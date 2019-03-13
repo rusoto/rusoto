@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1427,22 +1424,12 @@ pub enum CancelJobError {
     ResourceInUse(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1467,48 +1454,35 @@ impl CancelJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CancelJobError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return CancelJobError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::IncompatibleVersion(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CancelJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return CancelJobError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CancelJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelJobError {
-    fn from(err: serde_json::error::Error) -> CancelJobError {
-        CancelJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelJobError {
-    fn from(err: CredentialsError) -> CancelJobError {
-        CancelJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelJobError {
-    fn from(err: HttpDispatchError) -> CancelJobError {
-        CancelJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelJobError {
-    fn from(err: io::Error) -> CancelJobError {
-        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1524,11 +1498,6 @@ impl Error for CancelJobError {
             CancelJobError::InternalService(ref cause) => cause,
             CancelJobError::ResourceInUse(ref cause) => cause,
             CancelJobError::ResourceNotFound(ref cause) => cause,
-            CancelJobError::Validation(ref cause) => cause,
-            CancelJobError::Credentials(ref err) => err.description(),
-            CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::ParseError(ref cause) => cause,
-            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1545,22 +1514,12 @@ pub enum CreateJobError {
     LimitExceeded(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1585,48 +1544,35 @@ impl CreateJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateJobError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return CreateJobError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::IncompatibleVersion(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateJobError {
-    fn from(err: serde_json::error::Error) -> CreateJobError {
-        CreateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateJobError {
-    fn from(err: CredentialsError) -> CreateJobError {
-        CreateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateJobError {
-    fn from(err: HttpDispatchError) -> CreateJobError {
-        CreateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateJobError {
-    fn from(err: io::Error) -> CreateJobError {
-        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateJobError {
@@ -1642,11 +1588,6 @@ impl Error for CreateJobError {
             CreateJobError::InternalService(ref cause) => cause,
             CreateJobError::LimitExceeded(ref cause) => cause,
             CreateJobError::ResourceNotFound(ref cause) => cause,
-            CreateJobError::Validation(ref cause) => cause,
-            CreateJobError::Credentials(ref err) => err.description(),
-            CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::ParseError(ref cause) => cause,
-            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1663,22 +1604,12 @@ pub enum CreatePipelineError {
     LimitExceeded(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePipelineError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1703,48 +1634,35 @@ impl CreatePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreatePipelineError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return CreatePipelineError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreatePipelineError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreatePipelineError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreatePipelineError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePipelineError {
-    fn from(err: serde_json::error::Error) -> CreatePipelineError {
-        CreatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePipelineError {
-    fn from(err: CredentialsError) -> CreatePipelineError {
-        CreatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePipelineError {
-    fn from(err: HttpDispatchError) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePipelineError {
-    fn from(err: io::Error) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -1760,11 +1678,6 @@ impl Error for CreatePipelineError {
             CreatePipelineError::InternalService(ref cause) => cause,
             CreatePipelineError::LimitExceeded(ref cause) => cause,
             CreatePipelineError::ResourceNotFound(ref cause) => cause,
-            CreatePipelineError::Validation(ref cause) => cause,
-            CreatePipelineError::Credentials(ref err) => err.description(),
-            CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePipelineError::ParseError(ref cause) => cause,
-            CreatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1779,22 +1692,12 @@ pub enum CreatePresetError {
     InternalService(String),
     /// <p>Too many operations for a given AWS account. For example, the number of pipelines exceeds the maximum allowed.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePresetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePresetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePresetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1819,45 +1722,30 @@ impl CreatePresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreatePresetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreatePresetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return CreatePresetError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(CreatePresetError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreatePresetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreatePresetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreatePresetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreatePresetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreatePresetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePresetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePresetError {
-    fn from(err: serde_json::error::Error) -> CreatePresetError {
-        CreatePresetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePresetError {
-    fn from(err: CredentialsError) -> CreatePresetError {
-        CreatePresetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePresetError {
-    fn from(err: HttpDispatchError) -> CreatePresetError {
-        CreatePresetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePresetError {
-    fn from(err: io::Error) -> CreatePresetError {
-        CreatePresetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePresetError {
@@ -1872,11 +1760,6 @@ impl Error for CreatePresetError {
             CreatePresetError::IncompatibleVersion(ref cause) => cause,
             CreatePresetError::InternalService(ref cause) => cause,
             CreatePresetError::LimitExceeded(ref cause) => cause,
-            CreatePresetError::Validation(ref cause) => cause,
-            CreatePresetError::Credentials(ref err) => err.description(),
-            CreatePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePresetError::ParseError(ref cause) => cause,
-            CreatePresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1893,22 +1776,12 @@ pub enum DeletePipelineError {
     ResourceInUse(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePipelineError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1933,48 +1806,35 @@ impl DeletePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeletePipelineError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return DeletePipelineError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeletePipelineError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeletePipelineError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePipelineError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePipelineError {
-    fn from(err: serde_json::error::Error) -> DeletePipelineError {
-        DeletePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePipelineError {
-    fn from(err: CredentialsError) -> DeletePipelineError {
-        DeletePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePipelineError {
-    fn from(err: HttpDispatchError) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePipelineError {
-    fn from(err: io::Error) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -1990,11 +1850,6 @@ impl Error for DeletePipelineError {
             DeletePipelineError::InternalService(ref cause) => cause,
             DeletePipelineError::ResourceInUse(ref cause) => cause,
             DeletePipelineError::ResourceNotFound(ref cause) => cause,
-            DeletePipelineError::Validation(ref cause) => cause,
-            DeletePipelineError::Credentials(ref err) => err.description(),
-            DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePipelineError::ParseError(ref cause) => cause,
-            DeletePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2009,22 +1864,12 @@ pub enum DeletePresetError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePresetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePresetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePresetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2049,45 +1894,30 @@ impl DeletePresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeletePresetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeletePresetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return DeletePresetError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(DeletePresetError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeletePresetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeletePresetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeletePresetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePresetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeletePresetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePresetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePresetError {
-    fn from(err: serde_json::error::Error) -> DeletePresetError {
-        DeletePresetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePresetError {
-    fn from(err: CredentialsError) -> DeletePresetError {
-        DeletePresetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePresetError {
-    fn from(err: HttpDispatchError) -> DeletePresetError {
-        DeletePresetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePresetError {
-    fn from(err: io::Error) -> DeletePresetError {
-        DeletePresetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePresetError {
@@ -2102,11 +1932,6 @@ impl Error for DeletePresetError {
             DeletePresetError::IncompatibleVersion(ref cause) => cause,
             DeletePresetError::InternalService(ref cause) => cause,
             DeletePresetError::ResourceNotFound(ref cause) => cause,
-            DeletePresetError::Validation(ref cause) => cause,
-            DeletePresetError::Credentials(ref err) => err.description(),
-            DeletePresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePresetError::ParseError(ref cause) => cause,
-            DeletePresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2121,22 +1946,12 @@ pub enum ListJobsByPipelineError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsByPipelineError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsByPipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsByPipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2161,45 +1976,30 @@ impl ListJobsByPipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListJobsByPipelineError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListJobsByPipelineError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleVersionException" => {
-                    return ListJobsByPipelineError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ListJobsByPipelineError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListJobsByPipelineError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListJobsByPipelineError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsByPipelineError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListJobsByPipelineError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListJobsByPipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsByPipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsByPipelineError {
-    fn from(err: serde_json::error::Error) -> ListJobsByPipelineError {
-        ListJobsByPipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsByPipelineError {
-    fn from(err: CredentialsError) -> ListJobsByPipelineError {
-        ListJobsByPipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsByPipelineError {
-    fn from(err: HttpDispatchError) -> ListJobsByPipelineError {
-        ListJobsByPipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsByPipelineError {
-    fn from(err: io::Error) -> ListJobsByPipelineError {
-        ListJobsByPipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsByPipelineError {
@@ -2214,13 +2014,6 @@ impl Error for ListJobsByPipelineError {
             ListJobsByPipelineError::IncompatibleVersion(ref cause) => cause,
             ListJobsByPipelineError::InternalService(ref cause) => cause,
             ListJobsByPipelineError::ResourceNotFound(ref cause) => cause,
-            ListJobsByPipelineError::Validation(ref cause) => cause,
-            ListJobsByPipelineError::Credentials(ref err) => err.description(),
-            ListJobsByPipelineError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListJobsByPipelineError::ParseError(ref cause) => cause,
-            ListJobsByPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2235,22 +2028,12 @@ pub enum ListJobsByStatusError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsByStatusError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsByStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsByStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2275,45 +2058,30 @@ impl ListJobsByStatusError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListJobsByStatusError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListJobsByStatusError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ListJobsByStatusError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ListJobsByStatusError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListJobsByStatusError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListJobsByStatusError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListJobsByStatusError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListJobsByStatusError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListJobsByStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsByStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsByStatusError {
-    fn from(err: serde_json::error::Error) -> ListJobsByStatusError {
-        ListJobsByStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsByStatusError {
-    fn from(err: CredentialsError) -> ListJobsByStatusError {
-        ListJobsByStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsByStatusError {
-    fn from(err: HttpDispatchError) -> ListJobsByStatusError {
-        ListJobsByStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsByStatusError {
-    fn from(err: io::Error) -> ListJobsByStatusError {
-        ListJobsByStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsByStatusError {
@@ -2328,11 +2096,6 @@ impl Error for ListJobsByStatusError {
             ListJobsByStatusError::IncompatibleVersion(ref cause) => cause,
             ListJobsByStatusError::InternalService(ref cause) => cause,
             ListJobsByStatusError::ResourceNotFound(ref cause) => cause,
-            ListJobsByStatusError::Validation(ref cause) => cause,
-            ListJobsByStatusError::Credentials(ref err) => err.description(),
-            ListJobsByStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsByStatusError::ParseError(ref cause) => cause,
-            ListJobsByStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2345,22 +2108,12 @@ pub enum ListPipelinesError {
     IncompatibleVersion(String),
     /// <p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
     InternalService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelinesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPipelinesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2385,42 +2138,25 @@ impl ListPipelinesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPipelinesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ListPipelinesError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListPipelinesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPipelinesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPipelinesError {
-    fn from(err: serde_json::error::Error) -> ListPipelinesError {
-        ListPipelinesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPipelinesError {
-    fn from(err: CredentialsError) -> ListPipelinesError {
-        ListPipelinesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPipelinesError {
-    fn from(err: HttpDispatchError) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPipelinesError {
-    fn from(err: io::Error) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -2434,11 +2170,6 @@ impl Error for ListPipelinesError {
             ListPipelinesError::AccessDenied(ref cause) => cause,
             ListPipelinesError::IncompatibleVersion(ref cause) => cause,
             ListPipelinesError::InternalService(ref cause) => cause,
-            ListPipelinesError::Validation(ref cause) => cause,
-            ListPipelinesError::Credentials(ref err) => err.description(),
-            ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPipelinesError::ParseError(ref cause) => cause,
-            ListPipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2451,22 +2182,12 @@ pub enum ListPresetsError {
     IncompatibleVersion(String),
     /// <p>Elastic Transcoder encountered an unexpected exception while trying to fulfill the request.</p>
     InternalService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPresetsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPresetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPresetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2491,42 +2212,25 @@ impl ListPresetsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPresetsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPresetsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ListPresetsError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ListPresetsError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListPresetsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListPresetsError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPresetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPresetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPresetsError {
-    fn from(err: serde_json::error::Error) -> ListPresetsError {
-        ListPresetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPresetsError {
-    fn from(err: CredentialsError) -> ListPresetsError {
-        ListPresetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPresetsError {
-    fn from(err: HttpDispatchError) -> ListPresetsError {
-        ListPresetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPresetsError {
-    fn from(err: io::Error) -> ListPresetsError {
-        ListPresetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPresetsError {
@@ -2540,11 +2244,6 @@ impl Error for ListPresetsError {
             ListPresetsError::AccessDenied(ref cause) => cause,
             ListPresetsError::IncompatibleVersion(ref cause) => cause,
             ListPresetsError::InternalService(ref cause) => cause,
-            ListPresetsError::Validation(ref cause) => cause,
-            ListPresetsError::Credentials(ref err) => err.description(),
-            ListPresetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPresetsError::ParseError(ref cause) => cause,
-            ListPresetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2559,22 +2258,12 @@ pub enum ReadJobError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReadJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ReadJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2599,43 +2288,30 @@ impl ReadJobError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadJobError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ReadJobError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadJobError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ReadJobError::IncompatibleVersion(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ReadJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ReadJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadJobError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ReadJobError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return ReadJobError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReadJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReadJobError {
-    fn from(err: serde_json::error::Error) -> ReadJobError {
-        ReadJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReadJobError {
-    fn from(err: CredentialsError) -> ReadJobError {
-        ReadJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReadJobError {
-    fn from(err: HttpDispatchError) -> ReadJobError {
-        ReadJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReadJobError {
-    fn from(err: io::Error) -> ReadJobError {
-        ReadJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReadJobError {
@@ -2650,11 +2326,6 @@ impl Error for ReadJobError {
             ReadJobError::IncompatibleVersion(ref cause) => cause,
             ReadJobError::InternalService(ref cause) => cause,
             ReadJobError::ResourceNotFound(ref cause) => cause,
-            ReadJobError::Validation(ref cause) => cause,
-            ReadJobError::Credentials(ref err) => err.description(),
-            ReadJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadJobError::ParseError(ref cause) => cause,
-            ReadJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2669,22 +2340,12 @@ pub enum ReadPipelineError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReadPipelineError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ReadPipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadPipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2709,45 +2370,30 @@ impl ReadPipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadPipelineError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ReadPipelineError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadPipelineError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ReadPipelineError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ReadPipelineError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ReadPipelineError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadPipelineError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ReadPipelineError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ReadPipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReadPipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReadPipelineError {
-    fn from(err: serde_json::error::Error) -> ReadPipelineError {
-        ReadPipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReadPipelineError {
-    fn from(err: CredentialsError) -> ReadPipelineError {
-        ReadPipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReadPipelineError {
-    fn from(err: HttpDispatchError) -> ReadPipelineError {
-        ReadPipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReadPipelineError {
-    fn from(err: io::Error) -> ReadPipelineError {
-        ReadPipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReadPipelineError {
@@ -2762,11 +2408,6 @@ impl Error for ReadPipelineError {
             ReadPipelineError::IncompatibleVersion(ref cause) => cause,
             ReadPipelineError::InternalService(ref cause) => cause,
             ReadPipelineError::ResourceNotFound(ref cause) => cause,
-            ReadPipelineError::Validation(ref cause) => cause,
-            ReadPipelineError::Credentials(ref err) => err.description(),
-            ReadPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadPipelineError::ParseError(ref cause) => cause,
-            ReadPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2781,22 +2422,12 @@ pub enum ReadPresetError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReadPresetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ReadPresetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReadPresetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2821,45 +2452,30 @@ impl ReadPresetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ReadPresetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ReadPresetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return ReadPresetError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(ReadPresetError::IncompatibleVersion(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ReadPresetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ReadPresetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ReadPresetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ReadPresetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ReadPresetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReadPresetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReadPresetError {
-    fn from(err: serde_json::error::Error) -> ReadPresetError {
-        ReadPresetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReadPresetError {
-    fn from(err: CredentialsError) -> ReadPresetError {
-        ReadPresetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReadPresetError {
-    fn from(err: HttpDispatchError) -> ReadPresetError {
-        ReadPresetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReadPresetError {
-    fn from(err: io::Error) -> ReadPresetError {
-        ReadPresetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReadPresetError {
@@ -2874,11 +2490,6 @@ impl Error for ReadPresetError {
             ReadPresetError::IncompatibleVersion(ref cause) => cause,
             ReadPresetError::InternalService(ref cause) => cause,
             ReadPresetError::ResourceNotFound(ref cause) => cause,
-            ReadPresetError::Validation(ref cause) => cause,
-            ReadPresetError::Credentials(ref err) => err.description(),
-            ReadPresetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReadPresetError::ParseError(ref cause) => cause,
-            ReadPresetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2893,22 +2504,12 @@ pub enum TestRoleError {
     InternalService(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TestRoleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TestRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRoleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2933,45 +2534,30 @@ impl TestRoleError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return TestRoleError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(TestRoleError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return TestRoleError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(TestRoleError::IncompatibleVersion(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return TestRoleError::InternalService(String::from(error_message));
+                    return RusotoError::Service(TestRoleError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TestRoleError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TestRoleError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TestRoleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TestRoleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TestRoleError {
-    fn from(err: serde_json::error::Error) -> TestRoleError {
-        TestRoleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TestRoleError {
-    fn from(err: CredentialsError) -> TestRoleError {
-        TestRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TestRoleError {
-    fn from(err: HttpDispatchError) -> TestRoleError {
-        TestRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TestRoleError {
-    fn from(err: io::Error) -> TestRoleError {
-        TestRoleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TestRoleError {
@@ -2986,11 +2572,6 @@ impl Error for TestRoleError {
             TestRoleError::IncompatibleVersion(ref cause) => cause,
             TestRoleError::InternalService(ref cause) => cause,
             TestRoleError::ResourceNotFound(ref cause) => cause,
-            TestRoleError::Validation(ref cause) => cause,
-            TestRoleError::Credentials(ref err) => err.description(),
-            TestRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestRoleError::ParseError(ref cause) => cause,
-            TestRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3007,22 +2588,12 @@ pub enum UpdatePipelineError {
     ResourceInUse(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3047,48 +2618,35 @@ impl UpdatePipelineError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdatePipelineError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IncompatibleVersionException" => {
-                    return UpdatePipelineError::IncompatibleVersion(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::IncompatibleVersion(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdatePipelineError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return UpdatePipelineError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePipelineError {
-    fn from(err: serde_json::error::Error) -> UpdatePipelineError {
-        UpdatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePipelineError {
-    fn from(err: CredentialsError) -> UpdatePipelineError {
-        UpdatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePipelineError {
-    fn from(err: HttpDispatchError) -> UpdatePipelineError {
-        UpdatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePipelineError {
-    fn from(err: io::Error) -> UpdatePipelineError {
-        UpdatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePipelineError {
@@ -3104,11 +2662,6 @@ impl Error for UpdatePipelineError {
             UpdatePipelineError::InternalService(ref cause) => cause,
             UpdatePipelineError::ResourceInUse(ref cause) => cause,
             UpdatePipelineError::ResourceNotFound(ref cause) => cause,
-            UpdatePipelineError::Validation(ref cause) => cause,
-            UpdatePipelineError::Credentials(ref err) => err.description(),
-            UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePipelineError::ParseError(ref cause) => cause,
-            UpdatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3125,22 +2678,14 @@ pub enum UpdatePipelineNotificationsError {
     ResourceInUse(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineNotificationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineNotificationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdatePipelineNotificationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3165,58 +2710,37 @@ impl UpdatePipelineNotificationsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdatePipelineNotificationsError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineNotificationsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "IncompatibleVersionException" => {
-                    return UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePipelineNotificationsError::IncompatibleVersion(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServiceException" => {
-                    return UpdatePipelineNotificationsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineNotificationsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return UpdatePipelineNotificationsError::ResourceInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineNotificationsError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineNotificationsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineNotificationsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdatePipelineNotificationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePipelineNotificationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePipelineNotificationsError {
-    fn from(err: serde_json::error::Error) -> UpdatePipelineNotificationsError {
-        UpdatePipelineNotificationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePipelineNotificationsError {
-    fn from(err: CredentialsError) -> UpdatePipelineNotificationsError {
-        UpdatePipelineNotificationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePipelineNotificationsError {
-    fn from(err: HttpDispatchError) -> UpdatePipelineNotificationsError {
-        UpdatePipelineNotificationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePipelineNotificationsError {
-    fn from(err: io::Error) -> UpdatePipelineNotificationsError {
-        UpdatePipelineNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePipelineNotificationsError {
@@ -3232,13 +2756,6 @@ impl Error for UpdatePipelineNotificationsError {
             UpdatePipelineNotificationsError::InternalService(ref cause) => cause,
             UpdatePipelineNotificationsError::ResourceInUse(ref cause) => cause,
             UpdatePipelineNotificationsError::ResourceNotFound(ref cause) => cause,
-            UpdatePipelineNotificationsError::Validation(ref cause) => cause,
-            UpdatePipelineNotificationsError::Credentials(ref err) => err.description(),
-            UpdatePipelineNotificationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePipelineNotificationsError::ParseError(ref cause) => cause,
-            UpdatePipelineNotificationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3255,22 +2772,12 @@ pub enum UpdatePipelineStatusError {
     ResourceInUse(String),
     /// <p>The requested resource does not exist or is not available. For example, the pipeline to which you're trying to add a job doesn't exist or is still being created.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineStatusError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3295,50 +2802,35 @@ impl UpdatePipelineStatusError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdatePipelineStatusError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineStatusError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleVersionException" => {
-                    return UpdatePipelineStatusError::IncompatibleVersion(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineStatusError::IncompatibleVersion(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return UpdatePipelineStatusError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineStatusError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdatePipelineStatusError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineStatusError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdatePipelineStatusError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineStatusError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdatePipelineStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePipelineStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePipelineStatusError {
-    fn from(err: serde_json::error::Error) -> UpdatePipelineStatusError {
-        UpdatePipelineStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePipelineStatusError {
-    fn from(err: CredentialsError) -> UpdatePipelineStatusError {
-        UpdatePipelineStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePipelineStatusError {
-    fn from(err: HttpDispatchError) -> UpdatePipelineStatusError {
-        UpdatePipelineStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePipelineStatusError {
-    fn from(err: io::Error) -> UpdatePipelineStatusError {
-        UpdatePipelineStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePipelineStatusError {
@@ -3354,13 +2846,6 @@ impl Error for UpdatePipelineStatusError {
             UpdatePipelineStatusError::InternalService(ref cause) => cause,
             UpdatePipelineStatusError::ResourceInUse(ref cause) => cause,
             UpdatePipelineStatusError::ResourceNotFound(ref cause) => cause,
-            UpdatePipelineStatusError::Validation(ref cause) => cause,
-            UpdatePipelineStatusError::Credentials(ref err) => err.description(),
-            UpdatePipelineStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePipelineStatusError::ParseError(ref cause) => cause,
-            UpdatePipelineStatusError::Unknown(_) => "unknown error",
         }
     }
 }

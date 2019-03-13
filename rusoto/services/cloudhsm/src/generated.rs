@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -605,20 +602,10 @@ pub enum AddTagsToResourceError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -631,42 +618,25 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return AddTagsToResourceError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(AddTagsToResourceError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return AddTagsToResourceError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(AddTagsToResourceError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return AddTagsToResourceError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(AddTagsToResourceError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsToResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsToResourceError {
-    fn from(err: serde_json::error::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToResourceError {
-    fn from(err: CredentialsError) -> AddTagsToResourceError {
-        AddTagsToResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToResourceError {
-    fn from(err: HttpDispatchError) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToResourceError {
-    fn from(err: io::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -680,13 +650,6 @@ impl Error for AddTagsToResourceError {
             AddTagsToResourceError::CloudHsmInternal(ref cause) => cause,
             AddTagsToResourceError::CloudHsmService(ref cause) => cause,
             AddTagsToResourceError::InvalidRequest(ref cause) => cause,
-            AddTagsToResourceError::Validation(ref cause) => cause,
-            AddTagsToResourceError::Credentials(ref err) => err.description(),
-            AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddTagsToResourceError::ParseError(ref cause) => cause,
-            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -699,20 +662,10 @@ pub enum CreateHapgError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHapgError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHapgError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHapgError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -725,42 +678,25 @@ impl CreateHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateHapgError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(CreateHapgError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHapgError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CreateHapgError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return CreateHapgError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateHapgError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateHapgError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHapgError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHapgError {
-    fn from(err: serde_json::error::Error) -> CreateHapgError {
-        CreateHapgError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHapgError {
-    fn from(err: CredentialsError) -> CreateHapgError {
-        CreateHapgError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHapgError {
-    fn from(err: HttpDispatchError) -> CreateHapgError {
-        CreateHapgError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHapgError {
-    fn from(err: io::Error) -> CreateHapgError {
-        CreateHapgError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHapgError {
@@ -774,11 +710,6 @@ impl Error for CreateHapgError {
             CreateHapgError::CloudHsmInternal(ref cause) => cause,
             CreateHapgError::CloudHsmService(ref cause) => cause,
             CreateHapgError::InvalidRequest(ref cause) => cause,
-            CreateHapgError::Validation(ref cause) => cause,
-            CreateHapgError::Credentials(ref err) => err.description(),
-            CreateHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHapgError::ParseError(ref cause) => cause,
-            CreateHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -791,20 +722,10 @@ pub enum CreateHsmError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -817,42 +738,25 @@ impl CreateHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateHsmError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return CreateHsmError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHsmError {
-    fn from(err: serde_json::error::Error) -> CreateHsmError {
-        CreateHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHsmError {
-    fn from(err: CredentialsError) -> CreateHsmError {
-        CreateHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHsmError {
-    fn from(err: HttpDispatchError) -> CreateHsmError {
-        CreateHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHsmError {
-    fn from(err: io::Error) -> CreateHsmError {
-        CreateHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHsmError {
@@ -866,11 +770,6 @@ impl Error for CreateHsmError {
             CreateHsmError::CloudHsmInternal(ref cause) => cause,
             CreateHsmError::CloudHsmService(ref cause) => cause,
             CreateHsmError::InvalidRequest(ref cause) => cause,
-            CreateHsmError::Validation(ref cause) => cause,
-            CreateHsmError::Credentials(ref err) => err.description(),
-            CreateHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHsmError::ParseError(ref cause) => cause,
-            CreateHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -883,20 +782,10 @@ pub enum CreateLunaClientError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLunaClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLunaClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLunaClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -909,42 +798,25 @@ impl CreateLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return CreateLunaClientError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(CreateLunaClientError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateLunaClientError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CreateLunaClientError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreateLunaClientError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateLunaClientError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateLunaClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLunaClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLunaClientError {
-    fn from(err: serde_json::error::Error) -> CreateLunaClientError {
-        CreateLunaClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLunaClientError {
-    fn from(err: CredentialsError) -> CreateLunaClientError {
-        CreateLunaClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLunaClientError {
-    fn from(err: HttpDispatchError) -> CreateLunaClientError {
-        CreateLunaClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLunaClientError {
-    fn from(err: io::Error) -> CreateLunaClientError {
-        CreateLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLunaClientError {
@@ -958,11 +830,6 @@ impl Error for CreateLunaClientError {
             CreateLunaClientError::CloudHsmInternal(ref cause) => cause,
             CreateLunaClientError::CloudHsmService(ref cause) => cause,
             CreateLunaClientError::InvalidRequest(ref cause) => cause,
-            CreateLunaClientError::Validation(ref cause) => cause,
-            CreateLunaClientError::Credentials(ref err) => err.description(),
-            CreateLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLunaClientError::ParseError(ref cause) => cause,
-            CreateLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -975,20 +842,10 @@ pub enum DeleteHapgError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHapgError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHapgError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHapgError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1001,42 +858,25 @@ impl DeleteHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteHapgError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteHapgError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHapgError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteHapgError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DeleteHapgError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteHapgError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteHapgError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteHapgError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteHapgError {
-    fn from(err: serde_json::error::Error) -> DeleteHapgError {
-        DeleteHapgError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHapgError {
-    fn from(err: CredentialsError) -> DeleteHapgError {
-        DeleteHapgError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHapgError {
-    fn from(err: HttpDispatchError) -> DeleteHapgError {
-        DeleteHapgError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHapgError {
-    fn from(err: io::Error) -> DeleteHapgError {
-        DeleteHapgError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteHapgError {
@@ -1050,11 +890,6 @@ impl Error for DeleteHapgError {
             DeleteHapgError::CloudHsmInternal(ref cause) => cause,
             DeleteHapgError::CloudHsmService(ref cause) => cause,
             DeleteHapgError::InvalidRequest(ref cause) => cause,
-            DeleteHapgError::Validation(ref cause) => cause,
-            DeleteHapgError::Credentials(ref err) => err.description(),
-            DeleteHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHapgError::ParseError(ref cause) => cause,
-            DeleteHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1067,20 +902,10 @@ pub enum DeleteHsmError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1093,42 +918,25 @@ impl DeleteHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteHsmError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DeleteHsmError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteHsmError {
-    fn from(err: serde_json::error::Error) -> DeleteHsmError {
-        DeleteHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHsmError {
-    fn from(err: CredentialsError) -> DeleteHsmError {
-        DeleteHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHsmError {
-    fn from(err: HttpDispatchError) -> DeleteHsmError {
-        DeleteHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHsmError {
-    fn from(err: io::Error) -> DeleteHsmError {
-        DeleteHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteHsmError {
@@ -1142,11 +950,6 @@ impl Error for DeleteHsmError {
             DeleteHsmError::CloudHsmInternal(ref cause) => cause,
             DeleteHsmError::CloudHsmService(ref cause) => cause,
             DeleteHsmError::InvalidRequest(ref cause) => cause,
-            DeleteHsmError::Validation(ref cause) => cause,
-            DeleteHsmError::Credentials(ref err) => err.description(),
-            DeleteHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHsmError::ParseError(ref cause) => cause,
-            DeleteHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1159,20 +962,10 @@ pub enum DeleteLunaClientError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLunaClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLunaClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLunaClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1185,42 +978,25 @@ impl DeleteLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DeleteLunaClientError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteLunaClientError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteLunaClientError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteLunaClientError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeleteLunaClientError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteLunaClientError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLunaClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLunaClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLunaClientError {
-    fn from(err: serde_json::error::Error) -> DeleteLunaClientError {
-        DeleteLunaClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLunaClientError {
-    fn from(err: CredentialsError) -> DeleteLunaClientError {
-        DeleteLunaClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLunaClientError {
-    fn from(err: HttpDispatchError) -> DeleteLunaClientError {
-        DeleteLunaClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLunaClientError {
-    fn from(err: io::Error) -> DeleteLunaClientError {
-        DeleteLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLunaClientError {
@@ -1234,11 +1010,6 @@ impl Error for DeleteLunaClientError {
             DeleteLunaClientError::CloudHsmInternal(ref cause) => cause,
             DeleteLunaClientError::CloudHsmService(ref cause) => cause,
             DeleteLunaClientError::InvalidRequest(ref cause) => cause,
-            DeleteLunaClientError::Validation(ref cause) => cause,
-            DeleteLunaClientError::Credentials(ref err) => err.description(),
-            DeleteLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLunaClientError::ParseError(ref cause) => cause,
-            DeleteLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1251,20 +1022,10 @@ pub enum DescribeHapgError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHapgError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHapgError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHapgError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1277,42 +1038,25 @@ impl DescribeHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeHapgError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DescribeHapgError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeHapgError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DescribeHapgError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DescribeHapgError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeHapgError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeHapgError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeHapgError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeHapgError {
-    fn from(err: serde_json::error::Error) -> DescribeHapgError {
-        DescribeHapgError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHapgError {
-    fn from(err: CredentialsError) -> DescribeHapgError {
-        DescribeHapgError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHapgError {
-    fn from(err: HttpDispatchError) -> DescribeHapgError {
-        DescribeHapgError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHapgError {
-    fn from(err: io::Error) -> DescribeHapgError {
-        DescribeHapgError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeHapgError {
@@ -1326,11 +1070,6 @@ impl Error for DescribeHapgError {
             DescribeHapgError::CloudHsmInternal(ref cause) => cause,
             DescribeHapgError::CloudHsmService(ref cause) => cause,
             DescribeHapgError::InvalidRequest(ref cause) => cause,
-            DescribeHapgError::Validation(ref cause) => cause,
-            DescribeHapgError::Credentials(ref err) => err.description(),
-            DescribeHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeHapgError::ParseError(ref cause) => cause,
-            DescribeHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1343,20 +1082,10 @@ pub enum DescribeHsmError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1369,42 +1098,25 @@ impl DescribeHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeHsmError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DescribeHsmError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DescribeHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DescribeHsmError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeHsmError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeHsmError {
-    fn from(err: serde_json::error::Error) -> DescribeHsmError {
-        DescribeHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHsmError {
-    fn from(err: CredentialsError) -> DescribeHsmError {
-        DescribeHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHsmError {
-    fn from(err: HttpDispatchError) -> DescribeHsmError {
-        DescribeHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHsmError {
-    fn from(err: io::Error) -> DescribeHsmError {
-        DescribeHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeHsmError {
@@ -1418,11 +1130,6 @@ impl Error for DescribeHsmError {
             DescribeHsmError::CloudHsmInternal(ref cause) => cause,
             DescribeHsmError::CloudHsmService(ref cause) => cause,
             DescribeHsmError::InvalidRequest(ref cause) => cause,
-            DescribeHsmError::Validation(ref cause) => cause,
-            DescribeHsmError::Credentials(ref err) => err.description(),
-            DescribeHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeHsmError::ParseError(ref cause) => cause,
-            DescribeHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1435,20 +1142,10 @@ pub enum DescribeLunaClientError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLunaClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLunaClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLunaClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1461,42 +1158,25 @@ impl DescribeLunaClientError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return DescribeLunaClientError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(DescribeLunaClientError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeLunaClientError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DescribeLunaClientError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeLunaClientError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeLunaClientError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLunaClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLunaClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLunaClientError {
-    fn from(err: serde_json::error::Error) -> DescribeLunaClientError {
-        DescribeLunaClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLunaClientError {
-    fn from(err: CredentialsError) -> DescribeLunaClientError {
-        DescribeLunaClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLunaClientError {
-    fn from(err: HttpDispatchError) -> DescribeLunaClientError {
-        DescribeLunaClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLunaClientError {
-    fn from(err: io::Error) -> DescribeLunaClientError {
-        DescribeLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLunaClientError {
@@ -1510,13 +1190,6 @@ impl Error for DescribeLunaClientError {
             DescribeLunaClientError::CloudHsmInternal(ref cause) => cause,
             DescribeLunaClientError::CloudHsmService(ref cause) => cause,
             DescribeLunaClientError::InvalidRequest(ref cause) => cause,
-            DescribeLunaClientError::Validation(ref cause) => cause,
-            DescribeLunaClientError::Credentials(ref err) => err.description(),
-            DescribeLunaClientError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLunaClientError::ParseError(ref cause) => cause,
-            DescribeLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1529,20 +1202,10 @@ pub enum GetConfigError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1555,42 +1218,25 @@ impl GetConfigError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return GetConfigError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(GetConfigError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return GetConfigError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(GetConfigError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return GetConfigError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetConfigError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetConfigError {
-    fn from(err: serde_json::error::Error) -> GetConfigError {
-        GetConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetConfigError {
-    fn from(err: CredentialsError) -> GetConfigError {
-        GetConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetConfigError {
-    fn from(err: HttpDispatchError) -> GetConfigError {
-        GetConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetConfigError {
-    fn from(err: io::Error) -> GetConfigError {
-        GetConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetConfigError {
@@ -1604,11 +1250,6 @@ impl Error for GetConfigError {
             GetConfigError::CloudHsmInternal(ref cause) => cause,
             GetConfigError::CloudHsmService(ref cause) => cause,
             GetConfigError::InvalidRequest(ref cause) => cause,
-            GetConfigError::Validation(ref cause) => cause,
-            GetConfigError::Credentials(ref err) => err.description(),
-            GetConfigError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConfigError::ParseError(ref cause) => cause,
-            GetConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1621,20 +1262,10 @@ pub enum ListAvailableZonesError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAvailableZonesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAvailableZonesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAvailableZonesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1647,42 +1278,25 @@ impl ListAvailableZonesError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListAvailableZonesError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ListAvailableZonesError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return ListAvailableZonesError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListAvailableZonesError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListAvailableZonesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListAvailableZonesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListAvailableZonesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAvailableZonesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAvailableZonesError {
-    fn from(err: serde_json::error::Error) -> ListAvailableZonesError {
-        ListAvailableZonesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAvailableZonesError {
-    fn from(err: CredentialsError) -> ListAvailableZonesError {
-        ListAvailableZonesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAvailableZonesError {
-    fn from(err: HttpDispatchError) -> ListAvailableZonesError {
-        ListAvailableZonesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAvailableZonesError {
-    fn from(err: io::Error) -> ListAvailableZonesError {
-        ListAvailableZonesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAvailableZonesError {
@@ -1696,13 +1310,6 @@ impl Error for ListAvailableZonesError {
             ListAvailableZonesError::CloudHsmInternal(ref cause) => cause,
             ListAvailableZonesError::CloudHsmService(ref cause) => cause,
             ListAvailableZonesError::InvalidRequest(ref cause) => cause,
-            ListAvailableZonesError::Validation(ref cause) => cause,
-            ListAvailableZonesError::Credentials(ref err) => err.description(),
-            ListAvailableZonesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAvailableZonesError::ParseError(ref cause) => cause,
-            ListAvailableZonesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1715,20 +1322,10 @@ pub enum ListHapgsError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHapgsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHapgsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHapgsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1741,42 +1338,25 @@ impl ListHapgsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListHapgsError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ListHapgsError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return ListHapgsError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListHapgsError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListHapgsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListHapgsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListHapgsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHapgsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHapgsError {
-    fn from(err: serde_json::error::Error) -> ListHapgsError {
-        ListHapgsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHapgsError {
-    fn from(err: CredentialsError) -> ListHapgsError {
-        ListHapgsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHapgsError {
-    fn from(err: HttpDispatchError) -> ListHapgsError {
-        ListHapgsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHapgsError {
-    fn from(err: io::Error) -> ListHapgsError {
-        ListHapgsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHapgsError {
@@ -1790,11 +1370,6 @@ impl Error for ListHapgsError {
             ListHapgsError::CloudHsmInternal(ref cause) => cause,
             ListHapgsError::CloudHsmService(ref cause) => cause,
             ListHapgsError::InvalidRequest(ref cause) => cause,
-            ListHapgsError::Validation(ref cause) => cause,
-            ListHapgsError::Credentials(ref err) => err.description(),
-            ListHapgsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHapgsError::ParseError(ref cause) => cause,
-            ListHapgsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1807,20 +1382,10 @@ pub enum ListHsmsError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHsmsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHsmsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHsmsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1833,42 +1398,25 @@ impl ListHsmsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListHsmsError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ListHsmsError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return ListHsmsError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListHsmsError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListHsmsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListHsmsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListHsmsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHsmsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHsmsError {
-    fn from(err: serde_json::error::Error) -> ListHsmsError {
-        ListHsmsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHsmsError {
-    fn from(err: CredentialsError) -> ListHsmsError {
-        ListHsmsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHsmsError {
-    fn from(err: HttpDispatchError) -> ListHsmsError {
-        ListHsmsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHsmsError {
-    fn from(err: io::Error) -> ListHsmsError {
-        ListHsmsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHsmsError {
@@ -1882,11 +1430,6 @@ impl Error for ListHsmsError {
             ListHsmsError::CloudHsmInternal(ref cause) => cause,
             ListHsmsError::CloudHsmService(ref cause) => cause,
             ListHsmsError::InvalidRequest(ref cause) => cause,
-            ListHsmsError::Validation(ref cause) => cause,
-            ListHsmsError::Credentials(ref err) => err.description(),
-            ListHsmsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHsmsError::ParseError(ref cause) => cause,
-            ListHsmsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1899,20 +1442,10 @@ pub enum ListLunaClientsError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListLunaClientsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListLunaClientsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLunaClientsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1925,42 +1458,25 @@ impl ListLunaClientsError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListLunaClientsError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ListLunaClientsError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return ListLunaClientsError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListLunaClientsError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListLunaClientsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListLunaClientsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListLunaClientsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListLunaClientsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListLunaClientsError {
-    fn from(err: serde_json::error::Error) -> ListLunaClientsError {
-        ListLunaClientsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListLunaClientsError {
-    fn from(err: CredentialsError) -> ListLunaClientsError {
-        ListLunaClientsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListLunaClientsError {
-    fn from(err: HttpDispatchError) -> ListLunaClientsError {
-        ListLunaClientsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListLunaClientsError {
-    fn from(err: io::Error) -> ListLunaClientsError {
-        ListLunaClientsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListLunaClientsError {
@@ -1974,11 +1490,6 @@ impl Error for ListLunaClientsError {
             ListLunaClientsError::CloudHsmInternal(ref cause) => cause,
             ListLunaClientsError::CloudHsmService(ref cause) => cause,
             ListLunaClientsError::InvalidRequest(ref cause) => cause,
-            ListLunaClientsError::Validation(ref cause) => cause,
-            ListLunaClientsError::Credentials(ref err) => err.description(),
-            ListLunaClientsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLunaClientsError::ParseError(ref cause) => cause,
-            ListLunaClientsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1991,20 +1502,10 @@ pub enum ListTagsForResourceError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2017,42 +1518,25 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ListTagsForResourceError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::CloudHsmInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return ListTagsForResourceError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListTagsForResourceError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2066,13 +1550,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::CloudHsmInternal(ref cause) => cause,
             ListTagsForResourceError::CloudHsmService(ref cause) => cause,
             ListTagsForResourceError::InvalidRequest(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2085,20 +1562,10 @@ pub enum ModifyHapgError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyHapgError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyHapgError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHapgError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2111,42 +1578,25 @@ impl ModifyHapgError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ModifyHapgError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ModifyHapgError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return ModifyHapgError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ModifyHapgError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ModifyHapgError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ModifyHapgError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ModifyHapgError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ModifyHapgError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ModifyHapgError {
-    fn from(err: serde_json::error::Error) -> ModifyHapgError {
-        ModifyHapgError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ModifyHapgError {
-    fn from(err: CredentialsError) -> ModifyHapgError {
-        ModifyHapgError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyHapgError {
-    fn from(err: HttpDispatchError) -> ModifyHapgError {
-        ModifyHapgError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyHapgError {
-    fn from(err: io::Error) -> ModifyHapgError {
-        ModifyHapgError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ModifyHapgError {
@@ -2160,11 +1610,6 @@ impl Error for ModifyHapgError {
             ModifyHapgError::CloudHsmInternal(ref cause) => cause,
             ModifyHapgError::CloudHsmService(ref cause) => cause,
             ModifyHapgError::InvalidRequest(ref cause) => cause,
-            ModifyHapgError::Validation(ref cause) => cause,
-            ModifyHapgError::Credentials(ref err) => err.description(),
-            ModifyHapgError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyHapgError::ParseError(ref cause) => cause,
-            ModifyHapgError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2177,20 +1622,10 @@ pub enum ModifyHsmError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2203,42 +1638,25 @@ impl ModifyHsmError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return ModifyHsmError::CloudHsmInternal(String::from(error_message));
+                    return RusotoError::Service(ModifyHsmError::CloudHsmInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmServiceException" => {
-                    return ModifyHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ModifyHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ModifyHsmError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ModifyHsmError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ModifyHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ModifyHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ModifyHsmError {
-    fn from(err: serde_json::error::Error) -> ModifyHsmError {
-        ModifyHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ModifyHsmError {
-    fn from(err: CredentialsError) -> ModifyHsmError {
-        ModifyHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyHsmError {
-    fn from(err: HttpDispatchError) -> ModifyHsmError {
-        ModifyHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyHsmError {
-    fn from(err: io::Error) -> ModifyHsmError {
-        ModifyHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ModifyHsmError {
@@ -2252,11 +1670,6 @@ impl Error for ModifyHsmError {
             ModifyHsmError::CloudHsmInternal(ref cause) => cause,
             ModifyHsmError::CloudHsmService(ref cause) => cause,
             ModifyHsmError::InvalidRequest(ref cause) => cause,
-            ModifyHsmError::Validation(ref cause) => cause,
-            ModifyHsmError::Credentials(ref err) => err.description(),
-            ModifyHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyHsmError::ParseError(ref cause) => cause,
-            ModifyHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2265,20 +1678,10 @@ impl Error for ModifyHsmError {
 pub enum ModifyLunaClientError {
     /// <p>Indicates that an exception occurred in the AWS CloudHSM service.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyLunaClientError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyLunaClientError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyLunaClientError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2291,36 +1694,15 @@ impl ModifyLunaClientError {
 
             match *error_type {
                 "CloudHsmServiceException" => {
-                    return ModifyLunaClientError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ModifyLunaClientError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ModifyLunaClientError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ModifyLunaClientError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ModifyLunaClientError {
-    fn from(err: serde_json::error::Error) -> ModifyLunaClientError {
-        ModifyLunaClientError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ModifyLunaClientError {
-    fn from(err: CredentialsError) -> ModifyLunaClientError {
-        ModifyLunaClientError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyLunaClientError {
-    fn from(err: HttpDispatchError) -> ModifyLunaClientError {
-        ModifyLunaClientError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyLunaClientError {
-    fn from(err: io::Error) -> ModifyLunaClientError {
-        ModifyLunaClientError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ModifyLunaClientError {
@@ -2332,11 +1714,6 @@ impl Error for ModifyLunaClientError {
     fn description(&self) -> &str {
         match *self {
             ModifyLunaClientError::CloudHsmService(ref cause) => cause,
-            ModifyLunaClientError::Validation(ref cause) => cause,
-            ModifyLunaClientError::Credentials(ref err) => err.description(),
-            ModifyLunaClientError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyLunaClientError::ParseError(ref cause) => cause,
-            ModifyLunaClientError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2349,20 +1726,10 @@ pub enum RemoveTagsFromResourceError {
     CloudHsmService(String),
     /// <p>Indicates that one or more of the request parameters are not valid.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2375,44 +1742,25 @@ impl RemoveTagsFromResourceError {
 
             match *error_type {
                 "CloudHsmInternalException" => {
-                    return RemoveTagsFromResourceError::CloudHsmInternal(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmInternal(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmServiceException" => {
-                    return RemoveTagsFromResourceError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsFromResourceError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return RemoveTagsFromResourceError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsFromResourceError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsFromResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsFromResourceError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromResourceError {
-    fn from(err: CredentialsError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromResourceError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromResourceError {
-    fn from(err: io::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -2426,13 +1774,6 @@ impl Error for RemoveTagsFromResourceError {
             RemoveTagsFromResourceError::CloudHsmInternal(ref cause) => cause,
             RemoveTagsFromResourceError::CloudHsmService(ref cause) => cause,
             RemoveTagsFromResourceError::InvalidRequest(ref cause) => cause,
-            RemoveTagsFromResourceError::Validation(ref cause) => cause,
-            RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
-            RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
-            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }

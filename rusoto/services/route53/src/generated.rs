@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -9990,20 +9987,12 @@ pub enum AssociateVPCWithHostedZoneError {
     NotAuthorized(String),
     /// <p>You're trying to associate a VPC with a public hosted zone. Amazon Route 53 doesn't support associating a VPC with a public hosted zone.</p>
     PublicZoneVPCAssociation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateVPCWithHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateVPCWithHostedZoneError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateVPCWithHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10011,45 +10000,53 @@ impl AssociateVPCWithHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConflictingDomainExists" => {
-                        return AssociateVPCWithHostedZoneError::ConflictingDomainExists(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidInput" => {
-                        return AssociateVPCWithHostedZoneError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCId" => {
-                        return AssociateVPCWithHostedZoneError::InvalidVPCId(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidVPCId(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitsExceeded" => {
-                        return AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchHostedZone" => {
-                        return AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NotAuthorizedException" => {
-                        return AssociateVPCWithHostedZoneError::NotAuthorized(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssociateVPCWithHostedZoneError::NotAuthorized(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PublicZoneVPCAssociation" => {
-                        return AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        AssociateVPCWithHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10058,28 +10055,6 @@ impl AssociateVPCWithHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AssociateVPCWithHostedZoneError {
-    fn from(err: XmlParseError) -> AssociateVPCWithHostedZoneError {
-        let XmlParseError(message) = err;
-        AssociateVPCWithHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AssociateVPCWithHostedZoneError {
-    fn from(err: CredentialsError) -> AssociateVPCWithHostedZoneError {
-        AssociateVPCWithHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateVPCWithHostedZoneError {
-    fn from(err: HttpDispatchError) -> AssociateVPCWithHostedZoneError {
-        AssociateVPCWithHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateVPCWithHostedZoneError {
-    fn from(err: io::Error) -> AssociateVPCWithHostedZoneError {
-        AssociateVPCWithHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssociateVPCWithHostedZoneError {
@@ -10097,13 +10072,6 @@ impl Error for AssociateVPCWithHostedZoneError {
             AssociateVPCWithHostedZoneError::NoSuchHostedZone(ref cause) => cause,
             AssociateVPCWithHostedZoneError::NotAuthorized(ref cause) => cause,
             AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::Validation(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::Credentials(ref err) => err.description(),
-            AssociateVPCWithHostedZoneError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateVPCWithHostedZoneError::ParseError(ref cause) => cause,
-            AssociateVPCWithHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10120,20 +10088,10 @@ pub enum ChangeResourceRecordSetsError {
     NoSuchHostedZone(String),
     /// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeResourceRecordSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangeResourceRecordSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeResourceRecordSetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10141,35 +10099,43 @@ impl ChangeResourceRecordSetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidChangeBatch" => {
-                        return ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return ChangeResourceRecordSetsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangeResourceRecordSetsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchHostedZone" => {
-                        return ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "PriorRequestNotComplete" => {
-                        return ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ChangeResourceRecordSetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10178,28 +10144,6 @@ impl ChangeResourceRecordSetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ChangeResourceRecordSetsError {
-    fn from(err: XmlParseError) -> ChangeResourceRecordSetsError {
-        let XmlParseError(message) = err;
-        ChangeResourceRecordSetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ChangeResourceRecordSetsError {
-    fn from(err: CredentialsError) -> ChangeResourceRecordSetsError {
-        ChangeResourceRecordSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangeResourceRecordSetsError {
-    fn from(err: HttpDispatchError) -> ChangeResourceRecordSetsError {
-        ChangeResourceRecordSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangeResourceRecordSetsError {
-    fn from(err: io::Error) -> ChangeResourceRecordSetsError {
-        ChangeResourceRecordSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeResourceRecordSetsError {
@@ -10215,13 +10159,6 @@ impl Error for ChangeResourceRecordSetsError {
             ChangeResourceRecordSetsError::NoSuchHealthCheck(ref cause) => cause,
             ChangeResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
             ChangeResourceRecordSetsError::PriorRequestNotComplete(ref cause) => cause,
-            ChangeResourceRecordSetsError::Validation(ref cause) => cause,
-            ChangeResourceRecordSetsError::Credentials(ref err) => err.description(),
-            ChangeResourceRecordSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ChangeResourceRecordSetsError::ParseError(ref cause) => cause,
-            ChangeResourceRecordSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10238,20 +10175,10 @@ pub enum ChangeTagsForResourceError {
     PriorRequestNotComplete(String),
     /// <p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangeTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeTagsForResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10259,35 +10186,37 @@ impl ChangeTagsForResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ChangeTagsForResourceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangeTagsForResourceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return ChangeTagsForResourceError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangeTagsForResourceError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return ChangeTagsForResourceError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangeTagsForResourceError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PriorRequestNotComplete" => {
-                        return ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ThrottlingException" => {
-                        return ChangeTagsForResourceError::Throttling(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangeTagsForResourceError::Throttling(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ChangeTagsForResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10296,28 +10225,6 @@ impl ChangeTagsForResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ChangeTagsForResourceError {
-    fn from(err: XmlParseError) -> ChangeTagsForResourceError {
-        let XmlParseError(message) = err;
-        ChangeTagsForResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ChangeTagsForResourceError {
-    fn from(err: CredentialsError) -> ChangeTagsForResourceError {
-        ChangeTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangeTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ChangeTagsForResourceError {
-        ChangeTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangeTagsForResourceError {
-    fn from(err: io::Error) -> ChangeTagsForResourceError {
-        ChangeTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeTagsForResourceError {
@@ -10333,13 +10240,6 @@ impl Error for ChangeTagsForResourceError {
             ChangeTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
             ChangeTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
             ChangeTagsForResourceError::Throttling(ref cause) => cause,
-            ChangeTagsForResourceError::Validation(ref cause) => cause,
-            ChangeTagsForResourceError::Credentials(ref err) => err.description(),
-            ChangeTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ChangeTagsForResourceError::ParseError(ref cause) => cause,
-            ChangeTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10352,20 +10252,10 @@ pub enum CreateHealthCheckError {
     InvalidInput(String),
     /// <p>This health check can't be created because the current account has reached the limit on the number of active health checks.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>For information about how to get the current limit for an account, see <a>GetAccountLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p> <p>You have reached the maximum number of active health checks for an AWS account. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyHealthChecks(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHealthCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHealthCheckError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10373,25 +10263,27 @@ impl CreateHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HealthCheckAlreadyExists" => {
-                        return CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return CreateHealthCheckError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHealthCheckError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyHealthChecks" => {
-                        return CreateHealthCheckError::TooManyHealthChecks(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHealthCheckError::TooManyHealthChecks(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateHealthCheckError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10400,28 +10292,6 @@ impl CreateHealthCheckError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateHealthCheckError {
-    fn from(err: XmlParseError) -> CreateHealthCheckError {
-        let XmlParseError(message) = err;
-        CreateHealthCheckError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateHealthCheckError {
-    fn from(err: CredentialsError) -> CreateHealthCheckError {
-        CreateHealthCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHealthCheckError {
-    fn from(err: HttpDispatchError) -> CreateHealthCheckError {
-        CreateHealthCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHealthCheckError {
-    fn from(err: io::Error) -> CreateHealthCheckError {
-        CreateHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHealthCheckError {
@@ -10435,13 +10305,6 @@ impl Error for CreateHealthCheckError {
             CreateHealthCheckError::HealthCheckAlreadyExists(ref cause) => cause,
             CreateHealthCheckError::InvalidInput(ref cause) => cause,
             CreateHealthCheckError::TooManyHealthChecks(ref cause) => cause,
-            CreateHealthCheckError::Validation(ref cause) => cause,
-            CreateHealthCheckError::Credentials(ref err) => err.description(),
-            CreateHealthCheckError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateHealthCheckError::ParseError(ref cause) => cause,
-            CreateHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10466,20 +10329,10 @@ pub enum CreateHostedZoneError {
     NoSuchDelegationSet(String),
     /// <p>This operation can't be completed either because the current account has reached the limit on the number of hosted zones or because you've reached the limit on the number of hosted zones that can be associated with a reusable delegation set.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit on hosted zones that can be created by an account, see <a>GetAccountLimit</a>.</p> <p>To get the current limit on hosted zones that can be associated with a reusable delegation set, see <a>GetReusableDelegationSetLimit</a>.</p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyHostedZones(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHostedZoneError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10487,55 +10340,59 @@ impl CreateHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConflictingDomainExists" => {
-                        return CreateHostedZoneError::ConflictingDomainExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::ConflictingDomainExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DelegationSetNotAvailable" => {
-                        return CreateHostedZoneError::DelegationSetNotAvailable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateHostedZoneError::DelegationSetNotAvailable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DelegationSetNotReusable" => {
-                        return CreateHostedZoneError::DelegationSetNotReusable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateHostedZoneError::DelegationSetNotReusable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "HostedZoneAlreadyExists" => {
-                        return CreateHostedZoneError::HostedZoneAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::HostedZoneAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDomainName" => {
-                        return CreateHostedZoneError::InvalidDomainName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::InvalidDomainName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return CreateHostedZoneError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCId" => {
-                        return CreateHostedZoneError::InvalidVPCId(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::InvalidVPCId(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDelegationSet" => {
-                        return CreateHostedZoneError::NoSuchDelegationSet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::NoSuchDelegationSet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyHostedZones" => {
-                        return CreateHostedZoneError::TooManyHostedZones(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHostedZoneError::TooManyHostedZones(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10544,28 +10401,6 @@ impl CreateHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateHostedZoneError {
-    fn from(err: XmlParseError) -> CreateHostedZoneError {
-        let XmlParseError(message) = err;
-        CreateHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateHostedZoneError {
-    fn from(err: CredentialsError) -> CreateHostedZoneError {
-        CreateHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHostedZoneError {
-    fn from(err: HttpDispatchError) -> CreateHostedZoneError {
-        CreateHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHostedZoneError {
-    fn from(err: io::Error) -> CreateHostedZoneError {
-        CreateHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHostedZoneError {
@@ -10585,11 +10420,6 @@ impl Error for CreateHostedZoneError {
             CreateHostedZoneError::InvalidVPCId(ref cause) => cause,
             CreateHostedZoneError::NoSuchDelegationSet(ref cause) => cause,
             CreateHostedZoneError::TooManyHostedZones(ref cause) => cause,
-            CreateHostedZoneError::Validation(ref cause) => cause,
-            CreateHostedZoneError::Credentials(ref err) => err.description(),
-            CreateHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHostedZoneError::ParseError(ref cause) => cause,
-            CreateHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10608,31 +10438,61 @@ pub enum CreateQueryLoggingConfigError {
     NoSuchHostedZone(String),
     /// <p>You can create only one query logging configuration for a hosted zone, and a query logging configuration already exists for this hosted zone.</p>
     QueryLoggingConfigAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateQueryLoggingConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateQueryLoggingConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueryLoggingConfigError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return CreateQueryLoggingConfigError::ConcurrentModification(String::from(parsed_error.message)),"InsufficientCloudWatchLogsResourcePolicy" => return CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(String::from(parsed_error.message)),"InvalidInput" => return CreateQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message)),"NoSuchCloudWatchLogsLogGroup" => return CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(String::from(parsed_error.message)),"NoSuchHostedZone" => return CreateQueryLoggingConfigError::NoSuchHostedZone(String::from(parsed_error.message)),"QueryLoggingConfigAlreadyExists" => return CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            CreateQueryLoggingConfigError::ConcurrentModification(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InsufficientCloudWatchLogsResourcePolicy" => {
+                        return RusotoError::Service(
+                            CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidInput" => {
+                        return RusotoError::Service(CreateQueryLoggingConfigError::InvalidInput(
+                            String::from(parsed_error.message),
+                        ));
+                    }
+                    "NoSuchCloudWatchLogsLogGroup" => {
+                        return RusotoError::Service(
+                            CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(
+                            CreateQueryLoggingConfigError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "QueryLoggingConfigAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateQueryLoggingConfigError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10641,28 +10501,6 @@ impl CreateQueryLoggingConfigError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateQueryLoggingConfigError {
-    fn from(err: XmlParseError) -> CreateQueryLoggingConfigError {
-        let XmlParseError(message) = err;
-        CreateQueryLoggingConfigError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateQueryLoggingConfigError {
-    fn from(err: CredentialsError) -> CreateQueryLoggingConfigError {
-        CreateQueryLoggingConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateQueryLoggingConfigError {
-    fn from(err: HttpDispatchError) -> CreateQueryLoggingConfigError {
-        CreateQueryLoggingConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateQueryLoggingConfigError {
-    fn from(err: io::Error) -> CreateQueryLoggingConfigError {
-        CreateQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateQueryLoggingConfigError {
@@ -10681,13 +10519,6 @@ impl Error for CreateQueryLoggingConfigError {
             CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(ref cause) => cause,
             CreateQueryLoggingConfigError::NoSuchHostedZone(ref cause) => cause,
             CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(ref cause) => cause,
-            CreateQueryLoggingConfigError::Validation(ref cause) => cause,
-            CreateQueryLoggingConfigError::Credentials(ref err) => err.description(),
-            CreateQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateQueryLoggingConfigError::ParseError(ref cause) => cause,
-            CreateQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10708,20 +10539,12 @@ pub enum CreateReusableDelegationSetError {
     InvalidInput(String),
     /// <p>This operation can't be completed either because the current account has reached the limit on reusable delegation sets that it can create or because you've reached the limit on the number of Amazon VPCs that you can associate with a private hosted zone. To get the current limit on the number of reusable delegation sets, see <a>GetAccountLimit</a>. To get the current limit on the number of Amazon VPCs that you can associate with a private hosted zone, see <a>GetHostedZoneLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     LimitsExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReusableDelegationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateReusableDelegationSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateReusableDelegationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10729,45 +10552,57 @@ impl CreateReusableDelegationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DelegationSetAlreadyCreated" => {
-                        return CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DelegationSetAlreadyReusable" => {
-                        return CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DelegationSetNotAvailable" => {
-                        return CreateReusableDelegationSetError::DelegationSetNotAvailable(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::DelegationSetNotAvailable(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "HostedZoneNotFound" => {
-                        return CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidArgument" => {
-                        return CreateReusableDelegationSetError::InvalidArgument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::InvalidArgument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return CreateReusableDelegationSetError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReusableDelegationSetError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitsExceeded" => {
-                        return CreateReusableDelegationSetError::LimitsExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateReusableDelegationSetError::LimitsExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateReusableDelegationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10776,28 +10611,6 @@ impl CreateReusableDelegationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateReusableDelegationSetError {
-    fn from(err: XmlParseError) -> CreateReusableDelegationSetError {
-        let XmlParseError(message) = err;
-        CreateReusableDelegationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateReusableDelegationSetError {
-    fn from(err: CredentialsError) -> CreateReusableDelegationSetError {
-        CreateReusableDelegationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateReusableDelegationSetError {
-    fn from(err: HttpDispatchError) -> CreateReusableDelegationSetError {
-        CreateReusableDelegationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateReusableDelegationSetError {
-    fn from(err: io::Error) -> CreateReusableDelegationSetError {
-        CreateReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateReusableDelegationSetError {
@@ -10815,13 +10628,6 @@ impl Error for CreateReusableDelegationSetError {
             CreateReusableDelegationSetError::InvalidArgument(ref cause) => cause,
             CreateReusableDelegationSetError::InvalidInput(ref cause) => cause,
             CreateReusableDelegationSetError::LimitsExceeded(ref cause) => cause,
-            CreateReusableDelegationSetError::Validation(ref cause) => cause,
-            CreateReusableDelegationSetError::Credentials(ref err) => err.description(),
-            CreateReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateReusableDelegationSetError::ParseError(ref cause) => cause,
-            CreateReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10836,20 +10642,10 @@ pub enum CreateTrafficPolicyError {
     TooManyTrafficPolicies(String),
     /// <p>A traffic policy that has the same value for <code>Name</code> already exists.</p>
     TrafficPolicyAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTrafficPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10857,30 +10653,36 @@ impl CreateTrafficPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return CreateTrafficPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTrafficPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidTrafficPolicyDocument" => {
-                        return CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTrafficPolicies" => {
-                        return CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TrafficPolicyAlreadyExists" => {
-                        return CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateTrafficPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10889,28 +10691,6 @@ impl CreateTrafficPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTrafficPolicyError {
-    fn from(err: XmlParseError) -> CreateTrafficPolicyError {
-        let XmlParseError(message) = err;
-        CreateTrafficPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTrafficPolicyError {
-    fn from(err: CredentialsError) -> CreateTrafficPolicyError {
-        CreateTrafficPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTrafficPolicyError {
-    fn from(err: HttpDispatchError) -> CreateTrafficPolicyError {
-        CreateTrafficPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTrafficPolicyError {
-    fn from(err: io::Error) -> CreateTrafficPolicyError {
-        CreateTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTrafficPolicyError {
@@ -10925,13 +10705,6 @@ impl Error for CreateTrafficPolicyError {
             CreateTrafficPolicyError::InvalidTrafficPolicyDocument(ref cause) => cause,
             CreateTrafficPolicyError::TooManyTrafficPolicies(ref cause) => cause,
             CreateTrafficPolicyError::TrafficPolicyAlreadyExists(ref cause) => cause,
-            CreateTrafficPolicyError::Validation(ref cause) => cause,
-            CreateTrafficPolicyError::Credentials(ref err) => err.description(),
-            CreateTrafficPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTrafficPolicyError::ParseError(ref cause) => cause,
-            CreateTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10948,20 +10721,12 @@ pub enum CreateTrafficPolicyInstanceError {
     TooManyTrafficPolicyInstances(String),
     /// <p>There is already a traffic policy instance with the specified ID.</p>
     TrafficPolicyInstanceAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyInstanceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateTrafficPolicyInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10969,35 +10734,43 @@ impl CreateTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return CreateTrafficPolicyInstanceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTrafficPolicyInstanceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchTrafficPolicy" => {
-                        return CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTrafficPolicyInstances" => {
-                        return CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TrafficPolicyInstanceAlreadyExists" => {
-                        return CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateTrafficPolicyInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11006,28 +10779,6 @@ impl CreateTrafficPolicyInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTrafficPolicyInstanceError {
-    fn from(err: XmlParseError) -> CreateTrafficPolicyInstanceError {
-        let XmlParseError(message) = err;
-        CreateTrafficPolicyInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTrafficPolicyInstanceError {
-    fn from(err: CredentialsError) -> CreateTrafficPolicyInstanceError {
-        CreateTrafficPolicyInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTrafficPolicyInstanceError {
-    fn from(err: HttpDispatchError) -> CreateTrafficPolicyInstanceError {
-        CreateTrafficPolicyInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTrafficPolicyInstanceError {
-    fn from(err: io::Error) -> CreateTrafficPolicyInstanceError {
-        CreateTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTrafficPolicyInstanceError {
@@ -11045,13 +10796,6 @@ impl Error for CreateTrafficPolicyInstanceError {
             CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(ref cause) => {
                 cause
             }
-            CreateTrafficPolicyInstanceError::Validation(ref cause) => cause,
-            CreateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
-            CreateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTrafficPolicyInstanceError::ParseError(ref cause) => cause,
-            CreateTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11068,31 +10812,23 @@ pub enum CreateTrafficPolicyVersionError {
     NoSuchTrafficPolicy(String),
     /// <p>This traffic policy version can't be created because you've reached the limit of 1000 on the number of versions that you can create for the current traffic policy.</p> <p>To create more traffic policy versions, you can use <a>GetTrafficPolicy</a> to get the traffic policy document for a specified traffic policy version, and then use <a>CreateTrafficPolicy</a> to create a new traffic policy using the traffic policy document.</p>
     TooManyTrafficPolicyVersionsForCurrentPolicy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTrafficPolicyVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTrafficPolicyVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateTrafficPolicyVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message)),"InvalidTrafficPolicyDocument" => return CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message)),"NoSuchTrafficPolicy" => return CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(String::from(parsed_error.message)),_ => {}
+                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message))),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message))),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message))),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message))),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        CreateTrafficPolicyVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11101,28 +10837,6 @@ impl CreateTrafficPolicyVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTrafficPolicyVersionError {
-    fn from(err: XmlParseError) -> CreateTrafficPolicyVersionError {
-        let XmlParseError(message) = err;
-        CreateTrafficPolicyVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTrafficPolicyVersionError {
-    fn from(err: CredentialsError) -> CreateTrafficPolicyVersionError {
-        CreateTrafficPolicyVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTrafficPolicyVersionError {
-    fn from(err: HttpDispatchError) -> CreateTrafficPolicyVersionError {
-        CreateTrafficPolicyVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTrafficPolicyVersionError {
-    fn from(err: io::Error) -> CreateTrafficPolicyVersionError {
-        CreateTrafficPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTrafficPolicyVersionError {
@@ -11140,13 +10854,6 @@ impl Error for CreateTrafficPolicyVersionError {
             CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(
                 ref cause,
             ) => cause,
-            CreateTrafficPolicyVersionError::Validation(ref cause) => cause,
-            CreateTrafficPolicyVersionError::Credentials(ref err) => err.description(),
-            CreateTrafficPolicyVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTrafficPolicyVersionError::ParseError(ref cause) => cause,
-            CreateTrafficPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11163,31 +10870,56 @@ pub enum CreateVPCAssociationAuthorizationError {
     NoSuchHostedZone(String),
     /// <p>You've created the maximum number of authorizations that can be created for the specified hosted zone. To authorize another VPC to be associated with the hosted zone, submit a <code>DeleteVPCAssociationAuthorization</code> request to remove an existing authorization. To get a list of existing authorizations, submit a <code>ListVPCAssociationAuthorizations</code> request.</p>
     TooManyVPCAssociationAuthorizations(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVPCAssociationAuthorizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateVPCAssociationAuthorizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateVPCAssociationAuthorizationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return CreateVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return CreateVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => return CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => return CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"TooManyVPCAssociationAuthorizations" => return CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            CreateVPCAssociationAuthorizationError::ConcurrentModification(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidInput" => {
+                        return RusotoError::Service(
+                            CreateVPCAssociationAuthorizationError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCId" => {
+                        return RusotoError::Service(
+                            CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(
+                            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "TooManyVPCAssociationAuthorizations" => return RusotoError::Service(
+                        CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        CreateVPCAssociationAuthorizationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11196,28 +10928,6 @@ impl CreateVPCAssociationAuthorizationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateVPCAssociationAuthorizationError {
-    fn from(err: XmlParseError) -> CreateVPCAssociationAuthorizationError {
-        let XmlParseError(message) = err;
-        CreateVPCAssociationAuthorizationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateVPCAssociationAuthorizationError {
-    fn from(err: CredentialsError) -> CreateVPCAssociationAuthorizationError {
-        CreateVPCAssociationAuthorizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateVPCAssociationAuthorizationError {
-    fn from(err: HttpDispatchError) -> CreateVPCAssociationAuthorizationError {
-        CreateVPCAssociationAuthorizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateVPCAssociationAuthorizationError {
-    fn from(err: io::Error) -> CreateVPCAssociationAuthorizationError {
-        CreateVPCAssociationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateVPCAssociationAuthorizationError {
@@ -11235,13 +10945,6 @@ impl Error for CreateVPCAssociationAuthorizationError {
             CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
                 ref cause,
             ) => cause,
-            CreateVPCAssociationAuthorizationError::Validation(ref cause) => cause,
-            CreateVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),
-            CreateVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateVPCAssociationAuthorizationError::ParseError(ref cause) => cause,
-            CreateVPCAssociationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11254,20 +10957,10 @@ pub enum DeleteHealthCheckError {
     InvalidInput(String),
     /// <p>No health check exists with the specified ID.</p>
     NoSuchHealthCheck(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHealthCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHealthCheckError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11275,25 +10968,25 @@ impl DeleteHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HealthCheckInUse" => {
-                        return DeleteHealthCheckError::HealthCheckInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHealthCheckError::HealthCheckInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return DeleteHealthCheckError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHealthCheckError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return DeleteHealthCheckError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHealthCheckError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteHealthCheckError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11302,28 +10995,6 @@ impl DeleteHealthCheckError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteHealthCheckError {
-    fn from(err: XmlParseError) -> DeleteHealthCheckError {
-        let XmlParseError(message) = err;
-        DeleteHealthCheckError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHealthCheckError {
-    fn from(err: CredentialsError) -> DeleteHealthCheckError {
-        DeleteHealthCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHealthCheckError {
-    fn from(err: HttpDispatchError) -> DeleteHealthCheckError {
-        DeleteHealthCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHealthCheckError {
-    fn from(err: io::Error) -> DeleteHealthCheckError {
-        DeleteHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHealthCheckError {
@@ -11337,13 +11008,6 @@ impl Error for DeleteHealthCheckError {
             DeleteHealthCheckError::HealthCheckInUse(ref cause) => cause,
             DeleteHealthCheckError::InvalidInput(ref cause) => cause,
             DeleteHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
-            DeleteHealthCheckError::Validation(ref cause) => cause,
-            DeleteHealthCheckError::Credentials(ref err) => err.description(),
-            DeleteHealthCheckError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteHealthCheckError::ParseError(ref cause) => cause,
-            DeleteHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11360,20 +11024,10 @@ pub enum DeleteHostedZoneError {
     NoSuchHostedZone(String),
     /// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHostedZoneError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11381,35 +11035,35 @@ impl DeleteHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HostedZoneNotEmpty" => {
-                        return DeleteHostedZoneError::HostedZoneNotEmpty(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHostedZoneError::HostedZoneNotEmpty(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidDomainName" => {
-                        return DeleteHostedZoneError::InvalidDomainName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHostedZoneError::InvalidDomainName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return DeleteHostedZoneError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHostedZoneError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return DeleteHostedZoneError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHostedZoneError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PriorRequestNotComplete" => {
-                        return DeleteHostedZoneError::PriorRequestNotComplete(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteHostedZoneError::PriorRequestNotComplete(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11418,28 +11072,6 @@ impl DeleteHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteHostedZoneError {
-    fn from(err: XmlParseError) -> DeleteHostedZoneError {
-        let XmlParseError(message) = err;
-        DeleteHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHostedZoneError {
-    fn from(err: CredentialsError) -> DeleteHostedZoneError {
-        DeleteHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHostedZoneError {
-    fn from(err: HttpDispatchError) -> DeleteHostedZoneError {
-        DeleteHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHostedZoneError {
-    fn from(err: io::Error) -> DeleteHostedZoneError {
-        DeleteHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHostedZoneError {
@@ -11455,11 +11087,6 @@ impl Error for DeleteHostedZoneError {
             DeleteHostedZoneError::InvalidInput(ref cause) => cause,
             DeleteHostedZoneError::NoSuchHostedZone(ref cause) => cause,
             DeleteHostedZoneError::PriorRequestNotComplete(ref cause) => cause,
-            DeleteHostedZoneError::Validation(ref cause) => cause,
-            DeleteHostedZoneError::Credentials(ref err) => err.description(),
-            DeleteHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHostedZoneError::ParseError(ref cause) => cause,
-            DeleteHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11472,20 +11099,10 @@ pub enum DeleteQueryLoggingConfigError {
     InvalidInput(String),
     /// <p>There is no DNS query logging configuration with the specified ID.</p>
     NoSuchQueryLoggingConfig(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteQueryLoggingConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteQueryLoggingConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueryLoggingConfigError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11493,25 +11110,29 @@ impl DeleteQueryLoggingConfigError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return DeleteQueryLoggingConfigError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteQueryLoggingConfigError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchQueryLoggingConfig" => {
-                        return DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteQueryLoggingConfigError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11520,28 +11141,6 @@ impl DeleteQueryLoggingConfigError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteQueryLoggingConfigError {
-    fn from(err: XmlParseError) -> DeleteQueryLoggingConfigError {
-        let XmlParseError(message) = err;
-        DeleteQueryLoggingConfigError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteQueryLoggingConfigError {
-    fn from(err: CredentialsError) -> DeleteQueryLoggingConfigError {
-        DeleteQueryLoggingConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteQueryLoggingConfigError {
-    fn from(err: HttpDispatchError) -> DeleteQueryLoggingConfigError {
-        DeleteQueryLoggingConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteQueryLoggingConfigError {
-    fn from(err: io::Error) -> DeleteQueryLoggingConfigError {
-        DeleteQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteQueryLoggingConfigError {
@@ -11555,13 +11154,6 @@ impl Error for DeleteQueryLoggingConfigError {
             DeleteQueryLoggingConfigError::ConcurrentModification(ref cause) => cause,
             DeleteQueryLoggingConfigError::InvalidInput(ref cause) => cause,
             DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
-            DeleteQueryLoggingConfigError::Validation(ref cause) => cause,
-            DeleteQueryLoggingConfigError::Credentials(ref err) => err.description(),
-            DeleteQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteQueryLoggingConfigError::ParseError(ref cause) => cause,
-            DeleteQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11576,20 +11168,12 @@ pub enum DeleteReusableDelegationSetError {
     InvalidInput(String),
     /// <p>A reusable delegation set with the specified ID does not exist.</p>
     NoSuchDelegationSet(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReusableDelegationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReusableDelegationSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteReusableDelegationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11597,30 +11181,36 @@ impl DeleteReusableDelegationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DelegationSetInUse" => {
-                        return DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DelegationSetNotReusable" => {
-                        return DeleteReusableDelegationSetError::DelegationSetNotReusable(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteReusableDelegationSetError::DelegationSetNotReusable(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidInput" => {
-                        return DeleteReusableDelegationSetError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteReusableDelegationSetError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDelegationSet" => {
-                        return DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteReusableDelegationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11629,28 +11219,6 @@ impl DeleteReusableDelegationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteReusableDelegationSetError {
-    fn from(err: XmlParseError) -> DeleteReusableDelegationSetError {
-        let XmlParseError(message) = err;
-        DeleteReusableDelegationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReusableDelegationSetError {
-    fn from(err: CredentialsError) -> DeleteReusableDelegationSetError {
-        DeleteReusableDelegationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReusableDelegationSetError {
-    fn from(err: HttpDispatchError) -> DeleteReusableDelegationSetError {
-        DeleteReusableDelegationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReusableDelegationSetError {
-    fn from(err: io::Error) -> DeleteReusableDelegationSetError {
-        DeleteReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReusableDelegationSetError {
@@ -11665,13 +11233,6 @@ impl Error for DeleteReusableDelegationSetError {
             DeleteReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
             DeleteReusableDelegationSetError::InvalidInput(ref cause) => cause,
             DeleteReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
-            DeleteReusableDelegationSetError::Validation(ref cause) => cause,
-            DeleteReusableDelegationSetError::Credentials(ref err) => err.description(),
-            DeleteReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReusableDelegationSetError::ParseError(ref cause) => cause,
-            DeleteReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11686,20 +11247,10 @@ pub enum DeleteTrafficPolicyError {
     NoSuchTrafficPolicy(String),
     /// <p>One or more traffic policy instances were created by using the specified traffic policy.</p>
     TrafficPolicyInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTrafficPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTrafficPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTrafficPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11707,30 +11258,32 @@ impl DeleteTrafficPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return DeleteTrafficPolicyError::ConcurrentModification(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteTrafficPolicyError::ConcurrentModification(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return DeleteTrafficPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTrafficPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicy" => {
-                        return DeleteTrafficPolicyError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTrafficPolicyError::NoSuchTrafficPolicy(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TrafficPolicyInUse" => {
-                        return DeleteTrafficPolicyError::TrafficPolicyInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTrafficPolicyError::TrafficPolicyInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteTrafficPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11739,28 +11292,6 @@ impl DeleteTrafficPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteTrafficPolicyError {
-    fn from(err: XmlParseError) -> DeleteTrafficPolicyError {
-        let XmlParseError(message) = err;
-        DeleteTrafficPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTrafficPolicyError {
-    fn from(err: CredentialsError) -> DeleteTrafficPolicyError {
-        DeleteTrafficPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTrafficPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteTrafficPolicyError {
-        DeleteTrafficPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTrafficPolicyError {
-    fn from(err: io::Error) -> DeleteTrafficPolicyError {
-        DeleteTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTrafficPolicyError {
@@ -11775,13 +11306,6 @@ impl Error for DeleteTrafficPolicyError {
             DeleteTrafficPolicyError::InvalidInput(ref cause) => cause,
             DeleteTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
             DeleteTrafficPolicyError::TrafficPolicyInUse(ref cause) => cause,
-            DeleteTrafficPolicyError::Validation(ref cause) => cause,
-            DeleteTrafficPolicyError::Credentials(ref err) => err.description(),
-            DeleteTrafficPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTrafficPolicyError::ParseError(ref cause) => cause,
-            DeleteTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11794,20 +11318,12 @@ pub enum DeleteTrafficPolicyInstanceError {
     NoSuchTrafficPolicyInstance(String),
     /// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTrafficPolicyInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTrafficPolicyInstanceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteTrafficPolicyInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11815,25 +11331,29 @@ impl DeleteTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTrafficPolicyInstanceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
-                        return DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "PriorRequestNotComplete" => {
-                        return DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteTrafficPolicyInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11842,28 +11362,6 @@ impl DeleteTrafficPolicyInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteTrafficPolicyInstanceError {
-    fn from(err: XmlParseError) -> DeleteTrafficPolicyInstanceError {
-        let XmlParseError(message) = err;
-        DeleteTrafficPolicyInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTrafficPolicyInstanceError {
-    fn from(err: CredentialsError) -> DeleteTrafficPolicyInstanceError {
-        DeleteTrafficPolicyInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTrafficPolicyInstanceError {
-    fn from(err: HttpDispatchError) -> DeleteTrafficPolicyInstanceError {
-        DeleteTrafficPolicyInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTrafficPolicyInstanceError {
-    fn from(err: io::Error) -> DeleteTrafficPolicyInstanceError {
-        DeleteTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTrafficPolicyInstanceError {
@@ -11877,13 +11375,6 @@ impl Error for DeleteTrafficPolicyInstanceError {
             DeleteTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
             DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
             DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
-            DeleteTrafficPolicyInstanceError::Validation(ref cause) => cause,
-            DeleteTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
-            DeleteTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTrafficPolicyInstanceError::ParseError(ref cause) => cause,
-            DeleteTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11900,31 +11391,56 @@ pub enum DeleteVPCAssociationAuthorizationError {
     NoSuchHostedZone(String),
     /// <p>The VPC that you specified is not authorized to be associated with the hosted zone.</p>
     VPCAssociationAuthorizationNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVPCAssociationAuthorizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVPCAssociationAuthorizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteVPCAssociationAuthorizationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return DeleteVPCAssociationAuthorizationError::ConcurrentModification(String::from(parsed_error.message)),"InvalidInput" => return DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(parsed_error.message)),"InvalidVPCId" => return DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(parsed_error.message)),"NoSuchHostedZone" => return DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(parsed_error.message)),"VPCAssociationAuthorizationNotFound" => return DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConcurrentModification" => {
+                        return RusotoError::Service(
+                            DeleteVPCAssociationAuthorizationError::ConcurrentModification(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidInput" => {
+                        return RusotoError::Service(
+                            DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidVPCId" => {
+                        return RusotoError::Service(
+                            DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(
+                            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "VPCAssociationAuthorizationNotFound" => return RusotoError::Service(
+                        DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        DeleteVPCAssociationAuthorizationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11933,28 +11449,6 @@ impl DeleteVPCAssociationAuthorizationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteVPCAssociationAuthorizationError {
-    fn from(err: XmlParseError) -> DeleteVPCAssociationAuthorizationError {
-        let XmlParseError(message) = err;
-        DeleteVPCAssociationAuthorizationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVPCAssociationAuthorizationError {
-    fn from(err: CredentialsError) -> DeleteVPCAssociationAuthorizationError {
-        DeleteVPCAssociationAuthorizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVPCAssociationAuthorizationError {
-    fn from(err: HttpDispatchError) -> DeleteVPCAssociationAuthorizationError {
-        DeleteVPCAssociationAuthorizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVPCAssociationAuthorizationError {
-    fn from(err: io::Error) -> DeleteVPCAssociationAuthorizationError {
-        DeleteVPCAssociationAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVPCAssociationAuthorizationError {
@@ -11972,13 +11466,6 @@ impl Error for DeleteVPCAssociationAuthorizationError {
             DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
                 ref cause,
             ) => cause,
-            DeleteVPCAssociationAuthorizationError::Validation(ref cause) => cause,
-            DeleteVPCAssociationAuthorizationError::Credentials(ref err) => err.description(),
-            DeleteVPCAssociationAuthorizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVPCAssociationAuthorizationError::ParseError(ref cause) => cause,
-            DeleteVPCAssociationAuthorizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11995,20 +11482,12 @@ pub enum DisassociateVPCFromHostedZoneError {
     NoSuchHostedZone(String),
     /// <p>The specified VPC and hosted zone are not currently associated.</p>
     VPCAssociationNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateVPCFromHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateVPCFromHostedZoneError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateVPCFromHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12016,35 +11495,45 @@ impl DisassociateVPCFromHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidVPCId" => {
-                        return DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LastVPCAssociation" => {
-                        return DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchHostedZone" => {
-                        return DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "VPCAssociationNotFound" => {
-                        return DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DisassociateVPCFromHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12053,28 +11542,6 @@ impl DisassociateVPCFromHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DisassociateVPCFromHostedZoneError {
-    fn from(err: XmlParseError) -> DisassociateVPCFromHostedZoneError {
-        let XmlParseError(message) = err;
-        DisassociateVPCFromHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateVPCFromHostedZoneError {
-    fn from(err: CredentialsError) -> DisassociateVPCFromHostedZoneError {
-        DisassociateVPCFromHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateVPCFromHostedZoneError {
-    fn from(err: HttpDispatchError) -> DisassociateVPCFromHostedZoneError {
-        DisassociateVPCFromHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateVPCFromHostedZoneError {
-    fn from(err: io::Error) -> DisassociateVPCFromHostedZoneError {
-        DisassociateVPCFromHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisassociateVPCFromHostedZoneError {
@@ -12090,13 +11557,6 @@ impl Error for DisassociateVPCFromHostedZoneError {
             DisassociateVPCFromHostedZoneError::LastVPCAssociation(ref cause) => cause,
             DisassociateVPCFromHostedZoneError::NoSuchHostedZone(ref cause) => cause,
             DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::Validation(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::Credentials(ref err) => err.description(),
-            DisassociateVPCFromHostedZoneError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateVPCFromHostedZoneError::ParseError(ref cause) => cause,
-            DisassociateVPCFromHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12105,20 +11565,10 @@ impl Error for DisassociateVPCFromHostedZoneError {
 pub enum GetAccountLimitError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountLimitError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12126,15 +11576,15 @@ impl GetAccountLimitError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetAccountLimitError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAccountLimitError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetAccountLimitError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12143,28 +11593,6 @@ impl GetAccountLimitError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccountLimitError {
-    fn from(err: XmlParseError) -> GetAccountLimitError {
-        let XmlParseError(message) = err;
-        GetAccountLimitError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountLimitError {
-    fn from(err: CredentialsError) -> GetAccountLimitError {
-        GetAccountLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountLimitError {
-    fn from(err: HttpDispatchError) -> GetAccountLimitError {
-        GetAccountLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountLimitError {
-    fn from(err: io::Error) -> GetAccountLimitError {
-        GetAccountLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountLimitError {
@@ -12176,11 +11604,6 @@ impl Error for GetAccountLimitError {
     fn description(&self) -> &str {
         match *self {
             GetAccountLimitError::InvalidInput(ref cause) => cause,
-            GetAccountLimitError::Validation(ref cause) => cause,
-            GetAccountLimitError::Credentials(ref err) => err.description(),
-            GetAccountLimitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAccountLimitError::ParseError(ref cause) => cause,
-            GetAccountLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12191,20 +11614,10 @@ pub enum GetChangeError {
     InvalidInput(String),
     /// <p>A change with the specified change ID does not exist.</p>
     NoSuchChange(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetChangeError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetChangeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12212,16 +11625,20 @@ impl GetChangeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetChangeError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(GetChangeError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchChange" => {
-                        return GetChangeError::NoSuchChange(String::from(parsed_error.message));
+                        return RusotoError::Service(GetChangeError::NoSuchChange(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetChangeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12230,28 +11647,6 @@ impl GetChangeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetChangeError {
-    fn from(err: XmlParseError) -> GetChangeError {
-        let XmlParseError(message) = err;
-        GetChangeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetChangeError {
-    fn from(err: CredentialsError) -> GetChangeError {
-        GetChangeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetChangeError {
-    fn from(err: HttpDispatchError) -> GetChangeError {
-        GetChangeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetChangeError {
-    fn from(err: io::Error) -> GetChangeError {
-        GetChangeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetChangeError {
@@ -12264,31 +11659,15 @@ impl Error for GetChangeError {
         match *self {
             GetChangeError::InvalidInput(ref cause) => cause,
             GetChangeError::NoSuchChange(ref cause) => cause,
-            GetChangeError::Validation(ref cause) => cause,
-            GetChangeError::Credentials(ref err) => err.description(),
-            GetChangeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetChangeError::ParseError(ref cause) => cause,
-            GetChangeError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetCheckerIpRanges
 #[derive(Debug, PartialEq)]
-pub enum GetCheckerIpRangesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetCheckerIpRangesError {}
 
 impl GetCheckerIpRangesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCheckerIpRangesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCheckerIpRangesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12299,7 +11678,7 @@ impl GetCheckerIpRangesError {
                 }
             }
         }
-        GetCheckerIpRangesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12308,28 +11687,6 @@ impl GetCheckerIpRangesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetCheckerIpRangesError {
-    fn from(err: XmlParseError) -> GetCheckerIpRangesError {
-        let XmlParseError(message) = err;
-        GetCheckerIpRangesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetCheckerIpRangesError {
-    fn from(err: CredentialsError) -> GetCheckerIpRangesError {
-        GetCheckerIpRangesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCheckerIpRangesError {
-    fn from(err: HttpDispatchError) -> GetCheckerIpRangesError {
-        GetCheckerIpRangesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCheckerIpRangesError {
-    fn from(err: io::Error) -> GetCheckerIpRangesError {
-        GetCheckerIpRangesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCheckerIpRangesError {
@@ -12339,15 +11696,7 @@ impl fmt::Display for GetCheckerIpRangesError {
 }
 impl Error for GetCheckerIpRangesError {
     fn description(&self) -> &str {
-        match *self {
-            GetCheckerIpRangesError::Validation(ref cause) => cause,
-            GetCheckerIpRangesError::Credentials(ref err) => err.description(),
-            GetCheckerIpRangesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCheckerIpRangesError::ParseError(ref cause) => cause,
-            GetCheckerIpRangesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetGeoLocation
@@ -12357,20 +11706,10 @@ pub enum GetGeoLocationError {
     InvalidInput(String),
     /// <p>Amazon Route 53 doesn't support the specified geographic location.</p>
     NoSuchGeoLocation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGeoLocationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetGeoLocationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGeoLocationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12378,18 +11717,20 @@ impl GetGeoLocationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetGeoLocationError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(GetGeoLocationError::InvalidInput(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "NoSuchGeoLocation" => {
-                        return GetGeoLocationError::NoSuchGeoLocation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetGeoLocationError::NoSuchGeoLocation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetGeoLocationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12398,28 +11739,6 @@ impl GetGeoLocationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetGeoLocationError {
-    fn from(err: XmlParseError) -> GetGeoLocationError {
-        let XmlParseError(message) = err;
-        GetGeoLocationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetGeoLocationError {
-    fn from(err: CredentialsError) -> GetGeoLocationError {
-        GetGeoLocationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGeoLocationError {
-    fn from(err: HttpDispatchError) -> GetGeoLocationError {
-        GetGeoLocationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGeoLocationError {
-    fn from(err: io::Error) -> GetGeoLocationError {
-        GetGeoLocationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetGeoLocationError {
@@ -12432,11 +11751,6 @@ impl Error for GetGeoLocationError {
         match *self {
             GetGeoLocationError::InvalidInput(ref cause) => cause,
             GetGeoLocationError::NoSuchGeoLocation(ref cause) => cause,
-            GetGeoLocationError::Validation(ref cause) => cause,
-            GetGeoLocationError::Credentials(ref err) => err.description(),
-            GetGeoLocationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGeoLocationError::ParseError(ref cause) => cause,
-            GetGeoLocationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12449,20 +11763,10 @@ pub enum GetHealthCheckError {
     InvalidInput(String),
     /// <p>No health check exists with the specified ID.</p>
     NoSuchHealthCheck(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12470,23 +11774,25 @@ impl GetHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "IncompatibleVersion" => {
-                        return GetHealthCheckError::IncompatibleVersion(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHealthCheckError::IncompatibleVersion(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return GetHealthCheckError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(GetHealthCheckError::InvalidInput(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "NoSuchHealthCheck" => {
-                        return GetHealthCheckError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHealthCheckError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetHealthCheckError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12495,28 +11801,6 @@ impl GetHealthCheckError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHealthCheckError {
-    fn from(err: XmlParseError) -> GetHealthCheckError {
-        let XmlParseError(message) = err;
-        GetHealthCheckError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHealthCheckError {
-    fn from(err: CredentialsError) -> GetHealthCheckError {
-        GetHealthCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHealthCheckError {
-    fn from(err: HttpDispatchError) -> GetHealthCheckError {
-        GetHealthCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHealthCheckError {
-    fn from(err: io::Error) -> GetHealthCheckError {
-        GetHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckError {
@@ -12530,31 +11814,15 @@ impl Error for GetHealthCheckError {
             GetHealthCheckError::IncompatibleVersion(ref cause) => cause,
             GetHealthCheckError::InvalidInput(ref cause) => cause,
             GetHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
-            GetHealthCheckError::Validation(ref cause) => cause,
-            GetHealthCheckError::Credentials(ref err) => err.description(),
-            GetHealthCheckError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetHealthCheckError::ParseError(ref cause) => cause,
-            GetHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetHealthCheckCount
 #[derive(Debug, PartialEq)]
-pub enum GetHealthCheckCountError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetHealthCheckCountError {}
 
 impl GetHealthCheckCountError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckCountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckCountError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12565,7 +11833,7 @@ impl GetHealthCheckCountError {
                 }
             }
         }
-        GetHealthCheckCountError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12574,28 +11842,6 @@ impl GetHealthCheckCountError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHealthCheckCountError {
-    fn from(err: XmlParseError) -> GetHealthCheckCountError {
-        let XmlParseError(message) = err;
-        GetHealthCheckCountError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHealthCheckCountError {
-    fn from(err: CredentialsError) -> GetHealthCheckCountError {
-        GetHealthCheckCountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHealthCheckCountError {
-    fn from(err: HttpDispatchError) -> GetHealthCheckCountError {
-        GetHealthCheckCountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHealthCheckCountError {
-    fn from(err: io::Error) -> GetHealthCheckCountError {
-        GetHealthCheckCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckCountError {
@@ -12605,15 +11851,7 @@ impl fmt::Display for GetHealthCheckCountError {
 }
 impl Error for GetHealthCheckCountError {
     fn description(&self) -> &str {
-        match *self {
-            GetHealthCheckCountError::Validation(ref cause) => cause,
-            GetHealthCheckCountError::Credentials(ref err) => err.description(),
-            GetHealthCheckCountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHealthCheckCountError::ParseError(ref cause) => cause,
-            GetHealthCheckCountError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetHealthCheckLastFailureReason
@@ -12623,20 +11861,12 @@ pub enum GetHealthCheckLastFailureReasonError {
     InvalidInput(String),
     /// <p>No health check exists with the specified ID.</p>
     NoSuchHealthCheck(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckLastFailureReasonError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckLastFailureReasonError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetHealthCheckLastFailureReasonError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12644,20 +11874,24 @@ impl GetHealthCheckLastFailureReasonError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchHealthCheck" => {
-                        return GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        GetHealthCheckLastFailureReasonError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12666,28 +11900,6 @@ impl GetHealthCheckLastFailureReasonError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHealthCheckLastFailureReasonError {
-    fn from(err: XmlParseError) -> GetHealthCheckLastFailureReasonError {
-        let XmlParseError(message) = err;
-        GetHealthCheckLastFailureReasonError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHealthCheckLastFailureReasonError {
-    fn from(err: CredentialsError) -> GetHealthCheckLastFailureReasonError {
-        GetHealthCheckLastFailureReasonError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHealthCheckLastFailureReasonError {
-    fn from(err: HttpDispatchError) -> GetHealthCheckLastFailureReasonError {
-        GetHealthCheckLastFailureReasonError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHealthCheckLastFailureReasonError {
-    fn from(err: io::Error) -> GetHealthCheckLastFailureReasonError {
-        GetHealthCheckLastFailureReasonError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckLastFailureReasonError {
@@ -12700,13 +11912,6 @@ impl Error for GetHealthCheckLastFailureReasonError {
         match *self {
             GetHealthCheckLastFailureReasonError::InvalidInput(ref cause) => cause,
             GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(ref cause) => cause,
-            GetHealthCheckLastFailureReasonError::Validation(ref cause) => cause,
-            GetHealthCheckLastFailureReasonError::Credentials(ref err) => err.description(),
-            GetHealthCheckLastFailureReasonError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHealthCheckLastFailureReasonError::ParseError(ref cause) => cause,
-            GetHealthCheckLastFailureReasonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12717,20 +11922,10 @@ pub enum GetHealthCheckStatusError {
     InvalidInput(String),
     /// <p>No health check exists with the specified ID.</p>
     NoSuchHealthCheck(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHealthCheckStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHealthCheckStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHealthCheckStatusError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12738,20 +11933,20 @@ impl GetHealthCheckStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetHealthCheckStatusError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHealthCheckStatusError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return GetHealthCheckStatusError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHealthCheckStatusError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetHealthCheckStatusError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12760,28 +11955,6 @@ impl GetHealthCheckStatusError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHealthCheckStatusError {
-    fn from(err: XmlParseError) -> GetHealthCheckStatusError {
-        let XmlParseError(message) = err;
-        GetHealthCheckStatusError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHealthCheckStatusError {
-    fn from(err: CredentialsError) -> GetHealthCheckStatusError {
-        GetHealthCheckStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHealthCheckStatusError {
-    fn from(err: HttpDispatchError) -> GetHealthCheckStatusError {
-        GetHealthCheckStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHealthCheckStatusError {
-    fn from(err: io::Error) -> GetHealthCheckStatusError {
-        GetHealthCheckStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHealthCheckStatusError {
@@ -12794,13 +11967,6 @@ impl Error for GetHealthCheckStatusError {
         match *self {
             GetHealthCheckStatusError::InvalidInput(ref cause) => cause,
             GetHealthCheckStatusError::NoSuchHealthCheck(ref cause) => cause,
-            GetHealthCheckStatusError::Validation(ref cause) => cause,
-            GetHealthCheckStatusError::Credentials(ref err) => err.description(),
-            GetHealthCheckStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHealthCheckStatusError::ParseError(ref cause) => cause,
-            GetHealthCheckStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12811,20 +11977,10 @@ pub enum GetHostedZoneError {
     InvalidInput(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12832,18 +11988,20 @@ impl GetHostedZoneError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetHostedZoneError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(GetHostedZoneError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchHostedZone" => {
-                        return GetHostedZoneError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHostedZoneError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12852,28 +12010,6 @@ impl GetHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHostedZoneError {
-    fn from(err: XmlParseError) -> GetHostedZoneError {
-        let XmlParseError(message) = err;
-        GetHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHostedZoneError {
-    fn from(err: CredentialsError) -> GetHostedZoneError {
-        GetHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHostedZoneError {
-    fn from(err: HttpDispatchError) -> GetHostedZoneError {
-        GetHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHostedZoneError {
-    fn from(err: io::Error) -> GetHostedZoneError {
-        GetHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHostedZoneError {
@@ -12886,11 +12022,6 @@ impl Error for GetHostedZoneError {
         match *self {
             GetHostedZoneError::InvalidInput(ref cause) => cause,
             GetHostedZoneError::NoSuchHostedZone(ref cause) => cause,
-            GetHostedZoneError::Validation(ref cause) => cause,
-            GetHostedZoneError::Credentials(ref err) => err.description(),
-            GetHostedZoneError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetHostedZoneError::ParseError(ref cause) => cause,
-            GetHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12899,20 +12030,10 @@ impl Error for GetHostedZoneError {
 pub enum GetHostedZoneCountError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneCountError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneCountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneCountError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12920,15 +12041,15 @@ impl GetHostedZoneCountError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetHostedZoneCountError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHostedZoneCountError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetHostedZoneCountError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12937,28 +12058,6 @@ impl GetHostedZoneCountError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHostedZoneCountError {
-    fn from(err: XmlParseError) -> GetHostedZoneCountError {
-        let XmlParseError(message) = err;
-        GetHostedZoneCountError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHostedZoneCountError {
-    fn from(err: CredentialsError) -> GetHostedZoneCountError {
-        GetHostedZoneCountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHostedZoneCountError {
-    fn from(err: HttpDispatchError) -> GetHostedZoneCountError {
-        GetHostedZoneCountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHostedZoneCountError {
-    fn from(err: io::Error) -> GetHostedZoneCountError {
-        GetHostedZoneCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHostedZoneCountError {
@@ -12970,13 +12069,6 @@ impl Error for GetHostedZoneCountError {
     fn description(&self) -> &str {
         match *self {
             GetHostedZoneCountError::InvalidInput(ref cause) => cause,
-            GetHostedZoneCountError::Validation(ref cause) => cause,
-            GetHostedZoneCountError::Credentials(ref err) => err.description(),
-            GetHostedZoneCountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHostedZoneCountError::ParseError(ref cause) => cause,
-            GetHostedZoneCountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12989,20 +12081,10 @@ pub enum GetHostedZoneLimitError {
     InvalidInput(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHostedZoneLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHostedZoneLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHostedZoneLimitError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13010,25 +12092,25 @@ impl GetHostedZoneLimitError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HostedZoneNotPrivate" => {
-                        return GetHostedZoneLimitError::HostedZoneNotPrivate(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHostedZoneLimitError::HostedZoneNotPrivate(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return GetHostedZoneLimitError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHostedZoneLimitError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return GetHostedZoneLimitError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetHostedZoneLimitError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetHostedZoneLimitError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13037,28 +12119,6 @@ impl GetHostedZoneLimitError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetHostedZoneLimitError {
-    fn from(err: XmlParseError) -> GetHostedZoneLimitError {
-        let XmlParseError(message) = err;
-        GetHostedZoneLimitError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetHostedZoneLimitError {
-    fn from(err: CredentialsError) -> GetHostedZoneLimitError {
-        GetHostedZoneLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHostedZoneLimitError {
-    fn from(err: HttpDispatchError) -> GetHostedZoneLimitError {
-        GetHostedZoneLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHostedZoneLimitError {
-    fn from(err: io::Error) -> GetHostedZoneLimitError {
-        GetHostedZoneLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetHostedZoneLimitError {
@@ -13072,13 +12132,6 @@ impl Error for GetHostedZoneLimitError {
             GetHostedZoneLimitError::HostedZoneNotPrivate(ref cause) => cause,
             GetHostedZoneLimitError::InvalidInput(ref cause) => cause,
             GetHostedZoneLimitError::NoSuchHostedZone(ref cause) => cause,
-            GetHostedZoneLimitError::Validation(ref cause) => cause,
-            GetHostedZoneLimitError::Credentials(ref err) => err.description(),
-            GetHostedZoneLimitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHostedZoneLimitError::ParseError(ref cause) => cause,
-            GetHostedZoneLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13089,20 +12142,10 @@ pub enum GetQueryLoggingConfigError {
     InvalidInput(String),
     /// <p>There is no DNS query logging configuration with the specified ID.</p>
     NoSuchQueryLoggingConfig(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryLoggingConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueryLoggingConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueryLoggingConfigError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13110,20 +12153,22 @@ impl GetQueryLoggingConfigError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetQueryLoggingConfigError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetQueryLoggingConfigError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchQueryLoggingConfig" => {
-                        return GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetQueryLoggingConfigError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13132,28 +12177,6 @@ impl GetQueryLoggingConfigError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetQueryLoggingConfigError {
-    fn from(err: XmlParseError) -> GetQueryLoggingConfigError {
-        let XmlParseError(message) = err;
-        GetQueryLoggingConfigError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetQueryLoggingConfigError {
-    fn from(err: CredentialsError) -> GetQueryLoggingConfigError {
-        GetQueryLoggingConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueryLoggingConfigError {
-    fn from(err: HttpDispatchError) -> GetQueryLoggingConfigError {
-        GetQueryLoggingConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueryLoggingConfigError {
-    fn from(err: io::Error) -> GetQueryLoggingConfigError {
-        GetQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetQueryLoggingConfigError {
@@ -13166,13 +12189,6 @@ impl Error for GetQueryLoggingConfigError {
         match *self {
             GetQueryLoggingConfigError::InvalidInput(ref cause) => cause,
             GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
-            GetQueryLoggingConfigError::Validation(ref cause) => cause,
-            GetQueryLoggingConfigError::Credentials(ref err) => err.description(),
-            GetQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetQueryLoggingConfigError::ParseError(ref cause) => cause,
-            GetQueryLoggingConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13185,20 +12201,10 @@ pub enum GetReusableDelegationSetError {
     InvalidInput(String),
     /// <p>A reusable delegation set with the specified ID does not exist.</p>
     NoSuchDelegationSet(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReusableDelegationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReusableDelegationSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetReusableDelegationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13206,25 +12212,29 @@ impl GetReusableDelegationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DelegationSetNotReusable" => {
-                        return GetReusableDelegationSetError::DelegationSetNotReusable(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetReusableDelegationSetError::DelegationSetNotReusable(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidInput" => {
-                        return GetReusableDelegationSetError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetReusableDelegationSetError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDelegationSet" => {
-                        return GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetReusableDelegationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13233,28 +12243,6 @@ impl GetReusableDelegationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetReusableDelegationSetError {
-    fn from(err: XmlParseError) -> GetReusableDelegationSetError {
-        let XmlParseError(message) = err;
-        GetReusableDelegationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetReusableDelegationSetError {
-    fn from(err: CredentialsError) -> GetReusableDelegationSetError {
-        GetReusableDelegationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReusableDelegationSetError {
-    fn from(err: HttpDispatchError) -> GetReusableDelegationSetError {
-        GetReusableDelegationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReusableDelegationSetError {
-    fn from(err: io::Error) -> GetReusableDelegationSetError {
-        GetReusableDelegationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReusableDelegationSetError {
@@ -13268,13 +12256,6 @@ impl Error for GetReusableDelegationSetError {
             GetReusableDelegationSetError::DelegationSetNotReusable(ref cause) => cause,
             GetReusableDelegationSetError::InvalidInput(ref cause) => cause,
             GetReusableDelegationSetError::NoSuchDelegationSet(ref cause) => cause,
-            GetReusableDelegationSetError::Validation(ref cause) => cause,
-            GetReusableDelegationSetError::Credentials(ref err) => err.description(),
-            GetReusableDelegationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReusableDelegationSetError::ParseError(ref cause) => cause,
-            GetReusableDelegationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13285,20 +12266,12 @@ pub enum GetReusableDelegationSetLimitError {
     InvalidInput(String),
     /// <p>A reusable delegation set with the specified ID does not exist.</p>
     NoSuchDelegationSet(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReusableDelegationSetLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReusableDelegationSetLimitError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetReusableDelegationSetLimitError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13306,20 +12279,24 @@ impl GetReusableDelegationSetLimitError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetReusableDelegationSetLimitError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetReusableDelegationSetLimitError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchDelegationSet" => {
-                        return GetReusableDelegationSetLimitError::NoSuchDelegationSet(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetReusableDelegationSetLimitError::NoSuchDelegationSet(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        GetReusableDelegationSetLimitError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13328,28 +12305,6 @@ impl GetReusableDelegationSetLimitError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetReusableDelegationSetLimitError {
-    fn from(err: XmlParseError) -> GetReusableDelegationSetLimitError {
-        let XmlParseError(message) = err;
-        GetReusableDelegationSetLimitError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetReusableDelegationSetLimitError {
-    fn from(err: CredentialsError) -> GetReusableDelegationSetLimitError {
-        GetReusableDelegationSetLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReusableDelegationSetLimitError {
-    fn from(err: HttpDispatchError) -> GetReusableDelegationSetLimitError {
-        GetReusableDelegationSetLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReusableDelegationSetLimitError {
-    fn from(err: io::Error) -> GetReusableDelegationSetLimitError {
-        GetReusableDelegationSetLimitError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReusableDelegationSetLimitError {
@@ -13362,13 +12317,6 @@ impl Error for GetReusableDelegationSetLimitError {
         match *self {
             GetReusableDelegationSetLimitError::InvalidInput(ref cause) => cause,
             GetReusableDelegationSetLimitError::NoSuchDelegationSet(ref cause) => cause,
-            GetReusableDelegationSetLimitError::Validation(ref cause) => cause,
-            GetReusableDelegationSetLimitError::Credentials(ref err) => err.description(),
-            GetReusableDelegationSetLimitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReusableDelegationSetLimitError::ParseError(ref cause) => cause,
-            GetReusableDelegationSetLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13379,20 +12327,10 @@ pub enum GetTrafficPolicyError {
     InvalidInput(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTrafficPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrafficPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13400,20 +12338,20 @@ impl GetTrafficPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetTrafficPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetTrafficPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicy" => {
-                        return GetTrafficPolicyError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetTrafficPolicyError::NoSuchTrafficPolicy(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetTrafficPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13422,28 +12360,6 @@ impl GetTrafficPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetTrafficPolicyError {
-    fn from(err: XmlParseError) -> GetTrafficPolicyError {
-        let XmlParseError(message) = err;
-        GetTrafficPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetTrafficPolicyError {
-    fn from(err: CredentialsError) -> GetTrafficPolicyError {
-        GetTrafficPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTrafficPolicyError {
-    fn from(err: HttpDispatchError) -> GetTrafficPolicyError {
-        GetTrafficPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTrafficPolicyError {
-    fn from(err: io::Error) -> GetTrafficPolicyError {
-        GetTrafficPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTrafficPolicyError {
@@ -13456,11 +12372,6 @@ impl Error for GetTrafficPolicyError {
         match *self {
             GetTrafficPolicyError::InvalidInput(ref cause) => cause,
             GetTrafficPolicyError::NoSuchTrafficPolicy(ref cause) => cause,
-            GetTrafficPolicyError::Validation(ref cause) => cause,
-            GetTrafficPolicyError::Credentials(ref err) => err.description(),
-            GetTrafficPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTrafficPolicyError::ParseError(ref cause) => cause,
-            GetTrafficPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13471,20 +12382,10 @@ pub enum GetTrafficPolicyInstanceError {
     InvalidInput(String),
     /// <p>No traffic policy instance exists with the specified ID.</p>
     NoSuchTrafficPolicyInstance(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTrafficPolicyInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyInstanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTrafficPolicyInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13492,20 +12393,22 @@ impl GetTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetTrafficPolicyInstanceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetTrafficPolicyInstanceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
-                        return GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        GetTrafficPolicyInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13514,28 +12417,6 @@ impl GetTrafficPolicyInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetTrafficPolicyInstanceError {
-    fn from(err: XmlParseError) -> GetTrafficPolicyInstanceError {
-        let XmlParseError(message) = err;
-        GetTrafficPolicyInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetTrafficPolicyInstanceError {
-    fn from(err: CredentialsError) -> GetTrafficPolicyInstanceError {
-        GetTrafficPolicyInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTrafficPolicyInstanceError {
-    fn from(err: HttpDispatchError) -> GetTrafficPolicyInstanceError {
-        GetTrafficPolicyInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTrafficPolicyInstanceError {
-    fn from(err: io::Error) -> GetTrafficPolicyInstanceError {
-        GetTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTrafficPolicyInstanceError {
@@ -13548,33 +12429,17 @@ impl Error for GetTrafficPolicyInstanceError {
         match *self {
             GetTrafficPolicyInstanceError::InvalidInput(ref cause) => cause,
             GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
-            GetTrafficPolicyInstanceError::Validation(ref cause) => cause,
-            GetTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
-            GetTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetTrafficPolicyInstanceError::ParseError(ref cause) => cause,
-            GetTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetTrafficPolicyInstanceCount
 #[derive(Debug, PartialEq)]
-pub enum GetTrafficPolicyInstanceCountError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetTrafficPolicyInstanceCountError {}
 
 impl GetTrafficPolicyInstanceCountError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTrafficPolicyInstanceCountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetTrafficPolicyInstanceCountError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13585,7 +12450,7 @@ impl GetTrafficPolicyInstanceCountError {
                 }
             }
         }
-        GetTrafficPolicyInstanceCountError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13594,28 +12459,6 @@ impl GetTrafficPolicyInstanceCountError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetTrafficPolicyInstanceCountError {
-    fn from(err: XmlParseError) -> GetTrafficPolicyInstanceCountError {
-        let XmlParseError(message) = err;
-        GetTrafficPolicyInstanceCountError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetTrafficPolicyInstanceCountError {
-    fn from(err: CredentialsError) -> GetTrafficPolicyInstanceCountError {
-        GetTrafficPolicyInstanceCountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTrafficPolicyInstanceCountError {
-    fn from(err: HttpDispatchError) -> GetTrafficPolicyInstanceCountError {
-        GetTrafficPolicyInstanceCountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTrafficPolicyInstanceCountError {
-    fn from(err: io::Error) -> GetTrafficPolicyInstanceCountError {
-        GetTrafficPolicyInstanceCountError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTrafficPolicyInstanceCountError {
@@ -13625,15 +12468,7 @@ impl fmt::Display for GetTrafficPolicyInstanceCountError {
 }
 impl Error for GetTrafficPolicyInstanceCountError {
     fn description(&self) -> &str {
-        match *self {
-            GetTrafficPolicyInstanceCountError::Validation(ref cause) => cause,
-            GetTrafficPolicyInstanceCountError::Credentials(ref err) => err.description(),
-            GetTrafficPolicyInstanceCountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetTrafficPolicyInstanceCountError::ParseError(ref cause) => cause,
-            GetTrafficPolicyInstanceCountError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListGeoLocations
@@ -13641,20 +12476,10 @@ impl Error for GetTrafficPolicyInstanceCountError {
 pub enum ListGeoLocationsError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGeoLocationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGeoLocationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGeoLocationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13662,15 +12487,15 @@ impl ListGeoLocationsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListGeoLocationsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListGeoLocationsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListGeoLocationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13679,28 +12504,6 @@ impl ListGeoLocationsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListGeoLocationsError {
-    fn from(err: XmlParseError) -> ListGeoLocationsError {
-        let XmlParseError(message) = err;
-        ListGeoLocationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListGeoLocationsError {
-    fn from(err: CredentialsError) -> ListGeoLocationsError {
-        ListGeoLocationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGeoLocationsError {
-    fn from(err: HttpDispatchError) -> ListGeoLocationsError {
-        ListGeoLocationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGeoLocationsError {
-    fn from(err: io::Error) -> ListGeoLocationsError {
-        ListGeoLocationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGeoLocationsError {
@@ -13712,11 +12515,6 @@ impl Error for ListGeoLocationsError {
     fn description(&self) -> &str {
         match *self {
             ListGeoLocationsError::InvalidInput(ref cause) => cause,
-            ListGeoLocationsError::Validation(ref cause) => cause,
-            ListGeoLocationsError::Credentials(ref err) => err.description(),
-            ListGeoLocationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGeoLocationsError::ParseError(ref cause) => cause,
-            ListGeoLocationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13727,20 +12525,10 @@ pub enum ListHealthChecksError {
     IncompatibleVersion(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHealthChecksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHealthChecksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHealthChecksError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13748,20 +12536,20 @@ impl ListHealthChecksError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "IncompatibleVersion" => {
-                        return ListHealthChecksError::IncompatibleVersion(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHealthChecksError::IncompatibleVersion(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return ListHealthChecksError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHealthChecksError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListHealthChecksError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13770,28 +12558,6 @@ impl ListHealthChecksError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListHealthChecksError {
-    fn from(err: XmlParseError) -> ListHealthChecksError {
-        let XmlParseError(message) = err;
-        ListHealthChecksError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListHealthChecksError {
-    fn from(err: CredentialsError) -> ListHealthChecksError {
-        ListHealthChecksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHealthChecksError {
-    fn from(err: HttpDispatchError) -> ListHealthChecksError {
-        ListHealthChecksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHealthChecksError {
-    fn from(err: io::Error) -> ListHealthChecksError {
-        ListHealthChecksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHealthChecksError {
@@ -13804,11 +12570,6 @@ impl Error for ListHealthChecksError {
         match *self {
             ListHealthChecksError::IncompatibleVersion(ref cause) => cause,
             ListHealthChecksError::InvalidInput(ref cause) => cause,
-            ListHealthChecksError::Validation(ref cause) => cause,
-            ListHealthChecksError::Credentials(ref err) => err.description(),
-            ListHealthChecksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHealthChecksError::ParseError(ref cause) => cause,
-            ListHealthChecksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13821,20 +12582,10 @@ pub enum ListHostedZonesError {
     InvalidInput(String),
     /// <p>A reusable delegation set with the specified ID does not exist.</p>
     NoSuchDelegationSet(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHostedZonesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHostedZonesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostedZonesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13842,25 +12593,25 @@ impl ListHostedZonesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DelegationSetNotReusable" => {
-                        return ListHostedZonesError::DelegationSetNotReusable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHostedZonesError::DelegationSetNotReusable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return ListHostedZonesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHostedZonesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDelegationSet" => {
-                        return ListHostedZonesError::NoSuchDelegationSet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHostedZonesError::NoSuchDelegationSet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListHostedZonesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13869,28 +12620,6 @@ impl ListHostedZonesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListHostedZonesError {
-    fn from(err: XmlParseError) -> ListHostedZonesError {
-        let XmlParseError(message) = err;
-        ListHostedZonesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListHostedZonesError {
-    fn from(err: CredentialsError) -> ListHostedZonesError {
-        ListHostedZonesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHostedZonesError {
-    fn from(err: HttpDispatchError) -> ListHostedZonesError {
-        ListHostedZonesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHostedZonesError {
-    fn from(err: io::Error) -> ListHostedZonesError {
-        ListHostedZonesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHostedZonesError {
@@ -13904,11 +12633,6 @@ impl Error for ListHostedZonesError {
             ListHostedZonesError::DelegationSetNotReusable(ref cause) => cause,
             ListHostedZonesError::InvalidInput(ref cause) => cause,
             ListHostedZonesError::NoSuchDelegationSet(ref cause) => cause,
-            ListHostedZonesError::Validation(ref cause) => cause,
-            ListHostedZonesError::Credentials(ref err) => err.description(),
-            ListHostedZonesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHostedZonesError::ParseError(ref cause) => cause,
-            ListHostedZonesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13919,20 +12643,10 @@ pub enum ListHostedZonesByNameError {
     InvalidDomainName(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHostedZonesByNameError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHostedZonesByNameError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHostedZonesByNameError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13940,20 +12654,20 @@ impl ListHostedZonesByNameError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidDomainName" => {
-                        return ListHostedZonesByNameError::InvalidDomainName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHostedZonesByNameError::InvalidDomainName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return ListHostedZonesByNameError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListHostedZonesByNameError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListHostedZonesByNameError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13962,28 +12676,6 @@ impl ListHostedZonesByNameError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListHostedZonesByNameError {
-    fn from(err: XmlParseError) -> ListHostedZonesByNameError {
-        let XmlParseError(message) = err;
-        ListHostedZonesByNameError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListHostedZonesByNameError {
-    fn from(err: CredentialsError) -> ListHostedZonesByNameError {
-        ListHostedZonesByNameError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHostedZonesByNameError {
-    fn from(err: HttpDispatchError) -> ListHostedZonesByNameError {
-        ListHostedZonesByNameError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHostedZonesByNameError {
-    fn from(err: io::Error) -> ListHostedZonesByNameError {
-        ListHostedZonesByNameError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListHostedZonesByNameError {
@@ -13996,13 +12688,6 @@ impl Error for ListHostedZonesByNameError {
         match *self {
             ListHostedZonesByNameError::InvalidDomainName(ref cause) => cause,
             ListHostedZonesByNameError::InvalidInput(ref cause) => cause,
-            ListHostedZonesByNameError::Validation(ref cause) => cause,
-            ListHostedZonesByNameError::Credentials(ref err) => err.description(),
-            ListHostedZonesByNameError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListHostedZonesByNameError::ParseError(ref cause) => cause,
-            ListHostedZonesByNameError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14015,20 +12700,10 @@ pub enum ListQueryLoggingConfigsError {
     InvalidPaginationToken(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListQueryLoggingConfigsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQueryLoggingConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueryLoggingConfigsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14036,25 +12711,27 @@ impl ListQueryLoggingConfigsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListQueryLoggingConfigsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListQueryLoggingConfigsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidPaginationToken" => {
-                        return ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchHostedZone" => {
-                        return ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListQueryLoggingConfigsError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListQueryLoggingConfigsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14063,28 +12740,6 @@ impl ListQueryLoggingConfigsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListQueryLoggingConfigsError {
-    fn from(err: XmlParseError) -> ListQueryLoggingConfigsError {
-        let XmlParseError(message) = err;
-        ListQueryLoggingConfigsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListQueryLoggingConfigsError {
-    fn from(err: CredentialsError) -> ListQueryLoggingConfigsError {
-        ListQueryLoggingConfigsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQueryLoggingConfigsError {
-    fn from(err: HttpDispatchError) -> ListQueryLoggingConfigsError {
-        ListQueryLoggingConfigsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQueryLoggingConfigsError {
-    fn from(err: io::Error) -> ListQueryLoggingConfigsError {
-        ListQueryLoggingConfigsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListQueryLoggingConfigsError {
@@ -14098,13 +12753,6 @@ impl Error for ListQueryLoggingConfigsError {
             ListQueryLoggingConfigsError::InvalidInput(ref cause) => cause,
             ListQueryLoggingConfigsError::InvalidPaginationToken(ref cause) => cause,
             ListQueryLoggingConfigsError::NoSuchHostedZone(ref cause) => cause,
-            ListQueryLoggingConfigsError::Validation(ref cause) => cause,
-            ListQueryLoggingConfigsError::Credentials(ref err) => err.description(),
-            ListQueryLoggingConfigsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListQueryLoggingConfigsError::ParseError(ref cause) => cause,
-            ListQueryLoggingConfigsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14115,20 +12763,10 @@ pub enum ListResourceRecordSetsError {
     InvalidInput(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceRecordSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourceRecordSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceRecordSetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14136,20 +12774,20 @@ impl ListResourceRecordSetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListResourceRecordSetsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListResourceRecordSetsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return ListResourceRecordSetsError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListResourceRecordSetsError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListResourceRecordSetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14158,28 +12796,6 @@ impl ListResourceRecordSetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListResourceRecordSetsError {
-    fn from(err: XmlParseError) -> ListResourceRecordSetsError {
-        let XmlParseError(message) = err;
-        ListResourceRecordSetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListResourceRecordSetsError {
-    fn from(err: CredentialsError) -> ListResourceRecordSetsError {
-        ListResourceRecordSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourceRecordSetsError {
-    fn from(err: HttpDispatchError) -> ListResourceRecordSetsError {
-        ListResourceRecordSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourceRecordSetsError {
-    fn from(err: io::Error) -> ListResourceRecordSetsError {
-        ListResourceRecordSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListResourceRecordSetsError {
@@ -14192,13 +12808,6 @@ impl Error for ListResourceRecordSetsError {
         match *self {
             ListResourceRecordSetsError::InvalidInput(ref cause) => cause,
             ListResourceRecordSetsError::NoSuchHostedZone(ref cause) => cause,
-            ListResourceRecordSetsError::Validation(ref cause) => cause,
-            ListResourceRecordSetsError::Credentials(ref err) => err.description(),
-            ListResourceRecordSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListResourceRecordSetsError::ParseError(ref cause) => cause,
-            ListResourceRecordSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14207,20 +12816,12 @@ impl Error for ListResourceRecordSetsError {
 pub enum ListReusableDelegationSetsError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListReusableDelegationSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListReusableDelegationSetsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListReusableDelegationSetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14228,15 +12829,15 @@ impl ListReusableDelegationSetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListReusableDelegationSetsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListReusableDelegationSetsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListReusableDelegationSetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14245,28 +12846,6 @@ impl ListReusableDelegationSetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListReusableDelegationSetsError {
-    fn from(err: XmlParseError) -> ListReusableDelegationSetsError {
-        let XmlParseError(message) = err;
-        ListReusableDelegationSetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListReusableDelegationSetsError {
-    fn from(err: CredentialsError) -> ListReusableDelegationSetsError {
-        ListReusableDelegationSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListReusableDelegationSetsError {
-    fn from(err: HttpDispatchError) -> ListReusableDelegationSetsError {
-        ListReusableDelegationSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListReusableDelegationSetsError {
-    fn from(err: io::Error) -> ListReusableDelegationSetsError {
-        ListReusableDelegationSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListReusableDelegationSetsError {
@@ -14278,13 +12857,6 @@ impl Error for ListReusableDelegationSetsError {
     fn description(&self) -> &str {
         match *self {
             ListReusableDelegationSetsError::InvalidInput(ref cause) => cause,
-            ListReusableDelegationSetsError::Validation(ref cause) => cause,
-            ListReusableDelegationSetsError::Credentials(ref err) => err.description(),
-            ListReusableDelegationSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListReusableDelegationSetsError::ParseError(ref cause) => cause,
-            ListReusableDelegationSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14301,20 +12873,10 @@ pub enum ListTagsForResourceError {
     PriorRequestNotComplete(String),
     /// <p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14322,35 +12884,37 @@ impl ListTagsForResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTagsForResourceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return ListTagsForResourceError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourceError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return ListTagsForResourceError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourceError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PriorRequestNotComplete" => {
-                        return ListTagsForResourceError::PriorRequestNotComplete(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourceError::PriorRequestNotComplete(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ThrottlingException" => {
-                        return ListTagsForResourceError::Throttling(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourceError::Throttling(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListTagsForResourceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14359,28 +12923,6 @@ impl ListTagsForResourceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTagsForResourceError {
-    fn from(err: XmlParseError) -> ListTagsForResourceError {
-        let XmlParseError(message) = err;
-        ListTagsForResourceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -14396,13 +12938,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::NoSuchHostedZone(ref cause) => cause,
             ListTagsForResourceError::PriorRequestNotComplete(ref cause) => cause,
             ListTagsForResourceError::Throttling(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14419,20 +12954,10 @@ pub enum ListTagsForResourcesError {
     PriorRequestNotComplete(String),
     /// <p>The limit on the number of requests per second was exceeded.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourcesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14440,35 +12965,37 @@ impl ListTagsForResourcesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTagsForResourcesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourcesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return ListTagsForResourcesError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourcesError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return ListTagsForResourcesError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourcesError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PriorRequestNotComplete" => {
-                        return ListTagsForResourcesError::PriorRequestNotComplete(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTagsForResourcesError::PriorRequestNotComplete(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ThrottlingException" => {
-                        return ListTagsForResourcesError::Throttling(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTagsForResourcesError::Throttling(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListTagsForResourcesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14477,28 +13004,6 @@ impl ListTagsForResourcesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTagsForResourcesError {
-    fn from(err: XmlParseError) -> ListTagsForResourcesError {
-        let XmlParseError(message) = err;
-        ListTagsForResourcesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourcesError {
-    fn from(err: CredentialsError) -> ListTagsForResourcesError {
-        ListTagsForResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourcesError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourcesError {
-        ListTagsForResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourcesError {
-    fn from(err: io::Error) -> ListTagsForResourcesError {
-        ListTagsForResourcesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTagsForResourcesError {
@@ -14514,13 +13019,6 @@ impl Error for ListTagsForResourcesError {
             ListTagsForResourcesError::NoSuchHostedZone(ref cause) => cause,
             ListTagsForResourcesError::PriorRequestNotComplete(ref cause) => cause,
             ListTagsForResourcesError::Throttling(ref cause) => cause,
-            ListTagsForResourcesError::Validation(ref cause) => cause,
-            ListTagsForResourcesError::Credentials(ref err) => err.description(),
-            ListTagsForResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourcesError::ParseError(ref cause) => cause,
-            ListTagsForResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14529,20 +13027,10 @@ impl Error for ListTagsForResourcesError {
 pub enum ListTrafficPoliciesError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrafficPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14550,15 +13038,15 @@ impl ListTrafficPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTrafficPoliciesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTrafficPoliciesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListTrafficPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14567,28 +13055,6 @@ impl ListTrafficPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTrafficPoliciesError {
-    fn from(err: XmlParseError) -> ListTrafficPoliciesError {
-        let XmlParseError(message) = err;
-        ListTrafficPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTrafficPoliciesError {
-    fn from(err: CredentialsError) -> ListTrafficPoliciesError {
-        ListTrafficPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTrafficPoliciesError {
-    fn from(err: HttpDispatchError) -> ListTrafficPoliciesError {
-        ListTrafficPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTrafficPoliciesError {
-    fn from(err: io::Error) -> ListTrafficPoliciesError {
-        ListTrafficPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPoliciesError {
@@ -14600,13 +13066,6 @@ impl Error for ListTrafficPoliciesError {
     fn description(&self) -> &str {
         match *self {
             ListTrafficPoliciesError::InvalidInput(ref cause) => cause,
-            ListTrafficPoliciesError::Validation(ref cause) => cause,
-            ListTrafficPoliciesError::Credentials(ref err) => err.description(),
-            ListTrafficPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTrafficPoliciesError::ParseError(ref cause) => cause,
-            ListTrafficPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14617,20 +13076,12 @@ pub enum ListTrafficPolicyInstancesError {
     InvalidInput(String),
     /// <p>No traffic policy instance exists with the specified ID.</p>
     NoSuchTrafficPolicyInstance(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListTrafficPolicyInstancesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14638,20 +13089,22 @@ impl ListTrafficPolicyInstancesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTrafficPolicyInstancesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTrafficPolicyInstancesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicyInstance" => {
-                        return ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ListTrafficPolicyInstancesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14660,28 +13113,6 @@ impl ListTrafficPolicyInstancesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTrafficPolicyInstancesError {
-    fn from(err: XmlParseError) -> ListTrafficPolicyInstancesError {
-        let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTrafficPolicyInstancesError {
-    fn from(err: CredentialsError) -> ListTrafficPolicyInstancesError {
-        ListTrafficPolicyInstancesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTrafficPolicyInstancesError {
-    fn from(err: HttpDispatchError) -> ListTrafficPolicyInstancesError {
-        ListTrafficPolicyInstancesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTrafficPolicyInstancesError {
-    fn from(err: io::Error) -> ListTrafficPolicyInstancesError {
-        ListTrafficPolicyInstancesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesError {
@@ -14694,13 +13125,6 @@ impl Error for ListTrafficPolicyInstancesError {
         match *self {
             ListTrafficPolicyInstancesError::InvalidInput(ref cause) => cause,
             ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(ref cause) => cause,
-            ListTrafficPolicyInstancesError::Validation(ref cause) => cause,
-            ListTrafficPolicyInstancesError::Credentials(ref err) => err.description(),
-            ListTrafficPolicyInstancesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTrafficPolicyInstancesError::ParseError(ref cause) => cause,
-            ListTrafficPolicyInstancesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14713,31 +13137,42 @@ pub enum ListTrafficPolicyInstancesByHostedZoneError {
     NoSuchHostedZone(String),
     /// <p>No traffic policy instance exists with the specified ID.</p>
     NoSuchTrafficPolicyInstance(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesByHostedZoneError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesByHostedZoneError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListTrafficPolicyInstancesByHostedZoneError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InvalidInput" => return ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(String::from(parsed_error.message)),"NoSuchHostedZone" => return ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(String::from(parsed_error.message)),"NoSuchTrafficPolicyInstance" => return ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(String::from(parsed_error.message)),_ => {}
-                                }
+                    "InvalidInput" => {
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "NoSuchHostedZone" => {
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "NoSuchTrafficPolicyInstance" => return RusotoError::Service(
+                        ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        ListTrafficPolicyInstancesByHostedZoneError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14746,28 +13181,6 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTrafficPolicyInstancesByHostedZoneError {
-    fn from(err: XmlParseError) -> ListTrafficPolicyInstancesByHostedZoneError {
-        let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesByHostedZoneError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTrafficPolicyInstancesByHostedZoneError {
-    fn from(err: CredentialsError) -> ListTrafficPolicyInstancesByHostedZoneError {
-        ListTrafficPolicyInstancesByHostedZoneError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTrafficPolicyInstancesByHostedZoneError {
-    fn from(err: HttpDispatchError) -> ListTrafficPolicyInstancesByHostedZoneError {
-        ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTrafficPolicyInstancesByHostedZoneError {
-    fn from(err: io::Error) -> ListTrafficPolicyInstancesByHostedZoneError {
-        ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesByHostedZoneError {
@@ -14783,13 +13196,6 @@ impl Error for ListTrafficPolicyInstancesByHostedZoneError {
             ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(ref cause) => {
                 cause
             }
-            ListTrafficPolicyInstancesByHostedZoneError::Validation(ref cause) => cause,
-            ListTrafficPolicyInstancesByHostedZoneError::Credentials(ref err) => err.description(),
-            ListTrafficPolicyInstancesByHostedZoneError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTrafficPolicyInstancesByHostedZoneError::ParseError(ref cause) => cause,
-            ListTrafficPolicyInstancesByHostedZoneError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14802,20 +13208,12 @@ pub enum ListTrafficPolicyInstancesByPolicyError {
     NoSuchTrafficPolicy(String),
     /// <p>No traffic policy instance exists with the specified ID.</p>
     NoSuchTrafficPolicyInstance(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyInstancesByPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyInstancesByPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListTrafficPolicyInstancesByPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14823,25 +13221,31 @@ impl ListTrafficPolicyInstancesByPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchTrafficPolicy" => {
-                        return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NoSuchTrafficPolicyInstance" => {
-                        return ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ListTrafficPolicyInstancesByPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14850,28 +13254,6 @@ impl ListTrafficPolicyInstancesByPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTrafficPolicyInstancesByPolicyError {
-    fn from(err: XmlParseError) -> ListTrafficPolicyInstancesByPolicyError {
-        let XmlParseError(message) = err;
-        ListTrafficPolicyInstancesByPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTrafficPolicyInstancesByPolicyError {
-    fn from(err: CredentialsError) -> ListTrafficPolicyInstancesByPolicyError {
-        ListTrafficPolicyInstancesByPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTrafficPolicyInstancesByPolicyError {
-    fn from(err: HttpDispatchError) -> ListTrafficPolicyInstancesByPolicyError {
-        ListTrafficPolicyInstancesByPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTrafficPolicyInstancesByPolicyError {
-    fn from(err: io::Error) -> ListTrafficPolicyInstancesByPolicyError {
-        ListTrafficPolicyInstancesByPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyInstancesByPolicyError {
@@ -14887,13 +13269,6 @@ impl Error for ListTrafficPolicyInstancesByPolicyError {
             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(ref cause) => {
                 cause
             }
-            ListTrafficPolicyInstancesByPolicyError::Validation(ref cause) => cause,
-            ListTrafficPolicyInstancesByPolicyError::Credentials(ref err) => err.description(),
-            ListTrafficPolicyInstancesByPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTrafficPolicyInstancesByPolicyError::ParseError(ref cause) => cause,
-            ListTrafficPolicyInstancesByPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14904,20 +13279,10 @@ pub enum ListTrafficPolicyVersionsError {
     InvalidInput(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTrafficPolicyVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTrafficPolicyVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTrafficPolicyVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14925,20 +13290,22 @@ impl ListTrafficPolicyVersionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListTrafficPolicyVersionsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListTrafficPolicyVersionsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicy" => {
-                        return ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListTrafficPolicyVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14947,28 +13314,6 @@ impl ListTrafficPolicyVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTrafficPolicyVersionsError {
-    fn from(err: XmlParseError) -> ListTrafficPolicyVersionsError {
-        let XmlParseError(message) = err;
-        ListTrafficPolicyVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTrafficPolicyVersionsError {
-    fn from(err: CredentialsError) -> ListTrafficPolicyVersionsError {
-        ListTrafficPolicyVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTrafficPolicyVersionsError {
-    fn from(err: HttpDispatchError) -> ListTrafficPolicyVersionsError {
-        ListTrafficPolicyVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTrafficPolicyVersionsError {
-    fn from(err: io::Error) -> ListTrafficPolicyVersionsError {
-        ListTrafficPolicyVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTrafficPolicyVersionsError {
@@ -14981,13 +13326,6 @@ impl Error for ListTrafficPolicyVersionsError {
         match *self {
             ListTrafficPolicyVersionsError::InvalidInput(ref cause) => cause,
             ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(ref cause) => cause,
-            ListTrafficPolicyVersionsError::Validation(ref cause) => cause,
-            ListTrafficPolicyVersionsError::Credentials(ref err) => err.description(),
-            ListTrafficPolicyVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTrafficPolicyVersionsError::ParseError(ref cause) => cause,
-            ListTrafficPolicyVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15000,20 +13338,12 @@ pub enum ListVPCAssociationAuthorizationsError {
     InvalidPaginationToken(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVPCAssociationAuthorizationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVPCAssociationAuthorizationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListVPCAssociationAuthorizationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15021,25 +13351,31 @@ impl ListVPCAssociationAuthorizationsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidPaginationToken" => {
-                        return ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NoSuchHostedZone" => {
-                        return ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ListVPCAssociationAuthorizationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15048,28 +13384,6 @@ impl ListVPCAssociationAuthorizationsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListVPCAssociationAuthorizationsError {
-    fn from(err: XmlParseError) -> ListVPCAssociationAuthorizationsError {
-        let XmlParseError(message) = err;
-        ListVPCAssociationAuthorizationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListVPCAssociationAuthorizationsError {
-    fn from(err: CredentialsError) -> ListVPCAssociationAuthorizationsError {
-        ListVPCAssociationAuthorizationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVPCAssociationAuthorizationsError {
-    fn from(err: HttpDispatchError) -> ListVPCAssociationAuthorizationsError {
-        ListVPCAssociationAuthorizationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVPCAssociationAuthorizationsError {
-    fn from(err: io::Error) -> ListVPCAssociationAuthorizationsError {
-        ListVPCAssociationAuthorizationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVPCAssociationAuthorizationsError {
@@ -15083,13 +13397,6 @@ impl Error for ListVPCAssociationAuthorizationsError {
             ListVPCAssociationAuthorizationsError::InvalidInput(ref cause) => cause,
             ListVPCAssociationAuthorizationsError::InvalidPaginationToken(ref cause) => cause,
             ListVPCAssociationAuthorizationsError::NoSuchHostedZone(ref cause) => cause,
-            ListVPCAssociationAuthorizationsError::Validation(ref cause) => cause,
-            ListVPCAssociationAuthorizationsError::Credentials(ref err) => err.description(),
-            ListVPCAssociationAuthorizationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVPCAssociationAuthorizationsError::ParseError(ref cause) => cause,
-            ListVPCAssociationAuthorizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15100,20 +13407,10 @@ pub enum TestDNSAnswerError {
     InvalidInput(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TestDNSAnswerError {
-    pub fn from_response(res: BufferedHttpResponse) -> TestDNSAnswerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestDNSAnswerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15121,18 +13418,20 @@ impl TestDNSAnswerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return TestDNSAnswerError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(TestDNSAnswerError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchHostedZone" => {
-                        return TestDNSAnswerError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(TestDNSAnswerError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        TestDNSAnswerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15141,28 +13440,6 @@ impl TestDNSAnswerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TestDNSAnswerError {
-    fn from(err: XmlParseError) -> TestDNSAnswerError {
-        let XmlParseError(message) = err;
-        TestDNSAnswerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TestDNSAnswerError {
-    fn from(err: CredentialsError) -> TestDNSAnswerError {
-        TestDNSAnswerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TestDNSAnswerError {
-    fn from(err: HttpDispatchError) -> TestDNSAnswerError {
-        TestDNSAnswerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TestDNSAnswerError {
-    fn from(err: io::Error) -> TestDNSAnswerError {
-        TestDNSAnswerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestDNSAnswerError {
@@ -15175,11 +13452,6 @@ impl Error for TestDNSAnswerError {
         match *self {
             TestDNSAnswerError::InvalidInput(ref cause) => cause,
             TestDNSAnswerError::NoSuchHostedZone(ref cause) => cause,
-            TestDNSAnswerError::Validation(ref cause) => cause,
-            TestDNSAnswerError::Credentials(ref err) => err.description(),
-            TestDNSAnswerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestDNSAnswerError::ParseError(ref cause) => cause,
-            TestDNSAnswerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15192,20 +13464,10 @@ pub enum UpdateHealthCheckError {
     InvalidInput(String),
     /// <p>No health check exists with the specified ID.</p>
     NoSuchHealthCheck(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHealthCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateHealthCheckError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHealthCheckError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15213,25 +13475,27 @@ impl UpdateHealthCheckError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HealthCheckVersionMismatch" => {
-                        return UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return UpdateHealthCheckError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateHealthCheckError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHealthCheck" => {
-                        return UpdateHealthCheckError::NoSuchHealthCheck(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateHealthCheckError::NoSuchHealthCheck(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateHealthCheckError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15240,28 +13504,6 @@ impl UpdateHealthCheckError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateHealthCheckError {
-    fn from(err: XmlParseError) -> UpdateHealthCheckError {
-        let XmlParseError(message) = err;
-        UpdateHealthCheckError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateHealthCheckError {
-    fn from(err: CredentialsError) -> UpdateHealthCheckError {
-        UpdateHealthCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateHealthCheckError {
-    fn from(err: HttpDispatchError) -> UpdateHealthCheckError {
-        UpdateHealthCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateHealthCheckError {
-    fn from(err: io::Error) -> UpdateHealthCheckError {
-        UpdateHealthCheckError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateHealthCheckError {
@@ -15275,13 +13517,6 @@ impl Error for UpdateHealthCheckError {
             UpdateHealthCheckError::HealthCheckVersionMismatch(ref cause) => cause,
             UpdateHealthCheckError::InvalidInput(ref cause) => cause,
             UpdateHealthCheckError::NoSuchHealthCheck(ref cause) => cause,
-            UpdateHealthCheckError::Validation(ref cause) => cause,
-            UpdateHealthCheckError::Credentials(ref err) => err.description(),
-            UpdateHealthCheckError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateHealthCheckError::ParseError(ref cause) => cause,
-            UpdateHealthCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15292,20 +13527,10 @@ pub enum UpdateHostedZoneCommentError {
     InvalidInput(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHostedZoneCommentError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateHostedZoneCommentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHostedZoneCommentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15313,20 +13538,20 @@ impl UpdateHostedZoneCommentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return UpdateHostedZoneCommentError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateHostedZoneCommentError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchHostedZone" => {
-                        return UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateHostedZoneCommentError::NoSuchHostedZone(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateHostedZoneCommentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15335,28 +13560,6 @@ impl UpdateHostedZoneCommentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateHostedZoneCommentError {
-    fn from(err: XmlParseError) -> UpdateHostedZoneCommentError {
-        let XmlParseError(message) = err;
-        UpdateHostedZoneCommentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateHostedZoneCommentError {
-    fn from(err: CredentialsError) -> UpdateHostedZoneCommentError {
-        UpdateHostedZoneCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateHostedZoneCommentError {
-    fn from(err: HttpDispatchError) -> UpdateHostedZoneCommentError {
-        UpdateHostedZoneCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateHostedZoneCommentError {
-    fn from(err: io::Error) -> UpdateHostedZoneCommentError {
-        UpdateHostedZoneCommentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateHostedZoneCommentError {
@@ -15369,13 +13572,6 @@ impl Error for UpdateHostedZoneCommentError {
         match *self {
             UpdateHostedZoneCommentError::InvalidInput(ref cause) => cause,
             UpdateHostedZoneCommentError::NoSuchHostedZone(ref cause) => cause,
-            UpdateHostedZoneCommentError::Validation(ref cause) => cause,
-            UpdateHostedZoneCommentError::Credentials(ref err) => err.description(),
-            UpdateHostedZoneCommentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateHostedZoneCommentError::ParseError(ref cause) => cause,
-            UpdateHostedZoneCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15388,20 +13584,12 @@ pub enum UpdateTrafficPolicyCommentError {
     InvalidInput(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTrafficPolicyCommentError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTrafficPolicyCommentError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateTrafficPolicyCommentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15409,25 +13597,29 @@ impl UpdateTrafficPolicyCommentError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return UpdateTrafficPolicyCommentError::ConcurrentModification(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidInput" => {
-                        return UpdateTrafficPolicyCommentError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTrafficPolicyCommentError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicy" => {
-                        return UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateTrafficPolicyCommentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15436,28 +13628,6 @@ impl UpdateTrafficPolicyCommentError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateTrafficPolicyCommentError {
-    fn from(err: XmlParseError) -> UpdateTrafficPolicyCommentError {
-        let XmlParseError(message) = err;
-        UpdateTrafficPolicyCommentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTrafficPolicyCommentError {
-    fn from(err: CredentialsError) -> UpdateTrafficPolicyCommentError {
-        UpdateTrafficPolicyCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTrafficPolicyCommentError {
-    fn from(err: HttpDispatchError) -> UpdateTrafficPolicyCommentError {
-        UpdateTrafficPolicyCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTrafficPolicyCommentError {
-    fn from(err: io::Error) -> UpdateTrafficPolicyCommentError {
-        UpdateTrafficPolicyCommentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTrafficPolicyCommentError {
@@ -15471,13 +13641,6 @@ impl Error for UpdateTrafficPolicyCommentError {
             UpdateTrafficPolicyCommentError::ConcurrentModification(ref cause) => cause,
             UpdateTrafficPolicyCommentError::InvalidInput(ref cause) => cause,
             UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(ref cause) => cause,
-            UpdateTrafficPolicyCommentError::Validation(ref cause) => cause,
-            UpdateTrafficPolicyCommentError::Credentials(ref err) => err.description(),
-            UpdateTrafficPolicyCommentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateTrafficPolicyCommentError::ParseError(ref cause) => cause,
-            UpdateTrafficPolicyCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15494,20 +13657,12 @@ pub enum UpdateTrafficPolicyInstanceError {
     NoSuchTrafficPolicyInstance(String),
     /// <p>If Amazon Route 53 can't process a request before the next request arrives, it will reject subsequent requests for the same hosted zone and return an <code>HTTP 400 error</code> (<code>Bad request</code>). If Route 53 returns this error repeatedly for the same request, we recommend that you wait, in intervals of increasing duration, before you try the request again.</p>
     PriorRequestNotComplete(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTrafficPolicyInstanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTrafficPolicyInstanceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateTrafficPolicyInstanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15515,35 +13670,43 @@ impl UpdateTrafficPolicyInstanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConflictingTypes" => {
-                        return UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTrafficPolicyInstanceError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchTrafficPolicy" => {
-                        return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchTrafficPolicyInstance" => {
-                        return UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "PriorRequestNotComplete" => {
-                        return UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateTrafficPolicyInstanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15552,28 +13715,6 @@ impl UpdateTrafficPolicyInstanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateTrafficPolicyInstanceError {
-    fn from(err: XmlParseError) -> UpdateTrafficPolicyInstanceError {
-        let XmlParseError(message) = err;
-        UpdateTrafficPolicyInstanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTrafficPolicyInstanceError {
-    fn from(err: CredentialsError) -> UpdateTrafficPolicyInstanceError {
-        UpdateTrafficPolicyInstanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTrafficPolicyInstanceError {
-    fn from(err: HttpDispatchError) -> UpdateTrafficPolicyInstanceError {
-        UpdateTrafficPolicyInstanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTrafficPolicyInstanceError {
-    fn from(err: io::Error) -> UpdateTrafficPolicyInstanceError {
-        UpdateTrafficPolicyInstanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTrafficPolicyInstanceError {
@@ -15589,13 +13730,6 @@ impl Error for UpdateTrafficPolicyInstanceError {
             UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(ref cause) => cause,
             UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(ref cause) => cause,
             UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::Validation(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::Credentials(ref err) => err.description(),
-            UpdateTrafficPolicyInstanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateTrafficPolicyInstanceError::ParseError(ref cause) => cause,
-            UpdateTrafficPolicyInstanceError::Unknown(_) => "unknown error",
         }
     }
 }

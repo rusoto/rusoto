@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -216,20 +213,10 @@ pub enum GetResourcesError {
     PaginationTokenExpired(String),
     /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -242,45 +229,30 @@ impl GetResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetResourcesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetResourcesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetResourcesError::PaginationTokenExpired(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::PaginationTokenExpired(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetResourcesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourcesError {
-    fn from(err: serde_json::error::Error) -> GetResourcesError {
-        GetResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourcesError {
-    fn from(err: CredentialsError) -> GetResourcesError {
-        GetResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourcesError {
-    fn from(err: HttpDispatchError) -> GetResourcesError {
-        GetResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourcesError {
-    fn from(err: io::Error) -> GetResourcesError {
-        GetResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourcesError {
@@ -295,11 +267,6 @@ impl Error for GetResourcesError {
             GetResourcesError::InvalidParameter(ref cause) => cause,
             GetResourcesError::PaginationTokenExpired(ref cause) => cause,
             GetResourcesError::Throttled(ref cause) => cause,
-            GetResourcesError::Validation(ref cause) => cause,
-            GetResourcesError::Credentials(ref err) => err.description(),
-            GetResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetResourcesError::ParseError(ref cause) => cause,
-            GetResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -314,20 +281,10 @@ pub enum GetTagKeysError {
     PaginationTokenExpired(String),
     /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTagKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTagKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagKeysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -340,45 +297,30 @@ impl GetTagKeysError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetTagKeysError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTagKeysError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetTagKeysError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetTagKeysError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetTagKeysError::PaginationTokenExpired(String::from(error_message));
+                    return RusotoError::Service(GetTagKeysError::PaginationTokenExpired(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetTagKeysError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetTagKeysError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTagKeysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTagKeysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTagKeysError {
-    fn from(err: serde_json::error::Error) -> GetTagKeysError {
-        GetTagKeysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTagKeysError {
-    fn from(err: CredentialsError) -> GetTagKeysError {
-        GetTagKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTagKeysError {
-    fn from(err: HttpDispatchError) -> GetTagKeysError {
-        GetTagKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTagKeysError {
-    fn from(err: io::Error) -> GetTagKeysError {
-        GetTagKeysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTagKeysError {
@@ -393,11 +335,6 @@ impl Error for GetTagKeysError {
             GetTagKeysError::InvalidParameter(ref cause) => cause,
             GetTagKeysError::PaginationTokenExpired(ref cause) => cause,
             GetTagKeysError::Throttled(ref cause) => cause,
-            GetTagKeysError::Validation(ref cause) => cause,
-            GetTagKeysError::Credentials(ref err) => err.description(),
-            GetTagKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTagKeysError::ParseError(ref cause) => cause,
-            GetTagKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -412,20 +349,10 @@ pub enum GetTagValuesError {
     PaginationTokenExpired(String),
     /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTagValuesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTagValuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagValuesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -438,45 +365,30 @@ impl GetTagValuesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetTagValuesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTagValuesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetTagValuesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetTagValuesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "PaginationTokenExpiredException" => {
-                    return GetTagValuesError::PaginationTokenExpired(String::from(error_message));
+                    return RusotoError::Service(GetTagValuesError::PaginationTokenExpired(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return GetTagValuesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(GetTagValuesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTagValuesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTagValuesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTagValuesError {
-    fn from(err: serde_json::error::Error) -> GetTagValuesError {
-        GetTagValuesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTagValuesError {
-    fn from(err: CredentialsError) -> GetTagValuesError {
-        GetTagValuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTagValuesError {
-    fn from(err: HttpDispatchError) -> GetTagValuesError {
-        GetTagValuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTagValuesError {
-    fn from(err: io::Error) -> GetTagValuesError {
-        GetTagValuesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTagValuesError {
@@ -491,11 +403,6 @@ impl Error for GetTagValuesError {
             GetTagValuesError::InvalidParameter(ref cause) => cause,
             GetTagValuesError::PaginationTokenExpired(ref cause) => cause,
             GetTagValuesError::Throttled(ref cause) => cause,
-            GetTagValuesError::Validation(ref cause) => cause,
-            GetTagValuesError::Credentials(ref err) => err.description(),
-            GetTagValuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTagValuesError::ParseError(ref cause) => cause,
-            GetTagValuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -508,20 +415,10 @@ pub enum TagResourcesError {
     InvalidParameter(String),
     /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -534,42 +431,25 @@ impl TagResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return TagResourcesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(TagResourcesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return TagResourcesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TagResourcesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottledException" => {
-                    return TagResourcesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(TagResourcesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourcesError {
-    fn from(err: serde_json::error::Error) -> TagResourcesError {
-        TagResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourcesError {
-    fn from(err: CredentialsError) -> TagResourcesError {
-        TagResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourcesError {
-    fn from(err: HttpDispatchError) -> TagResourcesError {
-        TagResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourcesError {
-    fn from(err: io::Error) -> TagResourcesError {
-        TagResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourcesError {
@@ -583,11 +463,6 @@ impl Error for TagResourcesError {
             TagResourcesError::InternalService(ref cause) => cause,
             TagResourcesError::InvalidParameter(ref cause) => cause,
             TagResourcesError::Throttled(ref cause) => cause,
-            TagResourcesError::Validation(ref cause) => cause,
-            TagResourcesError::Credentials(ref err) => err.description(),
-            TagResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourcesError::ParseError(ref cause) => cause,
-            TagResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -600,20 +475,10 @@ pub enum UntagResourcesError {
     InvalidParameter(String),
     /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -626,42 +491,25 @@ impl UntagResourcesError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return UntagResourcesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UntagResourcesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UntagResourcesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UntagResourcesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottledException" => {
-                    return UntagResourcesError::Throttled(String::from(error_message));
+                    return RusotoError::Service(UntagResourcesError::Throttled(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourcesError {
-    fn from(err: serde_json::error::Error) -> UntagResourcesError {
-        UntagResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourcesError {
-    fn from(err: CredentialsError) -> UntagResourcesError {
-        UntagResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourcesError {
-    fn from(err: HttpDispatchError) -> UntagResourcesError {
-        UntagResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourcesError {
-    fn from(err: io::Error) -> UntagResourcesError {
-        UntagResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourcesError {
@@ -675,11 +523,6 @@ impl Error for UntagResourcesError {
             UntagResourcesError::InternalService(ref cause) => cause,
             UntagResourcesError::InvalidParameter(ref cause) => cause,
             UntagResourcesError::Throttled(ref cause) => cause,
-            UntagResourcesError::Validation(ref cause) => cause,
-            UntagResourcesError::Credentials(ref err) => err.description(),
-            UntagResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourcesError::ParseError(ref cause) => cause,
-            UntagResourcesError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1012,22 +1009,12 @@ pub enum AssociateConfigurationItemsToApplicationError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateConfigurationItemsToApplicationError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> AssociateConfigurationItemsToApplicationError {
+    ) -> RusotoError<AssociateConfigurationItemsToApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1040,55 +1027,38 @@ impl AssociateConfigurationItemsToApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return AssociateConfigurationItemsToApplicationError::AuthorizationError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AssociateConfigurationItemsToApplicationError::AuthorizationError(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidParameterException" => {
-                    return AssociateConfigurationItemsToApplicationError::InvalidParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AssociateConfigurationItemsToApplicationError::InvalidParameter(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidParameterValueException" => {
-                    return AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AssociateConfigurationItemsToApplicationError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServerInternalErrorException" => {
-                    return AssociateConfigurationItemsToApplicationError::ServerInternalError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AssociateConfigurationItemsToApplicationError::ServerInternalError(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return AssociateConfigurationItemsToApplicationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateConfigurationItemsToApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateConfigurationItemsToApplicationError {
-    fn from(err: serde_json::error::Error) -> AssociateConfigurationItemsToApplicationError {
-        AssociateConfigurationItemsToApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateConfigurationItemsToApplicationError {
-    fn from(err: CredentialsError) -> AssociateConfigurationItemsToApplicationError {
-        AssociateConfigurationItemsToApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateConfigurationItemsToApplicationError {
-    fn from(err: HttpDispatchError) -> AssociateConfigurationItemsToApplicationError {
-        AssociateConfigurationItemsToApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateConfigurationItemsToApplicationError {
-    fn from(err: io::Error) -> AssociateConfigurationItemsToApplicationError {
-        AssociateConfigurationItemsToApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateConfigurationItemsToApplicationError {
@@ -1105,15 +1075,6 @@ impl Error for AssociateConfigurationItemsToApplicationError {
                 cause
             }
             AssociateConfigurationItemsToApplicationError::ServerInternalError(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::Validation(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::Credentials(ref err) => {
-                err.description()
-            }
-            AssociateConfigurationItemsToApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateConfigurationItemsToApplicationError::ParseError(ref cause) => cause,
-            AssociateConfigurationItemsToApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1126,20 +1087,10 @@ pub enum BatchDeleteImportDataError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteImportDataError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteImportDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteImportDataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1152,48 +1103,25 @@ impl BatchDeleteImportDataError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return BatchDeleteImportDataError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDeleteImportDataError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return BatchDeleteImportDataError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDeleteImportDataError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return BatchDeleteImportDataError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDeleteImportDataError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchDeleteImportDataError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteImportDataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteImportDataError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteImportDataError {
-        BatchDeleteImportDataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteImportDataError {
-    fn from(err: CredentialsError) -> BatchDeleteImportDataError {
-        BatchDeleteImportDataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteImportDataError {
-    fn from(err: HttpDispatchError) -> BatchDeleteImportDataError {
-        BatchDeleteImportDataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteImportDataError {
-    fn from(err: io::Error) -> BatchDeleteImportDataError {
-        BatchDeleteImportDataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteImportDataError {
@@ -1207,13 +1135,6 @@ impl Error for BatchDeleteImportDataError {
             BatchDeleteImportDataError::AuthorizationError(ref cause) => cause,
             BatchDeleteImportDataError::InvalidParameterValue(ref cause) => cause,
             BatchDeleteImportDataError::ServerInternalError(ref cause) => cause,
-            BatchDeleteImportDataError::Validation(ref cause) => cause,
-            BatchDeleteImportDataError::Credentials(ref err) => err.description(),
-            BatchDeleteImportDataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteImportDataError::ParseError(ref cause) => cause,
-            BatchDeleteImportDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1228,20 +1149,10 @@ pub enum CreateApplicationError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1254,47 +1165,30 @@ impl CreateApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return CreateApplicationError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateApplicationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateApplicationError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return CreateApplicationError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateApplicationError {
-    fn from(err: serde_json::error::Error) -> CreateApplicationError {
-        CreateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationError {
-    fn from(err: CredentialsError) -> CreateApplicationError {
-        CreateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationError {
-    fn from(err: HttpDispatchError) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationError {
-    fn from(err: io::Error) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1309,13 +1203,6 @@ impl Error for CreateApplicationError {
             CreateApplicationError::InvalidParameter(ref cause) => cause,
             CreateApplicationError::InvalidParameterValue(ref cause) => cause,
             CreateApplicationError::ServerInternalError(ref cause) => cause,
-            CreateApplicationError::Validation(ref cause) => cause,
-            CreateApplicationError::Credentials(ref err) => err.description(),
-            CreateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationError::ParseError(ref cause) => cause,
-            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1332,20 +1219,10 @@ pub enum CreateTagsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1358,48 +1235,35 @@ impl CreateTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return CreateTagsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::AuthorizationError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateTagsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateTagsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateTagsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalErrorException" => {
-                    return CreateTagsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::ServerInternalError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTagsError {
-    fn from(err: serde_json::error::Error) -> CreateTagsError {
-        CreateTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTagsError {
-    fn from(err: CredentialsError) -> CreateTagsError {
-        CreateTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTagsError {
-    fn from(err: HttpDispatchError) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTagsError {
-    fn from(err: io::Error) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -1415,11 +1279,6 @@ impl Error for CreateTagsError {
             CreateTagsError::InvalidParameterValue(ref cause) => cause,
             CreateTagsError::ResourceNotFound(ref cause) => cause,
             CreateTagsError::ServerInternalError(ref cause) => cause,
-            CreateTagsError::Validation(ref cause) => cause,
-            CreateTagsError::Credentials(ref err) => err.description(),
-            CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::ParseError(ref cause) => cause,
-            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1434,20 +1293,10 @@ pub enum DeleteApplicationsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1460,47 +1309,30 @@ impl DeleteApplicationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DeleteApplicationsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationsError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteApplicationsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteApplicationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return DeleteApplicationsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationsError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteApplicationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationsError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationsError {
-        DeleteApplicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationsError {
-    fn from(err: CredentialsError) -> DeleteApplicationsError {
-        DeleteApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationsError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationsError {
-        DeleteApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationsError {
-    fn from(err: io::Error) -> DeleteApplicationsError {
-        DeleteApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationsError {
@@ -1515,13 +1347,6 @@ impl Error for DeleteApplicationsError {
             DeleteApplicationsError::InvalidParameter(ref cause) => cause,
             DeleteApplicationsError::InvalidParameterValue(ref cause) => cause,
             DeleteApplicationsError::ServerInternalError(ref cause) => cause,
-            DeleteApplicationsError::Validation(ref cause) => cause,
-            DeleteApplicationsError::Credentials(ref err) => err.description(),
-            DeleteApplicationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationsError::ParseError(ref cause) => cause,
-            DeleteApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1538,20 +1363,10 @@ pub enum DeleteTagsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1564,48 +1379,35 @@ impl DeleteTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DeleteTagsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::AuthorizationError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteTagsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteTagsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTagsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalErrorException" => {
-                    return DeleteTagsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::ServerInternalError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTagsError {
-    fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTagsError {
-    fn from(err: CredentialsError) -> DeleteTagsError {
-        DeleteTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTagsError {
-    fn from(err: HttpDispatchError) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTagsError {
-    fn from(err: io::Error) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -1621,11 +1423,6 @@ impl Error for DeleteTagsError {
             DeleteTagsError::InvalidParameterValue(ref cause) => cause,
             DeleteTagsError::ResourceNotFound(ref cause) => cause,
             DeleteTagsError::ServerInternalError(ref cause) => cause,
-            DeleteTagsError::Validation(ref cause) => cause,
-            DeleteTagsError::Credentials(ref err) => err.description(),
-            DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::ParseError(ref cause) => cause,
-            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1640,20 +1437,10 @@ pub enum DescribeAgentsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAgentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAgentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAgentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1666,45 +1453,30 @@ impl DescribeAgentsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeAgentsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DescribeAgentsError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeAgentsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeAgentsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeAgentsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeAgentsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeAgentsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeAgentsError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeAgentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAgentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAgentsError {
-    fn from(err: serde_json::error::Error) -> DescribeAgentsError {
-        DescribeAgentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAgentsError {
-    fn from(err: CredentialsError) -> DescribeAgentsError {
-        DescribeAgentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAgentsError {
-    fn from(err: HttpDispatchError) -> DescribeAgentsError {
-        DescribeAgentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAgentsError {
-    fn from(err: io::Error) -> DescribeAgentsError {
-        DescribeAgentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAgentsError {
@@ -1719,11 +1491,6 @@ impl Error for DescribeAgentsError {
             DescribeAgentsError::InvalidParameter(ref cause) => cause,
             DescribeAgentsError::InvalidParameterValue(ref cause) => cause,
             DescribeAgentsError::ServerInternalError(ref cause) => cause,
-            DescribeAgentsError::Validation(ref cause) => cause,
-            DescribeAgentsError::Credentials(ref err) => err.description(),
-            DescribeAgentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAgentsError::ParseError(ref cause) => cause,
-            DescribeAgentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1738,20 +1505,10 @@ pub enum DescribeConfigurationsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1764,53 +1521,30 @@ impl DescribeConfigurationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeConfigurationsError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConfigurationsError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeConfigurationsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConfigurationsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeConfigurationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConfigurationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeConfigurationsError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeConfigurationsError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeConfigurationsError {
-    fn from(err: serde_json::error::Error) -> DescribeConfigurationsError {
-        DescribeConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationsError {
-    fn from(err: CredentialsError) -> DescribeConfigurationsError {
-        DescribeConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationsError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationsError {
-        DescribeConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationsError {
-    fn from(err: io::Error) -> DescribeConfigurationsError {
-        DescribeConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeConfigurationsError {
@@ -1825,13 +1559,6 @@ impl Error for DescribeConfigurationsError {
             DescribeConfigurationsError::InvalidParameter(ref cause) => cause,
             DescribeConfigurationsError::InvalidParameterValue(ref cause) => cause,
             DescribeConfigurationsError::ServerInternalError(ref cause) => cause,
-            DescribeConfigurationsError::Validation(ref cause) => cause,
-            DescribeConfigurationsError::Credentials(ref err) => err.description(),
-            DescribeConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationsError::ParseError(ref cause) => cause,
-            DescribeConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1850,20 +1577,10 @@ pub enum DescribeContinuousExportsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContinuousExportsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeContinuousExportsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContinuousExportsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1876,63 +1593,46 @@ impl DescribeContinuousExportsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeContinuousExportsError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeContinuousExportsError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeContinuousExportsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeContinuousExportsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeContinuousExportsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeContinuousExportsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationNotPermittedException" => {
-                    return DescribeContinuousExportsError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeContinuousExportsError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeContinuousExportsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeContinuousExportsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeContinuousExportsError::ServerInternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeContinuousExportsError::ServerInternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeContinuousExportsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeContinuousExportsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeContinuousExportsError {
-    fn from(err: serde_json::error::Error) -> DescribeContinuousExportsError {
-        DescribeContinuousExportsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeContinuousExportsError {
-    fn from(err: CredentialsError) -> DescribeContinuousExportsError {
-        DescribeContinuousExportsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeContinuousExportsError {
-    fn from(err: HttpDispatchError) -> DescribeContinuousExportsError {
-        DescribeContinuousExportsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeContinuousExportsError {
-    fn from(err: io::Error) -> DescribeContinuousExportsError {
-        DescribeContinuousExportsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeContinuousExportsError {
@@ -1949,13 +1649,6 @@ impl Error for DescribeContinuousExportsError {
             DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
             DescribeContinuousExportsError::ResourceNotFound(ref cause) => cause,
             DescribeContinuousExportsError::ServerInternalError(ref cause) => cause,
-            DescribeContinuousExportsError::Validation(ref cause) => cause,
-            DescribeContinuousExportsError::Credentials(ref err) => err.description(),
-            DescribeContinuousExportsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeContinuousExportsError::ParseError(ref cause) => cause,
-            DescribeContinuousExportsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1972,20 +1665,12 @@ pub enum DescribeExportConfigurationsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExportConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeExportConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeExportConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1998,58 +1683,45 @@ impl DescribeExportConfigurationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeExportConfigurationsError::AuthorizationError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::AuthorizationError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return DescribeExportConfigurationsError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeExportConfigurationsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeExportConfigurationsError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeExportConfigurationsError::ServerInternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeExportConfigurationsError::ServerInternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeExportConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeExportConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeExportConfigurationsError {
-    fn from(err: serde_json::error::Error) -> DescribeExportConfigurationsError {
-        DescribeExportConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeExportConfigurationsError {
-    fn from(err: CredentialsError) -> DescribeExportConfigurationsError {
-        DescribeExportConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeExportConfigurationsError {
-    fn from(err: HttpDispatchError) -> DescribeExportConfigurationsError {
-        DescribeExportConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeExportConfigurationsError {
-    fn from(err: io::Error) -> DescribeExportConfigurationsError {
-        DescribeExportConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeExportConfigurationsError {
@@ -2065,13 +1737,6 @@ impl Error for DescribeExportConfigurationsError {
             DescribeExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
             DescribeExportConfigurationsError::ResourceNotFound(ref cause) => cause,
             DescribeExportConfigurationsError::ServerInternalError(ref cause) => cause,
-            DescribeExportConfigurationsError::Validation(ref cause) => cause,
-            DescribeExportConfigurationsError::Credentials(ref err) => err.description(),
-            DescribeExportConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeExportConfigurationsError::ParseError(ref cause) => cause,
-            DescribeExportConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2086,20 +1751,10 @@ pub enum DescribeExportTasksError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExportTasksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeExportTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportTasksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2112,49 +1767,30 @@ impl DescribeExportTasksError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeExportTasksError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DescribeExportTasksError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeExportTasksError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeExportTasksError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeExportTasksError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeExportTasksError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeExportTasksError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeExportTasksError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeExportTasksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeExportTasksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeExportTasksError {
-    fn from(err: serde_json::error::Error) -> DescribeExportTasksError {
-        DescribeExportTasksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeExportTasksError {
-    fn from(err: CredentialsError) -> DescribeExportTasksError {
-        DescribeExportTasksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeExportTasksError {
-    fn from(err: HttpDispatchError) -> DescribeExportTasksError {
-        DescribeExportTasksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeExportTasksError {
-    fn from(err: io::Error) -> DescribeExportTasksError {
-        DescribeExportTasksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeExportTasksError {
@@ -2169,13 +1805,6 @@ impl Error for DescribeExportTasksError {
             DescribeExportTasksError::InvalidParameter(ref cause) => cause,
             DescribeExportTasksError::InvalidParameterValue(ref cause) => cause,
             DescribeExportTasksError::ServerInternalError(ref cause) => cause,
-            DescribeExportTasksError::Validation(ref cause) => cause,
-            DescribeExportTasksError::Credentials(ref err) => err.description(),
-            DescribeExportTasksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeExportTasksError::ParseError(ref cause) => cause,
-            DescribeExportTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2188,20 +1817,10 @@ pub enum DescribeImportTasksError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeImportTasksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeImportTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImportTasksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2214,46 +1833,25 @@ impl DescribeImportTasksError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeImportTasksError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DescribeImportTasksError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeImportTasksError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeImportTasksError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeImportTasksError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeImportTasksError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeImportTasksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeImportTasksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeImportTasksError {
-    fn from(err: serde_json::error::Error) -> DescribeImportTasksError {
-        DescribeImportTasksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeImportTasksError {
-    fn from(err: CredentialsError) -> DescribeImportTasksError {
-        DescribeImportTasksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeImportTasksError {
-    fn from(err: HttpDispatchError) -> DescribeImportTasksError {
-        DescribeImportTasksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeImportTasksError {
-    fn from(err: io::Error) -> DescribeImportTasksError {
-        DescribeImportTasksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeImportTasksError {
@@ -2267,13 +1865,6 @@ impl Error for DescribeImportTasksError {
             DescribeImportTasksError::AuthorizationError(ref cause) => cause,
             DescribeImportTasksError::InvalidParameterValue(ref cause) => cause,
             DescribeImportTasksError::ServerInternalError(ref cause) => cause,
-            DescribeImportTasksError::Validation(ref cause) => cause,
-            DescribeImportTasksError::Credentials(ref err) => err.description(),
-            DescribeImportTasksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeImportTasksError::ParseError(ref cause) => cause,
-            DescribeImportTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2290,20 +1881,10 @@ pub enum DescribeTagsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2316,48 +1897,35 @@ impl DescribeTagsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DescribeTagsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeTagsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeTagsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTagsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalErrorException" => {
-                    return DescribeTagsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTagsError {
-    fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -2373,11 +1941,6 @@ impl Error for DescribeTagsError {
             DescribeTagsError::InvalidParameterValue(ref cause) => cause,
             DescribeTagsError::ResourceNotFound(ref cause) => cause,
             DescribeTagsError::ServerInternalError(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2392,22 +1955,12 @@ pub enum DisassociateConfigurationItemsFromApplicationError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateConfigurationItemsFromApplicationError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DisassociateConfigurationItemsFromApplicationError {
+    ) -> RusotoError<DisassociateConfigurationItemsFromApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2420,59 +1973,38 @@ impl DisassociateConfigurationItemsFromApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateConfigurationItemsFromApplicationError::AuthorizationError(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidParameterException" => {
-                    return DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateConfigurationItemsFromApplicationError::InvalidParameter(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidParameterValueException" => {
-                    return DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateConfigurationItemsFromApplicationError::InvalidParameterValue(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServerInternalErrorException" => {
-                    return DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateConfigurationItemsFromApplicationError::ServerInternalError(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DisassociateConfigurationItemsFromApplicationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateConfigurationItemsFromApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateConfigurationItemsFromApplicationError {
-    fn from(err: serde_json::error::Error) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::ParseError(
-            err.description().to_string(),
-        )
-    }
-}
-impl From<CredentialsError> for DisassociateConfigurationItemsFromApplicationError {
-    fn from(err: CredentialsError) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateConfigurationItemsFromApplicationError {
-    fn from(err: HttpDispatchError) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateConfigurationItemsFromApplicationError {
-    fn from(err: io::Error) -> DisassociateConfigurationItemsFromApplicationError {
-        DisassociateConfigurationItemsFromApplicationError::HttpDispatch(HttpDispatchError::from(
-            err,
-        ))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateConfigurationItemsFromApplicationError {
@@ -2495,15 +2027,6 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
             DisassociateConfigurationItemsFromApplicationError::ServerInternalError(ref cause) => {
                 cause
             }
-            DisassociateConfigurationItemsFromApplicationError::Validation(ref cause) => cause,
-            DisassociateConfigurationItemsFromApplicationError::Credentials(ref err) => {
-                err.description()
-            }
-            DisassociateConfigurationItemsFromApplicationError::HttpDispatch(
-                ref dispatch_error,
-            ) => dispatch_error.description(),
-            DisassociateConfigurationItemsFromApplicationError::ParseError(ref cause) => cause,
-            DisassociateConfigurationItemsFromApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2520,20 +2043,10 @@ pub enum ExportConfigurationsError {
     OperationNotPermitted(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ExportConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ExportConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2546,56 +2059,35 @@ impl ExportConfigurationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return ExportConfigurationsError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(ExportConfigurationsError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return ExportConfigurationsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ExportConfigurationsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return ExportConfigurationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ExportConfigurationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return ExportConfigurationsError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(ExportConfigurationsError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return ExportConfigurationsError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ExportConfigurationsError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ExportConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExportConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExportConfigurationsError {
-    fn from(err: serde_json::error::Error) -> ExportConfigurationsError {
-        ExportConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExportConfigurationsError {
-    fn from(err: CredentialsError) -> ExportConfigurationsError {
-        ExportConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExportConfigurationsError {
-    fn from(err: HttpDispatchError) -> ExportConfigurationsError {
-        ExportConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExportConfigurationsError {
-    fn from(err: io::Error) -> ExportConfigurationsError {
-        ExportConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExportConfigurationsError {
@@ -2611,13 +2103,6 @@ impl Error for ExportConfigurationsError {
             ExportConfigurationsError::InvalidParameterValue(ref cause) => cause,
             ExportConfigurationsError::OperationNotPermitted(ref cause) => cause,
             ExportConfigurationsError::ServerInternalError(ref cause) => cause,
-            ExportConfigurationsError::Validation(ref cause) => cause,
-            ExportConfigurationsError::Credentials(ref err) => err.description(),
-            ExportConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ExportConfigurationsError::ParseError(ref cause) => cause,
-            ExportConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2632,20 +2117,10 @@ pub enum GetDiscoverySummaryError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDiscoverySummaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDiscoverySummaryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDiscoverySummaryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2658,49 +2133,30 @@ impl GetDiscoverySummaryError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return GetDiscoverySummaryError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(GetDiscoverySummaryError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetDiscoverySummaryError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetDiscoverySummaryError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return GetDiscoverySummaryError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDiscoverySummaryError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return GetDiscoverySummaryError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDiscoverySummaryError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDiscoverySummaryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDiscoverySummaryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDiscoverySummaryError {
-    fn from(err: serde_json::error::Error) -> GetDiscoverySummaryError {
-        GetDiscoverySummaryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDiscoverySummaryError {
-    fn from(err: CredentialsError) -> GetDiscoverySummaryError {
-        GetDiscoverySummaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDiscoverySummaryError {
-    fn from(err: HttpDispatchError) -> GetDiscoverySummaryError {
-        GetDiscoverySummaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDiscoverySummaryError {
-    fn from(err: io::Error) -> GetDiscoverySummaryError {
-        GetDiscoverySummaryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDiscoverySummaryError {
@@ -2715,13 +2171,6 @@ impl Error for GetDiscoverySummaryError {
             GetDiscoverySummaryError::InvalidParameter(ref cause) => cause,
             GetDiscoverySummaryError::InvalidParameterValue(ref cause) => cause,
             GetDiscoverySummaryError::ServerInternalError(ref cause) => cause,
-            GetDiscoverySummaryError::Validation(ref cause) => cause,
-            GetDiscoverySummaryError::Credentials(ref err) => err.description(),
-            GetDiscoverySummaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDiscoverySummaryError::ParseError(ref cause) => cause,
-            GetDiscoverySummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2738,20 +2187,10 @@ pub enum ListConfigurationsError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2764,50 +2203,35 @@ impl ListConfigurationsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return ListConfigurationsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(ListConfigurationsError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListConfigurationsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListConfigurationsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return ListConfigurationsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListConfigurationsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListConfigurationsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListConfigurationsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return ListConfigurationsError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(ListConfigurationsError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListConfigurationsError {
-    fn from(err: serde_json::error::Error) -> ListConfigurationsError {
-        ListConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListConfigurationsError {
-    fn from(err: CredentialsError) -> ListConfigurationsError {
-        ListConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListConfigurationsError {
-        ListConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListConfigurationsError {
-    fn from(err: io::Error) -> ListConfigurationsError {
-        ListConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListConfigurationsError {
@@ -2823,13 +2247,6 @@ impl Error for ListConfigurationsError {
             ListConfigurationsError::InvalidParameterValue(ref cause) => cause,
             ListConfigurationsError::ResourceNotFound(ref cause) => cause,
             ListConfigurationsError::ServerInternalError(ref cause) => cause,
-            ListConfigurationsError::Validation(ref cause) => cause,
-            ListConfigurationsError::Credentials(ref err) => err.description(),
-            ListConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListConfigurationsError::ParseError(ref cause) => cause,
-            ListConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2844,20 +2261,10 @@ pub enum ListServerNeighborsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListServerNeighborsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListServerNeighborsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServerNeighborsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2870,49 +2277,30 @@ impl ListServerNeighborsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return ListServerNeighborsError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(ListServerNeighborsError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListServerNeighborsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListServerNeighborsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return ListServerNeighborsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListServerNeighborsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return ListServerNeighborsError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListServerNeighborsError::ServerInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListServerNeighborsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListServerNeighborsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListServerNeighborsError {
-    fn from(err: serde_json::error::Error) -> ListServerNeighborsError {
-        ListServerNeighborsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListServerNeighborsError {
-    fn from(err: CredentialsError) -> ListServerNeighborsError {
-        ListServerNeighborsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListServerNeighborsError {
-    fn from(err: HttpDispatchError) -> ListServerNeighborsError {
-        ListServerNeighborsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListServerNeighborsError {
-    fn from(err: io::Error) -> ListServerNeighborsError {
-        ListServerNeighborsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListServerNeighborsError {
@@ -2927,13 +2315,6 @@ impl Error for ListServerNeighborsError {
             ListServerNeighborsError::InvalidParameter(ref cause) => cause,
             ListServerNeighborsError::InvalidParameterValue(ref cause) => cause,
             ListServerNeighborsError::ServerInternalError(ref cause) => cause,
-            ListServerNeighborsError::Validation(ref cause) => cause,
-            ListServerNeighborsError::Credentials(ref err) => err.description(),
-            ListServerNeighborsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListServerNeighborsError::ParseError(ref cause) => cause,
-            ListServerNeighborsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2954,20 +2335,10 @@ pub enum StartContinuousExportError {
     ResourceInUse(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartContinuousExportError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartContinuousExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContinuousExportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2980,62 +2351,45 @@ impl StartContinuousExportError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StartContinuousExportError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContinuousExportError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "ConflictErrorException" => {
-                    return StartContinuousExportError::ConflictError(String::from(error_message));
+                    return RusotoError::Service(StartContinuousExportError::ConflictError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartContinuousExportError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StartContinuousExportError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return StartContinuousExportError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContinuousExportError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return StartContinuousExportError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContinuousExportError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return StartContinuousExportError::ResourceInUse(String::from(error_message));
-                }
-                "ServerInternalErrorException" => {
-                    return StartContinuousExportError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContinuousExportError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartContinuousExportError::Validation(error_message.to_string());
+                "ServerInternalErrorException" => {
+                    return RusotoError::Service(StartContinuousExportError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartContinuousExportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartContinuousExportError {
-    fn from(err: serde_json::error::Error) -> StartContinuousExportError {
-        StartContinuousExportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartContinuousExportError {
-    fn from(err: CredentialsError) -> StartContinuousExportError {
-        StartContinuousExportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartContinuousExportError {
-    fn from(err: HttpDispatchError) -> StartContinuousExportError {
-        StartContinuousExportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartContinuousExportError {
-    fn from(err: io::Error) -> StartContinuousExportError {
-        StartContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartContinuousExportError {
@@ -3053,13 +2407,6 @@ impl Error for StartContinuousExportError {
             StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
             StartContinuousExportError::ResourceInUse(ref cause) => cause,
             StartContinuousExportError::ServerInternalError(ref cause) => cause,
-            StartContinuousExportError::Validation(ref cause) => cause,
-            StartContinuousExportError::Credentials(ref err) => err.description(),
-            StartContinuousExportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartContinuousExportError::ParseError(ref cause) => cause,
-            StartContinuousExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3074,20 +2421,12 @@ pub enum StartDataCollectionByAgentIdsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartDataCollectionByAgentIdsError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartDataCollectionByAgentIdsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartDataCollectionByAgentIdsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3100,53 +2439,38 @@ impl StartDataCollectionByAgentIdsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalErrorException" => {
-                    return StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return StartDataCollectionByAgentIdsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartDataCollectionByAgentIdsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartDataCollectionByAgentIdsError {
-    fn from(err: serde_json::error::Error) -> StartDataCollectionByAgentIdsError {
-        StartDataCollectionByAgentIdsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartDataCollectionByAgentIdsError {
-    fn from(err: CredentialsError) -> StartDataCollectionByAgentIdsError {
-        StartDataCollectionByAgentIdsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartDataCollectionByAgentIdsError {
-    fn from(err: HttpDispatchError) -> StartDataCollectionByAgentIdsError {
-        StartDataCollectionByAgentIdsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartDataCollectionByAgentIdsError {
-    fn from(err: io::Error) -> StartDataCollectionByAgentIdsError {
-        StartDataCollectionByAgentIdsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartDataCollectionByAgentIdsError {
@@ -3161,13 +2485,6 @@ impl Error for StartDataCollectionByAgentIdsError {
             StartDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
             StartDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
             StartDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::Validation(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::Credentials(ref err) => err.description(),
-            StartDataCollectionByAgentIdsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartDataCollectionByAgentIdsError::ParseError(ref cause) => cause,
-            StartDataCollectionByAgentIdsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3184,20 +2501,10 @@ pub enum StartExportTaskError {
     OperationNotPermitted(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartExportTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartExportTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartExportTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3210,48 +2517,35 @@ impl StartExportTaskError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StartExportTaskError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(StartExportTaskError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return StartExportTaskError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StartExportTaskError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return StartExportTaskError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(StartExportTaskError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return StartExportTaskError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(StartExportTaskError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerInternalErrorException" => {
-                    return StartExportTaskError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(StartExportTaskError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartExportTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartExportTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartExportTaskError {
-    fn from(err: serde_json::error::Error) -> StartExportTaskError {
-        StartExportTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartExportTaskError {
-    fn from(err: CredentialsError) -> StartExportTaskError {
-        StartExportTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartExportTaskError {
-    fn from(err: HttpDispatchError) -> StartExportTaskError {
-        StartExportTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartExportTaskError {
-    fn from(err: io::Error) -> StartExportTaskError {
-        StartExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartExportTaskError {
@@ -3267,11 +2561,6 @@ impl Error for StartExportTaskError {
             StartExportTaskError::InvalidParameterValue(ref cause) => cause,
             StartExportTaskError::OperationNotPermitted(ref cause) => cause,
             StartExportTaskError::ServerInternalError(ref cause) => cause,
-            StartExportTaskError::Validation(ref cause) => cause,
-            StartExportTaskError::Credentials(ref err) => err.description(),
-            StartExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartExportTaskError::ParseError(ref cause) => cause,
-            StartExportTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3286,20 +2575,10 @@ pub enum StartImportTaskError {
     ResourceInUse(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartImportTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartImportTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImportTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3312,45 +2591,30 @@ impl StartImportTaskError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StartImportTaskError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(StartImportTaskError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return StartImportTaskError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(StartImportTaskError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return StartImportTaskError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(StartImportTaskError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerInternalErrorException" => {
-                    return StartImportTaskError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(StartImportTaskError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartImportTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartImportTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartImportTaskError {
-    fn from(err: serde_json::error::Error) -> StartImportTaskError {
-        StartImportTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartImportTaskError {
-    fn from(err: CredentialsError) -> StartImportTaskError {
-        StartImportTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartImportTaskError {
-    fn from(err: HttpDispatchError) -> StartImportTaskError {
-        StartImportTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartImportTaskError {
-    fn from(err: io::Error) -> StartImportTaskError {
-        StartImportTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartImportTaskError {
@@ -3365,11 +2629,6 @@ impl Error for StartImportTaskError {
             StartImportTaskError::InvalidParameterValue(ref cause) => cause,
             StartImportTaskError::ResourceInUse(ref cause) => cause,
             StartImportTaskError::ServerInternalError(ref cause) => cause,
-            StartImportTaskError::Validation(ref cause) => cause,
-            StartImportTaskError::Credentials(ref err) => err.description(),
-            StartImportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartImportTaskError::ParseError(ref cause) => cause,
-            StartImportTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3390,20 +2649,10 @@ pub enum StopContinuousExportError {
     ResourceNotFound(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopContinuousExportError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopContinuousExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopContinuousExportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3416,62 +2665,45 @@ impl StopContinuousExportError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StopContinuousExportError::AuthorizationError(String::from(
-                        error_message,
+                    return RusotoError::Service(StopContinuousExportError::AuthorizationError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StopContinuousExportError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StopContinuousExportError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return StopContinuousExportError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(StopContinuousExportError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return StopContinuousExportError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(StopContinuousExportError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return StopContinuousExportError::ResourceInUse(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return StopContinuousExportError::ResourceNotFound(String::from(error_message));
-                }
-                "ServerInternalErrorException" => {
-                    return StopContinuousExportError::ServerInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(StopContinuousExportError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StopContinuousExportError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopContinuousExportError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ServerInternalErrorException" => {
+                    return RusotoError::Service(StopContinuousExportError::ServerInternalError(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopContinuousExportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopContinuousExportError {
-    fn from(err: serde_json::error::Error) -> StopContinuousExportError {
-        StopContinuousExportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopContinuousExportError {
-    fn from(err: CredentialsError) -> StopContinuousExportError {
-        StopContinuousExportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopContinuousExportError {
-    fn from(err: HttpDispatchError) -> StopContinuousExportError {
-        StopContinuousExportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopContinuousExportError {
-    fn from(err: io::Error) -> StopContinuousExportError {
-        StopContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopContinuousExportError {
@@ -3489,13 +2721,6 @@ impl Error for StopContinuousExportError {
             StopContinuousExportError::ResourceInUse(ref cause) => cause,
             StopContinuousExportError::ResourceNotFound(ref cause) => cause,
             StopContinuousExportError::ServerInternalError(ref cause) => cause,
-            StopContinuousExportError::Validation(ref cause) => cause,
-            StopContinuousExportError::Credentials(ref err) => err.description(),
-            StopContinuousExportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopContinuousExportError::ParseError(ref cause) => cause,
-            StopContinuousExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3510,20 +2735,12 @@ pub enum StopDataCollectionByAgentIdsError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopDataCollectionByAgentIdsError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopDataCollectionByAgentIdsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopDataCollectionByAgentIdsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3536,53 +2753,38 @@ impl StopDataCollectionByAgentIdsError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StopDataCollectionByAgentIdsError::AuthorizationError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StopDataCollectionByAgentIdsError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StopDataCollectionByAgentIdsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerInternalErrorException" => {
-                    return StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StopDataCollectionByAgentIdsError::ServerInternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return StopDataCollectionByAgentIdsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopDataCollectionByAgentIdsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopDataCollectionByAgentIdsError {
-    fn from(err: serde_json::error::Error) -> StopDataCollectionByAgentIdsError {
-        StopDataCollectionByAgentIdsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopDataCollectionByAgentIdsError {
-    fn from(err: CredentialsError) -> StopDataCollectionByAgentIdsError {
-        StopDataCollectionByAgentIdsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopDataCollectionByAgentIdsError {
-    fn from(err: HttpDispatchError) -> StopDataCollectionByAgentIdsError {
-        StopDataCollectionByAgentIdsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopDataCollectionByAgentIdsError {
-    fn from(err: io::Error) -> StopDataCollectionByAgentIdsError {
-        StopDataCollectionByAgentIdsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopDataCollectionByAgentIdsError {
@@ -3597,13 +2799,6 @@ impl Error for StopDataCollectionByAgentIdsError {
             StopDataCollectionByAgentIdsError::InvalidParameter(ref cause) => cause,
             StopDataCollectionByAgentIdsError::InvalidParameterValue(ref cause) => cause,
             StopDataCollectionByAgentIdsError::ServerInternalError(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::Validation(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::Credentials(ref err) => err.description(),
-            StopDataCollectionByAgentIdsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopDataCollectionByAgentIdsError::ParseError(ref cause) => cause,
-            StopDataCollectionByAgentIdsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3618,20 +2813,10 @@ pub enum UpdateApplicationError {
     InvalidParameterValue(String),
     /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3644,47 +2829,30 @@ impl UpdateApplicationError {
 
             match *error_type {
                 "AuthorizationErrorException" => {
-                    return UpdateApplicationError::AuthorizationError(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::AuthorizationError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateApplicationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return UpdateApplicationError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ServerInternalErrorException" => {
-                    return UpdateApplicationError::ServerInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::ServerInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateApplicationError {
-    fn from(err: serde_json::error::Error) -> UpdateApplicationError {
-        UpdateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationError {
-    fn from(err: CredentialsError) -> UpdateApplicationError {
-        UpdateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationError {
-    fn from(err: io::Error) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -3699,13 +2867,6 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::InvalidParameter(ref cause) => cause,
             UpdateApplicationError::InvalidParameterValue(ref cause) => cause,
             UpdateApplicationError::ServerInternalError(ref cause) => cause,
-            UpdateApplicationError::Validation(ref cause) => cause,
-            UpdateApplicationError::Credentials(ref err) => err.description(),
-            UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationError::ParseError(ref cause) => cause,
-            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }

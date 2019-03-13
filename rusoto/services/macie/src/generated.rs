@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -259,20 +256,10 @@ pub enum AssociateMemberAccountError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded. </p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateMemberAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateMemberAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMemberAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -285,42 +272,25 @@ impl AssociateMemberAccountError {
 
             match *error_type {
                 "InternalException" => {
-                    return AssociateMemberAccountError::Internal(String::from(error_message));
+                    return RusotoError::Service(AssociateMemberAccountError::Internal(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return AssociateMemberAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AssociateMemberAccountError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AssociateMemberAccountError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AssociateMemberAccountError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateMemberAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateMemberAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateMemberAccountError {
-    fn from(err: serde_json::error::Error) -> AssociateMemberAccountError {
-        AssociateMemberAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateMemberAccountError {
-    fn from(err: CredentialsError) -> AssociateMemberAccountError {
-        AssociateMemberAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateMemberAccountError {
-    fn from(err: HttpDispatchError) -> AssociateMemberAccountError {
-        AssociateMemberAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateMemberAccountError {
-    fn from(err: io::Error) -> AssociateMemberAccountError {
-        AssociateMemberAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateMemberAccountError {
@@ -334,13 +304,6 @@ impl Error for AssociateMemberAccountError {
             AssociateMemberAccountError::Internal(ref cause) => cause,
             AssociateMemberAccountError::InvalidInput(ref cause) => cause,
             AssociateMemberAccountError::LimitExceeded(ref cause) => cause,
-            AssociateMemberAccountError::Validation(ref cause) => cause,
-            AssociateMemberAccountError::Credentials(ref err) => err.description(),
-            AssociateMemberAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateMemberAccountError::ParseError(ref cause) => cause,
-            AssociateMemberAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -355,20 +318,10 @@ pub enum AssociateS3ResourcesError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded. </p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateS3ResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateS3ResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateS3ResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -381,45 +334,30 @@ impl AssociateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return AssociateS3ResourcesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AssociateS3ResourcesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalException" => {
-                    return AssociateS3ResourcesError::Internal(String::from(error_message));
+                    return RusotoError::Service(AssociateS3ResourcesError::Internal(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return AssociateS3ResourcesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(AssociateS3ResourcesError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AssociateS3ResourcesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AssociateS3ResourcesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateS3ResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateS3ResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateS3ResourcesError {
-    fn from(err: serde_json::error::Error) -> AssociateS3ResourcesError {
-        AssociateS3ResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateS3ResourcesError {
-    fn from(err: CredentialsError) -> AssociateS3ResourcesError {
-        AssociateS3ResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateS3ResourcesError {
-    fn from(err: HttpDispatchError) -> AssociateS3ResourcesError {
-        AssociateS3ResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateS3ResourcesError {
-    fn from(err: io::Error) -> AssociateS3ResourcesError {
-        AssociateS3ResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateS3ResourcesError {
@@ -434,13 +372,6 @@ impl Error for AssociateS3ResourcesError {
             AssociateS3ResourcesError::Internal(ref cause) => cause,
             AssociateS3ResourcesError::InvalidInput(ref cause) => cause,
             AssociateS3ResourcesError::LimitExceeded(ref cause) => cause,
-            AssociateS3ResourcesError::Validation(ref cause) => cause,
-            AssociateS3ResourcesError::Credentials(ref err) => err.description(),
-            AssociateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateS3ResourcesError::ParseError(ref cause) => cause,
-            AssociateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -451,20 +382,10 @@ pub enum DisassociateMemberAccountError {
     Internal(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter. </p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateMemberAccountError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateMemberAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMemberAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -477,39 +398,20 @@ impl DisassociateMemberAccountError {
 
             match *error_type {
                 "InternalException" => {
-                    return DisassociateMemberAccountError::Internal(String::from(error_message));
+                    return RusotoError::Service(DisassociateMemberAccountError::Internal(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DisassociateMemberAccountError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DisassociateMemberAccountError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateMemberAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateMemberAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateMemberAccountError {
-    fn from(err: serde_json::error::Error) -> DisassociateMemberAccountError {
-        DisassociateMemberAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateMemberAccountError {
-    fn from(err: CredentialsError) -> DisassociateMemberAccountError {
-        DisassociateMemberAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateMemberAccountError {
-    fn from(err: HttpDispatchError) -> DisassociateMemberAccountError {
-        DisassociateMemberAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateMemberAccountError {
-    fn from(err: io::Error) -> DisassociateMemberAccountError {
-        DisassociateMemberAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateMemberAccountError {
@@ -522,13 +424,6 @@ impl Error for DisassociateMemberAccountError {
         match *self {
             DisassociateMemberAccountError::Internal(ref cause) => cause,
             DisassociateMemberAccountError::InvalidInput(ref cause) => cause,
-            DisassociateMemberAccountError::Validation(ref cause) => cause,
-            DisassociateMemberAccountError::Credentials(ref err) => err.description(),
-            DisassociateMemberAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateMemberAccountError::ParseError(ref cause) => cause,
-            DisassociateMemberAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -541,20 +436,10 @@ pub enum DisassociateS3ResourcesError {
     Internal(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter. </p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateS3ResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateS3ResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateS3ResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -567,42 +452,25 @@ impl DisassociateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DisassociateS3ResourcesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DisassociateS3ResourcesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalException" => {
-                    return DisassociateS3ResourcesError::Internal(String::from(error_message));
+                    return RusotoError::Service(DisassociateS3ResourcesError::Internal(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DisassociateS3ResourcesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DisassociateS3ResourcesError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateS3ResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateS3ResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateS3ResourcesError {
-    fn from(err: serde_json::error::Error) -> DisassociateS3ResourcesError {
-        DisassociateS3ResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateS3ResourcesError {
-    fn from(err: CredentialsError) -> DisassociateS3ResourcesError {
-        DisassociateS3ResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateS3ResourcesError {
-    fn from(err: HttpDispatchError) -> DisassociateS3ResourcesError {
-        DisassociateS3ResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateS3ResourcesError {
-    fn from(err: io::Error) -> DisassociateS3ResourcesError {
-        DisassociateS3ResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateS3ResourcesError {
@@ -616,13 +484,6 @@ impl Error for DisassociateS3ResourcesError {
             DisassociateS3ResourcesError::AccessDenied(ref cause) => cause,
             DisassociateS3ResourcesError::Internal(ref cause) => cause,
             DisassociateS3ResourcesError::InvalidInput(ref cause) => cause,
-            DisassociateS3ResourcesError::Validation(ref cause) => cause,
-            DisassociateS3ResourcesError::Credentials(ref err) => err.description(),
-            DisassociateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateS3ResourcesError::ParseError(ref cause) => cause,
-            DisassociateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -633,20 +494,10 @@ pub enum ListMemberAccountsError {
     Internal(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter. </p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMemberAccountsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListMemberAccountsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMemberAccountsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -659,39 +510,20 @@ impl ListMemberAccountsError {
 
             match *error_type {
                 "InternalException" => {
-                    return ListMemberAccountsError::Internal(String::from(error_message));
+                    return RusotoError::Service(ListMemberAccountsError::Internal(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListMemberAccountsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListMemberAccountsError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListMemberAccountsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListMemberAccountsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListMemberAccountsError {
-    fn from(err: serde_json::error::Error) -> ListMemberAccountsError {
-        ListMemberAccountsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListMemberAccountsError {
-    fn from(err: CredentialsError) -> ListMemberAccountsError {
-        ListMemberAccountsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMemberAccountsError {
-    fn from(err: HttpDispatchError) -> ListMemberAccountsError {
-        ListMemberAccountsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMemberAccountsError {
-    fn from(err: io::Error) -> ListMemberAccountsError {
-        ListMemberAccountsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListMemberAccountsError {
@@ -704,13 +536,6 @@ impl Error for ListMemberAccountsError {
         match *self {
             ListMemberAccountsError::Internal(ref cause) => cause,
             ListMemberAccountsError::InvalidInput(ref cause) => cause,
-            ListMemberAccountsError::Validation(ref cause) => cause,
-            ListMemberAccountsError::Credentials(ref err) => err.description(),
-            ListMemberAccountsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListMemberAccountsError::ParseError(ref cause) => cause,
-            ListMemberAccountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -723,20 +548,10 @@ pub enum ListS3ResourcesError {
     Internal(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter. </p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListS3ResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListS3ResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListS3ResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -749,42 +564,25 @@ impl ListS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListS3ResourcesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListS3ResourcesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalException" => {
-                    return ListS3ResourcesError::Internal(String::from(error_message));
+                    return RusotoError::Service(ListS3ResourcesError::Internal(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return ListS3ResourcesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ListS3ResourcesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListS3ResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListS3ResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListS3ResourcesError {
-    fn from(err: serde_json::error::Error) -> ListS3ResourcesError {
-        ListS3ResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListS3ResourcesError {
-    fn from(err: CredentialsError) -> ListS3ResourcesError {
-        ListS3ResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListS3ResourcesError {
-    fn from(err: HttpDispatchError) -> ListS3ResourcesError {
-        ListS3ResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListS3ResourcesError {
-    fn from(err: io::Error) -> ListS3ResourcesError {
-        ListS3ResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListS3ResourcesError {
@@ -798,11 +596,6 @@ impl Error for ListS3ResourcesError {
             ListS3ResourcesError::AccessDenied(ref cause) => cause,
             ListS3ResourcesError::Internal(ref cause) => cause,
             ListS3ResourcesError::InvalidInput(ref cause) => cause,
-            ListS3ResourcesError::Validation(ref cause) => cause,
-            ListS3ResourcesError::Credentials(ref err) => err.description(),
-            ListS3ResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListS3ResourcesError::ParseError(ref cause) => cause,
-            ListS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -815,20 +608,10 @@ pub enum UpdateS3ResourcesError {
     Internal(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter. </p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateS3ResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateS3ResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateS3ResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -841,42 +624,25 @@ impl UpdateS3ResourcesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return UpdateS3ResourcesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateS3ResourcesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalException" => {
-                    return UpdateS3ResourcesError::Internal(String::from(error_message));
+                    return RusotoError::Service(UpdateS3ResourcesError::Internal(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdateS3ResourcesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateS3ResourcesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateS3ResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateS3ResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateS3ResourcesError {
-    fn from(err: serde_json::error::Error) -> UpdateS3ResourcesError {
-        UpdateS3ResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateS3ResourcesError {
-    fn from(err: CredentialsError) -> UpdateS3ResourcesError {
-        UpdateS3ResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateS3ResourcesError {
-    fn from(err: HttpDispatchError) -> UpdateS3ResourcesError {
-        UpdateS3ResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateS3ResourcesError {
-    fn from(err: io::Error) -> UpdateS3ResourcesError {
-        UpdateS3ResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateS3ResourcesError {
@@ -890,13 +656,6 @@ impl Error for UpdateS3ResourcesError {
             UpdateS3ResourcesError::AccessDenied(ref cause) => cause,
             UpdateS3ResourcesError::Internal(ref cause) => cause,
             UpdateS3ResourcesError::InvalidInput(ref cause) => cause,
-            UpdateS3ResourcesError::Validation(ref cause) => cause,
-            UpdateS3ResourcesError::Credentials(ref err) => err.description(),
-            UpdateS3ResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateS3ResourcesError::ParseError(ref cause) => cause,
-            UpdateS3ResourcesError::Unknown(_) => "unknown error",
         }
     }
 }

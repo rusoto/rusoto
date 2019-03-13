@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -14478,20 +14475,12 @@ pub enum AddClientIDToOpenIDConnectProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddClientIDToOpenIDConnectProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddClientIDToOpenIDConnectProviderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddClientIDToOpenIDConnectProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14499,30 +14488,38 @@ impl AddClientIDToOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return AddClientIDToOpenIDConnectProviderError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddClientIDToOpenIDConnectProviderError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddClientIDToOpenIDConnectProviderError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return AddClientIDToOpenIDConnectProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddClientIDToOpenIDConnectProviderError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return AddClientIDToOpenIDConnectProviderError::ServiceFailure(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AddClientIDToOpenIDConnectProviderError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        AddClientIDToOpenIDConnectProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14531,28 +14528,6 @@ impl AddClientIDToOpenIDConnectProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddClientIDToOpenIDConnectProviderError {
-    fn from(err: XmlParseError) -> AddClientIDToOpenIDConnectProviderError {
-        let XmlParseError(message) = err;
-        AddClientIDToOpenIDConnectProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddClientIDToOpenIDConnectProviderError {
-    fn from(err: CredentialsError) -> AddClientIDToOpenIDConnectProviderError {
-        AddClientIDToOpenIDConnectProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddClientIDToOpenIDConnectProviderError {
-    fn from(err: HttpDispatchError) -> AddClientIDToOpenIDConnectProviderError {
-        AddClientIDToOpenIDConnectProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddClientIDToOpenIDConnectProviderError {
-    fn from(err: io::Error) -> AddClientIDToOpenIDConnectProviderError {
-        AddClientIDToOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddClientIDToOpenIDConnectProviderError {
@@ -14567,13 +14542,6 @@ impl Error for AddClientIDToOpenIDConnectProviderError {
             AddClientIDToOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
             AddClientIDToOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
             AddClientIDToOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::Validation(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::Credentials(ref err) => err.description(),
-            AddClientIDToOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddClientIDToOpenIDConnectProviderError::ParseError(ref cause) => cause,
-            AddClientIDToOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14590,20 +14558,10 @@ pub enum AddRoleToInstanceProfileError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddRoleToInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddRoleToInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddRoleToInstanceProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14611,35 +14569,39 @@ impl AddRoleToInstanceProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToInstanceProfileError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return AddRoleToInstanceProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddRoleToInstanceProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return AddRoleToInstanceProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddRoleToInstanceProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return AddRoleToInstanceProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddRoleToInstanceProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddRoleToInstanceProfileError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AddRoleToInstanceProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14648,28 +14610,6 @@ impl AddRoleToInstanceProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddRoleToInstanceProfileError {
-    fn from(err: XmlParseError) -> AddRoleToInstanceProfileError {
-        let XmlParseError(message) = err;
-        AddRoleToInstanceProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddRoleToInstanceProfileError {
-    fn from(err: CredentialsError) -> AddRoleToInstanceProfileError {
-        AddRoleToInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddRoleToInstanceProfileError {
-    fn from(err: HttpDispatchError) -> AddRoleToInstanceProfileError {
-        AddRoleToInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddRoleToInstanceProfileError {
-    fn from(err: io::Error) -> AddRoleToInstanceProfileError {
-        AddRoleToInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddRoleToInstanceProfileError {
@@ -14685,13 +14625,6 @@ impl Error for AddRoleToInstanceProfileError {
             AddRoleToInstanceProfileError::NoSuchEntity(ref cause) => cause,
             AddRoleToInstanceProfileError::ServiceFailure(ref cause) => cause,
             AddRoleToInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
-            AddRoleToInstanceProfileError::Validation(ref cause) => cause,
-            AddRoleToInstanceProfileError::Credentials(ref err) => err.description(),
-            AddRoleToInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddRoleToInstanceProfileError::ParseError(ref cause) => cause,
-            AddRoleToInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14704,20 +14637,10 @@ pub enum AddUserToGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddUserToGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddUserToGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddUserToGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14725,23 +14648,25 @@ impl AddUserToGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return AddUserToGroupError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddUserToGroupError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return AddUserToGroupError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(AddUserToGroupError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ServiceFailure" => {
-                        return AddUserToGroupError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddUserToGroupError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AddUserToGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14750,28 +14675,6 @@ impl AddUserToGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddUserToGroupError {
-    fn from(err: XmlParseError) -> AddUserToGroupError {
-        let XmlParseError(message) = err;
-        AddUserToGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddUserToGroupError {
-    fn from(err: CredentialsError) -> AddUserToGroupError {
-        AddUserToGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddUserToGroupError {
-    fn from(err: HttpDispatchError) -> AddUserToGroupError {
-        AddUserToGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddUserToGroupError {
-    fn from(err: io::Error) -> AddUserToGroupError {
-        AddUserToGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddUserToGroupError {
@@ -14785,11 +14688,6 @@ impl Error for AddUserToGroupError {
             AddUserToGroupError::LimitExceeded(ref cause) => cause,
             AddUserToGroupError::NoSuchEntity(ref cause) => cause,
             AddUserToGroupError::ServiceFailure(ref cause) => cause,
-            AddUserToGroupError::Validation(ref cause) => cause,
-            AddUserToGroupError::Credentials(ref err) => err.description(),
-            AddUserToGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddUserToGroupError::ParseError(ref cause) => cause,
-            AddUserToGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14806,20 +14704,10 @@ pub enum AttachGroupPolicyError {
     PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachGroupPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachGroupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachGroupPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14827,35 +14715,35 @@ impl AttachGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return AttachGroupPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachGroupPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return AttachGroupPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachGroupPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return AttachGroupPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachGroupPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyNotAttachable" => {
-                        return AttachGroupPolicyError::PolicyNotAttachable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachGroupPolicyError::PolicyNotAttachable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return AttachGroupPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachGroupPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AttachGroupPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14864,28 +14752,6 @@ impl AttachGroupPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AttachGroupPolicyError {
-    fn from(err: XmlParseError) -> AttachGroupPolicyError {
-        let XmlParseError(message) = err;
-        AttachGroupPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AttachGroupPolicyError {
-    fn from(err: CredentialsError) -> AttachGroupPolicyError {
-        AttachGroupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachGroupPolicyError {
-    fn from(err: HttpDispatchError) -> AttachGroupPolicyError {
-        AttachGroupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachGroupPolicyError {
-    fn from(err: io::Error) -> AttachGroupPolicyError {
-        AttachGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachGroupPolicyError {
@@ -14901,13 +14767,6 @@ impl Error for AttachGroupPolicyError {
             AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,
             AttachGroupPolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachGroupPolicyError::ServiceFailure(ref cause) => cause,
-            AttachGroupPolicyError::Validation(ref cause) => cause,
-            AttachGroupPolicyError::Credentials(ref err) => err.description(),
-            AttachGroupPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AttachGroupPolicyError::ParseError(ref cause) => cause,
-            AttachGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14926,20 +14785,10 @@ pub enum AttachRolePolicyError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14947,40 +14796,40 @@ impl AttachRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return AttachRolePolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return AttachRolePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return AttachRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyNotAttachable" => {
-                        return AttachRolePolicyError::PolicyNotAttachable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::PolicyNotAttachable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return AttachRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return AttachRolePolicyError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachRolePolicyError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AttachRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14989,28 +14838,6 @@ impl AttachRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AttachRolePolicyError {
-    fn from(err: XmlParseError) -> AttachRolePolicyError {
-        let XmlParseError(message) = err;
-        AttachRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AttachRolePolicyError {
-    fn from(err: CredentialsError) -> AttachRolePolicyError {
-        AttachRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachRolePolicyError {
-    fn from(err: HttpDispatchError) -> AttachRolePolicyError {
-        AttachRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachRolePolicyError {
-    fn from(err: io::Error) -> AttachRolePolicyError {
-        AttachRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachRolePolicyError {
@@ -15027,11 +14854,6 @@ impl Error for AttachRolePolicyError {
             AttachRolePolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachRolePolicyError::ServiceFailure(ref cause) => cause,
             AttachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
-            AttachRolePolicyError::Validation(ref cause) => cause,
-            AttachRolePolicyError::Credentials(ref err) => err.description(),
-            AttachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachRolePolicyError::ParseError(ref cause) => cause,
-            AttachRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15048,20 +14870,10 @@ pub enum AttachUserPolicyError {
     PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachUserPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachUserPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachUserPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15069,35 +14881,35 @@ impl AttachUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return AttachUserPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachUserPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return AttachUserPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachUserPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return AttachUserPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachUserPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyNotAttachable" => {
-                        return AttachUserPolicyError::PolicyNotAttachable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachUserPolicyError::PolicyNotAttachable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return AttachUserPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AttachUserPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AttachUserPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15106,28 +14918,6 @@ impl AttachUserPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AttachUserPolicyError {
-    fn from(err: XmlParseError) -> AttachUserPolicyError {
-        let XmlParseError(message) = err;
-        AttachUserPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AttachUserPolicyError {
-    fn from(err: CredentialsError) -> AttachUserPolicyError {
-        AttachUserPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachUserPolicyError {
-    fn from(err: HttpDispatchError) -> AttachUserPolicyError {
-        AttachUserPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachUserPolicyError {
-    fn from(err: io::Error) -> AttachUserPolicyError {
-        AttachUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AttachUserPolicyError {
@@ -15143,11 +14933,6 @@ impl Error for AttachUserPolicyError {
             AttachUserPolicyError::NoSuchEntity(ref cause) => cause,
             AttachUserPolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachUserPolicyError::ServiceFailure(ref cause) => cause,
-            AttachUserPolicyError::Validation(ref cause) => cause,
-            AttachUserPolicyError::Credentials(ref err) => err.description(),
-            AttachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachUserPolicyError::ParseError(ref cause) => cause,
-            AttachUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15166,20 +14951,10 @@ pub enum ChangePasswordError {
     PasswordPolicyViolation(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangePasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangePasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangePasswordError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15187,38 +14962,42 @@ impl ChangePasswordError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityTemporarilyUnmodifiable" => {
-                        return ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangePasswordError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidUserType" => {
-                        return ChangePasswordError::InvalidUserType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangePasswordError::InvalidUserType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return ChangePasswordError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangePasswordError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ChangePasswordError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(ChangePasswordError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "PasswordPolicyViolation" => {
-                        return ChangePasswordError::PasswordPolicyViolation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangePasswordError::PasswordPolicyViolation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ChangePasswordError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ChangePasswordError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ChangePasswordError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15227,28 +15006,6 @@ impl ChangePasswordError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ChangePasswordError {
-    fn from(err: XmlParseError) -> ChangePasswordError {
-        let XmlParseError(message) = err;
-        ChangePasswordError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ChangePasswordError {
-    fn from(err: CredentialsError) -> ChangePasswordError {
-        ChangePasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangePasswordError {
-    fn from(err: HttpDispatchError) -> ChangePasswordError {
-        ChangePasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangePasswordError {
-    fn from(err: io::Error) -> ChangePasswordError {
-        ChangePasswordError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangePasswordError {
@@ -15265,11 +15022,6 @@ impl Error for ChangePasswordError {
             ChangePasswordError::NoSuchEntity(ref cause) => cause,
             ChangePasswordError::PasswordPolicyViolation(ref cause) => cause,
             ChangePasswordError::ServiceFailure(ref cause) => cause,
-            ChangePasswordError::Validation(ref cause) => cause,
-            ChangePasswordError::Credentials(ref err) => err.description(),
-            ChangePasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ChangePasswordError::ParseError(ref cause) => cause,
-            ChangePasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15282,20 +15034,10 @@ pub enum CreateAccessKeyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAccessKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAccessKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccessKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15303,25 +15045,25 @@ impl CreateAccessKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return CreateAccessKeyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccessKeyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return CreateAccessKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccessKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateAccessKeyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccessKeyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateAccessKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15330,28 +15072,6 @@ impl CreateAccessKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateAccessKeyError {
-    fn from(err: XmlParseError) -> CreateAccessKeyError {
-        let XmlParseError(message) = err;
-        CreateAccessKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateAccessKeyError {
-    fn from(err: CredentialsError) -> CreateAccessKeyError {
-        CreateAccessKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAccessKeyError {
-    fn from(err: HttpDispatchError) -> CreateAccessKeyError {
-        CreateAccessKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAccessKeyError {
-    fn from(err: io::Error) -> CreateAccessKeyError {
-        CreateAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAccessKeyError {
@@ -15365,11 +15085,6 @@ impl Error for CreateAccessKeyError {
             CreateAccessKeyError::LimitExceeded(ref cause) => cause,
             CreateAccessKeyError::NoSuchEntity(ref cause) => cause,
             CreateAccessKeyError::ServiceFailure(ref cause) => cause,
-            CreateAccessKeyError::Validation(ref cause) => cause,
-            CreateAccessKeyError::Credentials(ref err) => err.description(),
-            CreateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAccessKeyError::ParseError(ref cause) => cause,
-            CreateAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15382,20 +15097,10 @@ pub enum CreateAccountAliasError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAccountAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAccountAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccountAliasError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15403,25 +15108,25 @@ impl CreateAccountAliasError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateAccountAliasError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccountAliasError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateAccountAliasError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccountAliasError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateAccountAliasError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateAccountAliasError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateAccountAliasError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15430,28 +15135,6 @@ impl CreateAccountAliasError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateAccountAliasError {
-    fn from(err: XmlParseError) -> CreateAccountAliasError {
-        let XmlParseError(message) = err;
-        CreateAccountAliasError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateAccountAliasError {
-    fn from(err: CredentialsError) -> CreateAccountAliasError {
-        CreateAccountAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAccountAliasError {
-    fn from(err: HttpDispatchError) -> CreateAccountAliasError {
-        CreateAccountAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAccountAliasError {
-    fn from(err: io::Error) -> CreateAccountAliasError {
-        CreateAccountAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateAccountAliasError {
@@ -15465,13 +15148,6 @@ impl Error for CreateAccountAliasError {
             CreateAccountAliasError::EntityAlreadyExists(ref cause) => cause,
             CreateAccountAliasError::LimitExceeded(ref cause) => cause,
             CreateAccountAliasError::ServiceFailure(ref cause) => cause,
-            CreateAccountAliasError::Validation(ref cause) => cause,
-            CreateAccountAliasError::Credentials(ref err) => err.description(),
-            CreateAccountAliasError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateAccountAliasError::ParseError(ref cause) => cause,
-            CreateAccountAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15486,20 +15162,10 @@ pub enum CreateGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15507,24 +15173,30 @@ impl CreateGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateGroupError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateGroupError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateGroupError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateGroupError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return CreateGroupError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateGroupError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return CreateGroupError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        CreateGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15533,28 +15205,6 @@ impl CreateGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateGroupError {
-    fn from(err: XmlParseError) -> CreateGroupError {
-        let XmlParseError(message) = err;
-        CreateGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateGroupError {
-    fn from(err: CredentialsError) -> CreateGroupError {
-        CreateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGroupError {
-    fn from(err: HttpDispatchError) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGroupError {
-    fn from(err: io::Error) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -15569,11 +15219,6 @@ impl Error for CreateGroupError {
             CreateGroupError::LimitExceeded(ref cause) => cause,
             CreateGroupError::NoSuchEntity(ref cause) => cause,
             CreateGroupError::ServiceFailure(ref cause) => cause,
-            CreateGroupError::Validation(ref cause) => cause,
-            CreateGroupError::Credentials(ref err) => err.description(),
-            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::ParseError(ref cause) => cause,
-            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15586,20 +15231,10 @@ pub enum CreateInstanceProfileError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateInstanceProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15607,25 +15242,27 @@ impl CreateInstanceProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateInstanceProfileError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateInstanceProfileError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return CreateInstanceProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateInstanceProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateInstanceProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateInstanceProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateInstanceProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15634,28 +15271,6 @@ impl CreateInstanceProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateInstanceProfileError {
-    fn from(err: XmlParseError) -> CreateInstanceProfileError {
-        let XmlParseError(message) = err;
-        CreateInstanceProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateInstanceProfileError {
-    fn from(err: CredentialsError) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateInstanceProfileError {
-    fn from(err: HttpDispatchError) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateInstanceProfileError {
-    fn from(err: io::Error) -> CreateInstanceProfileError {
-        CreateInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateInstanceProfileError {
@@ -15669,13 +15284,6 @@ impl Error for CreateInstanceProfileError {
             CreateInstanceProfileError::EntityAlreadyExists(ref cause) => cause,
             CreateInstanceProfileError::LimitExceeded(ref cause) => cause,
             CreateInstanceProfileError::ServiceFailure(ref cause) => cause,
-            CreateInstanceProfileError::Validation(ref cause) => cause,
-            CreateInstanceProfileError::Credentials(ref err) => err.description(),
-            CreateInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateInstanceProfileError::ParseError(ref cause) => cause,
-            CreateInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15692,20 +15300,10 @@ pub enum CreateLoginProfileError {
     PasswordPolicyViolation(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoginProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoginProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoginProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15713,35 +15311,37 @@ impl CreateLoginProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateLoginProfileError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoginProfileError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateLoginProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoginProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return CreateLoginProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoginProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PasswordPolicyViolation" => {
-                        return CreateLoginProfileError::PasswordPolicyViolation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoginProfileError::PasswordPolicyViolation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return CreateLoginProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoginProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateLoginProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15750,28 +15350,6 @@ impl CreateLoginProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLoginProfileError {
-    fn from(err: XmlParseError) -> CreateLoginProfileError {
-        let XmlParseError(message) = err;
-        CreateLoginProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoginProfileError {
-    fn from(err: CredentialsError) -> CreateLoginProfileError {
-        CreateLoginProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoginProfileError {
-    fn from(err: HttpDispatchError) -> CreateLoginProfileError {
-        CreateLoginProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoginProfileError {
-    fn from(err: io::Error) -> CreateLoginProfileError {
-        CreateLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLoginProfileError {
@@ -15787,13 +15365,6 @@ impl Error for CreateLoginProfileError {
             CreateLoginProfileError::NoSuchEntity(ref cause) => cause,
             CreateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
             CreateLoginProfileError::ServiceFailure(ref cause) => cause,
-            CreateLoginProfileError::Validation(ref cause) => cause,
-            CreateLoginProfileError::Credentials(ref err) => err.description(),
-            CreateLoginProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoginProfileError::ParseError(ref cause) => cause,
-            CreateLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15808,20 +15379,12 @@ pub enum CreateOpenIDConnectProviderError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateOpenIDConnectProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateOpenIDConnectProviderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateOpenIDConnectProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15829,30 +15392,36 @@ impl CreateOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateOpenIDConnectProviderError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidInput" => {
-                        return CreateOpenIDConnectProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateOpenIDConnectProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateOpenIDConnectProviderError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateOpenIDConnectProviderError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return CreateOpenIDConnectProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateOpenIDConnectProviderError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateOpenIDConnectProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15861,28 +15430,6 @@ impl CreateOpenIDConnectProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateOpenIDConnectProviderError {
-    fn from(err: XmlParseError) -> CreateOpenIDConnectProviderError {
-        let XmlParseError(message) = err;
-        CreateOpenIDConnectProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateOpenIDConnectProviderError {
-    fn from(err: CredentialsError) -> CreateOpenIDConnectProviderError {
-        CreateOpenIDConnectProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateOpenIDConnectProviderError {
-    fn from(err: HttpDispatchError) -> CreateOpenIDConnectProviderError {
-        CreateOpenIDConnectProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateOpenIDConnectProviderError {
-    fn from(err: io::Error) -> CreateOpenIDConnectProviderError {
-        CreateOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateOpenIDConnectProviderError {
@@ -15897,13 +15444,6 @@ impl Error for CreateOpenIDConnectProviderError {
             CreateOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
             CreateOpenIDConnectProviderError::LimitExceeded(ref cause) => cause,
             CreateOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
-            CreateOpenIDConnectProviderError::Validation(ref cause) => cause,
-            CreateOpenIDConnectProviderError::Credentials(ref err) => err.description(),
-            CreateOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateOpenIDConnectProviderError::ParseError(ref cause) => cause,
-            CreateOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15920,20 +15460,10 @@ pub enum CreatePolicyError {
     MalformedPolicyDocument(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15941,29 +15471,35 @@ impl CreatePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreatePolicyError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return CreatePolicyError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(CreatePolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return CreatePolicyError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(CreatePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "MalformedPolicyDocument" => {
-                        return CreatePolicyError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreatePolicyError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(CreatePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        CreatePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15972,28 +15508,6 @@ impl CreatePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreatePolicyError {
-    fn from(err: XmlParseError) -> CreatePolicyError {
-        let XmlParseError(message) = err;
-        CreatePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreatePolicyError {
-    fn from(err: CredentialsError) -> CreatePolicyError {
-        CreatePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePolicyError {
-    fn from(err: HttpDispatchError) -> CreatePolicyError {
-        CreatePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePolicyError {
-    fn from(err: io::Error) -> CreatePolicyError {
-        CreatePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePolicyError {
@@ -16009,11 +15523,6 @@ impl Error for CreatePolicyError {
             CreatePolicyError::LimitExceeded(ref cause) => cause,
             CreatePolicyError::MalformedPolicyDocument(ref cause) => cause,
             CreatePolicyError::ServiceFailure(ref cause) => cause,
-            CreatePolicyError::Validation(ref cause) => cause,
-            CreatePolicyError::Credentials(ref err) => err.description(),
-            CreatePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePolicyError::ParseError(ref cause) => cause,
-            CreatePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16030,20 +15539,10 @@ pub enum CreatePolicyVersionError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePolicyVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePolicyVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePolicyVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16051,35 +15550,37 @@ impl CreatePolicyVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return CreatePolicyVersionError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyVersionError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreatePolicyVersionError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyVersionError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedPolicyDocument" => {
-                        return CreatePolicyVersionError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreatePolicyVersionError::MalformedPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return CreatePolicyVersionError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyVersionError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreatePolicyVersionError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreatePolicyVersionError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreatePolicyVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16088,28 +15589,6 @@ impl CreatePolicyVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreatePolicyVersionError {
-    fn from(err: XmlParseError) -> CreatePolicyVersionError {
-        let XmlParseError(message) = err;
-        CreatePolicyVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreatePolicyVersionError {
-    fn from(err: CredentialsError) -> CreatePolicyVersionError {
-        CreatePolicyVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePolicyVersionError {
-    fn from(err: HttpDispatchError) -> CreatePolicyVersionError {
-        CreatePolicyVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePolicyVersionError {
-    fn from(err: io::Error) -> CreatePolicyVersionError {
-        CreatePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreatePolicyVersionError {
@@ -16125,13 +15604,6 @@ impl Error for CreatePolicyVersionError {
             CreatePolicyVersionError::MalformedPolicyDocument(ref cause) => cause,
             CreatePolicyVersionError::NoSuchEntity(ref cause) => cause,
             CreatePolicyVersionError::ServiceFailure(ref cause) => cause,
-            CreatePolicyVersionError::Validation(ref cause) => cause,
-            CreatePolicyVersionError::Credentials(ref err) => err.description(),
-            CreatePolicyVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePolicyVersionError::ParseError(ref cause) => cause,
-            CreatePolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16150,20 +15622,10 @@ pub enum CreateRoleError {
     MalformedPolicyDocument(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16171,34 +15633,40 @@ impl CreateRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return CreateRoleError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRoleError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "EntityAlreadyExists" => {
-                        return CreateRoleError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRoleError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return CreateRoleError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRoleError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return CreateRoleError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRoleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "MalformedPolicyDocument" => {
-                        return CreateRoleError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRoleError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        CreateRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16207,28 +15675,6 @@ impl CreateRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateRoleError {
-    fn from(err: XmlParseError) -> CreateRoleError {
-        let XmlParseError(message) = err;
-        CreateRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateRoleError {
-    fn from(err: CredentialsError) -> CreateRoleError {
-        CreateRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRoleError {
-    fn from(err: HttpDispatchError) -> CreateRoleError {
-        CreateRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRoleError {
-    fn from(err: io::Error) -> CreateRoleError {
-        CreateRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRoleError {
@@ -16245,11 +15691,6 @@ impl Error for CreateRoleError {
             CreateRoleError::LimitExceeded(ref cause) => cause,
             CreateRoleError::MalformedPolicyDocument(ref cause) => cause,
             CreateRoleError::ServiceFailure(ref cause) => cause,
-            CreateRoleError::Validation(ref cause) => cause,
-            CreateRoleError::Credentials(ref err) => err.description(),
-            CreateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRoleError::ParseError(ref cause) => cause,
-            CreateRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16264,20 +15705,10 @@ pub enum CreateSAMLProviderError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSAMLProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSAMLProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSAMLProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16285,30 +15716,30 @@ impl CreateSAMLProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateSAMLProviderError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateSAMLProviderError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return CreateSAMLProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateSAMLProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateSAMLProviderError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateSAMLProviderError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateSAMLProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateSAMLProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateSAMLProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16317,28 +15748,6 @@ impl CreateSAMLProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateSAMLProviderError {
-    fn from(err: XmlParseError) -> CreateSAMLProviderError {
-        let XmlParseError(message) = err;
-        CreateSAMLProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateSAMLProviderError {
-    fn from(err: CredentialsError) -> CreateSAMLProviderError {
-        CreateSAMLProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSAMLProviderError {
-    fn from(err: HttpDispatchError) -> CreateSAMLProviderError {
-        CreateSAMLProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSAMLProviderError {
-    fn from(err: io::Error) -> CreateSAMLProviderError {
-        CreateSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSAMLProviderError {
@@ -16353,13 +15762,6 @@ impl Error for CreateSAMLProviderError {
             CreateSAMLProviderError::InvalidInput(ref cause) => cause,
             CreateSAMLProviderError::LimitExceeded(ref cause) => cause,
             CreateSAMLProviderError::ServiceFailure(ref cause) => cause,
-            CreateSAMLProviderError::Validation(ref cause) => cause,
-            CreateSAMLProviderError::Credentials(ref err) => err.description(),
-            CreateSAMLProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSAMLProviderError::ParseError(ref cause) => cause,
-            CreateSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16374,20 +15776,10 @@ pub enum CreateServiceLinkedRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceLinkedRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceLinkedRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateServiceLinkedRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16395,30 +15787,30 @@ impl CreateServiceLinkedRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return CreateServiceLinkedRoleError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateServiceLinkedRoleError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateServiceLinkedRoleError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateServiceLinkedRoleError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return CreateServiceLinkedRoleError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateServiceLinkedRoleError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateServiceLinkedRoleError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateServiceLinkedRoleError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateServiceLinkedRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16427,28 +15819,6 @@ impl CreateServiceLinkedRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateServiceLinkedRoleError {
-    fn from(err: XmlParseError) -> CreateServiceLinkedRoleError {
-        let XmlParseError(message) = err;
-        CreateServiceLinkedRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateServiceLinkedRoleError {
-    fn from(err: CredentialsError) -> CreateServiceLinkedRoleError {
-        CreateServiceLinkedRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateServiceLinkedRoleError {
-    fn from(err: HttpDispatchError) -> CreateServiceLinkedRoleError {
-        CreateServiceLinkedRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateServiceLinkedRoleError {
-    fn from(err: io::Error) -> CreateServiceLinkedRoleError {
-        CreateServiceLinkedRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateServiceLinkedRoleError {
@@ -16463,13 +15833,6 @@ impl Error for CreateServiceLinkedRoleError {
             CreateServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
             CreateServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
             CreateServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
-            CreateServiceLinkedRoleError::Validation(ref cause) => cause,
-            CreateServiceLinkedRoleError::Credentials(ref err) => err.description(),
-            CreateServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateServiceLinkedRoleError::ParseError(ref cause) => cause,
-            CreateServiceLinkedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16482,20 +15845,12 @@ pub enum CreateServiceSpecificCredentialError {
     NoSuchEntity(String),
     /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateServiceSpecificCredentialError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceSpecificCredentialError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateServiceSpecificCredentialError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16503,25 +15858,31 @@ impl CreateServiceSpecificCredentialError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return CreateServiceSpecificCredentialError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateServiceSpecificCredentialError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NotSupportedService" => {
-                        return CreateServiceSpecificCredentialError::ServiceNotSupported(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateServiceSpecificCredentialError::ServiceNotSupported(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        CreateServiceSpecificCredentialError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16530,28 +15891,6 @@ impl CreateServiceSpecificCredentialError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateServiceSpecificCredentialError {
-    fn from(err: XmlParseError) -> CreateServiceSpecificCredentialError {
-        let XmlParseError(message) = err;
-        CreateServiceSpecificCredentialError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateServiceSpecificCredentialError {
-    fn from(err: CredentialsError) -> CreateServiceSpecificCredentialError {
-        CreateServiceSpecificCredentialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateServiceSpecificCredentialError {
-    fn from(err: HttpDispatchError) -> CreateServiceSpecificCredentialError {
-        CreateServiceSpecificCredentialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateServiceSpecificCredentialError {
-    fn from(err: io::Error) -> CreateServiceSpecificCredentialError {
-        CreateServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateServiceSpecificCredentialError {
@@ -16565,13 +15904,6 @@ impl Error for CreateServiceSpecificCredentialError {
             CreateServiceSpecificCredentialError::LimitExceeded(ref cause) => cause,
             CreateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
             CreateServiceSpecificCredentialError::ServiceNotSupported(ref cause) => cause,
-            CreateServiceSpecificCredentialError::Validation(ref cause) => cause,
-            CreateServiceSpecificCredentialError::Credentials(ref err) => err.description(),
-            CreateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateServiceSpecificCredentialError::ParseError(ref cause) => cause,
-            CreateServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16590,20 +15922,10 @@ pub enum CreateUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16611,32 +15933,40 @@ impl CreateUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return CreateUserError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateUserError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "EntityAlreadyExists" => {
-                        return CreateUserError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateUserError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return CreateUserError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateUserError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return CreateUserError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return CreateUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return CreateUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        CreateUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16645,28 +15975,6 @@ impl CreateUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateUserError {
-    fn from(err: XmlParseError) -> CreateUserError {
-        let XmlParseError(message) = err;
-        CreateUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserError {
-    fn from(err: CredentialsError) -> CreateUserError {
-        CreateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserError {
-    fn from(err: HttpDispatchError) -> CreateUserError {
-        CreateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserError {
-    fn from(err: io::Error) -> CreateUserError {
-        CreateUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateUserError {
@@ -16683,11 +15991,6 @@ impl Error for CreateUserError {
             CreateUserError::LimitExceeded(ref cause) => cause,
             CreateUserError::NoSuchEntity(ref cause) => cause,
             CreateUserError::ServiceFailure(ref cause) => cause,
-            CreateUserError::Validation(ref cause) => cause,
-            CreateUserError::Credentials(ref err) => err.description(),
-            CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::ParseError(ref cause) => cause,
-            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16700,20 +16003,10 @@ pub enum CreateVirtualMFADeviceError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVirtualMFADeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateVirtualMFADeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVirtualMFADeviceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16721,25 +16014,27 @@ impl CreateVirtualMFADeviceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateVirtualMFADeviceError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return CreateVirtualMFADeviceError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateVirtualMFADeviceError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return CreateVirtualMFADeviceError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateVirtualMFADeviceError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateVirtualMFADeviceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16748,28 +16043,6 @@ impl CreateVirtualMFADeviceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateVirtualMFADeviceError {
-    fn from(err: XmlParseError) -> CreateVirtualMFADeviceError {
-        let XmlParseError(message) = err;
-        CreateVirtualMFADeviceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateVirtualMFADeviceError {
-    fn from(err: CredentialsError) -> CreateVirtualMFADeviceError {
-        CreateVirtualMFADeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateVirtualMFADeviceError {
-    fn from(err: HttpDispatchError) -> CreateVirtualMFADeviceError {
-        CreateVirtualMFADeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateVirtualMFADeviceError {
-    fn from(err: io::Error) -> CreateVirtualMFADeviceError {
-        CreateVirtualMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateVirtualMFADeviceError {
@@ -16783,13 +16056,6 @@ impl Error for CreateVirtualMFADeviceError {
             CreateVirtualMFADeviceError::EntityAlreadyExists(ref cause) => cause,
             CreateVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
             CreateVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
-            CreateVirtualMFADeviceError::Validation(ref cause) => cause,
-            CreateVirtualMFADeviceError::Credentials(ref err) => err.description(),
-            CreateVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateVirtualMFADeviceError::ParseError(ref cause) => cause,
-            CreateVirtualMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16804,20 +16070,10 @@ pub enum DeactivateMFADeviceError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeactivateMFADeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeactivateMFADeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivateMFADeviceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16825,30 +16081,32 @@ impl DeactivateMFADeviceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityTemporarilyUnmodifiable" => {
-                        return DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeactivateMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "LimitExceeded" => {
-                        return DeactivateMFADeviceError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeactivateMFADeviceError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeactivateMFADeviceError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeactivateMFADeviceError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeactivateMFADeviceError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeactivateMFADeviceError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeactivateMFADeviceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16857,28 +16115,6 @@ impl DeactivateMFADeviceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeactivateMFADeviceError {
-    fn from(err: XmlParseError) -> DeactivateMFADeviceError {
-        let XmlParseError(message) = err;
-        DeactivateMFADeviceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeactivateMFADeviceError {
-    fn from(err: CredentialsError) -> DeactivateMFADeviceError {
-        DeactivateMFADeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeactivateMFADeviceError {
-    fn from(err: HttpDispatchError) -> DeactivateMFADeviceError {
-        DeactivateMFADeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeactivateMFADeviceError {
-    fn from(err: io::Error) -> DeactivateMFADeviceError {
-        DeactivateMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeactivateMFADeviceError {
@@ -16893,13 +16129,6 @@ impl Error for DeactivateMFADeviceError {
             DeactivateMFADeviceError::LimitExceeded(ref cause) => cause,
             DeactivateMFADeviceError::NoSuchEntity(ref cause) => cause,
             DeactivateMFADeviceError::ServiceFailure(ref cause) => cause,
-            DeactivateMFADeviceError::Validation(ref cause) => cause,
-            DeactivateMFADeviceError::Credentials(ref err) => err.description(),
-            DeactivateMFADeviceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeactivateMFADeviceError::ParseError(ref cause) => cause,
-            DeactivateMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16912,20 +16141,10 @@ pub enum DeleteAccessKeyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccessKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccessKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16933,25 +16152,25 @@ impl DeleteAccessKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteAccessKeyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccessKeyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteAccessKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccessKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteAccessKeyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccessKeyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteAccessKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16960,28 +16179,6 @@ impl DeleteAccessKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteAccessKeyError {
-    fn from(err: XmlParseError) -> DeleteAccessKeyError {
-        let XmlParseError(message) = err;
-        DeleteAccessKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAccessKeyError {
-    fn from(err: CredentialsError) -> DeleteAccessKeyError {
-        DeleteAccessKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAccessKeyError {
-    fn from(err: HttpDispatchError) -> DeleteAccessKeyError {
-        DeleteAccessKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAccessKeyError {
-    fn from(err: io::Error) -> DeleteAccessKeyError {
-        DeleteAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAccessKeyError {
@@ -16995,11 +16192,6 @@ impl Error for DeleteAccessKeyError {
             DeleteAccessKeyError::LimitExceeded(ref cause) => cause,
             DeleteAccessKeyError::NoSuchEntity(ref cause) => cause,
             DeleteAccessKeyError::ServiceFailure(ref cause) => cause,
-            DeleteAccessKeyError::Validation(ref cause) => cause,
-            DeleteAccessKeyError::Credentials(ref err) => err.description(),
-            DeleteAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAccessKeyError::ParseError(ref cause) => cause,
-            DeleteAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17012,20 +16204,10 @@ pub enum DeleteAccountAliasError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccountAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccountAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccountAliasError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17033,25 +16215,25 @@ impl DeleteAccountAliasError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteAccountAliasError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccountAliasError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteAccountAliasError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccountAliasError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteAccountAliasError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccountAliasError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteAccountAliasError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17060,28 +16242,6 @@ impl DeleteAccountAliasError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteAccountAliasError {
-    fn from(err: XmlParseError) -> DeleteAccountAliasError {
-        let XmlParseError(message) = err;
-        DeleteAccountAliasError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAccountAliasError {
-    fn from(err: CredentialsError) -> DeleteAccountAliasError {
-        DeleteAccountAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAccountAliasError {
-    fn from(err: HttpDispatchError) -> DeleteAccountAliasError {
-        DeleteAccountAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAccountAliasError {
-    fn from(err: io::Error) -> DeleteAccountAliasError {
-        DeleteAccountAliasError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAccountAliasError {
@@ -17095,13 +16255,6 @@ impl Error for DeleteAccountAliasError {
             DeleteAccountAliasError::LimitExceeded(ref cause) => cause,
             DeleteAccountAliasError::NoSuchEntity(ref cause) => cause,
             DeleteAccountAliasError::ServiceFailure(ref cause) => cause,
-            DeleteAccountAliasError::Validation(ref cause) => cause,
-            DeleteAccountAliasError::Credentials(ref err) => err.description(),
-            DeleteAccountAliasError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAccountAliasError::ParseError(ref cause) => cause,
-            DeleteAccountAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17114,20 +16267,12 @@ pub enum DeleteAccountPasswordPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAccountPasswordPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAccountPasswordPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteAccountPasswordPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17135,25 +16280,29 @@ impl DeleteAccountPasswordPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteAccountPasswordPolicyError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return DeleteAccountPasswordPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAccountPasswordPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteAccountPasswordPolicyError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteAccountPasswordPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17162,28 +16311,6 @@ impl DeleteAccountPasswordPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteAccountPasswordPolicyError {
-    fn from(err: XmlParseError) -> DeleteAccountPasswordPolicyError {
-        let XmlParseError(message) = err;
-        DeleteAccountPasswordPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAccountPasswordPolicyError {
-    fn from(err: CredentialsError) -> DeleteAccountPasswordPolicyError {
-        DeleteAccountPasswordPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAccountPasswordPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteAccountPasswordPolicyError {
-        DeleteAccountPasswordPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAccountPasswordPolicyError {
-    fn from(err: io::Error) -> DeleteAccountPasswordPolicyError {
-        DeleteAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAccountPasswordPolicyError {
@@ -17197,13 +16324,6 @@ impl Error for DeleteAccountPasswordPolicyError {
             DeleteAccountPasswordPolicyError::LimitExceeded(ref cause) => cause,
             DeleteAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
             DeleteAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::Validation(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::Credentials(ref err) => err.description(),
-            DeleteAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAccountPasswordPolicyError::ParseError(ref cause) => cause,
-            DeleteAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17218,20 +16338,10 @@ pub enum DeleteGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17239,22 +16349,30 @@ impl DeleteGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteGroupError::DeleteConflict(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteGroupError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return DeleteGroupError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteGroupError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return DeleteGroupError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteGroupError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return DeleteGroupError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17263,28 +16381,6 @@ impl DeleteGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteGroupError {
-    fn from(err: XmlParseError) -> DeleteGroupError {
-        let XmlParseError(message) = err;
-        DeleteGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupError {
-    fn from(err: CredentialsError) -> DeleteGroupError {
-        DeleteGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupError {
-    fn from(err: HttpDispatchError) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupError {
-    fn from(err: io::Error) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -17299,11 +16395,6 @@ impl Error for DeleteGroupError {
             DeleteGroupError::LimitExceeded(ref cause) => cause,
             DeleteGroupError::NoSuchEntity(ref cause) => cause,
             DeleteGroupError::ServiceFailure(ref cause) => cause,
-            DeleteGroupError::Validation(ref cause) => cause,
-            DeleteGroupError::Credentials(ref err) => err.description(),
-            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::ParseError(ref cause) => cause,
-            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17316,20 +16407,10 @@ pub enum DeleteGroupPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17337,25 +16418,25 @@ impl DeleteGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteGroupPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteGroupPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteGroupPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteGroupPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteGroupPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteGroupPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteGroupPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17364,28 +16445,6 @@ impl DeleteGroupPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteGroupPolicyError {
-    fn from(err: XmlParseError) -> DeleteGroupPolicyError {
-        let XmlParseError(message) = err;
-        DeleteGroupPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupPolicyError {
-    fn from(err: CredentialsError) -> DeleteGroupPolicyError {
-        DeleteGroupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteGroupPolicyError {
-        DeleteGroupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupPolicyError {
-    fn from(err: io::Error) -> DeleteGroupPolicyError {
-        DeleteGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteGroupPolicyError {
@@ -17399,13 +16458,6 @@ impl Error for DeleteGroupPolicyError {
             DeleteGroupPolicyError::LimitExceeded(ref cause) => cause,
             DeleteGroupPolicyError::NoSuchEntity(ref cause) => cause,
             DeleteGroupPolicyError::ServiceFailure(ref cause) => cause,
-            DeleteGroupPolicyError::Validation(ref cause) => cause,
-            DeleteGroupPolicyError::Credentials(ref err) => err.description(),
-            DeleteGroupPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteGroupPolicyError::ParseError(ref cause) => cause,
-            DeleteGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17420,20 +16472,10 @@ pub enum DeleteInstanceProfileError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInstanceProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17441,30 +16483,30 @@ impl DeleteInstanceProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteInstanceProfileError::DeleteConflict(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteInstanceProfileError::DeleteConflict(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DeleteInstanceProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteInstanceProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteInstanceProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteInstanceProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteInstanceProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteInstanceProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteInstanceProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17473,28 +16515,6 @@ impl DeleteInstanceProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteInstanceProfileError {
-    fn from(err: XmlParseError) -> DeleteInstanceProfileError {
-        let XmlParseError(message) = err;
-        DeleteInstanceProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInstanceProfileError {
-    fn from(err: CredentialsError) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInstanceProfileError {
-    fn from(err: HttpDispatchError) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInstanceProfileError {
-    fn from(err: io::Error) -> DeleteInstanceProfileError {
-        DeleteInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteInstanceProfileError {
@@ -17509,13 +16529,6 @@ impl Error for DeleteInstanceProfileError {
             DeleteInstanceProfileError::LimitExceeded(ref cause) => cause,
             DeleteInstanceProfileError::NoSuchEntity(ref cause) => cause,
             DeleteInstanceProfileError::ServiceFailure(ref cause) => cause,
-            DeleteInstanceProfileError::Validation(ref cause) => cause,
-            DeleteInstanceProfileError::Credentials(ref err) => err.description(),
-            DeleteInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteInstanceProfileError::ParseError(ref cause) => cause,
-            DeleteInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17530,20 +16543,10 @@ pub enum DeleteLoginProfileError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoginProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoginProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoginProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17551,30 +16554,32 @@ impl DeleteLoginProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityTemporarilyUnmodifiable" => {
-                        return DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return DeleteLoginProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoginProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteLoginProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoginProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteLoginProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoginProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteLoginProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17583,28 +16588,6 @@ impl DeleteLoginProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteLoginProfileError {
-    fn from(err: XmlParseError) -> DeleteLoginProfileError {
-        let XmlParseError(message) = err;
-        DeleteLoginProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoginProfileError {
-    fn from(err: CredentialsError) -> DeleteLoginProfileError {
-        DeleteLoginProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoginProfileError {
-    fn from(err: HttpDispatchError) -> DeleteLoginProfileError {
-        DeleteLoginProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoginProfileError {
-    fn from(err: io::Error) -> DeleteLoginProfileError {
-        DeleteLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoginProfileError {
@@ -17619,13 +16602,6 @@ impl Error for DeleteLoginProfileError {
             DeleteLoginProfileError::LimitExceeded(ref cause) => cause,
             DeleteLoginProfileError::NoSuchEntity(ref cause) => cause,
             DeleteLoginProfileError::ServiceFailure(ref cause) => cause,
-            DeleteLoginProfileError::Validation(ref cause) => cause,
-            DeleteLoginProfileError::Credentials(ref err) => err.description(),
-            DeleteLoginProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoginProfileError::ParseError(ref cause) => cause,
-            DeleteLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17638,20 +16614,12 @@ pub enum DeleteOpenIDConnectProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteOpenIDConnectProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteOpenIDConnectProviderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteOpenIDConnectProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17659,25 +16627,27 @@ impl DeleteOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DeleteOpenIDConnectProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteOpenIDConnectProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteOpenIDConnectProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteOpenIDConnectProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteOpenIDConnectProviderError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteOpenIDConnectProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17686,28 +16656,6 @@ impl DeleteOpenIDConnectProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteOpenIDConnectProviderError {
-    fn from(err: XmlParseError) -> DeleteOpenIDConnectProviderError {
-        let XmlParseError(message) = err;
-        DeleteOpenIDConnectProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteOpenIDConnectProviderError {
-    fn from(err: CredentialsError) -> DeleteOpenIDConnectProviderError {
-        DeleteOpenIDConnectProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteOpenIDConnectProviderError {
-    fn from(err: HttpDispatchError) -> DeleteOpenIDConnectProviderError {
-        DeleteOpenIDConnectProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteOpenIDConnectProviderError {
-    fn from(err: io::Error) -> DeleteOpenIDConnectProviderError {
-        DeleteOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteOpenIDConnectProviderError {
@@ -17721,13 +16669,6 @@ impl Error for DeleteOpenIDConnectProviderError {
             DeleteOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
             DeleteOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
             DeleteOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::Validation(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::Credentials(ref err) => err.description(),
-            DeleteOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteOpenIDConnectProviderError::ParseError(ref cause) => cause,
-            DeleteOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17744,20 +16685,10 @@ pub enum DeletePolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17765,25 +16696,35 @@ impl DeletePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeletePolicyError::DeleteConflict(String::from(parsed_error.message));
+                        return RusotoError::Service(DeletePolicyError::DeleteConflict(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "InvalidInput" => {
-                        return DeletePolicyError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(DeletePolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return DeletePolicyError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(DeletePolicyError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return DeletePolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(DeletePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return DeletePolicyError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(DeletePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        DeletePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17792,28 +16733,6 @@ impl DeletePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeletePolicyError {
-    fn from(err: XmlParseError) -> DeletePolicyError {
-        let XmlParseError(message) = err;
-        DeletePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeletePolicyError {
-    fn from(err: CredentialsError) -> DeletePolicyError {
-        DeletePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePolicyError {
-    fn from(err: HttpDispatchError) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePolicyError {
-    fn from(err: io::Error) -> DeletePolicyError {
-        DeletePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePolicyError {
@@ -17829,11 +16748,6 @@ impl Error for DeletePolicyError {
             DeletePolicyError::LimitExceeded(ref cause) => cause,
             DeletePolicyError::NoSuchEntity(ref cause) => cause,
             DeletePolicyError::ServiceFailure(ref cause) => cause,
-            DeletePolicyError::Validation(ref cause) => cause,
-            DeletePolicyError::Credentials(ref err) => err.description(),
-            DeletePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePolicyError::ParseError(ref cause) => cause,
-            DeletePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17850,20 +16764,10 @@ pub enum DeletePolicyVersionError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePolicyVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePolicyVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePolicyVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17871,35 +16775,35 @@ impl DeletePolicyVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeletePolicyVersionError::DeleteConflict(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeletePolicyVersionError::DeleteConflict(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return DeletePolicyVersionError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeletePolicyVersionError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DeletePolicyVersionError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeletePolicyVersionError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeletePolicyVersionError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeletePolicyVersionError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeletePolicyVersionError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeletePolicyVersionError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeletePolicyVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17908,28 +16812,6 @@ impl DeletePolicyVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeletePolicyVersionError {
-    fn from(err: XmlParseError) -> DeletePolicyVersionError {
-        let XmlParseError(message) = err;
-        DeletePolicyVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeletePolicyVersionError {
-    fn from(err: CredentialsError) -> DeletePolicyVersionError {
-        DeletePolicyVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePolicyVersionError {
-    fn from(err: HttpDispatchError) -> DeletePolicyVersionError {
-        DeletePolicyVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePolicyVersionError {
-    fn from(err: io::Error) -> DeletePolicyVersionError {
-        DeletePolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePolicyVersionError {
@@ -17945,13 +16827,6 @@ impl Error for DeletePolicyVersionError {
             DeletePolicyVersionError::LimitExceeded(ref cause) => cause,
             DeletePolicyVersionError::NoSuchEntity(ref cause) => cause,
             DeletePolicyVersionError::ServiceFailure(ref cause) => cause,
-            DeletePolicyVersionError::Validation(ref cause) => cause,
-            DeletePolicyVersionError::Credentials(ref err) => err.description(),
-            DeletePolicyVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePolicyVersionError::ParseError(ref cause) => cause,
-            DeletePolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17970,20 +16845,10 @@ pub enum DeleteRoleError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17991,32 +16856,40 @@ impl DeleteRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return DeleteRoleError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRoleError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DeleteConflict" => {
-                        return DeleteRoleError::DeleteConflict(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteRoleError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return DeleteRoleError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteRoleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return DeleteRoleError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return DeleteRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "UnmodifiableEntity" => {
-                        return DeleteRoleError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRoleError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18025,28 +16898,6 @@ impl DeleteRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteRoleError {
-    fn from(err: XmlParseError) -> DeleteRoleError {
-        let XmlParseError(message) = err;
-        DeleteRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRoleError {
-    fn from(err: CredentialsError) -> DeleteRoleError {
-        DeleteRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRoleError {
-    fn from(err: HttpDispatchError) -> DeleteRoleError {
-        DeleteRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRoleError {
-    fn from(err: io::Error) -> DeleteRoleError {
-        DeleteRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRoleError {
@@ -18063,11 +16914,6 @@ impl Error for DeleteRoleError {
             DeleteRoleError::NoSuchEntity(ref cause) => cause,
             DeleteRoleError::ServiceFailure(ref cause) => cause,
             DeleteRoleError::UnmodifiableEntity(ref cause) => cause,
-            DeleteRoleError::Validation(ref cause) => cause,
-            DeleteRoleError::Credentials(ref err) => err.description(),
-            DeleteRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRoleError::ParseError(ref cause) => cause,
-            DeleteRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18080,20 +16926,12 @@ pub enum DeleteRolePermissionsBoundaryError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRolePermissionsBoundaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRolePermissionsBoundaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteRolePermissionsBoundaryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18101,25 +16939,31 @@ impl DeleteRolePermissionsBoundaryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteRolePermissionsBoundaryError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return DeleteRolePermissionsBoundaryError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteRolePermissionsBoundaryError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnmodifiableEntity" => {
-                        return DeleteRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteRolePermissionsBoundaryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18128,28 +16972,6 @@ impl DeleteRolePermissionsBoundaryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteRolePermissionsBoundaryError {
-    fn from(err: XmlParseError) -> DeleteRolePermissionsBoundaryError {
-        let XmlParseError(message) = err;
-        DeleteRolePermissionsBoundaryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRolePermissionsBoundaryError {
-    fn from(err: CredentialsError) -> DeleteRolePermissionsBoundaryError {
-        DeleteRolePermissionsBoundaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRolePermissionsBoundaryError {
-    fn from(err: HttpDispatchError) -> DeleteRolePermissionsBoundaryError {
-        DeleteRolePermissionsBoundaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRolePermissionsBoundaryError {
-    fn from(err: io::Error) -> DeleteRolePermissionsBoundaryError {
-        DeleteRolePermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRolePermissionsBoundaryError {
@@ -18163,13 +16985,6 @@ impl Error for DeleteRolePermissionsBoundaryError {
             DeleteRolePermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
             DeleteRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
             DeleteRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::Validation(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::Credentials(ref err) => err.description(),
-            DeleteRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRolePermissionsBoundaryError::ParseError(ref cause) => cause,
-            DeleteRolePermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18184,20 +16999,10 @@ pub enum DeleteRolePolicyError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18205,30 +17010,30 @@ impl DeleteRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteRolePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRolePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return DeleteRolePolicyError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRolePolicyError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18237,28 +17042,6 @@ impl DeleteRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteRolePolicyError {
-    fn from(err: XmlParseError) -> DeleteRolePolicyError {
-        let XmlParseError(message) = err;
-        DeleteRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRolePolicyError {
-    fn from(err: CredentialsError) -> DeleteRolePolicyError {
-        DeleteRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRolePolicyError {
-    fn from(err: HttpDispatchError) -> DeleteRolePolicyError {
-        DeleteRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRolePolicyError {
-    fn from(err: io::Error) -> DeleteRolePolicyError {
-        DeleteRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRolePolicyError {
@@ -18273,11 +17056,6 @@ impl Error for DeleteRolePolicyError {
             DeleteRolePolicyError::NoSuchEntity(ref cause) => cause,
             DeleteRolePolicyError::ServiceFailure(ref cause) => cause,
             DeleteRolePolicyError::UnmodifiableEntity(ref cause) => cause,
-            DeleteRolePolicyError::Validation(ref cause) => cause,
-            DeleteRolePolicyError::Credentials(ref err) => err.description(),
-            DeleteRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRolePolicyError::ParseError(ref cause) => cause,
-            DeleteRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18292,20 +17070,10 @@ pub enum DeleteSAMLProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSAMLProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSAMLProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSAMLProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18313,30 +17081,30 @@ impl DeleteSAMLProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DeleteSAMLProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSAMLProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DeleteSAMLProviderError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSAMLProviderError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteSAMLProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSAMLProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteSAMLProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSAMLProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSAMLProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18345,28 +17113,6 @@ impl DeleteSAMLProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSAMLProviderError {
-    fn from(err: XmlParseError) -> DeleteSAMLProviderError {
-        let XmlParseError(message) = err;
-        DeleteSAMLProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSAMLProviderError {
-    fn from(err: CredentialsError) -> DeleteSAMLProviderError {
-        DeleteSAMLProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSAMLProviderError {
-    fn from(err: HttpDispatchError) -> DeleteSAMLProviderError {
-        DeleteSAMLProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSAMLProviderError {
-    fn from(err: io::Error) -> DeleteSAMLProviderError {
-        DeleteSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSAMLProviderError {
@@ -18381,13 +17127,6 @@ impl Error for DeleteSAMLProviderError {
             DeleteSAMLProviderError::LimitExceeded(ref cause) => cause,
             DeleteSAMLProviderError::NoSuchEntity(ref cause) => cause,
             DeleteSAMLProviderError::ServiceFailure(ref cause) => cause,
-            DeleteSAMLProviderError::Validation(ref cause) => cause,
-            DeleteSAMLProviderError::Credentials(ref err) => err.description(),
-            DeleteSAMLProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSAMLProviderError::ParseError(ref cause) => cause,
-            DeleteSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18396,20 +17135,10 @@ impl Error for DeleteSAMLProviderError {
 pub enum DeleteSSHPublicKeyError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSSHPublicKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSSHPublicKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSSHPublicKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18417,15 +17146,15 @@ impl DeleteSSHPublicKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return DeleteSSHPublicKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSSHPublicKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSSHPublicKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18434,28 +17163,6 @@ impl DeleteSSHPublicKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSSHPublicKeyError {
-    fn from(err: XmlParseError) -> DeleteSSHPublicKeyError {
-        let XmlParseError(message) = err;
-        DeleteSSHPublicKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSSHPublicKeyError {
-    fn from(err: CredentialsError) -> DeleteSSHPublicKeyError {
-        DeleteSSHPublicKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSSHPublicKeyError {
-    fn from(err: HttpDispatchError) -> DeleteSSHPublicKeyError {
-        DeleteSSHPublicKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSSHPublicKeyError {
-    fn from(err: io::Error) -> DeleteSSHPublicKeyError {
-        DeleteSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSSHPublicKeyError {
@@ -18467,13 +17174,6 @@ impl Error for DeleteSSHPublicKeyError {
     fn description(&self) -> &str {
         match *self {
             DeleteSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            DeleteSSHPublicKeyError::Validation(ref cause) => cause,
-            DeleteSSHPublicKeyError::Credentials(ref err) => err.description(),
-            DeleteSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSSHPublicKeyError::ParseError(ref cause) => cause,
-            DeleteSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18488,20 +17188,10 @@ pub enum DeleteServerCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServerCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteServerCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServerCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18509,30 +17199,30 @@ impl DeleteServerCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteServerCertificateError::DeleteConflict(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServerCertificateError::DeleteConflict(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DeleteServerCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServerCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteServerCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServerCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteServerCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServerCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteServerCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18541,28 +17231,6 @@ impl DeleteServerCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteServerCertificateError {
-    fn from(err: XmlParseError) -> DeleteServerCertificateError {
-        let XmlParseError(message) = err;
-        DeleteServerCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteServerCertificateError {
-    fn from(err: CredentialsError) -> DeleteServerCertificateError {
-        DeleteServerCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteServerCertificateError {
-    fn from(err: HttpDispatchError) -> DeleteServerCertificateError {
-        DeleteServerCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteServerCertificateError {
-    fn from(err: io::Error) -> DeleteServerCertificateError {
-        DeleteServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteServerCertificateError {
@@ -18577,13 +17245,6 @@ impl Error for DeleteServerCertificateError {
             DeleteServerCertificateError::LimitExceeded(ref cause) => cause,
             DeleteServerCertificateError::NoSuchEntity(ref cause) => cause,
             DeleteServerCertificateError::ServiceFailure(ref cause) => cause,
-            DeleteServerCertificateError::Validation(ref cause) => cause,
-            DeleteServerCertificateError::Credentials(ref err) => err.description(),
-            DeleteServerCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteServerCertificateError::ParseError(ref cause) => cause,
-            DeleteServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18596,20 +17257,10 @@ pub enum DeleteServiceLinkedRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceLinkedRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceLinkedRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteServiceLinkedRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18617,25 +17268,25 @@ impl DeleteServiceLinkedRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteServiceLinkedRoleError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServiceLinkedRoleError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteServiceLinkedRoleError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServiceLinkedRoleError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteServiceLinkedRoleError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteServiceLinkedRoleError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteServiceLinkedRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18644,28 +17295,6 @@ impl DeleteServiceLinkedRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteServiceLinkedRoleError {
-    fn from(err: XmlParseError) -> DeleteServiceLinkedRoleError {
-        let XmlParseError(message) = err;
-        DeleteServiceLinkedRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteServiceLinkedRoleError {
-    fn from(err: CredentialsError) -> DeleteServiceLinkedRoleError {
-        DeleteServiceLinkedRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteServiceLinkedRoleError {
-    fn from(err: HttpDispatchError) -> DeleteServiceLinkedRoleError {
-        DeleteServiceLinkedRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteServiceLinkedRoleError {
-    fn from(err: io::Error) -> DeleteServiceLinkedRoleError {
-        DeleteServiceLinkedRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteServiceLinkedRoleError {
@@ -18679,13 +17308,6 @@ impl Error for DeleteServiceLinkedRoleError {
             DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
             DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
             DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
-            DeleteServiceLinkedRoleError::Validation(ref cause) => cause,
-            DeleteServiceLinkedRoleError::Credentials(ref err) => err.description(),
-            DeleteServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteServiceLinkedRoleError::ParseError(ref cause) => cause,
-            DeleteServiceLinkedRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18694,20 +17316,12 @@ impl Error for DeleteServiceLinkedRoleError {
 pub enum DeleteServiceSpecificCredentialError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteServiceSpecificCredentialError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceSpecificCredentialError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteServiceSpecificCredentialError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18715,15 +17329,17 @@ impl DeleteServiceSpecificCredentialError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteServiceSpecificCredentialError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteServiceSpecificCredentialError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18732,28 +17348,6 @@ impl DeleteServiceSpecificCredentialError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteServiceSpecificCredentialError {
-    fn from(err: XmlParseError) -> DeleteServiceSpecificCredentialError {
-        let XmlParseError(message) = err;
-        DeleteServiceSpecificCredentialError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteServiceSpecificCredentialError {
-    fn from(err: CredentialsError) -> DeleteServiceSpecificCredentialError {
-        DeleteServiceSpecificCredentialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteServiceSpecificCredentialError {
-    fn from(err: HttpDispatchError) -> DeleteServiceSpecificCredentialError {
-        DeleteServiceSpecificCredentialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteServiceSpecificCredentialError {
-    fn from(err: io::Error) -> DeleteServiceSpecificCredentialError {
-        DeleteServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteServiceSpecificCredentialError {
@@ -18765,13 +17359,6 @@ impl Error for DeleteServiceSpecificCredentialError {
     fn description(&self) -> &str {
         match *self {
             DeleteServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
-            DeleteServiceSpecificCredentialError::Validation(ref cause) => cause,
-            DeleteServiceSpecificCredentialError::Credentials(ref err) => err.description(),
-            DeleteServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteServiceSpecificCredentialError::ParseError(ref cause) => cause,
-            DeleteServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18784,20 +17371,10 @@ pub enum DeleteSigningCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSigningCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSigningCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSigningCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18805,25 +17382,25 @@ impl DeleteSigningCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteSigningCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSigningCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteSigningCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSigningCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteSigningCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSigningCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSigningCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18832,28 +17409,6 @@ impl DeleteSigningCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSigningCertificateError {
-    fn from(err: XmlParseError) -> DeleteSigningCertificateError {
-        let XmlParseError(message) = err;
-        DeleteSigningCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSigningCertificateError {
-    fn from(err: CredentialsError) -> DeleteSigningCertificateError {
-        DeleteSigningCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSigningCertificateError {
-    fn from(err: HttpDispatchError) -> DeleteSigningCertificateError {
-        DeleteSigningCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSigningCertificateError {
-    fn from(err: io::Error) -> DeleteSigningCertificateError {
-        DeleteSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSigningCertificateError {
@@ -18867,13 +17422,6 @@ impl Error for DeleteSigningCertificateError {
             DeleteSigningCertificateError::LimitExceeded(ref cause) => cause,
             DeleteSigningCertificateError::NoSuchEntity(ref cause) => cause,
             DeleteSigningCertificateError::ServiceFailure(ref cause) => cause,
-            DeleteSigningCertificateError::Validation(ref cause) => cause,
-            DeleteSigningCertificateError::Credentials(ref err) => err.description(),
-            DeleteSigningCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSigningCertificateError::ParseError(ref cause) => cause,
-            DeleteSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18890,20 +17438,10 @@ pub enum DeleteUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18911,27 +17449,35 @@ impl DeleteUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return DeleteUserError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteUserError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DeleteConflict" => {
-                        return DeleteUserError::DeleteConflict(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteUserError::DeleteConflict(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return DeleteUserError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteUserError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return DeleteUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return DeleteUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18940,28 +17486,6 @@ impl DeleteUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteUserError {
-    fn from(err: XmlParseError) -> DeleteUserError {
-        let XmlParseError(message) = err;
-        DeleteUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserError {
-    fn from(err: CredentialsError) -> DeleteUserError {
-        DeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserError {
-    fn from(err: HttpDispatchError) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserError {
-    fn from(err: io::Error) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -18977,11 +17501,6 @@ impl Error for DeleteUserError {
             DeleteUserError::LimitExceeded(ref cause) => cause,
             DeleteUserError::NoSuchEntity(ref cause) => cause,
             DeleteUserError::ServiceFailure(ref cause) => cause,
-            DeleteUserError::Validation(ref cause) => cause,
-            DeleteUserError::Credentials(ref err) => err.description(),
-            DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::ParseError(ref cause) => cause,
-            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18992,20 +17511,12 @@ pub enum DeleteUserPermissionsBoundaryError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPermissionsBoundaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPermissionsBoundaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteUserPermissionsBoundaryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19013,20 +17524,24 @@ impl DeleteUserPermissionsBoundaryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteUserPermissionsBoundaryError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return DeleteUserPermissionsBoundaryError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteUserPermissionsBoundaryError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteUserPermissionsBoundaryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19035,28 +17550,6 @@ impl DeleteUserPermissionsBoundaryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteUserPermissionsBoundaryError {
-    fn from(err: XmlParseError) -> DeleteUserPermissionsBoundaryError {
-        let XmlParseError(message) = err;
-        DeleteUserPermissionsBoundaryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserPermissionsBoundaryError {
-    fn from(err: CredentialsError) -> DeleteUserPermissionsBoundaryError {
-        DeleteUserPermissionsBoundaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserPermissionsBoundaryError {
-    fn from(err: HttpDispatchError) -> DeleteUserPermissionsBoundaryError {
-        DeleteUserPermissionsBoundaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserPermissionsBoundaryError {
-    fn from(err: io::Error) -> DeleteUserPermissionsBoundaryError {
-        DeleteUserPermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteUserPermissionsBoundaryError {
@@ -19069,13 +17562,6 @@ impl Error for DeleteUserPermissionsBoundaryError {
         match *self {
             DeleteUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
             DeleteUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            DeleteUserPermissionsBoundaryError::Validation(ref cause) => cause,
-            DeleteUserPermissionsBoundaryError::Credentials(ref err) => err.description(),
-            DeleteUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserPermissionsBoundaryError::ParseError(ref cause) => cause,
-            DeleteUserPermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19088,20 +17574,10 @@ pub enum DeleteUserPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19109,25 +17585,25 @@ impl DeleteUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return DeleteUserPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteUserPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteUserPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteUserPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteUserPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteUserPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteUserPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19136,28 +17612,6 @@ impl DeleteUserPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteUserPolicyError {
-    fn from(err: XmlParseError) -> DeleteUserPolicyError {
-        let XmlParseError(message) = err;
-        DeleteUserPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserPolicyError {
-    fn from(err: CredentialsError) -> DeleteUserPolicyError {
-        DeleteUserPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteUserPolicyError {
-        DeleteUserPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserPolicyError {
-    fn from(err: io::Error) -> DeleteUserPolicyError {
-        DeleteUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteUserPolicyError {
@@ -19171,11 +17625,6 @@ impl Error for DeleteUserPolicyError {
             DeleteUserPolicyError::LimitExceeded(ref cause) => cause,
             DeleteUserPolicyError::NoSuchEntity(ref cause) => cause,
             DeleteUserPolicyError::ServiceFailure(ref cause) => cause,
-            DeleteUserPolicyError::Validation(ref cause) => cause,
-            DeleteUserPolicyError::Credentials(ref err) => err.description(),
-            DeleteUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserPolicyError::ParseError(ref cause) => cause,
-            DeleteUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19190,20 +17639,10 @@ pub enum DeleteVirtualMFADeviceError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVirtualMFADeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVirtualMFADeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVirtualMFADeviceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19211,30 +17650,30 @@ impl DeleteVirtualMFADeviceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DeleteConflict" => {
-                        return DeleteVirtualMFADeviceError::DeleteConflict(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteVirtualMFADeviceError::DeleteConflict(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DeleteVirtualMFADeviceError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteVirtualMFADeviceError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DeleteVirtualMFADeviceError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteVirtualMFADeviceError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DeleteVirtualMFADeviceError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteVirtualMFADeviceError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteVirtualMFADeviceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19243,28 +17682,6 @@ impl DeleteVirtualMFADeviceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteVirtualMFADeviceError {
-    fn from(err: XmlParseError) -> DeleteVirtualMFADeviceError {
-        let XmlParseError(message) = err;
-        DeleteVirtualMFADeviceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVirtualMFADeviceError {
-    fn from(err: CredentialsError) -> DeleteVirtualMFADeviceError {
-        DeleteVirtualMFADeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVirtualMFADeviceError {
-    fn from(err: HttpDispatchError) -> DeleteVirtualMFADeviceError {
-        DeleteVirtualMFADeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVirtualMFADeviceError {
-    fn from(err: io::Error) -> DeleteVirtualMFADeviceError {
-        DeleteVirtualMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVirtualMFADeviceError {
@@ -19279,13 +17696,6 @@ impl Error for DeleteVirtualMFADeviceError {
             DeleteVirtualMFADeviceError::LimitExceeded(ref cause) => cause,
             DeleteVirtualMFADeviceError::NoSuchEntity(ref cause) => cause,
             DeleteVirtualMFADeviceError::ServiceFailure(ref cause) => cause,
-            DeleteVirtualMFADeviceError::Validation(ref cause) => cause,
-            DeleteVirtualMFADeviceError::Credentials(ref err) => err.description(),
-            DeleteVirtualMFADeviceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVirtualMFADeviceError::ParseError(ref cause) => cause,
-            DeleteVirtualMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19300,20 +17710,10 @@ pub enum DetachGroupPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachGroupPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachGroupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachGroupPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19321,30 +17721,30 @@ impl DetachGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DetachGroupPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachGroupPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DetachGroupPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachGroupPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DetachGroupPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachGroupPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DetachGroupPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachGroupPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DetachGroupPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19353,28 +17753,6 @@ impl DetachGroupPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DetachGroupPolicyError {
-    fn from(err: XmlParseError) -> DetachGroupPolicyError {
-        let XmlParseError(message) = err;
-        DetachGroupPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DetachGroupPolicyError {
-    fn from(err: CredentialsError) -> DetachGroupPolicyError {
-        DetachGroupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachGroupPolicyError {
-    fn from(err: HttpDispatchError) -> DetachGroupPolicyError {
-        DetachGroupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachGroupPolicyError {
-    fn from(err: io::Error) -> DetachGroupPolicyError {
-        DetachGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachGroupPolicyError {
@@ -19389,13 +17767,6 @@ impl Error for DetachGroupPolicyError {
             DetachGroupPolicyError::LimitExceeded(ref cause) => cause,
             DetachGroupPolicyError::NoSuchEntity(ref cause) => cause,
             DetachGroupPolicyError::ServiceFailure(ref cause) => cause,
-            DetachGroupPolicyError::Validation(ref cause) => cause,
-            DetachGroupPolicyError::Credentials(ref err) => err.description(),
-            DetachGroupPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DetachGroupPolicyError::ParseError(ref cause) => cause,
-            DetachGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19412,20 +17783,10 @@ pub enum DetachRolePolicyError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19433,35 +17794,35 @@ impl DetachRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DetachRolePolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachRolePolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DetachRolePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachRolePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DetachRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DetachRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return DetachRolePolicyError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachRolePolicyError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DetachRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19470,28 +17831,6 @@ impl DetachRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DetachRolePolicyError {
-    fn from(err: XmlParseError) -> DetachRolePolicyError {
-        let XmlParseError(message) = err;
-        DetachRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DetachRolePolicyError {
-    fn from(err: CredentialsError) -> DetachRolePolicyError {
-        DetachRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachRolePolicyError {
-    fn from(err: HttpDispatchError) -> DetachRolePolicyError {
-        DetachRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachRolePolicyError {
-    fn from(err: io::Error) -> DetachRolePolicyError {
-        DetachRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachRolePolicyError {
@@ -19507,11 +17846,6 @@ impl Error for DetachRolePolicyError {
             DetachRolePolicyError::NoSuchEntity(ref cause) => cause,
             DetachRolePolicyError::ServiceFailure(ref cause) => cause,
             DetachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
-            DetachRolePolicyError::Validation(ref cause) => cause,
-            DetachRolePolicyError::Credentials(ref err) => err.description(),
-            DetachRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachRolePolicyError::ParseError(ref cause) => cause,
-            DetachRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19526,20 +17860,10 @@ pub enum DetachUserPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachUserPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachUserPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachUserPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19547,30 +17871,30 @@ impl DetachUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return DetachUserPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachUserPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DetachUserPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachUserPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return DetachUserPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachUserPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return DetachUserPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DetachUserPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DetachUserPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19579,28 +17903,6 @@ impl DetachUserPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DetachUserPolicyError {
-    fn from(err: XmlParseError) -> DetachUserPolicyError {
-        let XmlParseError(message) = err;
-        DetachUserPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DetachUserPolicyError {
-    fn from(err: CredentialsError) -> DetachUserPolicyError {
-        DetachUserPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachUserPolicyError {
-    fn from(err: HttpDispatchError) -> DetachUserPolicyError {
-        DetachUserPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachUserPolicyError {
-    fn from(err: io::Error) -> DetachUserPolicyError {
-        DetachUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DetachUserPolicyError {
@@ -19615,11 +17917,6 @@ impl Error for DetachUserPolicyError {
             DetachUserPolicyError::LimitExceeded(ref cause) => cause,
             DetachUserPolicyError::NoSuchEntity(ref cause) => cause,
             DetachUserPolicyError::ServiceFailure(ref cause) => cause,
-            DetachUserPolicyError::Validation(ref cause) => cause,
-            DetachUserPolicyError::Credentials(ref err) => err.description(),
-            DetachUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachUserPolicyError::ParseError(ref cause) => cause,
-            DetachUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19638,20 +17935,10 @@ pub enum EnableMFADeviceError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableMFADeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableMFADeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableMFADeviceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19659,40 +17946,44 @@ impl EnableMFADeviceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return EnableMFADeviceError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableMFADeviceError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "EntityTemporarilyUnmodifiable" => {
-                        return EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableMFADeviceError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidAuthenticationCode" => {
-                        return EnableMFADeviceError::InvalidAuthenticationCode(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableMFADeviceError::InvalidAuthenticationCode(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return EnableMFADeviceError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableMFADeviceError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return EnableMFADeviceError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableMFADeviceError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return EnableMFADeviceError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableMFADeviceError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        EnableMFADeviceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19701,28 +17992,6 @@ impl EnableMFADeviceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for EnableMFADeviceError {
-    fn from(err: XmlParseError) -> EnableMFADeviceError {
-        let XmlParseError(message) = err;
-        EnableMFADeviceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for EnableMFADeviceError {
-    fn from(err: CredentialsError) -> EnableMFADeviceError {
-        EnableMFADeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableMFADeviceError {
-    fn from(err: HttpDispatchError) -> EnableMFADeviceError {
-        EnableMFADeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableMFADeviceError {
-    fn from(err: io::Error) -> EnableMFADeviceError {
-        EnableMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableMFADeviceError {
@@ -19739,11 +18008,6 @@ impl Error for EnableMFADeviceError {
             EnableMFADeviceError::LimitExceeded(ref cause) => cause,
             EnableMFADeviceError::NoSuchEntity(ref cause) => cause,
             EnableMFADeviceError::ServiceFailure(ref cause) => cause,
-            EnableMFADeviceError::Validation(ref cause) => cause,
-            EnableMFADeviceError::Credentials(ref err) => err.description(),
-            EnableMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableMFADeviceError::ParseError(ref cause) => cause,
-            EnableMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19754,20 +18018,10 @@ pub enum GenerateCredentialReportError {
     LimitExceeded(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateCredentialReportError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateCredentialReportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateCredentialReportError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19775,20 +18029,20 @@ impl GenerateCredentialReportError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return GenerateCredentialReportError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GenerateCredentialReportError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GenerateCredentialReportError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GenerateCredentialReportError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GenerateCredentialReportError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19797,28 +18051,6 @@ impl GenerateCredentialReportError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GenerateCredentialReportError {
-    fn from(err: XmlParseError) -> GenerateCredentialReportError {
-        let XmlParseError(message) = err;
-        GenerateCredentialReportError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GenerateCredentialReportError {
-    fn from(err: CredentialsError) -> GenerateCredentialReportError {
-        GenerateCredentialReportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateCredentialReportError {
-    fn from(err: HttpDispatchError) -> GenerateCredentialReportError {
-        GenerateCredentialReportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateCredentialReportError {
-    fn from(err: io::Error) -> GenerateCredentialReportError {
-        GenerateCredentialReportError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GenerateCredentialReportError {
@@ -19831,13 +18063,6 @@ impl Error for GenerateCredentialReportError {
         match *self {
             GenerateCredentialReportError::LimitExceeded(ref cause) => cause,
             GenerateCredentialReportError::ServiceFailure(ref cause) => cause,
-            GenerateCredentialReportError::Validation(ref cause) => cause,
-            GenerateCredentialReportError::Credentials(ref err) => err.description(),
-            GenerateCredentialReportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GenerateCredentialReportError::ParseError(ref cause) => cause,
-            GenerateCredentialReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19848,20 +18073,12 @@ pub enum GenerateServiceLastAccessedDetailsError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateServiceLastAccessedDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateServiceLastAccessedDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GenerateServiceLastAccessedDetailsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19869,20 +18086,24 @@ impl GenerateServiceLastAccessedDetailsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GenerateServiceLastAccessedDetailsError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GenerateServiceLastAccessedDetailsError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return GenerateServiceLastAccessedDetailsError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GenerateServiceLastAccessedDetailsError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GenerateServiceLastAccessedDetailsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19891,28 +18112,6 @@ impl GenerateServiceLastAccessedDetailsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GenerateServiceLastAccessedDetailsError {
-    fn from(err: XmlParseError) -> GenerateServiceLastAccessedDetailsError {
-        let XmlParseError(message) = err;
-        GenerateServiceLastAccessedDetailsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GenerateServiceLastAccessedDetailsError {
-    fn from(err: CredentialsError) -> GenerateServiceLastAccessedDetailsError {
-        GenerateServiceLastAccessedDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateServiceLastAccessedDetailsError {
-    fn from(err: HttpDispatchError) -> GenerateServiceLastAccessedDetailsError {
-        GenerateServiceLastAccessedDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateServiceLastAccessedDetailsError {
-    fn from(err: io::Error) -> GenerateServiceLastAccessedDetailsError {
-        GenerateServiceLastAccessedDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GenerateServiceLastAccessedDetailsError {
@@ -19925,13 +18124,6 @@ impl Error for GenerateServiceLastAccessedDetailsError {
         match *self {
             GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
             GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
-            GenerateServiceLastAccessedDetailsError::Validation(ref cause) => cause,
-            GenerateServiceLastAccessedDetailsError::Credentials(ref err) => err.description(),
-            GenerateServiceLastAccessedDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GenerateServiceLastAccessedDetailsError::ParseError(ref cause) => cause,
-            GenerateServiceLastAccessedDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19940,20 +18132,10 @@ impl Error for GenerateServiceLastAccessedDetailsError {
 pub enum GetAccessKeyLastUsedError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccessKeyLastUsedError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccessKeyLastUsedError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccessKeyLastUsedError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19961,15 +18143,15 @@ impl GetAccessKeyLastUsedError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetAccessKeyLastUsedError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAccessKeyLastUsedError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetAccessKeyLastUsedError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19978,28 +18160,6 @@ impl GetAccessKeyLastUsedError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccessKeyLastUsedError {
-    fn from(err: XmlParseError) -> GetAccessKeyLastUsedError {
-        let XmlParseError(message) = err;
-        GetAccessKeyLastUsedError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccessKeyLastUsedError {
-    fn from(err: CredentialsError) -> GetAccessKeyLastUsedError {
-        GetAccessKeyLastUsedError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccessKeyLastUsedError {
-    fn from(err: HttpDispatchError) -> GetAccessKeyLastUsedError {
-        GetAccessKeyLastUsedError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccessKeyLastUsedError {
-    fn from(err: io::Error) -> GetAccessKeyLastUsedError {
-        GetAccessKeyLastUsedError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccessKeyLastUsedError {
@@ -20011,13 +18171,6 @@ impl Error for GetAccessKeyLastUsedError {
     fn description(&self) -> &str {
         match *self {
             GetAccessKeyLastUsedError::NoSuchEntity(ref cause) => cause,
-            GetAccessKeyLastUsedError::Validation(ref cause) => cause,
-            GetAccessKeyLastUsedError::Credentials(ref err) => err.description(),
-            GetAccessKeyLastUsedError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccessKeyLastUsedError::ParseError(ref cause) => cause,
-            GetAccessKeyLastUsedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20026,20 +18179,12 @@ impl Error for GetAccessKeyLastUsedError {
 pub enum GetAccountAuthorizationDetailsError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountAuthorizationDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountAuthorizationDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAccountAuthorizationDetailsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20047,15 +18192,17 @@ impl GetAccountAuthorizationDetailsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return GetAccountAuthorizationDetailsError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetAccountAuthorizationDetailsError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetAccountAuthorizationDetailsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20064,28 +18211,6 @@ impl GetAccountAuthorizationDetailsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccountAuthorizationDetailsError {
-    fn from(err: XmlParseError) -> GetAccountAuthorizationDetailsError {
-        let XmlParseError(message) = err;
-        GetAccountAuthorizationDetailsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountAuthorizationDetailsError {
-    fn from(err: CredentialsError) -> GetAccountAuthorizationDetailsError {
-        GetAccountAuthorizationDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountAuthorizationDetailsError {
-    fn from(err: HttpDispatchError) -> GetAccountAuthorizationDetailsError {
-        GetAccountAuthorizationDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountAuthorizationDetailsError {
-    fn from(err: io::Error) -> GetAccountAuthorizationDetailsError {
-        GetAccountAuthorizationDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountAuthorizationDetailsError {
@@ -20097,13 +18222,6 @@ impl Error for GetAccountAuthorizationDetailsError {
     fn description(&self) -> &str {
         match *self {
             GetAccountAuthorizationDetailsError::ServiceFailure(ref cause) => cause,
-            GetAccountAuthorizationDetailsError::Validation(ref cause) => cause,
-            GetAccountAuthorizationDetailsError::Credentials(ref err) => err.description(),
-            GetAccountAuthorizationDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountAuthorizationDetailsError::ParseError(ref cause) => cause,
-            GetAccountAuthorizationDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20114,20 +18232,10 @@ pub enum GetAccountPasswordPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountPasswordPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountPasswordPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountPasswordPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20135,20 +18243,20 @@ impl GetAccountPasswordPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetAccountPasswordPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAccountPasswordPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetAccountPasswordPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAccountPasswordPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetAccountPasswordPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20157,28 +18265,6 @@ impl GetAccountPasswordPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccountPasswordPolicyError {
-    fn from(err: XmlParseError) -> GetAccountPasswordPolicyError {
-        let XmlParseError(message) = err;
-        GetAccountPasswordPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountPasswordPolicyError {
-    fn from(err: CredentialsError) -> GetAccountPasswordPolicyError {
-        GetAccountPasswordPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountPasswordPolicyError {
-    fn from(err: HttpDispatchError) -> GetAccountPasswordPolicyError {
-        GetAccountPasswordPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountPasswordPolicyError {
-    fn from(err: io::Error) -> GetAccountPasswordPolicyError {
-        GetAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountPasswordPolicyError {
@@ -20191,13 +18277,6 @@ impl Error for GetAccountPasswordPolicyError {
         match *self {
             GetAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
             GetAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
-            GetAccountPasswordPolicyError::Validation(ref cause) => cause,
-            GetAccountPasswordPolicyError::Credentials(ref err) => err.description(),
-            GetAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountPasswordPolicyError::ParseError(ref cause) => cause,
-            GetAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20206,20 +18285,10 @@ impl Error for GetAccountPasswordPolicyError {
 pub enum GetAccountSummaryError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountSummaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSummaryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSummaryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20227,15 +18296,15 @@ impl GetAccountSummaryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return GetAccountSummaryError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAccountSummaryError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetAccountSummaryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20244,28 +18313,6 @@ impl GetAccountSummaryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccountSummaryError {
-    fn from(err: XmlParseError) -> GetAccountSummaryError {
-        let XmlParseError(message) = err;
-        GetAccountSummaryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountSummaryError {
-    fn from(err: CredentialsError) -> GetAccountSummaryError {
-        GetAccountSummaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountSummaryError {
-    fn from(err: HttpDispatchError) -> GetAccountSummaryError {
-        GetAccountSummaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountSummaryError {
-    fn from(err: io::Error) -> GetAccountSummaryError {
-        GetAccountSummaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountSummaryError {
@@ -20277,13 +18324,6 @@ impl Error for GetAccountSummaryError {
     fn description(&self) -> &str {
         match *self {
             GetAccountSummaryError::ServiceFailure(ref cause) => cause,
-            GetAccountSummaryError::Validation(ref cause) => cause,
-            GetAccountSummaryError::Credentials(ref err) => err.description(),
-            GetAccountSummaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountSummaryError::ParseError(ref cause) => cause,
-            GetAccountSummaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20292,20 +18332,12 @@ impl Error for GetAccountSummaryError {
 pub enum GetContextKeysForCustomPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetContextKeysForCustomPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetContextKeysForCustomPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetContextKeysForCustomPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20313,15 +18345,17 @@ impl GetContextKeysForCustomPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetContextKeysForCustomPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetContextKeysForCustomPolicyError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetContextKeysForCustomPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20330,28 +18364,6 @@ impl GetContextKeysForCustomPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetContextKeysForCustomPolicyError {
-    fn from(err: XmlParseError) -> GetContextKeysForCustomPolicyError {
-        let XmlParseError(message) = err;
-        GetContextKeysForCustomPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetContextKeysForCustomPolicyError {
-    fn from(err: CredentialsError) -> GetContextKeysForCustomPolicyError {
-        GetContextKeysForCustomPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetContextKeysForCustomPolicyError {
-    fn from(err: HttpDispatchError) -> GetContextKeysForCustomPolicyError {
-        GetContextKeysForCustomPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetContextKeysForCustomPolicyError {
-    fn from(err: io::Error) -> GetContextKeysForCustomPolicyError {
-        GetContextKeysForCustomPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetContextKeysForCustomPolicyError {
@@ -20363,13 +18375,6 @@ impl Error for GetContextKeysForCustomPolicyError {
     fn description(&self) -> &str {
         match *self {
             GetContextKeysForCustomPolicyError::InvalidInput(ref cause) => cause,
-            GetContextKeysForCustomPolicyError::Validation(ref cause) => cause,
-            GetContextKeysForCustomPolicyError::Credentials(ref err) => err.description(),
-            GetContextKeysForCustomPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetContextKeysForCustomPolicyError::ParseError(ref cause) => cause,
-            GetContextKeysForCustomPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20380,20 +18385,12 @@ pub enum GetContextKeysForPrincipalPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetContextKeysForPrincipalPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetContextKeysForPrincipalPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetContextKeysForPrincipalPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20401,20 +18398,24 @@ impl GetContextKeysForPrincipalPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetContextKeysForPrincipalPolicyError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetContextKeysForPrincipalPolicyError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetContextKeysForPrincipalPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20423,28 +18424,6 @@ impl GetContextKeysForPrincipalPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetContextKeysForPrincipalPolicyError {
-    fn from(err: XmlParseError) -> GetContextKeysForPrincipalPolicyError {
-        let XmlParseError(message) = err;
-        GetContextKeysForPrincipalPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetContextKeysForPrincipalPolicyError {
-    fn from(err: CredentialsError) -> GetContextKeysForPrincipalPolicyError {
-        GetContextKeysForPrincipalPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetContextKeysForPrincipalPolicyError {
-    fn from(err: HttpDispatchError) -> GetContextKeysForPrincipalPolicyError {
-        GetContextKeysForPrincipalPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetContextKeysForPrincipalPolicyError {
-    fn from(err: io::Error) -> GetContextKeysForPrincipalPolicyError {
-        GetContextKeysForPrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetContextKeysForPrincipalPolicyError {
@@ -20457,13 +18436,6 @@ impl Error for GetContextKeysForPrincipalPolicyError {
         match *self {
             GetContextKeysForPrincipalPolicyError::InvalidInput(ref cause) => cause,
             GetContextKeysForPrincipalPolicyError::NoSuchEntity(ref cause) => cause,
-            GetContextKeysForPrincipalPolicyError::Validation(ref cause) => cause,
-            GetContextKeysForPrincipalPolicyError::Credentials(ref err) => err.description(),
-            GetContextKeysForPrincipalPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetContextKeysForPrincipalPolicyError::ParseError(ref cause) => cause,
-            GetContextKeysForPrincipalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20478,20 +18450,10 @@ pub enum GetCredentialReportError {
     CredentialReportNotReady(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCredentialReportError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCredentialReportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCredentialReportError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20499,30 +18461,36 @@ impl GetCredentialReportError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ReportExpired" => {
-                        return GetCredentialReportError::CredentialReportExpired(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetCredentialReportError::CredentialReportExpired(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ReportNotPresent" => {
-                        return GetCredentialReportError::CredentialReportNotPresent(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetCredentialReportError::CredentialReportNotPresent(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ReportInProgress" => {
-                        return GetCredentialReportError::CredentialReportNotReady(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetCredentialReportError::CredentialReportNotReady(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return GetCredentialReportError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetCredentialReportError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetCredentialReportError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20531,28 +18499,6 @@ impl GetCredentialReportError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetCredentialReportError {
-    fn from(err: XmlParseError) -> GetCredentialReportError {
-        let XmlParseError(message) = err;
-        GetCredentialReportError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetCredentialReportError {
-    fn from(err: CredentialsError) -> GetCredentialReportError {
-        GetCredentialReportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCredentialReportError {
-    fn from(err: HttpDispatchError) -> GetCredentialReportError {
-        GetCredentialReportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCredentialReportError {
-    fn from(err: io::Error) -> GetCredentialReportError {
-        GetCredentialReportError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCredentialReportError {
@@ -20567,13 +18513,6 @@ impl Error for GetCredentialReportError {
             GetCredentialReportError::CredentialReportNotPresent(ref cause) => cause,
             GetCredentialReportError::CredentialReportNotReady(ref cause) => cause,
             GetCredentialReportError::ServiceFailure(ref cause) => cause,
-            GetCredentialReportError::Validation(ref cause) => cause,
-            GetCredentialReportError::Credentials(ref err) => err.description(),
-            GetCredentialReportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCredentialReportError::ParseError(ref cause) => cause,
-            GetCredentialReportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20584,20 +18523,10 @@ pub enum GetGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20605,16 +18534,20 @@ impl GetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetGroupError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetGroupError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetGroupError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(GetGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20623,28 +18556,6 @@ impl GetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetGroupError {
-    fn from(err: XmlParseError) -> GetGroupError {
-        let XmlParseError(message) = err;
-        GetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupError {
-    fn from(err: CredentialsError) -> GetGroupError {
-        GetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupError {
-    fn from(err: HttpDispatchError) -> GetGroupError {
-        GetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupError {
-    fn from(err: io::Error) -> GetGroupError {
-        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetGroupError {
@@ -20657,11 +18568,6 @@ impl Error for GetGroupError {
         match *self {
             GetGroupError::NoSuchEntity(ref cause) => cause,
             GetGroupError::ServiceFailure(ref cause) => cause,
-            GetGroupError::Validation(ref cause) => cause,
-            GetGroupError::Credentials(ref err) => err.description(),
-            GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupError::ParseError(ref cause) => cause,
-            GetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20672,20 +18578,10 @@ pub enum GetGroupPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGroupPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetGroupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGroupPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20693,18 +18589,20 @@ impl GetGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetGroupPolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetGroupPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ServiceFailure" => {
-                        return GetGroupPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetGroupPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetGroupPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20713,28 +18611,6 @@ impl GetGroupPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetGroupPolicyError {
-    fn from(err: XmlParseError) -> GetGroupPolicyError {
-        let XmlParseError(message) = err;
-        GetGroupPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetGroupPolicyError {
-    fn from(err: CredentialsError) -> GetGroupPolicyError {
-        GetGroupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGroupPolicyError {
-    fn from(err: HttpDispatchError) -> GetGroupPolicyError {
-        GetGroupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGroupPolicyError {
-    fn from(err: io::Error) -> GetGroupPolicyError {
-        GetGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetGroupPolicyError {
@@ -20747,11 +18623,6 @@ impl Error for GetGroupPolicyError {
         match *self {
             GetGroupPolicyError::NoSuchEntity(ref cause) => cause,
             GetGroupPolicyError::ServiceFailure(ref cause) => cause,
-            GetGroupPolicyError::Validation(ref cause) => cause,
-            GetGroupPolicyError::Credentials(ref err) => err.description(),
-            GetGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGroupPolicyError::ParseError(ref cause) => cause,
-            GetGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20762,20 +18633,10 @@ pub enum GetInstanceProfileError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetInstanceProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInstanceProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20783,20 +18644,20 @@ impl GetInstanceProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetInstanceProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetInstanceProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetInstanceProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetInstanceProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetInstanceProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20805,28 +18666,6 @@ impl GetInstanceProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetInstanceProfileError {
-    fn from(err: XmlParseError) -> GetInstanceProfileError {
-        let XmlParseError(message) = err;
-        GetInstanceProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetInstanceProfileError {
-    fn from(err: CredentialsError) -> GetInstanceProfileError {
-        GetInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInstanceProfileError {
-    fn from(err: HttpDispatchError) -> GetInstanceProfileError {
-        GetInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInstanceProfileError {
-    fn from(err: io::Error) -> GetInstanceProfileError {
-        GetInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetInstanceProfileError {
@@ -20839,13 +18678,6 @@ impl Error for GetInstanceProfileError {
         match *self {
             GetInstanceProfileError::NoSuchEntity(ref cause) => cause,
             GetInstanceProfileError::ServiceFailure(ref cause) => cause,
-            GetInstanceProfileError::Validation(ref cause) => cause,
-            GetInstanceProfileError::Credentials(ref err) => err.description(),
-            GetInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInstanceProfileError::ParseError(ref cause) => cause,
-            GetInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20856,20 +18688,10 @@ pub enum GetLoginProfileError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoginProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoginProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoginProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20877,20 +18699,20 @@ impl GetLoginProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetLoginProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetLoginProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetLoginProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetLoginProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetLoginProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20899,28 +18721,6 @@ impl GetLoginProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetLoginProfileError {
-    fn from(err: XmlParseError) -> GetLoginProfileError {
-        let XmlParseError(message) = err;
-        GetLoginProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetLoginProfileError {
-    fn from(err: CredentialsError) -> GetLoginProfileError {
-        GetLoginProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoginProfileError {
-    fn from(err: HttpDispatchError) -> GetLoginProfileError {
-        GetLoginProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoginProfileError {
-    fn from(err: io::Error) -> GetLoginProfileError {
-        GetLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetLoginProfileError {
@@ -20933,11 +18733,6 @@ impl Error for GetLoginProfileError {
         match *self {
             GetLoginProfileError::NoSuchEntity(ref cause) => cause,
             GetLoginProfileError::ServiceFailure(ref cause) => cause,
-            GetLoginProfileError::Validation(ref cause) => cause,
-            GetLoginProfileError::Credentials(ref err) => err.description(),
-            GetLoginProfileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLoginProfileError::ParseError(ref cause) => cause,
-            GetLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20950,20 +18745,10 @@ pub enum GetOpenIDConnectProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetOpenIDConnectProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetOpenIDConnectProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetOpenIDConnectProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20971,25 +18756,25 @@ impl GetOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetOpenIDConnectProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetOpenIDConnectProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return GetOpenIDConnectProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetOpenIDConnectProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetOpenIDConnectProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetOpenIDConnectProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetOpenIDConnectProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20998,28 +18783,6 @@ impl GetOpenIDConnectProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetOpenIDConnectProviderError {
-    fn from(err: XmlParseError) -> GetOpenIDConnectProviderError {
-        let XmlParseError(message) = err;
-        GetOpenIDConnectProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetOpenIDConnectProviderError {
-    fn from(err: CredentialsError) -> GetOpenIDConnectProviderError {
-        GetOpenIDConnectProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetOpenIDConnectProviderError {
-    fn from(err: HttpDispatchError) -> GetOpenIDConnectProviderError {
-        GetOpenIDConnectProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetOpenIDConnectProviderError {
-    fn from(err: io::Error) -> GetOpenIDConnectProviderError {
-        GetOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetOpenIDConnectProviderError {
@@ -21033,13 +18796,6 @@ impl Error for GetOpenIDConnectProviderError {
             GetOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
             GetOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
             GetOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
-            GetOpenIDConnectProviderError::Validation(ref cause) => cause,
-            GetOpenIDConnectProviderError::Credentials(ref err) => err.description(),
-            GetOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetOpenIDConnectProviderError::ParseError(ref cause) => cause,
-            GetOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21052,20 +18808,10 @@ pub enum GetPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21073,19 +18819,25 @@ impl GetPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetPolicyError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(GetPolicyError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return GetPolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetPolicyError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(GetPolicyError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21094,28 +18846,6 @@ impl GetPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetPolicyError {
-    fn from(err: XmlParseError) -> GetPolicyError {
-        let XmlParseError(message) = err;
-        GetPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetPolicyError {
-    fn from(err: CredentialsError) -> GetPolicyError {
-        GetPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPolicyError {
-    fn from(err: HttpDispatchError) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPolicyError {
-    fn from(err: io::Error) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -21129,11 +18859,6 @@ impl Error for GetPolicyError {
             GetPolicyError::InvalidInput(ref cause) => cause,
             GetPolicyError::NoSuchEntity(ref cause) => cause,
             GetPolicyError::ServiceFailure(ref cause) => cause,
-            GetPolicyError::Validation(ref cause) => cause,
-            GetPolicyError::Credentials(ref err) => err.description(),
-            GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyError::ParseError(ref cause) => cause,
-            GetPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21146,20 +18871,10 @@ pub enum GetPolicyVersionError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21167,25 +18882,25 @@ impl GetPolicyVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetPolicyVersionError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetPolicyVersionError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return GetPolicyVersionError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetPolicyVersionError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetPolicyVersionError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetPolicyVersionError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetPolicyVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21194,28 +18909,6 @@ impl GetPolicyVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetPolicyVersionError {
-    fn from(err: XmlParseError) -> GetPolicyVersionError {
-        let XmlParseError(message) = err;
-        GetPolicyVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetPolicyVersionError {
-    fn from(err: CredentialsError) -> GetPolicyVersionError {
-        GetPolicyVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPolicyVersionError {
-    fn from(err: HttpDispatchError) -> GetPolicyVersionError {
-        GetPolicyVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPolicyVersionError {
-    fn from(err: io::Error) -> GetPolicyVersionError {
-        GetPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPolicyVersionError {
@@ -21229,11 +18922,6 @@ impl Error for GetPolicyVersionError {
             GetPolicyVersionError::InvalidInput(ref cause) => cause,
             GetPolicyVersionError::NoSuchEntity(ref cause) => cause,
             GetPolicyVersionError::ServiceFailure(ref cause) => cause,
-            GetPolicyVersionError::Validation(ref cause) => cause,
-            GetPolicyVersionError::Credentials(ref err) => err.description(),
-            GetPolicyVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyVersionError::ParseError(ref cause) => cause,
-            GetPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21244,20 +18932,10 @@ pub enum GetRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21265,16 +18943,20 @@ impl GetRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetRoleError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(GetRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21283,28 +18965,6 @@ impl GetRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetRoleError {
-    fn from(err: XmlParseError) -> GetRoleError {
-        let XmlParseError(message) = err;
-        GetRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetRoleError {
-    fn from(err: CredentialsError) -> GetRoleError {
-        GetRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRoleError {
-    fn from(err: HttpDispatchError) -> GetRoleError {
-        GetRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRoleError {
-    fn from(err: io::Error) -> GetRoleError {
-        GetRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRoleError {
@@ -21317,11 +18977,6 @@ impl Error for GetRoleError {
         match *self {
             GetRoleError::NoSuchEntity(ref cause) => cause,
             GetRoleError::ServiceFailure(ref cause) => cause,
-            GetRoleError::Validation(ref cause) => cause,
-            GetRoleError::Credentials(ref err) => err.description(),
-            GetRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRoleError::ParseError(ref cause) => cause,
-            GetRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21332,20 +18987,10 @@ pub enum GetRolePolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21353,18 +18998,20 @@ impl GetRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetRolePolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21373,28 +19020,6 @@ impl GetRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetRolePolicyError {
-    fn from(err: XmlParseError) -> GetRolePolicyError {
-        let XmlParseError(message) = err;
-        GetRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetRolePolicyError {
-    fn from(err: CredentialsError) -> GetRolePolicyError {
-        GetRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRolePolicyError {
-    fn from(err: HttpDispatchError) -> GetRolePolicyError {
-        GetRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRolePolicyError {
-    fn from(err: io::Error) -> GetRolePolicyError {
-        GetRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetRolePolicyError {
@@ -21407,11 +19032,6 @@ impl Error for GetRolePolicyError {
         match *self {
             GetRolePolicyError::NoSuchEntity(ref cause) => cause,
             GetRolePolicyError::ServiceFailure(ref cause) => cause,
-            GetRolePolicyError::Validation(ref cause) => cause,
-            GetRolePolicyError::Credentials(ref err) => err.description(),
-            GetRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRolePolicyError::ParseError(ref cause) => cause,
-            GetRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21424,20 +19044,10 @@ pub enum GetSAMLProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSAMLProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSAMLProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSAMLProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21445,25 +19055,25 @@ impl GetSAMLProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetSAMLProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetSAMLProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return GetSAMLProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetSAMLProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetSAMLProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetSAMLProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetSAMLProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21472,28 +19082,6 @@ impl GetSAMLProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetSAMLProviderError {
-    fn from(err: XmlParseError) -> GetSAMLProviderError {
-        let XmlParseError(message) = err;
-        GetSAMLProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetSAMLProviderError {
-    fn from(err: CredentialsError) -> GetSAMLProviderError {
-        GetSAMLProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSAMLProviderError {
-    fn from(err: HttpDispatchError) -> GetSAMLProviderError {
-        GetSAMLProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSAMLProviderError {
-    fn from(err: io::Error) -> GetSAMLProviderError {
-        GetSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSAMLProviderError {
@@ -21507,11 +19095,6 @@ impl Error for GetSAMLProviderError {
             GetSAMLProviderError::InvalidInput(ref cause) => cause,
             GetSAMLProviderError::NoSuchEntity(ref cause) => cause,
             GetSAMLProviderError::ServiceFailure(ref cause) => cause,
-            GetSAMLProviderError::Validation(ref cause) => cause,
-            GetSAMLProviderError::Credentials(ref err) => err.description(),
-            GetSAMLProviderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSAMLProviderError::ParseError(ref cause) => cause,
-            GetSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21522,20 +19105,10 @@ pub enum GetSSHPublicKeyError {
     NoSuchEntity(String),
     /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSSHPublicKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSSHPublicKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSSHPublicKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21543,20 +19116,22 @@ impl GetSSHPublicKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetSSHPublicKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetSSHPublicKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnrecognizedPublicKeyEncoding" => {
-                        return GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetSSHPublicKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21565,28 +19140,6 @@ impl GetSSHPublicKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetSSHPublicKeyError {
-    fn from(err: XmlParseError) -> GetSSHPublicKeyError {
-        let XmlParseError(message) = err;
-        GetSSHPublicKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetSSHPublicKeyError {
-    fn from(err: CredentialsError) -> GetSSHPublicKeyError {
-        GetSSHPublicKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSSHPublicKeyError {
-    fn from(err: HttpDispatchError) -> GetSSHPublicKeyError {
-        GetSSHPublicKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSSHPublicKeyError {
-    fn from(err: io::Error) -> GetSSHPublicKeyError {
-        GetSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSSHPublicKeyError {
@@ -21599,11 +19152,6 @@ impl Error for GetSSHPublicKeyError {
         match *self {
             GetSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
             GetSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
-            GetSSHPublicKeyError::Validation(ref cause) => cause,
-            GetSSHPublicKeyError::Credentials(ref err) => err.description(),
-            GetSSHPublicKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSSHPublicKeyError::ParseError(ref cause) => cause,
-            GetSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21614,20 +19162,10 @@ pub enum GetServerCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServerCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetServerCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetServerCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21635,20 +19173,20 @@ impl GetServerCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetServerCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetServerCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return GetServerCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetServerCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetServerCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21657,28 +19195,6 @@ impl GetServerCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetServerCertificateError {
-    fn from(err: XmlParseError) -> GetServerCertificateError {
-        let XmlParseError(message) = err;
-        GetServerCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetServerCertificateError {
-    fn from(err: CredentialsError) -> GetServerCertificateError {
-        GetServerCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServerCertificateError {
-    fn from(err: HttpDispatchError) -> GetServerCertificateError {
-        GetServerCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServerCertificateError {
-    fn from(err: io::Error) -> GetServerCertificateError {
-        GetServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServerCertificateError {
@@ -21691,13 +19207,6 @@ impl Error for GetServerCertificateError {
         match *self {
             GetServerCertificateError::NoSuchEntity(ref cause) => cause,
             GetServerCertificateError::ServiceFailure(ref cause) => cause,
-            GetServerCertificateError::Validation(ref cause) => cause,
-            GetServerCertificateError::Credentials(ref err) => err.description(),
-            GetServerCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetServerCertificateError::ParseError(ref cause) => cause,
-            GetServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21708,20 +19217,12 @@ pub enum GetServiceLastAccessedDetailsError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceLastAccessedDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetServiceLastAccessedDetailsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetServiceLastAccessedDetailsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21729,20 +19230,24 @@ impl GetServiceLastAccessedDetailsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetServiceLastAccessedDetailsError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetServiceLastAccessedDetailsError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return GetServiceLastAccessedDetailsError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetServiceLastAccessedDetailsError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetServiceLastAccessedDetailsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21751,28 +19256,6 @@ impl GetServiceLastAccessedDetailsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetServiceLastAccessedDetailsError {
-    fn from(err: XmlParseError) -> GetServiceLastAccessedDetailsError {
-        let XmlParseError(message) = err;
-        GetServiceLastAccessedDetailsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetServiceLastAccessedDetailsError {
-    fn from(err: CredentialsError) -> GetServiceLastAccessedDetailsError {
-        GetServiceLastAccessedDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServiceLastAccessedDetailsError {
-    fn from(err: HttpDispatchError) -> GetServiceLastAccessedDetailsError {
-        GetServiceLastAccessedDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServiceLastAccessedDetailsError {
-    fn from(err: io::Error) -> GetServiceLastAccessedDetailsError {
-        GetServiceLastAccessedDetailsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServiceLastAccessedDetailsError {
@@ -21785,13 +19268,6 @@ impl Error for GetServiceLastAccessedDetailsError {
         match *self {
             GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
             GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
-            GetServiceLastAccessedDetailsError::Validation(ref cause) => cause,
-            GetServiceLastAccessedDetailsError::Credentials(ref err) => err.description(),
-            GetServiceLastAccessedDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetServiceLastAccessedDetailsError::ParseError(ref cause) => cause,
-            GetServiceLastAccessedDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21802,22 +19278,12 @@ pub enum GetServiceLastAccessedDetailsWithEntitiesError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceLastAccessedDetailsWithEntitiesError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> GetServiceLastAccessedDetailsWithEntitiesError {
+    ) -> RusotoError<GetServiceLastAccessedDetailsWithEntitiesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21825,20 +19291,24 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NoSuchEntity" => {
-                        return GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        GetServiceLastAccessedDetailsWithEntitiesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21847,28 +19317,6 @@ impl GetServiceLastAccessedDetailsWithEntitiesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn from(err: XmlParseError) -> GetServiceLastAccessedDetailsWithEntitiesError {
-        let XmlParseError(message) = err;
-        GetServiceLastAccessedDetailsWithEntitiesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn from(err: CredentialsError) -> GetServiceLastAccessedDetailsWithEntitiesError {
-        GetServiceLastAccessedDetailsWithEntitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn from(err: HttpDispatchError) -> GetServiceLastAccessedDetailsWithEntitiesError {
-        GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServiceLastAccessedDetailsWithEntitiesError {
-    fn from(err: io::Error) -> GetServiceLastAccessedDetailsWithEntitiesError {
-        GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServiceLastAccessedDetailsWithEntitiesError {
@@ -21881,15 +19329,6 @@ impl Error for GetServiceLastAccessedDetailsWithEntitiesError {
         match *self {
             GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => cause,
             GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => cause,
-            GetServiceLastAccessedDetailsWithEntitiesError::Validation(ref cause) => cause,
-            GetServiceLastAccessedDetailsWithEntitiesError::Credentials(ref err) => {
-                err.description()
-            }
-            GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetServiceLastAccessedDetailsWithEntitiesError::ParseError(ref cause) => cause,
-            GetServiceLastAccessedDetailsWithEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21902,20 +19341,12 @@ pub enum GetServiceLinkedRoleDeletionStatusError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetServiceLinkedRoleDeletionStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetServiceLinkedRoleDeletionStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetServiceLinkedRoleDeletionStatusError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21923,25 +19354,31 @@ impl GetServiceLinkedRoleDeletionStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return GetServiceLinkedRoleDeletionStatusError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetServiceLinkedRoleDeletionStatusError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return GetServiceLinkedRoleDeletionStatusError::ServiceFailure(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        GetServiceLinkedRoleDeletionStatusError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21950,28 +19387,6 @@ impl GetServiceLinkedRoleDeletionStatusError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetServiceLinkedRoleDeletionStatusError {
-    fn from(err: XmlParseError) -> GetServiceLinkedRoleDeletionStatusError {
-        let XmlParseError(message) = err;
-        GetServiceLinkedRoleDeletionStatusError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetServiceLinkedRoleDeletionStatusError {
-    fn from(err: CredentialsError) -> GetServiceLinkedRoleDeletionStatusError {
-        GetServiceLinkedRoleDeletionStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetServiceLinkedRoleDeletionStatusError {
-    fn from(err: HttpDispatchError) -> GetServiceLinkedRoleDeletionStatusError {
-        GetServiceLinkedRoleDeletionStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetServiceLinkedRoleDeletionStatusError {
-    fn from(err: io::Error) -> GetServiceLinkedRoleDeletionStatusError {
-        GetServiceLinkedRoleDeletionStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetServiceLinkedRoleDeletionStatusError {
@@ -21985,13 +19400,6 @@ impl Error for GetServiceLinkedRoleDeletionStatusError {
             GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => cause,
             GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => cause,
             GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::Validation(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::Credentials(ref err) => err.description(),
-            GetServiceLinkedRoleDeletionStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetServiceLinkedRoleDeletionStatusError::ParseError(ref cause) => cause,
-            GetServiceLinkedRoleDeletionStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22002,20 +19410,10 @@ pub enum GetUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22023,16 +19421,20 @@ impl GetUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(GetUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22041,28 +19443,6 @@ impl GetUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetUserError {
-    fn from(err: XmlParseError) -> GetUserError {
-        let XmlParseError(message) = err;
-        GetUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetUserError {
-    fn from(err: CredentialsError) -> GetUserError {
-        GetUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserError {
-    fn from(err: HttpDispatchError) -> GetUserError {
-        GetUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserError {
-    fn from(err: io::Error) -> GetUserError {
-        GetUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUserError {
@@ -22075,11 +19455,6 @@ impl Error for GetUserError {
         match *self {
             GetUserError::NoSuchEntity(ref cause) => cause,
             GetUserError::ServiceFailure(ref cause) => cause,
-            GetUserError::Validation(ref cause) => cause,
-            GetUserError::Credentials(ref err) => err.description(),
-            GetUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUserError::ParseError(ref cause) => cause,
-            GetUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22090,20 +19465,10 @@ pub enum GetUserPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22111,18 +19476,20 @@ impl GetUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return GetUserPolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(GetUserPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return GetUserPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetUserPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetUserPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22131,28 +19498,6 @@ impl GetUserPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetUserPolicyError {
-    fn from(err: XmlParseError) -> GetUserPolicyError {
-        let XmlParseError(message) = err;
-        GetUserPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetUserPolicyError {
-    fn from(err: CredentialsError) -> GetUserPolicyError {
-        GetUserPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserPolicyError {
-    fn from(err: HttpDispatchError) -> GetUserPolicyError {
-        GetUserPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserPolicyError {
-    fn from(err: io::Error) -> GetUserPolicyError {
-        GetUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetUserPolicyError {
@@ -22165,11 +19510,6 @@ impl Error for GetUserPolicyError {
         match *self {
             GetUserPolicyError::NoSuchEntity(ref cause) => cause,
             GetUserPolicyError::ServiceFailure(ref cause) => cause,
-            GetUserPolicyError::Validation(ref cause) => cause,
-            GetUserPolicyError::Credentials(ref err) => err.description(),
-            GetUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetUserPolicyError::ParseError(ref cause) => cause,
-            GetUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22180,20 +19520,10 @@ pub enum ListAccessKeysError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccessKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAccessKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccessKeysError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22201,18 +19531,20 @@ impl ListAccessKeysError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListAccessKeysError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(ListAccessKeysError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ServiceFailure" => {
-                        return ListAccessKeysError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAccessKeysError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListAccessKeysError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22221,28 +19553,6 @@ impl ListAccessKeysError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAccessKeysError {
-    fn from(err: XmlParseError) -> ListAccessKeysError {
-        let XmlParseError(message) = err;
-        ListAccessKeysError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAccessKeysError {
-    fn from(err: CredentialsError) -> ListAccessKeysError {
-        ListAccessKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAccessKeysError {
-    fn from(err: HttpDispatchError) -> ListAccessKeysError {
-        ListAccessKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAccessKeysError {
-    fn from(err: io::Error) -> ListAccessKeysError {
-        ListAccessKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAccessKeysError {
@@ -22255,11 +19565,6 @@ impl Error for ListAccessKeysError {
         match *self {
             ListAccessKeysError::NoSuchEntity(ref cause) => cause,
             ListAccessKeysError::ServiceFailure(ref cause) => cause,
-            ListAccessKeysError::Validation(ref cause) => cause,
-            ListAccessKeysError::Credentials(ref err) => err.description(),
-            ListAccessKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAccessKeysError::ParseError(ref cause) => cause,
-            ListAccessKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22268,20 +19573,10 @@ impl Error for ListAccessKeysError {
 pub enum ListAccountAliasesError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAccountAliasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAccountAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccountAliasesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22289,15 +19584,15 @@ impl ListAccountAliasesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListAccountAliasesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAccountAliasesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListAccountAliasesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22306,28 +19601,6 @@ impl ListAccountAliasesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAccountAliasesError {
-    fn from(err: XmlParseError) -> ListAccountAliasesError {
-        let XmlParseError(message) = err;
-        ListAccountAliasesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAccountAliasesError {
-    fn from(err: CredentialsError) -> ListAccountAliasesError {
-        ListAccountAliasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAccountAliasesError {
-    fn from(err: HttpDispatchError) -> ListAccountAliasesError {
-        ListAccountAliasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAccountAliasesError {
-    fn from(err: io::Error) -> ListAccountAliasesError {
-        ListAccountAliasesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAccountAliasesError {
@@ -22339,13 +19612,6 @@ impl Error for ListAccountAliasesError {
     fn description(&self) -> &str {
         match *self {
             ListAccountAliasesError::ServiceFailure(ref cause) => cause,
-            ListAccountAliasesError::Validation(ref cause) => cause,
-            ListAccountAliasesError::Credentials(ref err) => err.description(),
-            ListAccountAliasesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAccountAliasesError::ParseError(ref cause) => cause,
-            ListAccountAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22358,20 +19624,10 @@ pub enum ListAttachedGroupPoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedGroupPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedGroupPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedGroupPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22379,25 +19635,25 @@ impl ListAttachedGroupPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListAttachedGroupPoliciesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedGroupPoliciesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ListAttachedGroupPoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedGroupPoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListAttachedGroupPoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedGroupPoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListAttachedGroupPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22406,28 +19662,6 @@ impl ListAttachedGroupPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAttachedGroupPoliciesError {
-    fn from(err: XmlParseError) -> ListAttachedGroupPoliciesError {
-        let XmlParseError(message) = err;
-        ListAttachedGroupPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAttachedGroupPoliciesError {
-    fn from(err: CredentialsError) -> ListAttachedGroupPoliciesError {
-        ListAttachedGroupPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAttachedGroupPoliciesError {
-    fn from(err: HttpDispatchError) -> ListAttachedGroupPoliciesError {
-        ListAttachedGroupPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAttachedGroupPoliciesError {
-    fn from(err: io::Error) -> ListAttachedGroupPoliciesError {
-        ListAttachedGroupPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAttachedGroupPoliciesError {
@@ -22441,13 +19675,6 @@ impl Error for ListAttachedGroupPoliciesError {
             ListAttachedGroupPoliciesError::InvalidInput(ref cause) => cause,
             ListAttachedGroupPoliciesError::NoSuchEntity(ref cause) => cause,
             ListAttachedGroupPoliciesError::ServiceFailure(ref cause) => cause,
-            ListAttachedGroupPoliciesError::Validation(ref cause) => cause,
-            ListAttachedGroupPoliciesError::Credentials(ref err) => err.description(),
-            ListAttachedGroupPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAttachedGroupPoliciesError::ParseError(ref cause) => cause,
-            ListAttachedGroupPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22460,20 +19687,10 @@ pub enum ListAttachedRolePoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedRolePoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedRolePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedRolePoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22481,25 +19698,25 @@ impl ListAttachedRolePoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListAttachedRolePoliciesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedRolePoliciesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ListAttachedRolePoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedRolePoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListAttachedRolePoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedRolePoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListAttachedRolePoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22508,28 +19725,6 @@ impl ListAttachedRolePoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAttachedRolePoliciesError {
-    fn from(err: XmlParseError) -> ListAttachedRolePoliciesError {
-        let XmlParseError(message) = err;
-        ListAttachedRolePoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAttachedRolePoliciesError {
-    fn from(err: CredentialsError) -> ListAttachedRolePoliciesError {
-        ListAttachedRolePoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAttachedRolePoliciesError {
-    fn from(err: HttpDispatchError) -> ListAttachedRolePoliciesError {
-        ListAttachedRolePoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAttachedRolePoliciesError {
-    fn from(err: io::Error) -> ListAttachedRolePoliciesError {
-        ListAttachedRolePoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAttachedRolePoliciesError {
@@ -22543,13 +19738,6 @@ impl Error for ListAttachedRolePoliciesError {
             ListAttachedRolePoliciesError::InvalidInput(ref cause) => cause,
             ListAttachedRolePoliciesError::NoSuchEntity(ref cause) => cause,
             ListAttachedRolePoliciesError::ServiceFailure(ref cause) => cause,
-            ListAttachedRolePoliciesError::Validation(ref cause) => cause,
-            ListAttachedRolePoliciesError::Credentials(ref err) => err.description(),
-            ListAttachedRolePoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAttachedRolePoliciesError::ParseError(ref cause) => cause,
-            ListAttachedRolePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22562,20 +19750,10 @@ pub enum ListAttachedUserPoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedUserPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedUserPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedUserPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22583,25 +19761,25 @@ impl ListAttachedUserPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListAttachedUserPoliciesError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedUserPoliciesError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ListAttachedUserPoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedUserPoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListAttachedUserPoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListAttachedUserPoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListAttachedUserPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22610,28 +19788,6 @@ impl ListAttachedUserPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListAttachedUserPoliciesError {
-    fn from(err: XmlParseError) -> ListAttachedUserPoliciesError {
-        let XmlParseError(message) = err;
-        ListAttachedUserPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListAttachedUserPoliciesError {
-    fn from(err: CredentialsError) -> ListAttachedUserPoliciesError {
-        ListAttachedUserPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAttachedUserPoliciesError {
-    fn from(err: HttpDispatchError) -> ListAttachedUserPoliciesError {
-        ListAttachedUserPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAttachedUserPoliciesError {
-    fn from(err: io::Error) -> ListAttachedUserPoliciesError {
-        ListAttachedUserPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListAttachedUserPoliciesError {
@@ -22645,13 +19801,6 @@ impl Error for ListAttachedUserPoliciesError {
             ListAttachedUserPoliciesError::InvalidInput(ref cause) => cause,
             ListAttachedUserPoliciesError::NoSuchEntity(ref cause) => cause,
             ListAttachedUserPoliciesError::ServiceFailure(ref cause) => cause,
-            ListAttachedUserPoliciesError::Validation(ref cause) => cause,
-            ListAttachedUserPoliciesError::Credentials(ref err) => err.description(),
-            ListAttachedUserPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAttachedUserPoliciesError::ParseError(ref cause) => cause,
-            ListAttachedUserPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22664,20 +19813,10 @@ pub enum ListEntitiesForPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListEntitiesForPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListEntitiesForPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitiesForPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22685,25 +19824,25 @@ impl ListEntitiesForPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListEntitiesForPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListEntitiesForPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ListEntitiesForPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListEntitiesForPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListEntitiesForPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListEntitiesForPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListEntitiesForPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22712,28 +19851,6 @@ impl ListEntitiesForPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListEntitiesForPolicyError {
-    fn from(err: XmlParseError) -> ListEntitiesForPolicyError {
-        let XmlParseError(message) = err;
-        ListEntitiesForPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListEntitiesForPolicyError {
-    fn from(err: CredentialsError) -> ListEntitiesForPolicyError {
-        ListEntitiesForPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListEntitiesForPolicyError {
-    fn from(err: HttpDispatchError) -> ListEntitiesForPolicyError {
-        ListEntitiesForPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListEntitiesForPolicyError {
-    fn from(err: io::Error) -> ListEntitiesForPolicyError {
-        ListEntitiesForPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListEntitiesForPolicyError {
@@ -22747,13 +19864,6 @@ impl Error for ListEntitiesForPolicyError {
             ListEntitiesForPolicyError::InvalidInput(ref cause) => cause,
             ListEntitiesForPolicyError::NoSuchEntity(ref cause) => cause,
             ListEntitiesForPolicyError::ServiceFailure(ref cause) => cause,
-            ListEntitiesForPolicyError::Validation(ref cause) => cause,
-            ListEntitiesForPolicyError::Credentials(ref err) => err.description(),
-            ListEntitiesForPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListEntitiesForPolicyError::ParseError(ref cause) => cause,
-            ListEntitiesForPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22764,20 +19874,10 @@ pub enum ListGroupPoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22785,20 +19885,20 @@ impl ListGroupPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListGroupPoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListGroupPoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListGroupPoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListGroupPoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListGroupPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22807,28 +19907,6 @@ impl ListGroupPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListGroupPoliciesError {
-    fn from(err: XmlParseError) -> ListGroupPoliciesError {
-        let XmlParseError(message) = err;
-        ListGroupPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupPoliciesError {
-    fn from(err: CredentialsError) -> ListGroupPoliciesError {
-        ListGroupPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupPoliciesError {
-    fn from(err: HttpDispatchError) -> ListGroupPoliciesError {
-        ListGroupPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupPoliciesError {
-    fn from(err: io::Error) -> ListGroupPoliciesError {
-        ListGroupPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGroupPoliciesError {
@@ -22841,13 +19919,6 @@ impl Error for ListGroupPoliciesError {
         match *self {
             ListGroupPoliciesError::NoSuchEntity(ref cause) => cause,
             ListGroupPoliciesError::ServiceFailure(ref cause) => cause,
-            ListGroupPoliciesError::Validation(ref cause) => cause,
-            ListGroupPoliciesError::Credentials(ref err) => err.description(),
-            ListGroupPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListGroupPoliciesError::ParseError(ref cause) => cause,
-            ListGroupPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22856,20 +19927,10 @@ impl Error for ListGroupPoliciesError {
 pub enum ListGroupsError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22877,13 +19938,15 @@ impl ListGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListGroupsError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListGroupsError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22892,28 +19955,6 @@ impl ListGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListGroupsError {
-    fn from(err: XmlParseError) -> ListGroupsError {
-        let XmlParseError(message) = err;
-        ListGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupsError {
-    fn from(err: CredentialsError) -> ListGroupsError {
-        ListGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupsError {
-    fn from(err: HttpDispatchError) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupsError {
-    fn from(err: io::Error) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -22925,11 +19966,6 @@ impl Error for ListGroupsError {
     fn description(&self) -> &str {
         match *self {
             ListGroupsError::ServiceFailure(ref cause) => cause,
-            ListGroupsError::Validation(ref cause) => cause,
-            ListGroupsError::Credentials(ref err) => err.description(),
-            ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::ParseError(ref cause) => cause,
-            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22940,20 +19976,10 @@ pub enum ListGroupsForUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsForUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsForUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsForUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22961,20 +19987,20 @@ impl ListGroupsForUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListGroupsForUserError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListGroupsForUserError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListGroupsForUserError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListGroupsForUserError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListGroupsForUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22983,28 +20009,6 @@ impl ListGroupsForUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListGroupsForUserError {
-    fn from(err: XmlParseError) -> ListGroupsForUserError {
-        let XmlParseError(message) = err;
-        ListGroupsForUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupsForUserError {
-    fn from(err: CredentialsError) -> ListGroupsForUserError {
-        ListGroupsForUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupsForUserError {
-    fn from(err: HttpDispatchError) -> ListGroupsForUserError {
-        ListGroupsForUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupsForUserError {
-    fn from(err: io::Error) -> ListGroupsForUserError {
-        ListGroupsForUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListGroupsForUserError {
@@ -23017,13 +20021,6 @@ impl Error for ListGroupsForUserError {
         match *self {
             ListGroupsForUserError::NoSuchEntity(ref cause) => cause,
             ListGroupsForUserError::ServiceFailure(ref cause) => cause,
-            ListGroupsForUserError::Validation(ref cause) => cause,
-            ListGroupsForUserError::Credentials(ref err) => err.description(),
-            ListGroupsForUserError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListGroupsForUserError::ParseError(ref cause) => cause,
-            ListGroupsForUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23032,20 +20029,10 @@ impl Error for ListGroupsForUserError {
 pub enum ListInstanceProfilesError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstanceProfilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListInstanceProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInstanceProfilesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23053,15 +20040,15 @@ impl ListInstanceProfilesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListInstanceProfilesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListInstanceProfilesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListInstanceProfilesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23070,28 +20057,6 @@ impl ListInstanceProfilesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListInstanceProfilesError {
-    fn from(err: XmlParseError) -> ListInstanceProfilesError {
-        let XmlParseError(message) = err;
-        ListInstanceProfilesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListInstanceProfilesError {
-    fn from(err: CredentialsError) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListInstanceProfilesError {
-    fn from(err: HttpDispatchError) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListInstanceProfilesError {
-    fn from(err: io::Error) -> ListInstanceProfilesError {
-        ListInstanceProfilesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListInstanceProfilesError {
@@ -23103,13 +20068,6 @@ impl Error for ListInstanceProfilesError {
     fn description(&self) -> &str {
         match *self {
             ListInstanceProfilesError::ServiceFailure(ref cause) => cause,
-            ListInstanceProfilesError::Validation(ref cause) => cause,
-            ListInstanceProfilesError::Credentials(ref err) => err.description(),
-            ListInstanceProfilesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListInstanceProfilesError::ParseError(ref cause) => cause,
-            ListInstanceProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23120,20 +20078,12 @@ pub enum ListInstanceProfilesForRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListInstanceProfilesForRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListInstanceProfilesForRoleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListInstanceProfilesForRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23141,20 +20091,22 @@ impl ListInstanceProfilesForRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListInstanceProfilesForRoleError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListInstanceProfilesForRoleError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListInstanceProfilesForRoleError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListInstanceProfilesForRoleError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListInstanceProfilesForRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23163,28 +20115,6 @@ impl ListInstanceProfilesForRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListInstanceProfilesForRoleError {
-    fn from(err: XmlParseError) -> ListInstanceProfilesForRoleError {
-        let XmlParseError(message) = err;
-        ListInstanceProfilesForRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListInstanceProfilesForRoleError {
-    fn from(err: CredentialsError) -> ListInstanceProfilesForRoleError {
-        ListInstanceProfilesForRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListInstanceProfilesForRoleError {
-    fn from(err: HttpDispatchError) -> ListInstanceProfilesForRoleError {
-        ListInstanceProfilesForRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListInstanceProfilesForRoleError {
-    fn from(err: io::Error) -> ListInstanceProfilesForRoleError {
-        ListInstanceProfilesForRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListInstanceProfilesForRoleError {
@@ -23197,13 +20127,6 @@ impl Error for ListInstanceProfilesForRoleError {
         match *self {
             ListInstanceProfilesForRoleError::NoSuchEntity(ref cause) => cause,
             ListInstanceProfilesForRoleError::ServiceFailure(ref cause) => cause,
-            ListInstanceProfilesForRoleError::Validation(ref cause) => cause,
-            ListInstanceProfilesForRoleError::Credentials(ref err) => err.description(),
-            ListInstanceProfilesForRoleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListInstanceProfilesForRoleError::ParseError(ref cause) => cause,
-            ListInstanceProfilesForRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23214,20 +20137,10 @@ pub enum ListMFADevicesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMFADevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListMFADevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMFADevicesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23235,18 +20148,20 @@ impl ListMFADevicesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListMFADevicesError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(ListMFADevicesError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ServiceFailure" => {
-                        return ListMFADevicesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListMFADevicesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListMFADevicesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23255,28 +20170,6 @@ impl ListMFADevicesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListMFADevicesError {
-    fn from(err: XmlParseError) -> ListMFADevicesError {
-        let XmlParseError(message) = err;
-        ListMFADevicesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListMFADevicesError {
-    fn from(err: CredentialsError) -> ListMFADevicesError {
-        ListMFADevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMFADevicesError {
-    fn from(err: HttpDispatchError) -> ListMFADevicesError {
-        ListMFADevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMFADevicesError {
-    fn from(err: io::Error) -> ListMFADevicesError {
-        ListMFADevicesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListMFADevicesError {
@@ -23289,11 +20182,6 @@ impl Error for ListMFADevicesError {
         match *self {
             ListMFADevicesError::NoSuchEntity(ref cause) => cause,
             ListMFADevicesError::ServiceFailure(ref cause) => cause,
-            ListMFADevicesError::Validation(ref cause) => cause,
-            ListMFADevicesError::Credentials(ref err) => err.description(),
-            ListMFADevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListMFADevicesError::ParseError(ref cause) => cause,
-            ListMFADevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23302,20 +20190,12 @@ impl Error for ListMFADevicesError {
 pub enum ListOpenIDConnectProvidersError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOpenIDConnectProvidersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOpenIDConnectProvidersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListOpenIDConnectProvidersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23323,15 +20203,17 @@ impl ListOpenIDConnectProvidersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListOpenIDConnectProvidersError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListOpenIDConnectProvidersError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListOpenIDConnectProvidersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23340,28 +20222,6 @@ impl ListOpenIDConnectProvidersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListOpenIDConnectProvidersError {
-    fn from(err: XmlParseError) -> ListOpenIDConnectProvidersError {
-        let XmlParseError(message) = err;
-        ListOpenIDConnectProvidersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListOpenIDConnectProvidersError {
-    fn from(err: CredentialsError) -> ListOpenIDConnectProvidersError {
-        ListOpenIDConnectProvidersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOpenIDConnectProvidersError {
-    fn from(err: HttpDispatchError) -> ListOpenIDConnectProvidersError {
-        ListOpenIDConnectProvidersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOpenIDConnectProvidersError {
-    fn from(err: io::Error) -> ListOpenIDConnectProvidersError {
-        ListOpenIDConnectProvidersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListOpenIDConnectProvidersError {
@@ -23373,13 +20233,6 @@ impl Error for ListOpenIDConnectProvidersError {
     fn description(&self) -> &str {
         match *self {
             ListOpenIDConnectProvidersError::ServiceFailure(ref cause) => cause,
-            ListOpenIDConnectProvidersError::Validation(ref cause) => cause,
-            ListOpenIDConnectProvidersError::Credentials(ref err) => err.description(),
-            ListOpenIDConnectProvidersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOpenIDConnectProvidersError::ParseError(ref cause) => cause,
-            ListOpenIDConnectProvidersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23388,20 +20241,10 @@ impl Error for ListOpenIDConnectProvidersError {
 pub enum ListPoliciesError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23409,13 +20252,15 @@ impl ListPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListPoliciesError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListPoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        ListPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23424,28 +20269,6 @@ impl ListPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListPoliciesError {
-    fn from(err: XmlParseError) -> ListPoliciesError {
-        let XmlParseError(message) = err;
-        ListPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListPoliciesError {
-    fn from(err: CredentialsError) -> ListPoliciesError {
-        ListPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPoliciesError {
-    fn from(err: HttpDispatchError) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPoliciesError {
-    fn from(err: io::Error) -> ListPoliciesError {
-        ListPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPoliciesError {
@@ -23457,11 +20280,6 @@ impl Error for ListPoliciesError {
     fn description(&self) -> &str {
         match *self {
             ListPoliciesError::ServiceFailure(ref cause) => cause,
-            ListPoliciesError::Validation(ref cause) => cause,
-            ListPoliciesError::Credentials(ref err) => err.description(),
-            ListPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPoliciesError::ParseError(ref cause) => cause,
-            ListPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23472,20 +20290,12 @@ pub enum ListPoliciesGrantingServiceAccessError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPoliciesGrantingServiceAccessError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesGrantingServiceAccessError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListPoliciesGrantingServiceAccessError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23493,20 +20303,24 @@ impl ListPoliciesGrantingServiceAccessError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListPoliciesGrantingServiceAccessError::InvalidInput(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListPoliciesGrantingServiceAccessError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return ListPoliciesGrantingServiceAccessError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListPoliciesGrantingServiceAccessError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListPoliciesGrantingServiceAccessError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23515,28 +20329,6 @@ impl ListPoliciesGrantingServiceAccessError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListPoliciesGrantingServiceAccessError {
-    fn from(err: XmlParseError) -> ListPoliciesGrantingServiceAccessError {
-        let XmlParseError(message) = err;
-        ListPoliciesGrantingServiceAccessError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListPoliciesGrantingServiceAccessError {
-    fn from(err: CredentialsError) -> ListPoliciesGrantingServiceAccessError {
-        ListPoliciesGrantingServiceAccessError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPoliciesGrantingServiceAccessError {
-    fn from(err: HttpDispatchError) -> ListPoliciesGrantingServiceAccessError {
-        ListPoliciesGrantingServiceAccessError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPoliciesGrantingServiceAccessError {
-    fn from(err: io::Error) -> ListPoliciesGrantingServiceAccessError {
-        ListPoliciesGrantingServiceAccessError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPoliciesGrantingServiceAccessError {
@@ -23549,13 +20341,6 @@ impl Error for ListPoliciesGrantingServiceAccessError {
         match *self {
             ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => cause,
             ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => cause,
-            ListPoliciesGrantingServiceAccessError::Validation(ref cause) => cause,
-            ListPoliciesGrantingServiceAccessError::Credentials(ref err) => err.description(),
-            ListPoliciesGrantingServiceAccessError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPoliciesGrantingServiceAccessError::ParseError(ref cause) => cause,
-            ListPoliciesGrantingServiceAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23568,20 +20353,10 @@ pub enum ListPolicyVersionsError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPolicyVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPolicyVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPolicyVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23589,25 +20364,25 @@ impl ListPolicyVersionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return ListPolicyVersionsError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListPolicyVersionsError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ListPolicyVersionsError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListPolicyVersionsError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListPolicyVersionsError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListPolicyVersionsError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListPolicyVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23616,28 +20391,6 @@ impl ListPolicyVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListPolicyVersionsError {
-    fn from(err: XmlParseError) -> ListPolicyVersionsError {
-        let XmlParseError(message) = err;
-        ListPolicyVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListPolicyVersionsError {
-    fn from(err: CredentialsError) -> ListPolicyVersionsError {
-        ListPolicyVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPolicyVersionsError {
-    fn from(err: HttpDispatchError) -> ListPolicyVersionsError {
-        ListPolicyVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPolicyVersionsError {
-    fn from(err: io::Error) -> ListPolicyVersionsError {
-        ListPolicyVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPolicyVersionsError {
@@ -23651,13 +20404,6 @@ impl Error for ListPolicyVersionsError {
             ListPolicyVersionsError::InvalidInput(ref cause) => cause,
             ListPolicyVersionsError::NoSuchEntity(ref cause) => cause,
             ListPolicyVersionsError::ServiceFailure(ref cause) => cause,
-            ListPolicyVersionsError::Validation(ref cause) => cause,
-            ListPolicyVersionsError::Credentials(ref err) => err.description(),
-            ListPolicyVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPolicyVersionsError::ParseError(ref cause) => cause,
-            ListPolicyVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23668,20 +20414,10 @@ pub enum ListRolePoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRolePoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRolePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRolePoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23689,20 +20425,20 @@ impl ListRolePoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListRolePoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListRolePoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListRolePoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListRolePoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListRolePoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23711,28 +20447,6 @@ impl ListRolePoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListRolePoliciesError {
-    fn from(err: XmlParseError) -> ListRolePoliciesError {
-        let XmlParseError(message) = err;
-        ListRolePoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListRolePoliciesError {
-    fn from(err: CredentialsError) -> ListRolePoliciesError {
-        ListRolePoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRolePoliciesError {
-    fn from(err: HttpDispatchError) -> ListRolePoliciesError {
-        ListRolePoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRolePoliciesError {
-    fn from(err: io::Error) -> ListRolePoliciesError {
-        ListRolePoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRolePoliciesError {
@@ -23745,11 +20459,6 @@ impl Error for ListRolePoliciesError {
         match *self {
             ListRolePoliciesError::NoSuchEntity(ref cause) => cause,
             ListRolePoliciesError::ServiceFailure(ref cause) => cause,
-            ListRolePoliciesError::Validation(ref cause) => cause,
-            ListRolePoliciesError::Credentials(ref err) => err.description(),
-            ListRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRolePoliciesError::ParseError(ref cause) => cause,
-            ListRolePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23760,20 +20469,10 @@ pub enum ListRoleTagsError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRoleTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRoleTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRoleTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23781,16 +20480,20 @@ impl ListRoleTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListRoleTagsError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(ListRoleTagsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return ListRoleTagsError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListRoleTagsError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        ListRoleTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23799,28 +20502,6 @@ impl ListRoleTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListRoleTagsError {
-    fn from(err: XmlParseError) -> ListRoleTagsError {
-        let XmlParseError(message) = err;
-        ListRoleTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListRoleTagsError {
-    fn from(err: CredentialsError) -> ListRoleTagsError {
-        ListRoleTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRoleTagsError {
-    fn from(err: HttpDispatchError) -> ListRoleTagsError {
-        ListRoleTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRoleTagsError {
-    fn from(err: io::Error) -> ListRoleTagsError {
-        ListRoleTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRoleTagsError {
@@ -23833,11 +20514,6 @@ impl Error for ListRoleTagsError {
         match *self {
             ListRoleTagsError::NoSuchEntity(ref cause) => cause,
             ListRoleTagsError::ServiceFailure(ref cause) => cause,
-            ListRoleTagsError::Validation(ref cause) => cause,
-            ListRoleTagsError::Credentials(ref err) => err.description(),
-            ListRoleTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRoleTagsError::ParseError(ref cause) => cause,
-            ListRoleTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23846,20 +20522,10 @@ impl Error for ListRoleTagsError {
 pub enum ListRolesError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRolesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRolesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRolesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23867,13 +20533,15 @@ impl ListRolesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListRolesError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListRolesError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListRolesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23882,28 +20550,6 @@ impl ListRolesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListRolesError {
-    fn from(err: XmlParseError) -> ListRolesError {
-        let XmlParseError(message) = err;
-        ListRolesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListRolesError {
-    fn from(err: CredentialsError) -> ListRolesError {
-        ListRolesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRolesError {
-    fn from(err: HttpDispatchError) -> ListRolesError {
-        ListRolesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRolesError {
-    fn from(err: io::Error) -> ListRolesError {
-        ListRolesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListRolesError {
@@ -23915,11 +20561,6 @@ impl Error for ListRolesError {
     fn description(&self) -> &str {
         match *self {
             ListRolesError::ServiceFailure(ref cause) => cause,
-            ListRolesError::Validation(ref cause) => cause,
-            ListRolesError::Credentials(ref err) => err.description(),
-            ListRolesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRolesError::ParseError(ref cause) => cause,
-            ListRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23928,20 +20569,10 @@ impl Error for ListRolesError {
 pub enum ListSAMLProvidersError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSAMLProvidersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSAMLProvidersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSAMLProvidersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23949,15 +20580,15 @@ impl ListSAMLProvidersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListSAMLProvidersError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListSAMLProvidersError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListSAMLProvidersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23966,28 +20597,6 @@ impl ListSAMLProvidersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListSAMLProvidersError {
-    fn from(err: XmlParseError) -> ListSAMLProvidersError {
-        let XmlParseError(message) = err;
-        ListSAMLProvidersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListSAMLProvidersError {
-    fn from(err: CredentialsError) -> ListSAMLProvidersError {
-        ListSAMLProvidersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSAMLProvidersError {
-    fn from(err: HttpDispatchError) -> ListSAMLProvidersError {
-        ListSAMLProvidersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSAMLProvidersError {
-    fn from(err: io::Error) -> ListSAMLProvidersError {
-        ListSAMLProvidersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSAMLProvidersError {
@@ -23999,13 +20608,6 @@ impl Error for ListSAMLProvidersError {
     fn description(&self) -> &str {
         match *self {
             ListSAMLProvidersError::ServiceFailure(ref cause) => cause,
-            ListSAMLProvidersError::Validation(ref cause) => cause,
-            ListSAMLProvidersError::Credentials(ref err) => err.description(),
-            ListSAMLProvidersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSAMLProvidersError::ParseError(ref cause) => cause,
-            ListSAMLProvidersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24014,20 +20616,10 @@ impl Error for ListSAMLProvidersError {
 pub enum ListSSHPublicKeysError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSSHPublicKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSSHPublicKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSSHPublicKeysError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24035,15 +20627,15 @@ impl ListSSHPublicKeysError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListSSHPublicKeysError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListSSHPublicKeysError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListSSHPublicKeysError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24052,28 +20644,6 @@ impl ListSSHPublicKeysError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListSSHPublicKeysError {
-    fn from(err: XmlParseError) -> ListSSHPublicKeysError {
-        let XmlParseError(message) = err;
-        ListSSHPublicKeysError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListSSHPublicKeysError {
-    fn from(err: CredentialsError) -> ListSSHPublicKeysError {
-        ListSSHPublicKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSSHPublicKeysError {
-    fn from(err: HttpDispatchError) -> ListSSHPublicKeysError {
-        ListSSHPublicKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSSHPublicKeysError {
-    fn from(err: io::Error) -> ListSSHPublicKeysError {
-        ListSSHPublicKeysError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSSHPublicKeysError {
@@ -24085,13 +20655,6 @@ impl Error for ListSSHPublicKeysError {
     fn description(&self) -> &str {
         match *self {
             ListSSHPublicKeysError::NoSuchEntity(ref cause) => cause,
-            ListSSHPublicKeysError::Validation(ref cause) => cause,
-            ListSSHPublicKeysError::Credentials(ref err) => err.description(),
-            ListSSHPublicKeysError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSSHPublicKeysError::ParseError(ref cause) => cause,
-            ListSSHPublicKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24100,20 +20663,10 @@ impl Error for ListSSHPublicKeysError {
 pub enum ListServerCertificatesError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListServerCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListServerCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListServerCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24121,15 +20674,15 @@ impl ListServerCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListServerCertificatesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListServerCertificatesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListServerCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24138,28 +20691,6 @@ impl ListServerCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListServerCertificatesError {
-    fn from(err: XmlParseError) -> ListServerCertificatesError {
-        let XmlParseError(message) = err;
-        ListServerCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListServerCertificatesError {
-    fn from(err: CredentialsError) -> ListServerCertificatesError {
-        ListServerCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListServerCertificatesError {
-    fn from(err: HttpDispatchError) -> ListServerCertificatesError {
-        ListServerCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListServerCertificatesError {
-    fn from(err: io::Error) -> ListServerCertificatesError {
-        ListServerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListServerCertificatesError {
@@ -24171,13 +20702,6 @@ impl Error for ListServerCertificatesError {
     fn description(&self) -> &str {
         match *self {
             ListServerCertificatesError::ServiceFailure(ref cause) => cause,
-            ListServerCertificatesError::Validation(ref cause) => cause,
-            ListServerCertificatesError::Credentials(ref err) => err.description(),
-            ListServerCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListServerCertificatesError::ParseError(ref cause) => cause,
-            ListServerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24188,20 +20712,12 @@ pub enum ListServiceSpecificCredentialsError {
     NoSuchEntity(String),
     /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListServiceSpecificCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListServiceSpecificCredentialsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListServiceSpecificCredentialsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24209,20 +20725,24 @@ impl ListServiceSpecificCredentialsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListServiceSpecificCredentialsError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NotSupportedService" => {
-                        return ListServiceSpecificCredentialsError::ServiceNotSupported(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ListServiceSpecificCredentialsError::ServiceNotSupported(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ListServiceSpecificCredentialsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24231,28 +20751,6 @@ impl ListServiceSpecificCredentialsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListServiceSpecificCredentialsError {
-    fn from(err: XmlParseError) -> ListServiceSpecificCredentialsError {
-        let XmlParseError(message) = err;
-        ListServiceSpecificCredentialsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListServiceSpecificCredentialsError {
-    fn from(err: CredentialsError) -> ListServiceSpecificCredentialsError {
-        ListServiceSpecificCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListServiceSpecificCredentialsError {
-    fn from(err: HttpDispatchError) -> ListServiceSpecificCredentialsError {
-        ListServiceSpecificCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListServiceSpecificCredentialsError {
-    fn from(err: io::Error) -> ListServiceSpecificCredentialsError {
-        ListServiceSpecificCredentialsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListServiceSpecificCredentialsError {
@@ -24265,13 +20763,6 @@ impl Error for ListServiceSpecificCredentialsError {
         match *self {
             ListServiceSpecificCredentialsError::NoSuchEntity(ref cause) => cause,
             ListServiceSpecificCredentialsError::ServiceNotSupported(ref cause) => cause,
-            ListServiceSpecificCredentialsError::Validation(ref cause) => cause,
-            ListServiceSpecificCredentialsError::Credentials(ref err) => err.description(),
-            ListServiceSpecificCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListServiceSpecificCredentialsError::ParseError(ref cause) => cause,
-            ListServiceSpecificCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24282,20 +20773,10 @@ pub enum ListSigningCertificatesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSigningCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSigningCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSigningCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24303,20 +20784,20 @@ impl ListSigningCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListSigningCertificatesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListSigningCertificatesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListSigningCertificatesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListSigningCertificatesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListSigningCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24325,28 +20806,6 @@ impl ListSigningCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListSigningCertificatesError {
-    fn from(err: XmlParseError) -> ListSigningCertificatesError {
-        let XmlParseError(message) = err;
-        ListSigningCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListSigningCertificatesError {
-    fn from(err: CredentialsError) -> ListSigningCertificatesError {
-        ListSigningCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSigningCertificatesError {
-    fn from(err: HttpDispatchError) -> ListSigningCertificatesError {
-        ListSigningCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSigningCertificatesError {
-    fn from(err: io::Error) -> ListSigningCertificatesError {
-        ListSigningCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListSigningCertificatesError {
@@ -24359,13 +20818,6 @@ impl Error for ListSigningCertificatesError {
         match *self {
             ListSigningCertificatesError::NoSuchEntity(ref cause) => cause,
             ListSigningCertificatesError::ServiceFailure(ref cause) => cause,
-            ListSigningCertificatesError::Validation(ref cause) => cause,
-            ListSigningCertificatesError::Credentials(ref err) => err.description(),
-            ListSigningCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSigningCertificatesError::ParseError(ref cause) => cause,
-            ListSigningCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24376,20 +20828,10 @@ pub enum ListUserPoliciesError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24397,20 +20839,20 @@ impl ListUserPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListUserPoliciesError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListUserPoliciesError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ListUserPoliciesError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListUserPoliciesError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListUserPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24419,28 +20861,6 @@ impl ListUserPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListUserPoliciesError {
-    fn from(err: XmlParseError) -> ListUserPoliciesError {
-        let XmlParseError(message) = err;
-        ListUserPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListUserPoliciesError {
-    fn from(err: CredentialsError) -> ListUserPoliciesError {
-        ListUserPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserPoliciesError {
-    fn from(err: HttpDispatchError) -> ListUserPoliciesError {
-        ListUserPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserPoliciesError {
-    fn from(err: io::Error) -> ListUserPoliciesError {
-        ListUserPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListUserPoliciesError {
@@ -24453,11 +20873,6 @@ impl Error for ListUserPoliciesError {
         match *self {
             ListUserPoliciesError::NoSuchEntity(ref cause) => cause,
             ListUserPoliciesError::ServiceFailure(ref cause) => cause,
-            ListUserPoliciesError::Validation(ref cause) => cause,
-            ListUserPoliciesError::Credentials(ref err) => err.description(),
-            ListUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserPoliciesError::ParseError(ref cause) => cause,
-            ListUserPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24468,20 +20883,10 @@ pub enum ListUserTagsError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24489,16 +20894,20 @@ impl ListUserTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ListUserTagsError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(ListUserTagsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return ListUserTagsError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListUserTagsError::ServiceFailure(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        ListUserTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24507,28 +20916,6 @@ impl ListUserTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListUserTagsError {
-    fn from(err: XmlParseError) -> ListUserTagsError {
-        let XmlParseError(message) = err;
-        ListUserTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListUserTagsError {
-    fn from(err: CredentialsError) -> ListUserTagsError {
-        ListUserTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserTagsError {
-    fn from(err: HttpDispatchError) -> ListUserTagsError {
-        ListUserTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserTagsError {
-    fn from(err: io::Error) -> ListUserTagsError {
-        ListUserTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListUserTagsError {
@@ -24541,11 +20928,6 @@ impl Error for ListUserTagsError {
         match *self {
             ListUserTagsError::NoSuchEntity(ref cause) => cause,
             ListUserTagsError::ServiceFailure(ref cause) => cause,
-            ListUserTagsError::Validation(ref cause) => cause,
-            ListUserTagsError::Credentials(ref err) => err.description(),
-            ListUserTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserTagsError::ParseError(ref cause) => cause,
-            ListUserTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24554,20 +20936,10 @@ impl Error for ListUserTagsError {
 pub enum ListUsersError {
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24575,13 +20947,15 @@ impl ListUsersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
-                        return ListUsersError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(ListUsersError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListUsersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24590,28 +20964,6 @@ impl ListUsersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListUsersError {
-    fn from(err: XmlParseError) -> ListUsersError {
-        let XmlParseError(message) = err;
-        ListUsersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListUsersError {
-    fn from(err: CredentialsError) -> ListUsersError {
-        ListUsersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUsersError {
-    fn from(err: HttpDispatchError) -> ListUsersError {
-        ListUsersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUsersError {
-    fn from(err: io::Error) -> ListUsersError {
-        ListUsersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListUsersError {
@@ -24623,31 +20975,15 @@ impl Error for ListUsersError {
     fn description(&self) -> &str {
         match *self {
             ListUsersError::ServiceFailure(ref cause) => cause,
-            ListUsersError::Validation(ref cause) => cause,
-            ListUsersError::Credentials(ref err) => err.description(),
-            ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::ParseError(ref cause) => cause,
-            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListVirtualMFADevices
 #[derive(Debug, PartialEq)]
-pub enum ListVirtualMFADevicesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListVirtualMFADevicesError {}
 
 impl ListVirtualMFADevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVirtualMFADevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVirtualMFADevicesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24658,7 +20994,7 @@ impl ListVirtualMFADevicesError {
                 }
             }
         }
-        ListVirtualMFADevicesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24669,28 +21005,6 @@ impl ListVirtualMFADevicesError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for ListVirtualMFADevicesError {
-    fn from(err: XmlParseError) -> ListVirtualMFADevicesError {
-        let XmlParseError(message) = err;
-        ListVirtualMFADevicesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListVirtualMFADevicesError {
-    fn from(err: CredentialsError) -> ListVirtualMFADevicesError {
-        ListVirtualMFADevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVirtualMFADevicesError {
-    fn from(err: HttpDispatchError) -> ListVirtualMFADevicesError {
-        ListVirtualMFADevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVirtualMFADevicesError {
-    fn from(err: io::Error) -> ListVirtualMFADevicesError {
-        ListVirtualMFADevicesError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for ListVirtualMFADevicesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -24698,15 +21012,7 @@ impl fmt::Display for ListVirtualMFADevicesError {
 }
 impl Error for ListVirtualMFADevicesError {
     fn description(&self) -> &str {
-        match *self {
-            ListVirtualMFADevicesError::Validation(ref cause) => cause,
-            ListVirtualMFADevicesError::Credentials(ref err) => err.description(),
-            ListVirtualMFADevicesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVirtualMFADevicesError::ParseError(ref cause) => cause,
-            ListVirtualMFADevicesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutGroupPolicy
@@ -24720,20 +21026,10 @@ pub enum PutGroupPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutGroupPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutGroupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutGroupPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24741,28 +21037,30 @@ impl PutGroupPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return PutGroupPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutGroupPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedPolicyDocument" => {
-                        return PutGroupPolicyError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutGroupPolicyError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return PutGroupPolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(PutGroupPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ServiceFailure" => {
-                        return PutGroupPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutGroupPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        PutGroupPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24771,28 +21069,6 @@ impl PutGroupPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutGroupPolicyError {
-    fn from(err: XmlParseError) -> PutGroupPolicyError {
-        let XmlParseError(message) = err;
-        PutGroupPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutGroupPolicyError {
-    fn from(err: CredentialsError) -> PutGroupPolicyError {
-        PutGroupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutGroupPolicyError {
-    fn from(err: HttpDispatchError) -> PutGroupPolicyError {
-        PutGroupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutGroupPolicyError {
-    fn from(err: io::Error) -> PutGroupPolicyError {
-        PutGroupPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutGroupPolicyError {
@@ -24807,11 +21083,6 @@ impl Error for PutGroupPolicyError {
             PutGroupPolicyError::MalformedPolicyDocument(ref cause) => cause,
             PutGroupPolicyError::NoSuchEntity(ref cause) => cause,
             PutGroupPolicyError::ServiceFailure(ref cause) => cause,
-            PutGroupPolicyError::Validation(ref cause) => cause,
-            PutGroupPolicyError::Credentials(ref err) => err.description(),
-            PutGroupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutGroupPolicyError::ParseError(ref cause) => cause,
-            PutGroupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24828,20 +21099,12 @@ pub enum PutRolePermissionsBoundaryError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutRolePermissionsBoundaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutRolePermissionsBoundaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutRolePermissionsBoundaryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24849,35 +21112,41 @@ impl PutRolePermissionsBoundaryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return PutRolePermissionsBoundaryError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutRolePermissionsBoundaryError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return PutRolePermissionsBoundaryError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutRolePermissionsBoundaryError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyNotAttachable" => {
-                        return PutRolePermissionsBoundaryError::PolicyNotAttachable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutRolePermissionsBoundaryError::PolicyNotAttachable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return PutRolePermissionsBoundaryError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutRolePermissionsBoundaryError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnmodifiableEntity" => {
-                        return PutRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutRolePermissionsBoundaryError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        PutRolePermissionsBoundaryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24886,28 +21155,6 @@ impl PutRolePermissionsBoundaryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutRolePermissionsBoundaryError {
-    fn from(err: XmlParseError) -> PutRolePermissionsBoundaryError {
-        let XmlParseError(message) = err;
-        PutRolePermissionsBoundaryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutRolePermissionsBoundaryError {
-    fn from(err: CredentialsError) -> PutRolePermissionsBoundaryError {
-        PutRolePermissionsBoundaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutRolePermissionsBoundaryError {
-    fn from(err: HttpDispatchError) -> PutRolePermissionsBoundaryError {
-        PutRolePermissionsBoundaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutRolePermissionsBoundaryError {
-    fn from(err: io::Error) -> PutRolePermissionsBoundaryError {
-        PutRolePermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRolePermissionsBoundaryError {
@@ -24923,13 +21170,6 @@ impl Error for PutRolePermissionsBoundaryError {
             PutRolePermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
             PutRolePermissionsBoundaryError::ServiceFailure(ref cause) => cause,
             PutRolePermissionsBoundaryError::UnmodifiableEntity(ref cause) => cause,
-            PutRolePermissionsBoundaryError::Validation(ref cause) => cause,
-            PutRolePermissionsBoundaryError::Credentials(ref err) => err.description(),
-            PutRolePermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutRolePermissionsBoundaryError::ParseError(ref cause) => cause,
-            PutRolePermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24946,20 +21186,10 @@ pub enum PutRolePolicyError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24967,31 +21197,35 @@ impl PutRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return PutRolePolicyError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(PutRolePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "MalformedPolicyDocument" => {
-                        return PutRolePolicyError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutRolePolicyError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return PutRolePolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(PutRolePolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return PutRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return PutRolePolicyError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutRolePolicyError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        PutRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25000,28 +21234,6 @@ impl PutRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutRolePolicyError {
-    fn from(err: XmlParseError) -> PutRolePolicyError {
-        let XmlParseError(message) = err;
-        PutRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutRolePolicyError {
-    fn from(err: CredentialsError) -> PutRolePolicyError {
-        PutRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutRolePolicyError {
-    fn from(err: HttpDispatchError) -> PutRolePolicyError {
-        PutRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutRolePolicyError {
-    fn from(err: io::Error) -> PutRolePolicyError {
-        PutRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutRolePolicyError {
@@ -25037,11 +21249,6 @@ impl Error for PutRolePolicyError {
             PutRolePolicyError::NoSuchEntity(ref cause) => cause,
             PutRolePolicyError::ServiceFailure(ref cause) => cause,
             PutRolePolicyError::UnmodifiableEntity(ref cause) => cause,
-            PutRolePolicyError::Validation(ref cause) => cause,
-            PutRolePolicyError::Credentials(ref err) => err.description(),
-            PutRolePolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutRolePolicyError::ParseError(ref cause) => cause,
-            PutRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25056,20 +21263,12 @@ pub enum PutUserPermissionsBoundaryError {
     PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutUserPermissionsBoundaryError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutUserPermissionsBoundaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutUserPermissionsBoundaryError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25077,30 +21276,34 @@ impl PutUserPermissionsBoundaryError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return PutUserPermissionsBoundaryError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutUserPermissionsBoundaryError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return PutUserPermissionsBoundaryError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutUserPermissionsBoundaryError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyNotAttachable" => {
-                        return PutUserPermissionsBoundaryError::PolicyNotAttachable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutUserPermissionsBoundaryError::PolicyNotAttachable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return PutUserPermissionsBoundaryError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutUserPermissionsBoundaryError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        PutUserPermissionsBoundaryError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25109,28 +21312,6 @@ impl PutUserPermissionsBoundaryError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutUserPermissionsBoundaryError {
-    fn from(err: XmlParseError) -> PutUserPermissionsBoundaryError {
-        let XmlParseError(message) = err;
-        PutUserPermissionsBoundaryError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutUserPermissionsBoundaryError {
-    fn from(err: CredentialsError) -> PutUserPermissionsBoundaryError {
-        PutUserPermissionsBoundaryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutUserPermissionsBoundaryError {
-    fn from(err: HttpDispatchError) -> PutUserPermissionsBoundaryError {
-        PutUserPermissionsBoundaryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutUserPermissionsBoundaryError {
-    fn from(err: io::Error) -> PutUserPermissionsBoundaryError {
-        PutUserPermissionsBoundaryError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutUserPermissionsBoundaryError {
@@ -25145,13 +21326,6 @@ impl Error for PutUserPermissionsBoundaryError {
             PutUserPermissionsBoundaryError::NoSuchEntity(ref cause) => cause,
             PutUserPermissionsBoundaryError::PolicyNotAttachable(ref cause) => cause,
             PutUserPermissionsBoundaryError::ServiceFailure(ref cause) => cause,
-            PutUserPermissionsBoundaryError::Validation(ref cause) => cause,
-            PutUserPermissionsBoundaryError::Credentials(ref err) => err.description(),
-            PutUserPermissionsBoundaryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutUserPermissionsBoundaryError::ParseError(ref cause) => cause,
-            PutUserPermissionsBoundaryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25166,20 +21340,10 @@ pub enum PutUserPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutUserPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutUserPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutUserPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25187,26 +21351,30 @@ impl PutUserPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return PutUserPolicyError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(PutUserPolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "MalformedPolicyDocument" => {
-                        return PutUserPolicyError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutUserPolicyError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return PutUserPolicyError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(PutUserPolicyError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return PutUserPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutUserPolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        PutUserPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25215,28 +21383,6 @@ impl PutUserPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutUserPolicyError {
-    fn from(err: XmlParseError) -> PutUserPolicyError {
-        let XmlParseError(message) = err;
-        PutUserPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutUserPolicyError {
-    fn from(err: CredentialsError) -> PutUserPolicyError {
-        PutUserPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutUserPolicyError {
-    fn from(err: HttpDispatchError) -> PutUserPolicyError {
-        PutUserPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutUserPolicyError {
-    fn from(err: io::Error) -> PutUserPolicyError {
-        PutUserPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutUserPolicyError {
@@ -25251,11 +21397,6 @@ impl Error for PutUserPolicyError {
             PutUserPolicyError::MalformedPolicyDocument(ref cause) => cause,
             PutUserPolicyError::NoSuchEntity(ref cause) => cause,
             PutUserPolicyError::ServiceFailure(ref cause) => cause,
-            PutUserPolicyError::Validation(ref cause) => cause,
-            PutUserPolicyError::Credentials(ref err) => err.description(),
-            PutUserPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutUserPolicyError::ParseError(ref cause) => cause,
-            PutUserPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25268,22 +21409,12 @@ pub enum RemoveClientIDFromOpenIDConnectProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveClientIDFromOpenIDConnectProviderError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> RemoveClientIDFromOpenIDConnectProviderError {
+    ) -> RusotoError<RemoveClientIDFromOpenIDConnectProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25291,25 +21422,31 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NoSuchEntity" => {
-                        return RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ServiceFailure" => {
-                        return RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveClientIDFromOpenIDConnectProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25318,28 +21455,6 @@ impl RemoveClientIDFromOpenIDConnectProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveClientIDFromOpenIDConnectProviderError {
-    fn from(err: XmlParseError) -> RemoveClientIDFromOpenIDConnectProviderError {
-        let XmlParseError(message) = err;
-        RemoveClientIDFromOpenIDConnectProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveClientIDFromOpenIDConnectProviderError {
-    fn from(err: CredentialsError) -> RemoveClientIDFromOpenIDConnectProviderError {
-        RemoveClientIDFromOpenIDConnectProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveClientIDFromOpenIDConnectProviderError {
-    fn from(err: HttpDispatchError) -> RemoveClientIDFromOpenIDConnectProviderError {
-        RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveClientIDFromOpenIDConnectProviderError {
-    fn from(err: io::Error) -> RemoveClientIDFromOpenIDConnectProviderError {
-        RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveClientIDFromOpenIDConnectProviderError {
@@ -25353,13 +21468,6 @@ impl Error for RemoveClientIDFromOpenIDConnectProviderError {
             RemoveClientIDFromOpenIDConnectProviderError::InvalidInput(ref cause) => cause,
             RemoveClientIDFromOpenIDConnectProviderError::NoSuchEntity(ref cause) => cause,
             RemoveClientIDFromOpenIDConnectProviderError::ServiceFailure(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::Validation(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::Credentials(ref err) => err.description(),
-            RemoveClientIDFromOpenIDConnectProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveClientIDFromOpenIDConnectProviderError::ParseError(ref cause) => cause,
-            RemoveClientIDFromOpenIDConnectProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25374,20 +21482,12 @@ pub enum RemoveRoleFromInstanceProfileError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveRoleFromInstanceProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveRoleFromInstanceProfileError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveRoleFromInstanceProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25395,30 +21495,38 @@ impl RemoveRoleFromInstanceProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromInstanceProfileError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromInstanceProfileError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromInstanceProfileError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnmodifiableEntity" => {
-                        return RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveRoleFromInstanceProfileError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveRoleFromInstanceProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25427,28 +21535,6 @@ impl RemoveRoleFromInstanceProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveRoleFromInstanceProfileError {
-    fn from(err: XmlParseError) -> RemoveRoleFromInstanceProfileError {
-        let XmlParseError(message) = err;
-        RemoveRoleFromInstanceProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveRoleFromInstanceProfileError {
-    fn from(err: CredentialsError) -> RemoveRoleFromInstanceProfileError {
-        RemoveRoleFromInstanceProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveRoleFromInstanceProfileError {
-    fn from(err: HttpDispatchError) -> RemoveRoleFromInstanceProfileError {
-        RemoveRoleFromInstanceProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveRoleFromInstanceProfileError {
-    fn from(err: io::Error) -> RemoveRoleFromInstanceProfileError {
-        RemoveRoleFromInstanceProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveRoleFromInstanceProfileError {
@@ -25463,13 +21549,6 @@ impl Error for RemoveRoleFromInstanceProfileError {
             RemoveRoleFromInstanceProfileError::NoSuchEntity(ref cause) => cause,
             RemoveRoleFromInstanceProfileError::ServiceFailure(ref cause) => cause,
             RemoveRoleFromInstanceProfileError::UnmodifiableEntity(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::Validation(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::Credentials(ref err) => err.description(),
-            RemoveRoleFromInstanceProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveRoleFromInstanceProfileError::ParseError(ref cause) => cause,
-            RemoveRoleFromInstanceProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25482,20 +21561,10 @@ pub enum RemoveUserFromGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveUserFromGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveUserFromGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveUserFromGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25503,25 +21572,25 @@ impl RemoveUserFromGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return RemoveUserFromGroupError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveUserFromGroupError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return RemoveUserFromGroupError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveUserFromGroupError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return RemoveUserFromGroupError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveUserFromGroupError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        RemoveUserFromGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25530,28 +21599,6 @@ impl RemoveUserFromGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveUserFromGroupError {
-    fn from(err: XmlParseError) -> RemoveUserFromGroupError {
-        let XmlParseError(message) = err;
-        RemoveUserFromGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveUserFromGroupError {
-    fn from(err: CredentialsError) -> RemoveUserFromGroupError {
-        RemoveUserFromGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveUserFromGroupError {
-    fn from(err: HttpDispatchError) -> RemoveUserFromGroupError {
-        RemoveUserFromGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveUserFromGroupError {
-    fn from(err: io::Error) -> RemoveUserFromGroupError {
-        RemoveUserFromGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveUserFromGroupError {
@@ -25565,13 +21612,6 @@ impl Error for RemoveUserFromGroupError {
             RemoveUserFromGroupError::LimitExceeded(ref cause) => cause,
             RemoveUserFromGroupError::NoSuchEntity(ref cause) => cause,
             RemoveUserFromGroupError::ServiceFailure(ref cause) => cause,
-            RemoveUserFromGroupError::Validation(ref cause) => cause,
-            RemoveUserFromGroupError::Credentials(ref err) => err.description(),
-            RemoveUserFromGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveUserFromGroupError::ParseError(ref cause) => cause,
-            RemoveUserFromGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25580,20 +21620,12 @@ impl Error for RemoveUserFromGroupError {
 pub enum ResetServiceSpecificCredentialError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetServiceSpecificCredentialError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetServiceSpecificCredentialError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ResetServiceSpecificCredentialError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25601,15 +21633,17 @@ impl ResetServiceSpecificCredentialError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ResetServiceSpecificCredentialError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ResetServiceSpecificCredentialError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25618,28 +21652,6 @@ impl ResetServiceSpecificCredentialError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResetServiceSpecificCredentialError {
-    fn from(err: XmlParseError) -> ResetServiceSpecificCredentialError {
-        let XmlParseError(message) = err;
-        ResetServiceSpecificCredentialError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResetServiceSpecificCredentialError {
-    fn from(err: CredentialsError) -> ResetServiceSpecificCredentialError {
-        ResetServiceSpecificCredentialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetServiceSpecificCredentialError {
-    fn from(err: HttpDispatchError) -> ResetServiceSpecificCredentialError {
-        ResetServiceSpecificCredentialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetServiceSpecificCredentialError {
-    fn from(err: io::Error) -> ResetServiceSpecificCredentialError {
-        ResetServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetServiceSpecificCredentialError {
@@ -25651,13 +21663,6 @@ impl Error for ResetServiceSpecificCredentialError {
     fn description(&self) -> &str {
         match *self {
             ResetServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
-            ResetServiceSpecificCredentialError::Validation(ref cause) => cause,
-            ResetServiceSpecificCredentialError::Credentials(ref err) => err.description(),
-            ResetServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResetServiceSpecificCredentialError::ParseError(ref cause) => cause,
-            ResetServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25672,20 +21677,10 @@ pub enum ResyncMFADeviceError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResyncMFADeviceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResyncMFADeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResyncMFADeviceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25693,30 +21688,32 @@ impl ResyncMFADeviceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidAuthenticationCode" => {
-                        return ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ResyncMFADeviceError::InvalidAuthenticationCode(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return ResyncMFADeviceError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResyncMFADeviceError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return ResyncMFADeviceError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResyncMFADeviceError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return ResyncMFADeviceError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResyncMFADeviceError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ResyncMFADeviceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25725,28 +21722,6 @@ impl ResyncMFADeviceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResyncMFADeviceError {
-    fn from(err: XmlParseError) -> ResyncMFADeviceError {
-        let XmlParseError(message) = err;
-        ResyncMFADeviceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResyncMFADeviceError {
-    fn from(err: CredentialsError) -> ResyncMFADeviceError {
-        ResyncMFADeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResyncMFADeviceError {
-    fn from(err: HttpDispatchError) -> ResyncMFADeviceError {
-        ResyncMFADeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResyncMFADeviceError {
-    fn from(err: io::Error) -> ResyncMFADeviceError {
-        ResyncMFADeviceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResyncMFADeviceError {
@@ -25761,11 +21736,6 @@ impl Error for ResyncMFADeviceError {
             ResyncMFADeviceError::LimitExceeded(ref cause) => cause,
             ResyncMFADeviceError::NoSuchEntity(ref cause) => cause,
             ResyncMFADeviceError::ServiceFailure(ref cause) => cause,
-            ResyncMFADeviceError::Validation(ref cause) => cause,
-            ResyncMFADeviceError::Credentials(ref err) => err.description(),
-            ResyncMFADeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResyncMFADeviceError::ParseError(ref cause) => cause,
-            ResyncMFADeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25780,20 +21750,10 @@ pub enum SetDefaultPolicyVersionError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetDefaultPolicyVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetDefaultPolicyVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetDefaultPolicyVersionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25801,30 +21761,30 @@ impl SetDefaultPolicyVersionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return SetDefaultPolicyVersionError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetDefaultPolicyVersionError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return SetDefaultPolicyVersionError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetDefaultPolicyVersionError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return SetDefaultPolicyVersionError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetDefaultPolicyVersionError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return SetDefaultPolicyVersionError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetDefaultPolicyVersionError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SetDefaultPolicyVersionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25833,28 +21793,6 @@ impl SetDefaultPolicyVersionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetDefaultPolicyVersionError {
-    fn from(err: XmlParseError) -> SetDefaultPolicyVersionError {
-        let XmlParseError(message) = err;
-        SetDefaultPolicyVersionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetDefaultPolicyVersionError {
-    fn from(err: CredentialsError) -> SetDefaultPolicyVersionError {
-        SetDefaultPolicyVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetDefaultPolicyVersionError {
-    fn from(err: HttpDispatchError) -> SetDefaultPolicyVersionError {
-        SetDefaultPolicyVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetDefaultPolicyVersionError {
-    fn from(err: io::Error) -> SetDefaultPolicyVersionError {
-        SetDefaultPolicyVersionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetDefaultPolicyVersionError {
@@ -25869,13 +21807,6 @@ impl Error for SetDefaultPolicyVersionError {
             SetDefaultPolicyVersionError::LimitExceeded(ref cause) => cause,
             SetDefaultPolicyVersionError::NoSuchEntity(ref cause) => cause,
             SetDefaultPolicyVersionError::ServiceFailure(ref cause) => cause,
-            SetDefaultPolicyVersionError::Validation(ref cause) => cause,
-            SetDefaultPolicyVersionError::Credentials(ref err) => err.description(),
-            SetDefaultPolicyVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetDefaultPolicyVersionError::ParseError(ref cause) => cause,
-            SetDefaultPolicyVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25886,20 +21817,10 @@ pub enum SimulateCustomPolicyError {
     InvalidInput(String),
     /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detailed message indicates the source of the failure.</p>
     PolicyEvaluation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SimulateCustomPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> SimulateCustomPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SimulateCustomPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -25907,20 +21828,20 @@ impl SimulateCustomPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return SimulateCustomPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SimulateCustomPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyEvaluation" => {
-                        return SimulateCustomPolicyError::PolicyEvaluation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SimulateCustomPolicyError::PolicyEvaluation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SimulateCustomPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -25929,28 +21850,6 @@ impl SimulateCustomPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SimulateCustomPolicyError {
-    fn from(err: XmlParseError) -> SimulateCustomPolicyError {
-        let XmlParseError(message) = err;
-        SimulateCustomPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SimulateCustomPolicyError {
-    fn from(err: CredentialsError) -> SimulateCustomPolicyError {
-        SimulateCustomPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SimulateCustomPolicyError {
-    fn from(err: HttpDispatchError) -> SimulateCustomPolicyError {
-        SimulateCustomPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SimulateCustomPolicyError {
-    fn from(err: io::Error) -> SimulateCustomPolicyError {
-        SimulateCustomPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SimulateCustomPolicyError {
@@ -25963,13 +21862,6 @@ impl Error for SimulateCustomPolicyError {
         match *self {
             SimulateCustomPolicyError::InvalidInput(ref cause) => cause,
             SimulateCustomPolicyError::PolicyEvaluation(ref cause) => cause,
-            SimulateCustomPolicyError::Validation(ref cause) => cause,
-            SimulateCustomPolicyError::Credentials(ref err) => err.description(),
-            SimulateCustomPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SimulateCustomPolicyError::ParseError(ref cause) => cause,
-            SimulateCustomPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -25982,20 +21874,10 @@ pub enum SimulatePrincipalPolicyError {
     NoSuchEntity(String),
     /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detailed message indicates the source of the failure.</p>
     PolicyEvaluation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SimulatePrincipalPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> SimulatePrincipalPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SimulatePrincipalPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26003,25 +21885,25 @@ impl SimulatePrincipalPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return SimulatePrincipalPolicyError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SimulatePrincipalPolicyError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return SimulatePrincipalPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SimulatePrincipalPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PolicyEvaluation" => {
-                        return SimulatePrincipalPolicyError::PolicyEvaluation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SimulatePrincipalPolicyError::PolicyEvaluation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SimulatePrincipalPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26030,28 +21912,6 @@ impl SimulatePrincipalPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SimulatePrincipalPolicyError {
-    fn from(err: XmlParseError) -> SimulatePrincipalPolicyError {
-        let XmlParseError(message) = err;
-        SimulatePrincipalPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SimulatePrincipalPolicyError {
-    fn from(err: CredentialsError) -> SimulatePrincipalPolicyError {
-        SimulatePrincipalPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SimulatePrincipalPolicyError {
-    fn from(err: HttpDispatchError) -> SimulatePrincipalPolicyError {
-        SimulatePrincipalPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SimulatePrincipalPolicyError {
-    fn from(err: io::Error) -> SimulatePrincipalPolicyError {
-        SimulatePrincipalPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SimulatePrincipalPolicyError {
@@ -26065,13 +21925,6 @@ impl Error for SimulatePrincipalPolicyError {
             SimulatePrincipalPolicyError::InvalidInput(ref cause) => cause,
             SimulatePrincipalPolicyError::NoSuchEntity(ref cause) => cause,
             SimulatePrincipalPolicyError::PolicyEvaluation(ref cause) => cause,
-            SimulatePrincipalPolicyError::Validation(ref cause) => cause,
-            SimulatePrincipalPolicyError::Credentials(ref err) => err.description(),
-            SimulatePrincipalPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SimulatePrincipalPolicyError::ParseError(ref cause) => cause,
-            SimulatePrincipalPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26088,20 +21941,10 @@ pub enum TagRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26109,27 +21952,35 @@ impl TagRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return TagRoleError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(TagRoleError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return TagRoleError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(TagRoleError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return TagRoleError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(TagRoleError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return TagRoleError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(TagRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return TagRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(TagRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        TagRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26138,28 +21989,6 @@ impl TagRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TagRoleError {
-    fn from(err: XmlParseError) -> TagRoleError {
-        let XmlParseError(message) = err;
-        TagRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TagRoleError {
-    fn from(err: CredentialsError) -> TagRoleError {
-        TagRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagRoleError {
-    fn from(err: HttpDispatchError) -> TagRoleError {
-        TagRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagRoleError {
-    fn from(err: io::Error) -> TagRoleError {
-        TagRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TagRoleError {
@@ -26175,11 +22004,6 @@ impl Error for TagRoleError {
             TagRoleError::LimitExceeded(ref cause) => cause,
             TagRoleError::NoSuchEntity(ref cause) => cause,
             TagRoleError::ServiceFailure(ref cause) => cause,
-            TagRoleError::Validation(ref cause) => cause,
-            TagRoleError::Credentials(ref err) => err.description(),
-            TagRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagRoleError::ParseError(ref cause) => cause,
-            TagRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26196,20 +22020,10 @@ pub enum TagUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26217,27 +22031,35 @@ impl TagUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return TagUserError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(TagUserError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidInput" => {
-                        return TagUserError::InvalidInput(String::from(parsed_error.message));
+                        return RusotoError::Service(TagUserError::InvalidInput(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return TagUserError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(TagUserError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return TagUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(TagUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return TagUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(TagUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        TagUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26246,28 +22068,6 @@ impl TagUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TagUserError {
-    fn from(err: XmlParseError) -> TagUserError {
-        let XmlParseError(message) = err;
-        TagUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TagUserError {
-    fn from(err: CredentialsError) -> TagUserError {
-        TagUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagUserError {
-    fn from(err: HttpDispatchError) -> TagUserError {
-        TagUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagUserError {
-    fn from(err: io::Error) -> TagUserError {
-        TagUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TagUserError {
@@ -26283,11 +22083,6 @@ impl Error for TagUserError {
             TagUserError::LimitExceeded(ref cause) => cause,
             TagUserError::NoSuchEntity(ref cause) => cause,
             TagUserError::ServiceFailure(ref cause) => cause,
-            TagUserError::Validation(ref cause) => cause,
-            TagUserError::Credentials(ref err) => err.description(),
-            TagUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagUserError::ParseError(ref cause) => cause,
-            TagUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26300,20 +22095,10 @@ pub enum UntagRoleError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26321,21 +22106,25 @@ impl UntagRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return UntagRoleError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UntagRoleError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UntagRoleError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(UntagRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return UntagRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(UntagRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        UntagRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26344,28 +22133,6 @@ impl UntagRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UntagRoleError {
-    fn from(err: XmlParseError) -> UntagRoleError {
-        let XmlParseError(message) = err;
-        UntagRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UntagRoleError {
-    fn from(err: CredentialsError) -> UntagRoleError {
-        UntagRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagRoleError {
-    fn from(err: HttpDispatchError) -> UntagRoleError {
-        UntagRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagRoleError {
-    fn from(err: io::Error) -> UntagRoleError {
-        UntagRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UntagRoleError {
@@ -26379,11 +22146,6 @@ impl Error for UntagRoleError {
             UntagRoleError::ConcurrentModification(ref cause) => cause,
             UntagRoleError::NoSuchEntity(ref cause) => cause,
             UntagRoleError::ServiceFailure(ref cause) => cause,
-            UntagRoleError::Validation(ref cause) => cause,
-            UntagRoleError::Credentials(ref err) => err.description(),
-            UntagRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagRoleError::ParseError(ref cause) => cause,
-            UntagRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26396,20 +22158,10 @@ pub enum UntagUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26417,21 +22169,25 @@ impl UntagUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return UntagUserError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UntagUserError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UntagUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(UntagUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return UntagUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(UntagUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        UntagUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26440,28 +22196,6 @@ impl UntagUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UntagUserError {
-    fn from(err: XmlParseError) -> UntagUserError {
-        let XmlParseError(message) = err;
-        UntagUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UntagUserError {
-    fn from(err: CredentialsError) -> UntagUserError {
-        UntagUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagUserError {
-    fn from(err: HttpDispatchError) -> UntagUserError {
-        UntagUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagUserError {
-    fn from(err: io::Error) -> UntagUserError {
-        UntagUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UntagUserError {
@@ -26475,11 +22209,6 @@ impl Error for UntagUserError {
             UntagUserError::ConcurrentModification(ref cause) => cause,
             UntagUserError::NoSuchEntity(ref cause) => cause,
             UntagUserError::ServiceFailure(ref cause) => cause,
-            UntagUserError::Validation(ref cause) => cause,
-            UntagUserError::Credentials(ref err) => err.description(),
-            UntagUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagUserError::ParseError(ref cause) => cause,
-            UntagUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26492,20 +22221,10 @@ pub enum UpdateAccessKeyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAccessKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccessKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccessKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26513,25 +22232,25 @@ impl UpdateAccessKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return UpdateAccessKeyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAccessKeyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UpdateAccessKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAccessKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateAccessKeyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAccessKeyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateAccessKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26540,28 +22259,6 @@ impl UpdateAccessKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateAccessKeyError {
-    fn from(err: XmlParseError) -> UpdateAccessKeyError {
-        let XmlParseError(message) = err;
-        UpdateAccessKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAccessKeyError {
-    fn from(err: CredentialsError) -> UpdateAccessKeyError {
-        UpdateAccessKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAccessKeyError {
-    fn from(err: HttpDispatchError) -> UpdateAccessKeyError {
-        UpdateAccessKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAccessKeyError {
-    fn from(err: io::Error) -> UpdateAccessKeyError {
-        UpdateAccessKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAccessKeyError {
@@ -26575,11 +22272,6 @@ impl Error for UpdateAccessKeyError {
             UpdateAccessKeyError::LimitExceeded(ref cause) => cause,
             UpdateAccessKeyError::NoSuchEntity(ref cause) => cause,
             UpdateAccessKeyError::ServiceFailure(ref cause) => cause,
-            UpdateAccessKeyError::Validation(ref cause) => cause,
-            UpdateAccessKeyError::Credentials(ref err) => err.description(),
-            UpdateAccessKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAccessKeyError::ParseError(ref cause) => cause,
-            UpdateAccessKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26594,20 +22286,12 @@ pub enum UpdateAccountPasswordPolicyError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAccountPasswordPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccountPasswordPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateAccountPasswordPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26615,30 +22299,36 @@ impl UpdateAccountPasswordPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAccountPasswordPolicyError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MalformedPolicyDocument" => {
-                        return UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateAccountPasswordPolicyError::MalformedPolicyDocument(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NoSuchEntity" => {
-                        return UpdateAccountPasswordPolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAccountPasswordPolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAccountPasswordPolicyError::ServiceFailure(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateAccountPasswordPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26647,28 +22337,6 @@ impl UpdateAccountPasswordPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateAccountPasswordPolicyError {
-    fn from(err: XmlParseError) -> UpdateAccountPasswordPolicyError {
-        let XmlParseError(message) = err;
-        UpdateAccountPasswordPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAccountPasswordPolicyError {
-    fn from(err: CredentialsError) -> UpdateAccountPasswordPolicyError {
-        UpdateAccountPasswordPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAccountPasswordPolicyError {
-    fn from(err: HttpDispatchError) -> UpdateAccountPasswordPolicyError {
-        UpdateAccountPasswordPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAccountPasswordPolicyError {
-    fn from(err: io::Error) -> UpdateAccountPasswordPolicyError {
-        UpdateAccountPasswordPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAccountPasswordPolicyError {
@@ -26683,13 +22351,6 @@ impl Error for UpdateAccountPasswordPolicyError {
             UpdateAccountPasswordPolicyError::MalformedPolicyDocument(ref cause) => cause,
             UpdateAccountPasswordPolicyError::NoSuchEntity(ref cause) => cause,
             UpdateAccountPasswordPolicyError::ServiceFailure(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::Validation(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::Credentials(ref err) => err.description(),
-            UpdateAccountPasswordPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateAccountPasswordPolicyError::ParseError(ref cause) => cause,
-            UpdateAccountPasswordPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26706,20 +22367,10 @@ pub enum UpdateAssumeRolePolicyError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAssumeRolePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAssumeRolePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAssumeRolePolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26727,35 +22378,39 @@ impl UpdateAssumeRolePolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return UpdateAssumeRolePolicyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAssumeRolePolicyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedPolicyDocument" => {
-                        return UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAssumeRolePolicyError::MalformedPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return UpdateAssumeRolePolicyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAssumeRolePolicyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateAssumeRolePolicyError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAssumeRolePolicyError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return UpdateAssumeRolePolicyError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAssumeRolePolicyError::UnmodifiableEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateAssumeRolePolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26764,28 +22419,6 @@ impl UpdateAssumeRolePolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateAssumeRolePolicyError {
-    fn from(err: XmlParseError) -> UpdateAssumeRolePolicyError {
-        let XmlParseError(message) = err;
-        UpdateAssumeRolePolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAssumeRolePolicyError {
-    fn from(err: CredentialsError) -> UpdateAssumeRolePolicyError {
-        UpdateAssumeRolePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAssumeRolePolicyError {
-    fn from(err: HttpDispatchError) -> UpdateAssumeRolePolicyError {
-        UpdateAssumeRolePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAssumeRolePolicyError {
-    fn from(err: io::Error) -> UpdateAssumeRolePolicyError {
-        UpdateAssumeRolePolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAssumeRolePolicyError {
@@ -26801,13 +22434,6 @@ impl Error for UpdateAssumeRolePolicyError {
             UpdateAssumeRolePolicyError::NoSuchEntity(ref cause) => cause,
             UpdateAssumeRolePolicyError::ServiceFailure(ref cause) => cause,
             UpdateAssumeRolePolicyError::UnmodifiableEntity(ref cause) => cause,
-            UpdateAssumeRolePolicyError::Validation(ref cause) => cause,
-            UpdateAssumeRolePolicyError::Credentials(ref err) => err.description(),
-            UpdateAssumeRolePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateAssumeRolePolicyError::ParseError(ref cause) => cause,
-            UpdateAssumeRolePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26822,20 +22448,10 @@ pub enum UpdateGroupError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26843,24 +22459,30 @@ impl UpdateGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return UpdateGroupError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateGroupError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateGroupError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateGroupError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return UpdateGroupError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateGroupError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return UpdateGroupError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateGroupError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26869,28 +22491,6 @@ impl UpdateGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateGroupError {
-    fn from(err: XmlParseError) -> UpdateGroupError {
-        let XmlParseError(message) = err;
-        UpdateGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGroupError {
-    fn from(err: CredentialsError) -> UpdateGroupError {
-        UpdateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGroupError {
-    fn from(err: HttpDispatchError) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGroupError {
-    fn from(err: io::Error) -> UpdateGroupError {
-        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateGroupError {
@@ -26905,11 +22505,6 @@ impl Error for UpdateGroupError {
             UpdateGroupError::LimitExceeded(ref cause) => cause,
             UpdateGroupError::NoSuchEntity(ref cause) => cause,
             UpdateGroupError::ServiceFailure(ref cause) => cause,
-            UpdateGroupError::Validation(ref cause) => cause,
-            UpdateGroupError::Credentials(ref err) => err.description(),
-            UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateGroupError::ParseError(ref cause) => cause,
-            UpdateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -26926,20 +22521,10 @@ pub enum UpdateLoginProfileError {
     PasswordPolicyViolation(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLoginProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateLoginProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLoginProfileError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -26947,35 +22532,39 @@ impl UpdateLoginProfileError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityTemporarilyUnmodifiable" => {
-                        return UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateLoginProfileError::EntityTemporarilyUnmodifiable(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return UpdateLoginProfileError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateLoginProfileError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UpdateLoginProfileError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateLoginProfileError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PasswordPolicyViolation" => {
-                        return UpdateLoginProfileError::PasswordPolicyViolation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateLoginProfileError::PasswordPolicyViolation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return UpdateLoginProfileError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateLoginProfileError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateLoginProfileError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -26984,28 +22573,6 @@ impl UpdateLoginProfileError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateLoginProfileError {
-    fn from(err: XmlParseError) -> UpdateLoginProfileError {
-        let XmlParseError(message) = err;
-        UpdateLoginProfileError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateLoginProfileError {
-    fn from(err: CredentialsError) -> UpdateLoginProfileError {
-        UpdateLoginProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateLoginProfileError {
-    fn from(err: HttpDispatchError) -> UpdateLoginProfileError {
-        UpdateLoginProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateLoginProfileError {
-    fn from(err: io::Error) -> UpdateLoginProfileError {
-        UpdateLoginProfileError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateLoginProfileError {
@@ -27021,13 +22588,6 @@ impl Error for UpdateLoginProfileError {
             UpdateLoginProfileError::NoSuchEntity(ref cause) => cause,
             UpdateLoginProfileError::PasswordPolicyViolation(ref cause) => cause,
             UpdateLoginProfileError::ServiceFailure(ref cause) => cause,
-            UpdateLoginProfileError::Validation(ref cause) => cause,
-            UpdateLoginProfileError::Credentials(ref err) => err.description(),
-            UpdateLoginProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateLoginProfileError::ParseError(ref cause) => cause,
-            UpdateLoginProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27040,20 +22600,12 @@ pub enum UpdateOpenIDConnectProviderThumbprintError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateOpenIDConnectProviderThumbprintError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateOpenIDConnectProviderThumbprintError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateOpenIDConnectProviderThumbprintError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27061,25 +22613,31 @@ impl UpdateOpenIDConnectProviderThumbprintError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return UpdateOpenIDConnectProviderThumbprintError::InvalidInput(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateOpenIDConnectProviderThumbprintError::InvalidInput(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "NoSuchEntity" => {
-                        return UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "ServiceFailure" => {
-                        return UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateOpenIDConnectProviderThumbprintError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27088,28 +22646,6 @@ impl UpdateOpenIDConnectProviderThumbprintError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateOpenIDConnectProviderThumbprintError {
-    fn from(err: XmlParseError) -> UpdateOpenIDConnectProviderThumbprintError {
-        let XmlParseError(message) = err;
-        UpdateOpenIDConnectProviderThumbprintError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateOpenIDConnectProviderThumbprintError {
-    fn from(err: CredentialsError) -> UpdateOpenIDConnectProviderThumbprintError {
-        UpdateOpenIDConnectProviderThumbprintError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateOpenIDConnectProviderThumbprintError {
-    fn from(err: HttpDispatchError) -> UpdateOpenIDConnectProviderThumbprintError {
-        UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateOpenIDConnectProviderThumbprintError {
-    fn from(err: io::Error) -> UpdateOpenIDConnectProviderThumbprintError {
-        UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateOpenIDConnectProviderThumbprintError {
@@ -27123,13 +22659,6 @@ impl Error for UpdateOpenIDConnectProviderThumbprintError {
             UpdateOpenIDConnectProviderThumbprintError::InvalidInput(ref cause) => cause,
             UpdateOpenIDConnectProviderThumbprintError::NoSuchEntity(ref cause) => cause,
             UpdateOpenIDConnectProviderThumbprintError::ServiceFailure(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::Validation(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::Credentials(ref err) => err.description(),
-            UpdateOpenIDConnectProviderThumbprintError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateOpenIDConnectProviderThumbprintError::ParseError(ref cause) => cause,
-            UpdateOpenIDConnectProviderThumbprintError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27142,20 +22671,10 @@ pub enum UpdateRoleError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27163,21 +22682,25 @@ impl UpdateRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return UpdateRoleError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateRoleError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return UpdateRoleError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateRoleError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "UnmodifiableEntity" => {
-                        return UpdateRoleError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateRoleError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27186,28 +22709,6 @@ impl UpdateRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateRoleError {
-    fn from(err: XmlParseError) -> UpdateRoleError {
-        let XmlParseError(message) = err;
-        UpdateRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRoleError {
-    fn from(err: CredentialsError) -> UpdateRoleError {
-        UpdateRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRoleError {
-    fn from(err: HttpDispatchError) -> UpdateRoleError {
-        UpdateRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRoleError {
-    fn from(err: io::Error) -> UpdateRoleError {
-        UpdateRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRoleError {
@@ -27221,11 +22722,6 @@ impl Error for UpdateRoleError {
             UpdateRoleError::NoSuchEntity(ref cause) => cause,
             UpdateRoleError::ServiceFailure(ref cause) => cause,
             UpdateRoleError::UnmodifiableEntity(ref cause) => cause,
-            UpdateRoleError::Validation(ref cause) => cause,
-            UpdateRoleError::Credentials(ref err) => err.description(),
-            UpdateRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateRoleError::ParseError(ref cause) => cause,
-            UpdateRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27238,20 +22734,10 @@ pub enum UpdateRoleDescriptionError {
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
     UnmodifiableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRoleDescriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRoleDescriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRoleDescriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27259,25 +22745,25 @@ impl UpdateRoleDescriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return UpdateRoleDescriptionError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateRoleDescriptionError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateRoleDescriptionError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateRoleDescriptionError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnmodifiableEntity" => {
-                        return UpdateRoleDescriptionError::UnmodifiableEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateRoleDescriptionError::UnmodifiableEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateRoleDescriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27286,28 +22772,6 @@ impl UpdateRoleDescriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateRoleDescriptionError {
-    fn from(err: XmlParseError) -> UpdateRoleDescriptionError {
-        let XmlParseError(message) = err;
-        UpdateRoleDescriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRoleDescriptionError {
-    fn from(err: CredentialsError) -> UpdateRoleDescriptionError {
-        UpdateRoleDescriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRoleDescriptionError {
-    fn from(err: HttpDispatchError) -> UpdateRoleDescriptionError {
-        UpdateRoleDescriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRoleDescriptionError {
-    fn from(err: io::Error) -> UpdateRoleDescriptionError {
-        UpdateRoleDescriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateRoleDescriptionError {
@@ -27321,13 +22785,6 @@ impl Error for UpdateRoleDescriptionError {
             UpdateRoleDescriptionError::NoSuchEntity(ref cause) => cause,
             UpdateRoleDescriptionError::ServiceFailure(ref cause) => cause,
             UpdateRoleDescriptionError::UnmodifiableEntity(ref cause) => cause,
-            UpdateRoleDescriptionError::Validation(ref cause) => cause,
-            UpdateRoleDescriptionError::Credentials(ref err) => err.description(),
-            UpdateRoleDescriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRoleDescriptionError::ParseError(ref cause) => cause,
-            UpdateRoleDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27342,20 +22799,10 @@ pub enum UpdateSAMLProviderError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSAMLProviderError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSAMLProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSAMLProviderError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27363,30 +22810,30 @@ impl UpdateSAMLProviderError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return UpdateSAMLProviderError::InvalidInput(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSAMLProviderError::InvalidInput(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateSAMLProviderError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSAMLProviderError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UpdateSAMLProviderError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSAMLProviderError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateSAMLProviderError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSAMLProviderError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateSAMLProviderError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27395,28 +22842,6 @@ impl UpdateSAMLProviderError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateSAMLProviderError {
-    fn from(err: XmlParseError) -> UpdateSAMLProviderError {
-        let XmlParseError(message) = err;
-        UpdateSAMLProviderError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSAMLProviderError {
-    fn from(err: CredentialsError) -> UpdateSAMLProviderError {
-        UpdateSAMLProviderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSAMLProviderError {
-    fn from(err: HttpDispatchError) -> UpdateSAMLProviderError {
-        UpdateSAMLProviderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSAMLProviderError {
-    fn from(err: io::Error) -> UpdateSAMLProviderError {
-        UpdateSAMLProviderError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSAMLProviderError {
@@ -27431,13 +22856,6 @@ impl Error for UpdateSAMLProviderError {
             UpdateSAMLProviderError::LimitExceeded(ref cause) => cause,
             UpdateSAMLProviderError::NoSuchEntity(ref cause) => cause,
             UpdateSAMLProviderError::ServiceFailure(ref cause) => cause,
-            UpdateSAMLProviderError::Validation(ref cause) => cause,
-            UpdateSAMLProviderError::Credentials(ref err) => err.description(),
-            UpdateSAMLProviderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSAMLProviderError::ParseError(ref cause) => cause,
-            UpdateSAMLProviderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27446,20 +22864,10 @@ impl Error for UpdateSAMLProviderError {
 pub enum UpdateSSHPublicKeyError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSSHPublicKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSSHPublicKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSSHPublicKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27467,15 +22875,15 @@ impl UpdateSSHPublicKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return UpdateSSHPublicKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSSHPublicKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateSSHPublicKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27484,28 +22892,6 @@ impl UpdateSSHPublicKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateSSHPublicKeyError {
-    fn from(err: XmlParseError) -> UpdateSSHPublicKeyError {
-        let XmlParseError(message) = err;
-        UpdateSSHPublicKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSSHPublicKeyError {
-    fn from(err: CredentialsError) -> UpdateSSHPublicKeyError {
-        UpdateSSHPublicKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSSHPublicKeyError {
-    fn from(err: HttpDispatchError) -> UpdateSSHPublicKeyError {
-        UpdateSSHPublicKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSSHPublicKeyError {
-    fn from(err: io::Error) -> UpdateSSHPublicKeyError {
-        UpdateSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSSHPublicKeyError {
@@ -27517,13 +22903,6 @@ impl Error for UpdateSSHPublicKeyError {
     fn description(&self) -> &str {
         match *self {
             UpdateSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
-            UpdateSSHPublicKeyError::Validation(ref cause) => cause,
-            UpdateSSHPublicKeyError::Credentials(ref err) => err.description(),
-            UpdateSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSSHPublicKeyError::ParseError(ref cause) => cause,
-            UpdateSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27538,20 +22917,10 @@ pub enum UpdateServerCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServerCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateServerCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateServerCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27559,30 +22928,32 @@ impl UpdateServerCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return UpdateServerCertificateError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateServerCertificateError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return UpdateServerCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServerCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UpdateServerCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServerCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateServerCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServerCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateServerCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27591,28 +22962,6 @@ impl UpdateServerCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateServerCertificateError {
-    fn from(err: XmlParseError) -> UpdateServerCertificateError {
-        let XmlParseError(message) = err;
-        UpdateServerCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateServerCertificateError {
-    fn from(err: CredentialsError) -> UpdateServerCertificateError {
-        UpdateServerCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateServerCertificateError {
-    fn from(err: HttpDispatchError) -> UpdateServerCertificateError {
-        UpdateServerCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateServerCertificateError {
-    fn from(err: io::Error) -> UpdateServerCertificateError {
-        UpdateServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServerCertificateError {
@@ -27627,13 +22976,6 @@ impl Error for UpdateServerCertificateError {
             UpdateServerCertificateError::LimitExceeded(ref cause) => cause,
             UpdateServerCertificateError::NoSuchEntity(ref cause) => cause,
             UpdateServerCertificateError::ServiceFailure(ref cause) => cause,
-            UpdateServerCertificateError::Validation(ref cause) => cause,
-            UpdateServerCertificateError::Credentials(ref err) => err.description(),
-            UpdateServerCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateServerCertificateError::ParseError(ref cause) => cause,
-            UpdateServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27642,20 +22984,12 @@ impl Error for UpdateServerCertificateError {
 pub enum UpdateServiceSpecificCredentialError {
     /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceSpecificCredentialError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceSpecificCredentialError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateServiceSpecificCredentialError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27663,15 +22997,17 @@ impl UpdateServiceSpecificCredentialError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchEntity" => {
-                        return UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateServiceSpecificCredentialError::NoSuchEntity(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateServiceSpecificCredentialError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27680,28 +23016,6 @@ impl UpdateServiceSpecificCredentialError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateServiceSpecificCredentialError {
-    fn from(err: XmlParseError) -> UpdateServiceSpecificCredentialError {
-        let XmlParseError(message) = err;
-        UpdateServiceSpecificCredentialError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateServiceSpecificCredentialError {
-    fn from(err: CredentialsError) -> UpdateServiceSpecificCredentialError {
-        UpdateServiceSpecificCredentialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateServiceSpecificCredentialError {
-    fn from(err: HttpDispatchError) -> UpdateServiceSpecificCredentialError {
-        UpdateServiceSpecificCredentialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateServiceSpecificCredentialError {
-    fn from(err: io::Error) -> UpdateServiceSpecificCredentialError {
-        UpdateServiceSpecificCredentialError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServiceSpecificCredentialError {
@@ -27713,13 +23027,6 @@ impl Error for UpdateServiceSpecificCredentialError {
     fn description(&self) -> &str {
         match *self {
             UpdateServiceSpecificCredentialError::NoSuchEntity(ref cause) => cause,
-            UpdateServiceSpecificCredentialError::Validation(ref cause) => cause,
-            UpdateServiceSpecificCredentialError::Credentials(ref err) => err.description(),
-            UpdateServiceSpecificCredentialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateServiceSpecificCredentialError::ParseError(ref cause) => cause,
-            UpdateServiceSpecificCredentialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27732,20 +23039,10 @@ pub enum UpdateSigningCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSigningCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSigningCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSigningCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27753,25 +23050,25 @@ impl UpdateSigningCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LimitExceeded" => {
-                        return UpdateSigningCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSigningCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UpdateSigningCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSigningCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UpdateSigningCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateSigningCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateSigningCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27780,28 +23077,6 @@ impl UpdateSigningCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateSigningCertificateError {
-    fn from(err: XmlParseError) -> UpdateSigningCertificateError {
-        let XmlParseError(message) = err;
-        UpdateSigningCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSigningCertificateError {
-    fn from(err: CredentialsError) -> UpdateSigningCertificateError {
-        UpdateSigningCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSigningCertificateError {
-    fn from(err: HttpDispatchError) -> UpdateSigningCertificateError {
-        UpdateSigningCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSigningCertificateError {
-    fn from(err: io::Error) -> UpdateSigningCertificateError {
-        UpdateSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateSigningCertificateError {
@@ -27815,13 +23090,6 @@ impl Error for UpdateSigningCertificateError {
             UpdateSigningCertificateError::LimitExceeded(ref cause) => cause,
             UpdateSigningCertificateError::NoSuchEntity(ref cause) => cause,
             UpdateSigningCertificateError::ServiceFailure(ref cause) => cause,
-            UpdateSigningCertificateError::Validation(ref cause) => cause,
-            UpdateSigningCertificateError::Credentials(ref err) => err.description(),
-            UpdateSigningCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSigningCertificateError::ParseError(ref cause) => cause,
-            UpdateSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27840,20 +23108,10 @@ pub enum UpdateUserError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27861,34 +23119,40 @@ impl UpdateUserError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
-                        return UpdateUserError::ConcurrentModification(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateUserError::ConcurrentModification(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "EntityAlreadyExists" => {
-                        return UpdateUserError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateUserError::EntityAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "EntityTemporarilyUnmodifiable" => {
-                        return UpdateUserError::EntityTemporarilyUnmodifiable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateUserError::EntityTemporarilyUnmodifiable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateUserError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateUserError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchEntity" => {
-                        return UpdateUserError::NoSuchEntity(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateUserError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ServiceFailure" => {
-                        return UpdateUserError::ServiceFailure(String::from(parsed_error.message));
+                        return RusotoError::Service(UpdateUserError::ServiceFailure(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateUserError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -27897,28 +23161,6 @@ impl UpdateUserError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateUserError {
-    fn from(err: XmlParseError) -> UpdateUserError {
-        let XmlParseError(message) = err;
-        UpdateUserError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserError {
-    fn from(err: CredentialsError) -> UpdateUserError {
-        UpdateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserError {
-    fn from(err: HttpDispatchError) -> UpdateUserError {
-        UpdateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserError {
-    fn from(err: io::Error) -> UpdateUserError {
-        UpdateUserError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateUserError {
@@ -27935,11 +23177,6 @@ impl Error for UpdateUserError {
             UpdateUserError::LimitExceeded(ref cause) => cause,
             UpdateUserError::NoSuchEntity(ref cause) => cause,
             UpdateUserError::ServiceFailure(ref cause) => cause,
-            UpdateUserError::Validation(ref cause) => cause,
-            UpdateUserError::Credentials(ref err) => err.description(),
-            UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUserError::ParseError(ref cause) => cause,
-            UpdateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -27956,20 +23193,10 @@ pub enum UploadSSHPublicKeyError {
     NoSuchEntity(String),
     /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadSSHPublicKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadSSHPublicKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadSSHPublicKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -27977,35 +23204,37 @@ impl UploadSSHPublicKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateSSHPublicKey" => {
-                        return UploadSSHPublicKeyError::DuplicateSSHPublicKey(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSSHPublicKeyError::DuplicateSSHPublicKey(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidPublicKey" => {
-                        return UploadSSHPublicKeyError::InvalidPublicKey(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSSHPublicKeyError::InvalidPublicKey(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UploadSSHPublicKeyError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSSHPublicKeyError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchEntity" => {
-                        return UploadSSHPublicKeyError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSSHPublicKeyError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnrecognizedPublicKeyEncoding" => {
-                        return UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UploadSSHPublicKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28014,28 +23243,6 @@ impl UploadSSHPublicKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UploadSSHPublicKeyError {
-    fn from(err: XmlParseError) -> UploadSSHPublicKeyError {
-        let XmlParseError(message) = err;
-        UploadSSHPublicKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UploadSSHPublicKeyError {
-    fn from(err: CredentialsError) -> UploadSSHPublicKeyError {
-        UploadSSHPublicKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadSSHPublicKeyError {
-    fn from(err: HttpDispatchError) -> UploadSSHPublicKeyError {
-        UploadSSHPublicKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadSSHPublicKeyError {
-    fn from(err: io::Error) -> UploadSSHPublicKeyError {
-        UploadSSHPublicKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadSSHPublicKeyError {
@@ -28051,13 +23258,6 @@ impl Error for UploadSSHPublicKeyError {
             UploadSSHPublicKeyError::LimitExceeded(ref cause) => cause,
             UploadSSHPublicKeyError::NoSuchEntity(ref cause) => cause,
             UploadSSHPublicKeyError::UnrecognizedPublicKeyEncoding(ref cause) => cause,
-            UploadSSHPublicKeyError::Validation(ref cause) => cause,
-            UploadSSHPublicKeyError::Credentials(ref err) => err.description(),
-            UploadSSHPublicKeyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UploadSSHPublicKeyError::ParseError(ref cause) => cause,
-            UploadSSHPublicKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28074,20 +23274,10 @@ pub enum UploadServerCertificateError {
     MalformedCertificate(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadServerCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadServerCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadServerCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28095,35 +23285,39 @@ impl UploadServerCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EntityAlreadyExists" => {
-                        return UploadServerCertificateError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadServerCertificateError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "KeyPairMismatch" => {
-                        return UploadServerCertificateError::KeyPairMismatch(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadServerCertificateError::KeyPairMismatch(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UploadServerCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadServerCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedCertificate" => {
-                        return UploadServerCertificateError::MalformedCertificate(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadServerCertificateError::MalformedCertificate(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ServiceFailure" => {
-                        return UploadServerCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadServerCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UploadServerCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28132,28 +23326,6 @@ impl UploadServerCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UploadServerCertificateError {
-    fn from(err: XmlParseError) -> UploadServerCertificateError {
-        let XmlParseError(message) = err;
-        UploadServerCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UploadServerCertificateError {
-    fn from(err: CredentialsError) -> UploadServerCertificateError {
-        UploadServerCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadServerCertificateError {
-    fn from(err: HttpDispatchError) -> UploadServerCertificateError {
-        UploadServerCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadServerCertificateError {
-    fn from(err: io::Error) -> UploadServerCertificateError {
-        UploadServerCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadServerCertificateError {
@@ -28169,13 +23341,6 @@ impl Error for UploadServerCertificateError {
             UploadServerCertificateError::LimitExceeded(ref cause) => cause,
             UploadServerCertificateError::MalformedCertificate(ref cause) => cause,
             UploadServerCertificateError::ServiceFailure(ref cause) => cause,
-            UploadServerCertificateError::Validation(ref cause) => cause,
-            UploadServerCertificateError::Credentials(ref err) => err.description(),
-            UploadServerCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UploadServerCertificateError::ParseError(ref cause) => cause,
-            UploadServerCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -28196,20 +23361,10 @@ pub enum UploadSigningCertificateError {
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadSigningCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadSigningCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadSigningCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -28217,45 +23372,53 @@ impl UploadSigningCertificateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateCertificate" => {
-                        return UploadSigningCertificateError::DuplicateCertificate(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadSigningCertificateError::DuplicateCertificate(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "EntityAlreadyExists" => {
-                        return UploadSigningCertificateError::EntityAlreadyExists(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadSigningCertificateError::EntityAlreadyExists(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidCertificate" => {
-                        return UploadSigningCertificateError::InvalidCertificate(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadSigningCertificateError::InvalidCertificate(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return UploadSigningCertificateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSigningCertificateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedCertificate" => {
-                        return UploadSigningCertificateError::MalformedCertificate(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UploadSigningCertificateError::MalformedCertificate(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NoSuchEntity" => {
-                        return UploadSigningCertificateError::NoSuchEntity(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSigningCertificateError::NoSuchEntity(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ServiceFailure" => {
-                        return UploadSigningCertificateError::ServiceFailure(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UploadSigningCertificateError::ServiceFailure(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UploadSigningCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -28264,28 +23427,6 @@ impl UploadSigningCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UploadSigningCertificateError {
-    fn from(err: XmlParseError) -> UploadSigningCertificateError {
-        let XmlParseError(message) = err;
-        UploadSigningCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UploadSigningCertificateError {
-    fn from(err: CredentialsError) -> UploadSigningCertificateError {
-        UploadSigningCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadSigningCertificateError {
-    fn from(err: HttpDispatchError) -> UploadSigningCertificateError {
-        UploadSigningCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadSigningCertificateError {
-    fn from(err: io::Error) -> UploadSigningCertificateError {
-        UploadSigningCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadSigningCertificateError {
@@ -28303,13 +23444,6 @@ impl Error for UploadSigningCertificateError {
             UploadSigningCertificateError::MalformedCertificate(ref cause) => cause,
             UploadSigningCertificateError::NoSuchEntity(ref cause) => cause,
             UploadSigningCertificateError::ServiceFailure(ref cause) => cause,
-            UploadSigningCertificateError::Validation(ref cause) => cause,
-            UploadSigningCertificateError::Credentials(ref err) => err.description(),
-            UploadSigningCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UploadSigningCertificateError::ParseError(ref cause) => cause,
-            UploadSigningCertificateError::Unknown(_) => "unknown error",
         }
     }
 }

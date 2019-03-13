@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2583,20 +2580,10 @@ pub enum ActivateGatewayError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ActivateGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> ActivateGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2609,39 +2596,20 @@ impl ActivateGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ActivateGatewayError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ActivateGatewayError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ActivateGatewayError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ActivateGatewayError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ActivateGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ActivateGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ActivateGatewayError {
-    fn from(err: serde_json::error::Error) -> ActivateGatewayError {
-        ActivateGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ActivateGatewayError {
-    fn from(err: CredentialsError) -> ActivateGatewayError {
-        ActivateGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ActivateGatewayError {
-    fn from(err: HttpDispatchError) -> ActivateGatewayError {
-        ActivateGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ActivateGatewayError {
-    fn from(err: io::Error) -> ActivateGatewayError {
-        ActivateGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ActivateGatewayError {
@@ -2654,11 +2622,6 @@ impl Error for ActivateGatewayError {
         match *self {
             ActivateGatewayError::InternalServerError(ref cause) => cause,
             ActivateGatewayError::InvalidGatewayRequest(ref cause) => cause,
-            ActivateGatewayError::Validation(ref cause) => cause,
-            ActivateGatewayError::Credentials(ref err) => err.description(),
-            ActivateGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ActivateGatewayError::ParseError(ref cause) => cause,
-            ActivateGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2669,20 +2632,10 @@ pub enum AddCacheError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddCacheError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCacheError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2695,39 +2648,20 @@ impl AddCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddCacheError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(AddCacheError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGatewayRequestException" => {
-                    return AddCacheError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(AddCacheError::InvalidGatewayRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AddCacheError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddCacheError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddCacheError {
-    fn from(err: serde_json::error::Error) -> AddCacheError {
-        AddCacheError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddCacheError {
-    fn from(err: CredentialsError) -> AddCacheError {
-        AddCacheError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddCacheError {
-    fn from(err: HttpDispatchError) -> AddCacheError {
-        AddCacheError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddCacheError {
-    fn from(err: io::Error) -> AddCacheError {
-        AddCacheError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddCacheError {
@@ -2740,11 +2674,6 @@ impl Error for AddCacheError {
         match *self {
             AddCacheError::InternalServerError(ref cause) => cause,
             AddCacheError::InvalidGatewayRequest(ref cause) => cause,
-            AddCacheError::Validation(ref cause) => cause,
-            AddCacheError::Credentials(ref err) => err.description(),
-            AddCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddCacheError::ParseError(ref cause) => cause,
-            AddCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2755,20 +2684,10 @@ pub enum AddTagsToResourceError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2781,41 +2700,20 @@ impl AddTagsToResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddTagsToResourceError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return AddTagsToResourceError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(AddTagsToResourceError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddTagsToResourceError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(AddTagsToResourceError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsToResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsToResourceError {
-    fn from(err: serde_json::error::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToResourceError {
-    fn from(err: CredentialsError) -> AddTagsToResourceError {
-        AddTagsToResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToResourceError {
-    fn from(err: HttpDispatchError) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToResourceError {
-    fn from(err: io::Error) -> AddTagsToResourceError {
-        AddTagsToResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsToResourceError {
@@ -2828,13 +2726,6 @@ impl Error for AddTagsToResourceError {
         match *self {
             AddTagsToResourceError::InternalServerError(ref cause) => cause,
             AddTagsToResourceError::InvalidGatewayRequest(ref cause) => cause,
-            AddTagsToResourceError::Validation(ref cause) => cause,
-            AddTagsToResourceError::Credentials(ref err) => err.description(),
-            AddTagsToResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddTagsToResourceError::ParseError(ref cause) => cause,
-            AddTagsToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2845,20 +2736,10 @@ pub enum AddUploadBufferError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddUploadBufferError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddUploadBufferError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddUploadBufferError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2871,39 +2752,20 @@ impl AddUploadBufferError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddUploadBufferError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(AddUploadBufferError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return AddUploadBufferError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(AddUploadBufferError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AddUploadBufferError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddUploadBufferError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddUploadBufferError {
-    fn from(err: serde_json::error::Error) -> AddUploadBufferError {
-        AddUploadBufferError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddUploadBufferError {
-    fn from(err: CredentialsError) -> AddUploadBufferError {
-        AddUploadBufferError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddUploadBufferError {
-    fn from(err: HttpDispatchError) -> AddUploadBufferError {
-        AddUploadBufferError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddUploadBufferError {
-    fn from(err: io::Error) -> AddUploadBufferError {
-        AddUploadBufferError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddUploadBufferError {
@@ -2916,11 +2778,6 @@ impl Error for AddUploadBufferError {
         match *self {
             AddUploadBufferError::InternalServerError(ref cause) => cause,
             AddUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
-            AddUploadBufferError::Validation(ref cause) => cause,
-            AddUploadBufferError::Credentials(ref err) => err.description(),
-            AddUploadBufferError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddUploadBufferError::ParseError(ref cause) => cause,
-            AddUploadBufferError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2931,20 +2788,10 @@ pub enum AddWorkingStorageError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddWorkingStorageError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddWorkingStorageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddWorkingStorageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2957,41 +2804,20 @@ impl AddWorkingStorageError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AddWorkingStorageError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return AddWorkingStorageError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(AddWorkingStorageError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddWorkingStorageError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(AddWorkingStorageError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddWorkingStorageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddWorkingStorageError {
-    fn from(err: serde_json::error::Error) -> AddWorkingStorageError {
-        AddWorkingStorageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddWorkingStorageError {
-    fn from(err: CredentialsError) -> AddWorkingStorageError {
-        AddWorkingStorageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddWorkingStorageError {
-    fn from(err: HttpDispatchError) -> AddWorkingStorageError {
-        AddWorkingStorageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddWorkingStorageError {
-    fn from(err: io::Error) -> AddWorkingStorageError {
-        AddWorkingStorageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddWorkingStorageError {
@@ -3004,13 +2830,6 @@ impl Error for AddWorkingStorageError {
         match *self {
             AddWorkingStorageError::InternalServerError(ref cause) => cause,
             AddWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
-            AddWorkingStorageError::Validation(ref cause) => cause,
-            AddWorkingStorageError::Credentials(ref err) => err.description(),
-            AddWorkingStorageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddWorkingStorageError::ParseError(ref cause) => cause,
-            AddWorkingStorageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3021,20 +2840,10 @@ pub enum AttachVolumeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachVolumeError {
-    pub fn from_response(res: BufferedHttpResponse) -> AttachVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachVolumeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3047,39 +2856,20 @@ impl AttachVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return AttachVolumeError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(AttachVolumeError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return AttachVolumeError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(AttachVolumeError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AttachVolumeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachVolumeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachVolumeError {
-    fn from(err: serde_json::error::Error) -> AttachVolumeError {
-        AttachVolumeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachVolumeError {
-    fn from(err: CredentialsError) -> AttachVolumeError {
-        AttachVolumeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachVolumeError {
-    fn from(err: HttpDispatchError) -> AttachVolumeError {
-        AttachVolumeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachVolumeError {
-    fn from(err: io::Error) -> AttachVolumeError {
-        AttachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachVolumeError {
@@ -3092,11 +2882,6 @@ impl Error for AttachVolumeError {
         match *self {
             AttachVolumeError::InternalServerError(ref cause) => cause,
             AttachVolumeError::InvalidGatewayRequest(ref cause) => cause,
-            AttachVolumeError::Validation(ref cause) => cause,
-            AttachVolumeError::Credentials(ref err) => err.description(),
-            AttachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachVolumeError::ParseError(ref cause) => cause,
-            AttachVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3107,20 +2892,10 @@ pub enum CancelArchivalError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelArchivalError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelArchivalError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelArchivalError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3133,39 +2908,20 @@ impl CancelArchivalError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CancelArchivalError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CancelArchivalError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CancelArchivalError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(CancelArchivalError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CancelArchivalError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelArchivalError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelArchivalError {
-    fn from(err: serde_json::error::Error) -> CancelArchivalError {
-        CancelArchivalError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelArchivalError {
-    fn from(err: CredentialsError) -> CancelArchivalError {
-        CancelArchivalError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelArchivalError {
-    fn from(err: HttpDispatchError) -> CancelArchivalError {
-        CancelArchivalError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelArchivalError {
-    fn from(err: io::Error) -> CancelArchivalError {
-        CancelArchivalError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelArchivalError {
@@ -3178,11 +2934,6 @@ impl Error for CancelArchivalError {
         match *self {
             CancelArchivalError::InternalServerError(ref cause) => cause,
             CancelArchivalError::InvalidGatewayRequest(ref cause) => cause,
-            CancelArchivalError::Validation(ref cause) => cause,
-            CancelArchivalError::Credentials(ref err) => err.description(),
-            CancelArchivalError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelArchivalError::ParseError(ref cause) => cause,
-            CancelArchivalError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3193,20 +2944,10 @@ pub enum CancelRetrievalError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelRetrievalError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelRetrievalError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelRetrievalError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3219,39 +2960,20 @@ impl CancelRetrievalError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CancelRetrievalError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CancelRetrievalError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CancelRetrievalError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(CancelRetrievalError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CancelRetrievalError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelRetrievalError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelRetrievalError {
-    fn from(err: serde_json::error::Error) -> CancelRetrievalError {
-        CancelRetrievalError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelRetrievalError {
-    fn from(err: CredentialsError) -> CancelRetrievalError {
-        CancelRetrievalError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelRetrievalError {
-    fn from(err: HttpDispatchError) -> CancelRetrievalError {
-        CancelRetrievalError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelRetrievalError {
-    fn from(err: io::Error) -> CancelRetrievalError {
-        CancelRetrievalError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelRetrievalError {
@@ -3264,11 +2986,6 @@ impl Error for CancelRetrievalError {
         match *self {
             CancelRetrievalError::InternalServerError(ref cause) => cause,
             CancelRetrievalError::InvalidGatewayRequest(ref cause) => cause,
-            CancelRetrievalError::Validation(ref cause) => cause,
-            CancelRetrievalError::Credentials(ref err) => err.description(),
-            CancelRetrievalError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelRetrievalError::ParseError(ref cause) => cause,
-            CancelRetrievalError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3279,20 +2996,10 @@ pub enum CreateCachediSCSIVolumeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCachediSCSIVolumeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCachediSCSIVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCachediSCSIVolumeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3305,43 +3012,22 @@ impl CreateCachediSCSIVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateCachediSCSIVolumeError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCachediSCSIVolumeError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCachediSCSIVolumeError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateCachediSCSIVolumeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCachediSCSIVolumeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCachediSCSIVolumeError {
-    fn from(err: serde_json::error::Error) -> CreateCachediSCSIVolumeError {
-        CreateCachediSCSIVolumeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCachediSCSIVolumeError {
-    fn from(err: CredentialsError) -> CreateCachediSCSIVolumeError {
-        CreateCachediSCSIVolumeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCachediSCSIVolumeError {
-    fn from(err: HttpDispatchError) -> CreateCachediSCSIVolumeError {
-        CreateCachediSCSIVolumeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCachediSCSIVolumeError {
-    fn from(err: io::Error) -> CreateCachediSCSIVolumeError {
-        CreateCachediSCSIVolumeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCachediSCSIVolumeError {
@@ -3354,13 +3040,6 @@ impl Error for CreateCachediSCSIVolumeError {
         match *self {
             CreateCachediSCSIVolumeError::InternalServerError(ref cause) => cause,
             CreateCachediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
-            CreateCachediSCSIVolumeError::Validation(ref cause) => cause,
-            CreateCachediSCSIVolumeError::Credentials(ref err) => err.description(),
-            CreateCachediSCSIVolumeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCachediSCSIVolumeError::ParseError(ref cause) => cause,
-            CreateCachediSCSIVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3371,20 +3050,10 @@ pub enum CreateNFSFileShareError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNFSFileShareError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateNFSFileShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNFSFileShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3397,41 +3066,20 @@ impl CreateNFSFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateNFSFileShareError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return CreateNFSFileShareError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateNFSFileShareError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateNFSFileShareError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(CreateNFSFileShareError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateNFSFileShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateNFSFileShareError {
-    fn from(err: serde_json::error::Error) -> CreateNFSFileShareError {
-        CreateNFSFileShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateNFSFileShareError {
-    fn from(err: CredentialsError) -> CreateNFSFileShareError {
-        CreateNFSFileShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateNFSFileShareError {
-    fn from(err: HttpDispatchError) -> CreateNFSFileShareError {
-        CreateNFSFileShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateNFSFileShareError {
-    fn from(err: io::Error) -> CreateNFSFileShareError {
-        CreateNFSFileShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateNFSFileShareError {
@@ -3444,13 +3092,6 @@ impl Error for CreateNFSFileShareError {
         match *self {
             CreateNFSFileShareError::InternalServerError(ref cause) => cause,
             CreateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
-            CreateNFSFileShareError::Validation(ref cause) => cause,
-            CreateNFSFileShareError::Credentials(ref err) => err.description(),
-            CreateNFSFileShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateNFSFileShareError::ParseError(ref cause) => cause,
-            CreateNFSFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3461,20 +3102,10 @@ pub enum CreateSMBFileShareError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSMBFileShareError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSMBFileShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSMBFileShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3487,41 +3118,20 @@ impl CreateSMBFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateSMBFileShareError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return CreateSMBFileShareError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSMBFileShareError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateSMBFileShareError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(CreateSMBFileShareError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSMBFileShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSMBFileShareError {
-    fn from(err: serde_json::error::Error) -> CreateSMBFileShareError {
-        CreateSMBFileShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSMBFileShareError {
-    fn from(err: CredentialsError) -> CreateSMBFileShareError {
-        CreateSMBFileShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSMBFileShareError {
-    fn from(err: HttpDispatchError) -> CreateSMBFileShareError {
-        CreateSMBFileShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSMBFileShareError {
-    fn from(err: io::Error) -> CreateSMBFileShareError {
-        CreateSMBFileShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSMBFileShareError {
@@ -3534,13 +3144,6 @@ impl Error for CreateSMBFileShareError {
         match *self {
             CreateSMBFileShareError::InternalServerError(ref cause) => cause,
             CreateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
-            CreateSMBFileShareError::Validation(ref cause) => cause,
-            CreateSMBFileShareError::Credentials(ref err) => err.description(),
-            CreateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSMBFileShareError::ParseError(ref cause) => cause,
-            CreateSMBFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3553,20 +3156,10 @@ pub enum CreateSnapshotError {
     InvalidGatewayRequest(String),
     /// <p>An internal server error has occurred because the service is unavailable. For more information, see the error and message fields.</p>
     ServiceUnavailableError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3579,42 +3172,25 @@ impl CreateSnapshotError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateSnapshotError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateSnapshotError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateSnapshotError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(CreateSnapshotError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableError" => {
-                    return CreateSnapshotError::ServiceUnavailableError(String::from(error_message));
+                    return RusotoError::Service(CreateSnapshotError::ServiceUnavailableError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateSnapshotError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSnapshotError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSnapshotError {
-    fn from(err: serde_json::error::Error) -> CreateSnapshotError {
-        CreateSnapshotError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSnapshotError {
-    fn from(err: CredentialsError) -> CreateSnapshotError {
-        CreateSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateSnapshotError {
-        CreateSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSnapshotError {
-    fn from(err: io::Error) -> CreateSnapshotError {
-        CreateSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSnapshotError {
@@ -3628,11 +3204,6 @@ impl Error for CreateSnapshotError {
             CreateSnapshotError::InternalServerError(ref cause) => cause,
             CreateSnapshotError::InvalidGatewayRequest(ref cause) => cause,
             CreateSnapshotError::ServiceUnavailableError(ref cause) => cause,
-            CreateSnapshotError::Validation(ref cause) => cause,
-            CreateSnapshotError::Credentials(ref err) => err.description(),
-            CreateSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSnapshotError::ParseError(ref cause) => cause,
-            CreateSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3645,20 +3216,12 @@ pub enum CreateSnapshotFromVolumeRecoveryPointError {
     InvalidGatewayRequest(String),
     /// <p>An internal server error has occurred because the service is unavailable. For more information, see the error and message fields.</p>
     ServiceUnavailableError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotFromVolumeRecoveryPointError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotFromVolumeRecoveryPointError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateSnapshotFromVolumeRecoveryPointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3671,50 +3234,31 @@ impl CreateSnapshotFromVolumeRecoveryPointError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceUnavailableError" => {
-                    return CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return CreateSnapshotFromVolumeRecoveryPointError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSnapshotFromVolumeRecoveryPointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSnapshotFromVolumeRecoveryPointError {
-    fn from(err: serde_json::error::Error) -> CreateSnapshotFromVolumeRecoveryPointError {
-        CreateSnapshotFromVolumeRecoveryPointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSnapshotFromVolumeRecoveryPointError {
-    fn from(err: CredentialsError) -> CreateSnapshotFromVolumeRecoveryPointError {
-        CreateSnapshotFromVolumeRecoveryPointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSnapshotFromVolumeRecoveryPointError {
-    fn from(err: HttpDispatchError) -> CreateSnapshotFromVolumeRecoveryPointError {
-        CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSnapshotFromVolumeRecoveryPointError {
-    fn from(err: io::Error) -> CreateSnapshotFromVolumeRecoveryPointError {
-        CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSnapshotFromVolumeRecoveryPointError {
@@ -3728,13 +3272,6 @@ impl Error for CreateSnapshotFromVolumeRecoveryPointError {
             CreateSnapshotFromVolumeRecoveryPointError::InternalServerError(ref cause) => cause,
             CreateSnapshotFromVolumeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
             CreateSnapshotFromVolumeRecoveryPointError::ServiceUnavailableError(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::Validation(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::Credentials(ref err) => err.description(),
-            CreateSnapshotFromVolumeRecoveryPointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSnapshotFromVolumeRecoveryPointError::ParseError(ref cause) => cause,
-            CreateSnapshotFromVolumeRecoveryPointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3745,20 +3282,10 @@ pub enum CreateStorediSCSIVolumeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStorediSCSIVolumeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStorediSCSIVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStorediSCSIVolumeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3771,43 +3298,22 @@ impl CreateStorediSCSIVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateStorediSCSIVolumeError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStorediSCSIVolumeError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateStorediSCSIVolumeError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateStorediSCSIVolumeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateStorediSCSIVolumeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateStorediSCSIVolumeError {
-    fn from(err: serde_json::error::Error) -> CreateStorediSCSIVolumeError {
-        CreateStorediSCSIVolumeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateStorediSCSIVolumeError {
-    fn from(err: CredentialsError) -> CreateStorediSCSIVolumeError {
-        CreateStorediSCSIVolumeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStorediSCSIVolumeError {
-    fn from(err: HttpDispatchError) -> CreateStorediSCSIVolumeError {
-        CreateStorediSCSIVolumeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStorediSCSIVolumeError {
-    fn from(err: io::Error) -> CreateStorediSCSIVolumeError {
-        CreateStorediSCSIVolumeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateStorediSCSIVolumeError {
@@ -3820,13 +3326,6 @@ impl Error for CreateStorediSCSIVolumeError {
         match *self {
             CreateStorediSCSIVolumeError::InternalServerError(ref cause) => cause,
             CreateStorediSCSIVolumeError::InvalidGatewayRequest(ref cause) => cause,
-            CreateStorediSCSIVolumeError::Validation(ref cause) => cause,
-            CreateStorediSCSIVolumeError::Credentials(ref err) => err.description(),
-            CreateStorediSCSIVolumeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateStorediSCSIVolumeError::ParseError(ref cause) => cause,
-            CreateStorediSCSIVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3837,20 +3336,10 @@ pub enum CreateTapeWithBarcodeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTapeWithBarcodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTapeWithBarcodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTapeWithBarcodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3863,43 +3352,20 @@ impl CreateTapeWithBarcodeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateTapeWithBarcodeError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTapeWithBarcodeError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateTapeWithBarcodeError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTapeWithBarcodeError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateTapeWithBarcodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTapeWithBarcodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTapeWithBarcodeError {
-    fn from(err: serde_json::error::Error) -> CreateTapeWithBarcodeError {
-        CreateTapeWithBarcodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTapeWithBarcodeError {
-    fn from(err: CredentialsError) -> CreateTapeWithBarcodeError {
-        CreateTapeWithBarcodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTapeWithBarcodeError {
-    fn from(err: HttpDispatchError) -> CreateTapeWithBarcodeError {
-        CreateTapeWithBarcodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTapeWithBarcodeError {
-    fn from(err: io::Error) -> CreateTapeWithBarcodeError {
-        CreateTapeWithBarcodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTapeWithBarcodeError {
@@ -3912,13 +3378,6 @@ impl Error for CreateTapeWithBarcodeError {
         match *self {
             CreateTapeWithBarcodeError::InternalServerError(ref cause) => cause,
             CreateTapeWithBarcodeError::InvalidGatewayRequest(ref cause) => cause,
-            CreateTapeWithBarcodeError::Validation(ref cause) => cause,
-            CreateTapeWithBarcodeError::Credentials(ref err) => err.description(),
-            CreateTapeWithBarcodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTapeWithBarcodeError::ParseError(ref cause) => cause,
-            CreateTapeWithBarcodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3929,20 +3388,10 @@ pub enum CreateTapesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTapesError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTapesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTapesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3955,39 +3404,20 @@ impl CreateTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateTapesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateTapesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return CreateTapesError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(CreateTapesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateTapesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTapesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTapesError {
-    fn from(err: serde_json::error::Error) -> CreateTapesError {
-        CreateTapesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTapesError {
-    fn from(err: CredentialsError) -> CreateTapesError {
-        CreateTapesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTapesError {
-    fn from(err: HttpDispatchError) -> CreateTapesError {
-        CreateTapesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTapesError {
-    fn from(err: io::Error) -> CreateTapesError {
-        CreateTapesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTapesError {
@@ -4000,11 +3430,6 @@ impl Error for CreateTapesError {
         match *self {
             CreateTapesError::InternalServerError(ref cause) => cause,
             CreateTapesError::InvalidGatewayRequest(ref cause) => cause,
-            CreateTapesError::Validation(ref cause) => cause,
-            CreateTapesError::Credentials(ref err) => err.description(),
-            CreateTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTapesError::ParseError(ref cause) => cause,
-            CreateTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4015,20 +3440,10 @@ pub enum DeleteBandwidthRateLimitError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBandwidthRateLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBandwidthRateLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBandwidthRateLimitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4041,43 +3456,22 @@ impl DeleteBandwidthRateLimitError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteBandwidthRateLimitError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteBandwidthRateLimitError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteBandwidthRateLimitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBandwidthRateLimitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBandwidthRateLimitError {
-    fn from(err: serde_json::error::Error) -> DeleteBandwidthRateLimitError {
-        DeleteBandwidthRateLimitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBandwidthRateLimitError {
-    fn from(err: CredentialsError) -> DeleteBandwidthRateLimitError {
-        DeleteBandwidthRateLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBandwidthRateLimitError {
-    fn from(err: HttpDispatchError) -> DeleteBandwidthRateLimitError {
-        DeleteBandwidthRateLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBandwidthRateLimitError {
-    fn from(err: io::Error) -> DeleteBandwidthRateLimitError {
-        DeleteBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBandwidthRateLimitError {
@@ -4090,13 +3484,6 @@ impl Error for DeleteBandwidthRateLimitError {
         match *self {
             DeleteBandwidthRateLimitError::InternalServerError(ref cause) => cause,
             DeleteBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteBandwidthRateLimitError::Validation(ref cause) => cause,
-            DeleteBandwidthRateLimitError::Credentials(ref err) => err.description(),
-            DeleteBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBandwidthRateLimitError::ParseError(ref cause) => cause,
-            DeleteBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4107,20 +3494,10 @@ pub enum DeleteChapCredentialsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteChapCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteChapCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteChapCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4133,43 +3510,20 @@ impl DeleteChapCredentialsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteChapCredentialsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteChapCredentialsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteChapCredentialsError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteChapCredentialsError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteChapCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteChapCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteChapCredentialsError {
-    fn from(err: serde_json::error::Error) -> DeleteChapCredentialsError {
-        DeleteChapCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteChapCredentialsError {
-    fn from(err: CredentialsError) -> DeleteChapCredentialsError {
-        DeleteChapCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteChapCredentialsError {
-    fn from(err: HttpDispatchError) -> DeleteChapCredentialsError {
-        DeleteChapCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteChapCredentialsError {
-    fn from(err: io::Error) -> DeleteChapCredentialsError {
-        DeleteChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteChapCredentialsError {
@@ -4182,13 +3536,6 @@ impl Error for DeleteChapCredentialsError {
         match *self {
             DeleteChapCredentialsError::InternalServerError(ref cause) => cause,
             DeleteChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteChapCredentialsError::Validation(ref cause) => cause,
-            DeleteChapCredentialsError::Credentials(ref err) => err.description(),
-            DeleteChapCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteChapCredentialsError::ParseError(ref cause) => cause,
-            DeleteChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4199,20 +3546,10 @@ pub enum DeleteFileShareError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFileShareError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4225,39 +3562,20 @@ impl DeleteFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteFileShareError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteFileShareError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteFileShareError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteFileShareError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteFileShareError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFileShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFileShareError {
-    fn from(err: serde_json::error::Error) -> DeleteFileShareError {
-        DeleteFileShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFileShareError {
-    fn from(err: CredentialsError) -> DeleteFileShareError {
-        DeleteFileShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFileShareError {
-    fn from(err: HttpDispatchError) -> DeleteFileShareError {
-        DeleteFileShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFileShareError {
-    fn from(err: io::Error) -> DeleteFileShareError {
-        DeleteFileShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFileShareError {
@@ -4270,11 +3588,6 @@ impl Error for DeleteFileShareError {
         match *self {
             DeleteFileShareError::InternalServerError(ref cause) => cause,
             DeleteFileShareError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteFileShareError::Validation(ref cause) => cause,
-            DeleteFileShareError::Credentials(ref err) => err.description(),
-            DeleteFileShareError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFileShareError::ParseError(ref cause) => cause,
-            DeleteFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4285,20 +3598,10 @@ pub enum DeleteGatewayError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4311,39 +3614,20 @@ impl DeleteGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteGatewayError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteGatewayError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteGatewayError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteGatewayError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGatewayError {
-    fn from(err: serde_json::error::Error) -> DeleteGatewayError {
-        DeleteGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGatewayError {
-    fn from(err: CredentialsError) -> DeleteGatewayError {
-        DeleteGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGatewayError {
-    fn from(err: HttpDispatchError) -> DeleteGatewayError {
-        DeleteGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGatewayError {
-    fn from(err: io::Error) -> DeleteGatewayError {
-        DeleteGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGatewayError {
@@ -4356,11 +3640,6 @@ impl Error for DeleteGatewayError {
         match *self {
             DeleteGatewayError::InternalServerError(ref cause) => cause,
             DeleteGatewayError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteGatewayError::Validation(ref cause) => cause,
-            DeleteGatewayError::Credentials(ref err) => err.description(),
-            DeleteGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGatewayError::ParseError(ref cause) => cause,
-            DeleteGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4371,20 +3650,10 @@ pub enum DeleteSnapshotScheduleError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4397,43 +3666,20 @@ impl DeleteSnapshotScheduleError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteSnapshotScheduleError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSnapshotScheduleError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSnapshotScheduleError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSnapshotScheduleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSnapshotScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSnapshotScheduleError {
-    fn from(err: serde_json::error::Error) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSnapshotScheduleError {
-    fn from(err: CredentialsError) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSnapshotScheduleError {
-    fn from(err: io::Error) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
@@ -4446,13 +3692,6 @@ impl Error for DeleteSnapshotScheduleError {
         match *self {
             DeleteSnapshotScheduleError::InternalServerError(ref cause) => cause,
             DeleteSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteSnapshotScheduleError::Validation(ref cause) => cause,
-            DeleteSnapshotScheduleError::Credentials(ref err) => err.description(),
-            DeleteSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSnapshotScheduleError::ParseError(ref cause) => cause,
-            DeleteSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4463,20 +3702,10 @@ pub enum DeleteTapeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTapeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTapeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTapeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4489,39 +3718,20 @@ impl DeleteTapeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTapeError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteTapeError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteTapeError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteTapeError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTapeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTapeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTapeError {
-    fn from(err: serde_json::error::Error) -> DeleteTapeError {
-        DeleteTapeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTapeError {
-    fn from(err: CredentialsError) -> DeleteTapeError {
-        DeleteTapeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTapeError {
-    fn from(err: HttpDispatchError) -> DeleteTapeError {
-        DeleteTapeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTapeError {
-    fn from(err: io::Error) -> DeleteTapeError {
-        DeleteTapeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTapeError {
@@ -4534,11 +3744,6 @@ impl Error for DeleteTapeError {
         match *self {
             DeleteTapeError::InternalServerError(ref cause) => cause,
             DeleteTapeError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteTapeError::Validation(ref cause) => cause,
-            DeleteTapeError::Credentials(ref err) => err.description(),
-            DeleteTapeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTapeError::ParseError(ref cause) => cause,
-            DeleteTapeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4549,20 +3754,10 @@ pub enum DeleteTapeArchiveError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTapeArchiveError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTapeArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTapeArchiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4575,41 +3770,20 @@ impl DeleteTapeArchiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTapeArchiveError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return DeleteTapeArchiveError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteTapeArchiveError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteTapeArchiveError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(DeleteTapeArchiveError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTapeArchiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTapeArchiveError {
-    fn from(err: serde_json::error::Error) -> DeleteTapeArchiveError {
-        DeleteTapeArchiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTapeArchiveError {
-    fn from(err: CredentialsError) -> DeleteTapeArchiveError {
-        DeleteTapeArchiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTapeArchiveError {
-    fn from(err: HttpDispatchError) -> DeleteTapeArchiveError {
-        DeleteTapeArchiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTapeArchiveError {
-    fn from(err: io::Error) -> DeleteTapeArchiveError {
-        DeleteTapeArchiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTapeArchiveError {
@@ -4622,13 +3796,6 @@ impl Error for DeleteTapeArchiveError {
         match *self {
             DeleteTapeArchiveError::InternalServerError(ref cause) => cause,
             DeleteTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteTapeArchiveError::Validation(ref cause) => cause,
-            DeleteTapeArchiveError::Credentials(ref err) => err.description(),
-            DeleteTapeArchiveError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTapeArchiveError::ParseError(ref cause) => cause,
-            DeleteTapeArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4639,20 +3806,10 @@ pub enum DeleteVolumeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVolumeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVolumeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4665,39 +3822,20 @@ impl DeleteVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteVolumeError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteVolumeError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DeleteVolumeError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteVolumeError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteVolumeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVolumeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVolumeError {
-    fn from(err: serde_json::error::Error) -> DeleteVolumeError {
-        DeleteVolumeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVolumeError {
-    fn from(err: CredentialsError) -> DeleteVolumeError {
-        DeleteVolumeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVolumeError {
-    fn from(err: HttpDispatchError) -> DeleteVolumeError {
-        DeleteVolumeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVolumeError {
-    fn from(err: io::Error) -> DeleteVolumeError {
-        DeleteVolumeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVolumeError {
@@ -4710,11 +3848,6 @@ impl Error for DeleteVolumeError {
         match *self {
             DeleteVolumeError::InternalServerError(ref cause) => cause,
             DeleteVolumeError::InvalidGatewayRequest(ref cause) => cause,
-            DeleteVolumeError::Validation(ref cause) => cause,
-            DeleteVolumeError::Credentials(ref err) => err.description(),
-            DeleteVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVolumeError::ParseError(ref cause) => cause,
-            DeleteVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4725,20 +3858,12 @@ pub enum DescribeBandwidthRateLimitError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBandwidthRateLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBandwidthRateLimitError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeBandwidthRateLimitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4751,43 +3876,24 @@ impl DescribeBandwidthRateLimitError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeBandwidthRateLimitError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeBandwidthRateLimitError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeBandwidthRateLimitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBandwidthRateLimitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBandwidthRateLimitError {
-    fn from(err: serde_json::error::Error) -> DescribeBandwidthRateLimitError {
-        DescribeBandwidthRateLimitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBandwidthRateLimitError {
-    fn from(err: CredentialsError) -> DescribeBandwidthRateLimitError {
-        DescribeBandwidthRateLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBandwidthRateLimitError {
-    fn from(err: HttpDispatchError) -> DescribeBandwidthRateLimitError {
-        DescribeBandwidthRateLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBandwidthRateLimitError {
-    fn from(err: io::Error) -> DescribeBandwidthRateLimitError {
-        DescribeBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBandwidthRateLimitError {
@@ -4800,13 +3906,6 @@ impl Error for DescribeBandwidthRateLimitError {
         match *self {
             DescribeBandwidthRateLimitError::InternalServerError(ref cause) => cause,
             DescribeBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeBandwidthRateLimitError::Validation(ref cause) => cause,
-            DescribeBandwidthRateLimitError::Credentials(ref err) => err.description(),
-            DescribeBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeBandwidthRateLimitError::ParseError(ref cause) => cause,
-            DescribeBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4817,20 +3916,10 @@ pub enum DescribeCacheError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCacheError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCacheError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4843,39 +3932,20 @@ impl DescribeCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeCacheError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeCacheError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeCacheError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeCacheError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeCacheError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCacheError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCacheError {
-    fn from(err: serde_json::error::Error) -> DescribeCacheError {
-        DescribeCacheError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCacheError {
-    fn from(err: CredentialsError) -> DescribeCacheError {
-        DescribeCacheError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCacheError {
-    fn from(err: HttpDispatchError) -> DescribeCacheError {
-        DescribeCacheError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCacheError {
-    fn from(err: io::Error) -> DescribeCacheError {
-        DescribeCacheError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCacheError {
@@ -4888,11 +3958,6 @@ impl Error for DescribeCacheError {
         match *self {
             DescribeCacheError::InternalServerError(ref cause) => cause,
             DescribeCacheError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeCacheError::Validation(ref cause) => cause,
-            DescribeCacheError::Credentials(ref err) => err.description(),
-            DescribeCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeCacheError::ParseError(ref cause) => cause,
-            DescribeCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4903,20 +3968,12 @@ pub enum DescribeCachediSCSIVolumesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCachediSCSIVolumesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCachediSCSIVolumesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeCachediSCSIVolumesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4929,43 +3986,24 @@ impl DescribeCachediSCSIVolumesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeCachediSCSIVolumesError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCachediSCSIVolumesError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCachediSCSIVolumesError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeCachediSCSIVolumesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCachediSCSIVolumesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCachediSCSIVolumesError {
-    fn from(err: serde_json::error::Error) -> DescribeCachediSCSIVolumesError {
-        DescribeCachediSCSIVolumesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCachediSCSIVolumesError {
-    fn from(err: CredentialsError) -> DescribeCachediSCSIVolumesError {
-        DescribeCachediSCSIVolumesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCachediSCSIVolumesError {
-    fn from(err: HttpDispatchError) -> DescribeCachediSCSIVolumesError {
-        DescribeCachediSCSIVolumesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCachediSCSIVolumesError {
-    fn from(err: io::Error) -> DescribeCachediSCSIVolumesError {
-        DescribeCachediSCSIVolumesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCachediSCSIVolumesError {
@@ -4978,13 +4016,6 @@ impl Error for DescribeCachediSCSIVolumesError {
         match *self {
             DescribeCachediSCSIVolumesError::InternalServerError(ref cause) => cause,
             DescribeCachediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeCachediSCSIVolumesError::Validation(ref cause) => cause,
-            DescribeCachediSCSIVolumesError::Credentials(ref err) => err.description(),
-            DescribeCachediSCSIVolumesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCachediSCSIVolumesError::ParseError(ref cause) => cause,
-            DescribeCachediSCSIVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4995,20 +4026,10 @@ pub enum DescribeChapCredentialsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeChapCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeChapCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeChapCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5021,43 +4042,22 @@ impl DescribeChapCredentialsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeChapCredentialsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeChapCredentialsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeChapCredentialsError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeChapCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeChapCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeChapCredentialsError {
-    fn from(err: serde_json::error::Error) -> DescribeChapCredentialsError {
-        DescribeChapCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeChapCredentialsError {
-    fn from(err: CredentialsError) -> DescribeChapCredentialsError {
-        DescribeChapCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeChapCredentialsError {
-    fn from(err: HttpDispatchError) -> DescribeChapCredentialsError {
-        DescribeChapCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeChapCredentialsError {
-    fn from(err: io::Error) -> DescribeChapCredentialsError {
-        DescribeChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeChapCredentialsError {
@@ -5070,13 +4070,6 @@ impl Error for DescribeChapCredentialsError {
         match *self {
             DescribeChapCredentialsError::InternalServerError(ref cause) => cause,
             DescribeChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeChapCredentialsError::Validation(ref cause) => cause,
-            DescribeChapCredentialsError::Credentials(ref err) => err.description(),
-            DescribeChapCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeChapCredentialsError::ParseError(ref cause) => cause,
-            DescribeChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5087,20 +4080,12 @@ pub enum DescribeGatewayInformationError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGatewayInformationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGatewayInformationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeGatewayInformationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5113,43 +4098,24 @@ impl DescribeGatewayInformationError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeGatewayInformationError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeGatewayInformationError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeGatewayInformationError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeGatewayInformationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeGatewayInformationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeGatewayInformationError {
-    fn from(err: serde_json::error::Error) -> DescribeGatewayInformationError {
-        DescribeGatewayInformationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGatewayInformationError {
-    fn from(err: CredentialsError) -> DescribeGatewayInformationError {
-        DescribeGatewayInformationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGatewayInformationError {
-    fn from(err: HttpDispatchError) -> DescribeGatewayInformationError {
-        DescribeGatewayInformationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGatewayInformationError {
-    fn from(err: io::Error) -> DescribeGatewayInformationError {
-        DescribeGatewayInformationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeGatewayInformationError {
@@ -5162,13 +4128,6 @@ impl Error for DescribeGatewayInformationError {
         match *self {
             DescribeGatewayInformationError::InternalServerError(ref cause) => cause,
             DescribeGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeGatewayInformationError::Validation(ref cause) => cause,
-            DescribeGatewayInformationError::Credentials(ref err) => err.description(),
-            DescribeGatewayInformationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeGatewayInformationError::ParseError(ref cause) => cause,
-            DescribeGatewayInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5179,20 +4138,12 @@ pub enum DescribeMaintenanceStartTimeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMaintenanceStartTimeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeMaintenanceStartTimeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeMaintenanceStartTimeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5205,43 +4156,24 @@ impl DescribeMaintenanceStartTimeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeMaintenanceStartTimeError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeMaintenanceStartTimeError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeMaintenanceStartTimeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeMaintenanceStartTimeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeMaintenanceStartTimeError {
-    fn from(err: serde_json::error::Error) -> DescribeMaintenanceStartTimeError {
-        DescribeMaintenanceStartTimeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeMaintenanceStartTimeError {
-    fn from(err: CredentialsError) -> DescribeMaintenanceStartTimeError {
-        DescribeMaintenanceStartTimeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeMaintenanceStartTimeError {
-    fn from(err: HttpDispatchError) -> DescribeMaintenanceStartTimeError {
-        DescribeMaintenanceStartTimeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeMaintenanceStartTimeError {
-    fn from(err: io::Error) -> DescribeMaintenanceStartTimeError {
-        DescribeMaintenanceStartTimeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeMaintenanceStartTimeError {
@@ -5254,13 +4186,6 @@ impl Error for DescribeMaintenanceStartTimeError {
         match *self {
             DescribeMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
             DescribeMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeMaintenanceStartTimeError::Validation(ref cause) => cause,
-            DescribeMaintenanceStartTimeError::Credentials(ref err) => err.description(),
-            DescribeMaintenanceStartTimeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeMaintenanceStartTimeError::ParseError(ref cause) => cause,
-            DescribeMaintenanceStartTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5271,20 +4196,10 @@ pub enum DescribeNFSFileSharesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNFSFileSharesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeNFSFileSharesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeNFSFileSharesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5297,43 +4212,20 @@ impl DescribeNFSFileSharesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeNFSFileSharesError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeNFSFileSharesError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeNFSFileSharesError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeNFSFileSharesError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeNFSFileSharesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeNFSFileSharesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeNFSFileSharesError {
-    fn from(err: serde_json::error::Error) -> DescribeNFSFileSharesError {
-        DescribeNFSFileSharesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeNFSFileSharesError {
-    fn from(err: CredentialsError) -> DescribeNFSFileSharesError {
-        DescribeNFSFileSharesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeNFSFileSharesError {
-    fn from(err: HttpDispatchError) -> DescribeNFSFileSharesError {
-        DescribeNFSFileSharesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeNFSFileSharesError {
-    fn from(err: io::Error) -> DescribeNFSFileSharesError {
-        DescribeNFSFileSharesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeNFSFileSharesError {
@@ -5346,13 +4238,6 @@ impl Error for DescribeNFSFileSharesError {
         match *self {
             DescribeNFSFileSharesError::InternalServerError(ref cause) => cause,
             DescribeNFSFileSharesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeNFSFileSharesError::Validation(ref cause) => cause,
-            DescribeNFSFileSharesError::Credentials(ref err) => err.description(),
-            DescribeNFSFileSharesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeNFSFileSharesError::ParseError(ref cause) => cause,
-            DescribeNFSFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5363,20 +4248,10 @@ pub enum DescribeSMBFileSharesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSMBFileSharesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSMBFileSharesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSMBFileSharesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5389,43 +4264,20 @@ impl DescribeSMBFileSharesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeSMBFileSharesError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSMBFileSharesError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeSMBFileSharesError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSMBFileSharesError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeSMBFileSharesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSMBFileSharesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSMBFileSharesError {
-    fn from(err: serde_json::error::Error) -> DescribeSMBFileSharesError {
-        DescribeSMBFileSharesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSMBFileSharesError {
-    fn from(err: CredentialsError) -> DescribeSMBFileSharesError {
-        DescribeSMBFileSharesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSMBFileSharesError {
-    fn from(err: HttpDispatchError) -> DescribeSMBFileSharesError {
-        DescribeSMBFileSharesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSMBFileSharesError {
-    fn from(err: io::Error) -> DescribeSMBFileSharesError {
-        DescribeSMBFileSharesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSMBFileSharesError {
@@ -5438,13 +4290,6 @@ impl Error for DescribeSMBFileSharesError {
         match *self {
             DescribeSMBFileSharesError::InternalServerError(ref cause) => cause,
             DescribeSMBFileSharesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeSMBFileSharesError::Validation(ref cause) => cause,
-            DescribeSMBFileSharesError::Credentials(ref err) => err.description(),
-            DescribeSMBFileSharesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSMBFileSharesError::ParseError(ref cause) => cause,
-            DescribeSMBFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5455,20 +4300,10 @@ pub enum DescribeSMBSettingsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSMBSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSMBSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSMBSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5481,43 +4316,20 @@ impl DescribeSMBSettingsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeSMBSettingsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSMBSettingsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeSMBSettingsError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSMBSettingsError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeSMBSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSMBSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSMBSettingsError {
-    fn from(err: serde_json::error::Error) -> DescribeSMBSettingsError {
-        DescribeSMBSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSMBSettingsError {
-    fn from(err: CredentialsError) -> DescribeSMBSettingsError {
-        DescribeSMBSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSMBSettingsError {
-    fn from(err: HttpDispatchError) -> DescribeSMBSettingsError {
-        DescribeSMBSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSMBSettingsError {
-    fn from(err: io::Error) -> DescribeSMBSettingsError {
-        DescribeSMBSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSMBSettingsError {
@@ -5530,13 +4342,6 @@ impl Error for DescribeSMBSettingsError {
         match *self {
             DescribeSMBSettingsError::InternalServerError(ref cause) => cause,
             DescribeSMBSettingsError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeSMBSettingsError::Validation(ref cause) => cause,
-            DescribeSMBSettingsError::Credentials(ref err) => err.description(),
-            DescribeSMBSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSMBSettingsError::ParseError(ref cause) => cause,
-            DescribeSMBSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5547,20 +4352,10 @@ pub enum DescribeSnapshotScheduleError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5573,43 +4368,22 @@ impl DescribeSnapshotScheduleError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeSnapshotScheduleError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSnapshotScheduleError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeSnapshotScheduleError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeSnapshotScheduleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSnapshotScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSnapshotScheduleError {
-    fn from(err: serde_json::error::Error) -> DescribeSnapshotScheduleError {
-        DescribeSnapshotScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSnapshotScheduleError {
-    fn from(err: CredentialsError) -> DescribeSnapshotScheduleError {
-        DescribeSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> DescribeSnapshotScheduleError {
-        DescribeSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSnapshotScheduleError {
-    fn from(err: io::Error) -> DescribeSnapshotScheduleError {
-        DescribeSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSnapshotScheduleError {
@@ -5622,13 +4396,6 @@ impl Error for DescribeSnapshotScheduleError {
         match *self {
             DescribeSnapshotScheduleError::InternalServerError(ref cause) => cause,
             DescribeSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeSnapshotScheduleError::Validation(ref cause) => cause,
-            DescribeSnapshotScheduleError::Credentials(ref err) => err.description(),
-            DescribeSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSnapshotScheduleError::ParseError(ref cause) => cause,
-            DescribeSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5639,20 +4406,12 @@ pub enum DescribeStorediSCSIVolumesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStorediSCSIVolumesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStorediSCSIVolumesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeStorediSCSIVolumesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5665,43 +4424,24 @@ impl DescribeStorediSCSIVolumesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeStorediSCSIVolumesError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeStorediSCSIVolumesError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeStorediSCSIVolumesError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeStorediSCSIVolumesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeStorediSCSIVolumesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeStorediSCSIVolumesError {
-    fn from(err: serde_json::error::Error) -> DescribeStorediSCSIVolumesError {
-        DescribeStorediSCSIVolumesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStorediSCSIVolumesError {
-    fn from(err: CredentialsError) -> DescribeStorediSCSIVolumesError {
-        DescribeStorediSCSIVolumesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStorediSCSIVolumesError {
-    fn from(err: HttpDispatchError) -> DescribeStorediSCSIVolumesError {
-        DescribeStorediSCSIVolumesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStorediSCSIVolumesError {
-    fn from(err: io::Error) -> DescribeStorediSCSIVolumesError {
-        DescribeStorediSCSIVolumesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeStorediSCSIVolumesError {
@@ -5714,13 +4454,6 @@ impl Error for DescribeStorediSCSIVolumesError {
         match *self {
             DescribeStorediSCSIVolumesError::InternalServerError(ref cause) => cause,
             DescribeStorediSCSIVolumesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeStorediSCSIVolumesError::Validation(ref cause) => cause,
-            DescribeStorediSCSIVolumesError::Credentials(ref err) => err.description(),
-            DescribeStorediSCSIVolumesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeStorediSCSIVolumesError::ParseError(ref cause) => cause,
-            DescribeStorediSCSIVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5731,20 +4464,10 @@ pub enum DescribeTapeArchivesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapeArchivesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapeArchivesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTapeArchivesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5757,43 +4480,20 @@ impl DescribeTapeArchivesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTapeArchivesError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeTapeArchivesError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeTapeArchivesError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeTapeArchivesError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeTapeArchivesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTapeArchivesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTapeArchivesError {
-    fn from(err: serde_json::error::Error) -> DescribeTapeArchivesError {
-        DescribeTapeArchivesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTapeArchivesError {
-    fn from(err: CredentialsError) -> DescribeTapeArchivesError {
-        DescribeTapeArchivesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTapeArchivesError {
-    fn from(err: HttpDispatchError) -> DescribeTapeArchivesError {
-        DescribeTapeArchivesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTapeArchivesError {
-    fn from(err: io::Error) -> DescribeTapeArchivesError {
-        DescribeTapeArchivesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTapeArchivesError {
@@ -5806,13 +4506,6 @@ impl Error for DescribeTapeArchivesError {
         match *self {
             DescribeTapeArchivesError::InternalServerError(ref cause) => cause,
             DescribeTapeArchivesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeTapeArchivesError::Validation(ref cause) => cause,
-            DescribeTapeArchivesError::Credentials(ref err) => err.description(),
-            DescribeTapeArchivesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTapeArchivesError::ParseError(ref cause) => cause,
-            DescribeTapeArchivesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5823,20 +4516,12 @@ pub enum DescribeTapeRecoveryPointsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapeRecoveryPointsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapeRecoveryPointsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTapeRecoveryPointsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5849,43 +4534,24 @@ impl DescribeTapeRecoveryPointsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTapeRecoveryPointsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeTapeRecoveryPointsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeTapeRecoveryPointsError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeTapeRecoveryPointsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTapeRecoveryPointsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTapeRecoveryPointsError {
-    fn from(err: serde_json::error::Error) -> DescribeTapeRecoveryPointsError {
-        DescribeTapeRecoveryPointsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTapeRecoveryPointsError {
-    fn from(err: CredentialsError) -> DescribeTapeRecoveryPointsError {
-        DescribeTapeRecoveryPointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTapeRecoveryPointsError {
-    fn from(err: HttpDispatchError) -> DescribeTapeRecoveryPointsError {
-        DescribeTapeRecoveryPointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTapeRecoveryPointsError {
-    fn from(err: io::Error) -> DescribeTapeRecoveryPointsError {
-        DescribeTapeRecoveryPointsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTapeRecoveryPointsError {
@@ -5898,13 +4564,6 @@ impl Error for DescribeTapeRecoveryPointsError {
         match *self {
             DescribeTapeRecoveryPointsError::InternalServerError(ref cause) => cause,
             DescribeTapeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeTapeRecoveryPointsError::Validation(ref cause) => cause,
-            DescribeTapeRecoveryPointsError::Credentials(ref err) => err.description(),
-            DescribeTapeRecoveryPointsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTapeRecoveryPointsError::ParseError(ref cause) => cause,
-            DescribeTapeRecoveryPointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5915,20 +4574,10 @@ pub enum DescribeTapesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTapesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTapesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTapesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5941,39 +4590,20 @@ impl DescribeTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTapesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeTapesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeTapesError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeTapesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeTapesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTapesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTapesError {
-    fn from(err: serde_json::error::Error) -> DescribeTapesError {
-        DescribeTapesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTapesError {
-    fn from(err: CredentialsError) -> DescribeTapesError {
-        DescribeTapesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTapesError {
-    fn from(err: HttpDispatchError) -> DescribeTapesError {
-        DescribeTapesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTapesError {
-    fn from(err: io::Error) -> DescribeTapesError {
-        DescribeTapesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTapesError {
@@ -5986,11 +4616,6 @@ impl Error for DescribeTapesError {
         match *self {
             DescribeTapesError::InternalServerError(ref cause) => cause,
             DescribeTapesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeTapesError::Validation(ref cause) => cause,
-            DescribeTapesError::Credentials(ref err) => err.description(),
-            DescribeTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTapesError::ParseError(ref cause) => cause,
-            DescribeTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6001,20 +4626,10 @@ pub enum DescribeUploadBufferError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUploadBufferError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUploadBufferError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUploadBufferError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6027,43 +4642,20 @@ impl DescribeUploadBufferError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeUploadBufferError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUploadBufferError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeUploadBufferError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUploadBufferError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeUploadBufferError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUploadBufferError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUploadBufferError {
-    fn from(err: serde_json::error::Error) -> DescribeUploadBufferError {
-        DescribeUploadBufferError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUploadBufferError {
-    fn from(err: CredentialsError) -> DescribeUploadBufferError {
-        DescribeUploadBufferError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUploadBufferError {
-    fn from(err: HttpDispatchError) -> DescribeUploadBufferError {
-        DescribeUploadBufferError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUploadBufferError {
-    fn from(err: io::Error) -> DescribeUploadBufferError {
-        DescribeUploadBufferError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUploadBufferError {
@@ -6076,13 +4668,6 @@ impl Error for DescribeUploadBufferError {
         match *self {
             DescribeUploadBufferError::InternalServerError(ref cause) => cause,
             DescribeUploadBufferError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeUploadBufferError::Validation(ref cause) => cause,
-            DescribeUploadBufferError::Credentials(ref err) => err.description(),
-            DescribeUploadBufferError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUploadBufferError::ParseError(ref cause) => cause,
-            DescribeUploadBufferError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6093,20 +4678,10 @@ pub enum DescribeVTLDevicesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeVTLDevicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeVTLDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeVTLDevicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6119,41 +4694,20 @@ impl DescribeVTLDevicesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeVTLDevicesError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return DescribeVTLDevicesError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeVTLDevicesError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeVTLDevicesError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(DescribeVTLDevicesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeVTLDevicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeVTLDevicesError {
-    fn from(err: serde_json::error::Error) -> DescribeVTLDevicesError {
-        DescribeVTLDevicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeVTLDevicesError {
-    fn from(err: CredentialsError) -> DescribeVTLDevicesError {
-        DescribeVTLDevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeVTLDevicesError {
-    fn from(err: HttpDispatchError) -> DescribeVTLDevicesError {
-        DescribeVTLDevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeVTLDevicesError {
-    fn from(err: io::Error) -> DescribeVTLDevicesError {
-        DescribeVTLDevicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeVTLDevicesError {
@@ -6166,13 +4720,6 @@ impl Error for DescribeVTLDevicesError {
         match *self {
             DescribeVTLDevicesError::InternalServerError(ref cause) => cause,
             DescribeVTLDevicesError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeVTLDevicesError::Validation(ref cause) => cause,
-            DescribeVTLDevicesError::Credentials(ref err) => err.description(),
-            DescribeVTLDevicesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeVTLDevicesError::ParseError(ref cause) => cause,
-            DescribeVTLDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6183,20 +4730,10 @@ pub enum DescribeWorkingStorageError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeWorkingStorageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkingStorageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWorkingStorageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6209,43 +4746,20 @@ impl DescribeWorkingStorageError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeWorkingStorageError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeWorkingStorageError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DescribeWorkingStorageError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeWorkingStorageError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeWorkingStorageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeWorkingStorageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeWorkingStorageError {
-    fn from(err: serde_json::error::Error) -> DescribeWorkingStorageError {
-        DescribeWorkingStorageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeWorkingStorageError {
-    fn from(err: CredentialsError) -> DescribeWorkingStorageError {
-        DescribeWorkingStorageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeWorkingStorageError {
-    fn from(err: HttpDispatchError) -> DescribeWorkingStorageError {
-        DescribeWorkingStorageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeWorkingStorageError {
-    fn from(err: io::Error) -> DescribeWorkingStorageError {
-        DescribeWorkingStorageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeWorkingStorageError {
@@ -6258,13 +4772,6 @@ impl Error for DescribeWorkingStorageError {
         match *self {
             DescribeWorkingStorageError::InternalServerError(ref cause) => cause,
             DescribeWorkingStorageError::InvalidGatewayRequest(ref cause) => cause,
-            DescribeWorkingStorageError::Validation(ref cause) => cause,
-            DescribeWorkingStorageError::Credentials(ref err) => err.description(),
-            DescribeWorkingStorageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeWorkingStorageError::ParseError(ref cause) => cause,
-            DescribeWorkingStorageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6275,20 +4782,10 @@ pub enum DetachVolumeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachVolumeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetachVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachVolumeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6301,39 +4798,20 @@ impl DetachVolumeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DetachVolumeError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DetachVolumeError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DetachVolumeError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DetachVolumeError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetachVolumeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachVolumeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachVolumeError {
-    fn from(err: serde_json::error::Error) -> DetachVolumeError {
-        DetachVolumeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachVolumeError {
-    fn from(err: CredentialsError) -> DetachVolumeError {
-        DetachVolumeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachVolumeError {
-    fn from(err: HttpDispatchError) -> DetachVolumeError {
-        DetachVolumeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachVolumeError {
-    fn from(err: io::Error) -> DetachVolumeError {
-        DetachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachVolumeError {
@@ -6346,11 +4824,6 @@ impl Error for DetachVolumeError {
         match *self {
             DetachVolumeError::InternalServerError(ref cause) => cause,
             DetachVolumeError::InvalidGatewayRequest(ref cause) => cause,
-            DetachVolumeError::Validation(ref cause) => cause,
-            DetachVolumeError::Credentials(ref err) => err.description(),
-            DetachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachVolumeError::ParseError(ref cause) => cause,
-            DetachVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6361,20 +4834,10 @@ pub enum DisableGatewayError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6387,39 +4850,20 @@ impl DisableGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DisableGatewayError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DisableGatewayError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return DisableGatewayError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(DisableGatewayError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisableGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableGatewayError {
-    fn from(err: serde_json::error::Error) -> DisableGatewayError {
-        DisableGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableGatewayError {
-    fn from(err: CredentialsError) -> DisableGatewayError {
-        DisableGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableGatewayError {
-    fn from(err: HttpDispatchError) -> DisableGatewayError {
-        DisableGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableGatewayError {
-    fn from(err: io::Error) -> DisableGatewayError {
-        DisableGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableGatewayError {
@@ -6432,11 +4876,6 @@ impl Error for DisableGatewayError {
         match *self {
             DisableGatewayError::InternalServerError(ref cause) => cause,
             DisableGatewayError::InvalidGatewayRequest(ref cause) => cause,
-            DisableGatewayError::Validation(ref cause) => cause,
-            DisableGatewayError::Credentials(ref err) => err.description(),
-            DisableGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableGatewayError::ParseError(ref cause) => cause,
-            DisableGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6447,20 +4886,10 @@ pub enum JoinDomainError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl JoinDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> JoinDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<JoinDomainError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6473,39 +4902,20 @@ impl JoinDomainError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return JoinDomainError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(JoinDomainError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGatewayRequestException" => {
-                    return JoinDomainError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(JoinDomainError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return JoinDomainError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return JoinDomainError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for JoinDomainError {
-    fn from(err: serde_json::error::Error) -> JoinDomainError {
-        JoinDomainError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for JoinDomainError {
-    fn from(err: CredentialsError) -> JoinDomainError {
-        JoinDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for JoinDomainError {
-    fn from(err: HttpDispatchError) -> JoinDomainError {
-        JoinDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for JoinDomainError {
-    fn from(err: io::Error) -> JoinDomainError {
-        JoinDomainError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for JoinDomainError {
@@ -6518,11 +4928,6 @@ impl Error for JoinDomainError {
         match *self {
             JoinDomainError::InternalServerError(ref cause) => cause,
             JoinDomainError::InvalidGatewayRequest(ref cause) => cause,
-            JoinDomainError::Validation(ref cause) => cause,
-            JoinDomainError::Credentials(ref err) => err.description(),
-            JoinDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            JoinDomainError::ParseError(ref cause) => cause,
-            JoinDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6533,20 +4938,10 @@ pub enum ListFileSharesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFileSharesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListFileSharesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFileSharesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6559,39 +4954,20 @@ impl ListFileSharesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListFileSharesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListFileSharesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListFileSharesError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ListFileSharesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListFileSharesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFileSharesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFileSharesError {
-    fn from(err: serde_json::error::Error) -> ListFileSharesError {
-        ListFileSharesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFileSharesError {
-    fn from(err: CredentialsError) -> ListFileSharesError {
-        ListFileSharesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFileSharesError {
-    fn from(err: HttpDispatchError) -> ListFileSharesError {
-        ListFileSharesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFileSharesError {
-    fn from(err: io::Error) -> ListFileSharesError {
-        ListFileSharesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFileSharesError {
@@ -6604,11 +4980,6 @@ impl Error for ListFileSharesError {
         match *self {
             ListFileSharesError::InternalServerError(ref cause) => cause,
             ListFileSharesError::InvalidGatewayRequest(ref cause) => cause,
-            ListFileSharesError::Validation(ref cause) => cause,
-            ListFileSharesError::Credentials(ref err) => err.description(),
-            ListFileSharesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFileSharesError::ParseError(ref cause) => cause,
-            ListFileSharesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6619,20 +4990,10 @@ pub enum ListGatewaysError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGatewaysError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGatewaysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewaysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6645,39 +5006,20 @@ impl ListGatewaysError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListGatewaysError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListGatewaysError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListGatewaysError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ListGatewaysError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListGatewaysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGatewaysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGatewaysError {
-    fn from(err: serde_json::error::Error) -> ListGatewaysError {
-        ListGatewaysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGatewaysError {
-    fn from(err: CredentialsError) -> ListGatewaysError {
-        ListGatewaysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGatewaysError {
-    fn from(err: HttpDispatchError) -> ListGatewaysError {
-        ListGatewaysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGatewaysError {
-    fn from(err: io::Error) -> ListGatewaysError {
-        ListGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGatewaysError {
@@ -6690,11 +5032,6 @@ impl Error for ListGatewaysError {
         match *self {
             ListGatewaysError::InternalServerError(ref cause) => cause,
             ListGatewaysError::InvalidGatewayRequest(ref cause) => cause,
-            ListGatewaysError::Validation(ref cause) => cause,
-            ListGatewaysError::Credentials(ref err) => err.description(),
-            ListGatewaysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGatewaysError::ParseError(ref cause) => cause,
-            ListGatewaysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6705,20 +5042,10 @@ pub enum ListLocalDisksError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListLocalDisksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListLocalDisksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLocalDisksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6731,39 +5058,20 @@ impl ListLocalDisksError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListLocalDisksError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListLocalDisksError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListLocalDisksError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ListLocalDisksError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListLocalDisksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListLocalDisksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListLocalDisksError {
-    fn from(err: serde_json::error::Error) -> ListLocalDisksError {
-        ListLocalDisksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListLocalDisksError {
-    fn from(err: CredentialsError) -> ListLocalDisksError {
-        ListLocalDisksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListLocalDisksError {
-    fn from(err: HttpDispatchError) -> ListLocalDisksError {
-        ListLocalDisksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListLocalDisksError {
-    fn from(err: io::Error) -> ListLocalDisksError {
-        ListLocalDisksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListLocalDisksError {
@@ -6776,11 +5084,6 @@ impl Error for ListLocalDisksError {
         match *self {
             ListLocalDisksError::InternalServerError(ref cause) => cause,
             ListLocalDisksError::InvalidGatewayRequest(ref cause) => cause,
-            ListLocalDisksError::Validation(ref cause) => cause,
-            ListLocalDisksError::Credentials(ref err) => err.description(),
-            ListLocalDisksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLocalDisksError::ParseError(ref cause) => cause,
-            ListLocalDisksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6791,20 +5094,10 @@ pub enum ListTagsForResourceError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6817,43 +5110,20 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTagsForResourceError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForResourceError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListTagsForResourceError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForResourceError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -6866,13 +5136,6 @@ impl Error for ListTagsForResourceError {
         match *self {
             ListTagsForResourceError::InternalServerError(ref cause) => cause,
             ListTagsForResourceError::InvalidGatewayRequest(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6883,20 +5146,10 @@ pub enum ListTapesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTapesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTapesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTapesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6909,39 +5162,20 @@ impl ListTapesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTapesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListTapesError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListTapesError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ListTapesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTapesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTapesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTapesError {
-    fn from(err: serde_json::error::Error) -> ListTapesError {
-        ListTapesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTapesError {
-    fn from(err: CredentialsError) -> ListTapesError {
-        ListTapesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTapesError {
-    fn from(err: HttpDispatchError) -> ListTapesError {
-        ListTapesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTapesError {
-    fn from(err: io::Error) -> ListTapesError {
-        ListTapesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTapesError {
@@ -6954,11 +5188,6 @@ impl Error for ListTapesError {
         match *self {
             ListTapesError::InternalServerError(ref cause) => cause,
             ListTapesError::InvalidGatewayRequest(ref cause) => cause,
-            ListTapesError::Validation(ref cause) => cause,
-            ListTapesError::Credentials(ref err) => err.description(),
-            ListTapesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTapesError::ParseError(ref cause) => cause,
-            ListTapesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6969,20 +5198,10 @@ pub enum ListVolumeInitiatorsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumeInitiatorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVolumeInitiatorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumeInitiatorsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6995,43 +5214,20 @@ impl ListVolumeInitiatorsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListVolumeInitiatorsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListVolumeInitiatorsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListVolumeInitiatorsError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListVolumeInitiatorsError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListVolumeInitiatorsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVolumeInitiatorsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVolumeInitiatorsError {
-    fn from(err: serde_json::error::Error) -> ListVolumeInitiatorsError {
-        ListVolumeInitiatorsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVolumeInitiatorsError {
-    fn from(err: CredentialsError) -> ListVolumeInitiatorsError {
-        ListVolumeInitiatorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVolumeInitiatorsError {
-    fn from(err: HttpDispatchError) -> ListVolumeInitiatorsError {
-        ListVolumeInitiatorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVolumeInitiatorsError {
-    fn from(err: io::Error) -> ListVolumeInitiatorsError {
-        ListVolumeInitiatorsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVolumeInitiatorsError {
@@ -7044,13 +5240,6 @@ impl Error for ListVolumeInitiatorsError {
         match *self {
             ListVolumeInitiatorsError::InternalServerError(ref cause) => cause,
             ListVolumeInitiatorsError::InvalidGatewayRequest(ref cause) => cause,
-            ListVolumeInitiatorsError::Validation(ref cause) => cause,
-            ListVolumeInitiatorsError::Credentials(ref err) => err.description(),
-            ListVolumeInitiatorsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVolumeInitiatorsError::ParseError(ref cause) => cause,
-            ListVolumeInitiatorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7061,20 +5250,10 @@ pub enum ListVolumeRecoveryPointsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumeRecoveryPointsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVolumeRecoveryPointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumeRecoveryPointsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7087,43 +5266,22 @@ impl ListVolumeRecoveryPointsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListVolumeRecoveryPointsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListVolumeRecoveryPointsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListVolumeRecoveryPointsError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListVolumeRecoveryPointsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVolumeRecoveryPointsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVolumeRecoveryPointsError {
-    fn from(err: serde_json::error::Error) -> ListVolumeRecoveryPointsError {
-        ListVolumeRecoveryPointsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVolumeRecoveryPointsError {
-    fn from(err: CredentialsError) -> ListVolumeRecoveryPointsError {
-        ListVolumeRecoveryPointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVolumeRecoveryPointsError {
-    fn from(err: HttpDispatchError) -> ListVolumeRecoveryPointsError {
-        ListVolumeRecoveryPointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVolumeRecoveryPointsError {
-    fn from(err: io::Error) -> ListVolumeRecoveryPointsError {
-        ListVolumeRecoveryPointsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVolumeRecoveryPointsError {
@@ -7136,13 +5294,6 @@ impl Error for ListVolumeRecoveryPointsError {
         match *self {
             ListVolumeRecoveryPointsError::InternalServerError(ref cause) => cause,
             ListVolumeRecoveryPointsError::InvalidGatewayRequest(ref cause) => cause,
-            ListVolumeRecoveryPointsError::Validation(ref cause) => cause,
-            ListVolumeRecoveryPointsError::Credentials(ref err) => err.description(),
-            ListVolumeRecoveryPointsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVolumeRecoveryPointsError::ParseError(ref cause) => cause,
-            ListVolumeRecoveryPointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7153,20 +5304,10 @@ pub enum ListVolumesError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVolumesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVolumesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVolumesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7179,39 +5320,20 @@ impl ListVolumesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListVolumesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListVolumesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ListVolumesError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ListVolumesError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListVolumesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVolumesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVolumesError {
-    fn from(err: serde_json::error::Error) -> ListVolumesError {
-        ListVolumesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVolumesError {
-    fn from(err: CredentialsError) -> ListVolumesError {
-        ListVolumesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVolumesError {
-    fn from(err: HttpDispatchError) -> ListVolumesError {
-        ListVolumesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVolumesError {
-    fn from(err: io::Error) -> ListVolumesError {
-        ListVolumesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVolumesError {
@@ -7224,11 +5346,6 @@ impl Error for ListVolumesError {
         match *self {
             ListVolumesError::InternalServerError(ref cause) => cause,
             ListVolumesError::InvalidGatewayRequest(ref cause) => cause,
-            ListVolumesError::Validation(ref cause) => cause,
-            ListVolumesError::Credentials(ref err) => err.description(),
-            ListVolumesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVolumesError::ParseError(ref cause) => cause,
-            ListVolumesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7239,20 +5356,10 @@ pub enum NotifyWhenUploadedError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl NotifyWhenUploadedError {
-    pub fn from_response(res: BufferedHttpResponse) -> NotifyWhenUploadedError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyWhenUploadedError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7265,41 +5372,20 @@ impl NotifyWhenUploadedError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return NotifyWhenUploadedError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return NotifyWhenUploadedError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(NotifyWhenUploadedError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return NotifyWhenUploadedError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(NotifyWhenUploadedError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return NotifyWhenUploadedError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for NotifyWhenUploadedError {
-    fn from(err: serde_json::error::Error) -> NotifyWhenUploadedError {
-        NotifyWhenUploadedError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for NotifyWhenUploadedError {
-    fn from(err: CredentialsError) -> NotifyWhenUploadedError {
-        NotifyWhenUploadedError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for NotifyWhenUploadedError {
-    fn from(err: HttpDispatchError) -> NotifyWhenUploadedError {
-        NotifyWhenUploadedError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for NotifyWhenUploadedError {
-    fn from(err: io::Error) -> NotifyWhenUploadedError {
-        NotifyWhenUploadedError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for NotifyWhenUploadedError {
@@ -7312,13 +5398,6 @@ impl Error for NotifyWhenUploadedError {
         match *self {
             NotifyWhenUploadedError::InternalServerError(ref cause) => cause,
             NotifyWhenUploadedError::InvalidGatewayRequest(ref cause) => cause,
-            NotifyWhenUploadedError::Validation(ref cause) => cause,
-            NotifyWhenUploadedError::Credentials(ref err) => err.description(),
-            NotifyWhenUploadedError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            NotifyWhenUploadedError::ParseError(ref cause) => cause,
-            NotifyWhenUploadedError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7329,20 +5408,10 @@ pub enum RefreshCacheError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RefreshCacheError {
-    pub fn from_response(res: BufferedHttpResponse) -> RefreshCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RefreshCacheError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7355,39 +5424,20 @@ impl RefreshCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RefreshCacheError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(RefreshCacheError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return RefreshCacheError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(RefreshCacheError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RefreshCacheError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RefreshCacheError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RefreshCacheError {
-    fn from(err: serde_json::error::Error) -> RefreshCacheError {
-        RefreshCacheError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RefreshCacheError {
-    fn from(err: CredentialsError) -> RefreshCacheError {
-        RefreshCacheError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RefreshCacheError {
-    fn from(err: HttpDispatchError) -> RefreshCacheError {
-        RefreshCacheError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RefreshCacheError {
-    fn from(err: io::Error) -> RefreshCacheError {
-        RefreshCacheError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RefreshCacheError {
@@ -7400,11 +5450,6 @@ impl Error for RefreshCacheError {
         match *self {
             RefreshCacheError::InternalServerError(ref cause) => cause,
             RefreshCacheError::InvalidGatewayRequest(ref cause) => cause,
-            RefreshCacheError::Validation(ref cause) => cause,
-            RefreshCacheError::Credentials(ref err) => err.description(),
-            RefreshCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RefreshCacheError::ParseError(ref cause) => cause,
-            RefreshCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7415,20 +5460,10 @@ pub enum RemoveTagsFromResourceError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7441,43 +5476,20 @@ impl RemoveTagsFromResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RemoveTagsFromResourceError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromResourceError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return RemoveTagsFromResourceError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromResourceError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RemoveTagsFromResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsFromResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsFromResourceError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromResourceError {
-    fn from(err: CredentialsError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromResourceError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromResourceError {
-    fn from(err: io::Error) -> RemoveTagsFromResourceError {
-        RemoveTagsFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsFromResourceError {
@@ -7490,13 +5502,6 @@ impl Error for RemoveTagsFromResourceError {
         match *self {
             RemoveTagsFromResourceError::InternalServerError(ref cause) => cause,
             RemoveTagsFromResourceError::InvalidGatewayRequest(ref cause) => cause,
-            RemoveTagsFromResourceError::Validation(ref cause) => cause,
-            RemoveTagsFromResourceError::Credentials(ref err) => err.description(),
-            RemoveTagsFromResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromResourceError::ParseError(ref cause) => cause,
-            RemoveTagsFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7507,20 +5512,10 @@ pub enum ResetCacheError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetCacheError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetCacheError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetCacheError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7533,39 +5528,20 @@ impl ResetCacheError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ResetCacheError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ResetCacheError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ResetCacheError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ResetCacheError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResetCacheError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResetCacheError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResetCacheError {
-    fn from(err: serde_json::error::Error) -> ResetCacheError {
-        ResetCacheError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResetCacheError {
-    fn from(err: CredentialsError) -> ResetCacheError {
-        ResetCacheError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetCacheError {
-    fn from(err: HttpDispatchError) -> ResetCacheError {
-        ResetCacheError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetCacheError {
-    fn from(err: io::Error) -> ResetCacheError {
-        ResetCacheError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResetCacheError {
@@ -7578,11 +5554,6 @@ impl Error for ResetCacheError {
         match *self {
             ResetCacheError::InternalServerError(ref cause) => cause,
             ResetCacheError::InvalidGatewayRequest(ref cause) => cause,
-            ResetCacheError::Validation(ref cause) => cause,
-            ResetCacheError::Credentials(ref err) => err.description(),
-            ResetCacheError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResetCacheError::ParseError(ref cause) => cause,
-            ResetCacheError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7593,20 +5564,10 @@ pub enum RetrieveTapeArchiveError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveTapeArchiveError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetrieveTapeArchiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveTapeArchiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7619,43 +5580,20 @@ impl RetrieveTapeArchiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RetrieveTapeArchiveError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(RetrieveTapeArchiveError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return RetrieveTapeArchiveError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(RetrieveTapeArchiveError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RetrieveTapeArchiveError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RetrieveTapeArchiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RetrieveTapeArchiveError {
-    fn from(err: serde_json::error::Error) -> RetrieveTapeArchiveError {
-        RetrieveTapeArchiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RetrieveTapeArchiveError {
-    fn from(err: CredentialsError) -> RetrieveTapeArchiveError {
-        RetrieveTapeArchiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetrieveTapeArchiveError {
-    fn from(err: HttpDispatchError) -> RetrieveTapeArchiveError {
-        RetrieveTapeArchiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetrieveTapeArchiveError {
-    fn from(err: io::Error) -> RetrieveTapeArchiveError {
-        RetrieveTapeArchiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RetrieveTapeArchiveError {
@@ -7668,13 +5606,6 @@ impl Error for RetrieveTapeArchiveError {
         match *self {
             RetrieveTapeArchiveError::InternalServerError(ref cause) => cause,
             RetrieveTapeArchiveError::InvalidGatewayRequest(ref cause) => cause,
-            RetrieveTapeArchiveError::Validation(ref cause) => cause,
-            RetrieveTapeArchiveError::Credentials(ref err) => err.description(),
-            RetrieveTapeArchiveError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RetrieveTapeArchiveError::ParseError(ref cause) => cause,
-            RetrieveTapeArchiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7685,20 +5616,10 @@ pub enum RetrieveTapeRecoveryPointError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RetrieveTapeRecoveryPointError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetrieveTapeRecoveryPointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetrieveTapeRecoveryPointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7711,43 +5632,24 @@ impl RetrieveTapeRecoveryPointError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RetrieveTapeRecoveryPointError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RetrieveTapeRecoveryPointError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RetrieveTapeRecoveryPointError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RetrieveTapeRecoveryPointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RetrieveTapeRecoveryPointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RetrieveTapeRecoveryPointError {
-    fn from(err: serde_json::error::Error) -> RetrieveTapeRecoveryPointError {
-        RetrieveTapeRecoveryPointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RetrieveTapeRecoveryPointError {
-    fn from(err: CredentialsError) -> RetrieveTapeRecoveryPointError {
-        RetrieveTapeRecoveryPointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetrieveTapeRecoveryPointError {
-    fn from(err: HttpDispatchError) -> RetrieveTapeRecoveryPointError {
-        RetrieveTapeRecoveryPointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetrieveTapeRecoveryPointError {
-    fn from(err: io::Error) -> RetrieveTapeRecoveryPointError {
-        RetrieveTapeRecoveryPointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RetrieveTapeRecoveryPointError {
@@ -7760,13 +5662,6 @@ impl Error for RetrieveTapeRecoveryPointError {
         match *self {
             RetrieveTapeRecoveryPointError::InternalServerError(ref cause) => cause,
             RetrieveTapeRecoveryPointError::InvalidGatewayRequest(ref cause) => cause,
-            RetrieveTapeRecoveryPointError::Validation(ref cause) => cause,
-            RetrieveTapeRecoveryPointError::Credentials(ref err) => err.description(),
-            RetrieveTapeRecoveryPointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RetrieveTapeRecoveryPointError::ParseError(ref cause) => cause,
-            RetrieveTapeRecoveryPointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7777,20 +5672,10 @@ pub enum SetLocalConsolePasswordError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetLocalConsolePasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetLocalConsolePasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetLocalConsolePasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7803,43 +5688,22 @@ impl SetLocalConsolePasswordError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return SetLocalConsolePasswordError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(SetLocalConsolePasswordError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        SetLocalConsolePasswordError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return SetLocalConsolePasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetLocalConsolePasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetLocalConsolePasswordError {
-    fn from(err: serde_json::error::Error) -> SetLocalConsolePasswordError {
-        SetLocalConsolePasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetLocalConsolePasswordError {
-    fn from(err: CredentialsError) -> SetLocalConsolePasswordError {
-        SetLocalConsolePasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetLocalConsolePasswordError {
-    fn from(err: HttpDispatchError) -> SetLocalConsolePasswordError {
-        SetLocalConsolePasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetLocalConsolePasswordError {
-    fn from(err: io::Error) -> SetLocalConsolePasswordError {
-        SetLocalConsolePasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetLocalConsolePasswordError {
@@ -7852,13 +5716,6 @@ impl Error for SetLocalConsolePasswordError {
         match *self {
             SetLocalConsolePasswordError::InternalServerError(ref cause) => cause,
             SetLocalConsolePasswordError::InvalidGatewayRequest(ref cause) => cause,
-            SetLocalConsolePasswordError::Validation(ref cause) => cause,
-            SetLocalConsolePasswordError::Credentials(ref err) => err.description(),
-            SetLocalConsolePasswordError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetLocalConsolePasswordError::ParseError(ref cause) => cause,
-            SetLocalConsolePasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7869,20 +5726,10 @@ pub enum SetSMBGuestPasswordError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetSMBGuestPasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetSMBGuestPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSMBGuestPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7895,43 +5742,20 @@ impl SetSMBGuestPasswordError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return SetSMBGuestPasswordError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(SetSMBGuestPasswordError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return SetSMBGuestPasswordError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(SetSMBGuestPasswordError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return SetSMBGuestPasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetSMBGuestPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetSMBGuestPasswordError {
-    fn from(err: serde_json::error::Error) -> SetSMBGuestPasswordError {
-        SetSMBGuestPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetSMBGuestPasswordError {
-    fn from(err: CredentialsError) -> SetSMBGuestPasswordError {
-        SetSMBGuestPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetSMBGuestPasswordError {
-    fn from(err: HttpDispatchError) -> SetSMBGuestPasswordError {
-        SetSMBGuestPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetSMBGuestPasswordError {
-    fn from(err: io::Error) -> SetSMBGuestPasswordError {
-        SetSMBGuestPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetSMBGuestPasswordError {
@@ -7944,13 +5768,6 @@ impl Error for SetSMBGuestPasswordError {
         match *self {
             SetSMBGuestPasswordError::InternalServerError(ref cause) => cause,
             SetSMBGuestPasswordError::InvalidGatewayRequest(ref cause) => cause,
-            SetSMBGuestPasswordError::Validation(ref cause) => cause,
-            SetSMBGuestPasswordError::Credentials(ref err) => err.description(),
-            SetSMBGuestPasswordError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetSMBGuestPasswordError::ParseError(ref cause) => cause,
-            SetSMBGuestPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7961,20 +5778,10 @@ pub enum ShutdownGatewayError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ShutdownGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> ShutdownGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ShutdownGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7987,39 +5794,20 @@ impl ShutdownGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ShutdownGatewayError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ShutdownGatewayError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return ShutdownGatewayError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(ShutdownGatewayError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ShutdownGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ShutdownGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ShutdownGatewayError {
-    fn from(err: serde_json::error::Error) -> ShutdownGatewayError {
-        ShutdownGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ShutdownGatewayError {
-    fn from(err: CredentialsError) -> ShutdownGatewayError {
-        ShutdownGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ShutdownGatewayError {
-    fn from(err: HttpDispatchError) -> ShutdownGatewayError {
-        ShutdownGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ShutdownGatewayError {
-    fn from(err: io::Error) -> ShutdownGatewayError {
-        ShutdownGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ShutdownGatewayError {
@@ -8032,11 +5820,6 @@ impl Error for ShutdownGatewayError {
         match *self {
             ShutdownGatewayError::InternalServerError(ref cause) => cause,
             ShutdownGatewayError::InvalidGatewayRequest(ref cause) => cause,
-            ShutdownGatewayError::Validation(ref cause) => cause,
-            ShutdownGatewayError::Credentials(ref err) => err.description(),
-            ShutdownGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ShutdownGatewayError::ParseError(ref cause) => cause,
-            ShutdownGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8047,20 +5830,10 @@ pub enum StartGatewayError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartGatewayError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartGatewayError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8073,39 +5846,20 @@ impl StartGatewayError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return StartGatewayError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(StartGatewayError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return StartGatewayError::InvalidGatewayRequest(String::from(error_message));
+                    return RusotoError::Service(StartGatewayError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartGatewayError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartGatewayError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartGatewayError {
-    fn from(err: serde_json::error::Error) -> StartGatewayError {
-        StartGatewayError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartGatewayError {
-    fn from(err: CredentialsError) -> StartGatewayError {
-        StartGatewayError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartGatewayError {
-    fn from(err: HttpDispatchError) -> StartGatewayError {
-        StartGatewayError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartGatewayError {
-    fn from(err: io::Error) -> StartGatewayError {
-        StartGatewayError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartGatewayError {
@@ -8118,11 +5872,6 @@ impl Error for StartGatewayError {
         match *self {
             StartGatewayError::InternalServerError(ref cause) => cause,
             StartGatewayError::InvalidGatewayRequest(ref cause) => cause,
-            StartGatewayError::Validation(ref cause) => cause,
-            StartGatewayError::Credentials(ref err) => err.description(),
-            StartGatewayError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartGatewayError::ParseError(ref cause) => cause,
-            StartGatewayError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8133,20 +5882,10 @@ pub enum UpdateBandwidthRateLimitError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBandwidthRateLimitError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateBandwidthRateLimitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBandwidthRateLimitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8159,43 +5898,22 @@ impl UpdateBandwidthRateLimitError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateBandwidthRateLimitError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateBandwidthRateLimitError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateBandwidthRateLimitError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateBandwidthRateLimitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateBandwidthRateLimitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateBandwidthRateLimitError {
-    fn from(err: serde_json::error::Error) -> UpdateBandwidthRateLimitError {
-        UpdateBandwidthRateLimitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateBandwidthRateLimitError {
-    fn from(err: CredentialsError) -> UpdateBandwidthRateLimitError {
-        UpdateBandwidthRateLimitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateBandwidthRateLimitError {
-    fn from(err: HttpDispatchError) -> UpdateBandwidthRateLimitError {
-        UpdateBandwidthRateLimitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateBandwidthRateLimitError {
-    fn from(err: io::Error) -> UpdateBandwidthRateLimitError {
-        UpdateBandwidthRateLimitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateBandwidthRateLimitError {
@@ -8208,13 +5926,6 @@ impl Error for UpdateBandwidthRateLimitError {
         match *self {
             UpdateBandwidthRateLimitError::InternalServerError(ref cause) => cause,
             UpdateBandwidthRateLimitError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateBandwidthRateLimitError::Validation(ref cause) => cause,
-            UpdateBandwidthRateLimitError::Credentials(ref err) => err.description(),
-            UpdateBandwidthRateLimitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateBandwidthRateLimitError::ParseError(ref cause) => cause,
-            UpdateBandwidthRateLimitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8225,20 +5936,10 @@ pub enum UpdateChapCredentialsError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateChapCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateChapCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChapCredentialsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8251,43 +5952,20 @@ impl UpdateChapCredentialsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateChapCredentialsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateChapCredentialsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateChapCredentialsError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateChapCredentialsError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateChapCredentialsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateChapCredentialsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateChapCredentialsError {
-    fn from(err: serde_json::error::Error) -> UpdateChapCredentialsError {
-        UpdateChapCredentialsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateChapCredentialsError {
-    fn from(err: CredentialsError) -> UpdateChapCredentialsError {
-        UpdateChapCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateChapCredentialsError {
-    fn from(err: HttpDispatchError) -> UpdateChapCredentialsError {
-        UpdateChapCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateChapCredentialsError {
-    fn from(err: io::Error) -> UpdateChapCredentialsError {
-        UpdateChapCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateChapCredentialsError {
@@ -8300,13 +5978,6 @@ impl Error for UpdateChapCredentialsError {
         match *self {
             UpdateChapCredentialsError::InternalServerError(ref cause) => cause,
             UpdateChapCredentialsError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateChapCredentialsError::Validation(ref cause) => cause,
-            UpdateChapCredentialsError::Credentials(ref err) => err.description(),
-            UpdateChapCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateChapCredentialsError::ParseError(ref cause) => cause,
-            UpdateChapCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8317,20 +5988,10 @@ pub enum UpdateGatewayInformationError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGatewayInformationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGatewayInformationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayInformationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8343,43 +6004,22 @@ impl UpdateGatewayInformationError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateGatewayInformationError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGatewayInformationError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateGatewayInformationError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateGatewayInformationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGatewayInformationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGatewayInformationError {
-    fn from(err: serde_json::error::Error) -> UpdateGatewayInformationError {
-        UpdateGatewayInformationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGatewayInformationError {
-    fn from(err: CredentialsError) -> UpdateGatewayInformationError {
-        UpdateGatewayInformationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGatewayInformationError {
-    fn from(err: HttpDispatchError) -> UpdateGatewayInformationError {
-        UpdateGatewayInformationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGatewayInformationError {
-    fn from(err: io::Error) -> UpdateGatewayInformationError {
-        UpdateGatewayInformationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGatewayInformationError {
@@ -8392,13 +6032,6 @@ impl Error for UpdateGatewayInformationError {
         match *self {
             UpdateGatewayInformationError::InternalServerError(ref cause) => cause,
             UpdateGatewayInformationError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateGatewayInformationError::Validation(ref cause) => cause,
-            UpdateGatewayInformationError::Credentials(ref err) => err.description(),
-            UpdateGatewayInformationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateGatewayInformationError::ParseError(ref cause) => cause,
-            UpdateGatewayInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8409,20 +6042,10 @@ pub enum UpdateGatewaySoftwareNowError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGatewaySoftwareNowError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGatewaySoftwareNowError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewaySoftwareNowError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8435,43 +6058,22 @@ impl UpdateGatewaySoftwareNowError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateGatewaySoftwareNowError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGatewaySoftwareNowError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateGatewaySoftwareNowError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateGatewaySoftwareNowError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGatewaySoftwareNowError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGatewaySoftwareNowError {
-    fn from(err: serde_json::error::Error) -> UpdateGatewaySoftwareNowError {
-        UpdateGatewaySoftwareNowError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGatewaySoftwareNowError {
-    fn from(err: CredentialsError) -> UpdateGatewaySoftwareNowError {
-        UpdateGatewaySoftwareNowError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGatewaySoftwareNowError {
-    fn from(err: HttpDispatchError) -> UpdateGatewaySoftwareNowError {
-        UpdateGatewaySoftwareNowError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGatewaySoftwareNowError {
-    fn from(err: io::Error) -> UpdateGatewaySoftwareNowError {
-        UpdateGatewaySoftwareNowError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGatewaySoftwareNowError {
@@ -8484,13 +6086,6 @@ impl Error for UpdateGatewaySoftwareNowError {
         match *self {
             UpdateGatewaySoftwareNowError::InternalServerError(ref cause) => cause,
             UpdateGatewaySoftwareNowError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateGatewaySoftwareNowError::Validation(ref cause) => cause,
-            UpdateGatewaySoftwareNowError::Credentials(ref err) => err.description(),
-            UpdateGatewaySoftwareNowError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateGatewaySoftwareNowError::ParseError(ref cause) => cause,
-            UpdateGatewaySoftwareNowError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8501,20 +6096,12 @@ pub enum UpdateMaintenanceStartTimeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateMaintenanceStartTimeError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateMaintenanceStartTimeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateMaintenanceStartTimeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8527,43 +6114,24 @@ impl UpdateMaintenanceStartTimeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateMaintenanceStartTimeError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateMaintenanceStartTimeError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateMaintenanceStartTimeError::InvalidGatewayRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateMaintenanceStartTimeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateMaintenanceStartTimeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateMaintenanceStartTimeError {
-    fn from(err: serde_json::error::Error) -> UpdateMaintenanceStartTimeError {
-        UpdateMaintenanceStartTimeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateMaintenanceStartTimeError {
-    fn from(err: CredentialsError) -> UpdateMaintenanceStartTimeError {
-        UpdateMaintenanceStartTimeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateMaintenanceStartTimeError {
-    fn from(err: HttpDispatchError) -> UpdateMaintenanceStartTimeError {
-        UpdateMaintenanceStartTimeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateMaintenanceStartTimeError {
-    fn from(err: io::Error) -> UpdateMaintenanceStartTimeError {
-        UpdateMaintenanceStartTimeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateMaintenanceStartTimeError {
@@ -8576,13 +6144,6 @@ impl Error for UpdateMaintenanceStartTimeError {
         match *self {
             UpdateMaintenanceStartTimeError::InternalServerError(ref cause) => cause,
             UpdateMaintenanceStartTimeError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateMaintenanceStartTimeError::Validation(ref cause) => cause,
-            UpdateMaintenanceStartTimeError::Credentials(ref err) => err.description(),
-            UpdateMaintenanceStartTimeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateMaintenanceStartTimeError::ParseError(ref cause) => cause,
-            UpdateMaintenanceStartTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8593,20 +6154,10 @@ pub enum UpdateNFSFileShareError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNFSFileShareError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateNFSFileShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNFSFileShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8619,41 +6170,20 @@ impl UpdateNFSFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateNFSFileShareError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return UpdateNFSFileShareError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateNFSFileShareError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateNFSFileShareError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(UpdateNFSFileShareError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateNFSFileShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateNFSFileShareError {
-    fn from(err: serde_json::error::Error) -> UpdateNFSFileShareError {
-        UpdateNFSFileShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateNFSFileShareError {
-    fn from(err: CredentialsError) -> UpdateNFSFileShareError {
-        UpdateNFSFileShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateNFSFileShareError {
-    fn from(err: HttpDispatchError) -> UpdateNFSFileShareError {
-        UpdateNFSFileShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateNFSFileShareError {
-    fn from(err: io::Error) -> UpdateNFSFileShareError {
-        UpdateNFSFileShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateNFSFileShareError {
@@ -8666,13 +6196,6 @@ impl Error for UpdateNFSFileShareError {
         match *self {
             UpdateNFSFileShareError::InternalServerError(ref cause) => cause,
             UpdateNFSFileShareError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateNFSFileShareError::Validation(ref cause) => cause,
-            UpdateNFSFileShareError::Credentials(ref err) => err.description(),
-            UpdateNFSFileShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateNFSFileShareError::ParseError(ref cause) => cause,
-            UpdateNFSFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8683,20 +6206,10 @@ pub enum UpdateSMBFileShareError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSMBFileShareError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSMBFileShareError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSMBFileShareError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8709,41 +6222,20 @@ impl UpdateSMBFileShareError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateSMBFileShareError::InternalServerError(String::from(error_message));
-                }
-                "InvalidGatewayRequestException" => {
-                    return UpdateSMBFileShareError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSMBFileShareError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateSMBFileShareError::Validation(error_message.to_string());
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(UpdateSMBFileShareError::InvalidGatewayRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSMBFileShareError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSMBFileShareError {
-    fn from(err: serde_json::error::Error) -> UpdateSMBFileShareError {
-        UpdateSMBFileShareError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSMBFileShareError {
-    fn from(err: CredentialsError) -> UpdateSMBFileShareError {
-        UpdateSMBFileShareError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSMBFileShareError {
-    fn from(err: HttpDispatchError) -> UpdateSMBFileShareError {
-        UpdateSMBFileShareError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSMBFileShareError {
-    fn from(err: io::Error) -> UpdateSMBFileShareError {
-        UpdateSMBFileShareError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSMBFileShareError {
@@ -8756,13 +6248,6 @@ impl Error for UpdateSMBFileShareError {
         match *self {
             UpdateSMBFileShareError::InternalServerError(ref cause) => cause,
             UpdateSMBFileShareError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateSMBFileShareError::Validation(ref cause) => cause,
-            UpdateSMBFileShareError::Credentials(ref err) => err.description(),
-            UpdateSMBFileShareError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSMBFileShareError::ParseError(ref cause) => cause,
-            UpdateSMBFileShareError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8773,20 +6258,10 @@ pub enum UpdateSnapshotScheduleError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSnapshotScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8799,43 +6274,20 @@ impl UpdateSnapshotScheduleError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateSnapshotScheduleError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSnapshotScheduleError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateSnapshotScheduleError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSnapshotScheduleError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateSnapshotScheduleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSnapshotScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSnapshotScheduleError {
-    fn from(err: serde_json::error::Error) -> UpdateSnapshotScheduleError {
-        UpdateSnapshotScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSnapshotScheduleError {
-    fn from(err: CredentialsError) -> UpdateSnapshotScheduleError {
-        UpdateSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> UpdateSnapshotScheduleError {
-        UpdateSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSnapshotScheduleError {
-    fn from(err: io::Error) -> UpdateSnapshotScheduleError {
-        UpdateSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSnapshotScheduleError {
@@ -8848,13 +6300,6 @@ impl Error for UpdateSnapshotScheduleError {
         match *self {
             UpdateSnapshotScheduleError::InternalServerError(ref cause) => cause,
             UpdateSnapshotScheduleError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateSnapshotScheduleError::Validation(ref cause) => cause,
-            UpdateSnapshotScheduleError::Credentials(ref err) => err.description(),
-            UpdateSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSnapshotScheduleError::ParseError(ref cause) => cause,
-            UpdateSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8865,20 +6310,10 @@ pub enum UpdateVTLDeviceTypeError {
     InternalServerError(String),
     /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
     InvalidGatewayRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVTLDeviceTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateVTLDeviceTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVTLDeviceTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8891,43 +6326,20 @@ impl UpdateVTLDeviceTypeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateVTLDeviceTypeError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateVTLDeviceTypeError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGatewayRequestException" => {
-                    return UpdateVTLDeviceTypeError::InvalidGatewayRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateVTLDeviceTypeError::InvalidGatewayRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateVTLDeviceTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateVTLDeviceTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateVTLDeviceTypeError {
-    fn from(err: serde_json::error::Error) -> UpdateVTLDeviceTypeError {
-        UpdateVTLDeviceTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateVTLDeviceTypeError {
-    fn from(err: CredentialsError) -> UpdateVTLDeviceTypeError {
-        UpdateVTLDeviceTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateVTLDeviceTypeError {
-    fn from(err: HttpDispatchError) -> UpdateVTLDeviceTypeError {
-        UpdateVTLDeviceTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateVTLDeviceTypeError {
-    fn from(err: io::Error) -> UpdateVTLDeviceTypeError {
-        UpdateVTLDeviceTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateVTLDeviceTypeError {
@@ -8940,13 +6352,6 @@ impl Error for UpdateVTLDeviceTypeError {
         match *self {
             UpdateVTLDeviceTypeError::InternalServerError(ref cause) => cause,
             UpdateVTLDeviceTypeError::InvalidGatewayRequest(ref cause) => cause,
-            UpdateVTLDeviceTypeError::Validation(ref cause) => cause,
-            UpdateVTLDeviceTypeError::Credentials(ref err) => err.description(),
-            UpdateVTLDeviceTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateVTLDeviceTypeError::ParseError(ref cause) => cause,
-            UpdateVTLDeviceTypeError::Unknown(_) => "unknown error",
         }
     }
 }

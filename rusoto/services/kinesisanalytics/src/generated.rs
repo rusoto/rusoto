@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1212,20 +1209,12 @@ pub enum AddApplicationCloudWatchLoggingOptionError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddApplicationCloudWatchLoggingOptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddApplicationCloudWatchLoggingOptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddApplicationCloudWatchLoggingOptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1238,60 +1227,45 @@ impl AddApplicationCloudWatchLoggingOptionError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationCloudWatchLoggingOptionError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::InvalidArgument(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationCloudWatchLoggingOptionError::InvalidArgument(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceInUseException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnsupportedOperationException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return AddApplicationCloudWatchLoggingOptionError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddApplicationCloudWatchLoggingOptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddApplicationCloudWatchLoggingOptionError {
-    fn from(err: serde_json::error::Error) -> AddApplicationCloudWatchLoggingOptionError {
-        AddApplicationCloudWatchLoggingOptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddApplicationCloudWatchLoggingOptionError {
-    fn from(err: CredentialsError) -> AddApplicationCloudWatchLoggingOptionError {
-        AddApplicationCloudWatchLoggingOptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddApplicationCloudWatchLoggingOptionError {
-    fn from(err: HttpDispatchError) -> AddApplicationCloudWatchLoggingOptionError {
-        AddApplicationCloudWatchLoggingOptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddApplicationCloudWatchLoggingOptionError {
-    fn from(err: io::Error) -> AddApplicationCloudWatchLoggingOptionError {
-        AddApplicationCloudWatchLoggingOptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddApplicationCloudWatchLoggingOptionError {
@@ -1307,13 +1281,6 @@ impl Error for AddApplicationCloudWatchLoggingOptionError {
             AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::Validation(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::Credentials(ref err) => err.description(),
-            AddApplicationCloudWatchLoggingOptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddApplicationCloudWatchLoggingOptionError::ParseError(ref cause) => cause,
-            AddApplicationCloudWatchLoggingOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1332,20 +1299,10 @@ pub enum AddApplicationInputError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddApplicationInputError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddApplicationInputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddApplicationInputError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1358,55 +1315,40 @@ impl AddApplicationInputError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return AddApplicationInputError::CodeValidation(String::from(error_message));
+                    return RusotoError::Service(AddApplicationInputError::CodeValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return AddApplicationInputError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(AddApplicationInputError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationInputError::InvalidArgument(String::from(error_message));
-                }
-                "ResourceInUseException" => {
-                    return AddApplicationInputError::ResourceInUse(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return AddApplicationInputError::ResourceNotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return AddApplicationInputError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(AddApplicationInputError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddApplicationInputError::Validation(error_message.to_string());
+                "ResourceInUseException" => {
+                    return RusotoError::Service(AddApplicationInputError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AddApplicationInputError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(AddApplicationInputError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddApplicationInputError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddApplicationInputError {
-    fn from(err: serde_json::error::Error) -> AddApplicationInputError {
-        AddApplicationInputError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddApplicationInputError {
-    fn from(err: CredentialsError) -> AddApplicationInputError {
-        AddApplicationInputError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddApplicationInputError {
-    fn from(err: HttpDispatchError) -> AddApplicationInputError {
-        AddApplicationInputError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddApplicationInputError {
-    fn from(err: io::Error) -> AddApplicationInputError {
-        AddApplicationInputError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddApplicationInputError {
@@ -1423,13 +1365,6 @@ impl Error for AddApplicationInputError {
             AddApplicationInputError::ResourceInUse(ref cause) => cause,
             AddApplicationInputError::ResourceNotFound(ref cause) => cause,
             AddApplicationInputError::UnsupportedOperation(ref cause) => cause,
-            AddApplicationInputError::Validation(ref cause) => cause,
-            AddApplicationInputError::Credentials(ref err) => err.description(),
-            AddApplicationInputError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddApplicationInputError::ParseError(ref cause) => cause,
-            AddApplicationInputError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1446,22 +1381,12 @@ pub enum AddApplicationInputProcessingConfigurationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddApplicationInputProcessingConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> AddApplicationInputProcessingConfigurationError {
+    ) -> RusotoError<AddApplicationInputProcessingConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1474,60 +1399,45 @@ impl AddApplicationInputProcessingConfigurationError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AddApplicationInputProcessingConfigurationError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationInputProcessingConfigurationError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationInputProcessingConfigurationError::InvalidArgument(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationInputProcessingConfigurationError::InvalidArgument(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceInUseException" => {
-                    return AddApplicationInputProcessingConfigurationError::ResourceInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationInputProcessingConfigurationError::ResourceInUse(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return AddApplicationInputProcessingConfigurationError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationInputProcessingConfigurationError::ResourceNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnsupportedOperationException" => {
-                    return AddApplicationInputProcessingConfigurationError::UnsupportedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationInputProcessingConfigurationError::UnsupportedOperation(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return AddApplicationInputProcessingConfigurationError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddApplicationInputProcessingConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddApplicationInputProcessingConfigurationError {
-    fn from(err: serde_json::error::Error) -> AddApplicationInputProcessingConfigurationError {
-        AddApplicationInputProcessingConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddApplicationInputProcessingConfigurationError {
-    fn from(err: CredentialsError) -> AddApplicationInputProcessingConfigurationError {
-        AddApplicationInputProcessingConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddApplicationInputProcessingConfigurationError {
-    fn from(err: HttpDispatchError) -> AddApplicationInputProcessingConfigurationError {
-        AddApplicationInputProcessingConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddApplicationInputProcessingConfigurationError {
-    fn from(err: io::Error) -> AddApplicationInputProcessingConfigurationError {
-        AddApplicationInputProcessingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddApplicationInputProcessingConfigurationError {
@@ -1547,15 +1457,6 @@ impl Error for AddApplicationInputProcessingConfigurationError {
             AddApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
                 cause
             }
-            AddApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::Credentials(ref err) => {
-                err.description()
-            }
-            AddApplicationInputProcessingConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddApplicationInputProcessingConfigurationError::ParseError(ref cause) => cause,
-            AddApplicationInputProcessingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1572,20 +1473,10 @@ pub enum AddApplicationOutputError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddApplicationOutputError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddApplicationOutputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddApplicationOutputError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1598,52 +1489,35 @@ impl AddApplicationOutputError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AddApplicationOutputError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(AddApplicationOutputError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationOutputError::InvalidArgument(String::from(error_message));
-                }
-                "ResourceInUseException" => {
-                    return AddApplicationOutputError::ResourceInUse(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return AddApplicationOutputError::ResourceNotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return AddApplicationOutputError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(AddApplicationOutputError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddApplicationOutputError::Validation(error_message.to_string());
+                "ResourceInUseException" => {
+                    return RusotoError::Service(AddApplicationOutputError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AddApplicationOutputError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(AddApplicationOutputError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddApplicationOutputError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddApplicationOutputError {
-    fn from(err: serde_json::error::Error) -> AddApplicationOutputError {
-        AddApplicationOutputError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddApplicationOutputError {
-    fn from(err: CredentialsError) -> AddApplicationOutputError {
-        AddApplicationOutputError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddApplicationOutputError {
-    fn from(err: HttpDispatchError) -> AddApplicationOutputError {
-        AddApplicationOutputError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddApplicationOutputError {
-    fn from(err: io::Error) -> AddApplicationOutputError {
-        AddApplicationOutputError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddApplicationOutputError {
@@ -1659,13 +1533,6 @@ impl Error for AddApplicationOutputError {
             AddApplicationOutputError::ResourceInUse(ref cause) => cause,
             AddApplicationOutputError::ResourceNotFound(ref cause) => cause,
             AddApplicationOutputError::UnsupportedOperation(ref cause) => cause,
-            AddApplicationOutputError::Validation(ref cause) => cause,
-            AddApplicationOutputError::Credentials(ref err) => err.description(),
-            AddApplicationOutputError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddApplicationOutputError::ParseError(ref cause) => cause,
-            AddApplicationOutputError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1682,20 +1549,12 @@ pub enum AddApplicationReferenceDataSourceError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddApplicationReferenceDataSourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddApplicationReferenceDataSourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddApplicationReferenceDataSourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1708,60 +1567,45 @@ impl AddApplicationReferenceDataSourceError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AddApplicationReferenceDataSourceError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationReferenceDataSourceError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArgumentException" => {
-                    return AddApplicationReferenceDataSourceError::InvalidArgument(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddApplicationReferenceDataSourceError::InvalidArgument(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceInUseException" => {
-                    return AddApplicationReferenceDataSourceError::ResourceInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddApplicationReferenceDataSourceError::ResourceInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return AddApplicationReferenceDataSourceError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddApplicationReferenceDataSourceError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnsupportedOperationException" => {
-                    return AddApplicationReferenceDataSourceError::UnsupportedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AddApplicationReferenceDataSourceError::UnsupportedOperation(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return AddApplicationReferenceDataSourceError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddApplicationReferenceDataSourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddApplicationReferenceDataSourceError {
-    fn from(err: serde_json::error::Error) -> AddApplicationReferenceDataSourceError {
-        AddApplicationReferenceDataSourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddApplicationReferenceDataSourceError {
-    fn from(err: CredentialsError) -> AddApplicationReferenceDataSourceError {
-        AddApplicationReferenceDataSourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddApplicationReferenceDataSourceError {
-    fn from(err: HttpDispatchError) -> AddApplicationReferenceDataSourceError {
-        AddApplicationReferenceDataSourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddApplicationReferenceDataSourceError {
-    fn from(err: io::Error) -> AddApplicationReferenceDataSourceError {
-        AddApplicationReferenceDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddApplicationReferenceDataSourceError {
@@ -1777,13 +1621,6 @@ impl Error for AddApplicationReferenceDataSourceError {
             AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
             AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
             AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::Validation(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::Credentials(ref err) => err.description(),
-            AddApplicationReferenceDataSourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddApplicationReferenceDataSourceError::ParseError(ref cause) => cause,
-            AddApplicationReferenceDataSourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1798,20 +1635,10 @@ pub enum CreateApplicationError {
     LimitExceeded(String),
     /// <p>Application is not available for this operation.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1824,45 +1651,30 @@ impl CreateApplicationError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return CreateApplicationError::CodeValidation(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::CodeValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return CreateApplicationError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateApplicationError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return CreateApplicationError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateApplicationError {
-    fn from(err: serde_json::error::Error) -> CreateApplicationError {
-        CreateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationError {
-    fn from(err: CredentialsError) -> CreateApplicationError {
-        CreateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationError {
-    fn from(err: HttpDispatchError) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationError {
-    fn from(err: io::Error) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1877,13 +1689,6 @@ impl Error for CreateApplicationError {
             CreateApplicationError::InvalidArgument(ref cause) => cause,
             CreateApplicationError::LimitExceeded(ref cause) => cause,
             CreateApplicationError::ResourceInUse(ref cause) => cause,
-            CreateApplicationError::Validation(ref cause) => cause,
-            CreateApplicationError::Credentials(ref err) => err.description(),
-            CreateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationError::ParseError(ref cause) => cause,
-            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1898,20 +1703,10 @@ pub enum DeleteApplicationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1924,47 +1719,30 @@ impl DeleteApplicationError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteApplicationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteApplicationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteApplicationError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationError {
-        DeleteApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationError {
-    fn from(err: CredentialsError) -> DeleteApplicationError {
-        DeleteApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationError {
-    fn from(err: io::Error) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -1979,13 +1757,6 @@ impl Error for DeleteApplicationError {
             DeleteApplicationError::ResourceInUse(ref cause) => cause,
             DeleteApplicationError::ResourceNotFound(ref cause) => cause,
             DeleteApplicationError::UnsupportedOperation(ref cause) => cause,
-            DeleteApplicationError::Validation(ref cause) => cause,
-            DeleteApplicationError::Credentials(ref err) => err.description(),
-            DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationError::ParseError(ref cause) => cause,
-            DeleteApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2002,22 +1773,12 @@ pub enum DeleteApplicationCloudWatchLoggingOptionError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationCloudWatchLoggingOptionError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DeleteApplicationCloudWatchLoggingOptionError {
+    ) -> RusotoError<DeleteApplicationCloudWatchLoggingOptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2030,60 +1791,45 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationCloudWatchLoggingOptionError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArgumentException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteApplicationCloudWatchLoggingOptionError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationCloudWatchLoggingOptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationCloudWatchLoggingOptionError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationCloudWatchLoggingOptionError {
-        DeleteApplicationCloudWatchLoggingOptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationCloudWatchLoggingOptionError {
-    fn from(err: CredentialsError) -> DeleteApplicationCloudWatchLoggingOptionError {
-        DeleteApplicationCloudWatchLoggingOptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationCloudWatchLoggingOptionError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationCloudWatchLoggingOptionError {
-        DeleteApplicationCloudWatchLoggingOptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationCloudWatchLoggingOptionError {
-    fn from(err: io::Error) -> DeleteApplicationCloudWatchLoggingOptionError {
-        DeleteApplicationCloudWatchLoggingOptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationCloudWatchLoggingOptionError {
@@ -2101,15 +1847,6 @@ impl Error for DeleteApplicationCloudWatchLoggingOptionError {
             DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::Validation(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::Credentials(ref err) => {
-                err.description()
-            }
-            DeleteApplicationCloudWatchLoggingOptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationCloudWatchLoggingOptionError::ParseError(ref cause) => cause,
-            DeleteApplicationCloudWatchLoggingOptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2126,22 +1863,12 @@ pub enum DeleteApplicationInputProcessingConfigurationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationInputProcessingConfigurationError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DeleteApplicationInputProcessingConfigurationError {
+    ) -> RusotoError<DeleteApplicationInputProcessingConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2153,41 +1880,46 @@ impl DeleteApplicationInputProcessingConfigurationError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                                "ConcurrentModificationException" => return DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(String::from(error_message)),
-"InvalidArgumentException" => return DeleteApplicationInputProcessingConfigurationError::InvalidArgument(String::from(error_message)),
-"ResourceInUseException" => return DeleteApplicationInputProcessingConfigurationError::ResourceInUse(String::from(error_message)),
-"ResourceNotFoundException" => return DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(String::from(error_message)),
-"UnsupportedOperationException" => return DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(String::from(error_message)),
-"ValidationException" => return DeleteApplicationInputProcessingConfigurationError::Validation(error_message.to_string()),
-_ => {}
-                            }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationInputProcessingConfigurationError::InvalidArgument(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationInputProcessingConfigurationError::ResourceInUse(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
+                _ => {}
+            }
         }
-        return DeleteApplicationInputProcessingConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationInputProcessingConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationInputProcessingConfigurationError {
-        DeleteApplicationInputProcessingConfigurationError::ParseError(
-            err.description().to_string(),
-        )
-    }
-}
-impl From<CredentialsError> for DeleteApplicationInputProcessingConfigurationError {
-    fn from(err: CredentialsError) -> DeleteApplicationInputProcessingConfigurationError {
-        DeleteApplicationInputProcessingConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationInputProcessingConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationInputProcessingConfigurationError {
-        DeleteApplicationInputProcessingConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationInputProcessingConfigurationError {
-    fn from(err: io::Error) -> DeleteApplicationInputProcessingConfigurationError {
-        DeleteApplicationInputProcessingConfigurationError::HttpDispatch(HttpDispatchError::from(
-            err,
-        ))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
@@ -2209,15 +1941,6 @@ impl Error for DeleteApplicationInputProcessingConfigurationError {
             DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
                 cause
             }
-            DeleteApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
-            DeleteApplicationInputProcessingConfigurationError::Credentials(ref err) => {
-                err.description()
-            }
-            DeleteApplicationInputProcessingConfigurationError::HttpDispatch(
-                ref dispatch_error,
-            ) => dispatch_error.description(),
-            DeleteApplicationInputProcessingConfigurationError::ParseError(ref cause) => cause,
-            DeleteApplicationInputProcessingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2234,20 +1957,10 @@ pub enum DeleteApplicationOutputError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationOutputError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationOutputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationOutputError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2260,56 +1973,37 @@ impl DeleteApplicationOutputError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteApplicationOutputError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteApplicationOutputError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArgumentException" => {
-                    return DeleteApplicationOutputError::InvalidArgument(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationOutputError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationOutputError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationOutputError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteApplicationOutputError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationOutputError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteApplicationOutputError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteApplicationOutputError::UnsupportedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteApplicationOutputError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationOutputError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationOutputError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationOutputError {
-        DeleteApplicationOutputError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationOutputError {
-    fn from(err: CredentialsError) -> DeleteApplicationOutputError {
-        DeleteApplicationOutputError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationOutputError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationOutputError {
-        DeleteApplicationOutputError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationOutputError {
-    fn from(err: io::Error) -> DeleteApplicationOutputError {
-        DeleteApplicationOutputError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationOutputError {
@@ -2325,13 +2019,6 @@ impl Error for DeleteApplicationOutputError {
             DeleteApplicationOutputError::ResourceInUse(ref cause) => cause,
             DeleteApplicationOutputError::ResourceNotFound(ref cause) => cause,
             DeleteApplicationOutputError::UnsupportedOperation(ref cause) => cause,
-            DeleteApplicationOutputError::Validation(ref cause) => cause,
-            DeleteApplicationOutputError::Credentials(ref err) => err.description(),
-            DeleteApplicationOutputError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationOutputError::ParseError(ref cause) => cause,
-            DeleteApplicationOutputError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2348,20 +2035,12 @@ pub enum DeleteApplicationReferenceDataSourceError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationReferenceDataSourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationReferenceDataSourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteApplicationReferenceDataSourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2374,60 +2053,45 @@ impl DeleteApplicationReferenceDataSourceError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteApplicationReferenceDataSourceError::ConcurrentModification(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationReferenceDataSourceError::ConcurrentModification(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidArgumentException" => {
-                    return DeleteApplicationReferenceDataSourceError::InvalidArgument(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteApplicationReferenceDataSourceError::InvalidArgument(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceInUseException" => {
-                    return DeleteApplicationReferenceDataSourceError::ResourceInUse(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteApplicationReferenceDataSourceError::ResourceInUse(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteApplicationReferenceDataSourceError::ResourceNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationReferenceDataSourceError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteApplicationReferenceDataSourceError::UnsupportedOperation(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteApplicationReferenceDataSourceError::UnsupportedOperation(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteApplicationReferenceDataSourceError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationReferenceDataSourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationReferenceDataSourceError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationReferenceDataSourceError {
-        DeleteApplicationReferenceDataSourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationReferenceDataSourceError {
-    fn from(err: CredentialsError) -> DeleteApplicationReferenceDataSourceError {
-        DeleteApplicationReferenceDataSourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationReferenceDataSourceError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationReferenceDataSourceError {
-        DeleteApplicationReferenceDataSourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationReferenceDataSourceError {
-    fn from(err: io::Error) -> DeleteApplicationReferenceDataSourceError {
-        DeleteApplicationReferenceDataSourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationReferenceDataSourceError {
@@ -2443,13 +2107,6 @@ impl Error for DeleteApplicationReferenceDataSourceError {
             DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::Validation(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::Credentials(ref err) => err.description(),
-            DeleteApplicationReferenceDataSourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationReferenceDataSourceError::ParseError(ref cause) => cause,
-            DeleteApplicationReferenceDataSourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2460,20 +2117,10 @@ pub enum DescribeApplicationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2486,41 +2133,20 @@ impl DescribeApplicationError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeApplicationError::ResourceNotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return DescribeApplicationError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeApplicationError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeApplicationError::Validation(error_message.to_string());
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DescribeApplicationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeApplicationError {
-    fn from(err: serde_json::error::Error) -> DescribeApplicationError {
-        DescribeApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeApplicationError {
-    fn from(err: CredentialsError) -> DescribeApplicationError {
-        DescribeApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeApplicationError {
-    fn from(err: HttpDispatchError) -> DescribeApplicationError {
-        DescribeApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeApplicationError {
-    fn from(err: io::Error) -> DescribeApplicationError {
-        DescribeApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeApplicationError {
@@ -2533,13 +2159,6 @@ impl Error for DescribeApplicationError {
         match *self {
             DescribeApplicationError::ResourceNotFound(ref cause) => cause,
             DescribeApplicationError::UnsupportedOperation(ref cause) => cause,
-            DescribeApplicationError::Validation(ref cause) => cause,
-            DescribeApplicationError::Credentials(ref err) => err.description(),
-            DescribeApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeApplicationError::ParseError(ref cause) => cause,
-            DescribeApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2554,20 +2173,10 @@ pub enum DiscoverInputSchemaError {
     ServiceUnavailable(String),
     /// <p>Data format is not valid. Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
     UnableToDetectSchema(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DiscoverInputSchemaError {
-    pub fn from_response(res: BufferedHttpResponse) -> DiscoverInputSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DiscoverInputSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2580,49 +2189,32 @@ impl DiscoverInputSchemaError {
 
             match *error_type {
                 "InvalidArgumentException" => {
-                    return DiscoverInputSchemaError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DiscoverInputSchemaError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceProvisionedThroughputExceededException" => {
-                    return DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceUnavailableException" => {
-                    return DiscoverInputSchemaError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnableToDetectSchemaException" => {
-                    return DiscoverInputSchemaError::UnableToDetectSchema(String::from(
-                        error_message,
+                    return RusotoError::Service(DiscoverInputSchemaError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DiscoverInputSchemaError::Validation(error_message.to_string());
+                "UnableToDetectSchemaException" => {
+                    return RusotoError::Service(DiscoverInputSchemaError::UnableToDetectSchema(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DiscoverInputSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DiscoverInputSchemaError {
-    fn from(err: serde_json::error::Error) -> DiscoverInputSchemaError {
-        DiscoverInputSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DiscoverInputSchemaError {
-    fn from(err: CredentialsError) -> DiscoverInputSchemaError {
-        DiscoverInputSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DiscoverInputSchemaError {
-    fn from(err: HttpDispatchError) -> DiscoverInputSchemaError {
-        DiscoverInputSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DiscoverInputSchemaError {
-    fn from(err: io::Error) -> DiscoverInputSchemaError {
-        DiscoverInputSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DiscoverInputSchemaError {
@@ -2637,33 +2229,15 @@ impl Error for DiscoverInputSchemaError {
             DiscoverInputSchemaError::ResourceProvisionedThroughputExceeded(ref cause) => cause,
             DiscoverInputSchemaError::ServiceUnavailable(ref cause) => cause,
             DiscoverInputSchemaError::UnableToDetectSchema(ref cause) => cause,
-            DiscoverInputSchemaError::Validation(ref cause) => cause,
-            DiscoverInputSchemaError::Credentials(ref err) => err.description(),
-            DiscoverInputSchemaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DiscoverInputSchemaError::ParseError(ref cause) => cause,
-            DiscoverInputSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
-pub enum ListApplicationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListApplicationsError {}
 
 impl ListApplicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2675,34 +2249,11 @@ impl ListApplicationsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationsError {
-    fn from(err: serde_json::error::Error) -> ListApplicationsError {
-        ListApplicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationsError {
-    fn from(err: CredentialsError) -> ListApplicationsError {
-        ListApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationsError {
-    fn from(err: HttpDispatchError) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationsError {
-    fn from(err: io::Error) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -2712,13 +2263,7 @@ impl fmt::Display for ListApplicationsError {
 }
 impl Error for ListApplicationsError {
     fn description(&self) -> &str {
-        match *self {
-            ListApplicationsError::Validation(ref cause) => cause,
-            ListApplicationsError::Credentials(ref err) => err.description(),
-            ListApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListApplicationsError::ParseError(ref cause) => cause,
-            ListApplicationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by StartApplication
@@ -2734,20 +2279,10 @@ pub enum StartApplicationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2760,50 +2295,37 @@ impl StartApplicationError {
 
             match *error_type {
                 "InvalidApplicationConfigurationException" => {
-                    return StartApplicationError::InvalidApplicationConfiguration(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartApplicationError::InvalidApplicationConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArgumentException" => {
-                    return StartApplicationError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(StartApplicationError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return StartApplicationError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(StartApplicationError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StartApplicationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartApplicationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedOperationException" => {
-                    return StartApplicationError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(StartApplicationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartApplicationError {
-    fn from(err: serde_json::error::Error) -> StartApplicationError {
-        StartApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartApplicationError {
-    fn from(err: CredentialsError) -> StartApplicationError {
-        StartApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartApplicationError {
-    fn from(err: HttpDispatchError) -> StartApplicationError {
-        StartApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartApplicationError {
-    fn from(err: io::Error) -> StartApplicationError {
-        StartApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartApplicationError {
@@ -2819,11 +2341,6 @@ impl Error for StartApplicationError {
             StartApplicationError::ResourceInUse(ref cause) => cause,
             StartApplicationError::ResourceNotFound(ref cause) => cause,
             StartApplicationError::UnsupportedOperation(ref cause) => cause,
-            StartApplicationError::Validation(ref cause) => cause,
-            StartApplicationError::Credentials(ref err) => err.description(),
-            StartApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartApplicationError::ParseError(ref cause) => cause,
-            StartApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2836,20 +2353,10 @@ pub enum StopApplicationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2862,42 +2369,25 @@ impl StopApplicationError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return StopApplicationError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(StopApplicationError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StopApplicationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopApplicationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedOperationException" => {
-                    return StopApplicationError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(StopApplicationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopApplicationError {
-    fn from(err: serde_json::error::Error) -> StopApplicationError {
-        StopApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopApplicationError {
-    fn from(err: CredentialsError) -> StopApplicationError {
-        StopApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopApplicationError {
-    fn from(err: HttpDispatchError) -> StopApplicationError {
-        StopApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopApplicationError {
-    fn from(err: io::Error) -> StopApplicationError {
-        StopApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopApplicationError {
@@ -2911,11 +2401,6 @@ impl Error for StopApplicationError {
             StopApplicationError::ResourceInUse(ref cause) => cause,
             StopApplicationError::ResourceNotFound(ref cause) => cause,
             StopApplicationError::UnsupportedOperation(ref cause) => cause,
-            StopApplicationError::Validation(ref cause) => cause,
-            StopApplicationError::Credentials(ref err) => err.description(),
-            StopApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopApplicationError::ParseError(ref cause) => cause,
-            StopApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2934,20 +2419,10 @@ pub enum UpdateApplicationError {
     ResourceNotFound(String),
 
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2960,53 +2435,40 @@ impl UpdateApplicationError {
 
             match *error_type {
                 "CodeValidationException" => {
-                    return UpdateApplicationError::CodeValidation(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::CodeValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "ConcurrentModificationException" => {
-                    return UpdateApplicationError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateApplicationError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateApplicationError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateApplicationError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateApplicationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedOperationException" => {
-                    return UpdateApplicationError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateApplicationError {
-    fn from(err: serde_json::error::Error) -> UpdateApplicationError {
-        UpdateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationError {
-    fn from(err: CredentialsError) -> UpdateApplicationError {
-        UpdateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationError {
-    fn from(err: io::Error) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -3023,13 +2485,6 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::ResourceInUse(ref cause) => cause,
             UpdateApplicationError::ResourceNotFound(ref cause) => cause,
             UpdateApplicationError::UnsupportedOperation(ref cause) => cause,
-            UpdateApplicationError::Validation(ref cause) => cause,
-            UpdateApplicationError::Credentials(ref err) => err.description(),
-            UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationError::ParseError(ref cause) => cause,
-            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }

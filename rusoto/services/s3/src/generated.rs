@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -17656,20 +17653,10 @@ impl YearsSerializer {
 pub enum AbortMultipartUploadError {
     /// <p>The specified multipart upload does not exist.</p>
     NoSuchUpload(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AbortMultipartUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> AbortMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AbortMultipartUploadError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17677,15 +17664,15 @@ impl AbortMultipartUploadError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchUpload" => {
-                        return AbortMultipartUploadError::NoSuchUpload(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AbortMultipartUploadError::NoSuchUpload(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AbortMultipartUploadError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17693,28 +17680,6 @@ impl AbortMultipartUploadError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AbortMultipartUploadError {
-    fn from(err: XmlParseError) -> AbortMultipartUploadError {
-        let XmlParseError(message) = err;
-        AbortMultipartUploadError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AbortMultipartUploadError {
-    fn from(err: CredentialsError) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AbortMultipartUploadError {
-    fn from(err: HttpDispatchError) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AbortMultipartUploadError {
-    fn from(err: io::Error) -> AbortMultipartUploadError {
-        AbortMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AbortMultipartUploadError {
@@ -17726,33 +17691,15 @@ impl Error for AbortMultipartUploadError {
     fn description(&self) -> &str {
         match *self {
             AbortMultipartUploadError::NoSuchUpload(ref cause) => cause,
-            AbortMultipartUploadError::Validation(ref cause) => cause,
-            AbortMultipartUploadError::Credentials(ref err) => err.description(),
-            AbortMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AbortMultipartUploadError::ParseError(ref cause) => cause,
-            AbortMultipartUploadError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by CompleteMultipartUpload
 #[derive(Debug, PartialEq)]
-pub enum CompleteMultipartUploadError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum CompleteMultipartUploadError {}
 
 impl CompleteMultipartUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> CompleteMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteMultipartUploadError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17763,7 +17710,7 @@ impl CompleteMultipartUploadError {
                 }
             }
         }
-        CompleteMultipartUploadError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17771,28 +17718,6 @@ impl CompleteMultipartUploadError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CompleteMultipartUploadError {
-    fn from(err: XmlParseError) -> CompleteMultipartUploadError {
-        let XmlParseError(message) = err;
-        CompleteMultipartUploadError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CompleteMultipartUploadError {
-    fn from(err: CredentialsError) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CompleteMultipartUploadError {
-    fn from(err: HttpDispatchError) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CompleteMultipartUploadError {
-    fn from(err: io::Error) -> CompleteMultipartUploadError {
-        CompleteMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CompleteMultipartUploadError {
@@ -17802,15 +17727,7 @@ impl fmt::Display for CompleteMultipartUploadError {
 }
 impl Error for CompleteMultipartUploadError {
     fn description(&self) -> &str {
-        match *self {
-            CompleteMultipartUploadError::Validation(ref cause) => cause,
-            CompleteMultipartUploadError::Credentials(ref err) => err.description(),
-            CompleteMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CompleteMultipartUploadError::ParseError(ref cause) => cause,
-            CompleteMultipartUploadError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by CopyObject
@@ -17818,20 +17735,10 @@ impl Error for CompleteMultipartUploadError {
 pub enum CopyObjectError {
     /// <p>The source object of the COPY operation is not in the active tier and is only stored in Amazon Glacier.</p>
     ObjectNotInActiveTierError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17839,15 +17746,15 @@ impl CopyObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ObjectNotInActiveTierError" => {
-                        return CopyObjectError::ObjectNotInActiveTierError(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CopyObjectError::ObjectNotInActiveTierError(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CopyObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17855,28 +17762,6 @@ impl CopyObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyObjectError {
-    fn from(err: XmlParseError) -> CopyObjectError {
-        let XmlParseError(message) = err;
-        CopyObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyObjectError {
-    fn from(err: CredentialsError) -> CopyObjectError {
-        CopyObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyObjectError {
-    fn from(err: HttpDispatchError) -> CopyObjectError {
-        CopyObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyObjectError {
-    fn from(err: io::Error) -> CopyObjectError {
-        CopyObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyObjectError {
@@ -17888,11 +17773,6 @@ impl Error for CopyObjectError {
     fn description(&self) -> &str {
         match *self {
             CopyObjectError::ObjectNotInActiveTierError(ref cause) => cause,
-            CopyObjectError::Validation(ref cause) => cause,
-            CopyObjectError::Credentials(ref err) => err.description(),
-            CopyObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyObjectError::ParseError(ref cause) => cause,
-            CopyObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17903,20 +17783,10 @@ pub enum CreateBucketError {
     BucketAlreadyExists(String),
 
     BucketAlreadyOwnedByYou(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBucketError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBucketError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBucketError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17924,20 +17794,20 @@ impl CreateBucketError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketAlreadyExists" => {
-                        return CreateBucketError::BucketAlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateBucketError::BucketAlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "BucketAlreadyOwnedByYou" => {
-                        return CreateBucketError::BucketAlreadyOwnedByYou(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateBucketError::BucketAlreadyOwnedByYou(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateBucketError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17945,28 +17815,6 @@ impl CreateBucketError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateBucketError {
-    fn from(err: XmlParseError) -> CreateBucketError {
-        let XmlParseError(message) = err;
-        CreateBucketError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateBucketError {
-    fn from(err: CredentialsError) -> CreateBucketError {
-        CreateBucketError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBucketError {
-    fn from(err: HttpDispatchError) -> CreateBucketError {
-        CreateBucketError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBucketError {
-    fn from(err: io::Error) -> CreateBucketError {
-        CreateBucketError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateBucketError {
@@ -17979,31 +17827,15 @@ impl Error for CreateBucketError {
         match *self {
             CreateBucketError::BucketAlreadyExists(ref cause) => cause,
             CreateBucketError::BucketAlreadyOwnedByYou(ref cause) => cause,
-            CreateBucketError::Validation(ref cause) => cause,
-            CreateBucketError::Credentials(ref err) => err.description(),
-            CreateBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBucketError::ParseError(ref cause) => cause,
-            CreateBucketError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by CreateMultipartUpload
 #[derive(Debug, PartialEq)]
-pub enum CreateMultipartUploadError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum CreateMultipartUploadError {}
 
 impl CreateMultipartUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateMultipartUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMultipartUploadError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18014,7 +17846,7 @@ impl CreateMultipartUploadError {
                 }
             }
         }
-        CreateMultipartUploadError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18022,28 +17854,6 @@ impl CreateMultipartUploadError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateMultipartUploadError {
-    fn from(err: XmlParseError) -> CreateMultipartUploadError {
-        let XmlParseError(message) = err;
-        CreateMultipartUploadError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateMultipartUploadError {
-    fn from(err: CredentialsError) -> CreateMultipartUploadError {
-        CreateMultipartUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateMultipartUploadError {
-    fn from(err: HttpDispatchError) -> CreateMultipartUploadError {
-        CreateMultipartUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateMultipartUploadError {
-    fn from(err: io::Error) -> CreateMultipartUploadError {
-        CreateMultipartUploadError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateMultipartUploadError {
@@ -18053,34 +17863,15 @@ impl fmt::Display for CreateMultipartUploadError {
 }
 impl Error for CreateMultipartUploadError {
     fn description(&self) -> &str {
-        match *self {
-            CreateMultipartUploadError::Validation(ref cause) => cause,
-            CreateMultipartUploadError::Credentials(ref err) => err.description(),
-            CreateMultipartUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateMultipartUploadError::ParseError(ref cause) => cause,
-            CreateMultipartUploadError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucket
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketError {}
 
 impl DeleteBucketError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18091,7 +17882,7 @@ impl DeleteBucketError {
                 }
             }
         }
-        DeleteBucketError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18099,28 +17890,6 @@ impl DeleteBucketError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketError {
-    fn from(err: XmlParseError) -> DeleteBucketError {
-        let XmlParseError(message) = err;
-        DeleteBucketError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketError {
-    fn from(err: CredentialsError) -> DeleteBucketError {
-        DeleteBucketError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketError {
-    fn from(err: HttpDispatchError) -> DeleteBucketError {
-        DeleteBucketError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketError {
-    fn from(err: io::Error) -> DeleteBucketError {
-        DeleteBucketError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketError {
@@ -18130,32 +17899,17 @@ impl fmt::Display for DeleteBucketError {
 }
 impl Error for DeleteBucketError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketError::Validation(ref cause) => cause,
-            DeleteBucketError::Credentials(ref err) => err.description(),
-            DeleteBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBucketError::ParseError(ref cause) => cause,
-            DeleteBucketError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketAnalyticsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketAnalyticsConfigurationError {}
 
 impl DeleteBucketAnalyticsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketAnalyticsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteBucketAnalyticsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18166,7 +17920,7 @@ impl DeleteBucketAnalyticsConfigurationError {
                 }
             }
         }
-        DeleteBucketAnalyticsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18174,28 +17928,6 @@ impl DeleteBucketAnalyticsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketAnalyticsConfigurationError {
-    fn from(err: XmlParseError) -> DeleteBucketAnalyticsConfigurationError {
-        let XmlParseError(message) = err;
-        DeleteBucketAnalyticsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketAnalyticsConfigurationError {
-    fn from(err: CredentialsError) -> DeleteBucketAnalyticsConfigurationError {
-        DeleteBucketAnalyticsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketAnalyticsConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteBucketAnalyticsConfigurationError {
-        DeleteBucketAnalyticsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketAnalyticsConfigurationError {
-    fn from(err: io::Error) -> DeleteBucketAnalyticsConfigurationError {
-        DeleteBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketAnalyticsConfigurationError {
@@ -18205,34 +17937,15 @@ impl fmt::Display for DeleteBucketAnalyticsConfigurationError {
 }
 impl Error for DeleteBucketAnalyticsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
-            DeleteBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
-            DeleteBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
-            DeleteBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketCors
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketCorsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketCorsError {}
 
 impl DeleteBucketCorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketCorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketCorsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18243,7 +17956,7 @@ impl DeleteBucketCorsError {
                 }
             }
         }
-        DeleteBucketCorsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18251,28 +17964,6 @@ impl DeleteBucketCorsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketCorsError {
-    fn from(err: XmlParseError) -> DeleteBucketCorsError {
-        let XmlParseError(message) = err;
-        DeleteBucketCorsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketCorsError {
-    fn from(err: CredentialsError) -> DeleteBucketCorsError {
-        DeleteBucketCorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketCorsError {
-    fn from(err: HttpDispatchError) -> DeleteBucketCorsError {
-        DeleteBucketCorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketCorsError {
-    fn from(err: io::Error) -> DeleteBucketCorsError {
-        DeleteBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketCorsError {
@@ -18282,32 +17973,15 @@ impl fmt::Display for DeleteBucketCorsError {
 }
 impl Error for DeleteBucketCorsError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketCorsError::Validation(ref cause) => cause,
-            DeleteBucketCorsError::Credentials(ref err) => err.description(),
-            DeleteBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBucketCorsError::ParseError(ref cause) => cause,
-            DeleteBucketCorsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketEncryption
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketEncryptionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketEncryptionError {}
 
 impl DeleteBucketEncryptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketEncryptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketEncryptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18318,7 +17992,7 @@ impl DeleteBucketEncryptionError {
                 }
             }
         }
-        DeleteBucketEncryptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18326,28 +18000,6 @@ impl DeleteBucketEncryptionError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketEncryptionError {
-    fn from(err: XmlParseError) -> DeleteBucketEncryptionError {
-        let XmlParseError(message) = err;
-        DeleteBucketEncryptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketEncryptionError {
-    fn from(err: CredentialsError) -> DeleteBucketEncryptionError {
-        DeleteBucketEncryptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketEncryptionError {
-    fn from(err: HttpDispatchError) -> DeleteBucketEncryptionError {
-        DeleteBucketEncryptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketEncryptionError {
-    fn from(err: io::Error) -> DeleteBucketEncryptionError {
-        DeleteBucketEncryptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketEncryptionError {
@@ -18357,34 +18009,17 @@ impl fmt::Display for DeleteBucketEncryptionError {
 }
 impl Error for DeleteBucketEncryptionError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketEncryptionError::Validation(ref cause) => cause,
-            DeleteBucketEncryptionError::Credentials(ref err) => err.description(),
-            DeleteBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketEncryptionError::ParseError(ref cause) => cause,
-            DeleteBucketEncryptionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketInventoryConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketInventoryConfigurationError {}
 
 impl DeleteBucketInventoryConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketInventoryConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteBucketInventoryConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18395,7 +18030,7 @@ impl DeleteBucketInventoryConfigurationError {
                 }
             }
         }
-        DeleteBucketInventoryConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18403,28 +18038,6 @@ impl DeleteBucketInventoryConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketInventoryConfigurationError {
-    fn from(err: XmlParseError) -> DeleteBucketInventoryConfigurationError {
-        let XmlParseError(message) = err;
-        DeleteBucketInventoryConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketInventoryConfigurationError {
-    fn from(err: CredentialsError) -> DeleteBucketInventoryConfigurationError {
-        DeleteBucketInventoryConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketInventoryConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteBucketInventoryConfigurationError {
-        DeleteBucketInventoryConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketInventoryConfigurationError {
-    fn from(err: io::Error) -> DeleteBucketInventoryConfigurationError {
-        DeleteBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketInventoryConfigurationError {
@@ -18434,34 +18047,15 @@ impl fmt::Display for DeleteBucketInventoryConfigurationError {
 }
 impl Error for DeleteBucketInventoryConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketInventoryConfigurationError::Validation(ref cause) => cause,
-            DeleteBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
-            DeleteBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketInventoryConfigurationError::ParseError(ref cause) => cause,
-            DeleteBucketInventoryConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketLifecycle
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketLifecycleError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketLifecycleError {}
 
 impl DeleteBucketLifecycleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketLifecycleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketLifecycleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18472,7 +18066,7 @@ impl DeleteBucketLifecycleError {
                 }
             }
         }
-        DeleteBucketLifecycleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18480,28 +18074,6 @@ impl DeleteBucketLifecycleError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketLifecycleError {
-    fn from(err: XmlParseError) -> DeleteBucketLifecycleError {
-        let XmlParseError(message) = err;
-        DeleteBucketLifecycleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketLifecycleError {
-    fn from(err: CredentialsError) -> DeleteBucketLifecycleError {
-        DeleteBucketLifecycleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketLifecycleError {
-    fn from(err: HttpDispatchError) -> DeleteBucketLifecycleError {
-        DeleteBucketLifecycleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketLifecycleError {
-    fn from(err: io::Error) -> DeleteBucketLifecycleError {
-        DeleteBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketLifecycleError {
@@ -18511,34 +18083,17 @@ impl fmt::Display for DeleteBucketLifecycleError {
 }
 impl Error for DeleteBucketLifecycleError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketLifecycleError::Validation(ref cause) => cause,
-            DeleteBucketLifecycleError::Credentials(ref err) => err.description(),
-            DeleteBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketLifecycleError::ParseError(ref cause) => cause,
-            DeleteBucketLifecycleError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketMetricsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketMetricsConfigurationError {}
 
 impl DeleteBucketMetricsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketMetricsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteBucketMetricsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18549,7 +18104,7 @@ impl DeleteBucketMetricsConfigurationError {
                 }
             }
         }
-        DeleteBucketMetricsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18557,28 +18112,6 @@ impl DeleteBucketMetricsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketMetricsConfigurationError {
-    fn from(err: XmlParseError) -> DeleteBucketMetricsConfigurationError {
-        let XmlParseError(message) = err;
-        DeleteBucketMetricsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketMetricsConfigurationError {
-    fn from(err: CredentialsError) -> DeleteBucketMetricsConfigurationError {
-        DeleteBucketMetricsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketMetricsConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteBucketMetricsConfigurationError {
-        DeleteBucketMetricsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketMetricsConfigurationError {
-    fn from(err: io::Error) -> DeleteBucketMetricsConfigurationError {
-        DeleteBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketMetricsConfigurationError {
@@ -18588,34 +18121,15 @@ impl fmt::Display for DeleteBucketMetricsConfigurationError {
 }
 impl Error for DeleteBucketMetricsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketMetricsConfigurationError::Validation(ref cause) => cause,
-            DeleteBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
-            DeleteBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketMetricsConfigurationError::ParseError(ref cause) => cause,
-            DeleteBucketMetricsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketPolicy
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketPolicyError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketPolicyError {}
 
 impl DeleteBucketPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18626,7 +18140,7 @@ impl DeleteBucketPolicyError {
                 }
             }
         }
-        DeleteBucketPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18634,28 +18148,6 @@ impl DeleteBucketPolicyError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketPolicyError {
-    fn from(err: XmlParseError) -> DeleteBucketPolicyError {
-        let XmlParseError(message) = err;
-        DeleteBucketPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketPolicyError {
-    fn from(err: CredentialsError) -> DeleteBucketPolicyError {
-        DeleteBucketPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteBucketPolicyError {
-        DeleteBucketPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketPolicyError {
-    fn from(err: io::Error) -> DeleteBucketPolicyError {
-        DeleteBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketPolicyError {
@@ -18665,34 +18157,15 @@ impl fmt::Display for DeleteBucketPolicyError {
 }
 impl Error for DeleteBucketPolicyError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketPolicyError::Validation(ref cause) => cause,
-            DeleteBucketPolicyError::Credentials(ref err) => err.description(),
-            DeleteBucketPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketPolicyError::ParseError(ref cause) => cause,
-            DeleteBucketPolicyError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketReplication
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketReplicationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketReplicationError {}
 
 impl DeleteBucketReplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketReplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketReplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18703,7 +18176,7 @@ impl DeleteBucketReplicationError {
                 }
             }
         }
-        DeleteBucketReplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18711,28 +18184,6 @@ impl DeleteBucketReplicationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketReplicationError {
-    fn from(err: XmlParseError) -> DeleteBucketReplicationError {
-        let XmlParseError(message) = err;
-        DeleteBucketReplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketReplicationError {
-    fn from(err: CredentialsError) -> DeleteBucketReplicationError {
-        DeleteBucketReplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketReplicationError {
-    fn from(err: HttpDispatchError) -> DeleteBucketReplicationError {
-        DeleteBucketReplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketReplicationError {
-    fn from(err: io::Error) -> DeleteBucketReplicationError {
-        DeleteBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketReplicationError {
@@ -18742,34 +18193,15 @@ impl fmt::Display for DeleteBucketReplicationError {
 }
 impl Error for DeleteBucketReplicationError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketReplicationError::Validation(ref cause) => cause,
-            DeleteBucketReplicationError::Credentials(ref err) => err.description(),
-            DeleteBucketReplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketReplicationError::ParseError(ref cause) => cause,
-            DeleteBucketReplicationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketTagging
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketTaggingError {}
 
 impl DeleteBucketTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18780,7 +18212,7 @@ impl DeleteBucketTaggingError {
                 }
             }
         }
-        DeleteBucketTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18788,28 +18220,6 @@ impl DeleteBucketTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketTaggingError {
-    fn from(err: XmlParseError) -> DeleteBucketTaggingError {
-        let XmlParseError(message) = err;
-        DeleteBucketTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketTaggingError {
-    fn from(err: CredentialsError) -> DeleteBucketTaggingError {
-        DeleteBucketTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketTaggingError {
-    fn from(err: HttpDispatchError) -> DeleteBucketTaggingError {
-        DeleteBucketTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketTaggingError {
-    fn from(err: io::Error) -> DeleteBucketTaggingError {
-        DeleteBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketTaggingError {
@@ -18819,34 +18229,15 @@ impl fmt::Display for DeleteBucketTaggingError {
 }
 impl Error for DeleteBucketTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketTaggingError::Validation(ref cause) => cause,
-            DeleteBucketTaggingError::Credentials(ref err) => err.description(),
-            DeleteBucketTaggingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketTaggingError::ParseError(ref cause) => cause,
-            DeleteBucketTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteBucketWebsite
 #[derive(Debug, PartialEq)]
-pub enum DeleteBucketWebsiteError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteBucketWebsiteError {}
 
 impl DeleteBucketWebsiteError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBucketWebsiteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBucketWebsiteError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18857,7 +18248,7 @@ impl DeleteBucketWebsiteError {
                 }
             }
         }
-        DeleteBucketWebsiteError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18865,28 +18256,6 @@ impl DeleteBucketWebsiteError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteBucketWebsiteError {
-    fn from(err: XmlParseError) -> DeleteBucketWebsiteError {
-        let XmlParseError(message) = err;
-        DeleteBucketWebsiteError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBucketWebsiteError {
-    fn from(err: CredentialsError) -> DeleteBucketWebsiteError {
-        DeleteBucketWebsiteError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBucketWebsiteError {
-    fn from(err: HttpDispatchError) -> DeleteBucketWebsiteError {
-        DeleteBucketWebsiteError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBucketWebsiteError {
-    fn from(err: io::Error) -> DeleteBucketWebsiteError {
-        DeleteBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteBucketWebsiteError {
@@ -18896,34 +18265,15 @@ impl fmt::Display for DeleteBucketWebsiteError {
 }
 impl Error for DeleteBucketWebsiteError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteBucketWebsiteError::Validation(ref cause) => cause,
-            DeleteBucketWebsiteError::Credentials(ref err) => err.description(),
-            DeleteBucketWebsiteError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteBucketWebsiteError::ParseError(ref cause) => cause,
-            DeleteBucketWebsiteError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteObject
 #[derive(Debug, PartialEq)]
-pub enum DeleteObjectError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteObjectError {}
 
 impl DeleteObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18934,7 +18284,7 @@ impl DeleteObjectError {
                 }
             }
         }
-        DeleteObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18942,28 +18292,6 @@ impl DeleteObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteObjectError {
-    fn from(err: XmlParseError) -> DeleteObjectError {
-        let XmlParseError(message) = err;
-        DeleteObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteObjectError {
-    fn from(err: CredentialsError) -> DeleteObjectError {
-        DeleteObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteObjectError {
-    fn from(err: HttpDispatchError) -> DeleteObjectError {
-        DeleteObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteObjectError {
-    fn from(err: io::Error) -> DeleteObjectError {
-        DeleteObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteObjectError {
@@ -18973,32 +18301,15 @@ impl fmt::Display for DeleteObjectError {
 }
 impl Error for DeleteObjectError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteObjectError::Validation(ref cause) => cause,
-            DeleteObjectError::Credentials(ref err) => err.description(),
-            DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectError::ParseError(ref cause) => cause,
-            DeleteObjectError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteObjectTagging
 #[derive(Debug, PartialEq)]
-pub enum DeleteObjectTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteObjectTaggingError {}
 
 impl DeleteObjectTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19009,7 +18320,7 @@ impl DeleteObjectTaggingError {
                 }
             }
         }
-        DeleteObjectTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19017,28 +18328,6 @@ impl DeleteObjectTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteObjectTaggingError {
-    fn from(err: XmlParseError) -> DeleteObjectTaggingError {
-        let XmlParseError(message) = err;
-        DeleteObjectTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteObjectTaggingError {
-    fn from(err: CredentialsError) -> DeleteObjectTaggingError {
-        DeleteObjectTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteObjectTaggingError {
-    fn from(err: HttpDispatchError) -> DeleteObjectTaggingError {
-        DeleteObjectTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteObjectTaggingError {
-    fn from(err: io::Error) -> DeleteObjectTaggingError {
-        DeleteObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteObjectTaggingError {
@@ -19048,34 +18337,15 @@ impl fmt::Display for DeleteObjectTaggingError {
 }
 impl Error for DeleteObjectTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteObjectTaggingError::Validation(ref cause) => cause,
-            DeleteObjectTaggingError::Credentials(ref err) => err.description(),
-            DeleteObjectTaggingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteObjectTaggingError::ParseError(ref cause) => cause,
-            DeleteObjectTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteObjects
 #[derive(Debug, PartialEq)]
-pub enum DeleteObjectsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteObjectsError {}
 
 impl DeleteObjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19086,7 +18356,7 @@ impl DeleteObjectsError {
                 }
             }
         }
-        DeleteObjectsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19094,28 +18364,6 @@ impl DeleteObjectsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteObjectsError {
-    fn from(err: XmlParseError) -> DeleteObjectsError {
-        let XmlParseError(message) = err;
-        DeleteObjectsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteObjectsError {
-    fn from(err: CredentialsError) -> DeleteObjectsError {
-        DeleteObjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteObjectsError {
-    fn from(err: HttpDispatchError) -> DeleteObjectsError {
-        DeleteObjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteObjectsError {
-    fn from(err: io::Error) -> DeleteObjectsError {
-        DeleteObjectsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteObjectsError {
@@ -19125,32 +18373,15 @@ impl fmt::Display for DeleteObjectsError {
 }
 impl Error for DeleteObjectsError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteObjectsError::Validation(ref cause) => cause,
-            DeleteObjectsError::Credentials(ref err) => err.description(),
-            DeleteObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectsError::ParseError(ref cause) => cause,
-            DeleteObjectsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeletePublicAccessBlock
 #[derive(Debug, PartialEq)]
-pub enum DeletePublicAccessBlockError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeletePublicAccessBlockError {}
 
 impl DeletePublicAccessBlockError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePublicAccessBlockError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19161,7 +18392,7 @@ impl DeletePublicAccessBlockError {
                 }
             }
         }
-        DeletePublicAccessBlockError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19169,28 +18400,6 @@ impl DeletePublicAccessBlockError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeletePublicAccessBlockError {
-    fn from(err: XmlParseError) -> DeletePublicAccessBlockError {
-        let XmlParseError(message) = err;
-        DeletePublicAccessBlockError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeletePublicAccessBlockError {
-    fn from(err: CredentialsError) -> DeletePublicAccessBlockError {
-        DeletePublicAccessBlockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePublicAccessBlockError {
-    fn from(err: HttpDispatchError) -> DeletePublicAccessBlockError {
-        DeletePublicAccessBlockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePublicAccessBlockError {
-    fn from(err: io::Error) -> DeletePublicAccessBlockError {
-        DeletePublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeletePublicAccessBlockError {
@@ -19200,34 +18409,17 @@ impl fmt::Display for DeletePublicAccessBlockError {
 }
 impl Error for DeletePublicAccessBlockError {
     fn description(&self) -> &str {
-        match *self {
-            DeletePublicAccessBlockError::Validation(ref cause) => cause,
-            DeletePublicAccessBlockError::Credentials(ref err) => err.description(),
-            DeletePublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePublicAccessBlockError::ParseError(ref cause) => cause,
-            DeletePublicAccessBlockError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketAccelerateConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketAccelerateConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketAccelerateConfigurationError {}
 
 impl GetBucketAccelerateConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAccelerateConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketAccelerateConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19238,7 +18430,7 @@ impl GetBucketAccelerateConfigurationError {
                 }
             }
         }
-        GetBucketAccelerateConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19246,28 +18438,6 @@ impl GetBucketAccelerateConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketAccelerateConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketAccelerateConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketAccelerateConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketAccelerateConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketAccelerateConfigurationError {
-        GetBucketAccelerateConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketAccelerateConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketAccelerateConfigurationError {
-        GetBucketAccelerateConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketAccelerateConfigurationError {
-    fn from(err: io::Error) -> GetBucketAccelerateConfigurationError {
-        GetBucketAccelerateConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketAccelerateConfigurationError {
@@ -19277,34 +18447,15 @@ impl fmt::Display for GetBucketAccelerateConfigurationError {
 }
 impl Error for GetBucketAccelerateConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketAccelerateConfigurationError::Validation(ref cause) => cause,
-            GetBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketAccelerateConfigurationError::ParseError(ref cause) => cause,
-            GetBucketAccelerateConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketAcl
 #[derive(Debug, PartialEq)]
-pub enum GetBucketAclError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketAclError {}
 
 impl GetBucketAclError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAclError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketAclError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19315,7 +18466,7 @@ impl GetBucketAclError {
                 }
             }
         }
-        GetBucketAclError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19323,28 +18474,6 @@ impl GetBucketAclError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketAclError {
-    fn from(err: XmlParseError) -> GetBucketAclError {
-        let XmlParseError(message) = err;
-        GetBucketAclError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketAclError {
-    fn from(err: CredentialsError) -> GetBucketAclError {
-        GetBucketAclError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketAclError {
-    fn from(err: HttpDispatchError) -> GetBucketAclError {
-        GetBucketAclError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketAclError {
-    fn from(err: io::Error) -> GetBucketAclError {
-        GetBucketAclError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketAclError {
@@ -19354,32 +18483,17 @@ impl fmt::Display for GetBucketAclError {
 }
 impl Error for GetBucketAclError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketAclError::Validation(ref cause) => cause,
-            GetBucketAclError::Credentials(ref err) => err.description(),
-            GetBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketAclError::ParseError(ref cause) => cause,
-            GetBucketAclError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketAnalyticsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketAnalyticsConfigurationError {}
 
 impl GetBucketAnalyticsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketAnalyticsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketAnalyticsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19390,7 +18504,7 @@ impl GetBucketAnalyticsConfigurationError {
                 }
             }
         }
-        GetBucketAnalyticsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19398,28 +18512,6 @@ impl GetBucketAnalyticsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketAnalyticsConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketAnalyticsConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketAnalyticsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketAnalyticsConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketAnalyticsConfigurationError {
-        GetBucketAnalyticsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketAnalyticsConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketAnalyticsConfigurationError {
-        GetBucketAnalyticsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketAnalyticsConfigurationError {
-    fn from(err: io::Error) -> GetBucketAnalyticsConfigurationError {
-        GetBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketAnalyticsConfigurationError {
@@ -19429,34 +18521,15 @@ impl fmt::Display for GetBucketAnalyticsConfigurationError {
 }
 impl Error for GetBucketAnalyticsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
-            GetBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
-            GetBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketCors
 #[derive(Debug, PartialEq)]
-pub enum GetBucketCorsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketCorsError {}
 
 impl GetBucketCorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketCorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketCorsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19467,7 +18540,7 @@ impl GetBucketCorsError {
                 }
             }
         }
-        GetBucketCorsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19475,28 +18548,6 @@ impl GetBucketCorsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketCorsError {
-    fn from(err: XmlParseError) -> GetBucketCorsError {
-        let XmlParseError(message) = err;
-        GetBucketCorsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketCorsError {
-    fn from(err: CredentialsError) -> GetBucketCorsError {
-        GetBucketCorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketCorsError {
-    fn from(err: HttpDispatchError) -> GetBucketCorsError {
-        GetBucketCorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketCorsError {
-    fn from(err: io::Error) -> GetBucketCorsError {
-        GetBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketCorsError {
@@ -19506,32 +18557,15 @@ impl fmt::Display for GetBucketCorsError {
 }
 impl Error for GetBucketCorsError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketCorsError::Validation(ref cause) => cause,
-            GetBucketCorsError::Credentials(ref err) => err.description(),
-            GetBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketCorsError::ParseError(ref cause) => cause,
-            GetBucketCorsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketEncryption
 #[derive(Debug, PartialEq)]
-pub enum GetBucketEncryptionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketEncryptionError {}
 
 impl GetBucketEncryptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketEncryptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketEncryptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19542,7 +18576,7 @@ impl GetBucketEncryptionError {
                 }
             }
         }
-        GetBucketEncryptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19550,28 +18584,6 @@ impl GetBucketEncryptionError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketEncryptionError {
-    fn from(err: XmlParseError) -> GetBucketEncryptionError {
-        let XmlParseError(message) = err;
-        GetBucketEncryptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketEncryptionError {
-    fn from(err: CredentialsError) -> GetBucketEncryptionError {
-        GetBucketEncryptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketEncryptionError {
-    fn from(err: HttpDispatchError) -> GetBucketEncryptionError {
-        GetBucketEncryptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketEncryptionError {
-    fn from(err: io::Error) -> GetBucketEncryptionError {
-        GetBucketEncryptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketEncryptionError {
@@ -19581,34 +18593,17 @@ impl fmt::Display for GetBucketEncryptionError {
 }
 impl Error for GetBucketEncryptionError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketEncryptionError::Validation(ref cause) => cause,
-            GetBucketEncryptionError::Credentials(ref err) => err.description(),
-            GetBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketEncryptionError::ParseError(ref cause) => cause,
-            GetBucketEncryptionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketInventoryConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketInventoryConfigurationError {}
 
 impl GetBucketInventoryConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketInventoryConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketInventoryConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19619,7 +18614,7 @@ impl GetBucketInventoryConfigurationError {
                 }
             }
         }
-        GetBucketInventoryConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19627,28 +18622,6 @@ impl GetBucketInventoryConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketInventoryConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketInventoryConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketInventoryConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketInventoryConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketInventoryConfigurationError {
-        GetBucketInventoryConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketInventoryConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketInventoryConfigurationError {
-        GetBucketInventoryConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketInventoryConfigurationError {
-    fn from(err: io::Error) -> GetBucketInventoryConfigurationError {
-        GetBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketInventoryConfigurationError {
@@ -19658,34 +18631,15 @@ impl fmt::Display for GetBucketInventoryConfigurationError {
 }
 impl Error for GetBucketInventoryConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketInventoryConfigurationError::Validation(ref cause) => cause,
-            GetBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketInventoryConfigurationError::ParseError(ref cause) => cause,
-            GetBucketInventoryConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketLifecycle
 #[derive(Debug, PartialEq)]
-pub enum GetBucketLifecycleError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketLifecycleError {}
 
 impl GetBucketLifecycleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLifecycleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLifecycleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19696,7 +18650,7 @@ impl GetBucketLifecycleError {
                 }
             }
         }
-        GetBucketLifecycleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19704,28 +18658,6 @@ impl GetBucketLifecycleError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketLifecycleError {
-    fn from(err: XmlParseError) -> GetBucketLifecycleError {
-        let XmlParseError(message) = err;
-        GetBucketLifecycleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketLifecycleError {
-    fn from(err: CredentialsError) -> GetBucketLifecycleError {
-        GetBucketLifecycleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketLifecycleError {
-    fn from(err: HttpDispatchError) -> GetBucketLifecycleError {
-        GetBucketLifecycleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketLifecycleError {
-    fn from(err: io::Error) -> GetBucketLifecycleError {
-        GetBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketLifecycleError {
@@ -19735,34 +18667,17 @@ impl fmt::Display for GetBucketLifecycleError {
 }
 impl Error for GetBucketLifecycleError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketLifecycleError::Validation(ref cause) => cause,
-            GetBucketLifecycleError::Credentials(ref err) => err.description(),
-            GetBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketLifecycleError::ParseError(ref cause) => cause,
-            GetBucketLifecycleError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketLifecycleConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketLifecycleConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketLifecycleConfigurationError {}
 
 impl GetBucketLifecycleConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLifecycleConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketLifecycleConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19773,7 +18688,7 @@ impl GetBucketLifecycleConfigurationError {
                 }
             }
         }
-        GetBucketLifecycleConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19781,28 +18696,6 @@ impl GetBucketLifecycleConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketLifecycleConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketLifecycleConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketLifecycleConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketLifecycleConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketLifecycleConfigurationError {
-        GetBucketLifecycleConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketLifecycleConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketLifecycleConfigurationError {
-        GetBucketLifecycleConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketLifecycleConfigurationError {
-    fn from(err: io::Error) -> GetBucketLifecycleConfigurationError {
-        GetBucketLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketLifecycleConfigurationError {
@@ -19812,34 +18705,15 @@ impl fmt::Display for GetBucketLifecycleConfigurationError {
 }
 impl Error for GetBucketLifecycleConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketLifecycleConfigurationError::Validation(ref cause) => cause,
-            GetBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketLifecycleConfigurationError::ParseError(ref cause) => cause,
-            GetBucketLifecycleConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketLocation
 #[derive(Debug, PartialEq)]
-pub enum GetBucketLocationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketLocationError {}
 
 impl GetBucketLocationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLocationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLocationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19850,7 +18724,7 @@ impl GetBucketLocationError {
                 }
             }
         }
-        GetBucketLocationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19858,28 +18732,6 @@ impl GetBucketLocationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketLocationError {
-    fn from(err: XmlParseError) -> GetBucketLocationError {
-        let XmlParseError(message) = err;
-        GetBucketLocationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketLocationError {
-    fn from(err: CredentialsError) -> GetBucketLocationError {
-        GetBucketLocationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketLocationError {
-    fn from(err: HttpDispatchError) -> GetBucketLocationError {
-        GetBucketLocationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketLocationError {
-    fn from(err: io::Error) -> GetBucketLocationError {
-        GetBucketLocationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketLocationError {
@@ -19889,34 +18741,15 @@ impl fmt::Display for GetBucketLocationError {
 }
 impl Error for GetBucketLocationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketLocationError::Validation(ref cause) => cause,
-            GetBucketLocationError::Credentials(ref err) => err.description(),
-            GetBucketLocationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketLocationError::ParseError(ref cause) => cause,
-            GetBucketLocationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketLogging
 #[derive(Debug, PartialEq)]
-pub enum GetBucketLoggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketLoggingError {}
 
 impl GetBucketLoggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketLoggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19927,7 +18760,7 @@ impl GetBucketLoggingError {
                 }
             }
         }
-        GetBucketLoggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19935,28 +18768,6 @@ impl GetBucketLoggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketLoggingError {
-    fn from(err: XmlParseError) -> GetBucketLoggingError {
-        let XmlParseError(message) = err;
-        GetBucketLoggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketLoggingError {
-    fn from(err: CredentialsError) -> GetBucketLoggingError {
-        GetBucketLoggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketLoggingError {
-    fn from(err: HttpDispatchError) -> GetBucketLoggingError {
-        GetBucketLoggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketLoggingError {
-    fn from(err: io::Error) -> GetBucketLoggingError {
-        GetBucketLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketLoggingError {
@@ -19966,32 +18777,17 @@ impl fmt::Display for GetBucketLoggingError {
 }
 impl Error for GetBucketLoggingError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketLoggingError::Validation(ref cause) => cause,
-            GetBucketLoggingError::Credentials(ref err) => err.description(),
-            GetBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketLoggingError::ParseError(ref cause) => cause,
-            GetBucketLoggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketMetricsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketMetricsConfigurationError {}
 
 impl GetBucketMetricsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketMetricsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketMetricsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20002,7 +18798,7 @@ impl GetBucketMetricsConfigurationError {
                 }
             }
         }
-        GetBucketMetricsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20010,28 +18806,6 @@ impl GetBucketMetricsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketMetricsConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketMetricsConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketMetricsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketMetricsConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketMetricsConfigurationError {
-        GetBucketMetricsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketMetricsConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketMetricsConfigurationError {
-        GetBucketMetricsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketMetricsConfigurationError {
-    fn from(err: io::Error) -> GetBucketMetricsConfigurationError {
-        GetBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketMetricsConfigurationError {
@@ -20041,34 +18815,15 @@ impl fmt::Display for GetBucketMetricsConfigurationError {
 }
 impl Error for GetBucketMetricsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketMetricsConfigurationError::Validation(ref cause) => cause,
-            GetBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketMetricsConfigurationError::ParseError(ref cause) => cause,
-            GetBucketMetricsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketNotification
 #[derive(Debug, PartialEq)]
-pub enum GetBucketNotificationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketNotificationError {}
 
 impl GetBucketNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketNotificationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20079,7 +18834,7 @@ impl GetBucketNotificationError {
                 }
             }
         }
-        GetBucketNotificationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20087,28 +18842,6 @@ impl GetBucketNotificationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketNotificationError {
-    fn from(err: XmlParseError) -> GetBucketNotificationError {
-        let XmlParseError(message) = err;
-        GetBucketNotificationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketNotificationError {
-    fn from(err: CredentialsError) -> GetBucketNotificationError {
-        GetBucketNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketNotificationError {
-    fn from(err: HttpDispatchError) -> GetBucketNotificationError {
-        GetBucketNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketNotificationError {
-    fn from(err: io::Error) -> GetBucketNotificationError {
-        GetBucketNotificationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketNotificationError {
@@ -20118,34 +18851,17 @@ impl fmt::Display for GetBucketNotificationError {
 }
 impl Error for GetBucketNotificationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketNotificationError::Validation(ref cause) => cause,
-            GetBucketNotificationError::Credentials(ref err) => err.description(),
-            GetBucketNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketNotificationError::ParseError(ref cause) => cause,
-            GetBucketNotificationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketNotificationConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetBucketNotificationConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketNotificationConfigurationError {}
 
 impl GetBucketNotificationConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketNotificationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetBucketNotificationConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20156,7 +18872,7 @@ impl GetBucketNotificationConfigurationError {
                 }
             }
         }
-        GetBucketNotificationConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20164,28 +18880,6 @@ impl GetBucketNotificationConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketNotificationConfigurationError {
-    fn from(err: XmlParseError) -> GetBucketNotificationConfigurationError {
-        let XmlParseError(message) = err;
-        GetBucketNotificationConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketNotificationConfigurationError {
-    fn from(err: CredentialsError) -> GetBucketNotificationConfigurationError {
-        GetBucketNotificationConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketNotificationConfigurationError {
-    fn from(err: HttpDispatchError) -> GetBucketNotificationConfigurationError {
-        GetBucketNotificationConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketNotificationConfigurationError {
-    fn from(err: io::Error) -> GetBucketNotificationConfigurationError {
-        GetBucketNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketNotificationConfigurationError {
@@ -20195,34 +18889,15 @@ impl fmt::Display for GetBucketNotificationConfigurationError {
 }
 impl Error for GetBucketNotificationConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketNotificationConfigurationError::Validation(ref cause) => cause,
-            GetBucketNotificationConfigurationError::Credentials(ref err) => err.description(),
-            GetBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketNotificationConfigurationError::ParseError(ref cause) => cause,
-            GetBucketNotificationConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketPolicy
 #[derive(Debug, PartialEq)]
-pub enum GetBucketPolicyError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketPolicyError {}
 
 impl GetBucketPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20233,7 +18908,7 @@ impl GetBucketPolicyError {
                 }
             }
         }
-        GetBucketPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20241,28 +18916,6 @@ impl GetBucketPolicyError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketPolicyError {
-    fn from(err: XmlParseError) -> GetBucketPolicyError {
-        let XmlParseError(message) = err;
-        GetBucketPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketPolicyError {
-    fn from(err: CredentialsError) -> GetBucketPolicyError {
-        GetBucketPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketPolicyError {
-    fn from(err: HttpDispatchError) -> GetBucketPolicyError {
-        GetBucketPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketPolicyError {
-    fn from(err: io::Error) -> GetBucketPolicyError {
-        GetBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketPolicyError {
@@ -20272,32 +18925,15 @@ impl fmt::Display for GetBucketPolicyError {
 }
 impl Error for GetBucketPolicyError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketPolicyError::Validation(ref cause) => cause,
-            GetBucketPolicyError::Credentials(ref err) => err.description(),
-            GetBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketPolicyError::ParseError(ref cause) => cause,
-            GetBucketPolicyError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketPolicyStatus
 #[derive(Debug, PartialEq)]
-pub enum GetBucketPolicyStatusError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketPolicyStatusError {}
 
 impl GetBucketPolicyStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketPolicyStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketPolicyStatusError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20308,7 +18944,7 @@ impl GetBucketPolicyStatusError {
                 }
             }
         }
-        GetBucketPolicyStatusError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20316,28 +18952,6 @@ impl GetBucketPolicyStatusError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketPolicyStatusError {
-    fn from(err: XmlParseError) -> GetBucketPolicyStatusError {
-        let XmlParseError(message) = err;
-        GetBucketPolicyStatusError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketPolicyStatusError {
-    fn from(err: CredentialsError) -> GetBucketPolicyStatusError {
-        GetBucketPolicyStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketPolicyStatusError {
-    fn from(err: HttpDispatchError) -> GetBucketPolicyStatusError {
-        GetBucketPolicyStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketPolicyStatusError {
-    fn from(err: io::Error) -> GetBucketPolicyStatusError {
-        GetBucketPolicyStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketPolicyStatusError {
@@ -20347,34 +18961,15 @@ impl fmt::Display for GetBucketPolicyStatusError {
 }
 impl Error for GetBucketPolicyStatusError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketPolicyStatusError::Validation(ref cause) => cause,
-            GetBucketPolicyStatusError::Credentials(ref err) => err.description(),
-            GetBucketPolicyStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketPolicyStatusError::ParseError(ref cause) => cause,
-            GetBucketPolicyStatusError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketReplication
 #[derive(Debug, PartialEq)]
-pub enum GetBucketReplicationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketReplicationError {}
 
 impl GetBucketReplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketReplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketReplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20385,7 +18980,7 @@ impl GetBucketReplicationError {
                 }
             }
         }
-        GetBucketReplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20393,28 +18988,6 @@ impl GetBucketReplicationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketReplicationError {
-    fn from(err: XmlParseError) -> GetBucketReplicationError {
-        let XmlParseError(message) = err;
-        GetBucketReplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketReplicationError {
-    fn from(err: CredentialsError) -> GetBucketReplicationError {
-        GetBucketReplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketReplicationError {
-    fn from(err: HttpDispatchError) -> GetBucketReplicationError {
-        GetBucketReplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketReplicationError {
-    fn from(err: io::Error) -> GetBucketReplicationError {
-        GetBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketReplicationError {
@@ -20424,34 +18997,15 @@ impl fmt::Display for GetBucketReplicationError {
 }
 impl Error for GetBucketReplicationError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketReplicationError::Validation(ref cause) => cause,
-            GetBucketReplicationError::Credentials(ref err) => err.description(),
-            GetBucketReplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketReplicationError::ParseError(ref cause) => cause,
-            GetBucketReplicationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketRequestPayment
 #[derive(Debug, PartialEq)]
-pub enum GetBucketRequestPaymentError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketRequestPaymentError {}
 
 impl GetBucketRequestPaymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketRequestPaymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketRequestPaymentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20462,7 +19016,7 @@ impl GetBucketRequestPaymentError {
                 }
             }
         }
-        GetBucketRequestPaymentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20470,28 +19024,6 @@ impl GetBucketRequestPaymentError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketRequestPaymentError {
-    fn from(err: XmlParseError) -> GetBucketRequestPaymentError {
-        let XmlParseError(message) = err;
-        GetBucketRequestPaymentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketRequestPaymentError {
-    fn from(err: CredentialsError) -> GetBucketRequestPaymentError {
-        GetBucketRequestPaymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketRequestPaymentError {
-    fn from(err: HttpDispatchError) -> GetBucketRequestPaymentError {
-        GetBucketRequestPaymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketRequestPaymentError {
-    fn from(err: io::Error) -> GetBucketRequestPaymentError {
-        GetBucketRequestPaymentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketRequestPaymentError {
@@ -20501,34 +19033,15 @@ impl fmt::Display for GetBucketRequestPaymentError {
 }
 impl Error for GetBucketRequestPaymentError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketRequestPaymentError::Validation(ref cause) => cause,
-            GetBucketRequestPaymentError::Credentials(ref err) => err.description(),
-            GetBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketRequestPaymentError::ParseError(ref cause) => cause,
-            GetBucketRequestPaymentError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketTagging
 #[derive(Debug, PartialEq)]
-pub enum GetBucketTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketTaggingError {}
 
 impl GetBucketTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20539,7 +19052,7 @@ impl GetBucketTaggingError {
                 }
             }
         }
-        GetBucketTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20547,28 +19060,6 @@ impl GetBucketTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketTaggingError {
-    fn from(err: XmlParseError) -> GetBucketTaggingError {
-        let XmlParseError(message) = err;
-        GetBucketTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketTaggingError {
-    fn from(err: CredentialsError) -> GetBucketTaggingError {
-        GetBucketTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketTaggingError {
-    fn from(err: HttpDispatchError) -> GetBucketTaggingError {
-        GetBucketTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketTaggingError {
-    fn from(err: io::Error) -> GetBucketTaggingError {
-        GetBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketTaggingError {
@@ -20578,32 +19069,15 @@ impl fmt::Display for GetBucketTaggingError {
 }
 impl Error for GetBucketTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketTaggingError::Validation(ref cause) => cause,
-            GetBucketTaggingError::Credentials(ref err) => err.description(),
-            GetBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketTaggingError::ParseError(ref cause) => cause,
-            GetBucketTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketVersioning
 #[derive(Debug, PartialEq)]
-pub enum GetBucketVersioningError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketVersioningError {}
 
 impl GetBucketVersioningError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketVersioningError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketVersioningError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20614,7 +19088,7 @@ impl GetBucketVersioningError {
                 }
             }
         }
-        GetBucketVersioningError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20622,28 +19096,6 @@ impl GetBucketVersioningError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketVersioningError {
-    fn from(err: XmlParseError) -> GetBucketVersioningError {
-        let XmlParseError(message) = err;
-        GetBucketVersioningError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketVersioningError {
-    fn from(err: CredentialsError) -> GetBucketVersioningError {
-        GetBucketVersioningError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketVersioningError {
-    fn from(err: HttpDispatchError) -> GetBucketVersioningError {
-        GetBucketVersioningError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketVersioningError {
-    fn from(err: io::Error) -> GetBucketVersioningError {
-        GetBucketVersioningError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketVersioningError {
@@ -20653,34 +19105,15 @@ impl fmt::Display for GetBucketVersioningError {
 }
 impl Error for GetBucketVersioningError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketVersioningError::Validation(ref cause) => cause,
-            GetBucketVersioningError::Credentials(ref err) => err.description(),
-            GetBucketVersioningError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetBucketVersioningError::ParseError(ref cause) => cause,
-            GetBucketVersioningError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetBucketWebsite
 #[derive(Debug, PartialEq)]
-pub enum GetBucketWebsiteError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetBucketWebsiteError {}
 
 impl GetBucketWebsiteError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBucketWebsiteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBucketWebsiteError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20691,7 +19124,7 @@ impl GetBucketWebsiteError {
                 }
             }
         }
-        GetBucketWebsiteError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20699,28 +19132,6 @@ impl GetBucketWebsiteError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetBucketWebsiteError {
-    fn from(err: XmlParseError) -> GetBucketWebsiteError {
-        let XmlParseError(message) = err;
-        GetBucketWebsiteError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetBucketWebsiteError {
-    fn from(err: CredentialsError) -> GetBucketWebsiteError {
-        GetBucketWebsiteError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBucketWebsiteError {
-    fn from(err: HttpDispatchError) -> GetBucketWebsiteError {
-        GetBucketWebsiteError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBucketWebsiteError {
-    fn from(err: io::Error) -> GetBucketWebsiteError {
-        GetBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetBucketWebsiteError {
@@ -20730,13 +19141,7 @@ impl fmt::Display for GetBucketWebsiteError {
 }
 impl Error for GetBucketWebsiteError {
     fn description(&self) -> &str {
-        match *self {
-            GetBucketWebsiteError::Validation(ref cause) => cause,
-            GetBucketWebsiteError::Credentials(ref err) => err.description(),
-            GetBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBucketWebsiteError::ParseError(ref cause) => cause,
-            GetBucketWebsiteError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetObject
@@ -20744,20 +19149,10 @@ impl Error for GetBucketWebsiteError {
 pub enum GetObjectError {
     /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20765,13 +19160,15 @@ impl GetObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return GetObjectError::NoSuchKey(String::from(parsed_error.message));
+                        return RusotoError::Service(GetObjectError::NoSuchKey(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20779,28 +19176,6 @@ impl GetObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectError {
-    fn from(err: XmlParseError) -> GetObjectError {
-        let XmlParseError(message) = err;
-        GetObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectError {
-    fn from(err: CredentialsError) -> GetObjectError {
-        GetObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectError {
-    fn from(err: HttpDispatchError) -> GetObjectError {
-        GetObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectError {
-    fn from(err: io::Error) -> GetObjectError {
-        GetObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectError {
@@ -20812,11 +19187,6 @@ impl Error for GetObjectError {
     fn description(&self) -> &str {
         match *self {
             GetObjectError::NoSuchKey(ref cause) => cause,
-            GetObjectError::Validation(ref cause) => cause,
-            GetObjectError::Credentials(ref err) => err.description(),
-            GetObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectError::ParseError(ref cause) => cause,
-            GetObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20825,20 +19195,10 @@ impl Error for GetObjectError {
 pub enum GetObjectAclError {
     /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectAclError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectAclError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectAclError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20846,13 +19206,15 @@ impl GetObjectAclError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return GetObjectAclError::NoSuchKey(String::from(parsed_error.message));
+                        return RusotoError::Service(GetObjectAclError::NoSuchKey(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetObjectAclError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20860,28 +19222,6 @@ impl GetObjectAclError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectAclError {
-    fn from(err: XmlParseError) -> GetObjectAclError {
-        let XmlParseError(message) = err;
-        GetObjectAclError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectAclError {
-    fn from(err: CredentialsError) -> GetObjectAclError {
-        GetObjectAclError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectAclError {
-    fn from(err: HttpDispatchError) -> GetObjectAclError {
-        GetObjectAclError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectAclError {
-    fn from(err: io::Error) -> GetObjectAclError {
-        GetObjectAclError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectAclError {
@@ -20893,31 +19233,15 @@ impl Error for GetObjectAclError {
     fn description(&self) -> &str {
         match *self {
             GetObjectAclError::NoSuchKey(ref cause) => cause,
-            GetObjectAclError::Validation(ref cause) => cause,
-            GetObjectAclError::Credentials(ref err) => err.description(),
-            GetObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectAclError::ParseError(ref cause) => cause,
-            GetObjectAclError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetObjectLegalHold
 #[derive(Debug, PartialEq)]
-pub enum GetObjectLegalHoldError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetObjectLegalHoldError {}
 
 impl GetObjectLegalHoldError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectLegalHoldError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectLegalHoldError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20928,7 +19252,7 @@ impl GetObjectLegalHoldError {
                 }
             }
         }
-        GetObjectLegalHoldError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20936,28 +19260,6 @@ impl GetObjectLegalHoldError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectLegalHoldError {
-    fn from(err: XmlParseError) -> GetObjectLegalHoldError {
-        let XmlParseError(message) = err;
-        GetObjectLegalHoldError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectLegalHoldError {
-    fn from(err: CredentialsError) -> GetObjectLegalHoldError {
-        GetObjectLegalHoldError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectLegalHoldError {
-    fn from(err: HttpDispatchError) -> GetObjectLegalHoldError {
-        GetObjectLegalHoldError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectLegalHoldError {
-    fn from(err: io::Error) -> GetObjectLegalHoldError {
-        GetObjectLegalHoldError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectLegalHoldError {
@@ -20967,34 +19269,17 @@ impl fmt::Display for GetObjectLegalHoldError {
 }
 impl Error for GetObjectLegalHoldError {
     fn description(&self) -> &str {
-        match *self {
-            GetObjectLegalHoldError::Validation(ref cause) => cause,
-            GetObjectLegalHoldError::Credentials(ref err) => err.description(),
-            GetObjectLegalHoldError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetObjectLegalHoldError::ParseError(ref cause) => cause,
-            GetObjectLegalHoldError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetObjectLockConfiguration
 #[derive(Debug, PartialEq)]
-pub enum GetObjectLockConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetObjectLockConfigurationError {}
 
 impl GetObjectLockConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectLockConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetObjectLockConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21005,7 +19290,7 @@ impl GetObjectLockConfigurationError {
                 }
             }
         }
-        GetObjectLockConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21013,28 +19298,6 @@ impl GetObjectLockConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectLockConfigurationError {
-    fn from(err: XmlParseError) -> GetObjectLockConfigurationError {
-        let XmlParseError(message) = err;
-        GetObjectLockConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectLockConfigurationError {
-    fn from(err: CredentialsError) -> GetObjectLockConfigurationError {
-        GetObjectLockConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectLockConfigurationError {
-    fn from(err: HttpDispatchError) -> GetObjectLockConfigurationError {
-        GetObjectLockConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectLockConfigurationError {
-    fn from(err: io::Error) -> GetObjectLockConfigurationError {
-        GetObjectLockConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectLockConfigurationError {
@@ -21044,34 +19307,15 @@ impl fmt::Display for GetObjectLockConfigurationError {
 }
 impl Error for GetObjectLockConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            GetObjectLockConfigurationError::Validation(ref cause) => cause,
-            GetObjectLockConfigurationError::Credentials(ref err) => err.description(),
-            GetObjectLockConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetObjectLockConfigurationError::ParseError(ref cause) => cause,
-            GetObjectLockConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetObjectRetention
 #[derive(Debug, PartialEq)]
-pub enum GetObjectRetentionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetObjectRetentionError {}
 
 impl GetObjectRetentionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectRetentionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectRetentionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21082,7 +19326,7 @@ impl GetObjectRetentionError {
                 }
             }
         }
-        GetObjectRetentionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21090,28 +19334,6 @@ impl GetObjectRetentionError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectRetentionError {
-    fn from(err: XmlParseError) -> GetObjectRetentionError {
-        let XmlParseError(message) = err;
-        GetObjectRetentionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectRetentionError {
-    fn from(err: CredentialsError) -> GetObjectRetentionError {
-        GetObjectRetentionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectRetentionError {
-    fn from(err: HttpDispatchError) -> GetObjectRetentionError {
-        GetObjectRetentionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectRetentionError {
-    fn from(err: io::Error) -> GetObjectRetentionError {
-        GetObjectRetentionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectRetentionError {
@@ -21121,34 +19343,15 @@ impl fmt::Display for GetObjectRetentionError {
 }
 impl Error for GetObjectRetentionError {
     fn description(&self) -> &str {
-        match *self {
-            GetObjectRetentionError::Validation(ref cause) => cause,
-            GetObjectRetentionError::Credentials(ref err) => err.description(),
-            GetObjectRetentionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetObjectRetentionError::ParseError(ref cause) => cause,
-            GetObjectRetentionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetObjectTagging
 #[derive(Debug, PartialEq)]
-pub enum GetObjectTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetObjectTaggingError {}
 
 impl GetObjectTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21159,7 +19362,7 @@ impl GetObjectTaggingError {
                 }
             }
         }
-        GetObjectTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21167,28 +19370,6 @@ impl GetObjectTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectTaggingError {
-    fn from(err: XmlParseError) -> GetObjectTaggingError {
-        let XmlParseError(message) = err;
-        GetObjectTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectTaggingError {
-    fn from(err: CredentialsError) -> GetObjectTaggingError {
-        GetObjectTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectTaggingError {
-    fn from(err: HttpDispatchError) -> GetObjectTaggingError {
-        GetObjectTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectTaggingError {
-    fn from(err: io::Error) -> GetObjectTaggingError {
-        GetObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectTaggingError {
@@ -21198,32 +19379,15 @@ impl fmt::Display for GetObjectTaggingError {
 }
 impl Error for GetObjectTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            GetObjectTaggingError::Validation(ref cause) => cause,
-            GetObjectTaggingError::Credentials(ref err) => err.description(),
-            GetObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectTaggingError::ParseError(ref cause) => cause,
-            GetObjectTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetObjectTorrent
 #[derive(Debug, PartialEq)]
-pub enum GetObjectTorrentError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetObjectTorrentError {}
 
 impl GetObjectTorrentError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectTorrentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectTorrentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21234,7 +19398,7 @@ impl GetObjectTorrentError {
                 }
             }
         }
-        GetObjectTorrentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21242,28 +19406,6 @@ impl GetObjectTorrentError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetObjectTorrentError {
-    fn from(err: XmlParseError) -> GetObjectTorrentError {
-        let XmlParseError(message) = err;
-        GetObjectTorrentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectTorrentError {
-    fn from(err: CredentialsError) -> GetObjectTorrentError {
-        GetObjectTorrentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectTorrentError {
-    fn from(err: HttpDispatchError) -> GetObjectTorrentError {
-        GetObjectTorrentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectTorrentError {
-    fn from(err: io::Error) -> GetObjectTorrentError {
-        GetObjectTorrentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetObjectTorrentError {
@@ -21273,32 +19415,15 @@ impl fmt::Display for GetObjectTorrentError {
 }
 impl Error for GetObjectTorrentError {
     fn description(&self) -> &str {
-        match *self {
-            GetObjectTorrentError::Validation(ref cause) => cause,
-            GetObjectTorrentError::Credentials(ref err) => err.description(),
-            GetObjectTorrentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetObjectTorrentError::ParseError(ref cause) => cause,
-            GetObjectTorrentError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetPublicAccessBlock
 #[derive(Debug, PartialEq)]
-pub enum GetPublicAccessBlockError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetPublicAccessBlockError {}
 
 impl GetPublicAccessBlockError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPublicAccessBlockError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21309,7 +19434,7 @@ impl GetPublicAccessBlockError {
                 }
             }
         }
-        GetPublicAccessBlockError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21317,28 +19442,6 @@ impl GetPublicAccessBlockError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetPublicAccessBlockError {
-    fn from(err: XmlParseError) -> GetPublicAccessBlockError {
-        let XmlParseError(message) = err;
-        GetPublicAccessBlockError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetPublicAccessBlockError {
-    fn from(err: CredentialsError) -> GetPublicAccessBlockError {
-        GetPublicAccessBlockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPublicAccessBlockError {
-    fn from(err: HttpDispatchError) -> GetPublicAccessBlockError {
-        GetPublicAccessBlockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPublicAccessBlockError {
-    fn from(err: io::Error) -> GetPublicAccessBlockError {
-        GetPublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetPublicAccessBlockError {
@@ -21348,15 +19451,7 @@ impl fmt::Display for GetPublicAccessBlockError {
 }
 impl Error for GetPublicAccessBlockError {
     fn description(&self) -> &str {
-        match *self {
-            GetPublicAccessBlockError::Validation(ref cause) => cause,
-            GetPublicAccessBlockError::Credentials(ref err) => err.description(),
-            GetPublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPublicAccessBlockError::ParseError(ref cause) => cause,
-            GetPublicAccessBlockError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by HeadBucket
@@ -21364,20 +19459,10 @@ impl Error for GetPublicAccessBlockError {
 pub enum HeadBucketError {
     /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl HeadBucketError {
-    pub fn from_response(res: BufferedHttpResponse) -> HeadBucketError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<HeadBucketError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21385,13 +19470,15 @@ impl HeadBucketError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return HeadBucketError::NoSuchBucket(String::from(parsed_error.message));
+                        return RusotoError::Service(HeadBucketError::NoSuchBucket(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        HeadBucketError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21399,28 +19486,6 @@ impl HeadBucketError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for HeadBucketError {
-    fn from(err: XmlParseError) -> HeadBucketError {
-        let XmlParseError(message) = err;
-        HeadBucketError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for HeadBucketError {
-    fn from(err: CredentialsError) -> HeadBucketError {
-        HeadBucketError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for HeadBucketError {
-    fn from(err: HttpDispatchError) -> HeadBucketError {
-        HeadBucketError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for HeadBucketError {
-    fn from(err: io::Error) -> HeadBucketError {
-        HeadBucketError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for HeadBucketError {
@@ -21432,11 +19497,6 @@ impl Error for HeadBucketError {
     fn description(&self) -> &str {
         match *self {
             HeadBucketError::NoSuchBucket(ref cause) => cause,
-            HeadBucketError::Validation(ref cause) => cause,
-            HeadBucketError::Credentials(ref err) => err.description(),
-            HeadBucketError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            HeadBucketError::ParseError(ref cause) => cause,
-            HeadBucketError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21445,20 +19505,10 @@ impl Error for HeadBucketError {
 pub enum HeadObjectError {
     /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl HeadObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> HeadObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<HeadObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21466,13 +19516,15 @@ impl HeadObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return HeadObjectError::NoSuchKey(String::from(parsed_error.message));
+                        return RusotoError::Service(HeadObjectError::NoSuchKey(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        HeadObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21480,28 +19532,6 @@ impl HeadObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for HeadObjectError {
-    fn from(err: XmlParseError) -> HeadObjectError {
-        let XmlParseError(message) = err;
-        HeadObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for HeadObjectError {
-    fn from(err: CredentialsError) -> HeadObjectError {
-        HeadObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for HeadObjectError {
-    fn from(err: HttpDispatchError) -> HeadObjectError {
-        HeadObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for HeadObjectError {
-    fn from(err: io::Error) -> HeadObjectError {
-        HeadObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for HeadObjectError {
@@ -21513,31 +19543,17 @@ impl Error for HeadObjectError {
     fn description(&self) -> &str {
         match *self {
             HeadObjectError::NoSuchKey(ref cause) => cause,
-            HeadObjectError::Validation(ref cause) => cause,
-            HeadObjectError::Credentials(ref err) => err.description(),
-            HeadObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            HeadObjectError::ParseError(ref cause) => cause,
-            HeadObjectError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListBucketAnalyticsConfigurations
 #[derive(Debug, PartialEq)]
-pub enum ListBucketAnalyticsConfigurationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListBucketAnalyticsConfigurationsError {}
 
 impl ListBucketAnalyticsConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBucketAnalyticsConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListBucketAnalyticsConfigurationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21548,7 +19564,7 @@ impl ListBucketAnalyticsConfigurationsError {
                 }
             }
         }
-        ListBucketAnalyticsConfigurationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21556,28 +19572,6 @@ impl ListBucketAnalyticsConfigurationsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListBucketAnalyticsConfigurationsError {
-    fn from(err: XmlParseError) -> ListBucketAnalyticsConfigurationsError {
-        let XmlParseError(message) = err;
-        ListBucketAnalyticsConfigurationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListBucketAnalyticsConfigurationsError {
-    fn from(err: CredentialsError) -> ListBucketAnalyticsConfigurationsError {
-        ListBucketAnalyticsConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBucketAnalyticsConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListBucketAnalyticsConfigurationsError {
-        ListBucketAnalyticsConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBucketAnalyticsConfigurationsError {
-    fn from(err: io::Error) -> ListBucketAnalyticsConfigurationsError {
-        ListBucketAnalyticsConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketAnalyticsConfigurationsError {
@@ -21587,34 +19581,17 @@ impl fmt::Display for ListBucketAnalyticsConfigurationsError {
 }
 impl Error for ListBucketAnalyticsConfigurationsError {
     fn description(&self) -> &str {
-        match *self {
-            ListBucketAnalyticsConfigurationsError::Validation(ref cause) => cause,
-            ListBucketAnalyticsConfigurationsError::Credentials(ref err) => err.description(),
-            ListBucketAnalyticsConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListBucketAnalyticsConfigurationsError::ParseError(ref cause) => cause,
-            ListBucketAnalyticsConfigurationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListBucketInventoryConfigurations
 #[derive(Debug, PartialEq)]
-pub enum ListBucketInventoryConfigurationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListBucketInventoryConfigurationsError {}
 
 impl ListBucketInventoryConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBucketInventoryConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListBucketInventoryConfigurationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21625,7 +19602,7 @@ impl ListBucketInventoryConfigurationsError {
                 }
             }
         }
-        ListBucketInventoryConfigurationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21633,28 +19610,6 @@ impl ListBucketInventoryConfigurationsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListBucketInventoryConfigurationsError {
-    fn from(err: XmlParseError) -> ListBucketInventoryConfigurationsError {
-        let XmlParseError(message) = err;
-        ListBucketInventoryConfigurationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListBucketInventoryConfigurationsError {
-    fn from(err: CredentialsError) -> ListBucketInventoryConfigurationsError {
-        ListBucketInventoryConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBucketInventoryConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListBucketInventoryConfigurationsError {
-        ListBucketInventoryConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBucketInventoryConfigurationsError {
-    fn from(err: io::Error) -> ListBucketInventoryConfigurationsError {
-        ListBucketInventoryConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketInventoryConfigurationsError {
@@ -21664,34 +19619,17 @@ impl fmt::Display for ListBucketInventoryConfigurationsError {
 }
 impl Error for ListBucketInventoryConfigurationsError {
     fn description(&self) -> &str {
-        match *self {
-            ListBucketInventoryConfigurationsError::Validation(ref cause) => cause,
-            ListBucketInventoryConfigurationsError::Credentials(ref err) => err.description(),
-            ListBucketInventoryConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListBucketInventoryConfigurationsError::ParseError(ref cause) => cause,
-            ListBucketInventoryConfigurationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListBucketMetricsConfigurations
 #[derive(Debug, PartialEq)]
-pub enum ListBucketMetricsConfigurationsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListBucketMetricsConfigurationsError {}
 
 impl ListBucketMetricsConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBucketMetricsConfigurationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListBucketMetricsConfigurationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21702,7 +19640,7 @@ impl ListBucketMetricsConfigurationsError {
                 }
             }
         }
-        ListBucketMetricsConfigurationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21710,28 +19648,6 @@ impl ListBucketMetricsConfigurationsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListBucketMetricsConfigurationsError {
-    fn from(err: XmlParseError) -> ListBucketMetricsConfigurationsError {
-        let XmlParseError(message) = err;
-        ListBucketMetricsConfigurationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListBucketMetricsConfigurationsError {
-    fn from(err: CredentialsError) -> ListBucketMetricsConfigurationsError {
-        ListBucketMetricsConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBucketMetricsConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListBucketMetricsConfigurationsError {
-        ListBucketMetricsConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBucketMetricsConfigurationsError {
-    fn from(err: io::Error) -> ListBucketMetricsConfigurationsError {
-        ListBucketMetricsConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketMetricsConfigurationsError {
@@ -21741,34 +19657,15 @@ impl fmt::Display for ListBucketMetricsConfigurationsError {
 }
 impl Error for ListBucketMetricsConfigurationsError {
     fn description(&self) -> &str {
-        match *self {
-            ListBucketMetricsConfigurationsError::Validation(ref cause) => cause,
-            ListBucketMetricsConfigurationsError::Credentials(ref err) => err.description(),
-            ListBucketMetricsConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListBucketMetricsConfigurationsError::ParseError(ref cause) => cause,
-            ListBucketMetricsConfigurationsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListBuckets
 #[derive(Debug, PartialEq)]
-pub enum ListBucketsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListBucketsError {}
 
 impl ListBucketsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBucketsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBucketsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21779,7 +19676,7 @@ impl ListBucketsError {
                 }
             }
         }
-        ListBucketsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21787,28 +19684,6 @@ impl ListBucketsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListBucketsError {
-    fn from(err: XmlParseError) -> ListBucketsError {
-        let XmlParseError(message) = err;
-        ListBucketsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListBucketsError {
-    fn from(err: CredentialsError) -> ListBucketsError {
-        ListBucketsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBucketsError {
-    fn from(err: HttpDispatchError) -> ListBucketsError {
-        ListBucketsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBucketsError {
-    fn from(err: io::Error) -> ListBucketsError {
-        ListBucketsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListBucketsError {
@@ -21818,32 +19693,15 @@ impl fmt::Display for ListBucketsError {
 }
 impl Error for ListBucketsError {
     fn description(&self) -> &str {
-        match *self {
-            ListBucketsError::Validation(ref cause) => cause,
-            ListBucketsError::Credentials(ref err) => err.description(),
-            ListBucketsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBucketsError::ParseError(ref cause) => cause,
-            ListBucketsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListMultipartUploads
 #[derive(Debug, PartialEq)]
-pub enum ListMultipartUploadsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListMultipartUploadsError {}
 
 impl ListMultipartUploadsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListMultipartUploadsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMultipartUploadsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21854,7 +19712,7 @@ impl ListMultipartUploadsError {
                 }
             }
         }
-        ListMultipartUploadsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21862,28 +19720,6 @@ impl ListMultipartUploadsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListMultipartUploadsError {
-    fn from(err: XmlParseError) -> ListMultipartUploadsError {
-        let XmlParseError(message) = err;
-        ListMultipartUploadsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListMultipartUploadsError {
-    fn from(err: CredentialsError) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMultipartUploadsError {
-    fn from(err: HttpDispatchError) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMultipartUploadsError {
-    fn from(err: io::Error) -> ListMultipartUploadsError {
-        ListMultipartUploadsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListMultipartUploadsError {
@@ -21893,34 +19729,15 @@ impl fmt::Display for ListMultipartUploadsError {
 }
 impl Error for ListMultipartUploadsError {
     fn description(&self) -> &str {
-        match *self {
-            ListMultipartUploadsError::Validation(ref cause) => cause,
-            ListMultipartUploadsError::Credentials(ref err) => err.description(),
-            ListMultipartUploadsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListMultipartUploadsError::ParseError(ref cause) => cause,
-            ListMultipartUploadsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListObjectVersions
 #[derive(Debug, PartialEq)]
-pub enum ListObjectVersionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListObjectVersionsError {}
 
 impl ListObjectVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21931,7 +19748,7 @@ impl ListObjectVersionsError {
                 }
             }
         }
-        ListObjectVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21939,28 +19756,6 @@ impl ListObjectVersionsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListObjectVersionsError {
-    fn from(err: XmlParseError) -> ListObjectVersionsError {
-        let XmlParseError(message) = err;
-        ListObjectVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectVersionsError {
-    fn from(err: CredentialsError) -> ListObjectVersionsError {
-        ListObjectVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectVersionsError {
-    fn from(err: HttpDispatchError) -> ListObjectVersionsError {
-        ListObjectVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectVersionsError {
-    fn from(err: io::Error) -> ListObjectVersionsError {
-        ListObjectVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListObjectVersionsError {
@@ -21970,15 +19765,7 @@ impl fmt::Display for ListObjectVersionsError {
 }
 impl Error for ListObjectVersionsError {
     fn description(&self) -> &str {
-        match *self {
-            ListObjectVersionsError::Validation(ref cause) => cause,
-            ListObjectVersionsError::Credentials(ref err) => err.description(),
-            ListObjectVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectVersionsError::ParseError(ref cause) => cause,
-            ListObjectVersionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListObjects
@@ -21986,20 +19773,10 @@ impl Error for ListObjectVersionsError {
 pub enum ListObjectsError {
     /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22007,13 +19784,15 @@ impl ListObjectsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return ListObjectsError::NoSuchBucket(String::from(parsed_error.message));
+                        return RusotoError::Service(ListObjectsError::NoSuchBucket(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListObjectsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22021,28 +19800,6 @@ impl ListObjectsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListObjectsError {
-    fn from(err: XmlParseError) -> ListObjectsError {
-        let XmlParseError(message) = err;
-        ListObjectsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectsError {
-    fn from(err: CredentialsError) -> ListObjectsError {
-        ListObjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectsError {
-    fn from(err: HttpDispatchError) -> ListObjectsError {
-        ListObjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectsError {
-    fn from(err: io::Error) -> ListObjectsError {
-        ListObjectsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListObjectsError {
@@ -22054,11 +19811,6 @@ impl Error for ListObjectsError {
     fn description(&self) -> &str {
         match *self {
             ListObjectsError::NoSuchBucket(ref cause) => cause,
-            ListObjectsError::Validation(ref cause) => cause,
-            ListObjectsError::Credentials(ref err) => err.description(),
-            ListObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListObjectsError::ParseError(ref cause) => cause,
-            ListObjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22067,20 +19819,10 @@ impl Error for ListObjectsError {
 pub enum ListObjectsV2Error {
     /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectsV2Error {
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectsV2Error {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectsV2Error> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22088,13 +19830,15 @@ impl ListObjectsV2Error {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchBucket" => {
-                        return ListObjectsV2Error::NoSuchBucket(String::from(parsed_error.message));
+                        return RusotoError::Service(ListObjectsV2Error::NoSuchBucket(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListObjectsV2Error::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22102,28 +19846,6 @@ impl ListObjectsV2Error {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListObjectsV2Error {
-    fn from(err: XmlParseError) -> ListObjectsV2Error {
-        let XmlParseError(message) = err;
-        ListObjectsV2Error::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectsV2Error {
-    fn from(err: CredentialsError) -> ListObjectsV2Error {
-        ListObjectsV2Error::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectsV2Error {
-    fn from(err: HttpDispatchError) -> ListObjectsV2Error {
-        ListObjectsV2Error::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectsV2Error {
-    fn from(err: io::Error) -> ListObjectsV2Error {
-        ListObjectsV2Error::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListObjectsV2Error {
@@ -22135,31 +19857,15 @@ impl Error for ListObjectsV2Error {
     fn description(&self) -> &str {
         match *self {
             ListObjectsV2Error::NoSuchBucket(ref cause) => cause,
-            ListObjectsV2Error::Validation(ref cause) => cause,
-            ListObjectsV2Error::Credentials(ref err) => err.description(),
-            ListObjectsV2Error::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListObjectsV2Error::ParseError(ref cause) => cause,
-            ListObjectsV2Error::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListParts
 #[derive(Debug, PartialEq)]
-pub enum ListPartsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListPartsError {}
 
 impl ListPartsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPartsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPartsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22170,7 +19876,7 @@ impl ListPartsError {
                 }
             }
         }
-        ListPartsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22178,28 +19884,6 @@ impl ListPartsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListPartsError {
-    fn from(err: XmlParseError) -> ListPartsError {
-        let XmlParseError(message) = err;
-        ListPartsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListPartsError {
-    fn from(err: CredentialsError) -> ListPartsError {
-        ListPartsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPartsError {
-    fn from(err: HttpDispatchError) -> ListPartsError {
-        ListPartsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPartsError {
-    fn from(err: io::Error) -> ListPartsError {
-        ListPartsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListPartsError {
@@ -22209,32 +19893,17 @@ impl fmt::Display for ListPartsError {
 }
 impl Error for ListPartsError {
     fn description(&self) -> &str {
-        match *self {
-            ListPartsError::Validation(ref cause) => cause,
-            ListPartsError::Credentials(ref err) => err.description(),
-            ListPartsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPartsError::ParseError(ref cause) => cause,
-            ListPartsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketAccelerateConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketAccelerateConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketAccelerateConfigurationError {}
 
 impl PutBucketAccelerateConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAccelerateConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketAccelerateConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22245,7 +19914,7 @@ impl PutBucketAccelerateConfigurationError {
                 }
             }
         }
-        PutBucketAccelerateConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22253,28 +19922,6 @@ impl PutBucketAccelerateConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketAccelerateConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketAccelerateConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketAccelerateConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketAccelerateConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketAccelerateConfigurationError {
-        PutBucketAccelerateConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketAccelerateConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketAccelerateConfigurationError {
-        PutBucketAccelerateConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketAccelerateConfigurationError {
-    fn from(err: io::Error) -> PutBucketAccelerateConfigurationError {
-        PutBucketAccelerateConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketAccelerateConfigurationError {
@@ -22284,34 +19931,15 @@ impl fmt::Display for PutBucketAccelerateConfigurationError {
 }
 impl Error for PutBucketAccelerateConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketAccelerateConfigurationError::Validation(ref cause) => cause,
-            PutBucketAccelerateConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketAccelerateConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketAccelerateConfigurationError::ParseError(ref cause) => cause,
-            PutBucketAccelerateConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketAcl
 #[derive(Debug, PartialEq)]
-pub enum PutBucketAclError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketAclError {}
 
 impl PutBucketAclError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAclError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketAclError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22322,7 +19950,7 @@ impl PutBucketAclError {
                 }
             }
         }
-        PutBucketAclError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22330,28 +19958,6 @@ impl PutBucketAclError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketAclError {
-    fn from(err: XmlParseError) -> PutBucketAclError {
-        let XmlParseError(message) = err;
-        PutBucketAclError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketAclError {
-    fn from(err: CredentialsError) -> PutBucketAclError {
-        PutBucketAclError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketAclError {
-    fn from(err: HttpDispatchError) -> PutBucketAclError {
-        PutBucketAclError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketAclError {
-    fn from(err: io::Error) -> PutBucketAclError {
-        PutBucketAclError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketAclError {
@@ -22361,32 +19967,17 @@ impl fmt::Display for PutBucketAclError {
 }
 impl Error for PutBucketAclError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketAclError::Validation(ref cause) => cause,
-            PutBucketAclError::Credentials(ref err) => err.description(),
-            PutBucketAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketAclError::ParseError(ref cause) => cause,
-            PutBucketAclError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketAnalyticsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketAnalyticsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketAnalyticsConfigurationError {}
 
 impl PutBucketAnalyticsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketAnalyticsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketAnalyticsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22397,7 +19988,7 @@ impl PutBucketAnalyticsConfigurationError {
                 }
             }
         }
-        PutBucketAnalyticsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22405,28 +19996,6 @@ impl PutBucketAnalyticsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketAnalyticsConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketAnalyticsConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketAnalyticsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketAnalyticsConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketAnalyticsConfigurationError {
-        PutBucketAnalyticsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketAnalyticsConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketAnalyticsConfigurationError {
-        PutBucketAnalyticsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketAnalyticsConfigurationError {
-    fn from(err: io::Error) -> PutBucketAnalyticsConfigurationError {
-        PutBucketAnalyticsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketAnalyticsConfigurationError {
@@ -22436,34 +20005,15 @@ impl fmt::Display for PutBucketAnalyticsConfigurationError {
 }
 impl Error for PutBucketAnalyticsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketAnalyticsConfigurationError::Validation(ref cause) => cause,
-            PutBucketAnalyticsConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketAnalyticsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketAnalyticsConfigurationError::ParseError(ref cause) => cause,
-            PutBucketAnalyticsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketCors
 #[derive(Debug, PartialEq)]
-pub enum PutBucketCorsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketCorsError {}
 
 impl PutBucketCorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketCorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketCorsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22474,7 +20024,7 @@ impl PutBucketCorsError {
                 }
             }
         }
-        PutBucketCorsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22482,28 +20032,6 @@ impl PutBucketCorsError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketCorsError {
-    fn from(err: XmlParseError) -> PutBucketCorsError {
-        let XmlParseError(message) = err;
-        PutBucketCorsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketCorsError {
-    fn from(err: CredentialsError) -> PutBucketCorsError {
-        PutBucketCorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketCorsError {
-    fn from(err: HttpDispatchError) -> PutBucketCorsError {
-        PutBucketCorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketCorsError {
-    fn from(err: io::Error) -> PutBucketCorsError {
-        PutBucketCorsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketCorsError {
@@ -22513,32 +20041,15 @@ impl fmt::Display for PutBucketCorsError {
 }
 impl Error for PutBucketCorsError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketCorsError::Validation(ref cause) => cause,
-            PutBucketCorsError::Credentials(ref err) => err.description(),
-            PutBucketCorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketCorsError::ParseError(ref cause) => cause,
-            PutBucketCorsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketEncryption
 #[derive(Debug, PartialEq)]
-pub enum PutBucketEncryptionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketEncryptionError {}
 
 impl PutBucketEncryptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketEncryptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketEncryptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22549,7 +20060,7 @@ impl PutBucketEncryptionError {
                 }
             }
         }
-        PutBucketEncryptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22557,28 +20068,6 @@ impl PutBucketEncryptionError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketEncryptionError {
-    fn from(err: XmlParseError) -> PutBucketEncryptionError {
-        let XmlParseError(message) = err;
-        PutBucketEncryptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketEncryptionError {
-    fn from(err: CredentialsError) -> PutBucketEncryptionError {
-        PutBucketEncryptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketEncryptionError {
-    fn from(err: HttpDispatchError) -> PutBucketEncryptionError {
-        PutBucketEncryptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketEncryptionError {
-    fn from(err: io::Error) -> PutBucketEncryptionError {
-        PutBucketEncryptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketEncryptionError {
@@ -22588,34 +20077,17 @@ impl fmt::Display for PutBucketEncryptionError {
 }
 impl Error for PutBucketEncryptionError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketEncryptionError::Validation(ref cause) => cause,
-            PutBucketEncryptionError::Credentials(ref err) => err.description(),
-            PutBucketEncryptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketEncryptionError::ParseError(ref cause) => cause,
-            PutBucketEncryptionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketInventoryConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketInventoryConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketInventoryConfigurationError {}
 
 impl PutBucketInventoryConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketInventoryConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketInventoryConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22626,7 +20098,7 @@ impl PutBucketInventoryConfigurationError {
                 }
             }
         }
-        PutBucketInventoryConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22634,28 +20106,6 @@ impl PutBucketInventoryConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketInventoryConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketInventoryConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketInventoryConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketInventoryConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketInventoryConfigurationError {
-        PutBucketInventoryConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketInventoryConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketInventoryConfigurationError {
-        PutBucketInventoryConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketInventoryConfigurationError {
-    fn from(err: io::Error) -> PutBucketInventoryConfigurationError {
-        PutBucketInventoryConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketInventoryConfigurationError {
@@ -22665,34 +20115,15 @@ impl fmt::Display for PutBucketInventoryConfigurationError {
 }
 impl Error for PutBucketInventoryConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketInventoryConfigurationError::Validation(ref cause) => cause,
-            PutBucketInventoryConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketInventoryConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketInventoryConfigurationError::ParseError(ref cause) => cause,
-            PutBucketInventoryConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketLifecycle
 #[derive(Debug, PartialEq)]
-pub enum PutBucketLifecycleError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketLifecycleError {}
 
 impl PutBucketLifecycleError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLifecycleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketLifecycleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22703,7 +20134,7 @@ impl PutBucketLifecycleError {
                 }
             }
         }
-        PutBucketLifecycleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22711,28 +20142,6 @@ impl PutBucketLifecycleError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketLifecycleError {
-    fn from(err: XmlParseError) -> PutBucketLifecycleError {
-        let XmlParseError(message) = err;
-        PutBucketLifecycleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketLifecycleError {
-    fn from(err: CredentialsError) -> PutBucketLifecycleError {
-        PutBucketLifecycleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketLifecycleError {
-    fn from(err: HttpDispatchError) -> PutBucketLifecycleError {
-        PutBucketLifecycleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketLifecycleError {
-    fn from(err: io::Error) -> PutBucketLifecycleError {
-        PutBucketLifecycleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketLifecycleError {
@@ -22742,34 +20151,17 @@ impl fmt::Display for PutBucketLifecycleError {
 }
 impl Error for PutBucketLifecycleError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketLifecycleError::Validation(ref cause) => cause,
-            PutBucketLifecycleError::Credentials(ref err) => err.description(),
-            PutBucketLifecycleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketLifecycleError::ParseError(ref cause) => cause,
-            PutBucketLifecycleError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketLifecycleConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketLifecycleConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketLifecycleConfigurationError {}
 
 impl PutBucketLifecycleConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLifecycleConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketLifecycleConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22780,7 +20172,7 @@ impl PutBucketLifecycleConfigurationError {
                 }
             }
         }
-        PutBucketLifecycleConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22788,28 +20180,6 @@ impl PutBucketLifecycleConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketLifecycleConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketLifecycleConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketLifecycleConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketLifecycleConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketLifecycleConfigurationError {
-        PutBucketLifecycleConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketLifecycleConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketLifecycleConfigurationError {
-        PutBucketLifecycleConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketLifecycleConfigurationError {
-    fn from(err: io::Error) -> PutBucketLifecycleConfigurationError {
-        PutBucketLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketLifecycleConfigurationError {
@@ -22819,34 +20189,15 @@ impl fmt::Display for PutBucketLifecycleConfigurationError {
 }
 impl Error for PutBucketLifecycleConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketLifecycleConfigurationError::Validation(ref cause) => cause,
-            PutBucketLifecycleConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketLifecycleConfigurationError::ParseError(ref cause) => cause,
-            PutBucketLifecycleConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketLogging
 #[derive(Debug, PartialEq)]
-pub enum PutBucketLoggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketLoggingError {}
 
 impl PutBucketLoggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketLoggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22857,7 +20208,7 @@ impl PutBucketLoggingError {
                 }
             }
         }
-        PutBucketLoggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22865,28 +20216,6 @@ impl PutBucketLoggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketLoggingError {
-    fn from(err: XmlParseError) -> PutBucketLoggingError {
-        let XmlParseError(message) = err;
-        PutBucketLoggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketLoggingError {
-    fn from(err: CredentialsError) -> PutBucketLoggingError {
-        PutBucketLoggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketLoggingError {
-    fn from(err: HttpDispatchError) -> PutBucketLoggingError {
-        PutBucketLoggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketLoggingError {
-    fn from(err: io::Error) -> PutBucketLoggingError {
-        PutBucketLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketLoggingError {
@@ -22896,32 +20225,17 @@ impl fmt::Display for PutBucketLoggingError {
 }
 impl Error for PutBucketLoggingError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketLoggingError::Validation(ref cause) => cause,
-            PutBucketLoggingError::Credentials(ref err) => err.description(),
-            PutBucketLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketLoggingError::ParseError(ref cause) => cause,
-            PutBucketLoggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketMetricsConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketMetricsConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketMetricsConfigurationError {}
 
 impl PutBucketMetricsConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketMetricsConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketMetricsConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22932,7 +20246,7 @@ impl PutBucketMetricsConfigurationError {
                 }
             }
         }
-        PutBucketMetricsConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22940,28 +20254,6 @@ impl PutBucketMetricsConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketMetricsConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketMetricsConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketMetricsConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketMetricsConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketMetricsConfigurationError {
-        PutBucketMetricsConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketMetricsConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketMetricsConfigurationError {
-        PutBucketMetricsConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketMetricsConfigurationError {
-    fn from(err: io::Error) -> PutBucketMetricsConfigurationError {
-        PutBucketMetricsConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketMetricsConfigurationError {
@@ -22971,34 +20263,15 @@ impl fmt::Display for PutBucketMetricsConfigurationError {
 }
 impl Error for PutBucketMetricsConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketMetricsConfigurationError::Validation(ref cause) => cause,
-            PutBucketMetricsConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketMetricsConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketMetricsConfigurationError::ParseError(ref cause) => cause,
-            PutBucketMetricsConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketNotification
 #[derive(Debug, PartialEq)]
-pub enum PutBucketNotificationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketNotificationError {}
 
 impl PutBucketNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketNotificationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23009,7 +20282,7 @@ impl PutBucketNotificationError {
                 }
             }
         }
-        PutBucketNotificationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23017,28 +20290,6 @@ impl PutBucketNotificationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketNotificationError {
-    fn from(err: XmlParseError) -> PutBucketNotificationError {
-        let XmlParseError(message) = err;
-        PutBucketNotificationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketNotificationError {
-    fn from(err: CredentialsError) -> PutBucketNotificationError {
-        PutBucketNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketNotificationError {
-    fn from(err: HttpDispatchError) -> PutBucketNotificationError {
-        PutBucketNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketNotificationError {
-    fn from(err: io::Error) -> PutBucketNotificationError {
-        PutBucketNotificationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketNotificationError {
@@ -23048,34 +20299,17 @@ impl fmt::Display for PutBucketNotificationError {
 }
 impl Error for PutBucketNotificationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketNotificationError::Validation(ref cause) => cause,
-            PutBucketNotificationError::Credentials(ref err) => err.description(),
-            PutBucketNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketNotificationError::ParseError(ref cause) => cause,
-            PutBucketNotificationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketNotificationConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutBucketNotificationConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketNotificationConfigurationError {}
 
 impl PutBucketNotificationConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketNotificationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutBucketNotificationConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23086,7 +20320,7 @@ impl PutBucketNotificationConfigurationError {
                 }
             }
         }
-        PutBucketNotificationConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23094,28 +20328,6 @@ impl PutBucketNotificationConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketNotificationConfigurationError {
-    fn from(err: XmlParseError) -> PutBucketNotificationConfigurationError {
-        let XmlParseError(message) = err;
-        PutBucketNotificationConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketNotificationConfigurationError {
-    fn from(err: CredentialsError) -> PutBucketNotificationConfigurationError {
-        PutBucketNotificationConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketNotificationConfigurationError {
-    fn from(err: HttpDispatchError) -> PutBucketNotificationConfigurationError {
-        PutBucketNotificationConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketNotificationConfigurationError {
-    fn from(err: io::Error) -> PutBucketNotificationConfigurationError {
-        PutBucketNotificationConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketNotificationConfigurationError {
@@ -23125,34 +20337,15 @@ impl fmt::Display for PutBucketNotificationConfigurationError {
 }
 impl Error for PutBucketNotificationConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketNotificationConfigurationError::Validation(ref cause) => cause,
-            PutBucketNotificationConfigurationError::Credentials(ref err) => err.description(),
-            PutBucketNotificationConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketNotificationConfigurationError::ParseError(ref cause) => cause,
-            PutBucketNotificationConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketPolicy
 #[derive(Debug, PartialEq)]
-pub enum PutBucketPolicyError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketPolicyError {}
 
 impl PutBucketPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23163,7 +20356,7 @@ impl PutBucketPolicyError {
                 }
             }
         }
-        PutBucketPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23171,28 +20364,6 @@ impl PutBucketPolicyError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketPolicyError {
-    fn from(err: XmlParseError) -> PutBucketPolicyError {
-        let XmlParseError(message) = err;
-        PutBucketPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketPolicyError {
-    fn from(err: CredentialsError) -> PutBucketPolicyError {
-        PutBucketPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketPolicyError {
-    fn from(err: HttpDispatchError) -> PutBucketPolicyError {
-        PutBucketPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketPolicyError {
-    fn from(err: io::Error) -> PutBucketPolicyError {
-        PutBucketPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketPolicyError {
@@ -23202,32 +20373,15 @@ impl fmt::Display for PutBucketPolicyError {
 }
 impl Error for PutBucketPolicyError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketPolicyError::Validation(ref cause) => cause,
-            PutBucketPolicyError::Credentials(ref err) => err.description(),
-            PutBucketPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketPolicyError::ParseError(ref cause) => cause,
-            PutBucketPolicyError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketReplication
 #[derive(Debug, PartialEq)]
-pub enum PutBucketReplicationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketReplicationError {}
 
 impl PutBucketReplicationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketReplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketReplicationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23238,7 +20392,7 @@ impl PutBucketReplicationError {
                 }
             }
         }
-        PutBucketReplicationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23246,28 +20400,6 @@ impl PutBucketReplicationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketReplicationError {
-    fn from(err: XmlParseError) -> PutBucketReplicationError {
-        let XmlParseError(message) = err;
-        PutBucketReplicationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketReplicationError {
-    fn from(err: CredentialsError) -> PutBucketReplicationError {
-        PutBucketReplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketReplicationError {
-    fn from(err: HttpDispatchError) -> PutBucketReplicationError {
-        PutBucketReplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketReplicationError {
-    fn from(err: io::Error) -> PutBucketReplicationError {
-        PutBucketReplicationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketReplicationError {
@@ -23277,34 +20409,15 @@ impl fmt::Display for PutBucketReplicationError {
 }
 impl Error for PutBucketReplicationError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketReplicationError::Validation(ref cause) => cause,
-            PutBucketReplicationError::Credentials(ref err) => err.description(),
-            PutBucketReplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketReplicationError::ParseError(ref cause) => cause,
-            PutBucketReplicationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketRequestPayment
 #[derive(Debug, PartialEq)]
-pub enum PutBucketRequestPaymentError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketRequestPaymentError {}
 
 impl PutBucketRequestPaymentError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketRequestPaymentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketRequestPaymentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23315,7 +20428,7 @@ impl PutBucketRequestPaymentError {
                 }
             }
         }
-        PutBucketRequestPaymentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23323,28 +20436,6 @@ impl PutBucketRequestPaymentError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketRequestPaymentError {
-    fn from(err: XmlParseError) -> PutBucketRequestPaymentError {
-        let XmlParseError(message) = err;
-        PutBucketRequestPaymentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketRequestPaymentError {
-    fn from(err: CredentialsError) -> PutBucketRequestPaymentError {
-        PutBucketRequestPaymentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketRequestPaymentError {
-    fn from(err: HttpDispatchError) -> PutBucketRequestPaymentError {
-        PutBucketRequestPaymentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketRequestPaymentError {
-    fn from(err: io::Error) -> PutBucketRequestPaymentError {
-        PutBucketRequestPaymentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketRequestPaymentError {
@@ -23354,34 +20445,15 @@ impl fmt::Display for PutBucketRequestPaymentError {
 }
 impl Error for PutBucketRequestPaymentError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketRequestPaymentError::Validation(ref cause) => cause,
-            PutBucketRequestPaymentError::Credentials(ref err) => err.description(),
-            PutBucketRequestPaymentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketRequestPaymentError::ParseError(ref cause) => cause,
-            PutBucketRequestPaymentError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketTagging
 #[derive(Debug, PartialEq)]
-pub enum PutBucketTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketTaggingError {}
 
 impl PutBucketTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23392,7 +20464,7 @@ impl PutBucketTaggingError {
                 }
             }
         }
-        PutBucketTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23400,28 +20472,6 @@ impl PutBucketTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketTaggingError {
-    fn from(err: XmlParseError) -> PutBucketTaggingError {
-        let XmlParseError(message) = err;
-        PutBucketTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketTaggingError {
-    fn from(err: CredentialsError) -> PutBucketTaggingError {
-        PutBucketTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketTaggingError {
-    fn from(err: HttpDispatchError) -> PutBucketTaggingError {
-        PutBucketTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketTaggingError {
-    fn from(err: io::Error) -> PutBucketTaggingError {
-        PutBucketTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketTaggingError {
@@ -23431,32 +20481,15 @@ impl fmt::Display for PutBucketTaggingError {
 }
 impl Error for PutBucketTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketTaggingError::Validation(ref cause) => cause,
-            PutBucketTaggingError::Credentials(ref err) => err.description(),
-            PutBucketTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketTaggingError::ParseError(ref cause) => cause,
-            PutBucketTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketVersioning
 #[derive(Debug, PartialEq)]
-pub enum PutBucketVersioningError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketVersioningError {}
 
 impl PutBucketVersioningError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketVersioningError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketVersioningError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23467,7 +20500,7 @@ impl PutBucketVersioningError {
                 }
             }
         }
-        PutBucketVersioningError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23475,28 +20508,6 @@ impl PutBucketVersioningError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketVersioningError {
-    fn from(err: XmlParseError) -> PutBucketVersioningError {
-        let XmlParseError(message) = err;
-        PutBucketVersioningError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketVersioningError {
-    fn from(err: CredentialsError) -> PutBucketVersioningError {
-        PutBucketVersioningError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketVersioningError {
-    fn from(err: HttpDispatchError) -> PutBucketVersioningError {
-        PutBucketVersioningError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketVersioningError {
-    fn from(err: io::Error) -> PutBucketVersioningError {
-        PutBucketVersioningError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketVersioningError {
@@ -23506,34 +20517,15 @@ impl fmt::Display for PutBucketVersioningError {
 }
 impl Error for PutBucketVersioningError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketVersioningError::Validation(ref cause) => cause,
-            PutBucketVersioningError::Credentials(ref err) => err.description(),
-            PutBucketVersioningError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutBucketVersioningError::ParseError(ref cause) => cause,
-            PutBucketVersioningError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutBucketWebsite
 #[derive(Debug, PartialEq)]
-pub enum PutBucketWebsiteError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutBucketWebsiteError {}
 
 impl PutBucketWebsiteError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutBucketWebsiteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutBucketWebsiteError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23544,7 +20536,7 @@ impl PutBucketWebsiteError {
                 }
             }
         }
-        PutBucketWebsiteError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23552,28 +20544,6 @@ impl PutBucketWebsiteError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutBucketWebsiteError {
-    fn from(err: XmlParseError) -> PutBucketWebsiteError {
-        let XmlParseError(message) = err;
-        PutBucketWebsiteError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutBucketWebsiteError {
-    fn from(err: CredentialsError) -> PutBucketWebsiteError {
-        PutBucketWebsiteError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutBucketWebsiteError {
-    fn from(err: HttpDispatchError) -> PutBucketWebsiteError {
-        PutBucketWebsiteError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutBucketWebsiteError {
-    fn from(err: io::Error) -> PutBucketWebsiteError {
-        PutBucketWebsiteError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutBucketWebsiteError {
@@ -23583,32 +20553,15 @@ impl fmt::Display for PutBucketWebsiteError {
 }
 impl Error for PutBucketWebsiteError {
     fn description(&self) -> &str {
-        match *self {
-            PutBucketWebsiteError::Validation(ref cause) => cause,
-            PutBucketWebsiteError::Credentials(ref err) => err.description(),
-            PutBucketWebsiteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutBucketWebsiteError::ParseError(ref cause) => cause,
-            PutBucketWebsiteError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutObject
 #[derive(Debug, PartialEq)]
-pub enum PutObjectError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutObjectError {}
 
 impl PutObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23619,7 +20572,7 @@ impl PutObjectError {
                 }
             }
         }
-        PutObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23627,28 +20580,6 @@ impl PutObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectError {
-    fn from(err: XmlParseError) -> PutObjectError {
-        let XmlParseError(message) = err;
-        PutObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectError {
-    fn from(err: CredentialsError) -> PutObjectError {
-        PutObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectError {
-    fn from(err: HttpDispatchError) -> PutObjectError {
-        PutObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectError {
-    fn from(err: io::Error) -> PutObjectError {
-        PutObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectError {
@@ -23658,13 +20589,7 @@ impl fmt::Display for PutObjectError {
 }
 impl Error for PutObjectError {
     fn description(&self) -> &str {
-        match *self {
-            PutObjectError::Validation(ref cause) => cause,
-            PutObjectError::Credentials(ref err) => err.description(),
-            PutObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectError::ParseError(ref cause) => cause,
-            PutObjectError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutObjectAcl
@@ -23672,20 +20597,10 @@ impl Error for PutObjectError {
 pub enum PutObjectAclError {
     /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutObjectAclError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectAclError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectAclError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23693,13 +20608,15 @@ impl PutObjectAclError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "NoSuchKey" => {
-                        return PutObjectAclError::NoSuchKey(String::from(parsed_error.message));
+                        return RusotoError::Service(PutObjectAclError::NoSuchKey(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        PutObjectAclError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23707,28 +20624,6 @@ impl PutObjectAclError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectAclError {
-    fn from(err: XmlParseError) -> PutObjectAclError {
-        let XmlParseError(message) = err;
-        PutObjectAclError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectAclError {
-    fn from(err: CredentialsError) -> PutObjectAclError {
-        PutObjectAclError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectAclError {
-    fn from(err: HttpDispatchError) -> PutObjectAclError {
-        PutObjectAclError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectAclError {
-    fn from(err: io::Error) -> PutObjectAclError {
-        PutObjectAclError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectAclError {
@@ -23740,31 +20635,15 @@ impl Error for PutObjectAclError {
     fn description(&self) -> &str {
         match *self {
             PutObjectAclError::NoSuchKey(ref cause) => cause,
-            PutObjectAclError::Validation(ref cause) => cause,
-            PutObjectAclError::Credentials(ref err) => err.description(),
-            PutObjectAclError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectAclError::ParseError(ref cause) => cause,
-            PutObjectAclError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by PutObjectLegalHold
 #[derive(Debug, PartialEq)]
-pub enum PutObjectLegalHoldError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutObjectLegalHoldError {}
 
 impl PutObjectLegalHoldError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectLegalHoldError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectLegalHoldError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23775,7 +20654,7 @@ impl PutObjectLegalHoldError {
                 }
             }
         }
-        PutObjectLegalHoldError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23783,28 +20662,6 @@ impl PutObjectLegalHoldError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectLegalHoldError {
-    fn from(err: XmlParseError) -> PutObjectLegalHoldError {
-        let XmlParseError(message) = err;
-        PutObjectLegalHoldError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectLegalHoldError {
-    fn from(err: CredentialsError) -> PutObjectLegalHoldError {
-        PutObjectLegalHoldError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectLegalHoldError {
-    fn from(err: HttpDispatchError) -> PutObjectLegalHoldError {
-        PutObjectLegalHoldError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectLegalHoldError {
-    fn from(err: io::Error) -> PutObjectLegalHoldError {
-        PutObjectLegalHoldError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectLegalHoldError {
@@ -23814,34 +20671,17 @@ impl fmt::Display for PutObjectLegalHoldError {
 }
 impl Error for PutObjectLegalHoldError {
     fn description(&self) -> &str {
-        match *self {
-            PutObjectLegalHoldError::Validation(ref cause) => cause,
-            PutObjectLegalHoldError::Credentials(ref err) => err.description(),
-            PutObjectLegalHoldError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutObjectLegalHoldError::ParseError(ref cause) => cause,
-            PutObjectLegalHoldError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutObjectLockConfiguration
 #[derive(Debug, PartialEq)]
-pub enum PutObjectLockConfigurationError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutObjectLockConfigurationError {}
 
 impl PutObjectLockConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectLockConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutObjectLockConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23852,7 +20692,7 @@ impl PutObjectLockConfigurationError {
                 }
             }
         }
-        PutObjectLockConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23860,28 +20700,6 @@ impl PutObjectLockConfigurationError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectLockConfigurationError {
-    fn from(err: XmlParseError) -> PutObjectLockConfigurationError {
-        let XmlParseError(message) = err;
-        PutObjectLockConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectLockConfigurationError {
-    fn from(err: CredentialsError) -> PutObjectLockConfigurationError {
-        PutObjectLockConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectLockConfigurationError {
-    fn from(err: HttpDispatchError) -> PutObjectLockConfigurationError {
-        PutObjectLockConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectLockConfigurationError {
-    fn from(err: io::Error) -> PutObjectLockConfigurationError {
-        PutObjectLockConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectLockConfigurationError {
@@ -23891,34 +20709,15 @@ impl fmt::Display for PutObjectLockConfigurationError {
 }
 impl Error for PutObjectLockConfigurationError {
     fn description(&self) -> &str {
-        match *self {
-            PutObjectLockConfigurationError::Validation(ref cause) => cause,
-            PutObjectLockConfigurationError::Credentials(ref err) => err.description(),
-            PutObjectLockConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutObjectLockConfigurationError::ParseError(ref cause) => cause,
-            PutObjectLockConfigurationError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutObjectRetention
 #[derive(Debug, PartialEq)]
-pub enum PutObjectRetentionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutObjectRetentionError {}
 
 impl PutObjectRetentionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectRetentionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectRetentionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -23929,7 +20728,7 @@ impl PutObjectRetentionError {
                 }
             }
         }
-        PutObjectRetentionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -23937,28 +20736,6 @@ impl PutObjectRetentionError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectRetentionError {
-    fn from(err: XmlParseError) -> PutObjectRetentionError {
-        let XmlParseError(message) = err;
-        PutObjectRetentionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectRetentionError {
-    fn from(err: CredentialsError) -> PutObjectRetentionError {
-        PutObjectRetentionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectRetentionError {
-    fn from(err: HttpDispatchError) -> PutObjectRetentionError {
-        PutObjectRetentionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectRetentionError {
-    fn from(err: io::Error) -> PutObjectRetentionError {
-        PutObjectRetentionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectRetentionError {
@@ -23968,34 +20745,15 @@ impl fmt::Display for PutObjectRetentionError {
 }
 impl Error for PutObjectRetentionError {
     fn description(&self) -> &str {
-        match *self {
-            PutObjectRetentionError::Validation(ref cause) => cause,
-            PutObjectRetentionError::Credentials(ref err) => err.description(),
-            PutObjectRetentionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutObjectRetentionError::ParseError(ref cause) => cause,
-            PutObjectRetentionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutObjectTagging
 #[derive(Debug, PartialEq)]
-pub enum PutObjectTaggingError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutObjectTaggingError {}
 
 impl PutObjectTaggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutObjectTaggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutObjectTaggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24006,7 +20764,7 @@ impl PutObjectTaggingError {
                 }
             }
         }
-        PutObjectTaggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24014,28 +20772,6 @@ impl PutObjectTaggingError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutObjectTaggingError {
-    fn from(err: XmlParseError) -> PutObjectTaggingError {
-        let XmlParseError(message) = err;
-        PutObjectTaggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutObjectTaggingError {
-    fn from(err: CredentialsError) -> PutObjectTaggingError {
-        PutObjectTaggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutObjectTaggingError {
-    fn from(err: HttpDispatchError) -> PutObjectTaggingError {
-        PutObjectTaggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutObjectTaggingError {
-    fn from(err: io::Error) -> PutObjectTaggingError {
-        PutObjectTaggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutObjectTaggingError {
@@ -24045,32 +20781,15 @@ impl fmt::Display for PutObjectTaggingError {
 }
 impl Error for PutObjectTaggingError {
     fn description(&self) -> &str {
-        match *self {
-            PutObjectTaggingError::Validation(ref cause) => cause,
-            PutObjectTaggingError::Credentials(ref err) => err.description(),
-            PutObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutObjectTaggingError::ParseError(ref cause) => cause,
-            PutObjectTaggingError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutPublicAccessBlock
 #[derive(Debug, PartialEq)]
-pub enum PutPublicAccessBlockError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum PutPublicAccessBlockError {}
 
 impl PutPublicAccessBlockError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutPublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPublicAccessBlockError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24081,7 +20800,7 @@ impl PutPublicAccessBlockError {
                 }
             }
         }
-        PutPublicAccessBlockError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24089,28 +20808,6 @@ impl PutPublicAccessBlockError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutPublicAccessBlockError {
-    fn from(err: XmlParseError) -> PutPublicAccessBlockError {
-        let XmlParseError(message) = err;
-        PutPublicAccessBlockError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutPublicAccessBlockError {
-    fn from(err: CredentialsError) -> PutPublicAccessBlockError {
-        PutPublicAccessBlockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutPublicAccessBlockError {
-    fn from(err: HttpDispatchError) -> PutPublicAccessBlockError {
-        PutPublicAccessBlockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutPublicAccessBlockError {
-    fn from(err: io::Error) -> PutPublicAccessBlockError {
-        PutPublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutPublicAccessBlockError {
@@ -24120,15 +20817,7 @@ impl fmt::Display for PutPublicAccessBlockError {
 }
 impl Error for PutPublicAccessBlockError {
     fn description(&self) -> &str {
-        match *self {
-            PutPublicAccessBlockError::Validation(ref cause) => cause,
-            PutPublicAccessBlockError::Credentials(ref err) => err.description(),
-            PutPublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutPublicAccessBlockError::ParseError(ref cause) => cause,
-            PutPublicAccessBlockError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by RestoreObject
@@ -24136,20 +20825,10 @@ impl Error for PutPublicAccessBlockError {
 pub enum RestoreObjectError {
     /// <p>This operation is not allowed against this storage tier</p>
     ObjectAlreadyInActiveTierError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreObjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreObjectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24157,15 +20836,17 @@ impl RestoreObjectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ObjectAlreadyInActiveTierError" => {
-                        return RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RestoreObjectError::ObjectAlreadyInActiveTierError(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RestoreObjectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24173,28 +20854,6 @@ impl RestoreObjectError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreObjectError {
-    fn from(err: XmlParseError) -> RestoreObjectError {
-        let XmlParseError(message) = err;
-        RestoreObjectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreObjectError {
-    fn from(err: CredentialsError) -> RestoreObjectError {
-        RestoreObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreObjectError {
-    fn from(err: HttpDispatchError) -> RestoreObjectError {
-        RestoreObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreObjectError {
-    fn from(err: io::Error) -> RestoreObjectError {
-        RestoreObjectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreObjectError {
@@ -24206,31 +20865,15 @@ impl Error for RestoreObjectError {
     fn description(&self) -> &str {
         match *self {
             RestoreObjectError::ObjectAlreadyInActiveTierError(ref cause) => cause,
-            RestoreObjectError::Validation(ref cause) => cause,
-            RestoreObjectError::Credentials(ref err) => err.description(),
-            RestoreObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestoreObjectError::ParseError(ref cause) => cause,
-            RestoreObjectError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by SelectObjectContent
 #[derive(Debug, PartialEq)]
-pub enum SelectObjectContentError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SelectObjectContentError {}
 
 impl SelectObjectContentError {
-    pub fn from_response(res: BufferedHttpResponse) -> SelectObjectContentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SelectObjectContentError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24241,7 +20884,7 @@ impl SelectObjectContentError {
                 }
             }
         }
-        SelectObjectContentError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24249,28 +20892,6 @@ impl SelectObjectContentError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SelectObjectContentError {
-    fn from(err: XmlParseError) -> SelectObjectContentError {
-        let XmlParseError(message) = err;
-        SelectObjectContentError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SelectObjectContentError {
-    fn from(err: CredentialsError) -> SelectObjectContentError {
-        SelectObjectContentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SelectObjectContentError {
-    fn from(err: HttpDispatchError) -> SelectObjectContentError {
-        SelectObjectContentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SelectObjectContentError {
-    fn from(err: io::Error) -> SelectObjectContentError {
-        SelectObjectContentError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SelectObjectContentError {
@@ -24280,34 +20901,15 @@ impl fmt::Display for SelectObjectContentError {
 }
 impl Error for SelectObjectContentError {
     fn description(&self) -> &str {
-        match *self {
-            SelectObjectContentError::Validation(ref cause) => cause,
-            SelectObjectContentError::Credentials(ref err) => err.description(),
-            SelectObjectContentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SelectObjectContentError::ParseError(ref cause) => cause,
-            SelectObjectContentError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UploadPart
 #[derive(Debug, PartialEq)]
-pub enum UploadPartError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UploadPartError {}
 
 impl UploadPartError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadPartError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadPartError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24318,7 +20920,7 @@ impl UploadPartError {
                 }
             }
         }
-        UploadPartError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24326,28 +20928,6 @@ impl UploadPartError {
         T: Peek + Next,
     {
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UploadPartError {
-    fn from(err: XmlParseError) -> UploadPartError {
-        let XmlParseError(message) = err;
-        UploadPartError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UploadPartError {
-    fn from(err: CredentialsError) -> UploadPartError {
-        UploadPartError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadPartError {
-    fn from(err: HttpDispatchError) -> UploadPartError {
-        UploadPartError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadPartError {
-    fn from(err: io::Error) -> UploadPartError {
-        UploadPartError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UploadPartError {
@@ -24357,32 +20937,15 @@ impl fmt::Display for UploadPartError {
 }
 impl Error for UploadPartError {
     fn description(&self) -> &str {
-        match *self {
-            UploadPartError::Validation(ref cause) => cause,
-            UploadPartError::Credentials(ref err) => err.description(),
-            UploadPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadPartError::ParseError(ref cause) => cause,
-            UploadPartError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UploadPartCopy
 #[derive(Debug, PartialEq)]
-pub enum UploadPartCopyError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UploadPartCopyError {}
 
 impl UploadPartCopyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadPartCopyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadPartCopyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -24393,7 +20956,7 @@ impl UploadPartCopyError {
                 }
             }
         }
-        UploadPartCopyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -24403,28 +20966,6 @@ impl UploadPartCopyError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for UploadPartCopyError {
-    fn from(err: XmlParseError) -> UploadPartCopyError {
-        let XmlParseError(message) = err;
-        UploadPartCopyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UploadPartCopyError {
-    fn from(err: CredentialsError) -> UploadPartCopyError {
-        UploadPartCopyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadPartCopyError {
-    fn from(err: HttpDispatchError) -> UploadPartCopyError {
-        UploadPartCopyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadPartCopyError {
-    fn from(err: io::Error) -> UploadPartCopyError {
-        UploadPartCopyError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for UploadPartCopyError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -24432,13 +20973,7 @@ impl fmt::Display for UploadPartCopyError {
 }
 impl Error for UploadPartCopyError {
     fn description(&self) -> &str {
-        match *self {
-            UploadPartCopyError::Validation(ref cause) => cause,
-            UploadPartCopyError::Credentials(ref err) => err.description(),
-            UploadPartCopyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadPartCopyError::ParseError(ref cause) => cause,
-            UploadPartCopyError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.

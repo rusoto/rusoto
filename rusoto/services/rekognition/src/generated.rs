@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1929,20 +1926,10 @@ pub enum CompareFacesError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CompareFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> CompareFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompareFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1955,59 +1942,50 @@ impl CompareFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CompareFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ImageTooLargeException" => {
-                    return CompareFacesError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::ImageTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return CompareFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidImageFormatException" => {
-                    return CompareFacesError::InvalidImageFormat(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::InvalidImageFormat(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CompareFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidS3ObjectException" => {
-                    return CompareFacesError::InvalidS3Object(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::InvalidS3Object(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return CompareFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CompareFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return CompareFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(CompareFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CompareFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CompareFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CompareFacesError {
-    fn from(err: serde_json::error::Error) -> CompareFacesError {
-        CompareFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CompareFacesError {
-    fn from(err: CredentialsError) -> CompareFacesError {
-        CompareFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CompareFacesError {
-    fn from(err: HttpDispatchError) -> CompareFacesError {
-        CompareFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CompareFacesError {
-    fn from(err: io::Error) -> CompareFacesError {
-        CompareFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CompareFacesError {
@@ -2026,11 +2004,6 @@ impl Error for CompareFacesError {
             CompareFacesError::InvalidS3Object(ref cause) => cause,
             CompareFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             CompareFacesError::Throttling(ref cause) => cause,
-            CompareFacesError::Validation(ref cause) => cause,
-            CompareFacesError::Credentials(ref err) => err.description(),
-            CompareFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CompareFacesError::ParseError(ref cause) => cause,
-            CompareFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2049,20 +2022,10 @@ pub enum CreateCollectionError {
     ResourceAlreadyExists(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCollectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCollectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCollectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2075,53 +2038,42 @@ impl CreateCollectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateCollectionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateCollectionError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return CreateCollectionError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return CreateCollectionError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return CreateCollectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCollectionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateCollectionError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        CreateCollectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceAlreadyExistsException" => {
-                    return CreateCollectionError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateCollectionError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CreateCollectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(CreateCollectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateCollectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCollectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCollectionError {
-    fn from(err: serde_json::error::Error) -> CreateCollectionError {
-        CreateCollectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCollectionError {
-    fn from(err: CredentialsError) -> CreateCollectionError {
-        CreateCollectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCollectionError {
-    fn from(err: HttpDispatchError) -> CreateCollectionError {
-        CreateCollectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCollectionError {
-    fn from(err: io::Error) -> CreateCollectionError {
-        CreateCollectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCollectionError {
@@ -2138,11 +2090,6 @@ impl Error for CreateCollectionError {
             CreateCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             CreateCollectionError::ResourceAlreadyExists(ref cause) => cause,
             CreateCollectionError::Throttling(ref cause) => cause,
-            CreateCollectionError::Validation(ref cause) => cause,
-            CreateCollectionError::Credentials(ref err) => err.description(),
-            CreateCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCollectionError::ParseError(ref cause) => cause,
-            CreateCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2163,20 +2110,10 @@ pub enum CreateStreamProcessorError {
     ResourceInUse(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamProcessorError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamProcessorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamProcessorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2189,58 +2126,47 @@ impl CreateStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateStreamProcessorError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateStreamProcessorError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateStreamProcessorError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamProcessorError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return CreateStreamProcessorError::InvalidParameter(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return CreateStreamProcessorError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamProcessorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateStreamProcessorError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        CreateStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceInUseException" => {
-                    return CreateStreamProcessorError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CreateStreamProcessorError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return CreateStreamProcessorError::Throttling(String::from(error_message));
+                    return RusotoError::Service(CreateStreamProcessorError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateStreamProcessorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateStreamProcessorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateStreamProcessorError {
-    fn from(err: serde_json::error::Error) -> CreateStreamProcessorError {
-        CreateStreamProcessorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateStreamProcessorError {
-    fn from(err: CredentialsError) -> CreateStreamProcessorError {
-        CreateStreamProcessorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStreamProcessorError {
-    fn from(err: HttpDispatchError) -> CreateStreamProcessorError {
-        CreateStreamProcessorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStreamProcessorError {
-    fn from(err: io::Error) -> CreateStreamProcessorError {
-        CreateStreamProcessorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateStreamProcessorError {
@@ -2258,13 +2184,6 @@ impl Error for CreateStreamProcessorError {
             CreateStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
             CreateStreamProcessorError::ResourceInUse(ref cause) => cause,
             CreateStreamProcessorError::Throttling(ref cause) => cause,
-            CreateStreamProcessorError::Validation(ref cause) => cause,
-            CreateStreamProcessorError::Credentials(ref err) => err.description(),
-            CreateStreamProcessorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateStreamProcessorError::ParseError(ref cause) => cause,
-            CreateStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2283,20 +2202,10 @@ pub enum DeleteCollectionError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCollectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCollectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCollectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2309,53 +2218,42 @@ impl DeleteCollectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteCollectionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteCollectionError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DeleteCollectionError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return DeleteCollectionError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCollectionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DeleteCollectionError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DeleteCollectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return DeleteCollectionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteCollectionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DeleteCollectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DeleteCollectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteCollectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCollectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCollectionError {
-    fn from(err: serde_json::error::Error) -> DeleteCollectionError {
-        DeleteCollectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCollectionError {
-    fn from(err: CredentialsError) -> DeleteCollectionError {
-        DeleteCollectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCollectionError {
-    fn from(err: HttpDispatchError) -> DeleteCollectionError {
-        DeleteCollectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCollectionError {
-    fn from(err: io::Error) -> DeleteCollectionError {
-        DeleteCollectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCollectionError {
@@ -2372,11 +2270,6 @@ impl Error for DeleteCollectionError {
             DeleteCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             DeleteCollectionError::ResourceNotFound(ref cause) => cause,
             DeleteCollectionError::Throttling(ref cause) => cause,
-            DeleteCollectionError::Validation(ref cause) => cause,
-            DeleteCollectionError::Credentials(ref err) => err.description(),
-            DeleteCollectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCollectionError::ParseError(ref cause) => cause,
-            DeleteCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2395,20 +2288,10 @@ pub enum DeleteFacesError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2421,53 +2304,40 @@ impl DeleteFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DeleteFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteFacesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DeleteFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFacesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFacesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return DeleteFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DeleteFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFacesError {
-    fn from(err: serde_json::error::Error) -> DeleteFacesError {
-        DeleteFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFacesError {
-    fn from(err: CredentialsError) -> DeleteFacesError {
-        DeleteFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFacesError {
-    fn from(err: HttpDispatchError) -> DeleteFacesError {
-        DeleteFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFacesError {
-    fn from(err: io::Error) -> DeleteFacesError {
-        DeleteFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFacesError {
@@ -2484,11 +2354,6 @@ impl Error for DeleteFacesError {
             DeleteFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             DeleteFacesError::ResourceNotFound(ref cause) => cause,
             DeleteFacesError::Throttling(ref cause) => cause,
-            DeleteFacesError::Validation(ref cause) => cause,
-            DeleteFacesError::Credentials(ref err) => err.description(),
-            DeleteFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFacesError::ParseError(ref cause) => cause,
-            DeleteFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2509,20 +2374,10 @@ pub enum DeleteStreamProcessorError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStreamProcessorError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteStreamProcessorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStreamProcessorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2535,58 +2390,47 @@ impl DeleteStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DeleteStreamProcessorError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamProcessorError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteStreamProcessorError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteStreamProcessorError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteStreamProcessorError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteStreamProcessorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DeleteStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceInUseException" => {
-                    return DeleteStreamProcessorError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamProcessorError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStreamProcessorError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamProcessorError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DeleteStreamProcessorError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DeleteStreamProcessorError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteStreamProcessorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteStreamProcessorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteStreamProcessorError {
-    fn from(err: serde_json::error::Error) -> DeleteStreamProcessorError {
-        DeleteStreamProcessorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteStreamProcessorError {
-    fn from(err: CredentialsError) -> DeleteStreamProcessorError {
-        DeleteStreamProcessorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteStreamProcessorError {
-    fn from(err: HttpDispatchError) -> DeleteStreamProcessorError {
-        DeleteStreamProcessorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteStreamProcessorError {
-    fn from(err: io::Error) -> DeleteStreamProcessorError {
-        DeleteStreamProcessorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteStreamProcessorError {
@@ -2604,13 +2448,6 @@ impl Error for DeleteStreamProcessorError {
             DeleteStreamProcessorError::ResourceInUse(ref cause) => cause,
             DeleteStreamProcessorError::ResourceNotFound(ref cause) => cause,
             DeleteStreamProcessorError::Throttling(ref cause) => cause,
-            DeleteStreamProcessorError::Validation(ref cause) => cause,
-            DeleteStreamProcessorError::Credentials(ref err) => err.description(),
-            DeleteStreamProcessorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteStreamProcessorError::ParseError(ref cause) => cause,
-            DeleteStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2629,20 +2466,10 @@ pub enum DescribeCollectionError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCollectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCollectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCollectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2655,53 +2482,42 @@ impl DescribeCollectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeCollectionError::AccessDenied(String::from(error_message));
-                }
-                "InternalServerError" => {
-                    return DescribeCollectionError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return DescribeCollectionError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return DescribeCollectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCollectionError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeCollectionError::InternalServerError(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeCollectionError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DescribeCollectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return DescribeCollectionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeCollectionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DescribeCollectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DescribeCollectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeCollectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCollectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCollectionError {
-    fn from(err: serde_json::error::Error) -> DescribeCollectionError {
-        DescribeCollectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCollectionError {
-    fn from(err: CredentialsError) -> DescribeCollectionError {
-        DescribeCollectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCollectionError {
-    fn from(err: HttpDispatchError) -> DescribeCollectionError {
-        DescribeCollectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCollectionError {
-    fn from(err: io::Error) -> DescribeCollectionError {
-        DescribeCollectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCollectionError {
@@ -2718,13 +2534,6 @@ impl Error for DescribeCollectionError {
             DescribeCollectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             DescribeCollectionError::ResourceNotFound(ref cause) => cause,
             DescribeCollectionError::Throttling(ref cause) => cause,
-            DescribeCollectionError::Validation(ref cause) => cause,
-            DescribeCollectionError::Credentials(ref err) => err.description(),
-            DescribeCollectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCollectionError::ParseError(ref cause) => cause,
-            DescribeCollectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2743,20 +2552,10 @@ pub enum DescribeStreamProcessorError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStreamProcessorError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamProcessorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStreamProcessorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2769,59 +2568,42 @@ impl DescribeStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DescribeStreamProcessorError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamProcessorError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DescribeStreamProcessorError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeStreamProcessorError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeStreamProcessorError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeStreamProcessorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DescribeStreamProcessorError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeStreamProcessorError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeStreamProcessorError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return DescribeStreamProcessorError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DescribeStreamProcessorError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeStreamProcessorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeStreamProcessorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeStreamProcessorError {
-    fn from(err: serde_json::error::Error) -> DescribeStreamProcessorError {
-        DescribeStreamProcessorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStreamProcessorError {
-    fn from(err: CredentialsError) -> DescribeStreamProcessorError {
-        DescribeStreamProcessorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStreamProcessorError {
-    fn from(err: HttpDispatchError) -> DescribeStreamProcessorError {
-        DescribeStreamProcessorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStreamProcessorError {
-    fn from(err: io::Error) -> DescribeStreamProcessorError {
-        DescribeStreamProcessorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeStreamProcessorError {
@@ -2838,13 +2620,6 @@ impl Error for DescribeStreamProcessorError {
             DescribeStreamProcessorError::ProvisionedThroughputExceeded(ref cause) => cause,
             DescribeStreamProcessorError::ResourceNotFound(ref cause) => cause,
             DescribeStreamProcessorError::Throttling(ref cause) => cause,
-            DescribeStreamProcessorError::Validation(ref cause) => cause,
-            DescribeStreamProcessorError::Credentials(ref err) => err.description(),
-            DescribeStreamProcessorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeStreamProcessorError::ParseError(ref cause) => cause,
-            DescribeStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2867,20 +2642,10 @@ pub enum DetectFacesError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2893,59 +2658,50 @@ impl DetectFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ImageTooLargeException" => {
-                    return DetectFacesError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::ImageTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DetectFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectFacesError::InvalidImageFormat(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::InvalidImageFormat(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DetectFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectFacesError::InvalidS3Object(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::InvalidS3Object(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DetectFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return DetectFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DetectFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetectFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectFacesError {
-    fn from(err: serde_json::error::Error) -> DetectFacesError {
-        DetectFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectFacesError {
-    fn from(err: CredentialsError) -> DetectFacesError {
-        DetectFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectFacesError {
-    fn from(err: HttpDispatchError) -> DetectFacesError {
-        DetectFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectFacesError {
-    fn from(err: io::Error) -> DetectFacesError {
-        DetectFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectFacesError {
@@ -2964,11 +2720,6 @@ impl Error for DetectFacesError {
             DetectFacesError::InvalidS3Object(ref cause) => cause,
             DetectFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             DetectFacesError::Throttling(ref cause) => cause,
-            DetectFacesError::Validation(ref cause) => cause,
-            DetectFacesError::Credentials(ref err) => err.description(),
-            DetectFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectFacesError::ParseError(ref cause) => cause,
-            DetectFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2991,20 +2742,10 @@ pub enum DetectLabelsError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectLabelsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectLabelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectLabelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3017,59 +2758,50 @@ impl DetectLabelsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectLabelsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ImageTooLargeException" => {
-                    return DetectLabelsError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::ImageTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DetectLabelsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectLabelsError::InvalidImageFormat(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::InvalidImageFormat(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DetectLabelsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectLabelsError::InvalidS3Object(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::InvalidS3Object(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DetectLabelsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectLabelsError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return DetectLabelsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DetectLabelsError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetectLabelsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectLabelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectLabelsError {
-    fn from(err: serde_json::error::Error) -> DetectLabelsError {
-        DetectLabelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectLabelsError {
-    fn from(err: CredentialsError) -> DetectLabelsError {
-        DetectLabelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectLabelsError {
-    fn from(err: HttpDispatchError) -> DetectLabelsError {
-        DetectLabelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectLabelsError {
-    fn from(err: io::Error) -> DetectLabelsError {
-        DetectLabelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectLabelsError {
@@ -3088,11 +2820,6 @@ impl Error for DetectLabelsError {
             DetectLabelsError::InvalidS3Object(ref cause) => cause,
             DetectLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
             DetectLabelsError::Throttling(ref cause) => cause,
-            DetectLabelsError::Validation(ref cause) => cause,
-            DetectLabelsError::Credentials(ref err) => err.description(),
-            DetectLabelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectLabelsError::ParseError(ref cause) => cause,
-            DetectLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3115,20 +2842,10 @@ pub enum DetectModerationLabelsError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectModerationLabelsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectModerationLabelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectModerationLabelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3141,65 +2858,52 @@ impl DetectModerationLabelsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectModerationLabelsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetectModerationLabelsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ImageTooLargeException" => {
-                    return DetectModerationLabelsError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(DetectModerationLabelsError::ImageTooLarge(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DetectModerationLabelsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectModerationLabelsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectModerationLabelsError::InvalidImageFormat(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectModerationLabelsError::InvalidImageFormat(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DetectModerationLabelsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectModerationLabelsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectModerationLabelsError::InvalidS3Object(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectModerationLabelsError::InvalidS3Object(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        DetectModerationLabelsError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return DetectModerationLabelsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DetectModerationLabelsError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetectModerationLabelsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectModerationLabelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectModerationLabelsError {
-    fn from(err: serde_json::error::Error) -> DetectModerationLabelsError {
-        DetectModerationLabelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectModerationLabelsError {
-    fn from(err: CredentialsError) -> DetectModerationLabelsError {
-        DetectModerationLabelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectModerationLabelsError {
-    fn from(err: HttpDispatchError) -> DetectModerationLabelsError {
-        DetectModerationLabelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectModerationLabelsError {
-    fn from(err: io::Error) -> DetectModerationLabelsError {
-        DetectModerationLabelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectModerationLabelsError {
@@ -3218,13 +2922,6 @@ impl Error for DetectModerationLabelsError {
             DetectModerationLabelsError::InvalidS3Object(ref cause) => cause,
             DetectModerationLabelsError::ProvisionedThroughputExceeded(ref cause) => cause,
             DetectModerationLabelsError::Throttling(ref cause) => cause,
-            DetectModerationLabelsError::Validation(ref cause) => cause,
-            DetectModerationLabelsError::Credentials(ref err) => err.description(),
-            DetectModerationLabelsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DetectModerationLabelsError::ParseError(ref cause) => cause,
-            DetectModerationLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3247,20 +2944,10 @@ pub enum DetectTextError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectTextError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectTextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectTextError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3273,59 +2960,50 @@ impl DetectTextError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return DetectTextError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ImageTooLargeException" => {
-                    return DetectTextError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::ImageTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DetectTextError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidImageFormatException" => {
-                    return DetectTextError::InvalidImageFormat(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::InvalidImageFormat(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DetectTextError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidS3ObjectException" => {
-                    return DetectTextError::InvalidS3Object(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::InvalidS3Object(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DetectTextError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectTextError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return DetectTextError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DetectTextError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetectTextError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectTextError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectTextError {
-    fn from(err: serde_json::error::Error) -> DetectTextError {
-        DetectTextError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectTextError {
-    fn from(err: CredentialsError) -> DetectTextError {
-        DetectTextError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectTextError {
-    fn from(err: HttpDispatchError) -> DetectTextError {
-        DetectTextError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectTextError {
-    fn from(err: io::Error) -> DetectTextError {
-        DetectTextError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectTextError {
@@ -3344,11 +3022,6 @@ impl Error for DetectTextError {
             DetectTextError::InvalidS3Object(ref cause) => cause,
             DetectTextError::ProvisionedThroughputExceeded(ref cause) => cause,
             DetectTextError::Throttling(ref cause) => cause,
-            DetectTextError::Validation(ref cause) => cause,
-            DetectTextError::Credentials(ref err) => err.description(),
-            DetectTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectTextError::ParseError(ref cause) => cause,
-            DetectTextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3367,20 +3040,10 @@ pub enum GetCelebrityInfoError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCelebrityInfoError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCelebrityInfoError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCelebrityInfoError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3393,53 +3056,42 @@ impl GetCelebrityInfoError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetCelebrityInfoError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetCelebrityInfoError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetCelebrityInfoError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return GetCelebrityInfoError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCelebrityInfoError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(GetCelebrityInfoError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetCelebrityInfoError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return GetCelebrityInfoError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCelebrityInfoError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetCelebrityInfoError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetCelebrityInfoError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCelebrityInfoError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCelebrityInfoError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCelebrityInfoError {
-    fn from(err: serde_json::error::Error) -> GetCelebrityInfoError {
-        GetCelebrityInfoError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCelebrityInfoError {
-    fn from(err: CredentialsError) -> GetCelebrityInfoError {
-        GetCelebrityInfoError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCelebrityInfoError {
-    fn from(err: HttpDispatchError) -> GetCelebrityInfoError {
-        GetCelebrityInfoError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCelebrityInfoError {
-    fn from(err: io::Error) -> GetCelebrityInfoError {
-        GetCelebrityInfoError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCelebrityInfoError {
@@ -3456,11 +3108,6 @@ impl Error for GetCelebrityInfoError {
             GetCelebrityInfoError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetCelebrityInfoError::ResourceNotFound(ref cause) => cause,
             GetCelebrityInfoError::Throttling(ref cause) => cause,
-            GetCelebrityInfoError::Validation(ref cause) => cause,
-            GetCelebrityInfoError::Credentials(ref err) => err.description(),
-            GetCelebrityInfoError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCelebrityInfoError::ParseError(ref cause) => cause,
-            GetCelebrityInfoError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3481,20 +3128,10 @@ pub enum GetCelebrityRecognitionError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCelebrityRecognitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCelebrityRecognitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCelebrityRecognitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3507,64 +3144,49 @@ impl GetCelebrityRecognitionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetCelebrityRecognitionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetCelebrityRecognitionError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return GetCelebrityRecognitionError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCelebrityRecognitionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCelebrityRecognitionError::InvalidPaginationToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return GetCelebrityRecognitionError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCelebrityRecognitionError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return GetCelebrityRecognitionError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCelebrityRecognitionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ResourceNotFoundException" => {
-                    return GetCelebrityRecognitionError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCelebrityRecognitionError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return GetCelebrityRecognitionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetCelebrityRecognitionError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCelebrityRecognitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCelebrityRecognitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCelebrityRecognitionError {
-    fn from(err: serde_json::error::Error) -> GetCelebrityRecognitionError {
-        GetCelebrityRecognitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCelebrityRecognitionError {
-    fn from(err: CredentialsError) -> GetCelebrityRecognitionError {
-        GetCelebrityRecognitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCelebrityRecognitionError {
-    fn from(err: HttpDispatchError) -> GetCelebrityRecognitionError {
-        GetCelebrityRecognitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCelebrityRecognitionError {
-    fn from(err: io::Error) -> GetCelebrityRecognitionError {
-        GetCelebrityRecognitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCelebrityRecognitionError {
@@ -3582,13 +3204,6 @@ impl Error for GetCelebrityRecognitionError {
             GetCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetCelebrityRecognitionError::ResourceNotFound(ref cause) => cause,
             GetCelebrityRecognitionError::Throttling(ref cause) => cause,
-            GetCelebrityRecognitionError::Validation(ref cause) => cause,
-            GetCelebrityRecognitionError::Credentials(ref err) => err.description(),
-            GetCelebrityRecognitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCelebrityRecognitionError::ParseError(ref cause) => cause,
-            GetCelebrityRecognitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3609,20 +3224,10 @@ pub enum GetContentModerationError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetContentModerationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetContentModerationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContentModerationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3635,60 +3240,47 @@ impl GetContentModerationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetContentModerationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetContentModerationError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return GetContentModerationError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetContentModerationError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetContentModerationError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetContentModerationError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetContentModerationError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return GetContentModerationError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetContentModerationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetContentModerationError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return GetContentModerationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetContentModerationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetContentModerationError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetContentModerationError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetContentModerationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetContentModerationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetContentModerationError {
-    fn from(err: serde_json::error::Error) -> GetContentModerationError {
-        GetContentModerationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetContentModerationError {
-    fn from(err: CredentialsError) -> GetContentModerationError {
-        GetContentModerationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetContentModerationError {
-    fn from(err: HttpDispatchError) -> GetContentModerationError {
-        GetContentModerationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetContentModerationError {
-    fn from(err: io::Error) -> GetContentModerationError {
-        GetContentModerationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetContentModerationError {
@@ -3706,13 +3298,6 @@ impl Error for GetContentModerationError {
             GetContentModerationError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetContentModerationError::ResourceNotFound(ref cause) => cause,
             GetContentModerationError::Throttling(ref cause) => cause,
-            GetContentModerationError::Validation(ref cause) => cause,
-            GetContentModerationError::Credentials(ref err) => err.description(),
-            GetContentModerationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetContentModerationError::ParseError(ref cause) => cause,
-            GetContentModerationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3733,20 +3318,10 @@ pub enum GetFaceDetectionError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFaceDetectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFaceDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFaceDetectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3759,58 +3334,47 @@ impl GetFaceDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetFaceDetectionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetFaceDetectionError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetFaceDetectionError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetFaceDetectionError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetFaceDetectionError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFaceDetectionError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetFaceDetectionError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFaceDetectionError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetFaceDetectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return GetFaceDetectionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFaceDetectionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetFaceDetectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetFaceDetectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFaceDetectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFaceDetectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFaceDetectionError {
-    fn from(err: serde_json::error::Error) -> GetFaceDetectionError {
-        GetFaceDetectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFaceDetectionError {
-    fn from(err: CredentialsError) -> GetFaceDetectionError {
-        GetFaceDetectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFaceDetectionError {
-    fn from(err: HttpDispatchError) -> GetFaceDetectionError {
-        GetFaceDetectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFaceDetectionError {
-    fn from(err: io::Error) -> GetFaceDetectionError {
-        GetFaceDetectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFaceDetectionError {
@@ -3828,11 +3392,6 @@ impl Error for GetFaceDetectionError {
             GetFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetFaceDetectionError::ResourceNotFound(ref cause) => cause,
             GetFaceDetectionError::Throttling(ref cause) => cause,
-            GetFaceDetectionError::Validation(ref cause) => cause,
-            GetFaceDetectionError::Credentials(ref err) => err.description(),
-            GetFaceDetectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFaceDetectionError::ParseError(ref cause) => cause,
-            GetFaceDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3853,20 +3412,10 @@ pub enum GetFaceSearchError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFaceSearchError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFaceSearchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFaceSearchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3879,56 +3428,45 @@ impl GetFaceSearchError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetFaceSearchError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetFaceSearchError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetFaceSearchError::InvalidPaginationToken(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::InvalidPaginationToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetFaceSearchError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return GetFaceSearchError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFaceSearchError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFaceSearchError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return GetFaceSearchError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetFaceSearchError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFaceSearchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFaceSearchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFaceSearchError {
-    fn from(err: serde_json::error::Error) -> GetFaceSearchError {
-        GetFaceSearchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFaceSearchError {
-    fn from(err: CredentialsError) -> GetFaceSearchError {
-        GetFaceSearchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFaceSearchError {
-    fn from(err: HttpDispatchError) -> GetFaceSearchError {
-        GetFaceSearchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFaceSearchError {
-    fn from(err: io::Error) -> GetFaceSearchError {
-        GetFaceSearchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFaceSearchError {
@@ -3946,11 +3484,6 @@ impl Error for GetFaceSearchError {
             GetFaceSearchError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetFaceSearchError::ResourceNotFound(ref cause) => cause,
             GetFaceSearchError::Throttling(ref cause) => cause,
-            GetFaceSearchError::Validation(ref cause) => cause,
-            GetFaceSearchError::Credentials(ref err) => err.description(),
-            GetFaceSearchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFaceSearchError::ParseError(ref cause) => cause,
-            GetFaceSearchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3971,20 +3504,10 @@ pub enum GetLabelDetectionError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLabelDetectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLabelDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLabelDetectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3997,58 +3520,47 @@ impl GetLabelDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetLabelDetectionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetLabelDetectionError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetLabelDetectionError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetLabelDetectionError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetLabelDetectionError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLabelDetectionError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetLabelDetectionError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLabelDetectionError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetLabelDetectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return GetLabelDetectionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLabelDetectionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetLabelDetectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetLabelDetectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetLabelDetectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLabelDetectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLabelDetectionError {
-    fn from(err: serde_json::error::Error) -> GetLabelDetectionError {
-        GetLabelDetectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLabelDetectionError {
-    fn from(err: CredentialsError) -> GetLabelDetectionError {
-        GetLabelDetectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLabelDetectionError {
-    fn from(err: HttpDispatchError) -> GetLabelDetectionError {
-        GetLabelDetectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLabelDetectionError {
-    fn from(err: io::Error) -> GetLabelDetectionError {
-        GetLabelDetectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLabelDetectionError {
@@ -4066,13 +3578,6 @@ impl Error for GetLabelDetectionError {
             GetLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetLabelDetectionError::ResourceNotFound(ref cause) => cause,
             GetLabelDetectionError::Throttling(ref cause) => cause,
-            GetLabelDetectionError::Validation(ref cause) => cause,
-            GetLabelDetectionError::Credentials(ref err) => err.description(),
-            GetLabelDetectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLabelDetectionError::ParseError(ref cause) => cause,
-            GetLabelDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4093,20 +3598,10 @@ pub enum GetPersonTrackingError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPersonTrackingError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPersonTrackingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPersonTrackingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4119,58 +3614,47 @@ impl GetPersonTrackingError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return GetPersonTrackingError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetPersonTrackingError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return GetPersonTrackingError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetPersonTrackingError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return GetPersonTrackingError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPersonTrackingError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return GetPersonTrackingError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPersonTrackingError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        GetPersonTrackingError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return GetPersonTrackingError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPersonTrackingError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetPersonTrackingError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetPersonTrackingError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetPersonTrackingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPersonTrackingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPersonTrackingError {
-    fn from(err: serde_json::error::Error) -> GetPersonTrackingError {
-        GetPersonTrackingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPersonTrackingError {
-    fn from(err: CredentialsError) -> GetPersonTrackingError {
-        GetPersonTrackingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPersonTrackingError {
-    fn from(err: HttpDispatchError) -> GetPersonTrackingError {
-        GetPersonTrackingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPersonTrackingError {
-    fn from(err: io::Error) -> GetPersonTrackingError {
-        GetPersonTrackingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPersonTrackingError {
@@ -4188,13 +3672,6 @@ impl Error for GetPersonTrackingError {
             GetPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetPersonTrackingError::ResourceNotFound(ref cause) => cause,
             GetPersonTrackingError::Throttling(ref cause) => cause,
-            GetPersonTrackingError::Validation(ref cause) => cause,
-            GetPersonTrackingError::Credentials(ref err) => err.description(),
-            GetPersonTrackingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPersonTrackingError::ParseError(ref cause) => cause,
-            GetPersonTrackingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4219,20 +3696,10 @@ pub enum IndexFacesError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl IndexFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> IndexFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IndexFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4245,62 +3712,55 @@ impl IndexFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return IndexFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "ImageTooLargeException" => {
-                    return IndexFacesError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::ImageTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return IndexFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidImageFormatException" => {
-                    return IndexFacesError::InvalidImageFormat(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::InvalidImageFormat(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return IndexFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidS3ObjectException" => {
-                    return IndexFacesError::InvalidS3Object(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::InvalidS3Object(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return IndexFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(IndexFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return IndexFacesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return IndexFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(IndexFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return IndexFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return IndexFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for IndexFacesError {
-    fn from(err: serde_json::error::Error) -> IndexFacesError {
-        IndexFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for IndexFacesError {
-    fn from(err: CredentialsError) -> IndexFacesError {
-        IndexFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for IndexFacesError {
-    fn from(err: HttpDispatchError) -> IndexFacesError {
-        IndexFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for IndexFacesError {
-    fn from(err: io::Error) -> IndexFacesError {
-        IndexFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for IndexFacesError {
@@ -4320,11 +3780,6 @@ impl Error for IndexFacesError {
             IndexFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             IndexFacesError::ResourceNotFound(ref cause) => cause,
             IndexFacesError::Throttling(ref cause) => cause,
-            IndexFacesError::Validation(ref cause) => cause,
-            IndexFacesError::Credentials(ref err) => err.description(),
-            IndexFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IndexFacesError::ParseError(ref cause) => cause,
-            IndexFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4345,20 +3800,10 @@ pub enum ListCollectionsError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListCollectionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCollectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCollectionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4371,56 +3816,47 @@ impl ListCollectionsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListCollectionsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListCollectionsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return ListCollectionsError::InternalServerError(String::from(error_message));
-                }
-                "InvalidPaginationTokenException" => {
-                    return ListCollectionsError::InvalidPaginationToken(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return ListCollectionsError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return ListCollectionsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListCollectionsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(ListCollectionsError::InvalidPaginationToken(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListCollectionsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        ListCollectionsError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return ListCollectionsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListCollectionsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return ListCollectionsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(ListCollectionsError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListCollectionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCollectionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCollectionsError {
-    fn from(err: serde_json::error::Error) -> ListCollectionsError {
-        ListCollectionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCollectionsError {
-    fn from(err: CredentialsError) -> ListCollectionsError {
-        ListCollectionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCollectionsError {
-    fn from(err: HttpDispatchError) -> ListCollectionsError {
-        ListCollectionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCollectionsError {
-    fn from(err: io::Error) -> ListCollectionsError {
-        ListCollectionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCollectionsError {
@@ -4438,11 +3874,6 @@ impl Error for ListCollectionsError {
             ListCollectionsError::ProvisionedThroughputExceeded(ref cause) => cause,
             ListCollectionsError::ResourceNotFound(ref cause) => cause,
             ListCollectionsError::Throttling(ref cause) => cause,
-            ListCollectionsError::Validation(ref cause) => cause,
-            ListCollectionsError::Credentials(ref err) => err.description(),
-            ListCollectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListCollectionsError::ParseError(ref cause) => cause,
-            ListCollectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4463,20 +3894,10 @@ pub enum ListFacesError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4489,56 +3910,45 @@ impl ListFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return ListFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPaginationTokenException" => {
-                    return ListFacesError::InvalidPaginationToken(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::InvalidPaginationToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return ListFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return ListFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(ListFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFacesError {
-    fn from(err: serde_json::error::Error) -> ListFacesError {
-        ListFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFacesError {
-    fn from(err: CredentialsError) -> ListFacesError {
-        ListFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFacesError {
-    fn from(err: HttpDispatchError) -> ListFacesError {
-        ListFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFacesError {
-    fn from(err: io::Error) -> ListFacesError {
-        ListFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFacesError {
@@ -4556,11 +3966,6 @@ impl Error for ListFacesError {
             ListFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             ListFacesError::ResourceNotFound(ref cause) => cause,
             ListFacesError::Throttling(ref cause) => cause,
-            ListFacesError::Validation(ref cause) => cause,
-            ListFacesError::Credentials(ref err) => err.description(),
-            ListFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFacesError::ParseError(ref cause) => cause,
-            ListFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4579,20 +3984,10 @@ pub enum ListStreamProcessorsError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListStreamProcessorsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListStreamProcessorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListStreamProcessorsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4605,57 +4000,42 @@ impl ListStreamProcessorsError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return ListStreamProcessorsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListStreamProcessorsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return ListStreamProcessorsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListStreamProcessorsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPaginationTokenException" => {
-                    return ListStreamProcessorsError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListStreamProcessorsError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return ListStreamProcessorsError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListStreamProcessorsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        ListStreamProcessorsError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return ListStreamProcessorsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(ListStreamProcessorsError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListStreamProcessorsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListStreamProcessorsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListStreamProcessorsError {
-    fn from(err: serde_json::error::Error) -> ListStreamProcessorsError {
-        ListStreamProcessorsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListStreamProcessorsError {
-    fn from(err: CredentialsError) -> ListStreamProcessorsError {
-        ListStreamProcessorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListStreamProcessorsError {
-    fn from(err: HttpDispatchError) -> ListStreamProcessorsError {
-        ListStreamProcessorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListStreamProcessorsError {
-    fn from(err: io::Error) -> ListStreamProcessorsError {
-        ListStreamProcessorsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListStreamProcessorsError {
@@ -4672,13 +4052,6 @@ impl Error for ListStreamProcessorsError {
             ListStreamProcessorsError::InvalidParameter(ref cause) => cause,
             ListStreamProcessorsError::ProvisionedThroughputExceeded(ref cause) => cause,
             ListStreamProcessorsError::Throttling(ref cause) => cause,
-            ListStreamProcessorsError::Validation(ref cause) => cause,
-            ListStreamProcessorsError::Credentials(ref err) => err.description(),
-            ListStreamProcessorsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListStreamProcessorsError::ParseError(ref cause) => cause,
-            ListStreamProcessorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4701,20 +4074,10 @@ pub enum RecognizeCelebritiesError {
     ProvisionedThroughputExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RecognizeCelebritiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RecognizeCelebritiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RecognizeCelebritiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4727,63 +4090,52 @@ impl RecognizeCelebritiesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return RecognizeCelebritiesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(RecognizeCelebritiesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "ImageTooLargeException" => {
-                    return RecognizeCelebritiesError::ImageTooLarge(String::from(error_message));
+                    return RusotoError::Service(RecognizeCelebritiesError::ImageTooLarge(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return RecognizeCelebritiesError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(RecognizeCelebritiesError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidImageFormatException" => {
-                    return RecognizeCelebritiesError::InvalidImageFormat(String::from(
-                        error_message,
+                    return RusotoError::Service(RecognizeCelebritiesError::InvalidImageFormat(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return RecognizeCelebritiesError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return RecognizeCelebritiesError::InvalidS3Object(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(RecognizeCelebritiesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(RecognizeCelebritiesError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        RecognizeCelebritiesError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return RecognizeCelebritiesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(RecognizeCelebritiesError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RecognizeCelebritiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RecognizeCelebritiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RecognizeCelebritiesError {
-    fn from(err: serde_json::error::Error) -> RecognizeCelebritiesError {
-        RecognizeCelebritiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RecognizeCelebritiesError {
-    fn from(err: CredentialsError) -> RecognizeCelebritiesError {
-        RecognizeCelebritiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RecognizeCelebritiesError {
-    fn from(err: HttpDispatchError) -> RecognizeCelebritiesError {
-        RecognizeCelebritiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RecognizeCelebritiesError {
-    fn from(err: io::Error) -> RecognizeCelebritiesError {
-        RecognizeCelebritiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RecognizeCelebritiesError {
@@ -4802,13 +4154,6 @@ impl Error for RecognizeCelebritiesError {
             RecognizeCelebritiesError::InvalidS3Object(ref cause) => cause,
             RecognizeCelebritiesError::ProvisionedThroughputExceeded(ref cause) => cause,
             RecognizeCelebritiesError::Throttling(ref cause) => cause,
-            RecognizeCelebritiesError::Validation(ref cause) => cause,
-            RecognizeCelebritiesError::Credentials(ref err) => err.description(),
-            RecognizeCelebritiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RecognizeCelebritiesError::ParseError(ref cause) => cause,
-            RecognizeCelebritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4827,20 +4172,10 @@ pub enum SearchFacesError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SearchFacesError {
-    pub fn from_response(res: BufferedHttpResponse) -> SearchFacesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFacesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4853,53 +4188,40 @@ impl SearchFacesError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SearchFacesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(SearchFacesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return SearchFacesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(SearchFacesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return SearchFacesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SearchFacesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return SearchFacesError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(SearchFacesError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return SearchFacesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SearchFacesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ThrottlingException" => {
-                    return SearchFacesError::Throttling(String::from(error_message));
+                    return RusotoError::Service(SearchFacesError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SearchFacesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SearchFacesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SearchFacesError {
-    fn from(err: serde_json::error::Error) -> SearchFacesError {
-        SearchFacesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SearchFacesError {
-    fn from(err: CredentialsError) -> SearchFacesError {
-        SearchFacesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SearchFacesError {
-    fn from(err: HttpDispatchError) -> SearchFacesError {
-        SearchFacesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SearchFacesError {
-    fn from(err: io::Error) -> SearchFacesError {
-        SearchFacesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SearchFacesError {
@@ -4916,11 +4238,6 @@ impl Error for SearchFacesError {
             SearchFacesError::ProvisionedThroughputExceeded(ref cause) => cause,
             SearchFacesError::ResourceNotFound(ref cause) => cause,
             SearchFacesError::Throttling(ref cause) => cause,
-            SearchFacesError::Validation(ref cause) => cause,
-            SearchFacesError::Credentials(ref err) => err.description(),
-            SearchFacesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SearchFacesError::ParseError(ref cause) => cause,
-            SearchFacesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4945,20 +4262,10 @@ pub enum SearchFacesByImageError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SearchFacesByImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> SearchFacesByImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFacesByImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4971,62 +4278,57 @@ impl SearchFacesByImageError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return SearchFacesByImageError::AccessDenied(String::from(error_message));
-                }
-                "ImageTooLargeException" => {
-                    return SearchFacesByImageError::ImageTooLarge(String::from(error_message));
-                }
-                "InternalServerError" => {
-                    return SearchFacesByImageError::InternalServerError(String::from(error_message));
-                }
-                "InvalidImageFormatException" => {
-                    return SearchFacesByImageError::InvalidImageFormat(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return SearchFacesByImageError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return SearchFacesByImageError::InvalidS3Object(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(SearchFacesByImageError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "ImageTooLargeException" => {
+                    return RusotoError::Service(SearchFacesByImageError::ImageTooLarge(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(SearchFacesByImageError::InternalServerError(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidImageFormatException" => {
+                    return RusotoError::Service(SearchFacesByImageError::InvalidImageFormat(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(SearchFacesByImageError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(SearchFacesByImageError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        SearchFacesByImageError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return SearchFacesByImageError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(SearchFacesByImageError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return SearchFacesByImageError::Throttling(String::from(error_message));
+                    return RusotoError::Service(SearchFacesByImageError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SearchFacesByImageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SearchFacesByImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SearchFacesByImageError {
-    fn from(err: serde_json::error::Error) -> SearchFacesByImageError {
-        SearchFacesByImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SearchFacesByImageError {
-    fn from(err: CredentialsError) -> SearchFacesByImageError {
-        SearchFacesByImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SearchFacesByImageError {
-    fn from(err: HttpDispatchError) -> SearchFacesByImageError {
-        SearchFacesByImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SearchFacesByImageError {
-    fn from(err: io::Error) -> SearchFacesByImageError {
-        SearchFacesByImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SearchFacesByImageError {
@@ -5046,13 +4348,6 @@ impl Error for SearchFacesByImageError {
             SearchFacesByImageError::ProvisionedThroughputExceeded(ref cause) => cause,
             SearchFacesByImageError::ResourceNotFound(ref cause) => cause,
             SearchFacesByImageError::Throttling(ref cause) => cause,
-            SearchFacesByImageError::Validation(ref cause) => cause,
-            SearchFacesByImageError::Credentials(ref err) => err.description(),
-            SearchFacesByImageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SearchFacesByImageError::ParseError(ref cause) => cause,
-            SearchFacesByImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5077,20 +4372,10 @@ pub enum StartCelebrityRecognitionError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartCelebrityRecognitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartCelebrityRecognitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCelebrityRecognitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5103,74 +4388,61 @@ impl StartCelebrityRecognitionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartCelebrityRecognitionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StartCelebrityRecognitionError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return StartCelebrityRecognitionError::IdempotentParameterMismatch(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartCelebrityRecognitionError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InternalServerError" => {
-                    return StartCelebrityRecognitionError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartCelebrityRecognitionError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterException" => {
-                    return StartCelebrityRecognitionError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StartCelebrityRecognitionError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartCelebrityRecognitionError::InvalidS3Object(String::from(
-                        error_message,
+                    return RusotoError::Service(StartCelebrityRecognitionError::InvalidS3Object(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return StartCelebrityRecognitionError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartCelebrityRecognitionError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartCelebrityRecognitionError::ProvisionedThroughputExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ThrottlingException" => {
-                    return StartCelebrityRecognitionError::Throttling(String::from(error_message));
-                }
-                "VideoTooLargeException" => {
-                    return StartCelebrityRecognitionError::VideoTooLarge(String::from(
-                        error_message,
+                    return RusotoError::Service(StartCelebrityRecognitionError::Throttling(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartCelebrityRecognitionError::Validation(error_message.to_string());
+                "VideoTooLargeException" => {
+                    return RusotoError::Service(StartCelebrityRecognitionError::VideoTooLarge(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartCelebrityRecognitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartCelebrityRecognitionError {
-    fn from(err: serde_json::error::Error) -> StartCelebrityRecognitionError {
-        StartCelebrityRecognitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartCelebrityRecognitionError {
-    fn from(err: CredentialsError) -> StartCelebrityRecognitionError {
-        StartCelebrityRecognitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartCelebrityRecognitionError {
-    fn from(err: HttpDispatchError) -> StartCelebrityRecognitionError {
-        StartCelebrityRecognitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartCelebrityRecognitionError {
-    fn from(err: io::Error) -> StartCelebrityRecognitionError {
-        StartCelebrityRecognitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartCelebrityRecognitionError {
@@ -5190,13 +4462,6 @@ impl Error for StartCelebrityRecognitionError {
             StartCelebrityRecognitionError::ProvisionedThroughputExceeded(ref cause) => cause,
             StartCelebrityRecognitionError::Throttling(ref cause) => cause,
             StartCelebrityRecognitionError::VideoTooLarge(ref cause) => cause,
-            StartCelebrityRecognitionError::Validation(ref cause) => cause,
-            StartCelebrityRecognitionError::Credentials(ref err) => err.description(),
-            StartCelebrityRecognitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartCelebrityRecognitionError::ParseError(ref cause) => cause,
-            StartCelebrityRecognitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5221,20 +4486,10 @@ pub enum StartContentModerationError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartContentModerationError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartContentModerationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartContentModerationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5247,68 +4502,59 @@ impl StartContentModerationError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartContentModerationError::AccessDenied(String::from(error_message));
-                }
-                "IdempotentParameterMismatchException" => {
-                    return StartContentModerationError::IdempotentParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContentModerationError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartContentModerationError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InternalServerError" => {
-                    return StartContentModerationError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContentModerationError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StartContentModerationError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContentModerationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidS3ObjectException" => {
-                    return StartContentModerationError::InvalidS3Object(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return StartContentModerationError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartContentModerationError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartContentModerationError::InvalidS3Object(
+                        String::from(error_message),
                     ));
                 }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartContentModerationError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartContentModerationError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return StartContentModerationError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartContentModerationError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
                 "VideoTooLargeException" => {
-                    return StartContentModerationError::VideoTooLarge(String::from(error_message));
+                    return RusotoError::Service(StartContentModerationError::VideoTooLarge(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartContentModerationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartContentModerationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartContentModerationError {
-    fn from(err: serde_json::error::Error) -> StartContentModerationError {
-        StartContentModerationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartContentModerationError {
-    fn from(err: CredentialsError) -> StartContentModerationError {
-        StartContentModerationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartContentModerationError {
-    fn from(err: HttpDispatchError) -> StartContentModerationError {
-        StartContentModerationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartContentModerationError {
-    fn from(err: io::Error) -> StartContentModerationError {
-        StartContentModerationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartContentModerationError {
@@ -5328,13 +4574,6 @@ impl Error for StartContentModerationError {
             StartContentModerationError::ProvisionedThroughputExceeded(ref cause) => cause,
             StartContentModerationError::Throttling(ref cause) => cause,
             StartContentModerationError::VideoTooLarge(ref cause) => cause,
-            StartContentModerationError::Validation(ref cause) => cause,
-            StartContentModerationError::Credentials(ref err) => err.description(),
-            StartContentModerationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartContentModerationError::ParseError(ref cause) => cause,
-            StartContentModerationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5359,20 +4598,10 @@ pub enum StartFaceDetectionError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartFaceDetectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartFaceDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFaceDetectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5385,64 +4614,59 @@ impl StartFaceDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartFaceDetectionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StartFaceDetectionError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return StartFaceDetectionError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartFaceDetectionError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return StartFaceDetectionError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return StartFaceDetectionError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return StartFaceDetectionError::InvalidS3Object(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return StartFaceDetectionError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartFaceDetectionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartFaceDetectionError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartFaceDetectionError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartFaceDetectionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartFaceDetectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return StartFaceDetectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartFaceDetectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "VideoTooLargeException" => {
-                    return StartFaceDetectionError::VideoTooLarge(String::from(error_message));
+                    return RusotoError::Service(StartFaceDetectionError::VideoTooLarge(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartFaceDetectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartFaceDetectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartFaceDetectionError {
-    fn from(err: serde_json::error::Error) -> StartFaceDetectionError {
-        StartFaceDetectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartFaceDetectionError {
-    fn from(err: CredentialsError) -> StartFaceDetectionError {
-        StartFaceDetectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartFaceDetectionError {
-    fn from(err: HttpDispatchError) -> StartFaceDetectionError {
-        StartFaceDetectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartFaceDetectionError {
-    fn from(err: io::Error) -> StartFaceDetectionError {
-        StartFaceDetectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartFaceDetectionError {
@@ -5462,13 +4686,6 @@ impl Error for StartFaceDetectionError {
             StartFaceDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             StartFaceDetectionError::Throttling(ref cause) => cause,
             StartFaceDetectionError::VideoTooLarge(ref cause) => cause,
-            StartFaceDetectionError::Validation(ref cause) => cause,
-            StartFaceDetectionError::Credentials(ref err) => err.description(),
-            StartFaceDetectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartFaceDetectionError::ParseError(ref cause) => cause,
-            StartFaceDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5495,20 +4712,10 @@ pub enum StartFaceSearchError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartFaceSearchError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartFaceSearchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFaceSearchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5521,67 +4728,62 @@ impl StartFaceSearchError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartFaceSearchError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StartFaceSearchError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return StartFaceSearchError::IdempotentParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(StartFaceSearchError::IdempotentParameterMismatch(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return StartFaceSearchError::InternalServerError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return StartFaceSearchError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return StartFaceSearchError::InvalidS3Object(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return StartFaceSearchError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartFaceSearchError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(StartFaceSearchError::InvalidParameter(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartFaceSearchError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartFaceSearchError::LimitExceeded(String::from(
+                        error_message,
+                    )));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartFaceSearchError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return StartFaceSearchError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartFaceSearchError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartFaceSearchError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartFaceSearchError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "VideoTooLargeException" => {
-                    return StartFaceSearchError::VideoTooLarge(String::from(error_message));
+                    return RusotoError::Service(StartFaceSearchError::VideoTooLarge(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartFaceSearchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartFaceSearchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartFaceSearchError {
-    fn from(err: serde_json::error::Error) -> StartFaceSearchError {
-        StartFaceSearchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartFaceSearchError {
-    fn from(err: CredentialsError) -> StartFaceSearchError {
-        StartFaceSearchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartFaceSearchError {
-    fn from(err: HttpDispatchError) -> StartFaceSearchError {
-        StartFaceSearchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartFaceSearchError {
-    fn from(err: io::Error) -> StartFaceSearchError {
-        StartFaceSearchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartFaceSearchError {
@@ -5602,11 +4804,6 @@ impl Error for StartFaceSearchError {
             StartFaceSearchError::ResourceNotFound(ref cause) => cause,
             StartFaceSearchError::Throttling(ref cause) => cause,
             StartFaceSearchError::VideoTooLarge(ref cause) => cause,
-            StartFaceSearchError::Validation(ref cause) => cause,
-            StartFaceSearchError::Credentials(ref err) => err.description(),
-            StartFaceSearchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartFaceSearchError::ParseError(ref cause) => cause,
-            StartFaceSearchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5631,20 +4828,10 @@ pub enum StartLabelDetectionError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartLabelDetectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartLabelDetectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartLabelDetectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5657,66 +4844,59 @@ impl StartLabelDetectionError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartLabelDetectionError::AccessDenied(String::from(error_message));
-                }
-                "IdempotentParameterMismatchException" => {
-                    return StartLabelDetectionError::IdempotentParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(StartLabelDetectionError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartLabelDetectionError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InternalServerError" => {
-                    return StartLabelDetectionError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartLabelDetectionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StartLabelDetectionError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return StartLabelDetectionError::InvalidS3Object(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return StartLabelDetectionError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartLabelDetectionError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartLabelDetectionError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartLabelDetectionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartLabelDetectionError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return StartLabelDetectionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartLabelDetectionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "VideoTooLargeException" => {
-                    return StartLabelDetectionError::VideoTooLarge(String::from(error_message));
+                    return RusotoError::Service(StartLabelDetectionError::VideoTooLarge(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartLabelDetectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartLabelDetectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartLabelDetectionError {
-    fn from(err: serde_json::error::Error) -> StartLabelDetectionError {
-        StartLabelDetectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartLabelDetectionError {
-    fn from(err: CredentialsError) -> StartLabelDetectionError {
-        StartLabelDetectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartLabelDetectionError {
-    fn from(err: HttpDispatchError) -> StartLabelDetectionError {
-        StartLabelDetectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartLabelDetectionError {
-    fn from(err: io::Error) -> StartLabelDetectionError {
-        StartLabelDetectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartLabelDetectionError {
@@ -5736,13 +4916,6 @@ impl Error for StartLabelDetectionError {
             StartLabelDetectionError::ProvisionedThroughputExceeded(ref cause) => cause,
             StartLabelDetectionError::Throttling(ref cause) => cause,
             StartLabelDetectionError::VideoTooLarge(ref cause) => cause,
-            StartLabelDetectionError::Validation(ref cause) => cause,
-            StartLabelDetectionError::Credentials(ref err) => err.description(),
-            StartLabelDetectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartLabelDetectionError::ParseError(ref cause) => cause,
-            StartLabelDetectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5767,20 +4940,10 @@ pub enum StartPersonTrackingError {
     Throttling(String),
     /// <p>The file size or duration of the supplied media is too large. The maximum file size is 8GB. The maximum duration is 2 hours. </p>
     VideoTooLarge(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartPersonTrackingError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartPersonTrackingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPersonTrackingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5793,66 +4956,59 @@ impl StartPersonTrackingError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartPersonTrackingError::AccessDenied(String::from(error_message));
-                }
-                "IdempotentParameterMismatchException" => {
-                    return StartPersonTrackingError::IdempotentParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(StartPersonTrackingError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "IdempotentParameterMismatchException" => {
+                    return RusotoError::Service(
+                        StartPersonTrackingError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InternalServerError" => {
-                    return StartPersonTrackingError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartPersonTrackingError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StartPersonTrackingError::InvalidParameter(String::from(error_message));
-                }
-                "InvalidS3ObjectException" => {
-                    return StartPersonTrackingError::InvalidS3Object(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return StartPersonTrackingError::LimitExceeded(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartPersonTrackingError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidS3ObjectException" => {
+                    return RusotoError::Service(StartPersonTrackingError::InvalidS3Object(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StartPersonTrackingError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartPersonTrackingError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ThrottlingException" => {
-                    return StartPersonTrackingError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartPersonTrackingError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
                 "VideoTooLargeException" => {
-                    return StartPersonTrackingError::VideoTooLarge(String::from(error_message));
+                    return RusotoError::Service(StartPersonTrackingError::VideoTooLarge(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartPersonTrackingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartPersonTrackingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartPersonTrackingError {
-    fn from(err: serde_json::error::Error) -> StartPersonTrackingError {
-        StartPersonTrackingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartPersonTrackingError {
-    fn from(err: CredentialsError) -> StartPersonTrackingError {
-        StartPersonTrackingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartPersonTrackingError {
-    fn from(err: HttpDispatchError) -> StartPersonTrackingError {
-        StartPersonTrackingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartPersonTrackingError {
-    fn from(err: io::Error) -> StartPersonTrackingError {
-        StartPersonTrackingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartPersonTrackingError {
@@ -5872,13 +5028,6 @@ impl Error for StartPersonTrackingError {
             StartPersonTrackingError::ProvisionedThroughputExceeded(ref cause) => cause,
             StartPersonTrackingError::Throttling(ref cause) => cause,
             StartPersonTrackingError::VideoTooLarge(ref cause) => cause,
-            StartPersonTrackingError::Validation(ref cause) => cause,
-            StartPersonTrackingError::Credentials(ref err) => err.description(),
-            StartPersonTrackingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartPersonTrackingError::ParseError(ref cause) => cause,
-            StartPersonTrackingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5899,20 +5048,10 @@ pub enum StartStreamProcessorError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartStreamProcessorError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartStreamProcessorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartStreamProcessorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5925,58 +5064,47 @@ impl StartStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StartStreamProcessorError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StartStreamProcessorError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return StartStreamProcessorError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartStreamProcessorError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StartStreamProcessorError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartStreamProcessorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StartStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceInUseException" => {
-                    return StartStreamProcessorError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(StartStreamProcessorError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartStreamProcessorError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartStreamProcessorError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StartStreamProcessorError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StartStreamProcessorError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartStreamProcessorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartStreamProcessorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartStreamProcessorError {
-    fn from(err: serde_json::error::Error) -> StartStreamProcessorError {
-        StartStreamProcessorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartStreamProcessorError {
-    fn from(err: CredentialsError) -> StartStreamProcessorError {
-        StartStreamProcessorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartStreamProcessorError {
-    fn from(err: HttpDispatchError) -> StartStreamProcessorError {
-        StartStreamProcessorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartStreamProcessorError {
-    fn from(err: io::Error) -> StartStreamProcessorError {
-        StartStreamProcessorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartStreamProcessorError {
@@ -5994,13 +5122,6 @@ impl Error for StartStreamProcessorError {
             StartStreamProcessorError::ResourceInUse(ref cause) => cause,
             StartStreamProcessorError::ResourceNotFound(ref cause) => cause,
             StartStreamProcessorError::Throttling(ref cause) => cause,
-            StartStreamProcessorError::Validation(ref cause) => cause,
-            StartStreamProcessorError::Credentials(ref err) => err.description(),
-            StartStreamProcessorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartStreamProcessorError::ParseError(ref cause) => cause,
-            StartStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6021,20 +5142,10 @@ pub enum StopStreamProcessorError {
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopStreamProcessorError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopStreamProcessorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopStreamProcessorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6047,58 +5158,47 @@ impl StopStreamProcessorError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return StopStreamProcessorError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(StopStreamProcessorError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return StopStreamProcessorError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StopStreamProcessorError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return StopStreamProcessorError::InvalidParameter(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StopStreamProcessorError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        StopStreamProcessorError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceInUseException" => {
-                    return StopStreamProcessorError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(StopStreamProcessorError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StopStreamProcessorError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopStreamProcessorError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return StopStreamProcessorError::Throttling(String::from(error_message));
+                    return RusotoError::Service(StopStreamProcessorError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopStreamProcessorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopStreamProcessorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopStreamProcessorError {
-    fn from(err: serde_json::error::Error) -> StopStreamProcessorError {
-        StopStreamProcessorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopStreamProcessorError {
-    fn from(err: CredentialsError) -> StopStreamProcessorError {
-        StopStreamProcessorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopStreamProcessorError {
-    fn from(err: HttpDispatchError) -> StopStreamProcessorError {
-        StopStreamProcessorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopStreamProcessorError {
-    fn from(err: io::Error) -> StopStreamProcessorError {
-        StopStreamProcessorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopStreamProcessorError {
@@ -6116,13 +5216,6 @@ impl Error for StopStreamProcessorError {
             StopStreamProcessorError::ResourceInUse(ref cause) => cause,
             StopStreamProcessorError::ResourceNotFound(ref cause) => cause,
             StopStreamProcessorError::Throttling(ref cause) => cause,
-            StopStreamProcessorError::Validation(ref cause) => cause,
-            StopStreamProcessorError::Credentials(ref err) => err.description(),
-            StopStreamProcessorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopStreamProcessorError::ParseError(ref cause) => cause,
-            StopStreamProcessorError::Unknown(_) => "unknown error",
         }
     }
 }

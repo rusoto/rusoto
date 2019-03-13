@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1191,22 +1188,12 @@ pub enum CreateApplicationError {
     InternalServerError(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1231,48 +1218,35 @@ impl CreateApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateApplicationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return CreateApplicationError::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return CreateApplicationError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateApplicationError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateApplicationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateApplicationError {
-    fn from(err: serde_json::error::Error) -> CreateApplicationError {
-        CreateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationError {
-    fn from(err: CredentialsError) -> CreateApplicationError {
-        CreateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationError {
-    fn from(err: HttpDispatchError) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationError {
-    fn from(err: io::Error) -> CreateApplicationError {
-        CreateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateApplicationError {
@@ -1288,13 +1262,6 @@ impl Error for CreateApplicationError {
             CreateApplicationError::Forbidden(ref cause) => cause,
             CreateApplicationError::InternalServerError(ref cause) => cause,
             CreateApplicationError::TooManyRequests(ref cause) => cause,
-            CreateApplicationError::Validation(ref cause) => cause,
-            CreateApplicationError::Credentials(ref err) => err.description(),
-            CreateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationError::ParseError(ref cause) => cause,
-            CreateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1311,22 +1278,12 @@ pub enum CreateApplicationVersionError {
     InternalServerError(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateApplicationVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateApplicationVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApplicationVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1351,52 +1308,35 @@ impl CreateApplicationVersionError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateApplicationVersionError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationVersionError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return CreateApplicationVersionError::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationVersionError::Conflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return CreateApplicationVersionError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateApplicationVersionError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return CreateApplicationVersionError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationVersionError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateApplicationVersionError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateApplicationVersionError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateApplicationVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateApplicationVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateApplicationVersionError {
-    fn from(err: serde_json::error::Error) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateApplicationVersionError {
-    fn from(err: CredentialsError) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateApplicationVersionError {
-    fn from(err: HttpDispatchError) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateApplicationVersionError {
-    fn from(err: io::Error) -> CreateApplicationVersionError {
-        CreateApplicationVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateApplicationVersionError {
@@ -1412,13 +1352,6 @@ impl Error for CreateApplicationVersionError {
             CreateApplicationVersionError::Forbidden(ref cause) => cause,
             CreateApplicationVersionError::InternalServerError(ref cause) => cause,
             CreateApplicationVersionError::TooManyRequests(ref cause) => cause,
-            CreateApplicationVersionError::Validation(ref cause) => cause,
-            CreateApplicationVersionError::Credentials(ref err) => err.description(),
-            CreateApplicationVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateApplicationVersionError::ParseError(ref cause) => cause,
-            CreateApplicationVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1433,22 +1366,14 @@ pub enum CreateCloudFormationChangeSetError {
     InternalServerError(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCloudFormationChangeSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFormationChangeSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCloudFormationChangeSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1473,53 +1398,34 @@ impl CreateCloudFormationChangeSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateCloudFormationChangeSetError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationChangeSetError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ForbiddenException" => {
-                    return CreateCloudFormationChangeSetError::Forbidden(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationChangeSetError::Forbidden(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerErrorException" => {
-                    return CreateCloudFormationChangeSetError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCloudFormationChangeSetError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return CreateCloudFormationChangeSetError::TooManyRequests(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCloudFormationChangeSetError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateCloudFormationChangeSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCloudFormationChangeSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCloudFormationChangeSetError {
-    fn from(err: serde_json::error::Error) -> CreateCloudFormationChangeSetError {
-        CreateCloudFormationChangeSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCloudFormationChangeSetError {
-    fn from(err: CredentialsError) -> CreateCloudFormationChangeSetError {
-        CreateCloudFormationChangeSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCloudFormationChangeSetError {
-    fn from(err: HttpDispatchError) -> CreateCloudFormationChangeSetError {
-        CreateCloudFormationChangeSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCloudFormationChangeSetError {
-    fn from(err: io::Error) -> CreateCloudFormationChangeSetError {
-        CreateCloudFormationChangeSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCloudFormationChangeSetError {
@@ -1534,13 +1440,6 @@ impl Error for CreateCloudFormationChangeSetError {
             CreateCloudFormationChangeSetError::Forbidden(ref cause) => cause,
             CreateCloudFormationChangeSetError::InternalServerError(ref cause) => cause,
             CreateCloudFormationChangeSetError::TooManyRequests(ref cause) => cause,
-            CreateCloudFormationChangeSetError::Validation(ref cause) => cause,
-            CreateCloudFormationChangeSetError::Credentials(ref err) => err.description(),
-            CreateCloudFormationChangeSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCloudFormationChangeSetError::ParseError(ref cause) => cause,
-            CreateCloudFormationChangeSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1557,22 +1456,14 @@ pub enum CreateCloudFormationTemplateError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCloudFormationTemplateError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFormationTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCloudFormationTemplateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1597,54 +1488,37 @@ impl CreateCloudFormationTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateCloudFormationTemplateError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationTemplateError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ForbiddenException" => {
-                    return CreateCloudFormationTemplateError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateCloudFormationTemplateError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return CreateCloudFormationTemplateError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCloudFormationTemplateError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return CreateCloudFormationTemplateError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return CreateCloudFormationTemplateError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCloudFormationTemplateError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCloudFormationTemplateError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateCloudFormationTemplateError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCloudFormationTemplateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCloudFormationTemplateError {
-    fn from(err: serde_json::error::Error) -> CreateCloudFormationTemplateError {
-        CreateCloudFormationTemplateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCloudFormationTemplateError {
-    fn from(err: CredentialsError) -> CreateCloudFormationTemplateError {
-        CreateCloudFormationTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCloudFormationTemplateError {
-    fn from(err: HttpDispatchError) -> CreateCloudFormationTemplateError {
-        CreateCloudFormationTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCloudFormationTemplateError {
-    fn from(err: io::Error) -> CreateCloudFormationTemplateError {
-        CreateCloudFormationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCloudFormationTemplateError {
@@ -1660,13 +1534,6 @@ impl Error for CreateCloudFormationTemplateError {
             CreateCloudFormationTemplateError::InternalServerError(ref cause) => cause,
             CreateCloudFormationTemplateError::NotFound(ref cause) => cause,
             CreateCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
-            CreateCloudFormationTemplateError::Validation(ref cause) => cause,
-            CreateCloudFormationTemplateError::Credentials(ref err) => err.description(),
-            CreateCloudFormationTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCloudFormationTemplateError::ParseError(ref cause) => cause,
-            CreateCloudFormationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1685,22 +1552,12 @@ pub enum DeleteApplicationError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteApplicationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1725,51 +1582,40 @@ impl DeleteApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteApplicationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteApplicationError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return DeleteApplicationError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteApplicationError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteApplicationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteApplicationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteApplicationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteApplicationError {
-    fn from(err: serde_json::error::Error) -> DeleteApplicationError {
-        DeleteApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteApplicationError {
-    fn from(err: CredentialsError) -> DeleteApplicationError {
-        DeleteApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteApplicationError {
-    fn from(err: HttpDispatchError) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteApplicationError {
-    fn from(err: io::Error) -> DeleteApplicationError {
-        DeleteApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteApplicationError {
@@ -1786,13 +1632,6 @@ impl Error for DeleteApplicationError {
             DeleteApplicationError::InternalServerError(ref cause) => cause,
             DeleteApplicationError::NotFound(ref cause) => cause,
             DeleteApplicationError::TooManyRequests(ref cause) => cause,
-            DeleteApplicationError::Validation(ref cause) => cause,
-            DeleteApplicationError::Credentials(ref err) => err.description(),
-            DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteApplicationError::ParseError(ref cause) => cause,
-            DeleteApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1809,22 +1648,12 @@ pub enum GetApplicationError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetApplicationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1849,48 +1678,35 @@ impl GetApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetApplicationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return GetApplicationError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetApplicationError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetApplicationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetApplicationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetApplicationError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetApplicationError {
-    fn from(err: serde_json::error::Error) -> GetApplicationError {
-        GetApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetApplicationError {
-    fn from(err: CredentialsError) -> GetApplicationError {
-        GetApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetApplicationError {
-    fn from(err: HttpDispatchError) -> GetApplicationError {
-        GetApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetApplicationError {
-    fn from(err: io::Error) -> GetApplicationError {
-        GetApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetApplicationError {
@@ -1906,11 +1722,6 @@ impl Error for GetApplicationError {
             GetApplicationError::InternalServerError(ref cause) => cause,
             GetApplicationError::NotFound(ref cause) => cause,
             GetApplicationError::TooManyRequests(ref cause) => cause,
-            GetApplicationError::Validation(ref cause) => cause,
-            GetApplicationError::Credentials(ref err) => err.description(),
-            GetApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetApplicationError::ParseError(ref cause) => cause,
-            GetApplicationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1927,22 +1738,12 @@ pub enum GetApplicationPolicyError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetApplicationPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetApplicationPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetApplicationPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1967,50 +1768,35 @@ impl GetApplicationPolicyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetApplicationPolicyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetApplicationPolicyError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return GetApplicationPolicyError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(GetApplicationPolicyError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetApplicationPolicyError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetApplicationPolicyError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return GetApplicationPolicyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetApplicationPolicyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetApplicationPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetApplicationPolicyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetApplicationPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetApplicationPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetApplicationPolicyError {
-    fn from(err: serde_json::error::Error) -> GetApplicationPolicyError {
-        GetApplicationPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetApplicationPolicyError {
-    fn from(err: CredentialsError) -> GetApplicationPolicyError {
-        GetApplicationPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetApplicationPolicyError {
-    fn from(err: HttpDispatchError) -> GetApplicationPolicyError {
-        GetApplicationPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetApplicationPolicyError {
-    fn from(err: io::Error) -> GetApplicationPolicyError {
-        GetApplicationPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetApplicationPolicyError {
@@ -2026,13 +1812,6 @@ impl Error for GetApplicationPolicyError {
             GetApplicationPolicyError::InternalServerError(ref cause) => cause,
             GetApplicationPolicyError::NotFound(ref cause) => cause,
             GetApplicationPolicyError::TooManyRequests(ref cause) => cause,
-            GetApplicationPolicyError::Validation(ref cause) => cause,
-            GetApplicationPolicyError::Credentials(ref err) => err.description(),
-            GetApplicationPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetApplicationPolicyError::ParseError(ref cause) => cause,
-            GetApplicationPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2049,22 +1828,12 @@ pub enum GetCloudFormationTemplateError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCloudFormationTemplateError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetCloudFormationTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCloudFormationTemplateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2089,52 +1858,37 @@ impl GetCloudFormationTemplateError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetCloudFormationTemplateError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetCloudFormationTemplateError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return GetCloudFormationTemplateError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(GetCloudFormationTemplateError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return GetCloudFormationTemplateError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCloudFormationTemplateError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return GetCloudFormationTemplateError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return GetCloudFormationTemplateError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCloudFormationTemplateError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCloudFormationTemplateError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetCloudFormationTemplateError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCloudFormationTemplateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCloudFormationTemplateError {
-    fn from(err: serde_json::error::Error) -> GetCloudFormationTemplateError {
-        GetCloudFormationTemplateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCloudFormationTemplateError {
-    fn from(err: CredentialsError) -> GetCloudFormationTemplateError {
-        GetCloudFormationTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCloudFormationTemplateError {
-    fn from(err: HttpDispatchError) -> GetCloudFormationTemplateError {
-        GetCloudFormationTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCloudFormationTemplateError {
-    fn from(err: io::Error) -> GetCloudFormationTemplateError {
-        GetCloudFormationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCloudFormationTemplateError {
@@ -2150,13 +1904,6 @@ impl Error for GetCloudFormationTemplateError {
             GetCloudFormationTemplateError::InternalServerError(ref cause) => cause,
             GetCloudFormationTemplateError::NotFound(ref cause) => cause,
             GetCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
-            GetCloudFormationTemplateError::Validation(ref cause) => cause,
-            GetCloudFormationTemplateError::Credentials(ref err) => err.description(),
-            GetCloudFormationTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCloudFormationTemplateError::ParseError(ref cause) => cause,
-            GetCloudFormationTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2173,22 +1920,14 @@ pub enum ListApplicationDependenciesError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListApplicationDependenciesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationDependenciesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListApplicationDependenciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2213,52 +1952,37 @@ impl ListApplicationDependenciesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApplicationDependenciesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListApplicationDependenciesError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return ListApplicationDependenciesError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListApplicationDependenciesError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return ListApplicationDependenciesError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListApplicationDependenciesError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NotFoundException" => {
-                    return ListApplicationDependenciesError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListApplicationDependenciesError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListApplicationDependenciesError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListApplicationDependenciesError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListApplicationDependenciesError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationDependenciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationDependenciesError {
-    fn from(err: serde_json::error::Error) -> ListApplicationDependenciesError {
-        ListApplicationDependenciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationDependenciesError {
-    fn from(err: CredentialsError) -> ListApplicationDependenciesError {
-        ListApplicationDependenciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationDependenciesError {
-    fn from(err: HttpDispatchError) -> ListApplicationDependenciesError {
-        ListApplicationDependenciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationDependenciesError {
-    fn from(err: io::Error) -> ListApplicationDependenciesError {
-        ListApplicationDependenciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationDependenciesError {
@@ -2274,13 +1998,6 @@ impl Error for ListApplicationDependenciesError {
             ListApplicationDependenciesError::InternalServerError(ref cause) => cause,
             ListApplicationDependenciesError::NotFound(ref cause) => cause,
             ListApplicationDependenciesError::TooManyRequests(ref cause) => cause,
-            ListApplicationDependenciesError::Validation(ref cause) => cause,
-            ListApplicationDependenciesError::Credentials(ref err) => err.description(),
-            ListApplicationDependenciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListApplicationDependenciesError::ParseError(ref cause) => cause,
-            ListApplicationDependenciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2297,22 +2014,12 @@ pub enum ListApplicationVersionsError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListApplicationVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2337,52 +2044,35 @@ impl ListApplicationVersionsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApplicationVersionsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListApplicationVersionsError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return ListApplicationVersionsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListApplicationVersionsError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerErrorException" => {
-                    return ListApplicationVersionsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListApplicationVersionsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return ListApplicationVersionsError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListApplicationVersionsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListApplicationVersionsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListApplicationVersionsError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListApplicationVersionsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationVersionsError {
-    fn from(err: serde_json::error::Error) -> ListApplicationVersionsError {
-        ListApplicationVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationVersionsError {
-    fn from(err: CredentialsError) -> ListApplicationVersionsError {
-        ListApplicationVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationVersionsError {
-    fn from(err: HttpDispatchError) -> ListApplicationVersionsError {
-        ListApplicationVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationVersionsError {
-    fn from(err: io::Error) -> ListApplicationVersionsError {
-        ListApplicationVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationVersionsError {
@@ -2398,13 +2088,6 @@ impl Error for ListApplicationVersionsError {
             ListApplicationVersionsError::InternalServerError(ref cause) => cause,
             ListApplicationVersionsError::NotFound(ref cause) => cause,
             ListApplicationVersionsError::TooManyRequests(ref cause) => cause,
-            ListApplicationVersionsError::Validation(ref cause) => cause,
-            ListApplicationVersionsError::Credentials(ref err) => err.description(),
-            ListApplicationVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListApplicationVersionsError::ParseError(ref cause) => cause,
-            ListApplicationVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2419,22 +2102,12 @@ pub enum ListApplicationsError {
     InternalServerError(String),
     /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListApplicationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2459,45 +2132,30 @@ impl ListApplicationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListApplicationsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListApplicationsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return ListApplicationsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListApplicationsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListApplicationsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListApplicationsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListApplicationsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListApplicationsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListApplicationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListApplicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListApplicationsError {
-    fn from(err: serde_json::error::Error) -> ListApplicationsError {
-        ListApplicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListApplicationsError {
-    fn from(err: CredentialsError) -> ListApplicationsError {
-        ListApplicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListApplicationsError {
-    fn from(err: HttpDispatchError) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListApplicationsError {
-    fn from(err: io::Error) -> ListApplicationsError {
-        ListApplicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListApplicationsError {
@@ -2512,11 +2170,6 @@ impl Error for ListApplicationsError {
             ListApplicationsError::Forbidden(ref cause) => cause,
             ListApplicationsError::InternalServerError(ref cause) => cause,
             ListApplicationsError::NotFound(ref cause) => cause,
-            ListApplicationsError::Validation(ref cause) => cause,
-            ListApplicationsError::Credentials(ref err) => err.description(),
-            ListApplicationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListApplicationsError::ParseError(ref cause) => cause,
-            ListApplicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2533,22 +2186,12 @@ pub enum PutApplicationPolicyError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutApplicationPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutApplicationPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutApplicationPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2573,50 +2216,35 @@ impl PutApplicationPolicyError {
 
             match error_type {
                 "BadRequestException" => {
-                    return PutApplicationPolicyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutApplicationPolicyError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ForbiddenException" => {
-                    return PutApplicationPolicyError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(PutApplicationPolicyError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return PutApplicationPolicyError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(PutApplicationPolicyError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return PutApplicationPolicyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(PutApplicationPolicyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return PutApplicationPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(PutApplicationPolicyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutApplicationPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutApplicationPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutApplicationPolicyError {
-    fn from(err: serde_json::error::Error) -> PutApplicationPolicyError {
-        PutApplicationPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutApplicationPolicyError {
-    fn from(err: CredentialsError) -> PutApplicationPolicyError {
-        PutApplicationPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutApplicationPolicyError {
-    fn from(err: HttpDispatchError) -> PutApplicationPolicyError {
-        PutApplicationPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutApplicationPolicyError {
-    fn from(err: io::Error) -> PutApplicationPolicyError {
-        PutApplicationPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutApplicationPolicyError {
@@ -2632,13 +2260,6 @@ impl Error for PutApplicationPolicyError {
             PutApplicationPolicyError::InternalServerError(ref cause) => cause,
             PutApplicationPolicyError::NotFound(ref cause) => cause,
             PutApplicationPolicyError::TooManyRequests(ref cause) => cause,
-            PutApplicationPolicyError::Validation(ref cause) => cause,
-            PutApplicationPolicyError::Credentials(ref err) => err.description(),
-            PutApplicationPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutApplicationPolicyError::ParseError(ref cause) => cause,
-            PutApplicationPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2657,22 +2278,12 @@ pub enum UpdateApplicationError {
     NotFound(String),
     /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateApplicationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApplicationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2697,51 +2308,40 @@ impl UpdateApplicationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateApplicationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return UpdateApplicationError::Conflict(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return UpdateApplicationError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateApplicationError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateApplicationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateApplicationError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateApplicationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateApplicationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateApplicationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateApplicationError {
-    fn from(err: serde_json::error::Error) -> UpdateApplicationError {
-        UpdateApplicationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateApplicationError {
-    fn from(err: CredentialsError) -> UpdateApplicationError {
-        UpdateApplicationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateApplicationError {
-    fn from(err: HttpDispatchError) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateApplicationError {
-    fn from(err: io::Error) -> UpdateApplicationError {
-        UpdateApplicationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateApplicationError {
@@ -2758,13 +2358,6 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::InternalServerError(ref cause) => cause,
             UpdateApplicationError::NotFound(ref cause) => cause,
             UpdateApplicationError::TooManyRequests(ref cause) => cause,
-            UpdateApplicationError::Validation(ref cause) => cause,
-            UpdateApplicationError::Credentials(ref err) => err.description(),
-            UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateApplicationError::ParseError(ref cause) => cause,
-            UpdateApplicationError::Unknown(_) => "unknown error",
         }
     }
 }

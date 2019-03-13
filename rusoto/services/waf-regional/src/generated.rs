@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2415,20 +2412,10 @@ pub enum AssociateWebACLError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because the entity referenced is temporarily unavailable. Retry your request.</p>
     WAFUnavailableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2441,48 +2428,35 @@ impl AssociateWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return AssociateWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(AssociateWebACLError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return AssociateWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(AssociateWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return AssociateWebACLError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AssociateWebACLError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return AssociateWebACLError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(AssociateWebACLError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFUnavailableEntityException" => {
-                    return AssociateWebACLError::WAFUnavailableEntity(String::from(error_message));
+                    return RusotoError::Service(AssociateWebACLError::WAFUnavailableEntity(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateWebACLError {
-    fn from(err: serde_json::error::Error) -> AssociateWebACLError {
-        AssociateWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateWebACLError {
-    fn from(err: CredentialsError) -> AssociateWebACLError {
-        AssociateWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateWebACLError {
-    fn from(err: HttpDispatchError) -> AssociateWebACLError {
-        AssociateWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateWebACLError {
-    fn from(err: io::Error) -> AssociateWebACLError {
-        AssociateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateWebACLError {
@@ -2498,11 +2472,6 @@ impl Error for AssociateWebACLError {
             AssociateWebACLError::WAFInvalidParameter(ref cause) => cause,
             AssociateWebACLError::WAFNonexistentItem(ref cause) => cause,
             AssociateWebACLError::WAFUnavailableEntity(ref cause) => cause,
-            AssociateWebACLError::Validation(ref cause) => cause,
-            AssociateWebACLError::Credentials(ref err) => err.description(),
-            AssociateWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AssociateWebACLError::ParseError(ref cause) => cause,
-            AssociateWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2521,20 +2490,10 @@ pub enum CreateByteMatchSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateByteMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateByteMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateByteMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2547,51 +2506,40 @@ impl CreateByteMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateByteMatchSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateByteMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateByteMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateByteMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateByteMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateByteMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateByteMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateByteMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateByteMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateByteMatchSetError {
-    fn from(err: serde_json::error::Error) -> CreateByteMatchSetError {
-        CreateByteMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateByteMatchSetError {
-    fn from(err: CredentialsError) -> CreateByteMatchSetError {
-        CreateByteMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateByteMatchSetError {
-    fn from(err: HttpDispatchError) -> CreateByteMatchSetError {
-        CreateByteMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateByteMatchSetError {
-    fn from(err: io::Error) -> CreateByteMatchSetError {
-        CreateByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateByteMatchSetError {
@@ -2608,13 +2556,6 @@ impl Error for CreateByteMatchSetError {
             CreateByteMatchSetError::WAFInvalidParameter(ref cause) => cause,
             CreateByteMatchSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateByteMatchSetError::WAFStaleData(ref cause) => cause,
-            CreateByteMatchSetError::Validation(ref cause) => cause,
-            CreateByteMatchSetError::Credentials(ref err) => err.description(),
-            CreateByteMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateByteMatchSetError::ParseError(ref cause) => cause,
-            CreateByteMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2633,20 +2574,10 @@ pub enum CreateGeoMatchSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGeoMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGeoMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGeoMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2659,51 +2590,40 @@ impl CreateGeoMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateGeoMatchSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateGeoMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateGeoMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateGeoMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateGeoMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateGeoMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGeoMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGeoMatchSetError {
-    fn from(err: serde_json::error::Error) -> CreateGeoMatchSetError {
-        CreateGeoMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGeoMatchSetError {
-    fn from(err: CredentialsError) -> CreateGeoMatchSetError {
-        CreateGeoMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGeoMatchSetError {
-    fn from(err: HttpDispatchError) -> CreateGeoMatchSetError {
-        CreateGeoMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGeoMatchSetError {
-    fn from(err: io::Error) -> CreateGeoMatchSetError {
-        CreateGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGeoMatchSetError {
@@ -2720,13 +2640,6 @@ impl Error for CreateGeoMatchSetError {
             CreateGeoMatchSetError::WAFInvalidParameter(ref cause) => cause,
             CreateGeoMatchSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateGeoMatchSetError::WAFStaleData(ref cause) => cause,
-            CreateGeoMatchSetError::Validation(ref cause) => cause,
-            CreateGeoMatchSetError::Credentials(ref err) => err.description(),
-            CreateGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateGeoMatchSetError::ParseError(ref cause) => cause,
-            CreateGeoMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2745,20 +2658,10 @@ pub enum CreateIPSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIPSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2771,51 +2674,40 @@ impl CreateIPSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateIPSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFDisallowedName(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateIPSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateIPSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateIPSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateIPSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return CreateIPSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIPSetError {
-    fn from(err: serde_json::error::Error) -> CreateIPSetError {
-        CreateIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIPSetError {
-    fn from(err: CredentialsError) -> CreateIPSetError {
-        CreateIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIPSetError {
-    fn from(err: HttpDispatchError) -> CreateIPSetError {
-        CreateIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIPSetError {
-    fn from(err: io::Error) -> CreateIPSetError {
-        CreateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIPSetError {
@@ -2832,11 +2724,6 @@ impl Error for CreateIPSetError {
             CreateIPSetError::WAFInvalidParameter(ref cause) => cause,
             CreateIPSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateIPSetError::WAFStaleData(ref cause) => cause,
-            CreateIPSetError::Validation(ref cause) => cause,
-            CreateIPSetError::Credentials(ref err) => err.description(),
-            CreateIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateIPSetError::ParseError(ref cause) => cause,
-            CreateIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2853,20 +2740,10 @@ pub enum CreateRateBasedRuleError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRateBasedRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRateBasedRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRateBasedRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2879,50 +2756,35 @@ impl CreateRateBasedRuleError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRateBasedRuleError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRateBasedRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateRateBasedRuleError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRateBasedRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateRateBasedRuleError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateRateBasedRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRateBasedRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRateBasedRuleError {
-    fn from(err: serde_json::error::Error) -> CreateRateBasedRuleError {
-        CreateRateBasedRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRateBasedRuleError {
-    fn from(err: CredentialsError) -> CreateRateBasedRuleError {
-        CreateRateBasedRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRateBasedRuleError {
-    fn from(err: HttpDispatchError) -> CreateRateBasedRuleError {
-        CreateRateBasedRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRateBasedRuleError {
-    fn from(err: io::Error) -> CreateRateBasedRuleError {
-        CreateRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRateBasedRuleError {
@@ -2938,13 +2800,6 @@ impl Error for CreateRateBasedRuleError {
             CreateRateBasedRuleError::WAFInvalidParameter(ref cause) => cause,
             CreateRateBasedRuleError::WAFLimitsExceeded(ref cause) => cause,
             CreateRateBasedRuleError::WAFStaleData(ref cause) => cause,
-            CreateRateBasedRuleError::Validation(ref cause) => cause,
-            CreateRateBasedRuleError::Credentials(ref err) => err.description(),
-            CreateRateBasedRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRateBasedRuleError::ParseError(ref cause) => cause,
-            CreateRateBasedRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2959,20 +2814,10 @@ pub enum CreateRegexMatchSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRegexMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRegexMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2985,45 +2830,30 @@ impl CreateRegexMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRegexMatchSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateRegexMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRegexMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateRegexMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateRegexMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRegexMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateRegexMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateRegexMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRegexMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRegexMatchSetError {
-    fn from(err: serde_json::error::Error) -> CreateRegexMatchSetError {
-        CreateRegexMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRegexMatchSetError {
-    fn from(err: CredentialsError) -> CreateRegexMatchSetError {
-        CreateRegexMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRegexMatchSetError {
-    fn from(err: HttpDispatchError) -> CreateRegexMatchSetError {
-        CreateRegexMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRegexMatchSetError {
-    fn from(err: io::Error) -> CreateRegexMatchSetError {
-        CreateRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRegexMatchSetError {
@@ -3038,13 +2868,6 @@ impl Error for CreateRegexMatchSetError {
             CreateRegexMatchSetError::WAFInternalError(ref cause) => cause,
             CreateRegexMatchSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateRegexMatchSetError::WAFStaleData(ref cause) => cause,
-            CreateRegexMatchSetError::Validation(ref cause) => cause,
-            CreateRegexMatchSetError::Credentials(ref err) => err.description(),
-            CreateRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRegexMatchSetError::ParseError(ref cause) => cause,
-            CreateRegexMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3059,20 +2882,10 @@ pub enum CreateRegexPatternSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRegexPatternSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRegexPatternSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRegexPatternSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3085,49 +2898,30 @@ impl CreateRegexPatternSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRegexPatternSetError::WAFDisallowedName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRegexPatternSetError::WAFDisallowedName(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRegexPatternSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateRegexPatternSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRegexPatternSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRegexPatternSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRegexPatternSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateRegexPatternSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateRegexPatternSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRegexPatternSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRegexPatternSetError {
-    fn from(err: serde_json::error::Error) -> CreateRegexPatternSetError {
-        CreateRegexPatternSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRegexPatternSetError {
-    fn from(err: CredentialsError) -> CreateRegexPatternSetError {
-        CreateRegexPatternSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRegexPatternSetError {
-    fn from(err: HttpDispatchError) -> CreateRegexPatternSetError {
-        CreateRegexPatternSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRegexPatternSetError {
-    fn from(err: io::Error) -> CreateRegexPatternSetError {
-        CreateRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRegexPatternSetError {
@@ -3142,13 +2936,6 @@ impl Error for CreateRegexPatternSetError {
             CreateRegexPatternSetError::WAFInternalError(ref cause) => cause,
             CreateRegexPatternSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateRegexPatternSetError::WAFStaleData(ref cause) => cause,
-            CreateRegexPatternSetError::Validation(ref cause) => cause,
-            CreateRegexPatternSetError::Credentials(ref err) => err.description(),
-            CreateRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateRegexPatternSetError::ParseError(ref cause) => cause,
-            CreateRegexPatternSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3165,20 +2952,10 @@ pub enum CreateRuleError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3191,48 +2968,35 @@ impl CreateRuleError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRuleError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateRuleError::WAFDisallowedName(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateRuleError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateRuleError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateRuleError::WAFInvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRuleError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateRuleError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateRuleError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRuleError {
-    fn from(err: serde_json::error::Error) -> CreateRuleError {
-        CreateRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRuleError {
-    fn from(err: CredentialsError) -> CreateRuleError {
-        CreateRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRuleError {
-    fn from(err: HttpDispatchError) -> CreateRuleError {
-        CreateRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRuleError {
-    fn from(err: io::Error) -> CreateRuleError {
-        CreateRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRuleError {
@@ -3248,11 +3012,6 @@ impl Error for CreateRuleError {
             CreateRuleError::WAFInvalidParameter(ref cause) => cause,
             CreateRuleError::WAFLimitsExceeded(ref cause) => cause,
             CreateRuleError::WAFStaleData(ref cause) => cause,
-            CreateRuleError::Validation(ref cause) => cause,
-            CreateRuleError::Credentials(ref err) => err.description(),
-            CreateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRuleError::ParseError(ref cause) => cause,
-            CreateRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3267,20 +3026,10 @@ pub enum CreateRuleGroupError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRuleGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3293,45 +3042,30 @@ impl CreateRuleGroupError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateRuleGroupError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateRuleGroupError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateRuleGroupError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateRuleGroupError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateRuleGroupError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateRuleGroupError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateRuleGroupError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateRuleGroupError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateRuleGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRuleGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRuleGroupError {
-    fn from(err: serde_json::error::Error) -> CreateRuleGroupError {
-        CreateRuleGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRuleGroupError {
-    fn from(err: CredentialsError) -> CreateRuleGroupError {
-        CreateRuleGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRuleGroupError {
-    fn from(err: HttpDispatchError) -> CreateRuleGroupError {
-        CreateRuleGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRuleGroupError {
-    fn from(err: io::Error) -> CreateRuleGroupError {
-        CreateRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRuleGroupError {
@@ -3346,11 +3080,6 @@ impl Error for CreateRuleGroupError {
             CreateRuleGroupError::WAFInternalError(ref cause) => cause,
             CreateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
             CreateRuleGroupError::WAFStaleData(ref cause) => cause,
-            CreateRuleGroupError::Validation(ref cause) => cause,
-            CreateRuleGroupError::Credentials(ref err) => err.description(),
-            CreateRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRuleGroupError::ParseError(ref cause) => cause,
-            CreateRuleGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3369,20 +3098,10 @@ pub enum CreateSizeConstraintSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSizeConstraintSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSizeConstraintSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSizeConstraintSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3395,61 +3114,40 @@ impl CreateSizeConstraintSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateSizeConstraintSetError::WAFDisallowedName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFDisallowedName(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateSizeConstraintSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateSizeConstraintSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateSizeConstraintSetError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateSizeConstraintSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateSizeConstraintSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateSizeConstraintSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateSizeConstraintSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSizeConstraintSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSizeConstraintSetError {
-    fn from(err: serde_json::error::Error) -> CreateSizeConstraintSetError {
-        CreateSizeConstraintSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSizeConstraintSetError {
-    fn from(err: CredentialsError) -> CreateSizeConstraintSetError {
-        CreateSizeConstraintSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSizeConstraintSetError {
-    fn from(err: HttpDispatchError) -> CreateSizeConstraintSetError {
-        CreateSizeConstraintSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSizeConstraintSetError {
-    fn from(err: io::Error) -> CreateSizeConstraintSetError {
-        CreateSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSizeConstraintSetError {
@@ -3466,13 +3164,6 @@ impl Error for CreateSizeConstraintSetError {
             CreateSizeConstraintSetError::WAFInvalidParameter(ref cause) => cause,
             CreateSizeConstraintSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateSizeConstraintSetError::WAFStaleData(ref cause) => cause,
-            CreateSizeConstraintSetError::Validation(ref cause) => cause,
-            CreateSizeConstraintSetError::Credentials(ref err) => err.description(),
-            CreateSizeConstraintSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSizeConstraintSetError::ParseError(ref cause) => cause,
-            CreateSizeConstraintSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3491,20 +3182,12 @@ pub enum CreateSqlInjectionMatchSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSqlInjectionMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSqlInjectionMatchSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateSqlInjectionMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3517,63 +3200,42 @@ impl CreateSqlInjectionMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateSqlInjectionMatchSetError::WAFDisallowedName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateSqlInjectionMatchSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateSqlInjectionMatchSetError::WAFStaleData(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSqlInjectionMatchSetError::WAFStaleData(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateSqlInjectionMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSqlInjectionMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSqlInjectionMatchSetError {
-    fn from(err: serde_json::error::Error) -> CreateSqlInjectionMatchSetError {
-        CreateSqlInjectionMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSqlInjectionMatchSetError {
-    fn from(err: CredentialsError) -> CreateSqlInjectionMatchSetError {
-        CreateSqlInjectionMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSqlInjectionMatchSetError {
-    fn from(err: HttpDispatchError) -> CreateSqlInjectionMatchSetError {
-        CreateSqlInjectionMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSqlInjectionMatchSetError {
-    fn from(err: io::Error) -> CreateSqlInjectionMatchSetError {
-        CreateSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSqlInjectionMatchSetError {
@@ -3590,13 +3252,6 @@ impl Error for CreateSqlInjectionMatchSetError {
             CreateSqlInjectionMatchSetError::WAFInvalidParameter(ref cause) => cause,
             CreateSqlInjectionMatchSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::Validation(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::Credentials(ref err) => err.description(),
-            CreateSqlInjectionMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSqlInjectionMatchSetError::ParseError(ref cause) => cause,
-            CreateSqlInjectionMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3615,20 +3270,10 @@ pub enum CreateWebACLError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3641,51 +3286,40 @@ impl CreateWebACLError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateWebACLError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFDisallowedName(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateWebACLError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateWebACLError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return CreateWebACLError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateWebACLError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateWebACLError {
-    fn from(err: serde_json::error::Error) -> CreateWebACLError {
-        CreateWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateWebACLError {
-    fn from(err: CredentialsError) -> CreateWebACLError {
-        CreateWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateWebACLError {
-    fn from(err: HttpDispatchError) -> CreateWebACLError {
-        CreateWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateWebACLError {
-    fn from(err: io::Error) -> CreateWebACLError {
-        CreateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateWebACLError {
@@ -3702,11 +3336,6 @@ impl Error for CreateWebACLError {
             CreateWebACLError::WAFInvalidParameter(ref cause) => cause,
             CreateWebACLError::WAFLimitsExceeded(ref cause) => cause,
             CreateWebACLError::WAFStaleData(ref cause) => cause,
-            CreateWebACLError::Validation(ref cause) => cause,
-            CreateWebACLError::Credentials(ref err) => err.description(),
-            CreateWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateWebACLError::ParseError(ref cause) => cause,
-            CreateWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3725,20 +3354,10 @@ pub enum CreateXssMatchSetError {
     WAFLimitsExceeded(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateXssMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateXssMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateXssMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3751,51 +3370,40 @@ impl CreateXssMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return CreateXssMatchSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return CreateXssMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return CreateXssMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return CreateXssMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return CreateXssMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return CreateXssMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(CreateXssMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateXssMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateXssMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateXssMatchSetError {
-    fn from(err: serde_json::error::Error) -> CreateXssMatchSetError {
-        CreateXssMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateXssMatchSetError {
-    fn from(err: CredentialsError) -> CreateXssMatchSetError {
-        CreateXssMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateXssMatchSetError {
-    fn from(err: HttpDispatchError) -> CreateXssMatchSetError {
-        CreateXssMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateXssMatchSetError {
-    fn from(err: io::Error) -> CreateXssMatchSetError {
-        CreateXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateXssMatchSetError {
@@ -3812,13 +3420,6 @@ impl Error for CreateXssMatchSetError {
             CreateXssMatchSetError::WAFInvalidParameter(ref cause) => cause,
             CreateXssMatchSetError::WAFLimitsExceeded(ref cause) => cause,
             CreateXssMatchSetError::WAFStaleData(ref cause) => cause,
-            CreateXssMatchSetError::Validation(ref cause) => cause,
-            CreateXssMatchSetError::Credentials(ref err) => err.description(),
-            CreateXssMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateXssMatchSetError::ParseError(ref cause) => cause,
-            CreateXssMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3837,20 +3438,10 @@ pub enum DeleteByteMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteByteMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteByteMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteByteMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3863,51 +3454,40 @@ impl DeleteByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteByteMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteByteMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteByteMatchSetError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteByteMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteByteMatchSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteByteMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteByteMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteByteMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteByteMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteByteMatchSetError {
-    fn from(err: serde_json::error::Error) -> DeleteByteMatchSetError {
-        DeleteByteMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteByteMatchSetError {
-    fn from(err: CredentialsError) -> DeleteByteMatchSetError {
-        DeleteByteMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteByteMatchSetError {
-    fn from(err: HttpDispatchError) -> DeleteByteMatchSetError {
-        DeleteByteMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteByteMatchSetError {
-    fn from(err: io::Error) -> DeleteByteMatchSetError {
-        DeleteByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteByteMatchSetError {
@@ -3924,13 +3504,6 @@ impl Error for DeleteByteMatchSetError {
             DeleteByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteByteMatchSetError::WAFReferencedItem(ref cause) => cause,
             DeleteByteMatchSetError::WAFStaleData(ref cause) => cause,
-            DeleteByteMatchSetError::Validation(ref cause) => cause,
-            DeleteByteMatchSetError::Credentials(ref err) => err.description(),
-            DeleteByteMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteByteMatchSetError::ParseError(ref cause) => cause,
-            DeleteByteMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3949,20 +3522,10 @@ pub enum DeleteGeoMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGeoMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGeoMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGeoMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3975,51 +3538,40 @@ impl DeleteGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteGeoMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteGeoMatchSetError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteGeoMatchSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteGeoMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteGeoMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteGeoMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGeoMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGeoMatchSetError {
-    fn from(err: serde_json::error::Error) -> DeleteGeoMatchSetError {
-        DeleteGeoMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGeoMatchSetError {
-    fn from(err: CredentialsError) -> DeleteGeoMatchSetError {
-        DeleteGeoMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGeoMatchSetError {
-    fn from(err: HttpDispatchError) -> DeleteGeoMatchSetError {
-        DeleteGeoMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGeoMatchSetError {
-    fn from(err: io::Error) -> DeleteGeoMatchSetError {
-        DeleteGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGeoMatchSetError {
@@ -4036,13 +3588,6 @@ impl Error for DeleteGeoMatchSetError {
             DeleteGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
             DeleteGeoMatchSetError::WAFStaleData(ref cause) => cause,
-            DeleteGeoMatchSetError::Validation(ref cause) => cause,
-            DeleteGeoMatchSetError::Credentials(ref err) => err.description(),
-            DeleteGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteGeoMatchSetError::ParseError(ref cause) => cause,
-            DeleteGeoMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4061,20 +3606,10 @@ pub enum DeleteIPSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIPSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4087,51 +3622,40 @@ impl DeleteIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteIPSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteIPSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteIPSetError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFNonEmptyEntity(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteIPSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteIPSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteIPSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIPSetError {
-    fn from(err: serde_json::error::Error) -> DeleteIPSetError {
-        DeleteIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIPSetError {
-    fn from(err: CredentialsError) -> DeleteIPSetError {
-        DeleteIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIPSetError {
-    fn from(err: HttpDispatchError) -> DeleteIPSetError {
-        DeleteIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIPSetError {
-    fn from(err: io::Error) -> DeleteIPSetError {
-        DeleteIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIPSetError {
@@ -4148,11 +3672,6 @@ impl Error for DeleteIPSetError {
             DeleteIPSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteIPSetError::WAFReferencedItem(ref cause) => cause,
             DeleteIPSetError::WAFStaleData(ref cause) => cause,
-            DeleteIPSetError::Validation(ref cause) => cause,
-            DeleteIPSetError::Credentials(ref err) => err.description(),
-            DeleteIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIPSetError::ParseError(ref cause) => cause,
-            DeleteIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4165,20 +3684,12 @@ pub enum DeleteLoggingConfigurationError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoggingConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoggingConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteLoggingConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4191,48 +3702,27 @@ impl DeleteLoggingConfigurationError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteLoggingConfigurationError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLoggingConfigurationError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteLoggingConfigurationError::WAFNonexistentItem(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteLoggingConfigurationError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFStaleDataException" => {
-                    return DeleteLoggingConfigurationError::WAFStaleData(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLoggingConfigurationError::WAFStaleData(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteLoggingConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLoggingConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLoggingConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteLoggingConfigurationError {
-        DeleteLoggingConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoggingConfigurationError {
-    fn from(err: CredentialsError) -> DeleteLoggingConfigurationError {
-        DeleteLoggingConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoggingConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteLoggingConfigurationError {
-        DeleteLoggingConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoggingConfigurationError {
-    fn from(err: io::Error) -> DeleteLoggingConfigurationError {
-        DeleteLoggingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLoggingConfigurationError {
@@ -4246,13 +3736,6 @@ impl Error for DeleteLoggingConfigurationError {
             DeleteLoggingConfigurationError::WAFInternalError(ref cause) => cause,
             DeleteLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
             DeleteLoggingConfigurationError::WAFStaleData(ref cause) => cause,
-            DeleteLoggingConfigurationError::Validation(ref cause) => cause,
-            DeleteLoggingConfigurationError::Credentials(ref err) => err.description(),
-            DeleteLoggingConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoggingConfigurationError::ParseError(ref cause) => cause,
-            DeleteLoggingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4265,20 +3748,10 @@ pub enum DeletePermissionPolicyError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePermissionPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePermissionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePermissionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4291,46 +3764,25 @@ impl DeletePermissionPolicyError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeletePermissionPolicyError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeletePermissionPolicyError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeletePermissionPolicyError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeletePermissionPolicyError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return DeletePermissionPolicyError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeletePermissionPolicyError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeletePermissionPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePermissionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePermissionPolicyError {
-    fn from(err: serde_json::error::Error) -> DeletePermissionPolicyError {
-        DeletePermissionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePermissionPolicyError {
-    fn from(err: CredentialsError) -> DeletePermissionPolicyError {
-        DeletePermissionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePermissionPolicyError {
-    fn from(err: HttpDispatchError) -> DeletePermissionPolicyError {
-        DeletePermissionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePermissionPolicyError {
-    fn from(err: io::Error) -> DeletePermissionPolicyError {
-        DeletePermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePermissionPolicyError {
@@ -4344,13 +3796,6 @@ impl Error for DeletePermissionPolicyError {
             DeletePermissionPolicyError::WAFInternalError(ref cause) => cause,
             DeletePermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
             DeletePermissionPolicyError::WAFStaleData(ref cause) => cause,
-            DeletePermissionPolicyError::Validation(ref cause) => cause,
-            DeletePermissionPolicyError::Credentials(ref err) => err.description(),
-            DeletePermissionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeletePermissionPolicyError::ParseError(ref cause) => cause,
-            DeletePermissionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4369,20 +3814,10 @@ pub enum DeleteRateBasedRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRateBasedRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRateBasedRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRateBasedRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4395,51 +3830,40 @@ impl DeleteRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRateBasedRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRateBasedRuleError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRateBasedRuleError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRateBasedRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteRateBasedRuleError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteRateBasedRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRateBasedRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRateBasedRuleError {
-    fn from(err: serde_json::error::Error) -> DeleteRateBasedRuleError {
-        DeleteRateBasedRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRateBasedRuleError {
-    fn from(err: CredentialsError) -> DeleteRateBasedRuleError {
-        DeleteRateBasedRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRateBasedRuleError {
-    fn from(err: HttpDispatchError) -> DeleteRateBasedRuleError {
-        DeleteRateBasedRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRateBasedRuleError {
-    fn from(err: io::Error) -> DeleteRateBasedRuleError {
-        DeleteRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRateBasedRuleError {
@@ -4456,13 +3880,6 @@ impl Error for DeleteRateBasedRuleError {
             DeleteRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
             DeleteRateBasedRuleError::WAFReferencedItem(ref cause) => cause,
             DeleteRateBasedRuleError::WAFStaleData(ref cause) => cause,
-            DeleteRateBasedRuleError::Validation(ref cause) => cause,
-            DeleteRateBasedRuleError::Credentials(ref err) => err.description(),
-            DeleteRateBasedRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRateBasedRuleError::ParseError(ref cause) => cause,
-            DeleteRateBasedRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4481,20 +3898,10 @@ pub enum DeleteRegexMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRegexMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRegexMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4507,51 +3914,40 @@ impl DeleteRegexMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRegexMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRegexMatchSetError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRegexMatchSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRegexMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteRegexMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRegexMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRegexMatchSetError {
-    fn from(err: serde_json::error::Error) -> DeleteRegexMatchSetError {
-        DeleteRegexMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRegexMatchSetError {
-    fn from(err: CredentialsError) -> DeleteRegexMatchSetError {
-        DeleteRegexMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRegexMatchSetError {
-    fn from(err: HttpDispatchError) -> DeleteRegexMatchSetError {
-        DeleteRegexMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRegexMatchSetError {
-    fn from(err: io::Error) -> DeleteRegexMatchSetError {
-        DeleteRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRegexMatchSetError {
@@ -4568,13 +3964,6 @@ impl Error for DeleteRegexMatchSetError {
             DeleteRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteRegexMatchSetError::WAFReferencedItem(ref cause) => cause,
             DeleteRegexMatchSetError::WAFStaleData(ref cause) => cause,
-            DeleteRegexMatchSetError::Validation(ref cause) => cause,
-            DeleteRegexMatchSetError::Credentials(ref err) => err.description(),
-            DeleteRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRegexMatchSetError::ParseError(ref cause) => cause,
-            DeleteRegexMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4593,20 +3982,10 @@ pub enum DeleteRegexPatternSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRegexPatternSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRegexPatternSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRegexPatternSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4619,59 +3998,40 @@ impl DeleteRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRegexPatternSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRegexPatternSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRegexPatternSetError::WAFNonEmptyEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRegexPatternSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRegexPatternSetError::WAFReferencedItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFReferencedItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRegexPatternSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteRegexPatternSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteRegexPatternSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRegexPatternSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRegexPatternSetError {
-    fn from(err: serde_json::error::Error) -> DeleteRegexPatternSetError {
-        DeleteRegexPatternSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRegexPatternSetError {
-    fn from(err: CredentialsError) -> DeleteRegexPatternSetError {
-        DeleteRegexPatternSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRegexPatternSetError {
-    fn from(err: HttpDispatchError) -> DeleteRegexPatternSetError {
-        DeleteRegexPatternSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRegexPatternSetError {
-    fn from(err: io::Error) -> DeleteRegexPatternSetError {
-        DeleteRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRegexPatternSetError {
@@ -4688,13 +4048,6 @@ impl Error for DeleteRegexPatternSetError {
             DeleteRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteRegexPatternSetError::WAFReferencedItem(ref cause) => cause,
             DeleteRegexPatternSetError::WAFStaleData(ref cause) => cause,
-            DeleteRegexPatternSetError::Validation(ref cause) => cause,
-            DeleteRegexPatternSetError::Credentials(ref err) => err.description(),
-            DeleteRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRegexPatternSetError::ParseError(ref cause) => cause,
-            DeleteRegexPatternSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4713,20 +4066,10 @@ pub enum DeleteRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4739,51 +4082,40 @@ impl DeleteRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRuleError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFNonEmptyEntity(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRuleError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRuleError {
-    fn from(err: serde_json::error::Error) -> DeleteRuleError {
-        DeleteRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRuleError {
-    fn from(err: CredentialsError) -> DeleteRuleError {
-        DeleteRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRuleError {
-    fn from(err: HttpDispatchError) -> DeleteRuleError {
-        DeleteRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRuleError {
-    fn from(err: io::Error) -> DeleteRuleError {
-        DeleteRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRuleError {
@@ -4800,11 +4132,6 @@ impl Error for DeleteRuleError {
             DeleteRuleError::WAFNonexistentItem(ref cause) => cause,
             DeleteRuleError::WAFReferencedItem(ref cause) => cause,
             DeleteRuleError::WAFStaleData(ref cause) => cause,
-            DeleteRuleError::Validation(ref cause) => cause,
-            DeleteRuleError::Credentials(ref err) => err.description(),
-            DeleteRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRuleError::ParseError(ref cause) => cause,
-            DeleteRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4823,20 +4150,10 @@ pub enum DeleteRuleGroupError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRuleGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4849,51 +4166,40 @@ impl DeleteRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteRuleGroupError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return DeleteRuleGroupError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteRuleGroupError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteRuleGroupError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteRuleGroupError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteRuleGroupError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteRuleGroupError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteRuleGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRuleGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRuleGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteRuleGroupError {
-        DeleteRuleGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRuleGroupError {
-    fn from(err: CredentialsError) -> DeleteRuleGroupError {
-        DeleteRuleGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRuleGroupError {
-    fn from(err: HttpDispatchError) -> DeleteRuleGroupError {
-        DeleteRuleGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRuleGroupError {
-    fn from(err: io::Error) -> DeleteRuleGroupError {
-        DeleteRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRuleGroupError {
@@ -4910,11 +4216,6 @@ impl Error for DeleteRuleGroupError {
             DeleteRuleGroupError::WAFNonexistentItem(ref cause) => cause,
             DeleteRuleGroupError::WAFReferencedItem(ref cause) => cause,
             DeleteRuleGroupError::WAFStaleData(ref cause) => cause,
-            DeleteRuleGroupError::Validation(ref cause) => cause,
-            DeleteRuleGroupError::Credentials(ref err) => err.description(),
-            DeleteRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRuleGroupError::ParseError(ref cause) => cause,
-            DeleteRuleGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4933,20 +4234,10 @@ pub enum DeleteSizeConstraintSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSizeConstraintSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSizeConstraintSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSizeConstraintSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4959,61 +4250,40 @@ impl DeleteSizeConstraintSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteSizeConstraintSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteSizeConstraintSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteSizeConstraintSetError::WAFNonEmptyEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteSizeConstraintSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteSizeConstraintSetError::WAFReferencedItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFReferencedItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteSizeConstraintSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteSizeConstraintSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteSizeConstraintSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSizeConstraintSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSizeConstraintSetError {
-    fn from(err: serde_json::error::Error) -> DeleteSizeConstraintSetError {
-        DeleteSizeConstraintSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSizeConstraintSetError {
-    fn from(err: CredentialsError) -> DeleteSizeConstraintSetError {
-        DeleteSizeConstraintSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSizeConstraintSetError {
-    fn from(err: HttpDispatchError) -> DeleteSizeConstraintSetError {
-        DeleteSizeConstraintSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSizeConstraintSetError {
-    fn from(err: io::Error) -> DeleteSizeConstraintSetError {
-        DeleteSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSizeConstraintSetError {
@@ -5030,13 +4300,6 @@ impl Error for DeleteSizeConstraintSetError {
             DeleteSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteSizeConstraintSetError::WAFReferencedItem(ref cause) => cause,
             DeleteSizeConstraintSetError::WAFStaleData(ref cause) => cause,
-            DeleteSizeConstraintSetError::Validation(ref cause) => cause,
-            DeleteSizeConstraintSetError::Credentials(ref err) => err.description(),
-            DeleteSizeConstraintSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSizeConstraintSetError::ParseError(ref cause) => cause,
-            DeleteSizeConstraintSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5055,20 +4318,12 @@ pub enum DeleteSqlInjectionMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSqlInjectionMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSqlInjectionMatchSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteSqlInjectionMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5081,63 +4336,42 @@ impl DeleteSqlInjectionMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFReferencedItem(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteSqlInjectionMatchSetError::WAFStaleData(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSqlInjectionMatchSetError::WAFStaleData(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSqlInjectionMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSqlInjectionMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSqlInjectionMatchSetError {
-    fn from(err: serde_json::error::Error) -> DeleteSqlInjectionMatchSetError {
-        DeleteSqlInjectionMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSqlInjectionMatchSetError {
-    fn from(err: CredentialsError) -> DeleteSqlInjectionMatchSetError {
-        DeleteSqlInjectionMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSqlInjectionMatchSetError {
-    fn from(err: HttpDispatchError) -> DeleteSqlInjectionMatchSetError {
-        DeleteSqlInjectionMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSqlInjectionMatchSetError {
-    fn from(err: io::Error) -> DeleteSqlInjectionMatchSetError {
-        DeleteSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSqlInjectionMatchSetError {
@@ -5154,13 +4388,6 @@ impl Error for DeleteSqlInjectionMatchSetError {
             DeleteSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteSqlInjectionMatchSetError::WAFReferencedItem(ref cause) => cause,
             DeleteSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::Validation(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::Credentials(ref err) => err.description(),
-            DeleteSqlInjectionMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSqlInjectionMatchSetError::ParseError(ref cause) => cause,
-            DeleteSqlInjectionMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5179,20 +4406,10 @@ pub enum DeleteWebACLError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5205,51 +4422,40 @@ impl DeleteWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteWebACLError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFNonEmptyEntity(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteWebACLError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteWebACLError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteWebACLError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteWebACLError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteWebACLError {
-    fn from(err: serde_json::error::Error) -> DeleteWebACLError {
-        DeleteWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteWebACLError {
-    fn from(err: CredentialsError) -> DeleteWebACLError {
-        DeleteWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteWebACLError {
-    fn from(err: HttpDispatchError) -> DeleteWebACLError {
-        DeleteWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteWebACLError {
-    fn from(err: io::Error) -> DeleteWebACLError {
-        DeleteWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteWebACLError {
@@ -5266,11 +4472,6 @@ impl Error for DeleteWebACLError {
             DeleteWebACLError::WAFNonexistentItem(ref cause) => cause,
             DeleteWebACLError::WAFReferencedItem(ref cause) => cause,
             DeleteWebACLError::WAFStaleData(ref cause) => cause,
-            DeleteWebACLError::Validation(ref cause) => cause,
-            DeleteWebACLError::Credentials(ref err) => err.description(),
-            DeleteWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteWebACLError::ParseError(ref cause) => cause,
-            DeleteWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5289,20 +4490,10 @@ pub enum DeleteXssMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteXssMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteXssMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteXssMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5315,51 +4506,40 @@ impl DeleteXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DeleteXssMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DeleteXssMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonEmptyEntityException" => {
-                    return DeleteXssMatchSetError::WAFNonEmptyEntity(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFNonEmptyEntity(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DeleteXssMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return DeleteXssMatchSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return DeleteXssMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(DeleteXssMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteXssMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteXssMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteXssMatchSetError {
-    fn from(err: serde_json::error::Error) -> DeleteXssMatchSetError {
-        DeleteXssMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteXssMatchSetError {
-    fn from(err: CredentialsError) -> DeleteXssMatchSetError {
-        DeleteXssMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteXssMatchSetError {
-    fn from(err: HttpDispatchError) -> DeleteXssMatchSetError {
-        DeleteXssMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteXssMatchSetError {
-    fn from(err: io::Error) -> DeleteXssMatchSetError {
-        DeleteXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteXssMatchSetError {
@@ -5376,13 +4556,6 @@ impl Error for DeleteXssMatchSetError {
             DeleteXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
             DeleteXssMatchSetError::WAFReferencedItem(ref cause) => cause,
             DeleteXssMatchSetError::WAFStaleData(ref cause) => cause,
-            DeleteXssMatchSetError::Validation(ref cause) => cause,
-            DeleteXssMatchSetError::Credentials(ref err) => err.description(),
-            DeleteXssMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteXssMatchSetError::ParseError(ref cause) => cause,
-            DeleteXssMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5397,20 +4570,10 @@ pub enum DisassociateWebACLError {
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5423,45 +4586,30 @@ impl DisassociateWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return DisassociateWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(DisassociateWebACLError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return DisassociateWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(DisassociateWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return DisassociateWebACLError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DisassociateWebACLError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return DisassociateWebACLError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(DisassociateWebACLError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateWebACLError {
-    fn from(err: serde_json::error::Error) -> DisassociateWebACLError {
-        DisassociateWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateWebACLError {
-    fn from(err: CredentialsError) -> DisassociateWebACLError {
-        DisassociateWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateWebACLError {
-    fn from(err: HttpDispatchError) -> DisassociateWebACLError {
-        DisassociateWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateWebACLError {
-    fn from(err: io::Error) -> DisassociateWebACLError {
-        DisassociateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateWebACLError {
@@ -5476,13 +4624,6 @@ impl Error for DisassociateWebACLError {
             DisassociateWebACLError::WAFInvalidAccount(ref cause) => cause,
             DisassociateWebACLError::WAFInvalidParameter(ref cause) => cause,
             DisassociateWebACLError::WAFNonexistentItem(ref cause) => cause,
-            DisassociateWebACLError::Validation(ref cause) => cause,
-            DisassociateWebACLError::Credentials(ref err) => err.description(),
-            DisassociateWebACLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateWebACLError::ParseError(ref cause) => cause,
-            DisassociateWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5495,20 +4636,10 @@ pub enum GetByteMatchSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetByteMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetByteMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetByteMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5521,42 +4652,25 @@ impl GetByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetByteMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetByteMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetByteMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetByteMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetByteMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetByteMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetByteMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetByteMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetByteMatchSetError {
-    fn from(err: serde_json::error::Error) -> GetByteMatchSetError {
-        GetByteMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetByteMatchSetError {
-    fn from(err: CredentialsError) -> GetByteMatchSetError {
-        GetByteMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetByteMatchSetError {
-    fn from(err: HttpDispatchError) -> GetByteMatchSetError {
-        GetByteMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetByteMatchSetError {
-    fn from(err: io::Error) -> GetByteMatchSetError {
-        GetByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetByteMatchSetError {
@@ -5570,11 +4684,6 @@ impl Error for GetByteMatchSetError {
             GetByteMatchSetError::WAFInternalError(ref cause) => cause,
             GetByteMatchSetError::WAFInvalidAccount(ref cause) => cause,
             GetByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            GetByteMatchSetError::Validation(ref cause) => cause,
-            GetByteMatchSetError::Credentials(ref err) => err.description(),
-            GetByteMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetByteMatchSetError::ParseError(ref cause) => cause,
-            GetByteMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5583,20 +4692,10 @@ impl Error for GetByteMatchSetError {
 pub enum GetChangeTokenError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     WAFInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetChangeTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetChangeTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5609,36 +4708,15 @@ impl GetChangeTokenError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetChangeTokenError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetChangeTokenError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetChangeTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetChangeTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetChangeTokenError {
-    fn from(err: serde_json::error::Error) -> GetChangeTokenError {
-        GetChangeTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetChangeTokenError {
-    fn from(err: CredentialsError) -> GetChangeTokenError {
-        GetChangeTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetChangeTokenError {
-    fn from(err: HttpDispatchError) -> GetChangeTokenError {
-        GetChangeTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetChangeTokenError {
-    fn from(err: io::Error) -> GetChangeTokenError {
-        GetChangeTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetChangeTokenError {
@@ -5650,11 +4728,6 @@ impl Error for GetChangeTokenError {
     fn description(&self) -> &str {
         match *self {
             GetChangeTokenError::WAFInternalError(ref cause) => cause,
-            GetChangeTokenError::Validation(ref cause) => cause,
-            GetChangeTokenError::Credentials(ref err) => err.description(),
-            GetChangeTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetChangeTokenError::ParseError(ref cause) => cause,
-            GetChangeTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5665,20 +4738,10 @@ pub enum GetChangeTokenStatusError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetChangeTokenStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetChangeTokenStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetChangeTokenStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5691,41 +4754,20 @@ impl GetChangeTokenStatusError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetChangeTokenStatusError::WAFInternalError(String::from(error_message));
-                }
-                "WAFNonexistentItemException" => {
-                    return GetChangeTokenStatusError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(GetChangeTokenStatusError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetChangeTokenStatusError::Validation(error_message.to_string());
+                "WAFNonexistentItemException" => {
+                    return RusotoError::Service(GetChangeTokenStatusError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetChangeTokenStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetChangeTokenStatusError {
-    fn from(err: serde_json::error::Error) -> GetChangeTokenStatusError {
-        GetChangeTokenStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetChangeTokenStatusError {
-    fn from(err: CredentialsError) -> GetChangeTokenStatusError {
-        GetChangeTokenStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetChangeTokenStatusError {
-    fn from(err: HttpDispatchError) -> GetChangeTokenStatusError {
-        GetChangeTokenStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetChangeTokenStatusError {
-    fn from(err: io::Error) -> GetChangeTokenStatusError {
-        GetChangeTokenStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetChangeTokenStatusError {
@@ -5738,13 +4780,6 @@ impl Error for GetChangeTokenStatusError {
         match *self {
             GetChangeTokenStatusError::WAFInternalError(ref cause) => cause,
             GetChangeTokenStatusError::WAFNonexistentItem(ref cause) => cause,
-            GetChangeTokenStatusError::Validation(ref cause) => cause,
-            GetChangeTokenStatusError::Credentials(ref err) => err.description(),
-            GetChangeTokenStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetChangeTokenStatusError::ParseError(ref cause) => cause,
-            GetChangeTokenStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5757,20 +4792,10 @@ pub enum GetGeoMatchSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetGeoMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetGeoMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGeoMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5783,42 +4808,25 @@ impl GetGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetGeoMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetGeoMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetGeoMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetGeoMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetGeoMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetGeoMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetGeoMatchSetError {
-    fn from(err: serde_json::error::Error) -> GetGeoMatchSetError {
-        GetGeoMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetGeoMatchSetError {
-    fn from(err: CredentialsError) -> GetGeoMatchSetError {
-        GetGeoMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetGeoMatchSetError {
-    fn from(err: HttpDispatchError) -> GetGeoMatchSetError {
-        GetGeoMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetGeoMatchSetError {
-    fn from(err: io::Error) -> GetGeoMatchSetError {
-        GetGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetGeoMatchSetError {
@@ -5832,11 +4840,6 @@ impl Error for GetGeoMatchSetError {
             GetGeoMatchSetError::WAFInternalError(ref cause) => cause,
             GetGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
             GetGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            GetGeoMatchSetError::Validation(ref cause) => cause,
-            GetGeoMatchSetError::Credentials(ref err) => err.description(),
-            GetGeoMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetGeoMatchSetError::ParseError(ref cause) => cause,
-            GetGeoMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5849,20 +4852,10 @@ pub enum GetIPSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIPSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5875,42 +4868,25 @@ impl GetIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetIPSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetIPSetError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetIPSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetIPSetError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetIPSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetIPSetError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIPSetError {
-    fn from(err: serde_json::error::Error) -> GetIPSetError {
-        GetIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIPSetError {
-    fn from(err: CredentialsError) -> GetIPSetError {
-        GetIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIPSetError {
-    fn from(err: HttpDispatchError) -> GetIPSetError {
-        GetIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIPSetError {
-    fn from(err: io::Error) -> GetIPSetError {
-        GetIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIPSetError {
@@ -5924,11 +4900,6 @@ impl Error for GetIPSetError {
             GetIPSetError::WAFInternalError(ref cause) => cause,
             GetIPSetError::WAFInvalidAccount(ref cause) => cause,
             GetIPSetError::WAFNonexistentItem(ref cause) => cause,
-            GetIPSetError::Validation(ref cause) => cause,
-            GetIPSetError::Credentials(ref err) => err.description(),
-            GetIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIPSetError::ParseError(ref cause) => cause,
-            GetIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5939,20 +4910,10 @@ pub enum GetLoggingConfigurationError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLoggingConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLoggingConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLoggingConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5965,43 +4926,20 @@ impl GetLoggingConfigurationError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetLoggingConfigurationError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoggingConfigurationError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetLoggingConfigurationError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLoggingConfigurationError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetLoggingConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLoggingConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLoggingConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetLoggingConfigurationError {
-        GetLoggingConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLoggingConfigurationError {
-    fn from(err: CredentialsError) -> GetLoggingConfigurationError {
-        GetLoggingConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLoggingConfigurationError {
-    fn from(err: HttpDispatchError) -> GetLoggingConfigurationError {
-        GetLoggingConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLoggingConfigurationError {
-    fn from(err: io::Error) -> GetLoggingConfigurationError {
-        GetLoggingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLoggingConfigurationError {
@@ -6014,13 +4952,6 @@ impl Error for GetLoggingConfigurationError {
         match *self {
             GetLoggingConfigurationError::WAFInternalError(ref cause) => cause,
             GetLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
-            GetLoggingConfigurationError::Validation(ref cause) => cause,
-            GetLoggingConfigurationError::Credentials(ref err) => err.description(),
-            GetLoggingConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLoggingConfigurationError::ParseError(ref cause) => cause,
-            GetLoggingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6031,20 +4962,10 @@ pub enum GetPermissionPolicyError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPermissionPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPermissionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPermissionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6057,39 +4978,20 @@ impl GetPermissionPolicyError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetPermissionPolicyError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetPermissionPolicyError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetPermissionPolicyError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetPermissionPolicyError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPermissionPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPermissionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPermissionPolicyError {
-    fn from(err: serde_json::error::Error) -> GetPermissionPolicyError {
-        GetPermissionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPermissionPolicyError {
-    fn from(err: CredentialsError) -> GetPermissionPolicyError {
-        GetPermissionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPermissionPolicyError {
-    fn from(err: HttpDispatchError) -> GetPermissionPolicyError {
-        GetPermissionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPermissionPolicyError {
-    fn from(err: io::Error) -> GetPermissionPolicyError {
-        GetPermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPermissionPolicyError {
@@ -6102,13 +5004,6 @@ impl Error for GetPermissionPolicyError {
         match *self {
             GetPermissionPolicyError::WAFInternalError(ref cause) => cause,
             GetPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
-            GetPermissionPolicyError::Validation(ref cause) => cause,
-            GetPermissionPolicyError::Credentials(ref err) => err.description(),
-            GetPermissionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPermissionPolicyError::ParseError(ref cause) => cause,
-            GetPermissionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6121,20 +5016,10 @@ pub enum GetRateBasedRuleError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRateBasedRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRateBasedRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRateBasedRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6147,42 +5032,25 @@ impl GetRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRateBasedRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetRateBasedRuleError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetRateBasedRuleError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetRateBasedRuleError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRateBasedRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRateBasedRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRateBasedRuleError {
-    fn from(err: serde_json::error::Error) -> GetRateBasedRuleError {
-        GetRateBasedRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRateBasedRuleError {
-    fn from(err: CredentialsError) -> GetRateBasedRuleError {
-        GetRateBasedRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRateBasedRuleError {
-    fn from(err: HttpDispatchError) -> GetRateBasedRuleError {
-        GetRateBasedRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRateBasedRuleError {
-    fn from(err: io::Error) -> GetRateBasedRuleError {
-        GetRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRateBasedRuleError {
@@ -6196,11 +5064,6 @@ impl Error for GetRateBasedRuleError {
             GetRateBasedRuleError::WAFInternalError(ref cause) => cause,
             GetRateBasedRuleError::WAFInvalidAccount(ref cause) => cause,
             GetRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
-            GetRateBasedRuleError::Validation(ref cause) => cause,
-            GetRateBasedRuleError::Credentials(ref err) => err.description(),
-            GetRateBasedRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRateBasedRuleError::ParseError(ref cause) => cause,
-            GetRateBasedRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6215,20 +5078,12 @@ pub enum GetRateBasedRuleManagedKeysError {
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRateBasedRuleManagedKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRateBasedRuleManagedKeysError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetRateBasedRuleManagedKeysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6241,53 +5096,36 @@ impl GetRateBasedRuleManagedKeysError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRateBasedRuleManagedKeysError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRateBasedRuleManagedKeysError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRateBasedRuleManagedKeysError::WAFInvalidAccount(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRateBasedRuleManagedKeysError::WAFInvalidAccount(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFInvalidParameterException" => {
-                    return GetRateBasedRuleManagedKeysError::WAFInvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRateBasedRuleManagedKeysError::WAFInvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRateBasedRuleManagedKeysError::WAFNonexistentItem(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRateBasedRuleManagedKeysError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetRateBasedRuleManagedKeysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRateBasedRuleManagedKeysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRateBasedRuleManagedKeysError {
-    fn from(err: serde_json::error::Error) -> GetRateBasedRuleManagedKeysError {
-        GetRateBasedRuleManagedKeysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRateBasedRuleManagedKeysError {
-    fn from(err: CredentialsError) -> GetRateBasedRuleManagedKeysError {
-        GetRateBasedRuleManagedKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRateBasedRuleManagedKeysError {
-    fn from(err: HttpDispatchError) -> GetRateBasedRuleManagedKeysError {
-        GetRateBasedRuleManagedKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRateBasedRuleManagedKeysError {
-    fn from(err: io::Error) -> GetRateBasedRuleManagedKeysError {
-        GetRateBasedRuleManagedKeysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRateBasedRuleManagedKeysError {
@@ -6302,13 +5140,6 @@ impl Error for GetRateBasedRuleManagedKeysError {
             GetRateBasedRuleManagedKeysError::WAFInvalidAccount(ref cause) => cause,
             GetRateBasedRuleManagedKeysError::WAFInvalidParameter(ref cause) => cause,
             GetRateBasedRuleManagedKeysError::WAFNonexistentItem(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::Validation(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::Credentials(ref err) => err.description(),
-            GetRateBasedRuleManagedKeysError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRateBasedRuleManagedKeysError::ParseError(ref cause) => cause,
-            GetRateBasedRuleManagedKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6321,20 +5152,10 @@ pub enum GetRegexMatchSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRegexMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRegexMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6347,42 +5168,25 @@ impl GetRegexMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRegexMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetRegexMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetRegexMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetRegexMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRegexMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRegexMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRegexMatchSetError {
-    fn from(err: serde_json::error::Error) -> GetRegexMatchSetError {
-        GetRegexMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRegexMatchSetError {
-    fn from(err: CredentialsError) -> GetRegexMatchSetError {
-        GetRegexMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRegexMatchSetError {
-    fn from(err: HttpDispatchError) -> GetRegexMatchSetError {
-        GetRegexMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRegexMatchSetError {
-    fn from(err: io::Error) -> GetRegexMatchSetError {
-        GetRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRegexMatchSetError {
@@ -6396,11 +5200,6 @@ impl Error for GetRegexMatchSetError {
             GetRegexMatchSetError::WAFInternalError(ref cause) => cause,
             GetRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
             GetRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            GetRegexMatchSetError::Validation(ref cause) => cause,
-            GetRegexMatchSetError::Credentials(ref err) => err.description(),
-            GetRegexMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRegexMatchSetError::ParseError(ref cause) => cause,
-            GetRegexMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6413,20 +5212,10 @@ pub enum GetRegexPatternSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRegexPatternSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRegexPatternSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRegexPatternSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6439,42 +5228,25 @@ impl GetRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRegexPatternSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetRegexPatternSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRegexPatternSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetRegexPatternSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRegexPatternSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetRegexPatternSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRegexPatternSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRegexPatternSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRegexPatternSetError {
-    fn from(err: serde_json::error::Error) -> GetRegexPatternSetError {
-        GetRegexPatternSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRegexPatternSetError {
-    fn from(err: CredentialsError) -> GetRegexPatternSetError {
-        GetRegexPatternSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRegexPatternSetError {
-    fn from(err: HttpDispatchError) -> GetRegexPatternSetError {
-        GetRegexPatternSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRegexPatternSetError {
-    fn from(err: io::Error) -> GetRegexPatternSetError {
-        GetRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRegexPatternSetError {
@@ -6488,13 +5260,6 @@ impl Error for GetRegexPatternSetError {
             GetRegexPatternSetError::WAFInternalError(ref cause) => cause,
             GetRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
             GetRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
-            GetRegexPatternSetError::Validation(ref cause) => cause,
-            GetRegexPatternSetError::Credentials(ref err) => err.description(),
-            GetRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRegexPatternSetError::ParseError(ref cause) => cause,
-            GetRegexPatternSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6507,20 +5272,10 @@ pub enum GetRuleError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6533,40 +5288,25 @@ impl GetRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetRuleError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetRuleError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetRuleError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetRuleError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRuleError {
-    fn from(err: serde_json::error::Error) -> GetRuleError {
-        GetRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRuleError {
-    fn from(err: CredentialsError) -> GetRuleError {
-        GetRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRuleError {
-    fn from(err: HttpDispatchError) -> GetRuleError {
-        GetRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRuleError {
-    fn from(err: io::Error) -> GetRuleError {
-        GetRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRuleError {
@@ -6580,11 +5320,6 @@ impl Error for GetRuleError {
             GetRuleError::WAFInternalError(ref cause) => cause,
             GetRuleError::WAFInvalidAccount(ref cause) => cause,
             GetRuleError::WAFNonexistentItem(ref cause) => cause,
-            GetRuleError::Validation(ref cause) => cause,
-            GetRuleError::Credentials(ref err) => err.description(),
-            GetRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRuleError::ParseError(ref cause) => cause,
-            GetRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6595,20 +5330,10 @@ pub enum GetRuleGroupError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRuleGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRuleGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6621,39 +5346,20 @@ impl GetRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetRuleGroupError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetRuleGroupError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetRuleGroupError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetRuleGroupError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRuleGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRuleGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRuleGroupError {
-    fn from(err: serde_json::error::Error) -> GetRuleGroupError {
-        GetRuleGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRuleGroupError {
-    fn from(err: CredentialsError) -> GetRuleGroupError {
-        GetRuleGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRuleGroupError {
-    fn from(err: HttpDispatchError) -> GetRuleGroupError {
-        GetRuleGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRuleGroupError {
-    fn from(err: io::Error) -> GetRuleGroupError {
-        GetRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRuleGroupError {
@@ -6666,11 +5372,6 @@ impl Error for GetRuleGroupError {
         match *self {
             GetRuleGroupError::WAFInternalError(ref cause) => cause,
             GetRuleGroupError::WAFNonexistentItem(ref cause) => cause,
-            GetRuleGroupError::Validation(ref cause) => cause,
-            GetRuleGroupError::Credentials(ref err) => err.description(),
-            GetRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRuleGroupError::ParseError(ref cause) => cause,
-            GetRuleGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6681,20 +5382,10 @@ pub enum GetSampledRequestsError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSampledRequestsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSampledRequestsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSampledRequestsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6707,39 +5398,20 @@ impl GetSampledRequestsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetSampledRequestsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetSampledRequestsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetSampledRequestsError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetSampledRequestsError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetSampledRequestsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSampledRequestsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSampledRequestsError {
-    fn from(err: serde_json::error::Error) -> GetSampledRequestsError {
-        GetSampledRequestsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSampledRequestsError {
-    fn from(err: CredentialsError) -> GetSampledRequestsError {
-        GetSampledRequestsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSampledRequestsError {
-    fn from(err: HttpDispatchError) -> GetSampledRequestsError {
-        GetSampledRequestsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSampledRequestsError {
-    fn from(err: io::Error) -> GetSampledRequestsError {
-        GetSampledRequestsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSampledRequestsError {
@@ -6752,13 +5424,6 @@ impl Error for GetSampledRequestsError {
         match *self {
             GetSampledRequestsError::WAFInternalError(ref cause) => cause,
             GetSampledRequestsError::WAFNonexistentItem(ref cause) => cause,
-            GetSampledRequestsError::Validation(ref cause) => cause,
-            GetSampledRequestsError::Credentials(ref err) => err.description(),
-            GetSampledRequestsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSampledRequestsError::ParseError(ref cause) => cause,
-            GetSampledRequestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6771,20 +5436,10 @@ pub enum GetSizeConstraintSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSizeConstraintSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSizeConstraintSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSizeConstraintSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6797,44 +5452,25 @@ impl GetSizeConstraintSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetSizeConstraintSetError::WAFInternalError(String::from(error_message));
-                }
-                "WAFInvalidAccountException" => {
-                    return GetSizeConstraintSetError::WAFInvalidAccount(String::from(error_message));
-                }
-                "WAFNonexistentItemException" => {
-                    return GetSizeConstraintSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSizeConstraintSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetSizeConstraintSetError::Validation(error_message.to_string());
+                "WAFInvalidAccountException" => {
+                    return RusotoError::Service(GetSizeConstraintSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
+                "WAFNonexistentItemException" => {
+                    return RusotoError::Service(GetSizeConstraintSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSizeConstraintSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSizeConstraintSetError {
-    fn from(err: serde_json::error::Error) -> GetSizeConstraintSetError {
-        GetSizeConstraintSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSizeConstraintSetError {
-    fn from(err: CredentialsError) -> GetSizeConstraintSetError {
-        GetSizeConstraintSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSizeConstraintSetError {
-    fn from(err: HttpDispatchError) -> GetSizeConstraintSetError {
-        GetSizeConstraintSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSizeConstraintSetError {
-    fn from(err: io::Error) -> GetSizeConstraintSetError {
-        GetSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSizeConstraintSetError {
@@ -6848,13 +5484,6 @@ impl Error for GetSizeConstraintSetError {
             GetSizeConstraintSetError::WAFInternalError(ref cause) => cause,
             GetSizeConstraintSetError::WAFInvalidAccount(ref cause) => cause,
             GetSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
-            GetSizeConstraintSetError::Validation(ref cause) => cause,
-            GetSizeConstraintSetError::Credentials(ref err) => err.description(),
-            GetSizeConstraintSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSizeConstraintSetError::ParseError(ref cause) => cause,
-            GetSizeConstraintSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6867,20 +5496,10 @@ pub enum GetSqlInjectionMatchSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSqlInjectionMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSqlInjectionMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSqlInjectionMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6893,48 +5512,25 @@ impl GetSqlInjectionMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetSqlInjectionMatchSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSqlInjectionMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSqlInjectionMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetSqlInjectionMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSqlInjectionMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSqlInjectionMatchSetError {
-    fn from(err: serde_json::error::Error) -> GetSqlInjectionMatchSetError {
-        GetSqlInjectionMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSqlInjectionMatchSetError {
-    fn from(err: CredentialsError) -> GetSqlInjectionMatchSetError {
-        GetSqlInjectionMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSqlInjectionMatchSetError {
-    fn from(err: HttpDispatchError) -> GetSqlInjectionMatchSetError {
-        GetSqlInjectionMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSqlInjectionMatchSetError {
-    fn from(err: io::Error) -> GetSqlInjectionMatchSetError {
-        GetSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSqlInjectionMatchSetError {
@@ -6948,13 +5544,6 @@ impl Error for GetSqlInjectionMatchSetError {
             GetSqlInjectionMatchSetError::WAFInternalError(ref cause) => cause,
             GetSqlInjectionMatchSetError::WAFInvalidAccount(ref cause) => cause,
             GetSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            GetSqlInjectionMatchSetError::Validation(ref cause) => cause,
-            GetSqlInjectionMatchSetError::Credentials(ref err) => err.description(),
-            GetSqlInjectionMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSqlInjectionMatchSetError::ParseError(ref cause) => cause,
-            GetSqlInjectionMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6967,20 +5556,10 @@ pub enum GetWebACLError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6993,42 +5572,25 @@ impl GetWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetWebACLError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetWebACLError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetWebACLError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetWebACLError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetWebACLError {
-    fn from(err: serde_json::error::Error) -> GetWebACLError {
-        GetWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetWebACLError {
-    fn from(err: CredentialsError) -> GetWebACLError {
-        GetWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetWebACLError {
-    fn from(err: HttpDispatchError) -> GetWebACLError {
-        GetWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetWebACLError {
-    fn from(err: io::Error) -> GetWebACLError {
-        GetWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetWebACLError {
@@ -7042,11 +5604,6 @@ impl Error for GetWebACLError {
             GetWebACLError::WAFInternalError(ref cause) => cause,
             GetWebACLError::WAFInvalidAccount(ref cause) => cause,
             GetWebACLError::WAFNonexistentItem(ref cause) => cause,
-            GetWebACLError::Validation(ref cause) => cause,
-            GetWebACLError::Credentials(ref err) => err.description(),
-            GetWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetWebACLError::ParseError(ref cause) => cause,
-            GetWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7063,20 +5620,10 @@ pub enum GetWebACLForResourceError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because the entity referenced is temporarily unavailable. Retry your request.</p>
     WAFUnavailableEntity(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetWebACLForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetWebACLForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetWebACLForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7089,54 +5636,35 @@ impl GetWebACLForResourceError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetWebACLForResourceError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetWebACLForResourceError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetWebACLForResourceError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetWebACLForResourceError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return GetWebACLForResourceError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetWebACLForResourceError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetWebACLForResourceError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(GetWebACLForResourceError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFUnavailableEntityException" => {
-                    return GetWebACLForResourceError::WAFUnavailableEntity(String::from(
-                        error_message,
+                    return RusotoError::Service(GetWebACLForResourceError::WAFUnavailableEntity(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetWebACLForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetWebACLForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetWebACLForResourceError {
-    fn from(err: serde_json::error::Error) -> GetWebACLForResourceError {
-        GetWebACLForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetWebACLForResourceError {
-    fn from(err: CredentialsError) -> GetWebACLForResourceError {
-        GetWebACLForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetWebACLForResourceError {
-    fn from(err: HttpDispatchError) -> GetWebACLForResourceError {
-        GetWebACLForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetWebACLForResourceError {
-    fn from(err: io::Error) -> GetWebACLForResourceError {
-        GetWebACLForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetWebACLForResourceError {
@@ -7152,13 +5680,6 @@ impl Error for GetWebACLForResourceError {
             GetWebACLForResourceError::WAFInvalidParameter(ref cause) => cause,
             GetWebACLForResourceError::WAFNonexistentItem(ref cause) => cause,
             GetWebACLForResourceError::WAFUnavailableEntity(ref cause) => cause,
-            GetWebACLForResourceError::Validation(ref cause) => cause,
-            GetWebACLForResourceError::Credentials(ref err) => err.description(),
-            GetWebACLForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetWebACLForResourceError::ParseError(ref cause) => cause,
-            GetWebACLForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7171,20 +5692,10 @@ pub enum GetXssMatchSetError {
     WAFInvalidAccount(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetXssMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetXssMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetXssMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7197,42 +5708,25 @@ impl GetXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return GetXssMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(GetXssMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return GetXssMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(GetXssMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return GetXssMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(GetXssMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetXssMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetXssMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetXssMatchSetError {
-    fn from(err: serde_json::error::Error) -> GetXssMatchSetError {
-        GetXssMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetXssMatchSetError {
-    fn from(err: CredentialsError) -> GetXssMatchSetError {
-        GetXssMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetXssMatchSetError {
-    fn from(err: HttpDispatchError) -> GetXssMatchSetError {
-        GetXssMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetXssMatchSetError {
-    fn from(err: io::Error) -> GetXssMatchSetError {
-        GetXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetXssMatchSetError {
@@ -7246,11 +5740,6 @@ impl Error for GetXssMatchSetError {
             GetXssMatchSetError::WAFInternalError(ref cause) => cause,
             GetXssMatchSetError::WAFInvalidAccount(ref cause) => cause,
             GetXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
-            GetXssMatchSetError::Validation(ref cause) => cause,
-            GetXssMatchSetError::Credentials(ref err) => err.description(),
-            GetXssMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetXssMatchSetError::ParseError(ref cause) => cause,
-            GetXssMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7263,20 +5752,12 @@ pub enum ListActivatedRulesInRuleGroupError {
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListActivatedRulesInRuleGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListActivatedRulesInRuleGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListActivatedRulesInRuleGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7289,48 +5770,31 @@ impl ListActivatedRulesInRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFInvalidParameterException" => {
-                    return ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListActivatedRulesInRuleGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListActivatedRulesInRuleGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListActivatedRulesInRuleGroupError {
-    fn from(err: serde_json::error::Error) -> ListActivatedRulesInRuleGroupError {
-        ListActivatedRulesInRuleGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListActivatedRulesInRuleGroupError {
-    fn from(err: CredentialsError) -> ListActivatedRulesInRuleGroupError {
-        ListActivatedRulesInRuleGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListActivatedRulesInRuleGroupError {
-    fn from(err: HttpDispatchError) -> ListActivatedRulesInRuleGroupError {
-        ListActivatedRulesInRuleGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListActivatedRulesInRuleGroupError {
-    fn from(err: io::Error) -> ListActivatedRulesInRuleGroupError {
-        ListActivatedRulesInRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListActivatedRulesInRuleGroupError {
@@ -7344,13 +5808,6 @@ impl Error for ListActivatedRulesInRuleGroupError {
             ListActivatedRulesInRuleGroupError::WAFInternalError(ref cause) => cause,
             ListActivatedRulesInRuleGroupError::WAFInvalidParameter(ref cause) => cause,
             ListActivatedRulesInRuleGroupError::WAFNonexistentItem(ref cause) => cause,
-            ListActivatedRulesInRuleGroupError::Validation(ref cause) => cause,
-            ListActivatedRulesInRuleGroupError::Credentials(ref err) => err.description(),
-            ListActivatedRulesInRuleGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListActivatedRulesInRuleGroupError::ParseError(ref cause) => cause,
-            ListActivatedRulesInRuleGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7361,20 +5818,10 @@ pub enum ListByteMatchSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListByteMatchSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListByteMatchSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListByteMatchSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7387,39 +5834,20 @@ impl ListByteMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListByteMatchSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListByteMatchSetsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListByteMatchSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListByteMatchSetsError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListByteMatchSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListByteMatchSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListByteMatchSetsError {
-    fn from(err: serde_json::error::Error) -> ListByteMatchSetsError {
-        ListByteMatchSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListByteMatchSetsError {
-    fn from(err: CredentialsError) -> ListByteMatchSetsError {
-        ListByteMatchSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListByteMatchSetsError {
-    fn from(err: HttpDispatchError) -> ListByteMatchSetsError {
-        ListByteMatchSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListByteMatchSetsError {
-    fn from(err: io::Error) -> ListByteMatchSetsError {
-        ListByteMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListByteMatchSetsError {
@@ -7432,13 +5860,6 @@ impl Error for ListByteMatchSetsError {
         match *self {
             ListByteMatchSetsError::WAFInternalError(ref cause) => cause,
             ListByteMatchSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListByteMatchSetsError::Validation(ref cause) => cause,
-            ListByteMatchSetsError::Credentials(ref err) => err.description(),
-            ListByteMatchSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListByteMatchSetsError::ParseError(ref cause) => cause,
-            ListByteMatchSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7449,20 +5870,10 @@ pub enum ListGeoMatchSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGeoMatchSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGeoMatchSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGeoMatchSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7475,39 +5886,20 @@ impl ListGeoMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListGeoMatchSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListGeoMatchSetsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListGeoMatchSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListGeoMatchSetsError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListGeoMatchSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGeoMatchSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGeoMatchSetsError {
-    fn from(err: serde_json::error::Error) -> ListGeoMatchSetsError {
-        ListGeoMatchSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGeoMatchSetsError {
-    fn from(err: CredentialsError) -> ListGeoMatchSetsError {
-        ListGeoMatchSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGeoMatchSetsError {
-    fn from(err: HttpDispatchError) -> ListGeoMatchSetsError {
-        ListGeoMatchSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGeoMatchSetsError {
-    fn from(err: io::Error) -> ListGeoMatchSetsError {
-        ListGeoMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGeoMatchSetsError {
@@ -7520,11 +5912,6 @@ impl Error for ListGeoMatchSetsError {
         match *self {
             ListGeoMatchSetsError::WAFInternalError(ref cause) => cause,
             ListGeoMatchSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListGeoMatchSetsError::Validation(ref cause) => cause,
-            ListGeoMatchSetsError::Credentials(ref err) => err.description(),
-            ListGeoMatchSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGeoMatchSetsError::ParseError(ref cause) => cause,
-            ListGeoMatchSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7535,20 +5922,10 @@ pub enum ListIPSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIPSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIPSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIPSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7561,39 +5938,20 @@ impl ListIPSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListIPSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListIPSetsError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListIPSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListIPSetsError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListIPSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIPSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIPSetsError {
-    fn from(err: serde_json::error::Error) -> ListIPSetsError {
-        ListIPSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIPSetsError {
-    fn from(err: CredentialsError) -> ListIPSetsError {
-        ListIPSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIPSetsError {
-    fn from(err: HttpDispatchError) -> ListIPSetsError {
-        ListIPSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIPSetsError {
-    fn from(err: io::Error) -> ListIPSetsError {
-        ListIPSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIPSetsError {
@@ -7606,11 +5964,6 @@ impl Error for ListIPSetsError {
         match *self {
             ListIPSetsError::WAFInternalError(ref cause) => cause,
             ListIPSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListIPSetsError::Validation(ref cause) => cause,
-            ListIPSetsError::Credentials(ref err) => err.description(),
-            ListIPSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIPSetsError::ParseError(ref cause) => cause,
-            ListIPSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7623,20 +5976,10 @@ pub enum ListLoggingConfigurationsError {
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListLoggingConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListLoggingConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLoggingConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7649,48 +5992,27 @@ impl ListLoggingConfigurationsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListLoggingConfigurationsError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListLoggingConfigurationsError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return ListLoggingConfigurationsError::WAFInvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListLoggingConfigurationsError::WAFInvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return ListLoggingConfigurationsError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(ListLoggingConfigurationsError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListLoggingConfigurationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListLoggingConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListLoggingConfigurationsError {
-    fn from(err: serde_json::error::Error) -> ListLoggingConfigurationsError {
-        ListLoggingConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListLoggingConfigurationsError {
-    fn from(err: CredentialsError) -> ListLoggingConfigurationsError {
-        ListLoggingConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListLoggingConfigurationsError {
-    fn from(err: HttpDispatchError) -> ListLoggingConfigurationsError {
-        ListLoggingConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListLoggingConfigurationsError {
-    fn from(err: io::Error) -> ListLoggingConfigurationsError {
-        ListLoggingConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListLoggingConfigurationsError {
@@ -7704,13 +6026,6 @@ impl Error for ListLoggingConfigurationsError {
             ListLoggingConfigurationsError::WAFInternalError(ref cause) => cause,
             ListLoggingConfigurationsError::WAFInvalidParameter(ref cause) => cause,
             ListLoggingConfigurationsError::WAFNonexistentItem(ref cause) => cause,
-            ListLoggingConfigurationsError::Validation(ref cause) => cause,
-            ListLoggingConfigurationsError::Credentials(ref err) => err.description(),
-            ListLoggingConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListLoggingConfigurationsError::ParseError(ref cause) => cause,
-            ListLoggingConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7721,20 +6036,10 @@ pub enum ListRateBasedRulesError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRateBasedRulesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRateBasedRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRateBasedRulesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7747,39 +6052,20 @@ impl ListRateBasedRulesError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRateBasedRulesError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListRateBasedRulesError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRateBasedRulesError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListRateBasedRulesError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListRateBasedRulesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRateBasedRulesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRateBasedRulesError {
-    fn from(err: serde_json::error::Error) -> ListRateBasedRulesError {
-        ListRateBasedRulesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRateBasedRulesError {
-    fn from(err: CredentialsError) -> ListRateBasedRulesError {
-        ListRateBasedRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRateBasedRulesError {
-    fn from(err: HttpDispatchError) -> ListRateBasedRulesError {
-        ListRateBasedRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRateBasedRulesError {
-    fn from(err: io::Error) -> ListRateBasedRulesError {
-        ListRateBasedRulesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRateBasedRulesError {
@@ -7792,13 +6078,6 @@ impl Error for ListRateBasedRulesError {
         match *self {
             ListRateBasedRulesError::WAFInternalError(ref cause) => cause,
             ListRateBasedRulesError::WAFInvalidAccount(ref cause) => cause,
-            ListRateBasedRulesError::Validation(ref cause) => cause,
-            ListRateBasedRulesError::Credentials(ref err) => err.description(),
-            ListRateBasedRulesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListRateBasedRulesError::ParseError(ref cause) => cause,
-            ListRateBasedRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7809,20 +6088,10 @@ pub enum ListRegexMatchSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRegexMatchSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRegexMatchSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexMatchSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7835,39 +6104,20 @@ impl ListRegexMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRegexMatchSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListRegexMatchSetsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRegexMatchSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListRegexMatchSetsError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListRegexMatchSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRegexMatchSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRegexMatchSetsError {
-    fn from(err: serde_json::error::Error) -> ListRegexMatchSetsError {
-        ListRegexMatchSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRegexMatchSetsError {
-    fn from(err: CredentialsError) -> ListRegexMatchSetsError {
-        ListRegexMatchSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRegexMatchSetsError {
-    fn from(err: HttpDispatchError) -> ListRegexMatchSetsError {
-        ListRegexMatchSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRegexMatchSetsError {
-    fn from(err: io::Error) -> ListRegexMatchSetsError {
-        ListRegexMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRegexMatchSetsError {
@@ -7880,13 +6130,6 @@ impl Error for ListRegexMatchSetsError {
         match *self {
             ListRegexMatchSetsError::WAFInternalError(ref cause) => cause,
             ListRegexMatchSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListRegexMatchSetsError::Validation(ref cause) => cause,
-            ListRegexMatchSetsError::Credentials(ref err) => err.description(),
-            ListRegexMatchSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListRegexMatchSetsError::ParseError(ref cause) => cause,
-            ListRegexMatchSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7897,20 +6140,10 @@ pub enum ListRegexPatternSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRegexPatternSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRegexPatternSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRegexPatternSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7923,39 +6156,20 @@ impl ListRegexPatternSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRegexPatternSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListRegexPatternSetsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRegexPatternSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListRegexPatternSetsError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListRegexPatternSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRegexPatternSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRegexPatternSetsError {
-    fn from(err: serde_json::error::Error) -> ListRegexPatternSetsError {
-        ListRegexPatternSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRegexPatternSetsError {
-    fn from(err: CredentialsError) -> ListRegexPatternSetsError {
-        ListRegexPatternSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRegexPatternSetsError {
-    fn from(err: HttpDispatchError) -> ListRegexPatternSetsError {
-        ListRegexPatternSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRegexPatternSetsError {
-    fn from(err: io::Error) -> ListRegexPatternSetsError {
-        ListRegexPatternSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRegexPatternSetsError {
@@ -7968,13 +6182,6 @@ impl Error for ListRegexPatternSetsError {
         match *self {
             ListRegexPatternSetsError::WAFInternalError(ref cause) => cause,
             ListRegexPatternSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListRegexPatternSetsError::Validation(ref cause) => cause,
-            ListRegexPatternSetsError::Credentials(ref err) => err.description(),
-            ListRegexPatternSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListRegexPatternSetsError::ParseError(ref cause) => cause,
-            ListRegexPatternSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7989,20 +6196,10 @@ pub enum ListResourcesForWebACLError {
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesForWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesForWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesForWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8015,53 +6212,30 @@ impl ListResourcesForWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListResourcesForWebACLError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourcesForWebACLError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListResourcesForWebACLError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourcesForWebACLError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return ListResourcesForWebACLError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourcesForWebACLError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return ListResourcesForWebACLError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourcesForWebACLError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListResourcesForWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourcesForWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourcesForWebACLError {
-    fn from(err: serde_json::error::Error) -> ListResourcesForWebACLError {
-        ListResourcesForWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourcesForWebACLError {
-    fn from(err: CredentialsError) -> ListResourcesForWebACLError {
-        ListResourcesForWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourcesForWebACLError {
-    fn from(err: HttpDispatchError) -> ListResourcesForWebACLError {
-        ListResourcesForWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourcesForWebACLError {
-    fn from(err: io::Error) -> ListResourcesForWebACLError {
-        ListResourcesForWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourcesForWebACLError {
@@ -8076,13 +6250,6 @@ impl Error for ListResourcesForWebACLError {
             ListResourcesForWebACLError::WAFInvalidAccount(ref cause) => cause,
             ListResourcesForWebACLError::WAFInvalidParameter(ref cause) => cause,
             ListResourcesForWebACLError::WAFNonexistentItem(ref cause) => cause,
-            ListResourcesForWebACLError::Validation(ref cause) => cause,
-            ListResourcesForWebACLError::Credentials(ref err) => err.description(),
-            ListResourcesForWebACLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListResourcesForWebACLError::ParseError(ref cause) => cause,
-            ListResourcesForWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8091,20 +6258,10 @@ impl Error for ListResourcesForWebACLError {
 pub enum ListRuleGroupsError {
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     WAFInternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRuleGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRuleGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRuleGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8117,36 +6274,15 @@ impl ListRuleGroupsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRuleGroupsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListRuleGroupsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListRuleGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRuleGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRuleGroupsError {
-    fn from(err: serde_json::error::Error) -> ListRuleGroupsError {
-        ListRuleGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRuleGroupsError {
-    fn from(err: CredentialsError) -> ListRuleGroupsError {
-        ListRuleGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRuleGroupsError {
-    fn from(err: HttpDispatchError) -> ListRuleGroupsError {
-        ListRuleGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRuleGroupsError {
-    fn from(err: io::Error) -> ListRuleGroupsError {
-        ListRuleGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRuleGroupsError {
@@ -8158,11 +6294,6 @@ impl Error for ListRuleGroupsError {
     fn description(&self) -> &str {
         match *self {
             ListRuleGroupsError::WAFInternalError(ref cause) => cause,
-            ListRuleGroupsError::Validation(ref cause) => cause,
-            ListRuleGroupsError::Credentials(ref err) => err.description(),
-            ListRuleGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRuleGroupsError::ParseError(ref cause) => cause,
-            ListRuleGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8173,20 +6304,10 @@ pub enum ListRulesError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRulesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRulesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8199,39 +6320,20 @@ impl ListRulesError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListRulesError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListRulesError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListRulesError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListRulesError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListRulesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRulesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRulesError {
-    fn from(err: serde_json::error::Error) -> ListRulesError {
-        ListRulesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRulesError {
-    fn from(err: CredentialsError) -> ListRulesError {
-        ListRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRulesError {
-    fn from(err: HttpDispatchError) -> ListRulesError {
-        ListRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRulesError {
-    fn from(err: io::Error) -> ListRulesError {
-        ListRulesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRulesError {
@@ -8244,11 +6346,6 @@ impl Error for ListRulesError {
         match *self {
             ListRulesError::WAFInternalError(ref cause) => cause,
             ListRulesError::WAFInvalidAccount(ref cause) => cause,
-            ListRulesError::Validation(ref cause) => cause,
-            ListRulesError::Credentials(ref err) => err.description(),
-            ListRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRulesError::ParseError(ref cause) => cause,
-            ListRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8259,20 +6356,10 @@ pub enum ListSizeConstraintSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSizeConstraintSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSizeConstraintSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSizeConstraintSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8285,43 +6372,20 @@ impl ListSizeConstraintSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListSizeConstraintSetsError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSizeConstraintSetsError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListSizeConstraintSetsError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSizeConstraintSetsError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListSizeConstraintSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSizeConstraintSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSizeConstraintSetsError {
-    fn from(err: serde_json::error::Error) -> ListSizeConstraintSetsError {
-        ListSizeConstraintSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSizeConstraintSetsError {
-    fn from(err: CredentialsError) -> ListSizeConstraintSetsError {
-        ListSizeConstraintSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSizeConstraintSetsError {
-    fn from(err: HttpDispatchError) -> ListSizeConstraintSetsError {
-        ListSizeConstraintSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSizeConstraintSetsError {
-    fn from(err: io::Error) -> ListSizeConstraintSetsError {
-        ListSizeConstraintSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSizeConstraintSetsError {
@@ -8334,13 +6398,6 @@ impl Error for ListSizeConstraintSetsError {
         match *self {
             ListSizeConstraintSetsError::WAFInternalError(ref cause) => cause,
             ListSizeConstraintSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListSizeConstraintSetsError::Validation(ref cause) => cause,
-            ListSizeConstraintSetsError::Credentials(ref err) => err.description(),
-            ListSizeConstraintSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSizeConstraintSetsError::ParseError(ref cause) => cause,
-            ListSizeConstraintSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8351,20 +6408,10 @@ pub enum ListSqlInjectionMatchSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSqlInjectionMatchSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSqlInjectionMatchSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSqlInjectionMatchSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8377,43 +6424,20 @@ impl ListSqlInjectionMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListSqlInjectionMatchSetsError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListSqlInjectionMatchSetsError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSqlInjectionMatchSetsError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListSqlInjectionMatchSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSqlInjectionMatchSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSqlInjectionMatchSetsError {
-    fn from(err: serde_json::error::Error) -> ListSqlInjectionMatchSetsError {
-        ListSqlInjectionMatchSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSqlInjectionMatchSetsError {
-    fn from(err: CredentialsError) -> ListSqlInjectionMatchSetsError {
-        ListSqlInjectionMatchSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSqlInjectionMatchSetsError {
-    fn from(err: HttpDispatchError) -> ListSqlInjectionMatchSetsError {
-        ListSqlInjectionMatchSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSqlInjectionMatchSetsError {
-    fn from(err: io::Error) -> ListSqlInjectionMatchSetsError {
-        ListSqlInjectionMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSqlInjectionMatchSetsError {
@@ -8426,13 +6450,6 @@ impl Error for ListSqlInjectionMatchSetsError {
         match *self {
             ListSqlInjectionMatchSetsError::WAFInternalError(ref cause) => cause,
             ListSqlInjectionMatchSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListSqlInjectionMatchSetsError::Validation(ref cause) => cause,
-            ListSqlInjectionMatchSetsError::Credentials(ref err) => err.description(),
-            ListSqlInjectionMatchSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSqlInjectionMatchSetsError::ParseError(ref cause) => cause,
-            ListSqlInjectionMatchSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8443,20 +6460,10 @@ pub enum ListSubscribedRuleGroupsError {
     WAFInternalError(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSubscribedRuleGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSubscribedRuleGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListSubscribedRuleGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8469,43 +6476,20 @@ impl ListSubscribedRuleGroupsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListSubscribedRuleGroupsError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSubscribedRuleGroupsError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return ListSubscribedRuleGroupsError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSubscribedRuleGroupsError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListSubscribedRuleGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSubscribedRuleGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSubscribedRuleGroupsError {
-    fn from(err: serde_json::error::Error) -> ListSubscribedRuleGroupsError {
-        ListSubscribedRuleGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSubscribedRuleGroupsError {
-    fn from(err: CredentialsError) -> ListSubscribedRuleGroupsError {
-        ListSubscribedRuleGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSubscribedRuleGroupsError {
-    fn from(err: HttpDispatchError) -> ListSubscribedRuleGroupsError {
-        ListSubscribedRuleGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSubscribedRuleGroupsError {
-    fn from(err: io::Error) -> ListSubscribedRuleGroupsError {
-        ListSubscribedRuleGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSubscribedRuleGroupsError {
@@ -8518,13 +6502,6 @@ impl Error for ListSubscribedRuleGroupsError {
         match *self {
             ListSubscribedRuleGroupsError::WAFInternalError(ref cause) => cause,
             ListSubscribedRuleGroupsError::WAFNonexistentItem(ref cause) => cause,
-            ListSubscribedRuleGroupsError::Validation(ref cause) => cause,
-            ListSubscribedRuleGroupsError::Credentials(ref err) => err.description(),
-            ListSubscribedRuleGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSubscribedRuleGroupsError::ParseError(ref cause) => cause,
-            ListSubscribedRuleGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8535,20 +6512,10 @@ pub enum ListWebACLsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWebACLsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWebACLsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebACLsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8561,39 +6528,20 @@ impl ListWebACLsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListWebACLsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListWebACLsError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListWebACLsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListWebACLsError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListWebACLsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWebACLsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWebACLsError {
-    fn from(err: serde_json::error::Error) -> ListWebACLsError {
-        ListWebACLsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWebACLsError {
-    fn from(err: CredentialsError) -> ListWebACLsError {
-        ListWebACLsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWebACLsError {
-    fn from(err: HttpDispatchError) -> ListWebACLsError {
-        ListWebACLsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWebACLsError {
-    fn from(err: io::Error) -> ListWebACLsError {
-        ListWebACLsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWebACLsError {
@@ -8606,11 +6554,6 @@ impl Error for ListWebACLsError {
         match *self {
             ListWebACLsError::WAFInternalError(ref cause) => cause,
             ListWebACLsError::WAFInvalidAccount(ref cause) => cause,
-            ListWebACLsError::Validation(ref cause) => cause,
-            ListWebACLsError::Credentials(ref err) => err.description(),
-            ListWebACLsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListWebACLsError::ParseError(ref cause) => cause,
-            ListWebACLsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8621,20 +6564,10 @@ pub enum ListXssMatchSetsError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListXssMatchSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListXssMatchSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListXssMatchSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8647,39 +6580,20 @@ impl ListXssMatchSetsError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return ListXssMatchSetsError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(ListXssMatchSetsError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return ListXssMatchSetsError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(ListXssMatchSetsError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListXssMatchSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListXssMatchSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListXssMatchSetsError {
-    fn from(err: serde_json::error::Error) -> ListXssMatchSetsError {
-        ListXssMatchSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListXssMatchSetsError {
-    fn from(err: CredentialsError) -> ListXssMatchSetsError {
-        ListXssMatchSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListXssMatchSetsError {
-    fn from(err: HttpDispatchError) -> ListXssMatchSetsError {
-        ListXssMatchSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListXssMatchSetsError {
-    fn from(err: io::Error) -> ListXssMatchSetsError {
-        ListXssMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListXssMatchSetsError {
@@ -8692,11 +6606,6 @@ impl Error for ListXssMatchSetsError {
         match *self {
             ListXssMatchSetsError::WAFInternalError(ref cause) => cause,
             ListXssMatchSetsError::WAFInvalidAccount(ref cause) => cause,
-            ListXssMatchSetsError::Validation(ref cause) => cause,
-            ListXssMatchSetsError::Credentials(ref err) => err.description(),
-            ListXssMatchSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListXssMatchSetsError::ParseError(ref cause) => cause,
-            ListXssMatchSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8711,20 +6620,10 @@ pub enum PutLoggingConfigurationError {
     WAFServiceLinkedRoleError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLoggingConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutLoggingConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLoggingConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8737,51 +6636,32 @@ impl PutLoggingConfigurationError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return PutLoggingConfigurationError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(PutLoggingConfigurationError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return PutLoggingConfigurationError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(PutLoggingConfigurationError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFServiceLinkedRoleErrorException" => {
-                    return PutLoggingConfigurationError::WAFServiceLinkedRoleError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutLoggingConfigurationError::WAFServiceLinkedRoleError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFStaleDataException" => {
-                    return PutLoggingConfigurationError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(PutLoggingConfigurationError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutLoggingConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutLoggingConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLoggingConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutLoggingConfigurationError {
-        PutLoggingConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLoggingConfigurationError {
-    fn from(err: CredentialsError) -> PutLoggingConfigurationError {
-        PutLoggingConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLoggingConfigurationError {
-    fn from(err: HttpDispatchError) -> PutLoggingConfigurationError {
-        PutLoggingConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLoggingConfigurationError {
-    fn from(err: io::Error) -> PutLoggingConfigurationError {
-        PutLoggingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLoggingConfigurationError {
@@ -8796,13 +6676,6 @@ impl Error for PutLoggingConfigurationError {
             PutLoggingConfigurationError::WAFNonexistentItem(ref cause) => cause,
             PutLoggingConfigurationError::WAFServiceLinkedRoleError(ref cause) => cause,
             PutLoggingConfigurationError::WAFStaleData(ref cause) => cause,
-            PutLoggingConfigurationError::Validation(ref cause) => cause,
-            PutLoggingConfigurationError::Credentials(ref err) => err.description(),
-            PutLoggingConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutLoggingConfigurationError::ParseError(ref cause) => cause,
-            PutLoggingConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8817,20 +6690,10 @@ pub enum PutPermissionPolicyError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutPermissionPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutPermissionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPermissionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8843,47 +6706,32 @@ impl PutPermissionPolicyError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return PutPermissionPolicyError::WAFInternalError(String::from(error_message));
-                }
-                "WAFInvalidPermissionPolicyException" => {
-                    return PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
-                        error_message,
+                    return RusotoError::Service(PutPermissionPolicyError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
+                "WAFInvalidPermissionPolicyException" => {
+                    return RusotoError::Service(
+                        PutPermissionPolicyError::WAFInvalidPermissionPolicy(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "WAFNonexistentItemException" => {
-                    return PutPermissionPolicyError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(PutPermissionPolicyError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return PutPermissionPolicyError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(PutPermissionPolicyError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutPermissionPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutPermissionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutPermissionPolicyError {
-    fn from(err: serde_json::error::Error) -> PutPermissionPolicyError {
-        PutPermissionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutPermissionPolicyError {
-    fn from(err: CredentialsError) -> PutPermissionPolicyError {
-        PutPermissionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutPermissionPolicyError {
-    fn from(err: HttpDispatchError) -> PutPermissionPolicyError {
-        PutPermissionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutPermissionPolicyError {
-    fn from(err: io::Error) -> PutPermissionPolicyError {
-        PutPermissionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutPermissionPolicyError {
@@ -8898,13 +6746,6 @@ impl Error for PutPermissionPolicyError {
             PutPermissionPolicyError::WAFInvalidPermissionPolicy(ref cause) => cause,
             PutPermissionPolicyError::WAFNonexistentItem(ref cause) => cause,
             PutPermissionPolicyError::WAFStaleData(ref cause) => cause,
-            PutPermissionPolicyError::Validation(ref cause) => cause,
-            PutPermissionPolicyError::Credentials(ref err) => err.description(),
-            PutPermissionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutPermissionPolicyError::ParseError(ref cause) => cause,
-            PutPermissionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8927,20 +6768,10 @@ pub enum UpdateByteMatchSetError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateByteMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateByteMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateByteMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8953,59 +6784,50 @@ impl UpdateByteMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateByteMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateByteMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateByteMatchSetError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateByteMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateByteMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateByteMatchSetError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateByteMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateByteMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateByteMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateByteMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateByteMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateByteMatchSetError {
-    fn from(err: serde_json::error::Error) -> UpdateByteMatchSetError {
-        UpdateByteMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateByteMatchSetError {
-    fn from(err: CredentialsError) -> UpdateByteMatchSetError {
-        UpdateByteMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateByteMatchSetError {
-    fn from(err: HttpDispatchError) -> UpdateByteMatchSetError {
-        UpdateByteMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateByteMatchSetError {
-    fn from(err: io::Error) -> UpdateByteMatchSetError {
-        UpdateByteMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateByteMatchSetError {
@@ -9024,13 +6846,6 @@ impl Error for UpdateByteMatchSetError {
             UpdateByteMatchSetError::WAFNonexistentContainer(ref cause) => cause,
             UpdateByteMatchSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateByteMatchSetError::WAFStaleData(ref cause) => cause,
-            UpdateByteMatchSetError::Validation(ref cause) => cause,
-            UpdateByteMatchSetError::Credentials(ref err) => err.description(),
-            UpdateByteMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateByteMatchSetError::ParseError(ref cause) => cause,
-            UpdateByteMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9055,20 +6870,10 @@ pub enum UpdateGeoMatchSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGeoMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGeoMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGeoMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9081,62 +6886,55 @@ impl UpdateGeoMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateGeoMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateGeoMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateGeoMatchSetError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateGeoMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateGeoMatchSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateGeoMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateGeoMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateGeoMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGeoMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGeoMatchSetError {
-    fn from(err: serde_json::error::Error) -> UpdateGeoMatchSetError {
-        UpdateGeoMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGeoMatchSetError {
-    fn from(err: CredentialsError) -> UpdateGeoMatchSetError {
-        UpdateGeoMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGeoMatchSetError {
-    fn from(err: HttpDispatchError) -> UpdateGeoMatchSetError {
-        UpdateGeoMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGeoMatchSetError {
-    fn from(err: io::Error) -> UpdateGeoMatchSetError {
-        UpdateGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGeoMatchSetError {
@@ -9156,13 +6954,6 @@ impl Error for UpdateGeoMatchSetError {
             UpdateGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
             UpdateGeoMatchSetError::WAFStaleData(ref cause) => cause,
-            UpdateGeoMatchSetError::Validation(ref cause) => cause,
-            UpdateGeoMatchSetError::Credentials(ref err) => err.description(),
-            UpdateGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateGeoMatchSetError::ParseError(ref cause) => cause,
-            UpdateGeoMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9187,20 +6978,10 @@ pub enum UpdateIPSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateIPSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9213,60 +6994,55 @@ impl UpdateIPSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateIPSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateIPSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateIPSetError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateIPSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateIPSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateIPSetError::WAFNonexistentContainer(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentContainer(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateIPSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateIPSetError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateIPSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateIPSetError {
-    fn from(err: serde_json::error::Error) -> UpdateIPSetError {
-        UpdateIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateIPSetError {
-    fn from(err: CredentialsError) -> UpdateIPSetError {
-        UpdateIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateIPSetError {
-    fn from(err: HttpDispatchError) -> UpdateIPSetError {
-        UpdateIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateIPSetError {
-    fn from(err: io::Error) -> UpdateIPSetError {
-        UpdateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateIPSetError {
@@ -9286,11 +7062,6 @@ impl Error for UpdateIPSetError {
             UpdateIPSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateIPSetError::WAFReferencedItem(ref cause) => cause,
             UpdateIPSetError::WAFStaleData(ref cause) => cause,
-            UpdateIPSetError::Validation(ref cause) => cause,
-            UpdateIPSetError::Credentials(ref err) => err.description(),
-            UpdateIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateIPSetError::ParseError(ref cause) => cause,
-            UpdateIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9315,20 +7086,10 @@ pub enum UpdateRateBasedRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRateBasedRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRateBasedRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRateBasedRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9341,66 +7102,55 @@ impl UpdateRateBasedRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRateBasedRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRateBasedRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRateBasedRuleError::WAFInvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateRateBasedRuleError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRateBasedRuleError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRateBasedRuleError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRateBasedRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateRateBasedRuleError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFReferencedItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRateBasedRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateRateBasedRuleError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateRateBasedRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRateBasedRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRateBasedRuleError {
-    fn from(err: serde_json::error::Error) -> UpdateRateBasedRuleError {
-        UpdateRateBasedRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRateBasedRuleError {
-    fn from(err: CredentialsError) -> UpdateRateBasedRuleError {
-        UpdateRateBasedRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRateBasedRuleError {
-    fn from(err: HttpDispatchError) -> UpdateRateBasedRuleError {
-        UpdateRateBasedRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRateBasedRuleError {
-    fn from(err: io::Error) -> UpdateRateBasedRuleError {
-        UpdateRateBasedRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRateBasedRuleError {
@@ -9420,13 +7170,6 @@ impl Error for UpdateRateBasedRuleError {
             UpdateRateBasedRuleError::WAFNonexistentItem(ref cause) => cause,
             UpdateRateBasedRuleError::WAFReferencedItem(ref cause) => cause,
             UpdateRateBasedRuleError::WAFStaleData(ref cause) => cause,
-            UpdateRateBasedRuleError::Validation(ref cause) => cause,
-            UpdateRateBasedRuleError::Credentials(ref err) => err.description(),
-            UpdateRateBasedRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRateBasedRuleError::ParseError(ref cause) => cause,
-            UpdateRateBasedRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9449,20 +7192,10 @@ pub enum UpdateRegexMatchSetError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRegexMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRegexMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9475,61 +7208,50 @@ impl UpdateRegexMatchSetError {
 
             match *error_type {
                 "WAFDisallowedNameException" => {
-                    return UpdateRegexMatchSetError::WAFDisallowedName(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFDisallowedName(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInternalErrorException" => {
-                    return UpdateRegexMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRegexMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRegexMatchSetError::WAFInvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFInvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRegexMatchSetError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRegexMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRegexMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexMatchSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateRegexMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRegexMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRegexMatchSetError {
-    fn from(err: serde_json::error::Error) -> UpdateRegexMatchSetError {
-        UpdateRegexMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRegexMatchSetError {
-    fn from(err: CredentialsError) -> UpdateRegexMatchSetError {
-        UpdateRegexMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRegexMatchSetError {
-    fn from(err: HttpDispatchError) -> UpdateRegexMatchSetError {
-        UpdateRegexMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRegexMatchSetError {
-    fn from(err: io::Error) -> UpdateRegexMatchSetError {
-        UpdateRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRegexMatchSetError {
@@ -9548,13 +7270,6 @@ impl Error for UpdateRegexMatchSetError {
             UpdateRegexMatchSetError::WAFNonexistentContainer(ref cause) => cause,
             UpdateRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateRegexMatchSetError::WAFStaleData(ref cause) => cause,
-            UpdateRegexMatchSetError::Validation(ref cause) => cause,
-            UpdateRegexMatchSetError::Credentials(ref err) => err.description(),
-            UpdateRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRegexMatchSetError::ParseError(ref cause) => cause,
-            UpdateRegexMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9577,20 +7292,10 @@ pub enum UpdateRegexPatternSetError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRegexPatternSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRegexPatternSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRegexPatternSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9603,69 +7308,52 @@ impl UpdateRegexPatternSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRegexPatternSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRegexPatternSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRegexPatternSetError::WAFInvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidRegexPatternException" => {
-                    return UpdateRegexPatternSetError::WAFInvalidRegexPattern(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFInvalidRegexPattern(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRegexPatternSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRegexPatternSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRegexPatternSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateRegexPatternSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateRegexPatternSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRegexPatternSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRegexPatternSetError {
-    fn from(err: serde_json::error::Error) -> UpdateRegexPatternSetError {
-        UpdateRegexPatternSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRegexPatternSetError {
-    fn from(err: CredentialsError) -> UpdateRegexPatternSetError {
-        UpdateRegexPatternSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRegexPatternSetError {
-    fn from(err: HttpDispatchError) -> UpdateRegexPatternSetError {
-        UpdateRegexPatternSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRegexPatternSetError {
-    fn from(err: io::Error) -> UpdateRegexPatternSetError {
-        UpdateRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRegexPatternSetError {
@@ -9684,13 +7372,6 @@ impl Error for UpdateRegexPatternSetError {
             UpdateRegexPatternSetError::WAFNonexistentContainer(ref cause) => cause,
             UpdateRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateRegexPatternSetError::WAFStaleData(ref cause) => cause,
-            UpdateRegexPatternSetError::Validation(ref cause) => cause,
-            UpdateRegexPatternSetError::Credentials(ref err) => err.description(),
-            UpdateRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRegexPatternSetError::ParseError(ref cause) => cause,
-            UpdateRegexPatternSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9715,20 +7396,10 @@ pub enum UpdateRuleError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9741,60 +7412,55 @@ impl UpdateRuleError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRuleError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateRuleError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRuleError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidOperation(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateRuleError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFInvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRuleError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRuleError::WAFNonexistentContainer(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFNonexistentContainer(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRuleError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFNonexistentItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateRuleError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRuleError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateRuleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRuleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRuleError {
-    fn from(err: serde_json::error::Error) -> UpdateRuleError {
-        UpdateRuleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRuleError {
-    fn from(err: CredentialsError) -> UpdateRuleError {
-        UpdateRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRuleError {
-    fn from(err: HttpDispatchError) -> UpdateRuleError {
-        UpdateRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRuleError {
-    fn from(err: io::Error) -> UpdateRuleError {
-        UpdateRuleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRuleError {
@@ -9814,11 +7480,6 @@ impl Error for UpdateRuleError {
             UpdateRuleError::WAFNonexistentItem(ref cause) => cause,
             UpdateRuleError::WAFReferencedItem(ref cause) => cause,
             UpdateRuleError::WAFStaleData(ref cause) => cause,
-            UpdateRuleError::Validation(ref cause) => cause,
-            UpdateRuleError::Credentials(ref err) => err.description(),
-            UpdateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateRuleError::ParseError(ref cause) => cause,
-            UpdateRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9839,20 +7500,10 @@ pub enum UpdateRuleGroupError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRuleGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRuleGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9865,56 +7516,45 @@ impl UpdateRuleGroupError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateRuleGroupError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateRuleGroupError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateRuleGroupError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateRuleGroupError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateRuleGroupError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateRuleGroupError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateRuleGroupError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateRuleGroupError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateRuleGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRuleGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRuleGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateRuleGroupError {
-        UpdateRuleGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRuleGroupError {
-    fn from(err: CredentialsError) -> UpdateRuleGroupError {
-        UpdateRuleGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRuleGroupError {
-    fn from(err: HttpDispatchError) -> UpdateRuleGroupError {
-        UpdateRuleGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRuleGroupError {
-    fn from(err: io::Error) -> UpdateRuleGroupError {
-        UpdateRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRuleGroupError {
@@ -9932,11 +7572,6 @@ impl Error for UpdateRuleGroupError {
             UpdateRuleGroupError::WAFNonexistentContainer(ref cause) => cause,
             UpdateRuleGroupError::WAFNonexistentItem(ref cause) => cause,
             UpdateRuleGroupError::WAFStaleData(ref cause) => cause,
-            UpdateRuleGroupError::Validation(ref cause) => cause,
-            UpdateRuleGroupError::Credentials(ref err) => err.description(),
-            UpdateRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateRuleGroupError::ParseError(ref cause) => cause,
-            UpdateRuleGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9961,20 +7596,10 @@ pub enum UpdateSizeConstraintSetError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSizeConstraintSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSizeConstraintSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSizeConstraintSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9987,76 +7612,57 @@ impl UpdateSizeConstraintSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateSizeConstraintSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateSizeConstraintSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateSizeConstraintSetError::WAFInvalidOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidOperation(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateSizeConstraintSetError::WAFInvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFInvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateSizeConstraintSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateSizeConstraintSetError::WAFNonexistentContainer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateSizeConstraintSetError::WAFNonexistentContainer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateSizeConstraintSetError::WAFNonexistentItem(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFNonexistentItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateSizeConstraintSetError::WAFReferencedItem(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFReferencedItem(
+                        String::from(error_message),
                     ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateSizeConstraintSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateSizeConstraintSetError::WAFStaleData(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateSizeConstraintSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSizeConstraintSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSizeConstraintSetError {
-    fn from(err: serde_json::error::Error) -> UpdateSizeConstraintSetError {
-        UpdateSizeConstraintSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSizeConstraintSetError {
-    fn from(err: CredentialsError) -> UpdateSizeConstraintSetError {
-        UpdateSizeConstraintSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSizeConstraintSetError {
-    fn from(err: HttpDispatchError) -> UpdateSizeConstraintSetError {
-        UpdateSizeConstraintSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSizeConstraintSetError {
-    fn from(err: io::Error) -> UpdateSizeConstraintSetError {
-        UpdateSizeConstraintSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSizeConstraintSetError {
@@ -10076,13 +7682,6 @@ impl Error for UpdateSizeConstraintSetError {
             UpdateSizeConstraintSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateSizeConstraintSetError::WAFReferencedItem(ref cause) => cause,
             UpdateSizeConstraintSetError::WAFStaleData(ref cause) => cause,
-            UpdateSizeConstraintSetError::Validation(ref cause) => cause,
-            UpdateSizeConstraintSetError::Credentials(ref err) => err.description(),
-            UpdateSizeConstraintSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSizeConstraintSetError::ParseError(ref cause) => cause,
-            UpdateSizeConstraintSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10105,20 +7704,12 @@ pub enum UpdateSqlInjectionMatchSetError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSqlInjectionMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSqlInjectionMatchSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateSqlInjectionMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10131,73 +7722,58 @@ impl UpdateSqlInjectionMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFInternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInternalError(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFInvalidAccount(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
                     ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFInvalidOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFInvalidOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFInvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateSqlInjectionMatchSetError::WAFNonexistentItem(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "WAFStaleDataException" => {
-                    return UpdateSqlInjectionMatchSetError::WAFStaleData(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSqlInjectionMatchSetError::WAFStaleData(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateSqlInjectionMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSqlInjectionMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSqlInjectionMatchSetError {
-    fn from(err: serde_json::error::Error) -> UpdateSqlInjectionMatchSetError {
-        UpdateSqlInjectionMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSqlInjectionMatchSetError {
-    fn from(err: CredentialsError) -> UpdateSqlInjectionMatchSetError {
-        UpdateSqlInjectionMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSqlInjectionMatchSetError {
-    fn from(err: HttpDispatchError) -> UpdateSqlInjectionMatchSetError {
-        UpdateSqlInjectionMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSqlInjectionMatchSetError {
-    fn from(err: io::Error) -> UpdateSqlInjectionMatchSetError {
-        UpdateSqlInjectionMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSqlInjectionMatchSetError {
@@ -10216,13 +7792,6 @@ impl Error for UpdateSqlInjectionMatchSetError {
             UpdateSqlInjectionMatchSetError::WAFNonexistentContainer(ref cause) => cause,
             UpdateSqlInjectionMatchSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateSqlInjectionMatchSetError::WAFStaleData(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::Validation(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::Credentials(ref err) => err.description(),
-            UpdateSqlInjectionMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSqlInjectionMatchSetError::ParseError(ref cause) => cause,
-            UpdateSqlInjectionMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10249,20 +7818,10 @@ pub enum UpdateWebACLError {
     WAFStaleData(String),
     /// <p>The specified subscription does not exist.</p>
     WAFSubscriptionNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateWebACLError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateWebACLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWebACLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10275,63 +7834,60 @@ impl UpdateWebACLError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateWebACLError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFInternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateWebACLError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidAccount(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateWebACLError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateWebACLError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateWebACLError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFLimitsExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateWebACLError::WAFNonexistentContainer(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFNonexistentContainer(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateWebACLError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFReferencedItemException" => {
-                    return UpdateWebACLError::WAFReferencedItem(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFReferencedItem(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateWebACLError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
                 "WAFSubscriptionNotFoundException" => {
-                    return UpdateWebACLError::WAFSubscriptionNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateWebACLError::WAFSubscriptionNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateWebACLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateWebACLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateWebACLError {
-    fn from(err: serde_json::error::Error) -> UpdateWebACLError {
-        UpdateWebACLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateWebACLError {
-    fn from(err: CredentialsError) -> UpdateWebACLError {
-        UpdateWebACLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateWebACLError {
-    fn from(err: HttpDispatchError) -> UpdateWebACLError {
-        UpdateWebACLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateWebACLError {
-    fn from(err: io::Error) -> UpdateWebACLError {
-        UpdateWebACLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateWebACLError {
@@ -10352,11 +7908,6 @@ impl Error for UpdateWebACLError {
             UpdateWebACLError::WAFReferencedItem(ref cause) => cause,
             UpdateWebACLError::WAFStaleData(ref cause) => cause,
             UpdateWebACLError::WAFSubscriptionNotFound(ref cause) => cause,
-            UpdateWebACLError::Validation(ref cause) => cause,
-            UpdateWebACLError::Credentials(ref err) => err.description(),
-            UpdateWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateWebACLError::ParseError(ref cause) => cause,
-            UpdateWebACLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10379,20 +7930,10 @@ pub enum UpdateXssMatchSetError {
     WAFNonexistentItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateXssMatchSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateXssMatchSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateXssMatchSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10405,59 +7946,50 @@ impl UpdateXssMatchSetError {
 
             match *error_type {
                 "WAFInternalErrorException" => {
-                    return UpdateXssMatchSetError::WAFInternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidAccountException" => {
-                    return UpdateXssMatchSetError::WAFInvalidAccount(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidAccount(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidOperationException" => {
-                    return UpdateXssMatchSetError::WAFInvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFInvalidParameterException" => {
-                    return UpdateXssMatchSetError::WAFInvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFInvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFLimitsExceededException" => {
-                    return UpdateXssMatchSetError::WAFLimitsExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFLimitsExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFNonexistentContainerException" => {
-                    return UpdateXssMatchSetError::WAFNonexistentContainer(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentContainer(
+                        String::from(error_message),
                     ));
                 }
                 "WAFNonexistentItemException" => {
-                    return UpdateXssMatchSetError::WAFNonexistentItem(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFNonexistentItem(
+                        String::from(error_message),
+                    ));
                 }
                 "WAFStaleDataException" => {
-                    return UpdateXssMatchSetError::WAFStaleData(String::from(error_message));
+                    return RusotoError::Service(UpdateXssMatchSetError::WAFStaleData(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateXssMatchSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateXssMatchSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateXssMatchSetError {
-    fn from(err: serde_json::error::Error) -> UpdateXssMatchSetError {
-        UpdateXssMatchSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateXssMatchSetError {
-    fn from(err: CredentialsError) -> UpdateXssMatchSetError {
-        UpdateXssMatchSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateXssMatchSetError {
-    fn from(err: HttpDispatchError) -> UpdateXssMatchSetError {
-        UpdateXssMatchSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateXssMatchSetError {
-    fn from(err: io::Error) -> UpdateXssMatchSetError {
-        UpdateXssMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateXssMatchSetError {
@@ -10476,13 +8008,6 @@ impl Error for UpdateXssMatchSetError {
             UpdateXssMatchSetError::WAFNonexistentContainer(ref cause) => cause,
             UpdateXssMatchSetError::WAFNonexistentItem(ref cause) => cause,
             UpdateXssMatchSetError::WAFStaleData(ref cause) => cause,
-            UpdateXssMatchSetError::Validation(ref cause) => cause,
-            UpdateXssMatchSetError::Credentials(ref err) => err.description(),
-            UpdateXssMatchSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateXssMatchSetError::ParseError(ref cause) => cause,
-            UpdateXssMatchSetError::Unknown(_) => "unknown error",
         }
     }
 }

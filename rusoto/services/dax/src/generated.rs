@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -954,20 +951,10 @@ pub enum CreateClusterError {
     SubnetGroupNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -980,97 +967,90 @@ impl CreateClusterError {
 
             match *error_type {
                 "ClusterAlreadyExistsFault" => {
-                    return CreateClusterError::ClusterAlreadyExistsFault(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
+                        String::from(error_message),
                     ));
                 }
                 "ClusterQuotaForCustomerExceededFault" => {
-                    return CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::ClusterQuotaForCustomerExceededFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InsufficientClusterCapacityFault" => {
-                    return CreateClusterError::InsufficientClusterCapacityFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::InsufficientClusterCapacityFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClusterStateFault" => {
-                    return CreateClusterError::InvalidClusterStateFault(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return CreateClusterError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterGroupStateFault" => {
-                    return CreateClusterError::InvalidParameterGroupStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return CreateClusterError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidVPCNetworkStateFault" => {
-                    return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::InvalidVPCNetworkStateFault(
+                        String::from(error_message),
                     ));
                 }
                 "NodeQuotaForClusterExceededFault" => {
-                    return CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::NodeQuotaForClusterExceededFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NodeQuotaForCustomerExceededFault" => {
-                    return CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateClusterError::NodeQuotaForCustomerExceededFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ParameterGroupNotFoundFault" => {
-                    return CreateClusterError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::ParameterGroupNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return CreateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "SubnetGroupNotFoundFault" => {
-                    return CreateClusterError::SubnetGroupNotFoundFault(String::from(error_message));
-                }
-                "TagQuotaPerResourceExceeded" => {
-                    return CreateClusterError::TagQuotaPerResourceExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::SubnetGroupNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string());
+                "TagQuotaPerResourceExceeded" => {
+                    return RusotoError::Service(CreateClusterError::TagQuotaPerResourceExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateClusterError {
-    fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterError {
-    fn from(err: CredentialsError) -> CreateClusterError {
-        CreateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterError {
-    fn from(err: HttpDispatchError) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterError {
-    fn from(err: io::Error) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -1095,11 +1075,6 @@ impl Error for CreateClusterError {
             CreateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             CreateClusterError::SubnetGroupNotFoundFault(ref cause) => cause,
             CreateClusterError::TagQuotaPerResourceExceeded(ref cause) => cause,
-            CreateClusterError::Validation(ref cause) => cause,
-            CreateClusterError::Credentials(ref err) => err.description(),
-            CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::ParseError(ref cause) => cause,
-            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1118,20 +1093,10 @@ pub enum CreateParameterGroupError {
     ParameterGroupQuotaExceededFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateParameterGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1144,63 +1109,50 @@ impl CreateParameterGroupError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return CreateParameterGroupError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterGroupStateFault" => {
-                    return CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return CreateParameterGroupError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateParameterGroupError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ParameterGroupAlreadyExistsFault" => {
-                    return CreateParameterGroupError::ParameterGroupAlreadyExistsFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateParameterGroupError::ParameterGroupAlreadyExistsFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ParameterGroupQuotaExceededFault" => {
-                    return CreateParameterGroupError::ParameterGroupQuotaExceededFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateParameterGroupError::ParameterGroupQuotaExceededFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateParameterGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateParameterGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateParameterGroupError {
-    fn from(err: serde_json::error::Error) -> CreateParameterGroupError {
-        CreateParameterGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateParameterGroupError {
-    fn from(err: CredentialsError) -> CreateParameterGroupError {
-        CreateParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateParameterGroupError {
-    fn from(err: HttpDispatchError) -> CreateParameterGroupError {
-        CreateParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateParameterGroupError {
-    fn from(err: io::Error) -> CreateParameterGroupError {
-        CreateParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateParameterGroupError {
@@ -1217,13 +1169,6 @@ impl Error for CreateParameterGroupError {
             CreateParameterGroupError::ParameterGroupAlreadyExistsFault(ref cause) => cause,
             CreateParameterGroupError::ParameterGroupQuotaExceededFault(ref cause) => cause,
             CreateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            CreateParameterGroupError::Validation(ref cause) => cause,
-            CreateParameterGroupError::Credentials(ref err) => err.description(),
-            CreateParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateParameterGroupError::ParseError(ref cause) => cause,
-            CreateParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1240,20 +1185,10 @@ pub enum CreateSubnetGroupError {
     SubnetGroupQuotaExceededFault(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
     SubnetQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubnetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1266,56 +1201,41 @@ impl CreateSubnetGroupError {
 
             match *error_type {
                 "InvalidSubnet" => {
-                    return CreateSubnetGroupError::InvalidSubnet(String::from(error_message));
+                    return RusotoError::Service(CreateSubnetGroupError::InvalidSubnet(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SubnetGroupAlreadyExistsFault" => {
-                    return CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SubnetGroupQuotaExceededFault" => {
-                    return CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateSubnetGroupError::SubnetGroupQuotaExceededFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SubnetQuotaExceededFault" => {
-                    return CreateSubnetGroupError::SubnetQuotaExceededFault(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSubnetGroupError::SubnetQuotaExceededFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateSubnetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSubnetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSubnetGroupError {
-    fn from(err: serde_json::error::Error) -> CreateSubnetGroupError {
-        CreateSubnetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSubnetGroupError {
-    fn from(err: CredentialsError) -> CreateSubnetGroupError {
-        CreateSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSubnetGroupError {
-    fn from(err: HttpDispatchError) -> CreateSubnetGroupError {
-        CreateSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSubnetGroupError {
-    fn from(err: io::Error) -> CreateSubnetGroupError {
-        CreateSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSubnetGroupError {
@@ -1331,13 +1251,6 @@ impl Error for CreateSubnetGroupError {
             CreateSubnetGroupError::SubnetGroupAlreadyExistsFault(ref cause) => cause,
             CreateSubnetGroupError::SubnetGroupQuotaExceededFault(ref cause) => cause,
             CreateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,
-            CreateSubnetGroupError::Validation(ref cause) => cause,
-            CreateSubnetGroupError::Credentials(ref err) => err.description(),
-            CreateSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSubnetGroupError::ParseError(ref cause) => cause,
-            CreateSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1356,20 +1269,10 @@ pub enum DecreaseReplicationFactorError {
     NodeNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DecreaseReplicationFactorError {
-    pub fn from_response(res: BufferedHttpResponse) -> DecreaseReplicationFactorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecreaseReplicationFactorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1382,63 +1285,50 @@ impl DecreaseReplicationFactorError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DecreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClusterStateFault" => {
-                    return DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DecreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterCombinationException" => {
-                    return DecreaseReplicationFactorError::InvalidParameterCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DecreaseReplicationFactorError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidParameterValueException" => {
-                    return DecreaseReplicationFactorError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DecreaseReplicationFactorError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NodeNotFoundFault" => {
-                    return DecreaseReplicationFactorError::NodeNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DecreaseReplicationFactorError::NodeNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DecreaseReplicationFactorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DecreaseReplicationFactorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DecreaseReplicationFactorError {
-    fn from(err: serde_json::error::Error) -> DecreaseReplicationFactorError {
-        DecreaseReplicationFactorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DecreaseReplicationFactorError {
-    fn from(err: CredentialsError) -> DecreaseReplicationFactorError {
-        DecreaseReplicationFactorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DecreaseReplicationFactorError {
-    fn from(err: HttpDispatchError) -> DecreaseReplicationFactorError {
-        DecreaseReplicationFactorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DecreaseReplicationFactorError {
-    fn from(err: io::Error) -> DecreaseReplicationFactorError {
-        DecreaseReplicationFactorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DecreaseReplicationFactorError {
@@ -1455,13 +1345,6 @@ impl Error for DecreaseReplicationFactorError {
             DecreaseReplicationFactorError::InvalidParameterValue(ref cause) => cause,
             DecreaseReplicationFactorError::NodeNotFoundFault(ref cause) => cause,
             DecreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DecreaseReplicationFactorError::Validation(ref cause) => cause,
-            DecreaseReplicationFactorError::Credentials(ref err) => err.description(),
-            DecreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DecreaseReplicationFactorError::ParseError(ref cause) => cause,
-            DecreaseReplicationFactorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1478,20 +1361,10 @@ pub enum DeleteClusterError {
     InvalidParameterValue(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1504,52 +1377,35 @@ impl DeleteClusterError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return DeleteClusterError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidClusterStateFault" => {
-                    return DeleteClusterError::InvalidClusterStateFault(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return DeleteClusterError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteClusterError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteClusterError::InvalidParameterValue(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return DeleteClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteClusterError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string());
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(DeleteClusterError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteClusterError {
-    fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterError {
-    fn from(err: CredentialsError) -> DeleteClusterError {
-        DeleteClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterError {
-    fn from(err: HttpDispatchError) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterError {
-    fn from(err: io::Error) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -1565,11 +1421,6 @@ impl Error for DeleteClusterError {
             DeleteClusterError::InvalidParameterCombination(ref cause) => cause,
             DeleteClusterError::InvalidParameterValue(ref cause) => cause,
             DeleteClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DeleteClusterError::Validation(ref cause) => cause,
-            DeleteClusterError::Credentials(ref err) => err.description(),
-            DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::ParseError(ref cause) => cause,
-            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1586,20 +1437,10 @@ pub enum DeleteParameterGroupError {
     ParameterGroupNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteParameterGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1612,58 +1453,43 @@ impl DeleteParameterGroupError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DeleteParameterGroupError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterGroupStateFault" => {
-                    return DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DeleteParameterGroupError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteParameterGroupError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ParameterGroupNotFoundFault" => {
-                    return DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteParameterGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteParameterGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteParameterGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteParameterGroupError {
-        DeleteParameterGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteParameterGroupError {
-    fn from(err: CredentialsError) -> DeleteParameterGroupError {
-        DeleteParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteParameterGroupError {
-    fn from(err: HttpDispatchError) -> DeleteParameterGroupError {
-        DeleteParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteParameterGroupError {
-    fn from(err: io::Error) -> DeleteParameterGroupError {
-        DeleteParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteParameterGroupError {
@@ -1679,13 +1505,6 @@ impl Error for DeleteParameterGroupError {
             DeleteParameterGroupError::InvalidParameterValue(ref cause) => cause,
             DeleteParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
             DeleteParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DeleteParameterGroupError::Validation(ref cause) => cause,
-            DeleteParameterGroupError::Credentials(ref err) => err.description(),
-            DeleteParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteParameterGroupError::ParseError(ref cause) => cause,
-            DeleteParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1697,20 +1516,10 @@ pub enum DeleteSubnetGroupError {
     SubnetGroupInUseFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubnetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1723,48 +1532,27 @@ impl DeleteSubnetGroupError {
 
             match *error_type {
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SubnetGroupInUseFault" => {
-                    return DeleteSubnetGroupError::SubnetGroupInUseFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupInUseFault(
+                        String::from(error_message),
                     ));
                 }
                 "SubnetGroupNotFoundFault" => {
-                    return DeleteSubnetGroupError::SubnetGroupNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubnetGroupError::SubnetGroupNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSubnetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSubnetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSubnetGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteSubnetGroupError {
-        DeleteSubnetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSubnetGroupError {
-    fn from(err: CredentialsError) -> DeleteSubnetGroupError {
-        DeleteSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSubnetGroupError {
-    fn from(err: HttpDispatchError) -> DeleteSubnetGroupError {
-        DeleteSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSubnetGroupError {
-    fn from(err: io::Error) -> DeleteSubnetGroupError {
-        DeleteSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSubnetGroupError {
@@ -1778,13 +1566,6 @@ impl Error for DeleteSubnetGroupError {
             DeleteSubnetGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DeleteSubnetGroupError::SubnetGroupInUseFault(ref cause) => cause,
             DeleteSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
-            DeleteSubnetGroupError::Validation(ref cause) => cause,
-            DeleteSubnetGroupError::Credentials(ref err) => err.description(),
-            DeleteSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSubnetGroupError::ParseError(ref cause) => cause,
-            DeleteSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1799,20 +1580,10 @@ pub enum DescribeClustersError {
     InvalidParameterValue(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1825,49 +1596,32 @@ impl DescribeClustersError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return DescribeClustersError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return DescribeClustersError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeClustersError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeClustersError::InvalidParameterValue(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeClustersError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeClustersError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeClustersError::Validation(error_message.to_string());
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribeClustersError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeClustersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeClustersError {
-    fn from(err: serde_json::error::Error) -> DescribeClustersError {
-        DescribeClustersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClustersError {
-    fn from(err: CredentialsError) -> DescribeClustersError {
-        DescribeClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClustersError {
-    fn from(err: HttpDispatchError) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClustersError {
-    fn from(err: io::Error) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -1882,11 +1636,6 @@ impl Error for DescribeClustersError {
             DescribeClustersError::InvalidParameterCombination(ref cause) => cause,
             DescribeClustersError::InvalidParameterValue(ref cause) => cause,
             DescribeClustersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeClustersError::Validation(ref cause) => cause,
-            DescribeClustersError::Credentials(ref err) => err.description(),
-            DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::ParseError(ref cause) => cause,
-            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1899,20 +1648,10 @@ pub enum DescribeDefaultParametersError {
     InvalidParameterValue(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDefaultParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDefaultParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDefaultParametersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1925,48 +1664,31 @@ impl DescribeDefaultParametersError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeDefaultParametersError::InvalidParameterCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDefaultParametersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeDefaultParametersError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeDefaultParametersError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeDefaultParametersError::Validation(error_message.to_string());
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        ),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDefaultParametersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDefaultParametersError {
-    fn from(err: serde_json::error::Error) -> DescribeDefaultParametersError {
-        DescribeDefaultParametersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDefaultParametersError {
-    fn from(err: CredentialsError) -> DescribeDefaultParametersError {
-        DescribeDefaultParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDefaultParametersError {
-    fn from(err: HttpDispatchError) -> DescribeDefaultParametersError {
-        DescribeDefaultParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDefaultParametersError {
-    fn from(err: io::Error) -> DescribeDefaultParametersError {
-        DescribeDefaultParametersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDefaultParametersError {
@@ -1980,13 +1702,6 @@ impl Error for DescribeDefaultParametersError {
             DescribeDefaultParametersError::InvalidParameterCombination(ref cause) => cause,
             DescribeDefaultParametersError::InvalidParameterValue(ref cause) => cause,
             DescribeDefaultParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeDefaultParametersError::Validation(ref cause) => cause,
-            DescribeDefaultParametersError::Credentials(ref err) => err.description(),
-            DescribeDefaultParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDefaultParametersError::ParseError(ref cause) => cause,
-            DescribeDefaultParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1999,20 +1714,10 @@ pub enum DescribeEventsError {
     InvalidParameterValue(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2025,46 +1730,27 @@ impl DescribeEventsError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeEventsError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEventsError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeEventsError::InvalidParameterValue(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeEventsError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEventsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string());
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribeEventsError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEventsError {
-    fn from(err: serde_json::error::Error) -> DescribeEventsError {
-        DescribeEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventsError {
-    fn from(err: CredentialsError) -> DescribeEventsError {
-        DescribeEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventsError {
-    fn from(err: HttpDispatchError) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventsError {
-    fn from(err: io::Error) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -2078,11 +1764,6 @@ impl Error for DescribeEventsError {
             DescribeEventsError::InvalidParameterCombination(ref cause) => cause,
             DescribeEventsError::InvalidParameterValue(ref cause) => cause,
             DescribeEventsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeEventsError::Validation(ref cause) => cause,
-            DescribeEventsError::Credentials(ref err) => err.description(),
-            DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::ParseError(ref cause) => cause,
-            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2097,20 +1778,10 @@ pub enum DescribeParameterGroupsError {
     ParameterGroupNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeParameterGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeParameterGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParameterGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2123,53 +1794,38 @@ impl DescribeParameterGroupsError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeParameterGroupsError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterValueException" => {
-                    return DescribeParameterGroupsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
-                }
-                "ParameterGroupNotFoundFault" => {
-                    return DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeParameterGroupsError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeParameterGroupsError::Validation(error_message.to_string());
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeParameterGroupsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ParameterGroupNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribeParameterGroupsError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeParameterGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeParameterGroupsError {
-    fn from(err: serde_json::error::Error) -> DescribeParameterGroupsError {
-        DescribeParameterGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeParameterGroupsError {
-    fn from(err: CredentialsError) -> DescribeParameterGroupsError {
-        DescribeParameterGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeParameterGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeParameterGroupsError {
-        DescribeParameterGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeParameterGroupsError {
-    fn from(err: io::Error) -> DescribeParameterGroupsError {
-        DescribeParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeParameterGroupsError {
@@ -2184,13 +1840,6 @@ impl Error for DescribeParameterGroupsError {
             DescribeParameterGroupsError::InvalidParameterValue(ref cause) => cause,
             DescribeParameterGroupsError::ParameterGroupNotFoundFault(ref cause) => cause,
             DescribeParameterGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeParameterGroupsError::Validation(ref cause) => cause,
-            DescribeParameterGroupsError::Credentials(ref err) => err.description(),
-            DescribeParameterGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeParameterGroupsError::ParseError(ref cause) => cause,
-            DescribeParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2205,20 +1854,10 @@ pub enum DescribeParametersError {
     ParameterGroupNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeParametersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2231,53 +1870,36 @@ impl DescribeParametersError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeParametersError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeParametersError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return DescribeParametersError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeParametersError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ParameterGroupNotFoundFault" => {
-                    return DescribeParametersError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeParametersError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeParametersError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeParametersError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeParametersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeParametersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeParametersError {
-    fn from(err: serde_json::error::Error) -> DescribeParametersError {
-        DescribeParametersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeParametersError {
-    fn from(err: CredentialsError) -> DescribeParametersError {
-        DescribeParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeParametersError {
-    fn from(err: HttpDispatchError) -> DescribeParametersError {
-        DescribeParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeParametersError {
-    fn from(err: io::Error) -> DescribeParametersError {
-        DescribeParametersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeParametersError {
@@ -2292,13 +1914,6 @@ impl Error for DescribeParametersError {
             DescribeParametersError::InvalidParameterValue(ref cause) => cause,
             DescribeParametersError::ParameterGroupNotFoundFault(ref cause) => cause,
             DescribeParametersError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            DescribeParametersError::Validation(ref cause) => cause,
-            DescribeParametersError::Credentials(ref err) => err.description(),
-            DescribeParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeParametersError::ParseError(ref cause) => cause,
-            DescribeParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2308,20 +1923,10 @@ pub enum DescribeSubnetGroupsError {
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSubnetGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSubnetGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSubnetGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2334,43 +1939,24 @@ impl DescribeSubnetGroupsError {
 
             match *error_type {
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SubnetGroupNotFoundFault" => {
-                    return DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeSubnetGroupsError::SubnetGroupNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeSubnetGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSubnetGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSubnetGroupsError {
-    fn from(err: serde_json::error::Error) -> DescribeSubnetGroupsError {
-        DescribeSubnetGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSubnetGroupsError {
-    fn from(err: CredentialsError) -> DescribeSubnetGroupsError {
-        DescribeSubnetGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSubnetGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeSubnetGroupsError {
-        DescribeSubnetGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSubnetGroupsError {
-    fn from(err: io::Error) -> DescribeSubnetGroupsError {
-        DescribeSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSubnetGroupsError {
@@ -2383,13 +1969,6 @@ impl Error for DescribeSubnetGroupsError {
         match *self {
             DescribeSubnetGroupsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             DescribeSubnetGroupsError::SubnetGroupNotFoundFault(ref cause) => cause,
-            DescribeSubnetGroupsError::Validation(ref cause) => cause,
-            DescribeSubnetGroupsError::Credentials(ref err) => err.description(),
-            DescribeSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSubnetGroupsError::ParseError(ref cause) => cause,
-            DescribeSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2414,20 +1993,10 @@ pub enum IncreaseReplicationFactorError {
     NodeQuotaForCustomerExceededFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl IncreaseReplicationFactorError {
-    pub fn from_response(res: BufferedHttpResponse) -> IncreaseReplicationFactorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IncreaseReplicationFactorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2440,78 +2009,73 @@ impl IncreaseReplicationFactorError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::ClusterNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InsufficientClusterCapacityFault" => {
-                    return IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::InsufficientClusterCapacityFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidClusterStateFault" => {
-                    return IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::InvalidClusterStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterCombinationException" => {
-                    return IncreaseReplicationFactorError::InvalidParameterCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidParameterValueException" => {
-                    return IncreaseReplicationFactorError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidVPCNetworkStateFault" => {
-                    return IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::InvalidVPCNetworkStateFault(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "NodeQuotaForClusterExceededFault" => {
-                    return IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "NodeQuotaForCustomerExceededFault" => {
-                    return IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return IncreaseReplicationFactorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return IncreaseReplicationFactorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for IncreaseReplicationFactorError {
-    fn from(err: serde_json::error::Error) -> IncreaseReplicationFactorError {
-        IncreaseReplicationFactorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for IncreaseReplicationFactorError {
-    fn from(err: CredentialsError) -> IncreaseReplicationFactorError {
-        IncreaseReplicationFactorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for IncreaseReplicationFactorError {
-    fn from(err: HttpDispatchError) -> IncreaseReplicationFactorError {
-        IncreaseReplicationFactorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for IncreaseReplicationFactorError {
-    fn from(err: io::Error) -> IncreaseReplicationFactorError {
-        IncreaseReplicationFactorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for IncreaseReplicationFactorError {
@@ -2531,13 +2095,6 @@ impl Error for IncreaseReplicationFactorError {
             IncreaseReplicationFactorError::NodeQuotaForClusterExceededFault(ref cause) => cause,
             IncreaseReplicationFactorError::NodeQuotaForCustomerExceededFault(ref cause) => cause,
             IncreaseReplicationFactorError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            IncreaseReplicationFactorError::Validation(ref cause) => cause,
-            IncreaseReplicationFactorError::Credentials(ref err) => err.description(),
-            IncreaseReplicationFactorError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            IncreaseReplicationFactorError::ParseError(ref cause) => cause,
-            IncreaseReplicationFactorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2556,20 +2113,10 @@ pub enum ListTagsError {
     InvalidParameterValue(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2582,53 +2129,40 @@ impl ListTagsError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return ListTagsError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::ClusterNotFoundFault(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidARNFault" => {
-                    return ListTagsError::InvalidARNFault(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::InvalidARNFault(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidClusterStateFault" => {
-                    return ListTagsError::InvalidClusterStateFault(String::from(error_message));
-                }
-                "InvalidParameterCombinationException" => {
-                    return ListTagsError::InvalidParameterCombination(String::from(error_message));
-                }
-                "InvalidParameterValueException" => {
-                    return ListTagsError::InvalidParameterValue(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return ListTagsError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsError::InvalidClusterStateFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string());
+                "InvalidParameterCombinationException" => {
+                    return RusotoError::Service(ListTagsError::InvalidParameterCombination(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListTagsError::InvalidParameterValue(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(ListTagsError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsError {
-    fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsError {
-    fn from(err: CredentialsError) -> ListTagsError {
-        ListTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsError {
-    fn from(err: HttpDispatchError) -> ListTagsError {
-        ListTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsError {
-    fn from(err: io::Error) -> ListTagsError {
-        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsError {
@@ -2645,11 +2179,6 @@ impl Error for ListTagsError {
             ListTagsError::InvalidParameterCombination(ref cause) => cause,
             ListTagsError::InvalidParameterValue(ref cause) => cause,
             ListTagsError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            ListTagsError::Validation(ref cause) => cause,
-            ListTagsError::Credentials(ref err) => err.description(),
-            ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::ParseError(ref cause) => cause,
-            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2668,20 +2197,10 @@ pub enum RebootNodeError {
     NodeNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebootNodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebootNodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootNodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2694,53 +2213,40 @@ impl RebootNodeError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return RebootNodeError::ClusterNotFoundFault(String::from(error_message));
-                }
-                "InvalidClusterStateFault" => {
-                    return RebootNodeError::InvalidClusterStateFault(String::from(error_message));
-                }
-                "InvalidParameterCombinationException" => {
-                    return RebootNodeError::InvalidParameterCombination(String::from(error_message));
-                }
-                "InvalidParameterValueException" => {
-                    return RebootNodeError::InvalidParameterValue(String::from(error_message));
-                }
-                "NodeNotFoundFault" => {
-                    return RebootNodeError::NodeNotFoundFault(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return RebootNodeError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RebootNodeError::ClusterNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RebootNodeError::Validation(error_message.to_string());
+                "InvalidClusterStateFault" => {
+                    return RusotoError::Service(RebootNodeError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidParameterCombinationException" => {
+                    return RusotoError::Service(RebootNodeError::InvalidParameterCombination(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(RebootNodeError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
+                }
+                "NodeNotFoundFault" => {
+                    return RusotoError::Service(RebootNodeError::NodeNotFoundFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(RebootNodeError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RebootNodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RebootNodeError {
-    fn from(err: serde_json::error::Error) -> RebootNodeError {
-        RebootNodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RebootNodeError {
-    fn from(err: CredentialsError) -> RebootNodeError {
-        RebootNodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebootNodeError {
-    fn from(err: HttpDispatchError) -> RebootNodeError {
-        RebootNodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebootNodeError {
-    fn from(err: io::Error) -> RebootNodeError {
-        RebootNodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RebootNodeError {
@@ -2757,11 +2263,6 @@ impl Error for RebootNodeError {
             RebootNodeError::InvalidParameterValue(ref cause) => cause,
             RebootNodeError::NodeNotFoundFault(ref cause) => cause,
             RebootNodeError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            RebootNodeError::Validation(ref cause) => cause,
-            RebootNodeError::Credentials(ref err) => err.description(),
-            RebootNodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootNodeError::ParseError(ref cause) => cause,
-            RebootNodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2782,20 +2283,10 @@ pub enum TagResourceError {
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
     TagQuotaPerResourceExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2808,60 +2299,45 @@ impl TagResourceError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return TagResourceError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidARNFault" => {
-                    return TagResourceError::InvalidARNFault(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidARNFault(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidClusterStateFault" => {
-                    return TagResourceError::InvalidClusterStateFault(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return TagResourceError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(TagResourceError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return TagResourceError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return TagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(TagResourceError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "TagQuotaPerResourceExceeded" => {
-                    return TagResourceError::TagQuotaPerResourceExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(TagResourceError::TagQuotaPerResourceExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -2879,11 +2355,6 @@ impl Error for TagResourceError {
             TagResourceError::InvalidParameterValue(ref cause) => cause,
             TagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             TagResourceError::TagQuotaPerResourceExceeded(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2904,20 +2375,10 @@ pub enum UntagResourceError {
     ServiceLinkedRoleNotFoundFault(String),
     /// <p>The tag does not exist.</p>
     TagNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2930,58 +2391,45 @@ impl UntagResourceError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return UntagResourceError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidARNFault" => {
-                    return UntagResourceError::InvalidARNFault(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidARNFault(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidClusterStateFault" => {
-                    return UntagResourceError::InvalidClusterStateFault(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return UntagResourceError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(UntagResourceError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return UntagResourceError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return UntagResourceError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UntagResourceError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "TagNotFoundFault" => {
-                    return UntagResourceError::TagNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::TagNotFoundFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -2999,11 +2447,6 @@ impl Error for UntagResourceError {
             UntagResourceError::InvalidParameterValue(ref cause) => cause,
             UntagResourceError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
             UntagResourceError::TagNotFoundFault(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3024,20 +2467,10 @@ pub enum UpdateClusterError {
     ParameterGroupNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3050,62 +2483,47 @@ impl UpdateClusterError {
 
             match *error_type {
                 "ClusterNotFoundFault" => {
-                    return UpdateClusterError::ClusterNotFoundFault(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::ClusterNotFoundFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidClusterStateFault" => {
-                    return UpdateClusterError::InvalidClusterStateFault(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::InvalidClusterStateFault(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return UpdateClusterError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateClusterError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterGroupStateFault" => {
-                    return UpdateClusterError::InvalidParameterGroupStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateClusterError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return UpdateClusterError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ParameterGroupNotFoundFault" => {
-                    return UpdateClusterError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateClusterError::ParameterGroupNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return UpdateClusterError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateClusterError::ServiceLinkedRoleNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateClusterError {
-    fn from(err: serde_json::error::Error) -> UpdateClusterError {
-        UpdateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateClusterError {
-    fn from(err: CredentialsError) -> UpdateClusterError {
-        UpdateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateClusterError {
-    fn from(err: HttpDispatchError) -> UpdateClusterError {
-        UpdateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateClusterError {
-    fn from(err: io::Error) -> UpdateClusterError {
-        UpdateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateClusterError {
@@ -3123,11 +2541,6 @@ impl Error for UpdateClusterError {
             UpdateClusterError::InvalidParameterValue(ref cause) => cause,
             UpdateClusterError::ParameterGroupNotFoundFault(ref cause) => cause,
             UpdateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            UpdateClusterError::Validation(ref cause) => cause,
-            UpdateClusterError::Credentials(ref err) => err.description(),
-            UpdateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateClusterError::ParseError(ref cause) => cause,
-            UpdateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3144,20 +2557,10 @@ pub enum UpdateParameterGroupError {
     ParameterGroupNotFoundFault(String),
 
     ServiceLinkedRoleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateParameterGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateParameterGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3170,58 +2573,43 @@ impl UpdateParameterGroupError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return UpdateParameterGroupError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateParameterGroupError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterGroupStateFault" => {
-                    return UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateParameterGroupError::InvalidParameterGroupStateFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidParameterValueException" => {
-                    return UpdateParameterGroupError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateParameterGroupError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ParameterGroupNotFoundFault" => {
-                    return UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateParameterGroupError::ParameterGroupNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceLinkedRoleNotFoundFault" => {
-                    return UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateParameterGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateParameterGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateParameterGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateParameterGroupError {
-        UpdateParameterGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateParameterGroupError {
-    fn from(err: CredentialsError) -> UpdateParameterGroupError {
-        UpdateParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateParameterGroupError {
-    fn from(err: HttpDispatchError) -> UpdateParameterGroupError {
-        UpdateParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateParameterGroupError {
-    fn from(err: io::Error) -> UpdateParameterGroupError {
-        UpdateParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateParameterGroupError {
@@ -3237,13 +2625,6 @@ impl Error for UpdateParameterGroupError {
             UpdateParameterGroupError::InvalidParameterValue(ref cause) => cause,
             UpdateParameterGroupError::ParameterGroupNotFoundFault(ref cause) => cause,
             UpdateParameterGroupError::ServiceLinkedRoleNotFoundFault(ref cause) => cause,
-            UpdateParameterGroupError::Validation(ref cause) => cause,
-            UpdateParameterGroupError::Credentials(ref err) => err.description(),
-            UpdateParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateParameterGroupError::ParseError(ref cause) => cause,
-            UpdateParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3260,20 +2641,10 @@ pub enum UpdateSubnetGroupError {
     SubnetInUse(String),
     /// <p>The request cannot be processed because it would exceed the allowed number of subnets in a subnet group.</p>
     SubnetQuotaExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubnetGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3286,54 +2657,37 @@ impl UpdateSubnetGroupError {
 
             match *error_type {
                 "InvalidSubnet" => {
-                    return UpdateSubnetGroupError::InvalidSubnet(String::from(error_message));
-                }
-                "ServiceLinkedRoleNotFoundFault" => {
-                    return UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSubnetGroupError::InvalidSubnet(
+                        String::from(error_message),
                     ));
                 }
+                "ServiceLinkedRoleNotFoundFault" => {
+                    return RusotoError::Service(
+                        UpdateSubnetGroupError::ServiceLinkedRoleNotFoundFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "SubnetGroupNotFoundFault" => {
-                    return UpdateSubnetGroupError::SubnetGroupNotFoundFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSubnetGroupError::SubnetGroupNotFoundFault(
+                        String::from(error_message),
                     ));
                 }
                 "SubnetInUse" => {
-                    return UpdateSubnetGroupError::SubnetInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateSubnetGroupError::SubnetInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "SubnetQuotaExceededFault" => {
-                    return UpdateSubnetGroupError::SubnetQuotaExceededFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateSubnetGroupError::SubnetQuotaExceededFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateSubnetGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSubnetGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSubnetGroupError {
-    fn from(err: serde_json::error::Error) -> UpdateSubnetGroupError {
-        UpdateSubnetGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSubnetGroupError {
-    fn from(err: CredentialsError) -> UpdateSubnetGroupError {
-        UpdateSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSubnetGroupError {
-    fn from(err: HttpDispatchError) -> UpdateSubnetGroupError {
-        UpdateSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSubnetGroupError {
-    fn from(err: io::Error) -> UpdateSubnetGroupError {
-        UpdateSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSubnetGroupError {
@@ -3349,13 +2703,6 @@ impl Error for UpdateSubnetGroupError {
             UpdateSubnetGroupError::SubnetGroupNotFoundFault(ref cause) => cause,
             UpdateSubnetGroupError::SubnetInUse(ref cause) => cause,
             UpdateSubnetGroupError::SubnetQuotaExceededFault(ref cause) => cause,
-            UpdateSubnetGroupError::Validation(ref cause) => cause,
-            UpdateSubnetGroupError::Credentials(ref err) => err.description(),
-            UpdateSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateSubnetGroupError::ParseError(ref cause) => cause,
-            UpdateSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -109,20 +106,10 @@ pub struct ReportDefinition {
 pub enum DeleteReportDefinitionError {
     /// <p>This exception is thrown on a known dependency failure.</p>
     InternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReportDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReportDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReportDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -135,36 +122,15 @@ impl DeleteReportDefinitionError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteReportDefinitionError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteReportDefinitionError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteReportDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteReportDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteReportDefinitionError {
-    fn from(err: serde_json::error::Error) -> DeleteReportDefinitionError {
-        DeleteReportDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReportDefinitionError {
-    fn from(err: CredentialsError) -> DeleteReportDefinitionError {
-        DeleteReportDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReportDefinitionError {
-    fn from(err: HttpDispatchError) -> DeleteReportDefinitionError {
-        DeleteReportDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReportDefinitionError {
-    fn from(err: io::Error) -> DeleteReportDefinitionError {
-        DeleteReportDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteReportDefinitionError {
@@ -176,13 +142,6 @@ impl Error for DeleteReportDefinitionError {
     fn description(&self) -> &str {
         match *self {
             DeleteReportDefinitionError::InternalError(ref cause) => cause,
-            DeleteReportDefinitionError::Validation(ref cause) => cause,
-            DeleteReportDefinitionError::Credentials(ref err) => err.description(),
-            DeleteReportDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReportDefinitionError::ParseError(ref cause) => cause,
-            DeleteReportDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -191,20 +150,10 @@ impl Error for DeleteReportDefinitionError {
 pub enum DescribeReportDefinitionsError {
     /// <p>This exception is thrown on a known dependency failure.</p>
     InternalError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReportDefinitionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReportDefinitionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReportDefinitionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -217,38 +166,15 @@ impl DescribeReportDefinitionsError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeReportDefinitionsError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeReportDefinitionsError::InternalError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeReportDefinitionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeReportDefinitionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeReportDefinitionsError {
-    fn from(err: serde_json::error::Error) -> DescribeReportDefinitionsError {
-        DescribeReportDefinitionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReportDefinitionsError {
-    fn from(err: CredentialsError) -> DescribeReportDefinitionsError {
-        DescribeReportDefinitionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReportDefinitionsError {
-    fn from(err: HttpDispatchError) -> DescribeReportDefinitionsError {
-        DescribeReportDefinitionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReportDefinitionsError {
-    fn from(err: io::Error) -> DescribeReportDefinitionsError {
-        DescribeReportDefinitionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeReportDefinitionsError {
@@ -260,13 +186,6 @@ impl Error for DescribeReportDefinitionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeReportDefinitionsError::InternalError(ref cause) => cause,
-            DescribeReportDefinitionsError::Validation(ref cause) => cause,
-            DescribeReportDefinitionsError::Credentials(ref err) => err.description(),
-            DescribeReportDefinitionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReportDefinitionsError::ParseError(ref cause) => cause,
-            DescribeReportDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -279,20 +198,10 @@ pub enum PutReportDefinitionError {
     InternalError(String),
     /// <p>This exception is thrown when the number of report preference reaches max limit. The max number is 5.</p>
     ReportLimitReached(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutReportDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutReportDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutReportDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -305,44 +214,25 @@ impl PutReportDefinitionError {
 
             match *error_type {
                 "DuplicateReportNameException" => {
-                    return PutReportDefinitionError::DuplicateReportName(String::from(
-                        error_message,
+                    return RusotoError::Service(PutReportDefinitionError::DuplicateReportName(
+                        String::from(error_message),
                     ));
                 }
                 "InternalErrorException" => {
-                    return PutReportDefinitionError::InternalError(String::from(error_message));
+                    return RusotoError::Service(PutReportDefinitionError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "ReportLimitReachedException" => {
-                    return PutReportDefinitionError::ReportLimitReached(String::from(error_message));
+                    return RusotoError::Service(PutReportDefinitionError::ReportLimitReached(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutReportDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutReportDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutReportDefinitionError {
-    fn from(err: serde_json::error::Error) -> PutReportDefinitionError {
-        PutReportDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutReportDefinitionError {
-    fn from(err: CredentialsError) -> PutReportDefinitionError {
-        PutReportDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutReportDefinitionError {
-    fn from(err: HttpDispatchError) -> PutReportDefinitionError {
-        PutReportDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutReportDefinitionError {
-    fn from(err: io::Error) -> PutReportDefinitionError {
-        PutReportDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutReportDefinitionError {
@@ -356,13 +246,6 @@ impl Error for PutReportDefinitionError {
             PutReportDefinitionError::DuplicateReportName(ref cause) => cause,
             PutReportDefinitionError::InternalError(ref cause) => cause,
             PutReportDefinitionError::ReportLimitReached(ref cause) => cause,
-            PutReportDefinitionError::Validation(ref cause) => cause,
-            PutReportDefinitionError::Credentials(ref err) => err.description(),
-            PutReportDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutReportDefinitionError::ParseError(ref cause) => cause,
-            PutReportDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }

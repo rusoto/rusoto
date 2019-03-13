@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -5217,20 +5214,10 @@ pub enum BuildSuggestersError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BuildSuggestersError {
-    pub fn from_response(res: BufferedHttpResponse) -> BuildSuggestersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BuildSuggestersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5238,21 +5225,25 @@ impl BuildSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return BuildSuggestersError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(BuildSuggestersError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return BuildSuggestersError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(BuildSuggestersError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ResourceNotFound" => {
-                        return BuildSuggestersError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(BuildSuggestersError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        BuildSuggestersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5261,28 +5252,6 @@ impl BuildSuggestersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for BuildSuggestersError {
-    fn from(err: XmlParseError) -> BuildSuggestersError {
-        let XmlParseError(message) = err;
-        BuildSuggestersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BuildSuggestersError {
-    fn from(err: CredentialsError) -> BuildSuggestersError {
-        BuildSuggestersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BuildSuggestersError {
-    fn from(err: HttpDispatchError) -> BuildSuggestersError {
-        BuildSuggestersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BuildSuggestersError {
-    fn from(err: io::Error) -> BuildSuggestersError {
-        BuildSuggestersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BuildSuggestersError {
@@ -5296,11 +5265,6 @@ impl Error for BuildSuggestersError {
             BuildSuggestersError::Base(ref cause) => cause,
             BuildSuggestersError::Internal(ref cause) => cause,
             BuildSuggestersError::ResourceNotFound(ref cause) => cause,
-            BuildSuggestersError::Validation(ref cause) => cause,
-            BuildSuggestersError::Credentials(ref err) => err.description(),
-            BuildSuggestersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BuildSuggestersError::ParseError(ref cause) => cause,
-            BuildSuggestersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5313,20 +5277,10 @@ pub enum CreateDomainError {
     Internal(String),
     /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5334,19 +5288,25 @@ impl CreateDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return CreateDomainError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateDomainError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return CreateDomainError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateDomainError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LimitExceeded" => {
-                        return CreateDomainError::LimitExceeded(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateDomainError::LimitExceeded(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        CreateDomainError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5355,28 +5315,6 @@ impl CreateDomainError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDomainError {
-    fn from(err: XmlParseError) -> CreateDomainError {
-        let XmlParseError(message) = err;
-        CreateDomainError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDomainError {
-    fn from(err: CredentialsError) -> CreateDomainError {
-        CreateDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDomainError {
-    fn from(err: HttpDispatchError) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDomainError {
-    fn from(err: io::Error) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -5390,11 +5328,6 @@ impl Error for CreateDomainError {
             CreateDomainError::Base(ref cause) => cause,
             CreateDomainError::Internal(ref cause) => cause,
             CreateDomainError::LimitExceeded(ref cause) => cause,
-            CreateDomainError::Validation(ref cause) => cause,
-            CreateDomainError::Credentials(ref err) => err.description(),
-            CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDomainError::ParseError(ref cause) => cause,
-            CreateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5411,20 +5344,10 @@ pub enum DefineAnalysisSchemeError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DefineAnalysisSchemeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DefineAnalysisSchemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineAnalysisSchemeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5432,33 +5355,35 @@ impl DefineAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineAnalysisSchemeError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineAnalysisSchemeError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DefineAnalysisSchemeError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineAnalysisSchemeError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return DefineAnalysisSchemeError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineAnalysisSchemeError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DefineAnalysisSchemeError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineAnalysisSchemeError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DefineAnalysisSchemeError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineAnalysisSchemeError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DefineAnalysisSchemeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5467,28 +5392,6 @@ impl DefineAnalysisSchemeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DefineAnalysisSchemeError {
-    fn from(err: XmlParseError) -> DefineAnalysisSchemeError {
-        let XmlParseError(message) = err;
-        DefineAnalysisSchemeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DefineAnalysisSchemeError {
-    fn from(err: CredentialsError) -> DefineAnalysisSchemeError {
-        DefineAnalysisSchemeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DefineAnalysisSchemeError {
-    fn from(err: HttpDispatchError) -> DefineAnalysisSchemeError {
-        DefineAnalysisSchemeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DefineAnalysisSchemeError {
-    fn from(err: io::Error) -> DefineAnalysisSchemeError {
-        DefineAnalysisSchemeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineAnalysisSchemeError {
@@ -5504,13 +5407,6 @@ impl Error for DefineAnalysisSchemeError {
             DefineAnalysisSchemeError::InvalidType(ref cause) => cause,
             DefineAnalysisSchemeError::LimitExceeded(ref cause) => cause,
             DefineAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
-            DefineAnalysisSchemeError::Validation(ref cause) => cause,
-            DefineAnalysisSchemeError::Credentials(ref err) => err.description(),
-            DefineAnalysisSchemeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DefineAnalysisSchemeError::ParseError(ref cause) => cause,
-            DefineAnalysisSchemeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5527,20 +5423,10 @@ pub enum DefineExpressionError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DefineExpressionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DefineExpressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineExpressionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5548,31 +5434,35 @@ impl DefineExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineExpressionError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineExpressionError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DefineExpressionError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineExpressionError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DefineExpressionError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineExpressionError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DefineExpressionError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineExpressionError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DefineExpressionError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineExpressionError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DefineExpressionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5581,28 +5471,6 @@ impl DefineExpressionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DefineExpressionError {
-    fn from(err: XmlParseError) -> DefineExpressionError {
-        let XmlParseError(message) = err;
-        DefineExpressionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DefineExpressionError {
-    fn from(err: CredentialsError) -> DefineExpressionError {
-        DefineExpressionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DefineExpressionError {
-    fn from(err: HttpDispatchError) -> DefineExpressionError {
-        DefineExpressionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DefineExpressionError {
-    fn from(err: io::Error) -> DefineExpressionError {
-        DefineExpressionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineExpressionError {
@@ -5618,11 +5486,6 @@ impl Error for DefineExpressionError {
             DefineExpressionError::InvalidType(ref cause) => cause,
             DefineExpressionError::LimitExceeded(ref cause) => cause,
             DefineExpressionError::ResourceNotFound(ref cause) => cause,
-            DefineExpressionError::Validation(ref cause) => cause,
-            DefineExpressionError::Credentials(ref err) => err.description(),
-            DefineExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineExpressionError::ParseError(ref cause) => cause,
-            DefineExpressionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5639,20 +5502,10 @@ pub enum DefineIndexFieldError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DefineIndexFieldError {
-    pub fn from_response(res: BufferedHttpResponse) -> DefineIndexFieldError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineIndexFieldError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5660,31 +5513,35 @@ impl DefineIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineIndexFieldError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineIndexFieldError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DefineIndexFieldError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineIndexFieldError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DefineIndexFieldError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineIndexFieldError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DefineIndexFieldError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineIndexFieldError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DefineIndexFieldError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineIndexFieldError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DefineIndexFieldError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5693,28 +5550,6 @@ impl DefineIndexFieldError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DefineIndexFieldError {
-    fn from(err: XmlParseError) -> DefineIndexFieldError {
-        let XmlParseError(message) = err;
-        DefineIndexFieldError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DefineIndexFieldError {
-    fn from(err: CredentialsError) -> DefineIndexFieldError {
-        DefineIndexFieldError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DefineIndexFieldError {
-    fn from(err: HttpDispatchError) -> DefineIndexFieldError {
-        DefineIndexFieldError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DefineIndexFieldError {
-    fn from(err: io::Error) -> DefineIndexFieldError {
-        DefineIndexFieldError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineIndexFieldError {
@@ -5730,11 +5565,6 @@ impl Error for DefineIndexFieldError {
             DefineIndexFieldError::InvalidType(ref cause) => cause,
             DefineIndexFieldError::LimitExceeded(ref cause) => cause,
             DefineIndexFieldError::ResourceNotFound(ref cause) => cause,
-            DefineIndexFieldError::Validation(ref cause) => cause,
-            DefineIndexFieldError::Credentials(ref err) => err.description(),
-            DefineIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineIndexFieldError::ParseError(ref cause) => cause,
-            DefineIndexFieldError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5751,20 +5581,10 @@ pub enum DefineSuggesterError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DefineSuggesterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DefineSuggesterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DefineSuggesterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5772,29 +5592,35 @@ impl DefineSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DefineSuggesterError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineSuggesterError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DefineSuggesterError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineSuggesterError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DefineSuggesterError::InvalidType(String::from(parsed_error.message));
+                        return RusotoError::Service(DefineSuggesterError::InvalidType(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "LimitExceeded" => {
-                        return DefineSuggesterError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineSuggesterError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DefineSuggesterError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DefineSuggesterError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DefineSuggesterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5803,28 +5629,6 @@ impl DefineSuggesterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DefineSuggesterError {
-    fn from(err: XmlParseError) -> DefineSuggesterError {
-        let XmlParseError(message) = err;
-        DefineSuggesterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DefineSuggesterError {
-    fn from(err: CredentialsError) -> DefineSuggesterError {
-        DefineSuggesterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DefineSuggesterError {
-    fn from(err: HttpDispatchError) -> DefineSuggesterError {
-        DefineSuggesterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DefineSuggesterError {
-    fn from(err: io::Error) -> DefineSuggesterError {
-        DefineSuggesterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DefineSuggesterError {
@@ -5840,11 +5644,6 @@ impl Error for DefineSuggesterError {
             DefineSuggesterError::InvalidType(ref cause) => cause,
             DefineSuggesterError::LimitExceeded(ref cause) => cause,
             DefineSuggesterError::ResourceNotFound(ref cause) => cause,
-            DefineSuggesterError::Validation(ref cause) => cause,
-            DefineSuggesterError::Credentials(ref err) => err.description(),
-            DefineSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DefineSuggesterError::ParseError(ref cause) => cause,
-            DefineSuggesterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5859,20 +5658,10 @@ pub enum DeleteAnalysisSchemeError {
     InvalidType(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAnalysisSchemeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAnalysisSchemeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAnalysisSchemeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5880,28 +5669,30 @@ impl DeleteAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteAnalysisSchemeError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteAnalysisSchemeError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DeleteAnalysisSchemeError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAnalysisSchemeError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return DeleteAnalysisSchemeError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAnalysisSchemeError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DeleteAnalysisSchemeError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAnalysisSchemeError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteAnalysisSchemeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -5910,28 +5701,6 @@ impl DeleteAnalysisSchemeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteAnalysisSchemeError {
-    fn from(err: XmlParseError) -> DeleteAnalysisSchemeError {
-        let XmlParseError(message) = err;
-        DeleteAnalysisSchemeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAnalysisSchemeError {
-    fn from(err: CredentialsError) -> DeleteAnalysisSchemeError {
-        DeleteAnalysisSchemeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAnalysisSchemeError {
-    fn from(err: HttpDispatchError) -> DeleteAnalysisSchemeError {
-        DeleteAnalysisSchemeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAnalysisSchemeError {
-    fn from(err: io::Error) -> DeleteAnalysisSchemeError {
-        DeleteAnalysisSchemeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAnalysisSchemeError {
@@ -5946,13 +5715,6 @@ impl Error for DeleteAnalysisSchemeError {
             DeleteAnalysisSchemeError::Internal(ref cause) => cause,
             DeleteAnalysisSchemeError::InvalidType(ref cause) => cause,
             DeleteAnalysisSchemeError::ResourceNotFound(ref cause) => cause,
-            DeleteAnalysisSchemeError::Validation(ref cause) => cause,
-            DeleteAnalysisSchemeError::Credentials(ref err) => err.description(),
-            DeleteAnalysisSchemeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteAnalysisSchemeError::ParseError(ref cause) => cause,
-            DeleteAnalysisSchemeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5963,20 +5725,10 @@ pub enum DeleteDomainError {
     Base(String),
     /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5984,16 +5736,20 @@ impl DeleteDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteDomainError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteDomainError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DeleteDomainError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteDomainError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDomainError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6002,28 +5758,6 @@ impl DeleteDomainError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDomainError {
-    fn from(err: XmlParseError) -> DeleteDomainError {
-        let XmlParseError(message) = err;
-        DeleteDomainError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDomainError {
-    fn from(err: CredentialsError) -> DeleteDomainError {
-        DeleteDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDomainError {
-    fn from(err: HttpDispatchError) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDomainError {
-    fn from(err: io::Error) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -6036,11 +5770,6 @@ impl Error for DeleteDomainError {
         match *self {
             DeleteDomainError::Base(ref cause) => cause,
             DeleteDomainError::Internal(ref cause) => cause,
-            DeleteDomainError::Validation(ref cause) => cause,
-            DeleteDomainError::Credentials(ref err) => err.description(),
-            DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDomainError::ParseError(ref cause) => cause,
-            DeleteDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6055,20 +5784,10 @@ pub enum DeleteExpressionError {
     InvalidType(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteExpressionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteExpressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteExpressionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6076,26 +5795,30 @@ impl DeleteExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteExpressionError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteExpressionError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DeleteExpressionError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteExpressionError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DeleteExpressionError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteExpressionError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DeleteExpressionError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteExpressionError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteExpressionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6104,28 +5827,6 @@ impl DeleteExpressionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteExpressionError {
-    fn from(err: XmlParseError) -> DeleteExpressionError {
-        let XmlParseError(message) = err;
-        DeleteExpressionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteExpressionError {
-    fn from(err: CredentialsError) -> DeleteExpressionError {
-        DeleteExpressionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteExpressionError {
-    fn from(err: HttpDispatchError) -> DeleteExpressionError {
-        DeleteExpressionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteExpressionError {
-    fn from(err: io::Error) -> DeleteExpressionError {
-        DeleteExpressionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteExpressionError {
@@ -6140,11 +5841,6 @@ impl Error for DeleteExpressionError {
             DeleteExpressionError::Internal(ref cause) => cause,
             DeleteExpressionError::InvalidType(ref cause) => cause,
             DeleteExpressionError::ResourceNotFound(ref cause) => cause,
-            DeleteExpressionError::Validation(ref cause) => cause,
-            DeleteExpressionError::Credentials(ref err) => err.description(),
-            DeleteExpressionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteExpressionError::ParseError(ref cause) => cause,
-            DeleteExpressionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6159,20 +5855,10 @@ pub enum DeleteIndexFieldError {
     InvalidType(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIndexFieldError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIndexFieldError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIndexFieldError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6180,26 +5866,30 @@ impl DeleteIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteIndexFieldError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteIndexFieldError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DeleteIndexFieldError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteIndexFieldError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DeleteIndexFieldError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteIndexFieldError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DeleteIndexFieldError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteIndexFieldError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteIndexFieldError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6208,28 +5898,6 @@ impl DeleteIndexFieldError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteIndexFieldError {
-    fn from(err: XmlParseError) -> DeleteIndexFieldError {
-        let XmlParseError(message) = err;
-        DeleteIndexFieldError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIndexFieldError {
-    fn from(err: CredentialsError) -> DeleteIndexFieldError {
-        DeleteIndexFieldError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIndexFieldError {
-    fn from(err: HttpDispatchError) -> DeleteIndexFieldError {
-        DeleteIndexFieldError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIndexFieldError {
-    fn from(err: io::Error) -> DeleteIndexFieldError {
-        DeleteIndexFieldError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIndexFieldError {
@@ -6244,11 +5912,6 @@ impl Error for DeleteIndexFieldError {
             DeleteIndexFieldError::Internal(ref cause) => cause,
             DeleteIndexFieldError::InvalidType(ref cause) => cause,
             DeleteIndexFieldError::ResourceNotFound(ref cause) => cause,
-            DeleteIndexFieldError::Validation(ref cause) => cause,
-            DeleteIndexFieldError::Credentials(ref err) => err.description(),
-            DeleteIndexFieldError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIndexFieldError::ParseError(ref cause) => cause,
-            DeleteIndexFieldError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6263,20 +5926,10 @@ pub enum DeleteSuggesterError {
     InvalidType(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSuggesterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSuggesterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSuggesterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6284,24 +5937,30 @@ impl DeleteSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DeleteSuggesterError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteSuggesterError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DeleteSuggesterError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteSuggesterError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidType" => {
-                        return DeleteSuggesterError::InvalidType(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteSuggesterError::InvalidType(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ResourceNotFound" => {
-                        return DeleteSuggesterError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteSuggesterError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSuggesterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6310,28 +5969,6 @@ impl DeleteSuggesterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSuggesterError {
-    fn from(err: XmlParseError) -> DeleteSuggesterError {
-        let XmlParseError(message) = err;
-        DeleteSuggesterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSuggesterError {
-    fn from(err: CredentialsError) -> DeleteSuggesterError {
-        DeleteSuggesterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSuggesterError {
-    fn from(err: HttpDispatchError) -> DeleteSuggesterError {
-        DeleteSuggesterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSuggesterError {
-    fn from(err: io::Error) -> DeleteSuggesterError {
-        DeleteSuggesterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSuggesterError {
@@ -6346,11 +5983,6 @@ impl Error for DeleteSuggesterError {
             DeleteSuggesterError::Internal(ref cause) => cause,
             DeleteSuggesterError::InvalidType(ref cause) => cause,
             DeleteSuggesterError::ResourceNotFound(ref cause) => cause,
-            DeleteSuggesterError::Validation(ref cause) => cause,
-            DeleteSuggesterError::Credentials(ref err) => err.description(),
-            DeleteSuggesterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSuggesterError::ParseError(ref cause) => cause,
-            DeleteSuggesterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6363,20 +5995,10 @@ pub enum DescribeAnalysisSchemesError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAnalysisSchemesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAnalysisSchemesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAnalysisSchemesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6384,25 +6006,25 @@ impl DescribeAnalysisSchemesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeAnalysisSchemesError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAnalysisSchemesError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InternalException" => {
-                        return DescribeAnalysisSchemesError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAnalysisSchemesError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeAnalysisSchemesError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAnalysisSchemesError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeAnalysisSchemesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6411,28 +6033,6 @@ impl DescribeAnalysisSchemesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAnalysisSchemesError {
-    fn from(err: XmlParseError) -> DescribeAnalysisSchemesError {
-        let XmlParseError(message) = err;
-        DescribeAnalysisSchemesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAnalysisSchemesError {
-    fn from(err: CredentialsError) -> DescribeAnalysisSchemesError {
-        DescribeAnalysisSchemesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAnalysisSchemesError {
-    fn from(err: HttpDispatchError) -> DescribeAnalysisSchemesError {
-        DescribeAnalysisSchemesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAnalysisSchemesError {
-    fn from(err: io::Error) -> DescribeAnalysisSchemesError {
-        DescribeAnalysisSchemesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAnalysisSchemesError {
@@ -6446,13 +6046,6 @@ impl Error for DescribeAnalysisSchemesError {
             DescribeAnalysisSchemesError::Base(ref cause) => cause,
             DescribeAnalysisSchemesError::Internal(ref cause) => cause,
             DescribeAnalysisSchemesError::ResourceNotFound(ref cause) => cause,
-            DescribeAnalysisSchemesError::Validation(ref cause) => cause,
-            DescribeAnalysisSchemesError::Credentials(ref err) => err.description(),
-            DescribeAnalysisSchemesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAnalysisSchemesError::ParseError(ref cause) => cause,
-            DescribeAnalysisSchemesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6471,20 +6064,12 @@ pub enum DescribeAvailabilityOptionsError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAvailabilityOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAvailabilityOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAvailabilityOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6492,40 +6077,46 @@ impl DescribeAvailabilityOptionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeAvailabilityOptionsError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAvailabilityOptionsError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DisabledAction" => {
-                        return DescribeAvailabilityOptionsError::DisabledOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeAvailabilityOptionsError::DisabledOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InternalException" => {
-                        return DescribeAvailabilityOptionsError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAvailabilityOptionsError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return DescribeAvailabilityOptionsError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeAvailabilityOptionsError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return DescribeAvailabilityOptionsError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeAvailabilityOptionsError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ResourceNotFound" => {
-                        return DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeAvailabilityOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6534,28 +6125,6 @@ impl DescribeAvailabilityOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAvailabilityOptionsError {
-    fn from(err: XmlParseError) -> DescribeAvailabilityOptionsError {
-        let XmlParseError(message) = err;
-        DescribeAvailabilityOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAvailabilityOptionsError {
-    fn from(err: CredentialsError) -> DescribeAvailabilityOptionsError {
-        DescribeAvailabilityOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAvailabilityOptionsError {
-    fn from(err: HttpDispatchError) -> DescribeAvailabilityOptionsError {
-        DescribeAvailabilityOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAvailabilityOptionsError {
-    fn from(err: io::Error) -> DescribeAvailabilityOptionsError {
-        DescribeAvailabilityOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAvailabilityOptionsError {
@@ -6572,13 +6141,6 @@ impl Error for DescribeAvailabilityOptionsError {
             DescribeAvailabilityOptionsError::InvalidType(ref cause) => cause,
             DescribeAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
             DescribeAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
-            DescribeAvailabilityOptionsError::Validation(ref cause) => cause,
-            DescribeAvailabilityOptionsError::Credentials(ref err) => err.description(),
-            DescribeAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAvailabilityOptionsError::ParseError(ref cause) => cause,
-            DescribeAvailabilityOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6589,20 +6151,10 @@ pub enum DescribeDomainsError {
     Base(String),
     /// <p>An internal error occurred while processing the request. If this problem persists, report an issue from the <a href="http://status.aws.amazon.com/" target="_blank">Service Health Dashboard</a>.</p>
     Internal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDomainsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6610,16 +6162,20 @@ impl DescribeDomainsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeDomainsError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeDomainsError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DescribeDomainsError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeDomainsError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeDomainsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6628,28 +6184,6 @@ impl DescribeDomainsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDomainsError {
-    fn from(err: XmlParseError) -> DescribeDomainsError {
-        let XmlParseError(message) = err;
-        DescribeDomainsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDomainsError {
-    fn from(err: CredentialsError) -> DescribeDomainsError {
-        DescribeDomainsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDomainsError {
-    fn from(err: HttpDispatchError) -> DescribeDomainsError {
-        DescribeDomainsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDomainsError {
-    fn from(err: io::Error) -> DescribeDomainsError {
-        DescribeDomainsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDomainsError {
@@ -6662,11 +6196,6 @@ impl Error for DescribeDomainsError {
         match *self {
             DescribeDomainsError::Base(ref cause) => cause,
             DescribeDomainsError::Internal(ref cause) => cause,
-            DescribeDomainsError::Validation(ref cause) => cause,
-            DescribeDomainsError::Credentials(ref err) => err.description(),
-            DescribeDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeDomainsError::ParseError(ref cause) => cause,
-            DescribeDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6679,20 +6208,10 @@ pub enum DescribeExpressionsError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExpressionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeExpressionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExpressionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6700,23 +6219,25 @@ impl DescribeExpressionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeExpressionsError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeExpressionsError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DescribeExpressionsError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeExpressionsError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeExpressionsError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeExpressionsError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeExpressionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6725,28 +6246,6 @@ impl DescribeExpressionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeExpressionsError {
-    fn from(err: XmlParseError) -> DescribeExpressionsError {
-        let XmlParseError(message) = err;
-        DescribeExpressionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeExpressionsError {
-    fn from(err: CredentialsError) -> DescribeExpressionsError {
-        DescribeExpressionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeExpressionsError {
-    fn from(err: HttpDispatchError) -> DescribeExpressionsError {
-        DescribeExpressionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeExpressionsError {
-    fn from(err: io::Error) -> DescribeExpressionsError {
-        DescribeExpressionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeExpressionsError {
@@ -6760,13 +6259,6 @@ impl Error for DescribeExpressionsError {
             DescribeExpressionsError::Base(ref cause) => cause,
             DescribeExpressionsError::Internal(ref cause) => cause,
             DescribeExpressionsError::ResourceNotFound(ref cause) => cause,
-            DescribeExpressionsError::Validation(ref cause) => cause,
-            DescribeExpressionsError::Credentials(ref err) => err.description(),
-            DescribeExpressionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeExpressionsError::ParseError(ref cause) => cause,
-            DescribeExpressionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6779,20 +6271,10 @@ pub enum DescribeIndexFieldsError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeIndexFieldsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeIndexFieldsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeIndexFieldsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6800,23 +6282,25 @@ impl DescribeIndexFieldsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeIndexFieldsError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeIndexFieldsError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DescribeIndexFieldsError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeIndexFieldsError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeIndexFieldsError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeIndexFieldsError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeIndexFieldsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6825,28 +6309,6 @@ impl DescribeIndexFieldsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeIndexFieldsError {
-    fn from(err: XmlParseError) -> DescribeIndexFieldsError {
-        let XmlParseError(message) = err;
-        DescribeIndexFieldsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeIndexFieldsError {
-    fn from(err: CredentialsError) -> DescribeIndexFieldsError {
-        DescribeIndexFieldsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeIndexFieldsError {
-    fn from(err: HttpDispatchError) -> DescribeIndexFieldsError {
-        DescribeIndexFieldsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeIndexFieldsError {
-    fn from(err: io::Error) -> DescribeIndexFieldsError {
-        DescribeIndexFieldsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeIndexFieldsError {
@@ -6860,13 +6322,6 @@ impl Error for DescribeIndexFieldsError {
             DescribeIndexFieldsError::Base(ref cause) => cause,
             DescribeIndexFieldsError::Internal(ref cause) => cause,
             DescribeIndexFieldsError::ResourceNotFound(ref cause) => cause,
-            DescribeIndexFieldsError::Validation(ref cause) => cause,
-            DescribeIndexFieldsError::Credentials(ref err) => err.description(),
-            DescribeIndexFieldsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeIndexFieldsError::ParseError(ref cause) => cause,
-            DescribeIndexFieldsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6879,20 +6334,10 @@ pub enum DescribeScalingParametersError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6900,25 +6345,27 @@ impl DescribeScalingParametersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeScalingParametersError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeScalingParametersError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InternalException" => {
-                        return DescribeScalingParametersError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeScalingParametersError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeScalingParametersError::ResourceNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeScalingParametersError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeScalingParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -6927,28 +6374,6 @@ impl DescribeScalingParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeScalingParametersError {
-    fn from(err: XmlParseError) -> DescribeScalingParametersError {
-        let XmlParseError(message) = err;
-        DescribeScalingParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalingParametersError {
-    fn from(err: CredentialsError) -> DescribeScalingParametersError {
-        DescribeScalingParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalingParametersError {
-    fn from(err: HttpDispatchError) -> DescribeScalingParametersError {
-        DescribeScalingParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalingParametersError {
-    fn from(err: io::Error) -> DescribeScalingParametersError {
-        DescribeScalingParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeScalingParametersError {
@@ -6962,13 +6387,6 @@ impl Error for DescribeScalingParametersError {
             DescribeScalingParametersError::Base(ref cause) => cause,
             DescribeScalingParametersError::Internal(ref cause) => cause,
             DescribeScalingParametersError::ResourceNotFound(ref cause) => cause,
-            DescribeScalingParametersError::Validation(ref cause) => cause,
-            DescribeScalingParametersError::Credentials(ref err) => err.description(),
-            DescribeScalingParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalingParametersError::ParseError(ref cause) => cause,
-            DescribeScalingParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6981,20 +6399,12 @@ pub enum DescribeServiceAccessPoliciesError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeServiceAccessPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeServiceAccessPoliciesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeServiceAccessPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7002,25 +6412,27 @@ impl DescribeServiceAccessPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeServiceAccessPoliciesError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeServiceAccessPoliciesError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InternalException" => {
-                        return DescribeServiceAccessPoliciesError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeServiceAccessPoliciesError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeServiceAccessPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7029,28 +6441,6 @@ impl DescribeServiceAccessPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeServiceAccessPoliciesError {
-    fn from(err: XmlParseError) -> DescribeServiceAccessPoliciesError {
-        let XmlParseError(message) = err;
-        DescribeServiceAccessPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeServiceAccessPoliciesError {
-    fn from(err: CredentialsError) -> DescribeServiceAccessPoliciesError {
-        DescribeServiceAccessPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeServiceAccessPoliciesError {
-    fn from(err: HttpDispatchError) -> DescribeServiceAccessPoliciesError {
-        DescribeServiceAccessPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeServiceAccessPoliciesError {
-    fn from(err: io::Error) -> DescribeServiceAccessPoliciesError {
-        DescribeServiceAccessPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeServiceAccessPoliciesError {
@@ -7064,13 +6454,6 @@ impl Error for DescribeServiceAccessPoliciesError {
             DescribeServiceAccessPoliciesError::Base(ref cause) => cause,
             DescribeServiceAccessPoliciesError::Internal(ref cause) => cause,
             DescribeServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
-            DescribeServiceAccessPoliciesError::Validation(ref cause) => cause,
-            DescribeServiceAccessPoliciesError::Credentials(ref err) => err.description(),
-            DescribeServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeServiceAccessPoliciesError::ParseError(ref cause) => cause,
-            DescribeServiceAccessPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7083,20 +6466,10 @@ pub enum DescribeSuggestersError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSuggestersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSuggestersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSuggestersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7104,21 +6477,25 @@ impl DescribeSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return DescribeSuggestersError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeSuggestersError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return DescribeSuggestersError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeSuggestersError::Internal(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "ResourceNotFound" => {
-                        return DescribeSuggestersError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeSuggestersError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeSuggestersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7127,28 +6504,6 @@ impl DescribeSuggestersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeSuggestersError {
-    fn from(err: XmlParseError) -> DescribeSuggestersError {
-        let XmlParseError(message) = err;
-        DescribeSuggestersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSuggestersError {
-    fn from(err: CredentialsError) -> DescribeSuggestersError {
-        DescribeSuggestersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSuggestersError {
-    fn from(err: HttpDispatchError) -> DescribeSuggestersError {
-        DescribeSuggestersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSuggestersError {
-    fn from(err: io::Error) -> DescribeSuggestersError {
-        DescribeSuggestersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSuggestersError {
@@ -7162,13 +6517,6 @@ impl Error for DescribeSuggestersError {
             DescribeSuggestersError::Base(ref cause) => cause,
             DescribeSuggestersError::Internal(ref cause) => cause,
             DescribeSuggestersError::ResourceNotFound(ref cause) => cause,
-            DescribeSuggestersError::Validation(ref cause) => cause,
-            DescribeSuggestersError::Credentials(ref err) => err.description(),
-            DescribeSuggestersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSuggestersError::ParseError(ref cause) => cause,
-            DescribeSuggestersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7181,20 +6529,10 @@ pub enum IndexDocumentsError {
     Internal(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl IndexDocumentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> IndexDocumentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<IndexDocumentsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7202,21 +6540,25 @@ impl IndexDocumentsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return IndexDocumentsError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(IndexDocumentsError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InternalException" => {
-                        return IndexDocumentsError::Internal(String::from(parsed_error.message));
+                        return RusotoError::Service(IndexDocumentsError::Internal(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ResourceNotFound" => {
-                        return IndexDocumentsError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(IndexDocumentsError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        IndexDocumentsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7225,28 +6567,6 @@ impl IndexDocumentsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for IndexDocumentsError {
-    fn from(err: XmlParseError) -> IndexDocumentsError {
-        let XmlParseError(message) = err;
-        IndexDocumentsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for IndexDocumentsError {
-    fn from(err: CredentialsError) -> IndexDocumentsError {
-        IndexDocumentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for IndexDocumentsError {
-    fn from(err: HttpDispatchError) -> IndexDocumentsError {
-        IndexDocumentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for IndexDocumentsError {
-    fn from(err: io::Error) -> IndexDocumentsError {
-        IndexDocumentsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for IndexDocumentsError {
@@ -7260,11 +6580,6 @@ impl Error for IndexDocumentsError {
             IndexDocumentsError::Base(ref cause) => cause,
             IndexDocumentsError::Internal(ref cause) => cause,
             IndexDocumentsError::ResourceNotFound(ref cause) => cause,
-            IndexDocumentsError::Validation(ref cause) => cause,
-            IndexDocumentsError::Credentials(ref err) => err.description(),
-            IndexDocumentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            IndexDocumentsError::ParseError(ref cause) => cause,
-            IndexDocumentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7273,20 +6588,10 @@ impl Error for IndexDocumentsError {
 pub enum ListDomainNamesError {
     /// <p>An error occurred while processing the request.</p>
     Base(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainNamesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDomainNamesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainNamesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7294,13 +6599,15 @@ impl ListDomainNamesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return ListDomainNamesError::Base(String::from(parsed_error.message));
+                        return RusotoError::Service(ListDomainNamesError::Base(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ListDomainNamesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7309,28 +6616,6 @@ impl ListDomainNamesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListDomainNamesError {
-    fn from(err: XmlParseError) -> ListDomainNamesError {
-        let XmlParseError(message) = err;
-        ListDomainNamesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListDomainNamesError {
-    fn from(err: CredentialsError) -> ListDomainNamesError {
-        ListDomainNamesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDomainNamesError {
-    fn from(err: HttpDispatchError) -> ListDomainNamesError {
-        ListDomainNamesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDomainNamesError {
-    fn from(err: io::Error) -> ListDomainNamesError {
-        ListDomainNamesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDomainNamesError {
@@ -7342,11 +6627,6 @@ impl Error for ListDomainNamesError {
     fn description(&self) -> &str {
         match *self {
             ListDomainNamesError::Base(ref cause) => cause,
-            ListDomainNamesError::Validation(ref cause) => cause,
-            ListDomainNamesError::Credentials(ref err) => err.description(),
-            ListDomainNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainNamesError::ParseError(ref cause) => cause,
-            ListDomainNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7365,20 +6645,10 @@ pub enum UpdateAvailabilityOptionsError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAvailabilityOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAvailabilityOptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAvailabilityOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7386,40 +6656,44 @@ impl UpdateAvailabilityOptionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return UpdateAvailabilityOptionsError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAvailabilityOptionsError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DisabledAction" => {
-                        return UpdateAvailabilityOptionsError::DisabledOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAvailabilityOptionsError::DisabledOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InternalException" => {
-                        return UpdateAvailabilityOptionsError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAvailabilityOptionsError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return UpdateAvailabilityOptionsError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAvailabilityOptionsError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateAvailabilityOptionsError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateAvailabilityOptionsError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateAvailabilityOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7428,28 +6702,6 @@ impl UpdateAvailabilityOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateAvailabilityOptionsError {
-    fn from(err: XmlParseError) -> UpdateAvailabilityOptionsError {
-        let XmlParseError(message) = err;
-        UpdateAvailabilityOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAvailabilityOptionsError {
-    fn from(err: CredentialsError) -> UpdateAvailabilityOptionsError {
-        UpdateAvailabilityOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAvailabilityOptionsError {
-    fn from(err: HttpDispatchError) -> UpdateAvailabilityOptionsError {
-        UpdateAvailabilityOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAvailabilityOptionsError {
-    fn from(err: io::Error) -> UpdateAvailabilityOptionsError {
-        UpdateAvailabilityOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateAvailabilityOptionsError {
@@ -7466,13 +6718,6 @@ impl Error for UpdateAvailabilityOptionsError {
             UpdateAvailabilityOptionsError::InvalidType(ref cause) => cause,
             UpdateAvailabilityOptionsError::LimitExceeded(ref cause) => cause,
             UpdateAvailabilityOptionsError::ResourceNotFound(ref cause) => cause,
-            UpdateAvailabilityOptionsError::Validation(ref cause) => cause,
-            UpdateAvailabilityOptionsError::Credentials(ref err) => err.description(),
-            UpdateAvailabilityOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateAvailabilityOptionsError::ParseError(ref cause) => cause,
-            UpdateAvailabilityOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7489,20 +6734,10 @@ pub enum UpdateScalingParametersError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateScalingParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateScalingParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScalingParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7510,35 +6745,35 @@ impl UpdateScalingParametersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return UpdateScalingParametersError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateScalingParametersError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InternalException" => {
-                        return UpdateScalingParametersError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateScalingParametersError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return UpdateScalingParametersError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateScalingParametersError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateScalingParametersError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateScalingParametersError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFound" => {
-                        return UpdateScalingParametersError::ResourceNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateScalingParametersError::ResourceNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateScalingParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7547,28 +6782,6 @@ impl UpdateScalingParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateScalingParametersError {
-    fn from(err: XmlParseError) -> UpdateScalingParametersError {
-        let XmlParseError(message) = err;
-        UpdateScalingParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateScalingParametersError {
-    fn from(err: CredentialsError) -> UpdateScalingParametersError {
-        UpdateScalingParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateScalingParametersError {
-    fn from(err: HttpDispatchError) -> UpdateScalingParametersError {
-        UpdateScalingParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateScalingParametersError {
-    fn from(err: io::Error) -> UpdateScalingParametersError {
-        UpdateScalingParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateScalingParametersError {
@@ -7584,13 +6797,6 @@ impl Error for UpdateScalingParametersError {
             UpdateScalingParametersError::InvalidType(ref cause) => cause,
             UpdateScalingParametersError::LimitExceeded(ref cause) => cause,
             UpdateScalingParametersError::ResourceNotFound(ref cause) => cause,
-            UpdateScalingParametersError::Validation(ref cause) => cause,
-            UpdateScalingParametersError::Credentials(ref err) => err.description(),
-            UpdateScalingParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateScalingParametersError::ParseError(ref cause) => cause,
-            UpdateScalingParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7607,20 +6813,12 @@ pub enum UpdateServiceAccessPoliciesError {
     LimitExceeded(String),
     /// <p>The request was rejected because it attempted to reference a resource that does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateServiceAccessPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceAccessPoliciesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateServiceAccessPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7628,35 +6826,39 @@ impl UpdateServiceAccessPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return UpdateServiceAccessPoliciesError::Base(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServiceAccessPoliciesError::Base(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InternalException" => {
-                        return UpdateServiceAccessPoliciesError::Internal(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServiceAccessPoliciesError::Internal(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidType" => {
-                        return UpdateServiceAccessPoliciesError::InvalidType(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateServiceAccessPoliciesError::InvalidType(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ResourceNotFound" => {
-                        return UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        UpdateServiceAccessPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7665,28 +6867,6 @@ impl UpdateServiceAccessPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateServiceAccessPoliciesError {
-    fn from(err: XmlParseError) -> UpdateServiceAccessPoliciesError {
-        let XmlParseError(message) = err;
-        UpdateServiceAccessPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateServiceAccessPoliciesError {
-    fn from(err: CredentialsError) -> UpdateServiceAccessPoliciesError {
-        UpdateServiceAccessPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateServiceAccessPoliciesError {
-    fn from(err: HttpDispatchError) -> UpdateServiceAccessPoliciesError {
-        UpdateServiceAccessPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateServiceAccessPoliciesError {
-    fn from(err: io::Error) -> UpdateServiceAccessPoliciesError {
-        UpdateServiceAccessPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateServiceAccessPoliciesError {
@@ -7702,13 +6882,6 @@ impl Error for UpdateServiceAccessPoliciesError {
             UpdateServiceAccessPoliciesError::InvalidType(ref cause) => cause,
             UpdateServiceAccessPoliciesError::LimitExceeded(ref cause) => cause,
             UpdateServiceAccessPoliciesError::ResourceNotFound(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::Validation(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::Credentials(ref err) => err.description(),
-            UpdateServiceAccessPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateServiceAccessPoliciesError::ParseError(ref cause) => cause,
-            UpdateServiceAccessPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }

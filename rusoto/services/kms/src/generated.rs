@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1166,20 +1163,10 @@ pub enum CancelKeyDeletionError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelKeyDeletionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelKeyDeletionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelKeyDeletionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1192,48 +1179,35 @@ impl CancelKeyDeletionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return CancelKeyDeletionError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(CancelKeyDeletionError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return CancelKeyDeletionError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CancelKeyDeletionError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return CancelKeyDeletionError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(CancelKeyDeletionError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return CancelKeyDeletionError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(CancelKeyDeletionError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CancelKeyDeletionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CancelKeyDeletionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CancelKeyDeletionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelKeyDeletionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelKeyDeletionError {
-    fn from(err: serde_json::error::Error) -> CancelKeyDeletionError {
-        CancelKeyDeletionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelKeyDeletionError {
-    fn from(err: CredentialsError) -> CancelKeyDeletionError {
-        CancelKeyDeletionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelKeyDeletionError {
-    fn from(err: HttpDispatchError) -> CancelKeyDeletionError {
-        CancelKeyDeletionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelKeyDeletionError {
-    fn from(err: io::Error) -> CancelKeyDeletionError {
-        CancelKeyDeletionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelKeyDeletionError {
@@ -1249,13 +1223,6 @@ impl Error for CancelKeyDeletionError {
             CancelKeyDeletionError::KMSInternal(ref cause) => cause,
             CancelKeyDeletionError::KMSInvalidState(ref cause) => cause,
             CancelKeyDeletionError::NotFound(ref cause) => cause,
-            CancelKeyDeletionError::Validation(ref cause) => cause,
-            CancelKeyDeletionError::Credentials(ref err) => err.description(),
-            CancelKeyDeletionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CancelKeyDeletionError::ParseError(ref cause) => cause,
-            CancelKeyDeletionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1272,20 +1239,10 @@ pub enum ConnectCustomKeyStoreError {
     CustomKeyStoreNotFound(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ConnectCustomKeyStoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> ConnectCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConnectCustomKeyStoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1298,56 +1255,41 @@ impl ConnectCustomKeyStoreError {
 
             match *error_type {
                 "CloudHsmClusterInvalidConfigurationException" => {
-                    return ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CloudHsmClusterNotActiveException" => {
-                    return ConnectCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ConnectCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreInvalidStateException" => {
-                    return ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return ConnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ConnectCustomKeyStoreError::CustomKeyStoreNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "KMSInternalException" => {
-                    return ConnectCustomKeyStoreError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ConnectCustomKeyStoreError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ConnectCustomKeyStoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ConnectCustomKeyStoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ConnectCustomKeyStoreError {
-    fn from(err: serde_json::error::Error) -> ConnectCustomKeyStoreError {
-        ConnectCustomKeyStoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ConnectCustomKeyStoreError {
-    fn from(err: CredentialsError) -> ConnectCustomKeyStoreError {
-        ConnectCustomKeyStoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ConnectCustomKeyStoreError {
-    fn from(err: HttpDispatchError) -> ConnectCustomKeyStoreError {
-        ConnectCustomKeyStoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ConnectCustomKeyStoreError {
-    fn from(err: io::Error) -> ConnectCustomKeyStoreError {
-        ConnectCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ConnectCustomKeyStoreError {
@@ -1363,13 +1305,6 @@ impl Error for ConnectCustomKeyStoreError {
             ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
             ConnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
             ConnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
-            ConnectCustomKeyStoreError::Validation(ref cause) => cause,
-            ConnectCustomKeyStoreError::Credentials(ref err) => err.description(),
-            ConnectCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ConnectCustomKeyStoreError::ParseError(ref cause) => cause,
-            ConnectCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1390,20 +1325,10 @@ pub enum CreateAliasError {
     LimitExceeded(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1416,54 +1341,45 @@ impl CreateAliasError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateAliasError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "DependencyTimeoutException" => {
-                    return CreateAliasError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAliasNameException" => {
-                    return CreateAliasError::InvalidAliasName(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::InvalidAliasName(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return CreateAliasError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return CreateAliasError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateAliasError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateAliasError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAliasError {
-    fn from(err: serde_json::error::Error) -> CreateAliasError {
-        CreateAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAliasError {
-    fn from(err: CredentialsError) -> CreateAliasError {
-        CreateAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAliasError {
-    fn from(err: HttpDispatchError) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAliasError {
-    fn from(err: io::Error) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1481,11 +1397,6 @@ impl Error for CreateAliasError {
             CreateAliasError::KMSInvalidState(ref cause) => cause,
             CreateAliasError::LimitExceeded(ref cause) => cause,
             CreateAliasError::NotFound(ref cause) => cause,
-            CreateAliasError::Validation(ref cause) => cause,
-            CreateAliasError::Credentials(ref err) => err.description(),
-            CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAliasError::ParseError(ref cause) => cause,
-            CreateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1506,20 +1417,10 @@ pub enum CreateCustomKeyStoreError {
     IncorrectTrustAnchor(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomKeyStoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomKeyStoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1532,66 +1433,49 @@ impl CreateCustomKeyStoreError {
 
             match *error_type {
                 "CloudHsmClusterInUseException" => {
-                    return CreateCustomKeyStoreError::CloudHsmClusterInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterInUse(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmClusterInvalidConfigurationException" => {
-                    return CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CloudHsmClusterNotActiveException" => {
-                    return CreateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CloudHsmClusterNotFoundException" => {
-                    return CreateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomKeyStoreError::CloudHsmClusterNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "CustomKeyStoreNameInUseException" => {
-                    return CreateCustomKeyStoreError::CustomKeyStoreNameInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomKeyStoreError::CustomKeyStoreNameInUse(
+                        String::from(error_message),
                     ));
                 }
                 "IncorrectTrustAnchorException" => {
-                    return CreateCustomKeyStoreError::IncorrectTrustAnchor(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomKeyStoreError::IncorrectTrustAnchor(
+                        String::from(error_message),
                     ));
                 }
                 "KMSInternalException" => {
-                    return CreateCustomKeyStoreError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(CreateCustomKeyStoreError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateCustomKeyStoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCustomKeyStoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCustomKeyStoreError {
-    fn from(err: serde_json::error::Error) -> CreateCustomKeyStoreError {
-        CreateCustomKeyStoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCustomKeyStoreError {
-    fn from(err: CredentialsError) -> CreateCustomKeyStoreError {
-        CreateCustomKeyStoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCustomKeyStoreError {
-    fn from(err: HttpDispatchError) -> CreateCustomKeyStoreError {
-        CreateCustomKeyStoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCustomKeyStoreError {
-    fn from(err: io::Error) -> CreateCustomKeyStoreError {
-        CreateCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCustomKeyStoreError {
@@ -1609,13 +1493,6 @@ impl Error for CreateCustomKeyStoreError {
             CreateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => cause,
             CreateCustomKeyStoreError::IncorrectTrustAnchor(ref cause) => cause,
             CreateCustomKeyStoreError::KMSInternal(ref cause) => cause,
-            CreateCustomKeyStoreError::Validation(ref cause) => cause,
-            CreateCustomKeyStoreError::Credentials(ref err) => err.description(),
-            CreateCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCustomKeyStoreError::ParseError(ref cause) => cause,
-            CreateCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1638,20 +1515,10 @@ pub enum CreateGrantError {
     LimitExceeded(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGrantError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGrantError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGrantError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1664,57 +1531,50 @@ impl CreateGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return CreateGrantError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "DisabledException" => {
-                    return CreateGrantError::Disabled(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::Disabled(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateGrantError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantTokenException" => {
-                    return CreateGrantError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::InvalidGrantToken(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return CreateGrantError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return CreateGrantError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateGrantError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateGrantError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateGrantError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateGrantError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGrantError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGrantError {
-    fn from(err: serde_json::error::Error) -> CreateGrantError {
-        CreateGrantError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGrantError {
-    fn from(err: CredentialsError) -> CreateGrantError {
-        CreateGrantError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGrantError {
-    fn from(err: HttpDispatchError) -> CreateGrantError {
-        CreateGrantError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGrantError {
-    fn from(err: io::Error) -> CreateGrantError {
-        CreateGrantError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGrantError {
@@ -1733,11 +1593,6 @@ impl Error for CreateGrantError {
             CreateGrantError::KMSInvalidState(ref cause) => cause,
             CreateGrantError::LimitExceeded(ref cause) => cause,
             CreateGrantError::NotFound(ref cause) => cause,
-            CreateGrantError::Validation(ref cause) => cause,
-            CreateGrantError::Credentials(ref err) => err.description(),
-            CreateGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGrantError::ParseError(ref cause) => cause,
-            CreateGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1764,20 +1619,10 @@ pub enum CreateKeyError {
     Tag(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1790,63 +1635,60 @@ impl CreateKeyError {
 
             match *error_type {
                 "CloudHsmClusterInvalidConfigurationException" => {
-                    return CreateKeyError::CloudHsmClusterInvalidConfiguration(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateKeyError::CloudHsmClusterInvalidConfiguration(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreInvalidStateException" => {
-                    return CreateKeyError::CustomKeyStoreInvalidState(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::CustomKeyStoreInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return CreateKeyError::CustomKeyStoreNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::CustomKeyStoreNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "DependencyTimeoutException" => {
-                    return CreateKeyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateKeyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return CreateKeyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateKeyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return CreateKeyError::MalformedPolicyDocument(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::MalformedPolicyDocument(
+                        String::from(error_message),
+                    ));
                 }
-                "TagException" => return CreateKeyError::Tag(String::from(error_message)),
+                "TagException" => {
+                    return RusotoError::Service(CreateKeyError::Tag(String::from(error_message)));
+                }
                 "UnsupportedOperationException" => {
-                    return CreateKeyError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(CreateKeyError::UnsupportedOperation(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateKeyError {
-    fn from(err: serde_json::error::Error) -> CreateKeyError {
-        CreateKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateKeyError {
-    fn from(err: CredentialsError) -> CreateKeyError {
-        CreateKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateKeyError {
-    fn from(err: HttpDispatchError) -> CreateKeyError {
-        CreateKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateKeyError {
-    fn from(err: io::Error) -> CreateKeyError {
-        CreateKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateKeyError {
@@ -1867,11 +1709,6 @@ impl Error for CreateKeyError {
             CreateKeyError::MalformedPolicyDocument(ref cause) => cause,
             CreateKeyError::Tag(ref cause) => cause,
             CreateKeyError::UnsupportedOperation(ref cause) => cause,
-            CreateKeyError::Validation(ref cause) => cause,
-            CreateKeyError::Credentials(ref err) => err.description(),
-            CreateKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateKeyError::ParseError(ref cause) => cause,
-            CreateKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1894,20 +1731,10 @@ pub enum DecryptError {
     KeyUnavailable(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DecryptError {
-    pub fn from_response(res: BufferedHttpResponse) -> DecryptError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DecryptError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1920,51 +1747,46 @@ impl DecryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DecryptError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(DecryptError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "DisabledException" => return DecryptError::Disabled(String::from(error_message)),
+                "DisabledException" => {
+                    return RusotoError::Service(DecryptError::Disabled(String::from(error_message)));
+                }
                 "InvalidCiphertextException" => {
-                    return DecryptError::InvalidCiphertext(String::from(error_message));
+                    return RusotoError::Service(DecryptError::InvalidCiphertext(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantTokenException" => {
-                    return DecryptError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(DecryptError::InvalidGrantToken(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return DecryptError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DecryptError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return DecryptError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(DecryptError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "KeyUnavailableException" => {
-                    return DecryptError::KeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(DecryptError::KeyUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return DecryptError::NotFound(String::from(error_message)),
-                "ValidationException" => return DecryptError::Validation(error_message.to_string()),
+                "NotFoundException" => {
+                    return RusotoError::Service(DecryptError::NotFound(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DecryptError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DecryptError {
-    fn from(err: serde_json::error::Error) -> DecryptError {
-        DecryptError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DecryptError {
-    fn from(err: CredentialsError) -> DecryptError {
-        DecryptError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DecryptError {
-    fn from(err: HttpDispatchError) -> DecryptError {
-        DecryptError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DecryptError {
-    fn from(err: io::Error) -> DecryptError {
-        DecryptError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DecryptError {
@@ -1983,11 +1805,6 @@ impl Error for DecryptError {
             DecryptError::KMSInvalidState(ref cause) => cause,
             DecryptError::KeyUnavailable(ref cause) => cause,
             DecryptError::NotFound(ref cause) => cause,
-            DecryptError::Validation(ref cause) => cause,
-            DecryptError::Credentials(ref err) => err.description(),
-            DecryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DecryptError::ParseError(ref cause) => cause,
-            DecryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2002,20 +1819,10 @@ pub enum DeleteAliasError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2028,45 +1835,30 @@ impl DeleteAliasError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DeleteAliasError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return DeleteAliasError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return DeleteAliasError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteAliasError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAliasError {
-    fn from(err: serde_json::error::Error) -> DeleteAliasError {
-        DeleteAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAliasError {
-    fn from(err: CredentialsError) -> DeleteAliasError {
-        DeleteAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAliasError {
-    fn from(err: HttpDispatchError) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAliasError {
-    fn from(err: io::Error) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -2081,11 +1873,6 @@ impl Error for DeleteAliasError {
             DeleteAliasError::KMSInternal(ref cause) => cause,
             DeleteAliasError::KMSInvalidState(ref cause) => cause,
             DeleteAliasError::NotFound(ref cause) => cause,
-            DeleteAliasError::Validation(ref cause) => cause,
-            DeleteAliasError::Credentials(ref err) => err.description(),
-            DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAliasError::ParseError(ref cause) => cause,
-            DeleteAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2100,20 +1887,10 @@ pub enum DeleteCustomKeyStoreError {
     CustomKeyStoreNotFound(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCustomKeyStoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomKeyStoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2126,51 +1903,32 @@ impl DeleteCustomKeyStoreError {
 
             match *error_type {
                 "CustomKeyStoreHasCMKsException" => {
-                    return DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(
+                        String::from(error_message),
                     ));
                 }
                 "CustomKeyStoreInvalidStateException" => {
-                    return DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return DeleteCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCustomKeyStoreError::CustomKeyStoreNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "KMSInternalException" => {
-                    return DeleteCustomKeyStoreError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteCustomKeyStoreError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteCustomKeyStoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCustomKeyStoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCustomKeyStoreError {
-    fn from(err: serde_json::error::Error) -> DeleteCustomKeyStoreError {
-        DeleteCustomKeyStoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCustomKeyStoreError {
-    fn from(err: CredentialsError) -> DeleteCustomKeyStoreError {
-        DeleteCustomKeyStoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCustomKeyStoreError {
-    fn from(err: HttpDispatchError) -> DeleteCustomKeyStoreError {
-        DeleteCustomKeyStoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCustomKeyStoreError {
-    fn from(err: io::Error) -> DeleteCustomKeyStoreError {
-        DeleteCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCustomKeyStoreError {
@@ -2185,13 +1943,6 @@ impl Error for DeleteCustomKeyStoreError {
             DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
             DeleteCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
             DeleteCustomKeyStoreError::KMSInternal(ref cause) => cause,
-            DeleteCustomKeyStoreError::Validation(ref cause) => cause,
-            DeleteCustomKeyStoreError::Credentials(ref err) => err.description(),
-            DeleteCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCustomKeyStoreError::ParseError(ref cause) => cause,
-            DeleteCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2210,20 +1961,10 @@ pub enum DeleteImportedKeyMaterialError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteImportedKeyMaterialError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteImportedKeyMaterialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImportedKeyMaterialError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2236,57 +1977,42 @@ impl DeleteImportedKeyMaterialError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DeleteImportedKeyMaterialError::DependencyTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::DependencyTimeout(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return DeleteImportedKeyMaterialError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return DeleteImportedKeyMaterialError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInvalidStateException" => {
-                    return DeleteImportedKeyMaterialError::KMSInvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::KMSInvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteImportedKeyMaterialError::NotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImportedKeyMaterialError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteImportedKeyMaterialError::Validation(error_message.to_string());
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        DeleteImportedKeyMaterialError::UnsupportedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteImportedKeyMaterialError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteImportedKeyMaterialError {
-    fn from(err: serde_json::error::Error) -> DeleteImportedKeyMaterialError {
-        DeleteImportedKeyMaterialError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteImportedKeyMaterialError {
-    fn from(err: CredentialsError) -> DeleteImportedKeyMaterialError {
-        DeleteImportedKeyMaterialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteImportedKeyMaterialError {
-    fn from(err: HttpDispatchError) -> DeleteImportedKeyMaterialError {
-        DeleteImportedKeyMaterialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteImportedKeyMaterialError {
-    fn from(err: io::Error) -> DeleteImportedKeyMaterialError {
-        DeleteImportedKeyMaterialError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteImportedKeyMaterialError {
@@ -2303,13 +2029,6 @@ impl Error for DeleteImportedKeyMaterialError {
             DeleteImportedKeyMaterialError::KMSInvalidState(ref cause) => cause,
             DeleteImportedKeyMaterialError::NotFound(ref cause) => cause,
             DeleteImportedKeyMaterialError::UnsupportedOperation(ref cause) => cause,
-            DeleteImportedKeyMaterialError::Validation(ref cause) => cause,
-            DeleteImportedKeyMaterialError::Credentials(ref err) => err.description(),
-            DeleteImportedKeyMaterialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteImportedKeyMaterialError::ParseError(ref cause) => cause,
-            DeleteImportedKeyMaterialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2320,20 +2039,10 @@ pub enum DescribeCustomKeyStoresError {
     CustomKeyStoreNotFound(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCustomKeyStoresError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCustomKeyStoresError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCustomKeyStoresError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2346,41 +2055,22 @@ impl DescribeCustomKeyStoresError {
 
             match *error_type {
                 "CustomKeyStoreNotFoundException" => {
-                    return DescribeCustomKeyStoresError::CustomKeyStoreNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeCustomKeyStoresError::CustomKeyStoreNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "KMSInternalException" => {
-                    return DescribeCustomKeyStoresError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DescribeCustomKeyStoresError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeCustomKeyStoresError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCustomKeyStoresError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCustomKeyStoresError {
-    fn from(err: serde_json::error::Error) -> DescribeCustomKeyStoresError {
-        DescribeCustomKeyStoresError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCustomKeyStoresError {
-    fn from(err: CredentialsError) -> DescribeCustomKeyStoresError {
-        DescribeCustomKeyStoresError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCustomKeyStoresError {
-    fn from(err: HttpDispatchError) -> DescribeCustomKeyStoresError {
-        DescribeCustomKeyStoresError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCustomKeyStoresError {
-    fn from(err: io::Error) -> DescribeCustomKeyStoresError {
-        DescribeCustomKeyStoresError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCustomKeyStoresError {
@@ -2393,13 +2083,6 @@ impl Error for DescribeCustomKeyStoresError {
         match *self {
             DescribeCustomKeyStoresError::CustomKeyStoreNotFound(ref cause) => cause,
             DescribeCustomKeyStoresError::KMSInternal(ref cause) => cause,
-            DescribeCustomKeyStoresError::Validation(ref cause) => cause,
-            DescribeCustomKeyStoresError::Credentials(ref err) => err.description(),
-            DescribeCustomKeyStoresError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCustomKeyStoresError::ParseError(ref cause) => cause,
-            DescribeCustomKeyStoresError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2414,20 +2097,10 @@ pub enum DescribeKeyError {
     KMSInternal(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2440,45 +2113,30 @@ impl DescribeKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DescribeKeyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(DescribeKeyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DescribeKeyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DescribeKeyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return DescribeKeyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DescribeKeyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DescribeKeyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeKeyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeKeyError {
-    fn from(err: serde_json::error::Error) -> DescribeKeyError {
-        DescribeKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeKeyError {
-    fn from(err: CredentialsError) -> DescribeKeyError {
-        DescribeKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeKeyError {
-    fn from(err: HttpDispatchError) -> DescribeKeyError {
-        DescribeKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeKeyError {
-    fn from(err: io::Error) -> DescribeKeyError {
-        DescribeKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeKeyError {
@@ -2493,11 +2151,6 @@ impl Error for DescribeKeyError {
             DescribeKeyError::InvalidArn(ref cause) => cause,
             DescribeKeyError::KMSInternal(ref cause) => cause,
             DescribeKeyError::NotFound(ref cause) => cause,
-            DescribeKeyError::Validation(ref cause) => cause,
-            DescribeKeyError::Credentials(ref err) => err.description(),
-            DescribeKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeKeyError::ParseError(ref cause) => cause,
-            DescribeKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2514,20 +2167,10 @@ pub enum DisableKeyError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2540,48 +2183,35 @@ impl DisableKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DisableKeyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(DisableKeyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DisableKeyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DisableKeyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return DisableKeyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DisableKeyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return DisableKeyError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(DisableKeyError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DisableKeyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DisableKeyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DisableKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableKeyError {
-    fn from(err: serde_json::error::Error) -> DisableKeyError {
-        DisableKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableKeyError {
-    fn from(err: CredentialsError) -> DisableKeyError {
-        DisableKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableKeyError {
-    fn from(err: HttpDispatchError) -> DisableKeyError {
-        DisableKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableKeyError {
-    fn from(err: io::Error) -> DisableKeyError {
-        DisableKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableKeyError {
@@ -2597,11 +2227,6 @@ impl Error for DisableKeyError {
             DisableKeyError::KMSInternal(ref cause) => cause,
             DisableKeyError::KMSInvalidState(ref cause) => cause,
             DisableKeyError::NotFound(ref cause) => cause,
-            DisableKeyError::Validation(ref cause) => cause,
-            DisableKeyError::Credentials(ref err) => err.description(),
-            DisableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableKeyError::ParseError(ref cause) => cause,
-            DisableKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2622,20 +2247,10 @@ pub enum DisableKeyRotationError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableKeyRotationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableKeyRotationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableKeyRotationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2648,56 +2263,45 @@ impl DisableKeyRotationError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return DisableKeyRotationError::DependencyTimeout(String::from(error_message));
-                }
-                "DisabledException" => {
-                    return DisableKeyRotationError::Disabled(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return DisableKeyRotationError::InvalidArn(String::from(error_message));
-                }
-                "KMSInternalException" => {
-                    return DisableKeyRotationError::KMSInternal(String::from(error_message));
-                }
-                "KMSInvalidStateException" => {
-                    return DisableKeyRotationError::KMSInvalidState(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return DisableKeyRotationError::NotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return DisableKeyRotationError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableKeyRotationError::DependencyTimeout(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisableKeyRotationError::Validation(error_message.to_string());
+                "DisabledException" => {
+                    return RusotoError::Service(DisableKeyRotationError::Disabled(String::from(
+                        error_message,
+                    )));
                 }
+                "InvalidArnException" => {
+                    return RusotoError::Service(DisableKeyRotationError::InvalidArn(String::from(
+                        error_message,
+                    )));
+                }
+                "KMSInternalException" => {
+                    return RusotoError::Service(DisableKeyRotationError::KMSInternal(String::from(
+                        error_message,
+                    )));
+                }
+                "KMSInvalidStateException" => {
+                    return RusotoError::Service(DisableKeyRotationError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DisableKeyRotationError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(DisableKeyRotationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableKeyRotationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableKeyRotationError {
-    fn from(err: serde_json::error::Error) -> DisableKeyRotationError {
-        DisableKeyRotationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableKeyRotationError {
-    fn from(err: CredentialsError) -> DisableKeyRotationError {
-        DisableKeyRotationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableKeyRotationError {
-    fn from(err: HttpDispatchError) -> DisableKeyRotationError {
-        DisableKeyRotationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableKeyRotationError {
-    fn from(err: io::Error) -> DisableKeyRotationError {
-        DisableKeyRotationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableKeyRotationError {
@@ -2715,13 +2319,6 @@ impl Error for DisableKeyRotationError {
             DisableKeyRotationError::KMSInvalidState(ref cause) => cause,
             DisableKeyRotationError::NotFound(ref cause) => cause,
             DisableKeyRotationError::UnsupportedOperation(ref cause) => cause,
-            DisableKeyRotationError::Validation(ref cause) => cause,
-            DisableKeyRotationError::Credentials(ref err) => err.description(),
-            DisableKeyRotationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableKeyRotationError::ParseError(ref cause) => cause,
-            DisableKeyRotationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2734,20 +2331,10 @@ pub enum DisconnectCustomKeyStoreError {
     CustomKeyStoreNotFound(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisconnectCustomKeyStoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisconnectCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisconnectCustomKeyStoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2760,46 +2347,29 @@ impl DisconnectCustomKeyStoreError {
 
             match *error_type {
                 "CustomKeyStoreInvalidStateException" => {
-                    return DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "KMSInternalException" => {
-                    return DisconnectCustomKeyStoreError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(DisconnectCustomKeyStoreError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisconnectCustomKeyStoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisconnectCustomKeyStoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisconnectCustomKeyStoreError {
-    fn from(err: serde_json::error::Error) -> DisconnectCustomKeyStoreError {
-        DisconnectCustomKeyStoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisconnectCustomKeyStoreError {
-    fn from(err: CredentialsError) -> DisconnectCustomKeyStoreError {
-        DisconnectCustomKeyStoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisconnectCustomKeyStoreError {
-    fn from(err: HttpDispatchError) -> DisconnectCustomKeyStoreError {
-        DisconnectCustomKeyStoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisconnectCustomKeyStoreError {
-    fn from(err: io::Error) -> DisconnectCustomKeyStoreError {
-        DisconnectCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisconnectCustomKeyStoreError {
@@ -2813,13 +2383,6 @@ impl Error for DisconnectCustomKeyStoreError {
             DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
             DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
             DisconnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
-            DisconnectCustomKeyStoreError::Validation(ref cause) => cause,
-            DisconnectCustomKeyStoreError::Credentials(ref err) => err.description(),
-            DisconnectCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisconnectCustomKeyStoreError::ParseError(ref cause) => cause,
-            DisconnectCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2838,20 +2401,10 @@ pub enum EnableKeyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2864,49 +2417,40 @@ impl EnableKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EnableKeyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(EnableKeyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return EnableKeyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(EnableKeyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return EnableKeyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(EnableKeyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return EnableKeyError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(EnableKeyError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return EnableKeyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(EnableKeyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return EnableKeyError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return EnableKeyError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(EnableKeyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableKeyError {
-    fn from(err: serde_json::error::Error) -> EnableKeyError {
-        EnableKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableKeyError {
-    fn from(err: CredentialsError) -> EnableKeyError {
-        EnableKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableKeyError {
-    fn from(err: HttpDispatchError) -> EnableKeyError {
-        EnableKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableKeyError {
-    fn from(err: io::Error) -> EnableKeyError {
-        EnableKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableKeyError {
@@ -2923,11 +2467,6 @@ impl Error for EnableKeyError {
             EnableKeyError::KMSInvalidState(ref cause) => cause,
             EnableKeyError::LimitExceeded(ref cause) => cause,
             EnableKeyError::NotFound(ref cause) => cause,
-            EnableKeyError::Validation(ref cause) => cause,
-            EnableKeyError::Credentials(ref err) => err.description(),
-            EnableKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableKeyError::ParseError(ref cause) => cause,
-            EnableKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2948,20 +2487,10 @@ pub enum EnableKeyRotationError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableKeyRotationError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableKeyRotationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableKeyRotationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2974,54 +2503,45 @@ impl EnableKeyRotationError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EnableKeyRotationError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "DisabledException" => {
-                    return EnableKeyRotationError::Disabled(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::Disabled(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return EnableKeyRotationError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return EnableKeyRotationError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return EnableKeyRotationError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return EnableKeyRotationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return EnableKeyRotationError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(EnableKeyRotationError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableKeyRotationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableKeyRotationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableKeyRotationError {
-    fn from(err: serde_json::error::Error) -> EnableKeyRotationError {
-        EnableKeyRotationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableKeyRotationError {
-    fn from(err: CredentialsError) -> EnableKeyRotationError {
-        EnableKeyRotationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableKeyRotationError {
-    fn from(err: HttpDispatchError) -> EnableKeyRotationError {
-        EnableKeyRotationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableKeyRotationError {
-    fn from(err: io::Error) -> EnableKeyRotationError {
-        EnableKeyRotationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableKeyRotationError {
@@ -3039,13 +2559,6 @@ impl Error for EnableKeyRotationError {
             EnableKeyRotationError::KMSInvalidState(ref cause) => cause,
             EnableKeyRotationError::NotFound(ref cause) => cause,
             EnableKeyRotationError::UnsupportedOperation(ref cause) => cause,
-            EnableKeyRotationError::Validation(ref cause) => cause,
-            EnableKeyRotationError::Credentials(ref err) => err.description(),
-            EnableKeyRotationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableKeyRotationError::ParseError(ref cause) => cause,
-            EnableKeyRotationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3068,20 +2581,10 @@ pub enum EncryptError {
     KeyUnavailable(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EncryptError {
-    pub fn from_response(res: BufferedHttpResponse) -> EncryptError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EncryptError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3094,51 +2597,46 @@ impl EncryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return EncryptError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(EncryptError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "DisabledException" => return EncryptError::Disabled(String::from(error_message)),
+                "DisabledException" => {
+                    return RusotoError::Service(EncryptError::Disabled(String::from(error_message)));
+                }
                 "InvalidGrantTokenException" => {
-                    return EncryptError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(EncryptError::InvalidGrantToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidKeyUsageException" => {
-                    return EncryptError::InvalidKeyUsage(String::from(error_message));
+                    return RusotoError::Service(EncryptError::InvalidKeyUsage(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return EncryptError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(EncryptError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return EncryptError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(EncryptError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "KeyUnavailableException" => {
-                    return EncryptError::KeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(EncryptError::KeyUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return EncryptError::NotFound(String::from(error_message)),
-                "ValidationException" => return EncryptError::Validation(error_message.to_string()),
+                "NotFoundException" => {
+                    return RusotoError::Service(EncryptError::NotFound(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EncryptError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EncryptError {
-    fn from(err: serde_json::error::Error) -> EncryptError {
-        EncryptError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EncryptError {
-    fn from(err: CredentialsError) -> EncryptError {
-        EncryptError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EncryptError {
-    fn from(err: HttpDispatchError) -> EncryptError {
-        EncryptError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EncryptError {
-    fn from(err: io::Error) -> EncryptError {
-        EncryptError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EncryptError {
@@ -3157,11 +2655,6 @@ impl Error for EncryptError {
             EncryptError::KMSInvalidState(ref cause) => cause,
             EncryptError::KeyUnavailable(ref cause) => cause,
             EncryptError::NotFound(ref cause) => cause,
-            EncryptError::Validation(ref cause) => cause,
-            EncryptError::Credentials(ref err) => err.description(),
-            EncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EncryptError::ParseError(ref cause) => cause,
-            EncryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3184,20 +2677,10 @@ pub enum GenerateDataKeyError {
     KeyUnavailable(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateDataKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3210,57 +2693,50 @@ impl GenerateDataKeyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GenerateDataKeyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "DisabledException" => {
-                    return GenerateDataKeyError::Disabled(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::Disabled(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantTokenException" => {
-                    return GenerateDataKeyError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::InvalidGrantToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidKeyUsageException" => {
-                    return GenerateDataKeyError::InvalidKeyUsage(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::InvalidKeyUsage(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return GenerateDataKeyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return GenerateDataKeyError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "KeyUnavailableException" => {
-                    return GenerateDataKeyError::KeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::KeyUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GenerateDataKeyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GenerateDataKeyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GenerateDataKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateDataKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateDataKeyError {
-    fn from(err: serde_json::error::Error) -> GenerateDataKeyError {
-        GenerateDataKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateDataKeyError {
-    fn from(err: CredentialsError) -> GenerateDataKeyError {
-        GenerateDataKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateDataKeyError {
-    fn from(err: HttpDispatchError) -> GenerateDataKeyError {
-        GenerateDataKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateDataKeyError {
-    fn from(err: io::Error) -> GenerateDataKeyError {
-        GenerateDataKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateDataKeyError {
@@ -3279,11 +2755,6 @@ impl Error for GenerateDataKeyError {
             GenerateDataKeyError::KMSInvalidState(ref cause) => cause,
             GenerateDataKeyError::KeyUnavailable(ref cause) => cause,
             GenerateDataKeyError::NotFound(ref cause) => cause,
-            GenerateDataKeyError::Validation(ref cause) => cause,
-            GenerateDataKeyError::Credentials(ref err) => err.description(),
-            GenerateDataKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateDataKeyError::ParseError(ref cause) => cause,
-            GenerateDataKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3306,20 +2777,12 @@ pub enum GenerateDataKeyWithoutPlaintextError {
     KeyUnavailable(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateDataKeyWithoutPlaintextError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateDataKeyWithoutPlaintextError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GenerateDataKeyWithoutPlaintextError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3332,75 +2795,60 @@ impl GenerateDataKeyWithoutPlaintextError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GenerateDataKeyWithoutPlaintextError::DependencyTimeout(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DisabledException" => {
-                    return GenerateDataKeyWithoutPlaintextError::Disabled(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::Disabled(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidGrantTokenException" => {
-                    return GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GenerateDataKeyWithoutPlaintextError::InvalidGrantToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidKeyUsageException" => {
-                    return GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GenerateDataKeyWithoutPlaintextError::InvalidKeyUsage(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "KMSInternalException" => {
-                    return GenerateDataKeyWithoutPlaintextError::KMSInternal(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::KMSInternal(
+                        String::from(error_message),
                     ));
                 }
                 "KMSInvalidStateException" => {
-                    return GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
-                        error_message,
-                    ));
-                }
-                "KeyUnavailableException" => {
-                    return GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "NotFoundException" => {
-                    return GenerateDataKeyWithoutPlaintextError::NotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GenerateDataKeyWithoutPlaintextError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GenerateDataKeyWithoutPlaintextError::KMSInvalidState(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "KeyUnavailableException" => {
+                    return RusotoError::Service(
+                        GenerateDataKeyWithoutPlaintextError::KeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GenerateDataKeyWithoutPlaintextError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateDataKeyWithoutPlaintextError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateDataKeyWithoutPlaintextError {
-    fn from(err: serde_json::error::Error) -> GenerateDataKeyWithoutPlaintextError {
-        GenerateDataKeyWithoutPlaintextError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateDataKeyWithoutPlaintextError {
-    fn from(err: CredentialsError) -> GenerateDataKeyWithoutPlaintextError {
-        GenerateDataKeyWithoutPlaintextError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateDataKeyWithoutPlaintextError {
-    fn from(err: HttpDispatchError) -> GenerateDataKeyWithoutPlaintextError {
-        GenerateDataKeyWithoutPlaintextError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateDataKeyWithoutPlaintextError {
-    fn from(err: io::Error) -> GenerateDataKeyWithoutPlaintextError {
-        GenerateDataKeyWithoutPlaintextError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateDataKeyWithoutPlaintextError {
@@ -3419,13 +2867,6 @@ impl Error for GenerateDataKeyWithoutPlaintextError {
             GenerateDataKeyWithoutPlaintextError::KMSInvalidState(ref cause) => cause,
             GenerateDataKeyWithoutPlaintextError::KeyUnavailable(ref cause) => cause,
             GenerateDataKeyWithoutPlaintextError::NotFound(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::Validation(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::Credentials(ref err) => err.description(),
-            GenerateDataKeyWithoutPlaintextError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GenerateDataKeyWithoutPlaintextError::ParseError(ref cause) => cause,
-            GenerateDataKeyWithoutPlaintextError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3440,20 +2881,10 @@ pub enum GenerateRandomError {
     DependencyTimeout(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GenerateRandomError {
-    pub fn from_response(res: BufferedHttpResponse) -> GenerateRandomError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GenerateRandomError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3466,47 +2897,30 @@ impl GenerateRandomError {
 
             match *error_type {
                 "CustomKeyStoreInvalidStateException" => {
-                    return GenerateRandomError::CustomKeyStoreInvalidState(String::from(
-                        error_message,
+                    return RusotoError::Service(GenerateRandomError::CustomKeyStoreInvalidState(
+                        String::from(error_message),
                     ));
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return GenerateRandomError::CustomKeyStoreNotFound(String::from(error_message));
+                    return RusotoError::Service(GenerateRandomError::CustomKeyStoreNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "DependencyTimeoutException" => {
-                    return GenerateRandomError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(GenerateRandomError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return GenerateRandomError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(GenerateRandomError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GenerateRandomError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GenerateRandomError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GenerateRandomError {
-    fn from(err: serde_json::error::Error) -> GenerateRandomError {
-        GenerateRandomError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GenerateRandomError {
-    fn from(err: CredentialsError) -> GenerateRandomError {
-        GenerateRandomError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GenerateRandomError {
-    fn from(err: HttpDispatchError) -> GenerateRandomError {
-        GenerateRandomError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GenerateRandomError {
-    fn from(err: io::Error) -> GenerateRandomError {
-        GenerateRandomError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GenerateRandomError {
@@ -3521,11 +2935,6 @@ impl Error for GenerateRandomError {
             GenerateRandomError::CustomKeyStoreNotFound(ref cause) => cause,
             GenerateRandomError::DependencyTimeout(ref cause) => cause,
             GenerateRandomError::KMSInternal(ref cause) => cause,
-            GenerateRandomError::Validation(ref cause) => cause,
-            GenerateRandomError::Credentials(ref err) => err.description(),
-            GenerateRandomError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GenerateRandomError::ParseError(ref cause) => cause,
-            GenerateRandomError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3542,20 +2951,10 @@ pub enum GetKeyPolicyError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetKeyPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3568,48 +2967,35 @@ impl GetKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GetKeyPolicyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(GetKeyPolicyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return GetKeyPolicyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetKeyPolicyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return GetKeyPolicyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(GetKeyPolicyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return GetKeyPolicyError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(GetKeyPolicyError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetKeyPolicyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetKeyPolicyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetKeyPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetKeyPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetKeyPolicyError {
-    fn from(err: serde_json::error::Error) -> GetKeyPolicyError {
-        GetKeyPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetKeyPolicyError {
-    fn from(err: CredentialsError) -> GetKeyPolicyError {
-        GetKeyPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetKeyPolicyError {
-    fn from(err: HttpDispatchError) -> GetKeyPolicyError {
-        GetKeyPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetKeyPolicyError {
-    fn from(err: io::Error) -> GetKeyPolicyError {
-        GetKeyPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetKeyPolicyError {
@@ -3625,11 +3011,6 @@ impl Error for GetKeyPolicyError {
             GetKeyPolicyError::KMSInternal(ref cause) => cause,
             GetKeyPolicyError::KMSInvalidState(ref cause) => cause,
             GetKeyPolicyError::NotFound(ref cause) => cause,
-            GetKeyPolicyError::Validation(ref cause) => cause,
-            GetKeyPolicyError::Credentials(ref err) => err.description(),
-            GetKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetKeyPolicyError::ParseError(ref cause) => cause,
-            GetKeyPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3648,20 +3029,10 @@ pub enum GetKeyRotationStatusError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetKeyRotationStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetKeyRotationStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetKeyRotationStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3674,53 +3045,40 @@ impl GetKeyRotationStatusError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GetKeyRotationStatusError::DependencyTimeout(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return GetKeyRotationStatusError::InvalidArn(String::from(error_message));
-                }
-                "KMSInternalException" => {
-                    return GetKeyRotationStatusError::KMSInternal(String::from(error_message));
-                }
-                "KMSInvalidStateException" => {
-                    return GetKeyRotationStatusError::KMSInvalidState(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return GetKeyRotationStatusError::NotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return GetKeyRotationStatusError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetKeyRotationStatusError::DependencyTimeout(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetKeyRotationStatusError::Validation(error_message.to_string());
+                "InvalidArnException" => {
+                    return RusotoError::Service(GetKeyRotationStatusError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
+                "KMSInternalException" => {
+                    return RusotoError::Service(GetKeyRotationStatusError::KMSInternal(
+                        String::from(error_message),
+                    ));
+                }
+                "KMSInvalidStateException" => {
+                    return RusotoError::Service(GetKeyRotationStatusError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetKeyRotationStatusError::NotFound(String::from(
+                        error_message,
+                    )));
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(GetKeyRotationStatusError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetKeyRotationStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetKeyRotationStatusError {
-    fn from(err: serde_json::error::Error) -> GetKeyRotationStatusError {
-        GetKeyRotationStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetKeyRotationStatusError {
-    fn from(err: CredentialsError) -> GetKeyRotationStatusError {
-        GetKeyRotationStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetKeyRotationStatusError {
-    fn from(err: HttpDispatchError) -> GetKeyRotationStatusError {
-        GetKeyRotationStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetKeyRotationStatusError {
-    fn from(err: io::Error) -> GetKeyRotationStatusError {
-        GetKeyRotationStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetKeyRotationStatusError {
@@ -3737,13 +3095,6 @@ impl Error for GetKeyRotationStatusError {
             GetKeyRotationStatusError::KMSInvalidState(ref cause) => cause,
             GetKeyRotationStatusError::NotFound(ref cause) => cause,
             GetKeyRotationStatusError::UnsupportedOperation(ref cause) => cause,
-            GetKeyRotationStatusError::Validation(ref cause) => cause,
-            GetKeyRotationStatusError::Credentials(ref err) => err.description(),
-            GetKeyRotationStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetKeyRotationStatusError::ParseError(ref cause) => cause,
-            GetKeyRotationStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3762,20 +3113,10 @@ pub enum GetParametersForImportError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetParametersForImportError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetParametersForImportError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetParametersForImportError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3788,55 +3129,40 @@ impl GetParametersForImportError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return GetParametersForImportError::DependencyTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetParametersForImportError::DependencyTimeout(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return GetParametersForImportError::InvalidArn(String::from(error_message));
-                }
-                "KMSInternalException" => {
-                    return GetParametersForImportError::KMSInternal(String::from(error_message));
-                }
-                "KMSInvalidStateException" => {
-                    return GetParametersForImportError::KMSInvalidState(String::from(error_message));
-                }
-                "NotFoundException" => {
-                    return GetParametersForImportError::NotFound(String::from(error_message));
-                }
-                "UnsupportedOperationException" => {
-                    return GetParametersForImportError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetParametersForImportError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetParametersForImportError::Validation(error_message.to_string());
+                "KMSInternalException" => {
+                    return RusotoError::Service(GetParametersForImportError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
+                "KMSInvalidStateException" => {
+                    return RusotoError::Service(GetParametersForImportError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetParametersForImportError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(GetParametersForImportError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetParametersForImportError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetParametersForImportError {
-    fn from(err: serde_json::error::Error) -> GetParametersForImportError {
-        GetParametersForImportError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetParametersForImportError {
-    fn from(err: CredentialsError) -> GetParametersForImportError {
-        GetParametersForImportError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetParametersForImportError {
-    fn from(err: HttpDispatchError) -> GetParametersForImportError {
-        GetParametersForImportError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetParametersForImportError {
-    fn from(err: io::Error) -> GetParametersForImportError {
-        GetParametersForImportError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetParametersForImportError {
@@ -3853,13 +3179,6 @@ impl Error for GetParametersForImportError {
             GetParametersForImportError::KMSInvalidState(ref cause) => cause,
             GetParametersForImportError::NotFound(ref cause) => cause,
             GetParametersForImportError::UnsupportedOperation(ref cause) => cause,
-            GetParametersForImportError::Validation(ref cause) => cause,
-            GetParametersForImportError::Credentials(ref err) => err.description(),
-            GetParametersForImportError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetParametersForImportError::ParseError(ref cause) => cause,
-            GetParametersForImportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3886,20 +3205,10 @@ pub enum ImportKeyMaterialError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportKeyMaterialError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportKeyMaterialError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportKeyMaterialError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3912,63 +3221,60 @@ impl ImportKeyMaterialError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ImportKeyMaterialError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "ExpiredImportTokenException" => {
-                    return ImportKeyMaterialError::ExpiredImportToken(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::ExpiredImportToken(
+                        String::from(error_message),
+                    ));
                 }
                 "IncorrectKeyMaterialException" => {
-                    return ImportKeyMaterialError::IncorrectKeyMaterial(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::IncorrectKeyMaterial(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ImportKeyMaterialError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCiphertextException" => {
-                    return ImportKeyMaterialError::InvalidCiphertext(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::InvalidCiphertext(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidImportTokenException" => {
-                    return ImportKeyMaterialError::InvalidImportToken(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::InvalidImportToken(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return ImportKeyMaterialError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return ImportKeyMaterialError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ImportKeyMaterialError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return ImportKeyMaterialError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(ImportKeyMaterialError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ImportKeyMaterialError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportKeyMaterialError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportKeyMaterialError {
-    fn from(err: serde_json::error::Error) -> ImportKeyMaterialError {
-        ImportKeyMaterialError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportKeyMaterialError {
-    fn from(err: CredentialsError) -> ImportKeyMaterialError {
-        ImportKeyMaterialError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportKeyMaterialError {
-    fn from(err: HttpDispatchError) -> ImportKeyMaterialError {
-        ImportKeyMaterialError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportKeyMaterialError {
-    fn from(err: io::Error) -> ImportKeyMaterialError {
-        ImportKeyMaterialError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportKeyMaterialError {
@@ -3989,13 +3295,6 @@ impl Error for ImportKeyMaterialError {
             ImportKeyMaterialError::KMSInvalidState(ref cause) => cause,
             ImportKeyMaterialError::NotFound(ref cause) => cause,
             ImportKeyMaterialError::UnsupportedOperation(ref cause) => cause,
-            ImportKeyMaterialError::Validation(ref cause) => cause,
-            ImportKeyMaterialError::Credentials(ref err) => err.description(),
-            ImportKeyMaterialError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportKeyMaterialError::ParseError(ref cause) => cause,
-            ImportKeyMaterialError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4012,20 +3311,10 @@ pub enum ListAliasesError {
     KMSInternal(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAliasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4038,48 +3327,35 @@ impl ListAliasesError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListAliasesError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return ListAliasesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidMarkerException" => {
-                    return ListAliasesError::InvalidMarker(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::InvalidMarker(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ListAliasesError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListAliasesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAliasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAliasesError {
-    fn from(err: serde_json::error::Error) -> ListAliasesError {
-        ListAliasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAliasesError {
-    fn from(err: CredentialsError) -> ListAliasesError {
-        ListAliasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAliasesError {
-    fn from(err: HttpDispatchError) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAliasesError {
-    fn from(err: io::Error) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -4095,11 +3371,6 @@ impl Error for ListAliasesError {
             ListAliasesError::InvalidMarker(ref cause) => cause,
             ListAliasesError::KMSInternal(ref cause) => cause,
             ListAliasesError::NotFound(ref cause) => cause,
-            ListAliasesError::Validation(ref cause) => cause,
-            ListAliasesError::Credentials(ref err) => err.description(),
-            ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAliasesError::ParseError(ref cause) => cause,
-            ListAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4118,20 +3389,10 @@ pub enum ListGrantsError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGrantsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGrantsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGrantsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4144,51 +3405,40 @@ impl ListGrantsError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListGrantsError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return ListGrantsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidMarkerException" => {
-                    return ListGrantsError::InvalidMarker(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::InvalidMarker(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ListGrantsError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return ListGrantsError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListGrantsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListGrantsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListGrantsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGrantsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGrantsError {
-    fn from(err: serde_json::error::Error) -> ListGrantsError {
-        ListGrantsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGrantsError {
-    fn from(err: CredentialsError) -> ListGrantsError {
-        ListGrantsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGrantsError {
-    fn from(err: HttpDispatchError) -> ListGrantsError {
-        ListGrantsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGrantsError {
-    fn from(err: io::Error) -> ListGrantsError {
-        ListGrantsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGrantsError {
@@ -4205,11 +3455,6 @@ impl Error for ListGrantsError {
             ListGrantsError::KMSInternal(ref cause) => cause,
             ListGrantsError::KMSInvalidState(ref cause) => cause,
             ListGrantsError::NotFound(ref cause) => cause,
-            ListGrantsError::Validation(ref cause) => cause,
-            ListGrantsError::Credentials(ref err) => err.description(),
-            ListGrantsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGrantsError::ParseError(ref cause) => cause,
-            ListGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4226,20 +3471,10 @@ pub enum ListKeyPoliciesError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeyPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListKeyPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeyPoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4252,48 +3487,35 @@ impl ListKeyPoliciesError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListKeyPoliciesError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ListKeyPoliciesError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListKeyPoliciesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListKeyPoliciesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ListKeyPoliciesError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListKeyPoliciesError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return ListKeyPoliciesError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(ListKeyPoliciesError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListKeyPoliciesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListKeyPoliciesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListKeyPoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListKeyPoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListKeyPoliciesError {
-    fn from(err: serde_json::error::Error) -> ListKeyPoliciesError {
-        ListKeyPoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListKeyPoliciesError {
-    fn from(err: CredentialsError) -> ListKeyPoliciesError {
-        ListKeyPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListKeyPoliciesError {
-    fn from(err: HttpDispatchError) -> ListKeyPoliciesError {
-        ListKeyPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListKeyPoliciesError {
-    fn from(err: io::Error) -> ListKeyPoliciesError {
-        ListKeyPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListKeyPoliciesError {
@@ -4309,11 +3531,6 @@ impl Error for ListKeyPoliciesError {
             ListKeyPoliciesError::KMSInternal(ref cause) => cause,
             ListKeyPoliciesError::KMSInvalidState(ref cause) => cause,
             ListKeyPoliciesError::NotFound(ref cause) => cause,
-            ListKeyPoliciesError::Validation(ref cause) => cause,
-            ListKeyPoliciesError::Credentials(ref err) => err.description(),
-            ListKeyPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListKeyPoliciesError::ParseError(ref cause) => cause,
-            ListKeyPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4326,20 +3543,10 @@ pub enum ListKeysError {
     InvalidMarker(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeysError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListKeysError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4352,42 +3559,25 @@ impl ListKeysError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListKeysError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ListKeysError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidMarkerException" => {
-                    return ListKeysError::InvalidMarker(String::from(error_message));
+                    return RusotoError::Service(ListKeysError::InvalidMarker(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ListKeysError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListKeysError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListKeysError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListKeysError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListKeysError {
-    fn from(err: serde_json::error::Error) -> ListKeysError {
-        ListKeysError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListKeysError {
-    fn from(err: CredentialsError) -> ListKeysError {
-        ListKeysError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListKeysError {
-    fn from(err: HttpDispatchError) -> ListKeysError {
-        ListKeysError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListKeysError {
-    fn from(err: io::Error) -> ListKeysError {
-        ListKeysError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListKeysError {
@@ -4401,11 +3591,6 @@ impl Error for ListKeysError {
             ListKeysError::DependencyTimeout(ref cause) => cause,
             ListKeysError::InvalidMarker(ref cause) => cause,
             ListKeysError::KMSInternal(ref cause) => cause,
-            ListKeysError::Validation(ref cause) => cause,
-            ListKeysError::Credentials(ref err) => err.description(),
-            ListKeysError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListKeysError::ParseError(ref cause) => cause,
-            ListKeysError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4420,20 +3605,10 @@ pub enum ListResourceTagsError {
     KMSInternal(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourceTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4446,45 +3621,30 @@ impl ListResourceTagsError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ListResourceTagsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListResourceTagsError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidMarkerException" => {
-                    return ListResourceTagsError::InvalidMarker(String::from(error_message));
+                    return RusotoError::Service(ListResourceTagsError::InvalidMarker(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ListResourceTagsError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListResourceTagsError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListResourceTagsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListResourceTagsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListResourceTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourceTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourceTagsError {
-    fn from(err: serde_json::error::Error) -> ListResourceTagsError {
-        ListResourceTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourceTagsError {
-    fn from(err: CredentialsError) -> ListResourceTagsError {
-        ListResourceTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourceTagsError {
-    fn from(err: HttpDispatchError) -> ListResourceTagsError {
-        ListResourceTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourceTagsError {
-    fn from(err: io::Error) -> ListResourceTagsError {
-        ListResourceTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourceTagsError {
@@ -4499,11 +3659,6 @@ impl Error for ListResourceTagsError {
             ListResourceTagsError::InvalidMarker(ref cause) => cause,
             ListResourceTagsError::KMSInternal(ref cause) => cause,
             ListResourceTagsError::NotFound(ref cause) => cause,
-            ListResourceTagsError::Validation(ref cause) => cause,
-            ListResourceTagsError::Credentials(ref err) => err.description(),
-            ListResourceTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourceTagsError::ParseError(ref cause) => cause,
-            ListResourceTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4520,20 +3675,10 @@ pub enum ListRetirableGrantsError {
     KMSInternal(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRetirableGrantsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRetirableGrantsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRetirableGrantsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4546,48 +3691,35 @@ impl ListRetirableGrantsError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ListRetirableGrantsError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ListRetirableGrantsError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListRetirableGrantsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListRetirableGrantsError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidMarkerException" => {
-                    return ListRetirableGrantsError::InvalidMarker(String::from(error_message));
+                    return RusotoError::Service(ListRetirableGrantsError::InvalidMarker(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return ListRetirableGrantsError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ListRetirableGrantsError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ListRetirableGrantsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListRetirableGrantsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListRetirableGrantsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRetirableGrantsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRetirableGrantsError {
-    fn from(err: serde_json::error::Error) -> ListRetirableGrantsError {
-        ListRetirableGrantsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRetirableGrantsError {
-    fn from(err: CredentialsError) -> ListRetirableGrantsError {
-        ListRetirableGrantsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRetirableGrantsError {
-    fn from(err: HttpDispatchError) -> ListRetirableGrantsError {
-        ListRetirableGrantsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRetirableGrantsError {
-    fn from(err: io::Error) -> ListRetirableGrantsError {
-        ListRetirableGrantsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRetirableGrantsError {
@@ -4603,13 +3735,6 @@ impl Error for ListRetirableGrantsError {
             ListRetirableGrantsError::InvalidMarker(ref cause) => cause,
             ListRetirableGrantsError::KMSInternal(ref cause) => cause,
             ListRetirableGrantsError::NotFound(ref cause) => cause,
-            ListRetirableGrantsError::Validation(ref cause) => cause,
-            ListRetirableGrantsError::Credentials(ref err) => err.description(),
-            ListRetirableGrantsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListRetirableGrantsError::ParseError(ref cause) => cause,
-            ListRetirableGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4632,20 +3757,10 @@ pub enum PutKeyPolicyError {
     NotFound(String),
     /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutKeyPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutKeyPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutKeyPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4658,57 +3773,50 @@ impl PutKeyPolicyError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return PutKeyPolicyError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return PutKeyPolicyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return PutKeyPolicyError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return PutKeyPolicyError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutKeyPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedPolicyDocumentException" => {
-                    return PutKeyPolicyError::MalformedPolicyDocument(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::MalformedPolicyDocument(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return PutKeyPolicyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return PutKeyPolicyError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(PutKeyPolicyError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutKeyPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutKeyPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutKeyPolicyError {
-    fn from(err: serde_json::error::Error) -> PutKeyPolicyError {
-        PutKeyPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutKeyPolicyError {
-    fn from(err: CredentialsError) -> PutKeyPolicyError {
-        PutKeyPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutKeyPolicyError {
-    fn from(err: HttpDispatchError) -> PutKeyPolicyError {
-        PutKeyPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutKeyPolicyError {
-    fn from(err: io::Error) -> PutKeyPolicyError {
-        PutKeyPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutKeyPolicyError {
@@ -4727,11 +3835,6 @@ impl Error for PutKeyPolicyError {
             PutKeyPolicyError::MalformedPolicyDocument(ref cause) => cause,
             PutKeyPolicyError::NotFound(ref cause) => cause,
             PutKeyPolicyError::UnsupportedOperation(ref cause) => cause,
-            PutKeyPolicyError::Validation(ref cause) => cause,
-            PutKeyPolicyError::Credentials(ref err) => err.description(),
-            PutKeyPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutKeyPolicyError::ParseError(ref cause) => cause,
-            PutKeyPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4756,20 +3859,10 @@ pub enum ReEncryptError {
     KeyUnavailable(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReEncryptError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReEncryptError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReEncryptError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4782,56 +3875,55 @@ impl ReEncryptError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ReEncryptError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "DisabledException" => return ReEncryptError::Disabled(String::from(error_message)),
+                "DisabledException" => {
+                    return RusotoError::Service(ReEncryptError::Disabled(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidCiphertextException" => {
-                    return ReEncryptError::InvalidCiphertext(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::InvalidCiphertext(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantTokenException" => {
-                    return ReEncryptError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::InvalidGrantToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidKeyUsageException" => {
-                    return ReEncryptError::InvalidKeyUsage(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::InvalidKeyUsage(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ReEncryptError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return ReEncryptError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "KeyUnavailableException" => {
-                    return ReEncryptError::KeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(ReEncryptError::KeyUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return ReEncryptError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return ReEncryptError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(ReEncryptError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReEncryptError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReEncryptError {
-    fn from(err: serde_json::error::Error) -> ReEncryptError {
-        ReEncryptError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReEncryptError {
-    fn from(err: CredentialsError) -> ReEncryptError {
-        ReEncryptError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReEncryptError {
-    fn from(err: HttpDispatchError) -> ReEncryptError {
-        ReEncryptError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReEncryptError {
-    fn from(err: io::Error) -> ReEncryptError {
-        ReEncryptError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReEncryptError {
@@ -4851,11 +3943,6 @@ impl Error for ReEncryptError {
             ReEncryptError::KMSInvalidState(ref cause) => cause,
             ReEncryptError::KeyUnavailable(ref cause) => cause,
             ReEncryptError::NotFound(ref cause) => cause,
-            ReEncryptError::Validation(ref cause) => cause,
-            ReEncryptError::Credentials(ref err) => err.description(),
-            ReEncryptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReEncryptError::ParseError(ref cause) => cause,
-            ReEncryptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4876,20 +3963,10 @@ pub enum RetireGrantError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RetireGrantError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetireGrantError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetireGrantError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4902,54 +3979,45 @@ impl RetireGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RetireGrantError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return RetireGrantError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantIdException" => {
-                    return RetireGrantError::InvalidGrantId(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::InvalidGrantId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantTokenException" => {
-                    return RetireGrantError::InvalidGrantToken(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::InvalidGrantToken(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return RetireGrantError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return RetireGrantError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return RetireGrantError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RetireGrantError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RetireGrantError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RetireGrantError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RetireGrantError {
-    fn from(err: serde_json::error::Error) -> RetireGrantError {
-        RetireGrantError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RetireGrantError {
-    fn from(err: CredentialsError) -> RetireGrantError {
-        RetireGrantError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetireGrantError {
-    fn from(err: HttpDispatchError) -> RetireGrantError {
-        RetireGrantError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetireGrantError {
-    fn from(err: io::Error) -> RetireGrantError {
-        RetireGrantError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RetireGrantError {
@@ -4967,11 +4035,6 @@ impl Error for RetireGrantError {
             RetireGrantError::KMSInternal(ref cause) => cause,
             RetireGrantError::KMSInvalidState(ref cause) => cause,
             RetireGrantError::NotFound(ref cause) => cause,
-            RetireGrantError::Validation(ref cause) => cause,
-            RetireGrantError::Credentials(ref err) => err.description(),
-            RetireGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RetireGrantError::ParseError(ref cause) => cause,
-            RetireGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4990,20 +4053,10 @@ pub enum RevokeGrantError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeGrantError {
-    pub fn from_response(res: BufferedHttpResponse) -> RevokeGrantError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeGrantError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5016,51 +4069,40 @@ impl RevokeGrantError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return RevokeGrantError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return RevokeGrantError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidGrantIdException" => {
-                    return RevokeGrantError::InvalidGrantId(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::InvalidGrantId(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return RevokeGrantError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return RevokeGrantError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return RevokeGrantError::NotFound(String::from(error_message));
+                    return RusotoError::Service(RevokeGrantError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RevokeGrantError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RevokeGrantError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RevokeGrantError {
-    fn from(err: serde_json::error::Error) -> RevokeGrantError {
-        RevokeGrantError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RevokeGrantError {
-    fn from(err: CredentialsError) -> RevokeGrantError {
-        RevokeGrantError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RevokeGrantError {
-    fn from(err: HttpDispatchError) -> RevokeGrantError {
-        RevokeGrantError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RevokeGrantError {
-    fn from(err: io::Error) -> RevokeGrantError {
-        RevokeGrantError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RevokeGrantError {
@@ -5077,11 +4119,6 @@ impl Error for RevokeGrantError {
             RevokeGrantError::KMSInternal(ref cause) => cause,
             RevokeGrantError::KMSInvalidState(ref cause) => cause,
             RevokeGrantError::NotFound(ref cause) => cause,
-            RevokeGrantError::Validation(ref cause) => cause,
-            RevokeGrantError::Credentials(ref err) => err.description(),
-            RevokeGrantError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RevokeGrantError::ParseError(ref cause) => cause,
-            RevokeGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5098,20 +4135,10 @@ pub enum ScheduleKeyDeletionError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ScheduleKeyDeletionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ScheduleKeyDeletionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScheduleKeyDeletionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5124,48 +4151,35 @@ impl ScheduleKeyDeletionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return ScheduleKeyDeletionError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(ScheduleKeyDeletionError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ScheduleKeyDeletionError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ScheduleKeyDeletionError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return ScheduleKeyDeletionError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInvalidStateException" => {
-                    return ScheduleKeyDeletionError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(ScheduleKeyDeletionError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return ScheduleKeyDeletionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ScheduleKeyDeletionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ScheduleKeyDeletionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ScheduleKeyDeletionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ScheduleKeyDeletionError {
-    fn from(err: serde_json::error::Error) -> ScheduleKeyDeletionError {
-        ScheduleKeyDeletionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ScheduleKeyDeletionError {
-    fn from(err: CredentialsError) -> ScheduleKeyDeletionError {
-        ScheduleKeyDeletionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ScheduleKeyDeletionError {
-    fn from(err: HttpDispatchError) -> ScheduleKeyDeletionError {
-        ScheduleKeyDeletionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ScheduleKeyDeletionError {
-    fn from(err: io::Error) -> ScheduleKeyDeletionError {
-        ScheduleKeyDeletionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ScheduleKeyDeletionError {
@@ -5181,13 +4195,6 @@ impl Error for ScheduleKeyDeletionError {
             ScheduleKeyDeletionError::KMSInternal(ref cause) => cause,
             ScheduleKeyDeletionError::KMSInvalidState(ref cause) => cause,
             ScheduleKeyDeletionError::NotFound(ref cause) => cause,
-            ScheduleKeyDeletionError::Validation(ref cause) => cause,
-            ScheduleKeyDeletionError::Credentials(ref err) => err.description(),
-            ScheduleKeyDeletionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ScheduleKeyDeletionError::ParseError(ref cause) => cause,
-            ScheduleKeyDeletionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5206,20 +4213,10 @@ pub enum TagResourceError {
     NotFound(String),
     /// <p>The request was rejected because one or more tags are not valid.</p>
     Tag(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5232,49 +4229,38 @@ impl TagResourceError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return TagResourceError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return TagResourceError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return TagResourceError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return TagResourceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "TagException" => return TagResourceError::Tag(String::from(error_message)),
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
+                "TagException" => {
+                    return RusotoError::Service(TagResourceError::Tag(String::from(error_message)));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5291,11 +4277,6 @@ impl Error for TagResourceError {
             TagResourceError::LimitExceeded(ref cause) => cause,
             TagResourceError::NotFound(ref cause) => cause,
             TagResourceError::Tag(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5312,20 +4293,10 @@ pub enum UntagResourceError {
     NotFound(String),
     /// <p>The request was rejected because one or more tags are not valid.</p>
     Tag(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5338,46 +4309,35 @@ impl UntagResourceError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return UntagResourceError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return UntagResourceError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return UntagResourceError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UntagResourceError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "TagException" => return UntagResourceError::Tag(String::from(error_message)),
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
+                "TagException" => {
+                    return RusotoError::Service(UntagResourceError::Tag(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5393,11 +4353,6 @@ impl Error for UntagResourceError {
             UntagResourceError::KMSInvalidState(ref cause) => cause,
             UntagResourceError::NotFound(ref cause) => cause,
             UntagResourceError::Tag(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5412,20 +4367,10 @@ pub enum UpdateAliasError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5438,45 +4383,30 @@ impl UpdateAliasError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return UpdateAliasError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::DependencyTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInternalException" => {
-                    return UpdateAliasError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::KMSInternal(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return UpdateAliasError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateAliasError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateAliasError {
-    fn from(err: serde_json::error::Error) -> UpdateAliasError {
-        UpdateAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAliasError {
-    fn from(err: CredentialsError) -> UpdateAliasError {
-        UpdateAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAliasError {
-    fn from(err: HttpDispatchError) -> UpdateAliasError {
-        UpdateAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAliasError {
-    fn from(err: io::Error) -> UpdateAliasError {
-        UpdateAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -5491,11 +4421,6 @@ impl Error for UpdateAliasError {
             UpdateAliasError::KMSInternal(ref cause) => cause,
             UpdateAliasError::KMSInvalidState(ref cause) => cause,
             UpdateAliasError::NotFound(ref cause) => cause,
-            UpdateAliasError::Validation(ref cause) => cause,
-            UpdateAliasError::Credentials(ref err) => err.description(),
-            UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAliasError::ParseError(ref cause) => cause,
-            UpdateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5516,20 +4441,10 @@ pub enum UpdateCustomKeyStoreError {
     CustomKeyStoreNotFound(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCustomKeyStoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCustomKeyStoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5542,66 +4457,53 @@ impl UpdateCustomKeyStoreError {
 
             match *error_type {
                 "CloudHsmClusterInvalidConfigurationException" => {
-                    return UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CloudHsmClusterNotActiveException" => {
-                    return UpdateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CloudHsmClusterNotFoundException" => {
-                    return UpdateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCustomKeyStoreError::CloudHsmClusterNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmClusterNotRelatedException" => {
-                    return UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreInvalidStateException" => {
-                    return UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CustomKeyStoreNotFoundException" => {
-                    return UpdateCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCustomKeyStoreError::CustomKeyStoreNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "KMSInternalException" => {
-                    return UpdateCustomKeyStoreError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(UpdateCustomKeyStoreError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateCustomKeyStoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCustomKeyStoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCustomKeyStoreError {
-    fn from(err: serde_json::error::Error) -> UpdateCustomKeyStoreError {
-        UpdateCustomKeyStoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCustomKeyStoreError {
-    fn from(err: CredentialsError) -> UpdateCustomKeyStoreError {
-        UpdateCustomKeyStoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCustomKeyStoreError {
-    fn from(err: HttpDispatchError) -> UpdateCustomKeyStoreError {
-        UpdateCustomKeyStoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCustomKeyStoreError {
-    fn from(err: io::Error) -> UpdateCustomKeyStoreError {
-        UpdateCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCustomKeyStoreError {
@@ -5619,13 +4521,6 @@ impl Error for UpdateCustomKeyStoreError {
             UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
             UpdateCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
             UpdateCustomKeyStoreError::KMSInternal(ref cause) => cause,
-            UpdateCustomKeyStoreError::Validation(ref cause) => cause,
-            UpdateCustomKeyStoreError::Credentials(ref err) => err.description(),
-            UpdateCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateCustomKeyStoreError::ParseError(ref cause) => cause,
-            UpdateCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5642,20 +4537,10 @@ pub enum UpdateKeyDescriptionError {
     KMSInvalidState(String),
     /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateKeyDescriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateKeyDescriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateKeyDescriptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5668,48 +4553,35 @@ impl UpdateKeyDescriptionError {
 
             match *error_type {
                 "DependencyTimeoutException" => {
-                    return UpdateKeyDescriptionError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateKeyDescriptionError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpdateKeyDescriptionError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateKeyDescriptionError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInternalException" => {
-                    return UpdateKeyDescriptionError::KMSInternal(String::from(error_message));
+                    return RusotoError::Service(UpdateKeyDescriptionError::KMSInternal(
+                        String::from(error_message),
+                    ));
                 }
                 "KMSInvalidStateException" => {
-                    return UpdateKeyDescriptionError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(UpdateKeyDescriptionError::KMSInvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateKeyDescriptionError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateKeyDescriptionError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateKeyDescriptionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateKeyDescriptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateKeyDescriptionError {
-    fn from(err: serde_json::error::Error) -> UpdateKeyDescriptionError {
-        UpdateKeyDescriptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateKeyDescriptionError {
-    fn from(err: CredentialsError) -> UpdateKeyDescriptionError {
-        UpdateKeyDescriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateKeyDescriptionError {
-    fn from(err: HttpDispatchError) -> UpdateKeyDescriptionError {
-        UpdateKeyDescriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateKeyDescriptionError {
-    fn from(err: io::Error) -> UpdateKeyDescriptionError {
-        UpdateKeyDescriptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateKeyDescriptionError {
@@ -5725,13 +4597,6 @@ impl Error for UpdateKeyDescriptionError {
             UpdateKeyDescriptionError::KMSInternal(ref cause) => cause,
             UpdateKeyDescriptionError::KMSInvalidState(ref cause) => cause,
             UpdateKeyDescriptionError::NotFound(ref cause) => cause,
-            UpdateKeyDescriptionError::Validation(ref cause) => cause,
-            UpdateKeyDescriptionError::Credentials(ref err) => err.description(),
-            UpdateKeyDescriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateKeyDescriptionError::ParseError(ref cause) => cause,
-            UpdateKeyDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }

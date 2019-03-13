@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -230,22 +227,12 @@ pub enum PostContentError {
     RequestTimeout(String),
     /// <p>The Content-Type header (<code>PostContent</code> API) has an invalid value. </p>
     UnsupportedMediaType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostContentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PostContentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostContentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -270,66 +257,65 @@ impl PostContentError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return PostContentError::BadGateway(String::from(error_message));
+                    return RusotoError::Service(PostContentError::BadGateway(String::from(
+                        error_message,
+                    )));
                 }
                 "BadRequestException" => {
-                    return PostContentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PostContentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return PostContentError::Conflict(String::from(error_message));
+                    return RusotoError::Service(PostContentError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "DependencyFailedException" => {
-                    return PostContentError::DependencyFailed(String::from(error_message));
+                    return RusotoError::Service(PostContentError::DependencyFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return PostContentError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PostContentError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PostContentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PostContentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LoopDetectedException" => {
-                    return PostContentError::LoopDetected(String::from(error_message));
+                    return RusotoError::Service(PostContentError::LoopDetected(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAcceptableException" => {
-                    return PostContentError::NotAcceptable(String::from(error_message));
+                    return RusotoError::Service(PostContentError::NotAcceptable(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return PostContentError::NotFound(String::from(error_message));
+                    return RusotoError::Service(PostContentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestTimeoutException" => {
-                    return PostContentError::RequestTimeout(String::from(error_message));
+                    return RusotoError::Service(PostContentError::RequestTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedMediaTypeException" => {
-                    return PostContentError::UnsupportedMediaType(String::from(error_message));
+                    return RusotoError::Service(PostContentError::UnsupportedMediaType(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PostContentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostContentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostContentError {
-    fn from(err: serde_json::error::Error) -> PostContentError {
-        PostContentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostContentError {
-    fn from(err: CredentialsError) -> PostContentError {
-        PostContentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostContentError {
-    fn from(err: HttpDispatchError) -> PostContentError {
-        PostContentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostContentError {
-    fn from(err: io::Error) -> PostContentError {
-        PostContentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostContentError {
@@ -351,11 +337,6 @@ impl Error for PostContentError {
             PostContentError::NotFound(ref cause) => cause,
             PostContentError::RequestTimeout(ref cause) => cause,
             PostContentError::UnsupportedMediaType(ref cause) => cause,
-            PostContentError::Validation(ref cause) => cause,
-            PostContentError::Credentials(ref err) => err.description(),
-            PostContentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostContentError::ParseError(ref cause) => cause,
-            PostContentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -378,22 +359,12 @@ pub enum PostTextError {
     LoopDetected(String),
     /// <p>The resource (such as the Amazon Lex bot or an alias) that is referred to is not found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostTextError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PostTextError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostTextError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -418,53 +389,50 @@ impl PostTextError {
 
             match error_type {
                 "BadGatewayException" => {
-                    return PostTextError::BadGateway(String::from(error_message));
+                    return RusotoError::Service(PostTextError::BadGateway(String::from(
+                        error_message,
+                    )));
                 }
                 "BadRequestException" => {
-                    return PostTextError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PostTextError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ConflictException" => return PostTextError::Conflict(String::from(error_message)),
+                "ConflictException" => {
+                    return RusotoError::Service(PostTextError::Conflict(String::from(
+                        error_message,
+                    )));
+                }
                 "DependencyFailedException" => {
-                    return PostTextError::DependencyFailed(String::from(error_message));
+                    return RusotoError::Service(PostTextError::DependencyFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return PostTextError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(PostTextError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PostTextError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PostTextError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LoopDetectedException" => {
-                    return PostTextError::LoopDetected(String::from(error_message));
+                    return RusotoError::Service(PostTextError::LoopDetected(String::from(
+                        error_message,
+                    )));
                 }
-                "NotFoundException" => return PostTextError::NotFound(String::from(error_message)),
-                "ValidationException" => {
-                    return PostTextError::Validation(error_message.to_string());
+                "NotFoundException" => {
+                    return RusotoError::Service(PostTextError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostTextError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostTextError {
-    fn from(err: serde_json::error::Error) -> PostTextError {
-        PostTextError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostTextError {
-    fn from(err: CredentialsError) -> PostTextError {
-        PostTextError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostTextError {
-    fn from(err: HttpDispatchError) -> PostTextError {
-        PostTextError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostTextError {
-    fn from(err: io::Error) -> PostTextError {
-        PostTextError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostTextError {
@@ -483,11 +451,6 @@ impl Error for PostTextError {
             PostTextError::LimitExceeded(ref cause) => cause,
             PostTextError::LoopDetected(ref cause) => cause,
             PostTextError::NotFound(ref cause) => cause,
-            PostTextError::Validation(ref cause) => cause,
-            PostTextError::Credentials(ref err) => err.description(),
-            PostTextError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostTextError::ParseError(ref cause) => cause,
-            PostTextError::Unknown(_) => "unknown error",
         }
     }
 }

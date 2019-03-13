@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1782,20 +1779,10 @@ pub enum AssociateFleetError {
     OperationNotPermitted(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1808,51 +1795,40 @@ impl AssociateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AssociateFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleImageException" => {
-                    return AssociateFleetError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::IncompatibleImage(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAccountStatusException" => {
-                    return AssociateFleetError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AssociateFleetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return AssociateFleetError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AssociateFleetError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateFleetError {
-    fn from(err: serde_json::error::Error) -> AssociateFleetError {
-        AssociateFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateFleetError {
-    fn from(err: CredentialsError) -> AssociateFleetError {
-        AssociateFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateFleetError {
-    fn from(err: HttpDispatchError) -> AssociateFleetError {
-        AssociateFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateFleetError {
-    fn from(err: io::Error) -> AssociateFleetError {
-        AssociateFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateFleetError {
@@ -1869,11 +1845,6 @@ impl Error for AssociateFleetError {
             AssociateFleetError::LimitExceeded(ref cause) => cause,
             AssociateFleetError::OperationNotPermitted(ref cause) => cause,
             AssociateFleetError::ResourceNotFound(ref cause) => cause,
-            AssociateFleetError::Validation(ref cause) => cause,
-            AssociateFleetError::Credentials(ref err) => err.description(),
-            AssociateFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AssociateFleetError::ParseError(ref cause) => cause,
-            AssociateFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1882,20 +1853,10 @@ impl Error for AssociateFleetError {
 pub enum BatchAssociateUserStackError {
     /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchAssociateUserStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchAssociateUserStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchAssociateUserStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1908,38 +1869,17 @@ impl BatchAssociateUserStackError {
 
             match *error_type {
                 "OperationNotPermittedException" => {
-                    return BatchAssociateUserStackError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchAssociateUserStackError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchAssociateUserStackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchAssociateUserStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchAssociateUserStackError {
-    fn from(err: serde_json::error::Error) -> BatchAssociateUserStackError {
-        BatchAssociateUserStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchAssociateUserStackError {
-    fn from(err: CredentialsError) -> BatchAssociateUserStackError {
-        BatchAssociateUserStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchAssociateUserStackError {
-    fn from(err: HttpDispatchError) -> BatchAssociateUserStackError {
-        BatchAssociateUserStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchAssociateUserStackError {
-    fn from(err: io::Error) -> BatchAssociateUserStackError {
-        BatchAssociateUserStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchAssociateUserStackError {
@@ -1951,33 +1891,17 @@ impl Error for BatchAssociateUserStackError {
     fn description(&self) -> &str {
         match *self {
             BatchAssociateUserStackError::OperationNotPermitted(ref cause) => cause,
-            BatchAssociateUserStackError::Validation(ref cause) => cause,
-            BatchAssociateUserStackError::Credentials(ref err) => err.description(),
-            BatchAssociateUserStackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchAssociateUserStackError::ParseError(ref cause) => cause,
-            BatchAssociateUserStackError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by BatchDisassociateUserStack
 #[derive(Debug, PartialEq)]
-pub enum BatchDisassociateUserStackError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum BatchDisassociateUserStackError {}
 
 impl BatchDisassociateUserStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDisassociateUserStackError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchDisassociateUserStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1989,34 +1913,11 @@ impl BatchDisassociateUserStackError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return BatchDisassociateUserStackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDisassociateUserStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDisassociateUserStackError {
-    fn from(err: serde_json::error::Error) -> BatchDisassociateUserStackError {
-        BatchDisassociateUserStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDisassociateUserStackError {
-    fn from(err: CredentialsError) -> BatchDisassociateUserStackError {
-        BatchDisassociateUserStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDisassociateUserStackError {
-    fn from(err: HttpDispatchError) -> BatchDisassociateUserStackError {
-        BatchDisassociateUserStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDisassociateUserStackError {
-    fn from(err: io::Error) -> BatchDisassociateUserStackError {
-        BatchDisassociateUserStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDisassociateUserStackError {
@@ -2026,15 +1927,7 @@ impl fmt::Display for BatchDisassociateUserStackError {
 }
 impl Error for BatchDisassociateUserStackError {
     fn description(&self) -> &str {
-        match *self {
-            BatchDisassociateUserStackError::Validation(ref cause) => cause,
-            BatchDisassociateUserStackError::Credentials(ref err) => err.description(),
-            BatchDisassociateUserStackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDisassociateUserStackError::ParseError(ref cause) => cause,
-            BatchDisassociateUserStackError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by CopyImage
@@ -2052,20 +1945,10 @@ pub enum CopyImageError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2078,51 +1961,40 @@ impl CopyImageError {
 
             match *error_type {
                 "IncompatibleImageException" => {
-                    return CopyImageError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::IncompatibleImage(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAccountStatusException" => {
-                    return CopyImageError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::InvalidAccountStatus(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CopyImageError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CopyImageError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotAvailableException" => {
-                    return CopyImageError::ResourceNotAvailable(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::ResourceNotAvailable(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CopyImageError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CopyImageError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CopyImageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CopyImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CopyImageError {
-    fn from(err: serde_json::error::Error) -> CopyImageError {
-        CopyImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CopyImageError {
-    fn from(err: CredentialsError) -> CopyImageError {
-        CopyImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyImageError {
-    fn from(err: HttpDispatchError) -> CopyImageError {
-        CopyImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyImageError {
-    fn from(err: io::Error) -> CopyImageError {
-        CopyImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CopyImageError {
@@ -2139,11 +2011,6 @@ impl Error for CopyImageError {
             CopyImageError::ResourceAlreadyExists(ref cause) => cause,
             CopyImageError::ResourceNotAvailable(ref cause) => cause,
             CopyImageError::ResourceNotFound(ref cause) => cause,
-            CopyImageError::Validation(ref cause) => cause,
-            CopyImageError::Credentials(ref err) => err.description(),
-            CopyImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CopyImageError::ParseError(ref cause) => cause,
-            CopyImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2156,20 +2023,10 @@ pub enum CreateDirectoryConfigError {
     LimitExceeded(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectoryConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectoryConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2182,46 +2039,25 @@ impl CreateDirectoryConfigError {
 
             match *error_type {
                 "InvalidAccountStatusException" => {
-                    return CreateDirectoryConfigError::InvalidAccountStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDirectoryConfigError::InvalidAccountStatus(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return CreateDirectoryConfigError::LimitExceeded(String::from(error_message));
-                }
-                "ResourceAlreadyExistsException" => {
-                    return CreateDirectoryConfigError::ResourceAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDirectoryConfigError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateDirectoryConfigError::Validation(error_message.to_string());
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateDirectoryConfigError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDirectoryConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDirectoryConfigError {
-    fn from(err: serde_json::error::Error) -> CreateDirectoryConfigError {
-        CreateDirectoryConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDirectoryConfigError {
-    fn from(err: CredentialsError) -> CreateDirectoryConfigError {
-        CreateDirectoryConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDirectoryConfigError {
-    fn from(err: HttpDispatchError) -> CreateDirectoryConfigError {
-        CreateDirectoryConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDirectoryConfigError {
-    fn from(err: io::Error) -> CreateDirectoryConfigError {
-        CreateDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDirectoryConfigError {
@@ -2235,13 +2071,6 @@ impl Error for CreateDirectoryConfigError {
             CreateDirectoryConfigError::InvalidAccountStatus(ref cause) => cause,
             CreateDirectoryConfigError::LimitExceeded(ref cause) => cause,
             CreateDirectoryConfigError::ResourceAlreadyExists(ref cause) => cause,
-            CreateDirectoryConfigError::Validation(ref cause) => cause,
-            CreateDirectoryConfigError::Credentials(ref err) => err.description(),
-            CreateDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDirectoryConfigError::ParseError(ref cause) => cause,
-            CreateDirectoryConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2268,20 +2097,10 @@ pub enum CreateFleetError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2294,65 +2113,60 @@ impl CreateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleImageException" => {
-                    return CreateFleetError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::IncompatibleImage(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAccountStatusException" => {
-                    return CreateFleetError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return CreateFleetError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateFleetError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRoleException" => {
-                    return CreateFleetError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateFleetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateFleetError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateFleetError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotAvailableException" => {
-                    return CreateFleetError::ResourceNotAvailable(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::ResourceNotAvailable(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateFleetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFleetError {
-    fn from(err: serde_json::error::Error) -> CreateFleetError {
-        CreateFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFleetError {
-    fn from(err: CredentialsError) -> CreateFleetError {
-        CreateFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFleetError {
-    fn from(err: HttpDispatchError) -> CreateFleetError {
-        CreateFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFleetError {
-    fn from(err: io::Error) -> CreateFleetError {
-        CreateFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFleetError {
@@ -2373,11 +2187,6 @@ impl Error for CreateFleetError {
             CreateFleetError::ResourceAlreadyExists(ref cause) => cause,
             CreateFleetError::ResourceNotAvailable(ref cause) => cause,
             CreateFleetError::ResourceNotFound(ref cause) => cause,
-            CreateFleetError::Validation(ref cause) => cause,
-            CreateFleetError::Credentials(ref err) => err.description(),
-            CreateFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFleetError::ParseError(ref cause) => cause,
-            CreateFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2404,20 +2213,10 @@ pub enum CreateImageBuilderError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateImageBuilderError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateImageBuilderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateImageBuilderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2430,75 +2229,62 @@ impl CreateImageBuilderError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateImageBuilderError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateImageBuilderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "IncompatibleImageException" => {
-                    return CreateImageBuilderError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(CreateImageBuilderError::IncompatibleImage(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAccountStatusException" => {
-                    return CreateImageBuilderError::InvalidAccountStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateImageBuilderError::InvalidAccountStatus(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return CreateImageBuilderError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateImageBuilderError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRoleException" => {
-                    return CreateImageBuilderError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(CreateImageBuilderError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateImageBuilderError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateImageBuilderError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateImageBuilderError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateImageBuilderError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateImageBuilderError::ResourceAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateImageBuilderError::ResourceAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotAvailableException" => {
-                    return CreateImageBuilderError::ResourceNotAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateImageBuilderError::ResourceNotAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateImageBuilderError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateImageBuilderError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateImageBuilderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateImageBuilderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateImageBuilderError {
-    fn from(err: serde_json::error::Error) -> CreateImageBuilderError {
-        CreateImageBuilderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateImageBuilderError {
-    fn from(err: CredentialsError) -> CreateImageBuilderError {
-        CreateImageBuilderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateImageBuilderError {
-    fn from(err: HttpDispatchError) -> CreateImageBuilderError {
-        CreateImageBuilderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateImageBuilderError {
-    fn from(err: io::Error) -> CreateImageBuilderError {
-        CreateImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateImageBuilderError {
@@ -2519,13 +2305,6 @@ impl Error for CreateImageBuilderError {
             CreateImageBuilderError::ResourceAlreadyExists(ref cause) => cause,
             CreateImageBuilderError::ResourceNotAvailable(ref cause) => cause,
             CreateImageBuilderError::ResourceNotFound(ref cause) => cause,
-            CreateImageBuilderError::Validation(ref cause) => cause,
-            CreateImageBuilderError::Credentials(ref err) => err.description(),
-            CreateImageBuilderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateImageBuilderError::ParseError(ref cause) => cause,
-            CreateImageBuilderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2536,20 +2315,12 @@ pub enum CreateImageBuilderStreamingURLError {
     OperationNotPermitted(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateImageBuilderStreamingURLError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateImageBuilderStreamingURLError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateImageBuilderStreamingURLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2562,45 +2333,24 @@ impl CreateImageBuilderStreamingURLError {
 
             match *error_type {
                 "OperationNotPermittedException" => {
-                    return CreateImageBuilderStreamingURLError::OperationNotPermitted(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return CreateImageBuilderStreamingURLError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return CreateImageBuilderStreamingURLError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        CreateImageBuilderStreamingURLError::OperationNotPermitted(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateImageBuilderStreamingURLError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateImageBuilderStreamingURLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateImageBuilderStreamingURLError {
-    fn from(err: serde_json::error::Error) -> CreateImageBuilderStreamingURLError {
-        CreateImageBuilderStreamingURLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateImageBuilderStreamingURLError {
-    fn from(err: CredentialsError) -> CreateImageBuilderStreamingURLError {
-        CreateImageBuilderStreamingURLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateImageBuilderStreamingURLError {
-    fn from(err: HttpDispatchError) -> CreateImageBuilderStreamingURLError {
-        CreateImageBuilderStreamingURLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateImageBuilderStreamingURLError {
-    fn from(err: io::Error) -> CreateImageBuilderStreamingURLError {
-        CreateImageBuilderStreamingURLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateImageBuilderStreamingURLError {
@@ -2613,13 +2363,6 @@ impl Error for CreateImageBuilderStreamingURLError {
         match *self {
             CreateImageBuilderStreamingURLError::OperationNotPermitted(ref cause) => cause,
             CreateImageBuilderStreamingURLError::ResourceNotFound(ref cause) => cause,
-            CreateImageBuilderStreamingURLError::Validation(ref cause) => cause,
-            CreateImageBuilderStreamingURLError::Credentials(ref err) => err.description(),
-            CreateImageBuilderStreamingURLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateImageBuilderStreamingURLError::ParseError(ref cause) => cause,
-            CreateImageBuilderStreamingURLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2640,20 +2383,10 @@ pub enum CreateStackError {
     ResourceAlreadyExists(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2666,56 +2399,45 @@ impl CreateStackError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateStackError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAccountStatusException" => {
-                    return CreateStackError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return CreateStackError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStackError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRoleException" => {
-                    return CreateStackError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateStackError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateStackError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateStackError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateStackError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateStackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateStackError {
-    fn from(err: serde_json::error::Error) -> CreateStackError {
-        CreateStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateStackError {
-    fn from(err: CredentialsError) -> CreateStackError {
-        CreateStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStackError {
-    fn from(err: HttpDispatchError) -> CreateStackError {
-        CreateStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStackError {
-    fn from(err: io::Error) -> CreateStackError {
-        CreateStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateStackError {
@@ -2733,11 +2455,6 @@ impl Error for CreateStackError {
             CreateStackError::LimitExceeded(ref cause) => cause,
             CreateStackError::ResourceAlreadyExists(ref cause) => cause,
             CreateStackError::ResourceNotFound(ref cause) => cause,
-            CreateStackError::Validation(ref cause) => cause,
-            CreateStackError::Credentials(ref err) => err.description(),
-            CreateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateStackError::ParseError(ref cause) => cause,
-            CreateStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2752,20 +2469,10 @@ pub enum CreateStreamingURLError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateStreamingURLError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateStreamingURLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateStreamingURLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2778,51 +2485,32 @@ impl CreateStreamingURLError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return CreateStreamingURLError::InvalidParameterCombination(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateStreamingURLError::InvalidParameterCombination(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OperationNotPermittedException" => {
-                    return CreateStreamingURLError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamingURLError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotAvailableException" => {
-                    return CreateStreamingURLError::ResourceNotAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateStreamingURLError::ResourceNotAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateStreamingURLError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateStreamingURLError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateStreamingURLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateStreamingURLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateStreamingURLError {
-    fn from(err: serde_json::error::Error) -> CreateStreamingURLError {
-        CreateStreamingURLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateStreamingURLError {
-    fn from(err: CredentialsError) -> CreateStreamingURLError {
-        CreateStreamingURLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateStreamingURLError {
-    fn from(err: HttpDispatchError) -> CreateStreamingURLError {
-        CreateStreamingURLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateStreamingURLError {
-    fn from(err: io::Error) -> CreateStreamingURLError {
-        CreateStreamingURLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateStreamingURLError {
@@ -2837,13 +2525,6 @@ impl Error for CreateStreamingURLError {
             CreateStreamingURLError::OperationNotPermitted(ref cause) => cause,
             CreateStreamingURLError::ResourceNotAvailable(ref cause) => cause,
             CreateStreamingURLError::ResourceNotFound(ref cause) => cause,
-            CreateStreamingURLError::Validation(ref cause) => cause,
-            CreateStreamingURLError::Credentials(ref err) => err.description(),
-            CreateStreamingURLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateStreamingURLError::ParseError(ref cause) => cause,
-            CreateStreamingURLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2860,20 +2541,10 @@ pub enum CreateUserError {
     OperationNotPermitted(String),
     /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2886,48 +2557,35 @@ impl CreateUserError {
 
             match *error_type {
                 "InvalidAccountStatusException" => {
-                    return CreateUserError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return CreateUserError::InvalidParameterCombination(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::InvalidParameterCombination(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateUserError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return CreateUserError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateUserError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserError {
-    fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserError {
-    fn from(err: CredentialsError) -> CreateUserError {
-        CreateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserError {
-    fn from(err: HttpDispatchError) -> CreateUserError {
-        CreateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserError {
-    fn from(err: io::Error) -> CreateUserError {
-        CreateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserError {
@@ -2943,11 +2601,6 @@ impl Error for CreateUserError {
             CreateUserError::LimitExceeded(ref cause) => cause,
             CreateUserError::OperationNotPermitted(ref cause) => cause,
             CreateUserError::ResourceAlreadyExists(ref cause) => cause,
-            CreateUserError::Validation(ref cause) => cause,
-            CreateUserError::Credentials(ref err) => err.description(),
-            CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::ParseError(ref cause) => cause,
-            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2958,20 +2611,10 @@ pub enum DeleteDirectoryConfigError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectoryConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectoryConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2984,39 +2627,20 @@ impl DeleteDirectoryConfigError {
 
             match *error_type {
                 "ResourceInUseException" => {
-                    return DeleteDirectoryConfigError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryConfigError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDirectoryConfigError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryConfigError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDirectoryConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDirectoryConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDirectoryConfigError {
-    fn from(err: serde_json::error::Error) -> DeleteDirectoryConfigError {
-        DeleteDirectoryConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDirectoryConfigError {
-    fn from(err: CredentialsError) -> DeleteDirectoryConfigError {
-        DeleteDirectoryConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDirectoryConfigError {
-    fn from(err: HttpDispatchError) -> DeleteDirectoryConfigError {
-        DeleteDirectoryConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDirectoryConfigError {
-    fn from(err: io::Error) -> DeleteDirectoryConfigError {
-        DeleteDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDirectoryConfigError {
@@ -3029,13 +2653,6 @@ impl Error for DeleteDirectoryConfigError {
         match *self {
             DeleteDirectoryConfigError::ResourceInUse(ref cause) => cause,
             DeleteDirectoryConfigError::ResourceNotFound(ref cause) => cause,
-            DeleteDirectoryConfigError::Validation(ref cause) => cause,
-            DeleteDirectoryConfigError::Credentials(ref err) => err.description(),
-            DeleteDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDirectoryConfigError::ParseError(ref cause) => cause,
-            DeleteDirectoryConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3048,20 +2665,10 @@ pub enum DeleteFleetError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3074,42 +2681,25 @@ impl DeleteFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeleteFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteFleetError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteFleetError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFleetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFleetError {
-    fn from(err: serde_json::error::Error) -> DeleteFleetError {
-        DeleteFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFleetError {
-    fn from(err: CredentialsError) -> DeleteFleetError {
-        DeleteFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFleetError {
-    fn from(err: HttpDispatchError) -> DeleteFleetError {
-        DeleteFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFleetError {
-    fn from(err: io::Error) -> DeleteFleetError {
-        DeleteFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFleetError {
@@ -3123,11 +2713,6 @@ impl Error for DeleteFleetError {
             DeleteFleetError::ConcurrentModification(ref cause) => cause,
             DeleteFleetError::ResourceInUse(ref cause) => cause,
             DeleteFleetError::ResourceNotFound(ref cause) => cause,
-            DeleteFleetError::Validation(ref cause) => cause,
-            DeleteFleetError::Credentials(ref err) => err.description(),
-            DeleteFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFleetError::ParseError(ref cause) => cause,
-            DeleteFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3142,20 +2727,10 @@ pub enum DeleteImageError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3168,45 +2743,30 @@ impl DeleteImageError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteImageError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeleteImageError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteImageError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(DeleteImageError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteImageError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteImageError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteImageError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteImageError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteImageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteImageError {
-    fn from(err: serde_json::error::Error) -> DeleteImageError {
-        DeleteImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteImageError {
-    fn from(err: CredentialsError) -> DeleteImageError {
-        DeleteImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteImageError {
-    fn from(err: HttpDispatchError) -> DeleteImageError {
-        DeleteImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteImageError {
-    fn from(err: io::Error) -> DeleteImageError {
-        DeleteImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteImageError {
@@ -3221,11 +2781,6 @@ impl Error for DeleteImageError {
             DeleteImageError::OperationNotPermitted(ref cause) => cause,
             DeleteImageError::ResourceInUse(ref cause) => cause,
             DeleteImageError::ResourceNotFound(ref cause) => cause,
-            DeleteImageError::Validation(ref cause) => cause,
-            DeleteImageError::Credentials(ref err) => err.description(),
-            DeleteImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteImageError::ParseError(ref cause) => cause,
-            DeleteImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3238,20 +2793,10 @@ pub enum DeleteImageBuilderError {
     OperationNotPermitted(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteImageBuilderError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteImageBuilderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImageBuilderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3264,46 +2809,25 @@ impl DeleteImageBuilderError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteImageBuilderError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImageBuilderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return DeleteImageBuilderError::OperationNotPermitted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImageBuilderError::OperationNotPermitted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteImageBuilderError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteImageBuilderError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteImageBuilderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteImageBuilderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteImageBuilderError {
-    fn from(err: serde_json::error::Error) -> DeleteImageBuilderError {
-        DeleteImageBuilderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteImageBuilderError {
-    fn from(err: CredentialsError) -> DeleteImageBuilderError {
-        DeleteImageBuilderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteImageBuilderError {
-    fn from(err: HttpDispatchError) -> DeleteImageBuilderError {
-        DeleteImageBuilderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteImageBuilderError {
-    fn from(err: io::Error) -> DeleteImageBuilderError {
-        DeleteImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteImageBuilderError {
@@ -3317,13 +2841,6 @@ impl Error for DeleteImageBuilderError {
             DeleteImageBuilderError::ConcurrentModification(ref cause) => cause,
             DeleteImageBuilderError::OperationNotPermitted(ref cause) => cause,
             DeleteImageBuilderError::ResourceNotFound(ref cause) => cause,
-            DeleteImageBuilderError::Validation(ref cause) => cause,
-            DeleteImageBuilderError::Credentials(ref err) => err.description(),
-            DeleteImageBuilderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteImageBuilderError::ParseError(ref cause) => cause,
-            DeleteImageBuilderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3334,20 +2851,10 @@ pub enum DeleteImagePermissionsError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteImagePermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteImagePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteImagePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3360,43 +2867,20 @@ impl DeleteImagePermissionsError {
 
             match *error_type {
                 "ResourceNotAvailableException" => {
-                    return DeleteImagePermissionsError::ResourceNotAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImagePermissionsError::ResourceNotAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteImagePermissionsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteImagePermissionsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteImagePermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteImagePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteImagePermissionsError {
-    fn from(err: serde_json::error::Error) -> DeleteImagePermissionsError {
-        DeleteImagePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteImagePermissionsError {
-    fn from(err: CredentialsError) -> DeleteImagePermissionsError {
-        DeleteImagePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteImagePermissionsError {
-    fn from(err: HttpDispatchError) -> DeleteImagePermissionsError {
-        DeleteImagePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteImagePermissionsError {
-    fn from(err: io::Error) -> DeleteImagePermissionsError {
-        DeleteImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteImagePermissionsError {
@@ -3409,13 +2893,6 @@ impl Error for DeleteImagePermissionsError {
         match *self {
             DeleteImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
             DeleteImagePermissionsError::ResourceNotFound(ref cause) => cause,
-            DeleteImagePermissionsError::Validation(ref cause) => cause,
-            DeleteImagePermissionsError::Credentials(ref err) => err.description(),
-            DeleteImagePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteImagePermissionsError::ParseError(ref cause) => cause,
-            DeleteImagePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3428,20 +2905,10 @@ pub enum DeleteStackError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3454,42 +2921,25 @@ impl DeleteStackError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteStackError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeleteStackError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteStackError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteStackError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteStackError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteStackError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteStackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteStackError {
-    fn from(err: serde_json::error::Error) -> DeleteStackError {
-        DeleteStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteStackError {
-    fn from(err: CredentialsError) -> DeleteStackError {
-        DeleteStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteStackError {
-    fn from(err: HttpDispatchError) -> DeleteStackError {
-        DeleteStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteStackError {
-    fn from(err: io::Error) -> DeleteStackError {
-        DeleteStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteStackError {
@@ -3503,11 +2953,6 @@ impl Error for DeleteStackError {
             DeleteStackError::ConcurrentModification(ref cause) => cause,
             DeleteStackError::ResourceInUse(ref cause) => cause,
             DeleteStackError::ResourceNotFound(ref cause) => cause,
-            DeleteStackError::Validation(ref cause) => cause,
-            DeleteStackError::Credentials(ref err) => err.description(),
-            DeleteStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteStackError::ParseError(ref cause) => cause,
-            DeleteStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3516,20 +2961,10 @@ impl Error for DeleteStackError {
 pub enum DeleteUserError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3542,36 +2977,15 @@ impl DeleteUserError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DeleteUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserError {
-    fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserError {
-    fn from(err: CredentialsError) -> DeleteUserError {
-        DeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserError {
-    fn from(err: HttpDispatchError) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserError {
-    fn from(err: io::Error) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -3583,11 +2997,6 @@ impl Error for DeleteUserError {
     fn description(&self) -> &str {
         match *self {
             DeleteUserError::ResourceNotFound(ref cause) => cause,
-            DeleteUserError::Validation(ref cause) => cause,
-            DeleteUserError::Credentials(ref err) => err.description(),
-            DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::ParseError(ref cause) => cause,
-            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3596,20 +3005,10 @@ impl Error for DeleteUserError {
 pub enum DescribeDirectoryConfigsError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDirectoryConfigsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDirectoryConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDirectoryConfigsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3622,38 +3021,15 @@ impl DescribeDirectoryConfigsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeDirectoryConfigsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDirectoryConfigsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeDirectoryConfigsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDirectoryConfigsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDirectoryConfigsError {
-    fn from(err: serde_json::error::Error) -> DescribeDirectoryConfigsError {
-        DescribeDirectoryConfigsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDirectoryConfigsError {
-    fn from(err: CredentialsError) -> DescribeDirectoryConfigsError {
-        DescribeDirectoryConfigsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDirectoryConfigsError {
-    fn from(err: HttpDispatchError) -> DescribeDirectoryConfigsError {
-        DescribeDirectoryConfigsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDirectoryConfigsError {
-    fn from(err: io::Error) -> DescribeDirectoryConfigsError {
-        DescribeDirectoryConfigsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDirectoryConfigsError {
@@ -3665,13 +3041,6 @@ impl Error for DescribeDirectoryConfigsError {
     fn description(&self) -> &str {
         match *self {
             DescribeDirectoryConfigsError::ResourceNotFound(ref cause) => cause,
-            DescribeDirectoryConfigsError::Validation(ref cause) => cause,
-            DescribeDirectoryConfigsError::Credentials(ref err) => err.description(),
-            DescribeDirectoryConfigsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDirectoryConfigsError::ParseError(ref cause) => cause,
-            DescribeDirectoryConfigsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3680,20 +3049,10 @@ impl Error for DescribeDirectoryConfigsError {
 pub enum DescribeFleetsError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFleetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeFleetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFleetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3706,36 +3065,15 @@ impl DescribeFleetsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeFleetsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeFleetsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeFleetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeFleetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeFleetsError {
-    fn from(err: serde_json::error::Error) -> DescribeFleetsError {
-        DescribeFleetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeFleetsError {
-    fn from(err: CredentialsError) -> DescribeFleetsError {
-        DescribeFleetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeFleetsError {
-    fn from(err: HttpDispatchError) -> DescribeFleetsError {
-        DescribeFleetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeFleetsError {
-    fn from(err: io::Error) -> DescribeFleetsError {
-        DescribeFleetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeFleetsError {
@@ -3747,11 +3085,6 @@ impl Error for DescribeFleetsError {
     fn description(&self) -> &str {
         match *self {
             DescribeFleetsError::ResourceNotFound(ref cause) => cause,
-            DescribeFleetsError::Validation(ref cause) => cause,
-            DescribeFleetsError::Credentials(ref err) => err.description(),
-            DescribeFleetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeFleetsError::ParseError(ref cause) => cause,
-            DescribeFleetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3760,20 +3093,10 @@ impl Error for DescribeFleetsError {
 pub enum DescribeImageBuildersError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeImageBuildersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeImageBuildersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImageBuildersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3786,36 +3109,15 @@ impl DescribeImageBuildersError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeImageBuildersError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeImageBuildersError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeImageBuildersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeImageBuildersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeImageBuildersError {
-    fn from(err: serde_json::error::Error) -> DescribeImageBuildersError {
-        DescribeImageBuildersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeImageBuildersError {
-    fn from(err: CredentialsError) -> DescribeImageBuildersError {
-        DescribeImageBuildersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeImageBuildersError {
-    fn from(err: HttpDispatchError) -> DescribeImageBuildersError {
-        DescribeImageBuildersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeImageBuildersError {
-    fn from(err: io::Error) -> DescribeImageBuildersError {
-        DescribeImageBuildersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeImageBuildersError {
@@ -3827,13 +3129,6 @@ impl Error for DescribeImageBuildersError {
     fn description(&self) -> &str {
         match *self {
             DescribeImageBuildersError::ResourceNotFound(ref cause) => cause,
-            DescribeImageBuildersError::Validation(ref cause) => cause,
-            DescribeImageBuildersError::Credentials(ref err) => err.description(),
-            DescribeImageBuildersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeImageBuildersError::ParseError(ref cause) => cause,
-            DescribeImageBuildersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3842,20 +3137,10 @@ impl Error for DescribeImageBuildersError {
 pub enum DescribeImagePermissionsError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeImagePermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeImagePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3868,38 +3153,15 @@ impl DescribeImagePermissionsError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeImagePermissionsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeImagePermissionsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeImagePermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeImagePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeImagePermissionsError {
-    fn from(err: serde_json::error::Error) -> DescribeImagePermissionsError {
-        DescribeImagePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeImagePermissionsError {
-    fn from(err: CredentialsError) -> DescribeImagePermissionsError {
-        DescribeImagePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeImagePermissionsError {
-    fn from(err: HttpDispatchError) -> DescribeImagePermissionsError {
-        DescribeImagePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeImagePermissionsError {
-    fn from(err: io::Error) -> DescribeImagePermissionsError {
-        DescribeImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeImagePermissionsError {
@@ -3911,13 +3173,6 @@ impl Error for DescribeImagePermissionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeImagePermissionsError::ResourceNotFound(ref cause) => cause,
-            DescribeImagePermissionsError::Validation(ref cause) => cause,
-            DescribeImagePermissionsError::Credentials(ref err) => err.description(),
-            DescribeImagePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeImagePermissionsError::ParseError(ref cause) => cause,
-            DescribeImagePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3928,20 +3183,10 @@ pub enum DescribeImagesError {
     InvalidParameterCombination(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeImagesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3954,41 +3199,20 @@ impl DescribeImagesError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeImagesError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeImagesError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeImagesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeImagesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeImagesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeImagesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeImagesError {
-    fn from(err: serde_json::error::Error) -> DescribeImagesError {
-        DescribeImagesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeImagesError {
-    fn from(err: CredentialsError) -> DescribeImagesError {
-        DescribeImagesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeImagesError {
-    fn from(err: HttpDispatchError) -> DescribeImagesError {
-        DescribeImagesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeImagesError {
-    fn from(err: io::Error) -> DescribeImagesError {
-        DescribeImagesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeImagesError {
@@ -4001,11 +3225,6 @@ impl Error for DescribeImagesError {
         match *self {
             DescribeImagesError::InvalidParameterCombination(ref cause) => cause,
             DescribeImagesError::ResourceNotFound(ref cause) => cause,
-            DescribeImagesError::Validation(ref cause) => cause,
-            DescribeImagesError::Credentials(ref err) => err.description(),
-            DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeImagesError::ParseError(ref cause) => cause,
-            DescribeImagesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4014,20 +3233,10 @@ impl Error for DescribeImagesError {
 pub enum DescribeSessionsError {
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSessionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSessionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSessionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4040,38 +3249,15 @@ impl DescribeSessionsError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeSessionsError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSessionsError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeSessionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSessionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSessionsError {
-    fn from(err: serde_json::error::Error) -> DescribeSessionsError {
-        DescribeSessionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSessionsError {
-    fn from(err: CredentialsError) -> DescribeSessionsError {
-        DescribeSessionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSessionsError {
-    fn from(err: HttpDispatchError) -> DescribeSessionsError {
-        DescribeSessionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSessionsError {
-    fn from(err: io::Error) -> DescribeSessionsError {
-        DescribeSessionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSessionsError {
@@ -4083,11 +3269,6 @@ impl Error for DescribeSessionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeSessionsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeSessionsError::Validation(ref cause) => cause,
-            DescribeSessionsError::Credentials(ref err) => err.description(),
-            DescribeSessionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeSessionsError::ParseError(ref cause) => cause,
-            DescribeSessionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4096,20 +3277,10 @@ impl Error for DescribeSessionsError {
 pub enum DescribeStacksError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeStacksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStacksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStacksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4122,36 +3293,15 @@ impl DescribeStacksError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DescribeStacksError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeStacksError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeStacksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeStacksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeStacksError {
-    fn from(err: serde_json::error::Error) -> DescribeStacksError {
-        DescribeStacksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStacksError {
-    fn from(err: CredentialsError) -> DescribeStacksError {
-        DescribeStacksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStacksError {
-    fn from(err: HttpDispatchError) -> DescribeStacksError {
-        DescribeStacksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStacksError {
-    fn from(err: io::Error) -> DescribeStacksError {
-        DescribeStacksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeStacksError {
@@ -4163,11 +3313,6 @@ impl Error for DescribeStacksError {
     fn description(&self) -> &str {
         match *self {
             DescribeStacksError::ResourceNotFound(ref cause) => cause,
-            DescribeStacksError::Validation(ref cause) => cause,
-            DescribeStacksError::Credentials(ref err) => err.description(),
-            DescribeStacksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStacksError::ParseError(ref cause) => cause,
-            DescribeStacksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4176,20 +3321,12 @@ impl Error for DescribeStacksError {
 pub enum DescribeUserStackAssociationsError {
     /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserStackAssociationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserStackAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeUserStackAssociationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4202,38 +3339,17 @@ impl DescribeUserStackAssociationsError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeUserStackAssociationsError::InvalidParameterCombination(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeUserStackAssociationsError::InvalidParameterCombination(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeUserStackAssociationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserStackAssociationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserStackAssociationsError {
-    fn from(err: serde_json::error::Error) -> DescribeUserStackAssociationsError {
-        DescribeUserStackAssociationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserStackAssociationsError {
-    fn from(err: CredentialsError) -> DescribeUserStackAssociationsError {
-        DescribeUserStackAssociationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserStackAssociationsError {
-    fn from(err: HttpDispatchError) -> DescribeUserStackAssociationsError {
-        DescribeUserStackAssociationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserStackAssociationsError {
-    fn from(err: io::Error) -> DescribeUserStackAssociationsError {
-        DescribeUserStackAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserStackAssociationsError {
@@ -4245,13 +3361,6 @@ impl Error for DescribeUserStackAssociationsError {
     fn description(&self) -> &str {
         match *self {
             DescribeUserStackAssociationsError::InvalidParameterCombination(ref cause) => cause,
-            DescribeUserStackAssociationsError::Validation(ref cause) => cause,
-            DescribeUserStackAssociationsError::Credentials(ref err) => err.description(),
-            DescribeUserStackAssociationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUserStackAssociationsError::ParseError(ref cause) => cause,
-            DescribeUserStackAssociationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4262,20 +3371,10 @@ pub enum DescribeUsersError {
     InvalidParameterCombination(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUsersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUsersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4288,41 +3387,20 @@ impl DescribeUsersError {
 
             match *error_type {
                 "InvalidParameterCombinationException" => {
-                    return DescribeUsersError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUsersError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUsersError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUsersError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeUsersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUsersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUsersError {
-    fn from(err: serde_json::error::Error) -> DescribeUsersError {
-        DescribeUsersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUsersError {
-    fn from(err: CredentialsError) -> DescribeUsersError {
-        DescribeUsersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUsersError {
-    fn from(err: HttpDispatchError) -> DescribeUsersError {
-        DescribeUsersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUsersError {
-    fn from(err: io::Error) -> DescribeUsersError {
-        DescribeUsersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUsersError {
@@ -4335,11 +3413,6 @@ impl Error for DescribeUsersError {
         match *self {
             DescribeUsersError::InvalidParameterCombination(ref cause) => cause,
             DescribeUsersError::ResourceNotFound(ref cause) => cause,
-            DescribeUsersError::Validation(ref cause) => cause,
-            DescribeUsersError::Credentials(ref err) => err.description(),
-            DescribeUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUsersError::ParseError(ref cause) => cause,
-            DescribeUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4348,20 +3421,10 @@ impl Error for DescribeUsersError {
 pub enum DisableUserError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4374,36 +3437,15 @@ impl DisableUserError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return DisableUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DisableUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DisableUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableUserError {
-    fn from(err: serde_json::error::Error) -> DisableUserError {
-        DisableUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableUserError {
-    fn from(err: CredentialsError) -> DisableUserError {
-        DisableUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableUserError {
-    fn from(err: HttpDispatchError) -> DisableUserError {
-        DisableUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableUserError {
-    fn from(err: io::Error) -> DisableUserError {
-        DisableUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableUserError {
@@ -4415,11 +3457,6 @@ impl Error for DisableUserError {
     fn description(&self) -> &str {
         match *self {
             DisableUserError::ResourceNotFound(ref cause) => cause,
-            DisableUserError::Validation(ref cause) => cause,
-            DisableUserError::Credentials(ref err) => err.description(),
-            DisableUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableUserError::ParseError(ref cause) => cause,
-            DisableUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4432,20 +3469,10 @@ pub enum DisassociateFleetError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4458,44 +3485,25 @@ impl DisassociateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DisassociateFleetError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateFleetError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return DisassociateFleetError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DisassociateFleetError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DisassociateFleetError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateFleetError {
-    fn from(err: serde_json::error::Error) -> DisassociateFleetError {
-        DisassociateFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateFleetError {
-    fn from(err: CredentialsError) -> DisassociateFleetError {
-        DisassociateFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateFleetError {
-    fn from(err: HttpDispatchError) -> DisassociateFleetError {
-        DisassociateFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateFleetError {
-    fn from(err: io::Error) -> DisassociateFleetError {
-        DisassociateFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateFleetError {
@@ -4509,13 +3517,6 @@ impl Error for DisassociateFleetError {
             DisassociateFleetError::ConcurrentModification(ref cause) => cause,
             DisassociateFleetError::ResourceInUse(ref cause) => cause,
             DisassociateFleetError::ResourceNotFound(ref cause) => cause,
-            DisassociateFleetError::Validation(ref cause) => cause,
-            DisassociateFleetError::Credentials(ref err) => err.description(),
-            DisassociateFleetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateFleetError::ParseError(ref cause) => cause,
-            DisassociateFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4526,20 +3527,10 @@ pub enum EnableUserError {
     InvalidAccountStatus(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4552,39 +3543,20 @@ impl EnableUserError {
 
             match *error_type {
                 "InvalidAccountStatusException" => {
-                    return EnableUserError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(EnableUserError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return EnableUserError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(EnableUserError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return EnableUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableUserError {
-    fn from(err: serde_json::error::Error) -> EnableUserError {
-        EnableUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableUserError {
-    fn from(err: CredentialsError) -> EnableUserError {
-        EnableUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableUserError {
-    fn from(err: HttpDispatchError) -> EnableUserError {
-        EnableUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableUserError {
-    fn from(err: io::Error) -> EnableUserError {
-        EnableUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableUserError {
@@ -4597,31 +3569,15 @@ impl Error for EnableUserError {
         match *self {
             EnableUserError::InvalidAccountStatus(ref cause) => cause,
             EnableUserError::ResourceNotFound(ref cause) => cause,
-            EnableUserError::Validation(ref cause) => cause,
-            EnableUserError::Credentials(ref err) => err.description(),
-            EnableUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableUserError::ParseError(ref cause) => cause,
-            EnableUserError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ExpireSession
 #[derive(Debug, PartialEq)]
-pub enum ExpireSessionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ExpireSessionError {}
 
 impl ExpireSessionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ExpireSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExpireSessionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4633,34 +3589,11 @@ impl ExpireSessionError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ExpireSessionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExpireSessionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExpireSessionError {
-    fn from(err: serde_json::error::Error) -> ExpireSessionError {
-        ExpireSessionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExpireSessionError {
-    fn from(err: CredentialsError) -> ExpireSessionError {
-        ExpireSessionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExpireSessionError {
-    fn from(err: HttpDispatchError) -> ExpireSessionError {
-        ExpireSessionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExpireSessionError {
-    fn from(err: io::Error) -> ExpireSessionError {
-        ExpireSessionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExpireSessionError {
@@ -4670,32 +3603,15 @@ impl fmt::Display for ExpireSessionError {
 }
 impl Error for ExpireSessionError {
     fn description(&self) -> &str {
-        match *self {
-            ExpireSessionError::Validation(ref cause) => cause,
-            ExpireSessionError::Credentials(ref err) => err.description(),
-            ExpireSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExpireSessionError::ParseError(ref cause) => cause,
-            ExpireSessionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListAssociatedFleets
 #[derive(Debug, PartialEq)]
-pub enum ListAssociatedFleetsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListAssociatedFleetsError {}
 
 impl ListAssociatedFleetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAssociatedFleetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociatedFleetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4707,34 +3623,11 @@ impl ListAssociatedFleetsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListAssociatedFleetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAssociatedFleetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAssociatedFleetsError {
-    fn from(err: serde_json::error::Error) -> ListAssociatedFleetsError {
-        ListAssociatedFleetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAssociatedFleetsError {
-    fn from(err: CredentialsError) -> ListAssociatedFleetsError {
-        ListAssociatedFleetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAssociatedFleetsError {
-    fn from(err: HttpDispatchError) -> ListAssociatedFleetsError {
-        ListAssociatedFleetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAssociatedFleetsError {
-    fn from(err: io::Error) -> ListAssociatedFleetsError {
-        ListAssociatedFleetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAssociatedFleetsError {
@@ -4744,34 +3637,15 @@ impl fmt::Display for ListAssociatedFleetsError {
 }
 impl Error for ListAssociatedFleetsError {
     fn description(&self) -> &str {
-        match *self {
-            ListAssociatedFleetsError::Validation(ref cause) => cause,
-            ListAssociatedFleetsError::Credentials(ref err) => err.description(),
-            ListAssociatedFleetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAssociatedFleetsError::ParseError(ref cause) => cause,
-            ListAssociatedFleetsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListAssociatedStacks
 #[derive(Debug, PartialEq)]
-pub enum ListAssociatedStacksError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListAssociatedStacksError {}
 
 impl ListAssociatedStacksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAssociatedStacksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssociatedStacksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4783,34 +3657,11 @@ impl ListAssociatedStacksError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListAssociatedStacksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAssociatedStacksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAssociatedStacksError {
-    fn from(err: serde_json::error::Error) -> ListAssociatedStacksError {
-        ListAssociatedStacksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAssociatedStacksError {
-    fn from(err: CredentialsError) -> ListAssociatedStacksError {
-        ListAssociatedStacksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAssociatedStacksError {
-    fn from(err: HttpDispatchError) -> ListAssociatedStacksError {
-        ListAssociatedStacksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAssociatedStacksError {
-    fn from(err: io::Error) -> ListAssociatedStacksError {
-        ListAssociatedStacksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAssociatedStacksError {
@@ -4820,15 +3671,7 @@ impl fmt::Display for ListAssociatedStacksError {
 }
 impl Error for ListAssociatedStacksError {
     fn description(&self) -> &str {
-        match *self {
-            ListAssociatedStacksError::Validation(ref cause) => cause,
-            ListAssociatedStacksError::Credentials(ref err) => err.description(),
-            ListAssociatedStacksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAssociatedStacksError::ParseError(ref cause) => cause,
-            ListAssociatedStacksError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListTagsForResource
@@ -4836,20 +3679,10 @@ impl Error for ListAssociatedStacksError {
 pub enum ListTagsForResourceError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4862,36 +3695,15 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -4903,13 +3715,6 @@ impl Error for ListTagsForResourceError {
     fn description(&self) -> &str {
         match *self {
             ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4926,20 +3731,10 @@ pub enum StartFleetError {
     OperationNotPermitted(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4952,48 +3747,35 @@ impl StartFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StartFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(StartFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAccountStatusException" => {
-                    return StartFleetError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(StartFleetError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return StartFleetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StartFleetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return StartFleetError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(StartFleetError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartFleetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartFleetError {
-    fn from(err: serde_json::error::Error) -> StartFleetError {
-        StartFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartFleetError {
-    fn from(err: CredentialsError) -> StartFleetError {
-        StartFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartFleetError {
-    fn from(err: HttpDispatchError) -> StartFleetError {
-        StartFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartFleetError {
-    fn from(err: io::Error) -> StartFleetError {
-        StartFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartFleetError {
@@ -5009,11 +3791,6 @@ impl Error for StartFleetError {
             StartFleetError::LimitExceeded(ref cause) => cause,
             StartFleetError::OperationNotPermitted(ref cause) => cause,
             StartFleetError::ResourceNotFound(ref cause) => cause,
-            StartFleetError::Validation(ref cause) => cause,
-            StartFleetError::Credentials(ref err) => err.description(),
-            StartFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartFleetError::ParseError(ref cause) => cause,
-            StartFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5030,20 +3807,10 @@ pub enum StartImageBuilderError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartImageBuilderError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartImageBuilderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartImageBuilderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5056,50 +3823,35 @@ impl StartImageBuilderError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StartImageBuilderError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(StartImageBuilderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "IncompatibleImageException" => {
-                    return StartImageBuilderError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(StartImageBuilderError::IncompatibleImage(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAccountStatusException" => {
-                    return StartImageBuilderError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(StartImageBuilderError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotAvailableException" => {
-                    return StartImageBuilderError::ResourceNotAvailable(String::from(error_message));
+                    return RusotoError::Service(StartImageBuilderError::ResourceNotAvailable(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartImageBuilderError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartImageBuilderError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartImageBuilderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartImageBuilderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartImageBuilderError {
-    fn from(err: serde_json::error::Error) -> StartImageBuilderError {
-        StartImageBuilderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartImageBuilderError {
-    fn from(err: CredentialsError) -> StartImageBuilderError {
-        StartImageBuilderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartImageBuilderError {
-    fn from(err: HttpDispatchError) -> StartImageBuilderError {
-        StartImageBuilderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartImageBuilderError {
-    fn from(err: io::Error) -> StartImageBuilderError {
-        StartImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartImageBuilderError {
@@ -5115,13 +3867,6 @@ impl Error for StartImageBuilderError {
             StartImageBuilderError::InvalidAccountStatus(ref cause) => cause,
             StartImageBuilderError::ResourceNotAvailable(ref cause) => cause,
             StartImageBuilderError::ResourceNotFound(ref cause) => cause,
-            StartImageBuilderError::Validation(ref cause) => cause,
-            StartImageBuilderError::Credentials(ref err) => err.description(),
-            StartImageBuilderError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartImageBuilderError::ParseError(ref cause) => cause,
-            StartImageBuilderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5132,20 +3877,10 @@ pub enum StopFleetError {
     ConcurrentModification(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5158,39 +3893,20 @@ impl StopFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StopFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(StopFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StopFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopFleetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopFleetError {
-    fn from(err: serde_json::error::Error) -> StopFleetError {
-        StopFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopFleetError {
-    fn from(err: CredentialsError) -> StopFleetError {
-        StopFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopFleetError {
-    fn from(err: HttpDispatchError) -> StopFleetError {
-        StopFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopFleetError {
-    fn from(err: io::Error) -> StopFleetError {
-        StopFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopFleetError {
@@ -5203,11 +3919,6 @@ impl Error for StopFleetError {
         match *self {
             StopFleetError::ConcurrentModification(ref cause) => cause,
             StopFleetError::ResourceNotFound(ref cause) => cause,
-            StopFleetError::Validation(ref cause) => cause,
-            StopFleetError::Credentials(ref err) => err.description(),
-            StopFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopFleetError::ParseError(ref cause) => cause,
-            StopFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5220,20 +3931,10 @@ pub enum StopImageBuilderError {
     OperationNotPermitted(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopImageBuilderError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopImageBuilderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopImageBuilderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5246,44 +3947,25 @@ impl StopImageBuilderError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StopImageBuilderError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(StopImageBuilderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "OperationNotPermittedException" => {
-                    return StopImageBuilderError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(StopImageBuilderError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return StopImageBuilderError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopImageBuilderError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopImageBuilderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopImageBuilderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopImageBuilderError {
-    fn from(err: serde_json::error::Error) -> StopImageBuilderError {
-        StopImageBuilderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopImageBuilderError {
-    fn from(err: CredentialsError) -> StopImageBuilderError {
-        StopImageBuilderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopImageBuilderError {
-    fn from(err: HttpDispatchError) -> StopImageBuilderError {
-        StopImageBuilderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopImageBuilderError {
-    fn from(err: io::Error) -> StopImageBuilderError {
-        StopImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopImageBuilderError {
@@ -5297,11 +3979,6 @@ impl Error for StopImageBuilderError {
             StopImageBuilderError::ConcurrentModification(ref cause) => cause,
             StopImageBuilderError::OperationNotPermitted(ref cause) => cause,
             StopImageBuilderError::ResourceNotFound(ref cause) => cause,
-            StopImageBuilderError::Validation(ref cause) => cause,
-            StopImageBuilderError::Credentials(ref err) => err.description(),
-            StopImageBuilderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopImageBuilderError::ParseError(ref cause) => cause,
-            StopImageBuilderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5314,20 +3991,10 @@ pub enum TagResourceError {
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5340,42 +4007,25 @@ impl TagResourceError {
 
             match *error_type {
                 "InvalidAccountStatusException" => {
-                    return TagResourceError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5389,11 +4039,6 @@ impl Error for TagResourceError {
             TagResourceError::InvalidAccountStatus(ref cause) => cause,
             TagResourceError::LimitExceeded(ref cause) => cause,
             TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5402,20 +4047,10 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5428,36 +4063,15 @@ impl UntagResourceError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5469,11 +4083,6 @@ impl Error for UntagResourceError {
     fn description(&self) -> &str {
         match *self {
             UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5486,20 +4095,10 @@ pub enum UpdateDirectoryConfigError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDirectoryConfigError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDirectoryConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDirectoryConfigError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5512,44 +4111,25 @@ impl UpdateDirectoryConfigError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateDirectoryConfigError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDirectoryConfigError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateDirectoryConfigError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateDirectoryConfigError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDirectoryConfigError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDirectoryConfigError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDirectoryConfigError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDirectoryConfigError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDirectoryConfigError {
-    fn from(err: serde_json::error::Error) -> UpdateDirectoryConfigError {
-        UpdateDirectoryConfigError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDirectoryConfigError {
-    fn from(err: CredentialsError) -> UpdateDirectoryConfigError {
-        UpdateDirectoryConfigError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDirectoryConfigError {
-    fn from(err: HttpDispatchError) -> UpdateDirectoryConfigError {
-        UpdateDirectoryConfigError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDirectoryConfigError {
-    fn from(err: io::Error) -> UpdateDirectoryConfigError {
-        UpdateDirectoryConfigError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDirectoryConfigError {
@@ -5563,13 +4143,6 @@ impl Error for UpdateDirectoryConfigError {
             UpdateDirectoryConfigError::ConcurrentModification(ref cause) => cause,
             UpdateDirectoryConfigError::ResourceInUse(ref cause) => cause,
             UpdateDirectoryConfigError::ResourceNotFound(ref cause) => cause,
-            UpdateDirectoryConfigError::Validation(ref cause) => cause,
-            UpdateDirectoryConfigError::Credentials(ref err) => err.description(),
-            UpdateDirectoryConfigError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDirectoryConfigError::ParseError(ref cause) => cause,
-            UpdateDirectoryConfigError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5596,20 +4169,10 @@ pub enum UpdateFleetError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFleetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFleetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFleetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5622,65 +4185,60 @@ impl UpdateFleetError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateFleetError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleImageException" => {
-                    return UpdateFleetError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::IncompatibleImage(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAccountStatusException" => {
-                    return UpdateFleetError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return UpdateFleetError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFleetError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRoleException" => {
-                    return UpdateFleetError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateFleetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateFleetError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateFleetError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotAvailableException" => {
-                    return UpdateFleetError::ResourceNotAvailable(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::ResourceNotAvailable(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFleetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateFleetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateFleetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFleetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFleetError {
-    fn from(err: serde_json::error::Error) -> UpdateFleetError {
-        UpdateFleetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFleetError {
-    fn from(err: CredentialsError) -> UpdateFleetError {
-        UpdateFleetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFleetError {
-    fn from(err: HttpDispatchError) -> UpdateFleetError {
-        UpdateFleetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFleetError {
-    fn from(err: io::Error) -> UpdateFleetError {
-        UpdateFleetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFleetError {
@@ -5701,11 +4259,6 @@ impl Error for UpdateFleetError {
             UpdateFleetError::ResourceInUse(ref cause) => cause,
             UpdateFleetError::ResourceNotAvailable(ref cause) => cause,
             UpdateFleetError::ResourceNotFound(ref cause) => cause,
-            UpdateFleetError::Validation(ref cause) => cause,
-            UpdateFleetError::Credentials(ref err) => err.description(),
-            UpdateFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFleetError::ParseError(ref cause) => cause,
-            UpdateFleetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5718,20 +4271,10 @@ pub enum UpdateImagePermissionsError {
     ResourceNotAvailable(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateImagePermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateImagePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateImagePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5744,46 +4287,25 @@ impl UpdateImagePermissionsError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return UpdateImagePermissionsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateImagePermissionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotAvailableException" => {
-                    return UpdateImagePermissionsError::ResourceNotAvailable(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateImagePermissionsError::ResourceNotAvailable(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateImagePermissionsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateImagePermissionsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateImagePermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateImagePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateImagePermissionsError {
-    fn from(err: serde_json::error::Error) -> UpdateImagePermissionsError {
-        UpdateImagePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateImagePermissionsError {
-    fn from(err: CredentialsError) -> UpdateImagePermissionsError {
-        UpdateImagePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateImagePermissionsError {
-    fn from(err: HttpDispatchError) -> UpdateImagePermissionsError {
-        UpdateImagePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateImagePermissionsError {
-    fn from(err: io::Error) -> UpdateImagePermissionsError {
-        UpdateImagePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateImagePermissionsError {
@@ -5797,13 +4319,6 @@ impl Error for UpdateImagePermissionsError {
             UpdateImagePermissionsError::LimitExceeded(ref cause) => cause,
             UpdateImagePermissionsError::ResourceNotAvailable(ref cause) => cause,
             UpdateImagePermissionsError::ResourceNotFound(ref cause) => cause,
-            UpdateImagePermissionsError::Validation(ref cause) => cause,
-            UpdateImagePermissionsError::Credentials(ref err) => err.description(),
-            UpdateImagePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateImagePermissionsError::ParseError(ref cause) => cause,
-            UpdateImagePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5826,20 +4341,10 @@ pub enum UpdateStackError {
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateStackError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5852,59 +4357,50 @@ impl UpdateStackError {
 
             match *error_type {
                 "IncompatibleImageException" => {
-                    return UpdateStackError::IncompatibleImage(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::IncompatibleImage(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAccountStatusException" => {
-                    return UpdateStackError::InvalidAccountStatus(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::InvalidAccountStatus(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterCombinationException" => {
-                    return UpdateStackError::InvalidParameterCombination(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateStackError::InvalidParameterCombination(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRoleException" => {
-                    return UpdateStackError::InvalidRole(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::InvalidRole(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateStackError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationNotPermittedException" => {
-                    return UpdateStackError::OperationNotPermitted(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::OperationNotPermitted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateStackError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateStackError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateStackError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateStackError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateStackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateStackError {
-    fn from(err: serde_json::error::Error) -> UpdateStackError {
-        UpdateStackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateStackError {
-    fn from(err: CredentialsError) -> UpdateStackError {
-        UpdateStackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateStackError {
-    fn from(err: HttpDispatchError) -> UpdateStackError {
-        UpdateStackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateStackError {
-    fn from(err: io::Error) -> UpdateStackError {
-        UpdateStackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateStackError {
@@ -5923,11 +4419,6 @@ impl Error for UpdateStackError {
             UpdateStackError::OperationNotPermitted(ref cause) => cause,
             UpdateStackError::ResourceInUse(ref cause) => cause,
             UpdateStackError::ResourceNotFound(ref cause) => cause,
-            UpdateStackError::Validation(ref cause) => cause,
-            UpdateStackError::Credentials(ref err) => err.description(),
-            UpdateStackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateStackError::ParseError(ref cause) => cause,
-            UpdateStackError::Unknown(_) => "unknown error",
         }
     }
 }

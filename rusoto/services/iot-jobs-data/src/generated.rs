@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -263,22 +260,12 @@ pub enum DescribeJobExecutionError {
     TerminalState(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobExecutionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -303,55 +290,40 @@ impl DescribeJobExecutionError {
 
             match error_type {
                 "CertificateValidationException" => {
-                    return DescribeJobExecutionError::CertificateValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeJobExecutionError::CertificateValidation(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeJobExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeJobExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeJobExecutionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeJobExecutionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeJobExecutionError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeJobExecutionError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TerminalStateException" => {
-                    return DescribeJobExecutionError::TerminalState(String::from(error_message));
+                    return RusotoError::Service(DescribeJobExecutionError::TerminalState(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return DescribeJobExecutionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(DescribeJobExecutionError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeJobExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobExecutionError {
-    fn from(err: serde_json::error::Error) -> DescribeJobExecutionError {
-        DescribeJobExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobExecutionError {
-    fn from(err: CredentialsError) -> DescribeJobExecutionError {
-        DescribeJobExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobExecutionError {
-    fn from(err: HttpDispatchError) -> DescribeJobExecutionError {
-        DescribeJobExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobExecutionError {
-    fn from(err: io::Error) -> DescribeJobExecutionError {
-        DescribeJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobExecutionError {
@@ -368,13 +340,6 @@ impl Error for DescribeJobExecutionError {
             DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
             DescribeJobExecutionError::TerminalState(ref cause) => cause,
             DescribeJobExecutionError::Throttling(ref cause) => cause,
-            DescribeJobExecutionError::Validation(ref cause) => cause,
-            DescribeJobExecutionError::Credentials(ref err) => err.description(),
-            DescribeJobExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeJobExecutionError::ParseError(ref cause) => cause,
-            DescribeJobExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -391,22 +356,12 @@ pub enum GetPendingJobExecutionsError {
     ServiceUnavailable(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPendingJobExecutionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetPendingJobExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPendingJobExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -431,54 +386,37 @@ impl GetPendingJobExecutionsError {
 
             match error_type {
                 "CertificateValidationException" => {
-                    return GetPendingJobExecutionsError::CertificateValidation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetPendingJobExecutionsError::CertificateValidation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRequestException" => {
-                    return GetPendingJobExecutionsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetPendingJobExecutionsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPendingJobExecutionsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPendingJobExecutionsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetPendingJobExecutionsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPendingJobExecutionsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "ThrottlingException" => {
-                    return GetPendingJobExecutionsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetPendingJobExecutionsError::Throttling(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPendingJobExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPendingJobExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPendingJobExecutionsError {
-    fn from(err: serde_json::error::Error) -> GetPendingJobExecutionsError {
-        GetPendingJobExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPendingJobExecutionsError {
-    fn from(err: CredentialsError) -> GetPendingJobExecutionsError {
-        GetPendingJobExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPendingJobExecutionsError {
-    fn from(err: HttpDispatchError) -> GetPendingJobExecutionsError {
-        GetPendingJobExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPendingJobExecutionsError {
-    fn from(err: io::Error) -> GetPendingJobExecutionsError {
-        GetPendingJobExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPendingJobExecutionsError {
@@ -494,13 +432,6 @@ impl Error for GetPendingJobExecutionsError {
             GetPendingJobExecutionsError::ResourceNotFound(ref cause) => cause,
             GetPendingJobExecutionsError::ServiceUnavailable(ref cause) => cause,
             GetPendingJobExecutionsError::Throttling(ref cause) => cause,
-            GetPendingJobExecutionsError::Validation(ref cause) => cause,
-            GetPendingJobExecutionsError::Credentials(ref err) => err.description(),
-            GetPendingJobExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPendingJobExecutionsError::ParseError(ref cause) => cause,
-            GetPendingJobExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -517,22 +448,14 @@ pub enum StartNextPendingJobExecutionError {
     ServiceUnavailable(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartNextPendingJobExecutionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> StartNextPendingJobExecutionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartNextPendingJobExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -557,58 +480,41 @@ impl StartNextPendingJobExecutionError {
 
             match error_type {
                 "CertificateValidationException" => {
-                    return StartNextPendingJobExecutionError::CertificateValidation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartNextPendingJobExecutionError::CertificateValidation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRequestException" => {
-                    return StartNextPendingJobExecutionError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StartNextPendingJobExecutionError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartNextPendingJobExecutionError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartNextPendingJobExecutionError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return StartNextPendingJobExecutionError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartNextPendingJobExecutionError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ThrottlingException" => {
-                    return StartNextPendingJobExecutionError::Throttling(String::from(
-                        error_message,
+                    return RusotoError::Service(StartNextPendingJobExecutionError::Throttling(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartNextPendingJobExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartNextPendingJobExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartNextPendingJobExecutionError {
-    fn from(err: serde_json::error::Error) -> StartNextPendingJobExecutionError {
-        StartNextPendingJobExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartNextPendingJobExecutionError {
-    fn from(err: CredentialsError) -> StartNextPendingJobExecutionError {
-        StartNextPendingJobExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartNextPendingJobExecutionError {
-    fn from(err: HttpDispatchError) -> StartNextPendingJobExecutionError {
-        StartNextPendingJobExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartNextPendingJobExecutionError {
-    fn from(err: io::Error) -> StartNextPendingJobExecutionError {
-        StartNextPendingJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartNextPendingJobExecutionError {
@@ -624,13 +530,6 @@ impl Error for StartNextPendingJobExecutionError {
             StartNextPendingJobExecutionError::ResourceNotFound(ref cause) => cause,
             StartNextPendingJobExecutionError::ServiceUnavailable(ref cause) => cause,
             StartNextPendingJobExecutionError::Throttling(ref cause) => cause,
-            StartNextPendingJobExecutionError::Validation(ref cause) => cause,
-            StartNextPendingJobExecutionError::Credentials(ref err) => err.description(),
-            StartNextPendingJobExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartNextPendingJobExecutionError::ParseError(ref cause) => cause,
-            StartNextPendingJobExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -649,22 +548,12 @@ pub enum UpdateJobExecutionError {
     ServiceUnavailable(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobExecutionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -689,55 +578,40 @@ impl UpdateJobExecutionError {
 
             match error_type {
                 "CertificateValidationException" => {
-                    return UpdateJobExecutionError::CertificateValidation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateJobExecutionError::CertificateValidation(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateJobExecutionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateJobExecutionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStateTransitionException" => {
-                    return UpdateJobExecutionError::InvalidStateTransition(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateJobExecutionError::InvalidStateTransition(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateJobExecutionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateJobExecutionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateJobExecutionError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateJobExecutionError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return UpdateJobExecutionError::Throttling(String::from(error_message));
+                    return RusotoError::Service(UpdateJobExecutionError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateJobExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateJobExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateJobExecutionError {
-    fn from(err: serde_json::error::Error) -> UpdateJobExecutionError {
-        UpdateJobExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateJobExecutionError {
-    fn from(err: CredentialsError) -> UpdateJobExecutionError {
-        UpdateJobExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateJobExecutionError {
-    fn from(err: HttpDispatchError) -> UpdateJobExecutionError {
-        UpdateJobExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateJobExecutionError {
-    fn from(err: io::Error) -> UpdateJobExecutionError {
-        UpdateJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateJobExecutionError {
@@ -754,13 +628,6 @@ impl Error for UpdateJobExecutionError {
             UpdateJobExecutionError::ResourceNotFound(ref cause) => cause,
             UpdateJobExecutionError::ServiceUnavailable(ref cause) => cause,
             UpdateJobExecutionError::Throttling(ref cause) => cause,
-            UpdateJobExecutionError::Validation(ref cause) => cause,
-            UpdateJobExecutionError::Credentials(ref err) => err.description(),
-            UpdateJobExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateJobExecutionError::ParseError(ref cause) => cause,
-            UpdateJobExecutionError::Unknown(_) => "unknown error",
         }
     }
 }

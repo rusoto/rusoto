@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1264,22 +1261,12 @@ pub enum CancelJobError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1303,36 +1290,17 @@ impl CancelJobError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return CancelJobError::Client(String::from(error_message)),
-                "ServerException" => return CancelJobError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string());
+                "ClientException" => {
+                    return RusotoError::Service(CancelJobError::Client(String::from(error_message)));
                 }
+                "ServerException" => {
+                    return RusotoError::Service(CancelJobError::Server(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelJobError {
-    fn from(err: serde_json::error::Error) -> CancelJobError {
-        CancelJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelJobError {
-    fn from(err: CredentialsError) -> CancelJobError {
-        CancelJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelJobError {
-    fn from(err: HttpDispatchError) -> CancelJobError {
-        CancelJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelJobError {
-    fn from(err: io::Error) -> CancelJobError {
-        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1345,11 +1313,6 @@ impl Error for CancelJobError {
         match *self {
             CancelJobError::Client(ref cause) => cause,
             CancelJobError::Server(ref cause) => cause,
-            CancelJobError::Validation(ref cause) => cause,
-            CancelJobError::Credentials(ref err) => err.description(),
-            CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::ParseError(ref cause) => cause,
-            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1360,22 +1323,12 @@ pub enum CreateComputeEnvironmentError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateComputeEnvironmentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateComputeEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateComputeEnvironmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1400,39 +1353,20 @@ impl CreateComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return CreateComputeEnvironmentError::Client(String::from(error_message));
+                    return RusotoError::Service(CreateComputeEnvironmentError::Client(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return CreateComputeEnvironmentError::Server(String::from(error_message));
+                    return RusotoError::Service(CreateComputeEnvironmentError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateComputeEnvironmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateComputeEnvironmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateComputeEnvironmentError {
-    fn from(err: serde_json::error::Error) -> CreateComputeEnvironmentError {
-        CreateComputeEnvironmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateComputeEnvironmentError {
-    fn from(err: CredentialsError) -> CreateComputeEnvironmentError {
-        CreateComputeEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateComputeEnvironmentError {
-    fn from(err: HttpDispatchError) -> CreateComputeEnvironmentError {
-        CreateComputeEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateComputeEnvironmentError {
-    fn from(err: io::Error) -> CreateComputeEnvironmentError {
-        CreateComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateComputeEnvironmentError {
@@ -1445,13 +1379,6 @@ impl Error for CreateComputeEnvironmentError {
         match *self {
             CreateComputeEnvironmentError::Client(ref cause) => cause,
             CreateComputeEnvironmentError::Server(ref cause) => cause,
-            CreateComputeEnvironmentError::Validation(ref cause) => cause,
-            CreateComputeEnvironmentError::Credentials(ref err) => err.description(),
-            CreateComputeEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateComputeEnvironmentError::ParseError(ref cause) => cause,
-            CreateComputeEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1462,22 +1389,12 @@ pub enum CreateJobQueueError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobQueueError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateJobQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobQueueError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1502,39 +1419,20 @@ impl CreateJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return CreateJobQueueError::Client(String::from(error_message));
+                    return RusotoError::Service(CreateJobQueueError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return CreateJobQueueError::Server(String::from(error_message));
+                    return RusotoError::Service(CreateJobQueueError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateJobQueueError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateJobQueueError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateJobQueueError {
-    fn from(err: serde_json::error::Error) -> CreateJobQueueError {
-        CreateJobQueueError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateJobQueueError {
-    fn from(err: CredentialsError) -> CreateJobQueueError {
-        CreateJobQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateJobQueueError {
-    fn from(err: HttpDispatchError) -> CreateJobQueueError {
-        CreateJobQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateJobQueueError {
-    fn from(err: io::Error) -> CreateJobQueueError {
-        CreateJobQueueError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateJobQueueError {
@@ -1547,11 +1445,6 @@ impl Error for CreateJobQueueError {
         match *self {
             CreateJobQueueError::Client(ref cause) => cause,
             CreateJobQueueError::Server(ref cause) => cause,
-            CreateJobQueueError::Validation(ref cause) => cause,
-            CreateJobQueueError::Credentials(ref err) => err.description(),
-            CreateJobQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobQueueError::ParseError(ref cause) => cause,
-            CreateJobQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1562,22 +1455,12 @@ pub enum DeleteComputeEnvironmentError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteComputeEnvironmentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteComputeEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteComputeEnvironmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1602,39 +1485,20 @@ impl DeleteComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return DeleteComputeEnvironmentError::Client(String::from(error_message));
+                    return RusotoError::Service(DeleteComputeEnvironmentError::Client(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DeleteComputeEnvironmentError::Server(String::from(error_message));
+                    return RusotoError::Service(DeleteComputeEnvironmentError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteComputeEnvironmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteComputeEnvironmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteComputeEnvironmentError {
-    fn from(err: serde_json::error::Error) -> DeleteComputeEnvironmentError {
-        DeleteComputeEnvironmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteComputeEnvironmentError {
-    fn from(err: CredentialsError) -> DeleteComputeEnvironmentError {
-        DeleteComputeEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteComputeEnvironmentError {
-    fn from(err: HttpDispatchError) -> DeleteComputeEnvironmentError {
-        DeleteComputeEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteComputeEnvironmentError {
-    fn from(err: io::Error) -> DeleteComputeEnvironmentError {
-        DeleteComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteComputeEnvironmentError {
@@ -1647,13 +1511,6 @@ impl Error for DeleteComputeEnvironmentError {
         match *self {
             DeleteComputeEnvironmentError::Client(ref cause) => cause,
             DeleteComputeEnvironmentError::Server(ref cause) => cause,
-            DeleteComputeEnvironmentError::Validation(ref cause) => cause,
-            DeleteComputeEnvironmentError::Credentials(ref err) => err.description(),
-            DeleteComputeEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteComputeEnvironmentError::ParseError(ref cause) => cause,
-            DeleteComputeEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1664,22 +1521,12 @@ pub enum DeleteJobQueueError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteJobQueueError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteJobQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobQueueError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1704,39 +1551,20 @@ impl DeleteJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return DeleteJobQueueError::Client(String::from(error_message));
+                    return RusotoError::Service(DeleteJobQueueError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return DeleteJobQueueError::Server(String::from(error_message));
+                    return RusotoError::Service(DeleteJobQueueError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteJobQueueError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteJobQueueError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteJobQueueError {
-    fn from(err: serde_json::error::Error) -> DeleteJobQueueError {
-        DeleteJobQueueError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteJobQueueError {
-    fn from(err: CredentialsError) -> DeleteJobQueueError {
-        DeleteJobQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteJobQueueError {
-    fn from(err: HttpDispatchError) -> DeleteJobQueueError {
-        DeleteJobQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteJobQueueError {
-    fn from(err: io::Error) -> DeleteJobQueueError {
-        DeleteJobQueueError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteJobQueueError {
@@ -1749,11 +1577,6 @@ impl Error for DeleteJobQueueError {
         match *self {
             DeleteJobQueueError::Client(ref cause) => cause,
             DeleteJobQueueError::Server(ref cause) => cause,
-            DeleteJobQueueError::Validation(ref cause) => cause,
-            DeleteJobQueueError::Credentials(ref err) => err.description(),
-            DeleteJobQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteJobQueueError::ParseError(ref cause) => cause,
-            DeleteJobQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1764,22 +1587,12 @@ pub enum DeregisterJobDefinitionError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterJobDefinitionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterJobDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterJobDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1804,39 +1617,20 @@ impl DeregisterJobDefinitionError {
 
             match error_type {
                 "ClientException" => {
-                    return DeregisterJobDefinitionError::Client(String::from(error_message));
+                    return RusotoError::Service(DeregisterJobDefinitionError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return DeregisterJobDefinitionError::Server(String::from(error_message));
+                    return RusotoError::Service(DeregisterJobDefinitionError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeregisterJobDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterJobDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterJobDefinitionError {
-    fn from(err: serde_json::error::Error) -> DeregisterJobDefinitionError {
-        DeregisterJobDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterJobDefinitionError {
-    fn from(err: CredentialsError) -> DeregisterJobDefinitionError {
-        DeregisterJobDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterJobDefinitionError {
-    fn from(err: HttpDispatchError) -> DeregisterJobDefinitionError {
-        DeregisterJobDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterJobDefinitionError {
-    fn from(err: io::Error) -> DeregisterJobDefinitionError {
-        DeregisterJobDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterJobDefinitionError {
@@ -1849,13 +1643,6 @@ impl Error for DeregisterJobDefinitionError {
         match *self {
             DeregisterJobDefinitionError::Client(ref cause) => cause,
             DeregisterJobDefinitionError::Server(ref cause) => cause,
-            DeregisterJobDefinitionError::Validation(ref cause) => cause,
-            DeregisterJobDefinitionError::Credentials(ref err) => err.description(),
-            DeregisterJobDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterJobDefinitionError::ParseError(ref cause) => cause,
-            DeregisterJobDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1866,22 +1653,14 @@ pub enum DescribeComputeEnvironmentsError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeComputeEnvironmentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeComputeEnvironmentsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeComputeEnvironmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1906,39 +1685,20 @@ impl DescribeComputeEnvironmentsError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeComputeEnvironmentsError::Client(String::from(error_message));
+                    return RusotoError::Service(DescribeComputeEnvironmentsError::Client(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeComputeEnvironmentsError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeComputeEnvironmentsError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeComputeEnvironmentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeComputeEnvironmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeComputeEnvironmentsError {
-    fn from(err: serde_json::error::Error) -> DescribeComputeEnvironmentsError {
-        DescribeComputeEnvironmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeComputeEnvironmentsError {
-    fn from(err: CredentialsError) -> DescribeComputeEnvironmentsError {
-        DescribeComputeEnvironmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeComputeEnvironmentsError {
-    fn from(err: HttpDispatchError) -> DescribeComputeEnvironmentsError {
-        DescribeComputeEnvironmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeComputeEnvironmentsError {
-    fn from(err: io::Error) -> DescribeComputeEnvironmentsError {
-        DescribeComputeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeComputeEnvironmentsError {
@@ -1951,13 +1711,6 @@ impl Error for DescribeComputeEnvironmentsError {
         match *self {
             DescribeComputeEnvironmentsError::Client(ref cause) => cause,
             DescribeComputeEnvironmentsError::Server(ref cause) => cause,
-            DescribeComputeEnvironmentsError::Validation(ref cause) => cause,
-            DescribeComputeEnvironmentsError::Credentials(ref err) => err.description(),
-            DescribeComputeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeComputeEnvironmentsError::ParseError(ref cause) => cause,
-            DescribeComputeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1968,22 +1721,12 @@ pub enum DescribeJobDefinitionsError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobDefinitionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobDefinitionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobDefinitionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2008,39 +1751,20 @@ impl DescribeJobDefinitionsError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeJobDefinitionsError::Client(String::from(error_message));
+                    return RusotoError::Service(DescribeJobDefinitionsError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return DescribeJobDefinitionsError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeJobDefinitionsError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeJobDefinitionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobDefinitionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobDefinitionsError {
-    fn from(err: serde_json::error::Error) -> DescribeJobDefinitionsError {
-        DescribeJobDefinitionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobDefinitionsError {
-    fn from(err: CredentialsError) -> DescribeJobDefinitionsError {
-        DescribeJobDefinitionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobDefinitionsError {
-    fn from(err: HttpDispatchError) -> DescribeJobDefinitionsError {
-        DescribeJobDefinitionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobDefinitionsError {
-    fn from(err: io::Error) -> DescribeJobDefinitionsError {
-        DescribeJobDefinitionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobDefinitionsError {
@@ -2053,13 +1777,6 @@ impl Error for DescribeJobDefinitionsError {
         match *self {
             DescribeJobDefinitionsError::Client(ref cause) => cause,
             DescribeJobDefinitionsError::Server(ref cause) => cause,
-            DescribeJobDefinitionsError::Validation(ref cause) => cause,
-            DescribeJobDefinitionsError::Credentials(ref err) => err.description(),
-            DescribeJobDefinitionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeJobDefinitionsError::ParseError(ref cause) => cause,
-            DescribeJobDefinitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2070,22 +1787,12 @@ pub enum DescribeJobQueuesError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobQueuesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobQueuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobQueuesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2110,39 +1817,20 @@ impl DescribeJobQueuesError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeJobQueuesError::Client(String::from(error_message));
+                    return RusotoError::Service(DescribeJobQueuesError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return DescribeJobQueuesError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeJobQueuesError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeJobQueuesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobQueuesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobQueuesError {
-    fn from(err: serde_json::error::Error) -> DescribeJobQueuesError {
-        DescribeJobQueuesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobQueuesError {
-    fn from(err: CredentialsError) -> DescribeJobQueuesError {
-        DescribeJobQueuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobQueuesError {
-    fn from(err: HttpDispatchError) -> DescribeJobQueuesError {
-        DescribeJobQueuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobQueuesError {
-    fn from(err: io::Error) -> DescribeJobQueuesError {
-        DescribeJobQueuesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobQueuesError {
@@ -2155,13 +1843,6 @@ impl Error for DescribeJobQueuesError {
         match *self {
             DescribeJobQueuesError::Client(ref cause) => cause,
             DescribeJobQueuesError::Server(ref cause) => cause,
-            DescribeJobQueuesError::Validation(ref cause) => cause,
-            DescribeJobQueuesError::Credentials(ref err) => err.description(),
-            DescribeJobQueuesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeJobQueuesError::ParseError(ref cause) => cause,
-            DescribeJobQueuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2172,22 +1853,12 @@ pub enum DescribeJobsError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2211,36 +1882,21 @@ impl DescribeJobsError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return DescribeJobsError::Client(String::from(error_message)),
-                "ServerException" => return DescribeJobsError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return DescribeJobsError::Validation(error_message.to_string());
+                "ClientException" => {
+                    return RusotoError::Service(DescribeJobsError::Client(String::from(
+                        error_message,
+                    )));
                 }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeJobsError::Server(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobsError {
-    fn from(err: serde_json::error::Error) -> DescribeJobsError {
-        DescribeJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobsError {
-    fn from(err: CredentialsError) -> DescribeJobsError {
-        DescribeJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobsError {
-    fn from(err: HttpDispatchError) -> DescribeJobsError {
-        DescribeJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobsError {
-    fn from(err: io::Error) -> DescribeJobsError {
-        DescribeJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobsError {
@@ -2253,11 +1909,6 @@ impl Error for DescribeJobsError {
         match *self {
             DescribeJobsError::Client(ref cause) => cause,
             DescribeJobsError::Server(ref cause) => cause,
-            DescribeJobsError::Validation(ref cause) => cause,
-            DescribeJobsError::Credentials(ref err) => err.description(),
-            DescribeJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeJobsError::ParseError(ref cause) => cause,
-            DescribeJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2268,22 +1919,12 @@ pub enum ListJobsError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2307,36 +1948,17 @@ impl ListJobsError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return ListJobsError::Client(String::from(error_message)),
-                "ServerException" => return ListJobsError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string());
+                "ClientException" => {
+                    return RusotoError::Service(ListJobsError::Client(String::from(error_message)));
                 }
+                "ServerException" => {
+                    return RusotoError::Service(ListJobsError::Server(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsError {
-    fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsError {
-    fn from(err: CredentialsError) -> ListJobsError {
-        ListJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsError {
-    fn from(err: HttpDispatchError) -> ListJobsError {
-        ListJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsError {
-    fn from(err: io::Error) -> ListJobsError {
-        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsError {
@@ -2349,11 +1971,6 @@ impl Error for ListJobsError {
         match *self {
             ListJobsError::Client(ref cause) => cause,
             ListJobsError::Server(ref cause) => cause,
-            ListJobsError::Validation(ref cause) => cause,
-            ListJobsError::Credentials(ref err) => err.description(),
-            ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::ParseError(ref cause) => cause,
-            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2364,22 +1981,12 @@ pub enum RegisterJobDefinitionError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterJobDefinitionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterJobDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterJobDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2404,39 +2011,20 @@ impl RegisterJobDefinitionError {
 
             match error_type {
                 "ClientException" => {
-                    return RegisterJobDefinitionError::Client(String::from(error_message));
+                    return RusotoError::Service(RegisterJobDefinitionError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return RegisterJobDefinitionError::Server(String::from(error_message));
+                    return RusotoError::Service(RegisterJobDefinitionError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RegisterJobDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterJobDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterJobDefinitionError {
-    fn from(err: serde_json::error::Error) -> RegisterJobDefinitionError {
-        RegisterJobDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterJobDefinitionError {
-    fn from(err: CredentialsError) -> RegisterJobDefinitionError {
-        RegisterJobDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterJobDefinitionError {
-    fn from(err: HttpDispatchError) -> RegisterJobDefinitionError {
-        RegisterJobDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterJobDefinitionError {
-    fn from(err: io::Error) -> RegisterJobDefinitionError {
-        RegisterJobDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterJobDefinitionError {
@@ -2449,13 +2037,6 @@ impl Error for RegisterJobDefinitionError {
         match *self {
             RegisterJobDefinitionError::Client(ref cause) => cause,
             RegisterJobDefinitionError::Server(ref cause) => cause,
-            RegisterJobDefinitionError::Validation(ref cause) => cause,
-            RegisterJobDefinitionError::Credentials(ref err) => err.description(),
-            RegisterJobDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterJobDefinitionError::ParseError(ref cause) => cause,
-            RegisterJobDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2466,22 +2047,12 @@ pub enum SubmitJobError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SubmitJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> SubmitJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SubmitJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2505,36 +2076,17 @@ impl SubmitJobError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return SubmitJobError::Client(String::from(error_message)),
-                "ServerException" => return SubmitJobError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return SubmitJobError::Validation(error_message.to_string());
+                "ClientException" => {
+                    return RusotoError::Service(SubmitJobError::Client(String::from(error_message)));
                 }
+                "ServerException" => {
+                    return RusotoError::Service(SubmitJobError::Server(String::from(error_message)));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SubmitJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SubmitJobError {
-    fn from(err: serde_json::error::Error) -> SubmitJobError {
-        SubmitJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SubmitJobError {
-    fn from(err: CredentialsError) -> SubmitJobError {
-        SubmitJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SubmitJobError {
-    fn from(err: HttpDispatchError) -> SubmitJobError {
-        SubmitJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SubmitJobError {
-    fn from(err: io::Error) -> SubmitJobError {
-        SubmitJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SubmitJobError {
@@ -2547,11 +2099,6 @@ impl Error for SubmitJobError {
         match *self {
             SubmitJobError::Client(ref cause) => cause,
             SubmitJobError::Server(ref cause) => cause,
-            SubmitJobError::Validation(ref cause) => cause,
-            SubmitJobError::Credentials(ref err) => err.description(),
-            SubmitJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SubmitJobError::ParseError(ref cause) => cause,
-            SubmitJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2562,22 +2109,12 @@ pub enum TerminateJobError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TerminateJobError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TerminateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TerminateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2601,36 +2138,21 @@ impl TerminateJobError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return TerminateJobError::Client(String::from(error_message)),
-                "ServerException" => return TerminateJobError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return TerminateJobError::Validation(error_message.to_string());
+                "ClientException" => {
+                    return RusotoError::Service(TerminateJobError::Client(String::from(
+                        error_message,
+                    )));
                 }
+                "ServerException" => {
+                    return RusotoError::Service(TerminateJobError::Server(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TerminateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TerminateJobError {
-    fn from(err: serde_json::error::Error) -> TerminateJobError {
-        TerminateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TerminateJobError {
-    fn from(err: CredentialsError) -> TerminateJobError {
-        TerminateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TerminateJobError {
-    fn from(err: HttpDispatchError) -> TerminateJobError {
-        TerminateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TerminateJobError {
-    fn from(err: io::Error) -> TerminateJobError {
-        TerminateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TerminateJobError {
@@ -2643,11 +2165,6 @@ impl Error for TerminateJobError {
         match *self {
             TerminateJobError::Client(ref cause) => cause,
             TerminateJobError::Server(ref cause) => cause,
-            TerminateJobError::Validation(ref cause) => cause,
-            TerminateJobError::Credentials(ref err) => err.description(),
-            TerminateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TerminateJobError::ParseError(ref cause) => cause,
-            TerminateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2658,22 +2175,12 @@ pub enum UpdateComputeEnvironmentError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateComputeEnvironmentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateComputeEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateComputeEnvironmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2698,39 +2205,20 @@ impl UpdateComputeEnvironmentError {
 
             match error_type {
                 "ClientException" => {
-                    return UpdateComputeEnvironmentError::Client(String::from(error_message));
+                    return RusotoError::Service(UpdateComputeEnvironmentError::Client(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return UpdateComputeEnvironmentError::Server(String::from(error_message));
+                    return RusotoError::Service(UpdateComputeEnvironmentError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateComputeEnvironmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateComputeEnvironmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateComputeEnvironmentError {
-    fn from(err: serde_json::error::Error) -> UpdateComputeEnvironmentError {
-        UpdateComputeEnvironmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateComputeEnvironmentError {
-    fn from(err: CredentialsError) -> UpdateComputeEnvironmentError {
-        UpdateComputeEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateComputeEnvironmentError {
-    fn from(err: HttpDispatchError) -> UpdateComputeEnvironmentError {
-        UpdateComputeEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateComputeEnvironmentError {
-    fn from(err: io::Error) -> UpdateComputeEnvironmentError {
-        UpdateComputeEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateComputeEnvironmentError {
@@ -2743,13 +2231,6 @@ impl Error for UpdateComputeEnvironmentError {
         match *self {
             UpdateComputeEnvironmentError::Client(ref cause) => cause,
             UpdateComputeEnvironmentError::Server(ref cause) => cause,
-            UpdateComputeEnvironmentError::Validation(ref cause) => cause,
-            UpdateComputeEnvironmentError::Credentials(ref err) => err.description(),
-            UpdateComputeEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateComputeEnvironmentError::ParseError(ref cause) => cause,
-            UpdateComputeEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2760,22 +2241,12 @@ pub enum UpdateJobQueueError {
     Client(String),
     /// <p>These errors are usually caused by a server issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobQueueError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobQueueError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2800,39 +2271,20 @@ impl UpdateJobQueueError {
 
             match error_type {
                 "ClientException" => {
-                    return UpdateJobQueueError::Client(String::from(error_message));
+                    return RusotoError::Service(UpdateJobQueueError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ServerException" => {
-                    return UpdateJobQueueError::Server(String::from(error_message));
+                    return RusotoError::Service(UpdateJobQueueError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateJobQueueError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateJobQueueError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateJobQueueError {
-    fn from(err: serde_json::error::Error) -> UpdateJobQueueError {
-        UpdateJobQueueError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateJobQueueError {
-    fn from(err: CredentialsError) -> UpdateJobQueueError {
-        UpdateJobQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateJobQueueError {
-    fn from(err: HttpDispatchError) -> UpdateJobQueueError {
-        UpdateJobQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateJobQueueError {
-    fn from(err: io::Error) -> UpdateJobQueueError {
-        UpdateJobQueueError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateJobQueueError {
@@ -2845,11 +2297,6 @@ impl Error for UpdateJobQueueError {
         match *self {
             UpdateJobQueueError::Client(ref cause) => cause,
             UpdateJobQueueError::Server(ref cause) => cause,
-            UpdateJobQueueError::Validation(ref cause) => cause,
-            UpdateJobQueueError::Credentials(ref err) => err.description(),
-            UpdateJobQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateJobQueueError::ParseError(ref cause) => cause,
-            UpdateJobQueueError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1037,20 +1034,12 @@ pub enum BatchCheckLayerAvailabilityError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchCheckLayerAvailabilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchCheckLayerAvailabilityError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchCheckLayerAvailabilityError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1063,46 +1052,27 @@ impl BatchCheckLayerAvailabilityError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return BatchCheckLayerAvailabilityError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchCheckLayerAvailabilityError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNotFoundException" => {
-                    return BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchCheckLayerAvailabilityError::RepositoryNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerException" => {
-                    return BatchCheckLayerAvailabilityError::Server(String::from(error_message));
+                    return RusotoError::Service(BatchCheckLayerAvailabilityError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchCheckLayerAvailabilityError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchCheckLayerAvailabilityError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchCheckLayerAvailabilityError {
-    fn from(err: serde_json::error::Error) -> BatchCheckLayerAvailabilityError {
-        BatchCheckLayerAvailabilityError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchCheckLayerAvailabilityError {
-    fn from(err: CredentialsError) -> BatchCheckLayerAvailabilityError {
-        BatchCheckLayerAvailabilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchCheckLayerAvailabilityError {
-    fn from(err: HttpDispatchError) -> BatchCheckLayerAvailabilityError {
-        BatchCheckLayerAvailabilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchCheckLayerAvailabilityError {
-    fn from(err: io::Error) -> BatchCheckLayerAvailabilityError {
-        BatchCheckLayerAvailabilityError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchCheckLayerAvailabilityError {
@@ -1116,13 +1086,6 @@ impl Error for BatchCheckLayerAvailabilityError {
             BatchCheckLayerAvailabilityError::InvalidParameter(ref cause) => cause,
             BatchCheckLayerAvailabilityError::RepositoryNotFound(ref cause) => cause,
             BatchCheckLayerAvailabilityError::Server(ref cause) => cause,
-            BatchCheckLayerAvailabilityError::Validation(ref cause) => cause,
-            BatchCheckLayerAvailabilityError::Credentials(ref err) => err.description(),
-            BatchCheckLayerAvailabilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchCheckLayerAvailabilityError::ParseError(ref cause) => cause,
-            BatchCheckLayerAvailabilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1135,20 +1098,10 @@ pub enum BatchDeleteImageError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1161,42 +1114,25 @@ impl BatchDeleteImageError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return BatchDeleteImageError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteImageError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return BatchDeleteImageError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteImageError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return BatchDeleteImageError::Server(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteImageError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchDeleteImageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteImageError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteImageError {
-        BatchDeleteImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteImageError {
-    fn from(err: CredentialsError) -> BatchDeleteImageError {
-        BatchDeleteImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteImageError {
-    fn from(err: HttpDispatchError) -> BatchDeleteImageError {
-        BatchDeleteImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteImageError {
-    fn from(err: io::Error) -> BatchDeleteImageError {
-        BatchDeleteImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteImageError {
@@ -1210,11 +1146,6 @@ impl Error for BatchDeleteImageError {
             BatchDeleteImageError::InvalidParameter(ref cause) => cause,
             BatchDeleteImageError::RepositoryNotFound(ref cause) => cause,
             BatchDeleteImageError::Server(ref cause) => cause,
-            BatchDeleteImageError::Validation(ref cause) => cause,
-            BatchDeleteImageError::Credentials(ref err) => err.description(),
-            BatchDeleteImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchDeleteImageError::ParseError(ref cause) => cause,
-            BatchDeleteImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1227,20 +1158,10 @@ pub enum BatchGetImageError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1253,40 +1174,25 @@ impl BatchGetImageError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return BatchGetImageError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(BatchGetImageError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNotFoundException" => {
-                    return BatchGetImageError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchGetImageError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ServerException" => return BatchGetImageError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return BatchGetImageError::Validation(error_message.to_string());
+                "ServerException" => {
+                    return RusotoError::Service(BatchGetImageError::Server(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetImageError {
-    fn from(err: serde_json::error::Error) -> BatchGetImageError {
-        BatchGetImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetImageError {
-    fn from(err: CredentialsError) -> BatchGetImageError {
-        BatchGetImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetImageError {
-    fn from(err: HttpDispatchError) -> BatchGetImageError {
-        BatchGetImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetImageError {
-    fn from(err: io::Error) -> BatchGetImageError {
-        BatchGetImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetImageError {
@@ -1300,11 +1206,6 @@ impl Error for BatchGetImageError {
             BatchGetImageError::InvalidParameter(ref cause) => cause,
             BatchGetImageError::RepositoryNotFound(ref cause) => cause,
             BatchGetImageError::Server(ref cause) => cause,
-            BatchGetImageError::Validation(ref cause) => cause,
-            BatchGetImageError::Credentials(ref err) => err.description(),
-            BatchGetImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetImageError::ParseError(ref cause) => cause,
-            BatchGetImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1327,20 +1228,10 @@ pub enum CompleteLayerUploadError {
     Server(String),
     /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
     UploadNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CompleteLayerUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> CompleteLayerUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CompleteLayerUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1353,57 +1244,50 @@ impl CompleteLayerUploadError {
 
             match *error_type {
                 "EmptyUploadException" => {
-                    return CompleteLayerUploadError::EmptyUpload(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::EmptyUpload(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidLayerException" => {
-                    return CompleteLayerUploadError::InvalidLayer(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::InvalidLayer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CompleteLayerUploadError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LayerAlreadyExistsException" => {
-                    return CompleteLayerUploadError::LayerAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::LayerAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "LayerPartTooSmallException" => {
-                    return CompleteLayerUploadError::LayerPartTooSmall(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::LayerPartTooSmall(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return CompleteLayerUploadError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return CompleteLayerUploadError::Server(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::Server(String::from(
+                        error_message,
+                    )));
                 }
                 "UploadNotFoundException" => {
-                    return CompleteLayerUploadError::UploadNotFound(String::from(error_message));
+                    return RusotoError::Service(CompleteLayerUploadError::UploadNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CompleteLayerUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CompleteLayerUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CompleteLayerUploadError {
-    fn from(err: serde_json::error::Error) -> CompleteLayerUploadError {
-        CompleteLayerUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CompleteLayerUploadError {
-    fn from(err: CredentialsError) -> CompleteLayerUploadError {
-        CompleteLayerUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CompleteLayerUploadError {
-    fn from(err: HttpDispatchError) -> CompleteLayerUploadError {
-        CompleteLayerUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CompleteLayerUploadError {
-    fn from(err: io::Error) -> CompleteLayerUploadError {
-        CompleteLayerUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CompleteLayerUploadError {
@@ -1422,13 +1306,6 @@ impl Error for CompleteLayerUploadError {
             CompleteLayerUploadError::RepositoryNotFound(ref cause) => cause,
             CompleteLayerUploadError::Server(ref cause) => cause,
             CompleteLayerUploadError::UploadNotFound(ref cause) => cause,
-            CompleteLayerUploadError::Validation(ref cause) => cause,
-            CompleteLayerUploadError::Credentials(ref err) => err.description(),
-            CompleteLayerUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CompleteLayerUploadError::ParseError(ref cause) => cause,
-            CompleteLayerUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1447,20 +1324,10 @@ pub enum CreateRepositoryError {
     Server(String),
     /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRepositoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRepositoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRepositoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1473,53 +1340,40 @@ impl CreateRepositoryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateRepositoryError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTagParameterException" => {
-                    return CreateRepositoryError::InvalidTagParameter(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::InvalidTagParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateRepositoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryAlreadyExistsException" => {
-                    return CreateRepositoryError::RepositoryAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRepositoryError::RepositoryAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return CreateRepositoryError::Server(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::Server(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyTagsException" => {
-                    return CreateRepositoryError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::TooManyTags(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateRepositoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRepositoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRepositoryError {
-    fn from(err: serde_json::error::Error) -> CreateRepositoryError {
-        CreateRepositoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRepositoryError {
-    fn from(err: CredentialsError) -> CreateRepositoryError {
-        CreateRepositoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRepositoryError {
-    fn from(err: HttpDispatchError) -> CreateRepositoryError {
-        CreateRepositoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRepositoryError {
-    fn from(err: io::Error) -> CreateRepositoryError {
-        CreateRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRepositoryError {
@@ -1536,11 +1390,6 @@ impl Error for CreateRepositoryError {
             CreateRepositoryError::RepositoryAlreadyExists(ref cause) => cause,
             CreateRepositoryError::Server(ref cause) => cause,
             CreateRepositoryError::TooManyTags(ref cause) => cause,
-            CreateRepositoryError::Validation(ref cause) => cause,
-            CreateRepositoryError::Credentials(ref err) => err.description(),
-            CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRepositoryError::ParseError(ref cause) => cause,
-            CreateRepositoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1555,20 +1404,10 @@ pub enum DeleteLifecyclePolicyError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1581,49 +1420,32 @@ impl DeleteLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLifecyclePolicyError::InvalidParameter(String::from(error_message));
-                }
-                "LifecyclePolicyNotFoundException" => {
-                    return DeleteLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLifecyclePolicyError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
+                "LifecyclePolicyNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "RepositoryNotFoundException" => {
-                    return DeleteLifecyclePolicyError::RepositoryNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLifecyclePolicyError::RepositoryNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return DeleteLifecyclePolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(DeleteLifecyclePolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLifecyclePolicyError {
-    fn from(err: CredentialsError) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLifecyclePolicyError {
-    fn from(err: io::Error) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
@@ -1638,13 +1460,6 @@ impl Error for DeleteLifecyclePolicyError {
             DeleteLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
             DeleteLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
             DeleteLifecyclePolicyError::Server(ref cause) => cause,
-            DeleteLifecyclePolicyError::Validation(ref cause) => cause,
-            DeleteLifecyclePolicyError::Credentials(ref err) => err.description(),
-            DeleteLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLifecyclePolicyError::ParseError(ref cause) => cause,
-            DeleteLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1659,20 +1474,10 @@ pub enum DeleteRepositoryError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRepositoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRepositoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1685,45 +1490,30 @@ impl DeleteRepositoryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteRepositoryError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotEmptyException" => {
-                    return DeleteRepositoryError::RepositoryNotEmpty(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::RepositoryNotEmpty(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return DeleteRepositoryError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DeleteRepositoryError::Server(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteRepositoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRepositoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRepositoryError {
-    fn from(err: serde_json::error::Error) -> DeleteRepositoryError {
-        DeleteRepositoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRepositoryError {
-    fn from(err: CredentialsError) -> DeleteRepositoryError {
-        DeleteRepositoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRepositoryError {
-    fn from(err: HttpDispatchError) -> DeleteRepositoryError {
-        DeleteRepositoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRepositoryError {
-    fn from(err: io::Error) -> DeleteRepositoryError {
-        DeleteRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRepositoryError {
@@ -1738,11 +1528,6 @@ impl Error for DeleteRepositoryError {
             DeleteRepositoryError::RepositoryNotEmpty(ref cause) => cause,
             DeleteRepositoryError::RepositoryNotFound(ref cause) => cause,
             DeleteRepositoryError::Server(ref cause) => cause,
-            DeleteRepositoryError::Validation(ref cause) => cause,
-            DeleteRepositoryError::Credentials(ref err) => err.description(),
-            DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRepositoryError::ParseError(ref cause) => cause,
-            DeleteRepositoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1757,20 +1542,10 @@ pub enum DeleteRepositoryPolicyError {
     RepositoryPolicyNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRepositoryPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRepositoryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1783,51 +1558,32 @@ impl DeleteRepositoryPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteRepositoryPolicyError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRepositoryPolicyError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNotFoundException" => {
-                    return DeleteRepositoryPolicyError::RepositoryNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRepositoryPolicyError::RepositoryNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryPolicyNotFoundException" => {
-                    return DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerException" => {
-                    return DeleteRepositoryPolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryPolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteRepositoryPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRepositoryPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRepositoryPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteRepositoryPolicyError {
-        DeleteRepositoryPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRepositoryPolicyError {
-    fn from(err: CredentialsError) -> DeleteRepositoryPolicyError {
-        DeleteRepositoryPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRepositoryPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteRepositoryPolicyError {
-        DeleteRepositoryPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRepositoryPolicyError {
-    fn from(err: io::Error) -> DeleteRepositoryPolicyError {
-        DeleteRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRepositoryPolicyError {
@@ -1842,13 +1598,6 @@ impl Error for DeleteRepositoryPolicyError {
             DeleteRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             DeleteRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
             DeleteRepositoryPolicyError::Server(ref cause) => cause,
-            DeleteRepositoryPolicyError::Validation(ref cause) => cause,
-            DeleteRepositoryPolicyError::Credentials(ref err) => err.description(),
-            DeleteRepositoryPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRepositoryPolicyError::ParseError(ref cause) => cause,
-            DeleteRepositoryPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1863,20 +1612,10 @@ pub enum DescribeImagesError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeImagesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeImagesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1889,45 +1628,30 @@ impl DescribeImagesError {
 
             match *error_type {
                 "ImageNotFoundException" => {
-                    return DescribeImagesError::ImageNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeImagesError::ImageNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeImagesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeImagesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return DescribeImagesError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeImagesError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeImagesError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeImagesError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeImagesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeImagesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeImagesError {
-    fn from(err: serde_json::error::Error) -> DescribeImagesError {
-        DescribeImagesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeImagesError {
-    fn from(err: CredentialsError) -> DescribeImagesError {
-        DescribeImagesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeImagesError {
-    fn from(err: HttpDispatchError) -> DescribeImagesError {
-        DescribeImagesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeImagesError {
-    fn from(err: io::Error) -> DescribeImagesError {
-        DescribeImagesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeImagesError {
@@ -1942,11 +1666,6 @@ impl Error for DescribeImagesError {
             DescribeImagesError::InvalidParameter(ref cause) => cause,
             DescribeImagesError::RepositoryNotFound(ref cause) => cause,
             DescribeImagesError::Server(ref cause) => cause,
-            DescribeImagesError::Validation(ref cause) => cause,
-            DescribeImagesError::Credentials(ref err) => err.description(),
-            DescribeImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeImagesError::ParseError(ref cause) => cause,
-            DescribeImagesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1959,20 +1678,10 @@ pub enum DescribeRepositoriesError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRepositoriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeRepositoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRepositoriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1985,44 +1694,25 @@ impl DescribeRepositoriesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeRepositoriesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeRepositoriesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return DescribeRepositoriesError::RepositoryNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRepositoriesError::RepositoryNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return DescribeRepositoriesError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeRepositoriesError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeRepositoriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeRepositoriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeRepositoriesError {
-    fn from(err: serde_json::error::Error) -> DescribeRepositoriesError {
-        DescribeRepositoriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeRepositoriesError {
-    fn from(err: CredentialsError) -> DescribeRepositoriesError {
-        DescribeRepositoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeRepositoriesError {
-    fn from(err: HttpDispatchError) -> DescribeRepositoriesError {
-        DescribeRepositoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeRepositoriesError {
-    fn from(err: io::Error) -> DescribeRepositoriesError {
-        DescribeRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeRepositoriesError {
@@ -2036,13 +1726,6 @@ impl Error for DescribeRepositoriesError {
             DescribeRepositoriesError::InvalidParameter(ref cause) => cause,
             DescribeRepositoriesError::RepositoryNotFound(ref cause) => cause,
             DescribeRepositoriesError::Server(ref cause) => cause,
-            DescribeRepositoriesError::Validation(ref cause) => cause,
-            DescribeRepositoriesError::Credentials(ref err) => err.description(),
-            DescribeRepositoriesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeRepositoriesError::ParseError(ref cause) => cause,
-            DescribeRepositoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2053,20 +1736,10 @@ pub enum GetAuthorizationTokenError {
     InvalidParameter(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAuthorizationTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAuthorizationTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAuthorizationTokenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2079,39 +1752,20 @@ impl GetAuthorizationTokenError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetAuthorizationTokenError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetAuthorizationTokenError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return GetAuthorizationTokenError::Server(String::from(error_message));
+                    return RusotoError::Service(GetAuthorizationTokenError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetAuthorizationTokenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAuthorizationTokenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAuthorizationTokenError {
-    fn from(err: serde_json::error::Error) -> GetAuthorizationTokenError {
-        GetAuthorizationTokenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAuthorizationTokenError {
-    fn from(err: CredentialsError) -> GetAuthorizationTokenError {
-        GetAuthorizationTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAuthorizationTokenError {
-    fn from(err: HttpDispatchError) -> GetAuthorizationTokenError {
-        GetAuthorizationTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAuthorizationTokenError {
-    fn from(err: io::Error) -> GetAuthorizationTokenError {
-        GetAuthorizationTokenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAuthorizationTokenError {
@@ -2124,13 +1778,6 @@ impl Error for GetAuthorizationTokenError {
         match *self {
             GetAuthorizationTokenError::InvalidParameter(ref cause) => cause,
             GetAuthorizationTokenError::Server(ref cause) => cause,
-            GetAuthorizationTokenError::Validation(ref cause) => cause,
-            GetAuthorizationTokenError::Credentials(ref err) => err.description(),
-            GetAuthorizationTokenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAuthorizationTokenError::ParseError(ref cause) => cause,
-            GetAuthorizationTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2147,20 +1794,10 @@ pub enum GetDownloadUrlForLayerError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDownloadUrlForLayerError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDownloadUrlForLayerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDownloadUrlForLayerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2173,54 +1810,35 @@ impl GetDownloadUrlForLayerError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetDownloadUrlForLayerError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDownloadUrlForLayerError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "LayerInaccessibleException" => {
-                    return GetDownloadUrlForLayerError::LayerInaccessible(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDownloadUrlForLayerError::LayerInaccessible(
+                        String::from(error_message),
                     ));
                 }
                 "LayersNotFoundException" => {
-                    return GetDownloadUrlForLayerError::LayersNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDownloadUrlForLayerError::LayersNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return GetDownloadUrlForLayerError::RepositoryNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDownloadUrlForLayerError::RepositoryNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return GetDownloadUrlForLayerError::Server(String::from(error_message));
+                    return RusotoError::Service(GetDownloadUrlForLayerError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDownloadUrlForLayerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDownloadUrlForLayerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDownloadUrlForLayerError {
-    fn from(err: serde_json::error::Error) -> GetDownloadUrlForLayerError {
-        GetDownloadUrlForLayerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDownloadUrlForLayerError {
-    fn from(err: CredentialsError) -> GetDownloadUrlForLayerError {
-        GetDownloadUrlForLayerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDownloadUrlForLayerError {
-    fn from(err: HttpDispatchError) -> GetDownloadUrlForLayerError {
-        GetDownloadUrlForLayerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDownloadUrlForLayerError {
-    fn from(err: io::Error) -> GetDownloadUrlForLayerError {
-        GetDownloadUrlForLayerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDownloadUrlForLayerError {
@@ -2236,13 +1854,6 @@ impl Error for GetDownloadUrlForLayerError {
             GetDownloadUrlForLayerError::LayersNotFound(ref cause) => cause,
             GetDownloadUrlForLayerError::RepositoryNotFound(ref cause) => cause,
             GetDownloadUrlForLayerError::Server(ref cause) => cause,
-            GetDownloadUrlForLayerError::Validation(ref cause) => cause,
-            GetDownloadUrlForLayerError::Credentials(ref err) => err.description(),
-            GetDownloadUrlForLayerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDownloadUrlForLayerError::ParseError(ref cause) => cause,
-            GetDownloadUrlForLayerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2257,20 +1868,10 @@ pub enum GetLifecyclePolicyError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2283,47 +1884,30 @@ impl GetLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLifecyclePolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LifecyclePolicyNotFoundException" => {
-                    return GetLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLifecyclePolicyError::LifecyclePolicyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNotFoundException" => {
-                    return GetLifecyclePolicyError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return GetLifecyclePolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLifecyclePolicyError {
-    fn from(err: CredentialsError) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLifecyclePolicyError {
-    fn from(err: io::Error) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLifecyclePolicyError {
@@ -2338,13 +1922,6 @@ impl Error for GetLifecyclePolicyError {
             GetLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
             GetLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
             GetLifecyclePolicyError::Server(ref cause) => cause,
-            GetLifecyclePolicyError::Validation(ref cause) => cause,
-            GetLifecyclePolicyError::Credentials(ref err) => err.description(),
-            GetLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLifecyclePolicyError::ParseError(ref cause) => cause,
-            GetLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2359,20 +1936,10 @@ pub enum GetLifecyclePolicyPreviewError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLifecyclePolicyPreviewError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLifecyclePolicyPreviewError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyPreviewError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2385,51 +1952,32 @@ impl GetLifecyclePolicyPreviewError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLifecyclePolicyPreviewError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLifecyclePolicyPreviewError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "LifecyclePolicyPreviewNotFoundException" => {
-                    return GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryNotFoundException" => {
-                    return GetLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLifecyclePolicyPreviewError::RepositoryNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return GetLifecyclePolicyPreviewError::Server(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyPreviewError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLifecyclePolicyPreviewError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLifecyclePolicyPreviewError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLifecyclePolicyPreviewError {
-    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyPreviewError {
-        GetLifecyclePolicyPreviewError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLifecyclePolicyPreviewError {
-    fn from(err: CredentialsError) -> GetLifecyclePolicyPreviewError {
-        GetLifecyclePolicyPreviewError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLifecyclePolicyPreviewError {
-    fn from(err: HttpDispatchError) -> GetLifecyclePolicyPreviewError {
-        GetLifecyclePolicyPreviewError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLifecyclePolicyPreviewError {
-    fn from(err: io::Error) -> GetLifecyclePolicyPreviewError {
-        GetLifecyclePolicyPreviewError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLifecyclePolicyPreviewError {
@@ -2444,13 +1992,6 @@ impl Error for GetLifecyclePolicyPreviewError {
             GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(ref cause) => cause,
             GetLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
             GetLifecyclePolicyPreviewError::Server(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::Validation(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::Credentials(ref err) => err.description(),
-            GetLifecyclePolicyPreviewError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLifecyclePolicyPreviewError::ParseError(ref cause) => cause,
-            GetLifecyclePolicyPreviewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2465,20 +2006,10 @@ pub enum GetRepositoryPolicyError {
     RepositoryPolicyNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRepositoryPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRepositoryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2491,47 +2022,30 @@ impl GetRepositoryPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetRepositoryPolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryPolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return GetRepositoryPolicyError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryPolicyError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryPolicyNotFoundException" => {
-                    return GetRepositoryPolicyError::RepositoryPolicyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryPolicyError::RepositoryPolicyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServerException" => {
-                    return GetRepositoryPolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryPolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetRepositoryPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRepositoryPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRepositoryPolicyError {
-    fn from(err: serde_json::error::Error) -> GetRepositoryPolicyError {
-        GetRepositoryPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRepositoryPolicyError {
-    fn from(err: CredentialsError) -> GetRepositoryPolicyError {
-        GetRepositoryPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRepositoryPolicyError {
-    fn from(err: HttpDispatchError) -> GetRepositoryPolicyError {
-        GetRepositoryPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRepositoryPolicyError {
-    fn from(err: io::Error) -> GetRepositoryPolicyError {
-        GetRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRepositoryPolicyError {
@@ -2546,13 +2060,6 @@ impl Error for GetRepositoryPolicyError {
             GetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             GetRepositoryPolicyError::RepositoryPolicyNotFound(ref cause) => cause,
             GetRepositoryPolicyError::Server(ref cause) => cause,
-            GetRepositoryPolicyError::Validation(ref cause) => cause,
-            GetRepositoryPolicyError::Credentials(ref err) => err.description(),
-            GetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRepositoryPolicyError::ParseError(ref cause) => cause,
-            GetRepositoryPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2565,20 +2072,10 @@ pub enum InitiateLayerUploadError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateLayerUploadError {
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateLayerUploadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateLayerUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2591,42 +2088,25 @@ impl InitiateLayerUploadError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return InitiateLayerUploadError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(InitiateLayerUploadError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return InitiateLayerUploadError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateLayerUploadError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return InitiateLayerUploadError::Server(String::from(error_message));
+                    return RusotoError::Service(InitiateLayerUploadError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return InitiateLayerUploadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateLayerUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateLayerUploadError {
-    fn from(err: serde_json::error::Error) -> InitiateLayerUploadError {
-        InitiateLayerUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateLayerUploadError {
-    fn from(err: CredentialsError) -> InitiateLayerUploadError {
-        InitiateLayerUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateLayerUploadError {
-    fn from(err: HttpDispatchError) -> InitiateLayerUploadError {
-        InitiateLayerUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateLayerUploadError {
-    fn from(err: io::Error) -> InitiateLayerUploadError {
-        InitiateLayerUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateLayerUploadError {
@@ -2640,13 +2120,6 @@ impl Error for InitiateLayerUploadError {
             InitiateLayerUploadError::InvalidParameter(ref cause) => cause,
             InitiateLayerUploadError::RepositoryNotFound(ref cause) => cause,
             InitiateLayerUploadError::Server(ref cause) => cause,
-            InitiateLayerUploadError::Validation(ref cause) => cause,
-            InitiateLayerUploadError::Credentials(ref err) => err.description(),
-            InitiateLayerUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitiateLayerUploadError::ParseError(ref cause) => cause,
-            InitiateLayerUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2659,20 +2132,10 @@ pub enum ListImagesError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListImagesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2685,40 +2148,25 @@ impl ListImagesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListImagesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListImagesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNotFoundException" => {
-                    return ListImagesError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(ListImagesError::RepositoryNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return ListImagesError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return ListImagesError::Validation(error_message.to_string());
+                "ServerException" => {
+                    return RusotoError::Service(ListImagesError::Server(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListImagesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListImagesError {
-    fn from(err: serde_json::error::Error) -> ListImagesError {
-        ListImagesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListImagesError {
-    fn from(err: CredentialsError) -> ListImagesError {
-        ListImagesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListImagesError {
-    fn from(err: HttpDispatchError) -> ListImagesError {
-        ListImagesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListImagesError {
-    fn from(err: io::Error) -> ListImagesError {
-        ListImagesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListImagesError {
@@ -2732,11 +2180,6 @@ impl Error for ListImagesError {
             ListImagesError::InvalidParameter(ref cause) => cause,
             ListImagesError::RepositoryNotFound(ref cause) => cause,
             ListImagesError::Server(ref cause) => cause,
-            ListImagesError::Validation(ref cause) => cause,
-            ListImagesError::Credentials(ref err) => err.description(),
-            ListImagesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListImagesError::ParseError(ref cause) => cause,
-            ListImagesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2749,20 +2192,10 @@ pub enum ListTagsForResourceError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2775,42 +2208,25 @@ impl ListTagsForResourceError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListTagsForResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return ListTagsForResourceError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return ListTagsForResourceError::Server(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -2824,13 +2240,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::InvalidParameter(ref cause) => cause,
             ListTagsForResourceError::RepositoryNotFound(ref cause) => cause,
             ListTagsForResourceError::Server(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2849,20 +2258,10 @@ pub enum PutImageError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutImageError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutImageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2875,49 +2274,38 @@ impl PutImageError {
 
             match *error_type {
                 "ImageAlreadyExistsException" => {
-                    return PutImageError::ImageAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(PutImageError::ImageAlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return PutImageError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutImageError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LayersNotFoundException" => {
-                    return PutImageError::LayersNotFound(String::from(error_message));
+                    return RusotoError::Service(PutImageError::LayersNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PutImageError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutImageError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNotFoundException" => {
-                    return PutImageError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(PutImageError::RepositoryNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return PutImageError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return PutImageError::Validation(error_message.to_string());
+                "ServerException" => {
+                    return RusotoError::Service(PutImageError::Server(String::from(error_message)));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutImageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutImageError {
-    fn from(err: serde_json::error::Error) -> PutImageError {
-        PutImageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutImageError {
-    fn from(err: CredentialsError) -> PutImageError {
-        PutImageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutImageError {
-    fn from(err: HttpDispatchError) -> PutImageError {
-        PutImageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutImageError {
-    fn from(err: io::Error) -> PutImageError {
-        PutImageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutImageError {
@@ -2934,11 +2322,6 @@ impl Error for PutImageError {
             PutImageError::LimitExceeded(ref cause) => cause,
             PutImageError::RepositoryNotFound(ref cause) => cause,
             PutImageError::Server(ref cause) => cause,
-            PutImageError::Validation(ref cause) => cause,
-            PutImageError::Credentials(ref err) => err.description(),
-            PutImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutImageError::ParseError(ref cause) => cause,
-            PutImageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2951,20 +2334,10 @@ pub enum PutLifecyclePolicyError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2977,42 +2350,25 @@ impl PutLifecyclePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutLifecyclePolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return PutLifecyclePolicyError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return PutLifecyclePolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLifecyclePolicyError {
-    fn from(err: CredentialsError) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLifecyclePolicyError {
-    fn from(err: io::Error) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLifecyclePolicyError {
@@ -3026,13 +2382,6 @@ impl Error for PutLifecyclePolicyError {
             PutLifecyclePolicyError::InvalidParameter(ref cause) => cause,
             PutLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
             PutLifecyclePolicyError::Server(ref cause) => cause,
-            PutLifecyclePolicyError::Validation(ref cause) => cause,
-            PutLifecyclePolicyError::Credentials(ref err) => err.description(),
-            PutLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutLifecyclePolicyError::ParseError(ref cause) => cause,
-            PutLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3045,20 +2394,10 @@ pub enum SetRepositoryPolicyError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetRepositoryPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetRepositoryPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRepositoryPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3071,42 +2410,25 @@ impl SetRepositoryPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return SetRepositoryPolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(SetRepositoryPolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return SetRepositoryPolicyError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(SetRepositoryPolicyError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return SetRepositoryPolicyError::Server(String::from(error_message));
+                    return RusotoError::Service(SetRepositoryPolicyError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SetRepositoryPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetRepositoryPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetRepositoryPolicyError {
-    fn from(err: serde_json::error::Error) -> SetRepositoryPolicyError {
-        SetRepositoryPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetRepositoryPolicyError {
-    fn from(err: CredentialsError) -> SetRepositoryPolicyError {
-        SetRepositoryPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetRepositoryPolicyError {
-    fn from(err: HttpDispatchError) -> SetRepositoryPolicyError {
-        SetRepositoryPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetRepositoryPolicyError {
-    fn from(err: io::Error) -> SetRepositoryPolicyError {
-        SetRepositoryPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetRepositoryPolicyError {
@@ -3120,13 +2442,6 @@ impl Error for SetRepositoryPolicyError {
             SetRepositoryPolicyError::InvalidParameter(ref cause) => cause,
             SetRepositoryPolicyError::RepositoryNotFound(ref cause) => cause,
             SetRepositoryPolicyError::Server(ref cause) => cause,
-            SetRepositoryPolicyError::Validation(ref cause) => cause,
-            SetRepositoryPolicyError::Credentials(ref err) => err.description(),
-            SetRepositoryPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetRepositoryPolicyError::ParseError(ref cause) => cause,
-            SetRepositoryPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3143,20 +2458,12 @@ pub enum StartLifecyclePolicyPreviewError {
     RepositoryNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartLifecyclePolicyPreviewError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartLifecyclePolicyPreviewError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartLifecyclePolicyPreviewError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3169,56 +2476,41 @@ impl StartLifecyclePolicyPreviewError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return StartLifecyclePolicyPreviewError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(StartLifecyclePolicyPreviewError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "LifecyclePolicyNotFoundException" => {
-                    return StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LifecyclePolicyPreviewInProgressException" => {
-                    return StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryNotFoundException" => {
-                    return StartLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServerException" => {
-                    return StartLifecyclePolicyPreviewError::Server(String::from(error_message));
+                    return RusotoError::Service(StartLifecyclePolicyPreviewError::Server(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartLifecyclePolicyPreviewError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartLifecyclePolicyPreviewError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartLifecyclePolicyPreviewError {
-    fn from(err: serde_json::error::Error) -> StartLifecyclePolicyPreviewError {
-        StartLifecyclePolicyPreviewError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartLifecyclePolicyPreviewError {
-    fn from(err: CredentialsError) -> StartLifecyclePolicyPreviewError {
-        StartLifecyclePolicyPreviewError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartLifecyclePolicyPreviewError {
-    fn from(err: HttpDispatchError) -> StartLifecyclePolicyPreviewError {
-        StartLifecyclePolicyPreviewError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartLifecyclePolicyPreviewError {
-    fn from(err: io::Error) -> StartLifecyclePolicyPreviewError {
-        StartLifecyclePolicyPreviewError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartLifecyclePolicyPreviewError {
@@ -3234,13 +2526,6 @@ impl Error for StartLifecyclePolicyPreviewError {
             StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(ref cause) => cause,
             StartLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
             StartLifecyclePolicyPreviewError::Server(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::Validation(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::Credentials(ref err) => err.description(),
-            StartLifecyclePolicyPreviewError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartLifecyclePolicyPreviewError::ParseError(ref cause) => cause,
-            StartLifecyclePolicyPreviewError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3257,20 +2542,10 @@ pub enum TagResourceError {
     Server(String),
     /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3283,46 +2558,35 @@ impl TagResourceError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return TagResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTagParameterException" => {
-                    return TagResourceError::InvalidTagParameter(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidTagParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return TagResourceError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::RepositoryNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return TagResourceError::Server(String::from(error_message)),
+                "ServerException" => {
+                    return RusotoError::Service(TagResourceError::Server(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyTagsException" => {
-                    return TagResourceError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::TooManyTags(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -3338,11 +2602,6 @@ impl Error for TagResourceError {
             TagResourceError::RepositoryNotFound(ref cause) => cause,
             TagResourceError::Server(ref cause) => cause,
             TagResourceError::TooManyTags(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3359,20 +2618,10 @@ pub enum UntagResourceError {
     Server(String),
     /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3385,46 +2634,35 @@ impl UntagResourceError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return UntagResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTagParameterException" => {
-                    return UntagResourceError::InvalidTagParameter(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidTagParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNotFoundException" => {
-                    return UntagResourceError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ServerException" => return UntagResourceError::Server(String::from(error_message)),
+                "ServerException" => {
+                    return RusotoError::Service(UntagResourceError::Server(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyTagsException" => {
-                    return UntagResourceError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::TooManyTags(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -3440,11 +2678,6 @@ impl Error for UntagResourceError {
             UntagResourceError::RepositoryNotFound(ref cause) => cause,
             UntagResourceError::Server(ref cause) => cause,
             UntagResourceError::TooManyTags(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3463,20 +2696,10 @@ pub enum UploadLayerPartError {
     Server(String),
     /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
     UploadNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UploadLayerPartError {
-    pub fn from_response(res: BufferedHttpResponse) -> UploadLayerPartError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UploadLayerPartError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3489,51 +2712,40 @@ impl UploadLayerPartError {
 
             match *error_type {
                 "InvalidLayerPartException" => {
-                    return UploadLayerPartError::InvalidLayerPart(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::InvalidLayerPart(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UploadLayerPartError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UploadLayerPartError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNotFoundException" => {
-                    return UploadLayerPartError::RepositoryNotFound(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::RepositoryNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return UploadLayerPartError::Server(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::Server(String::from(
+                        error_message,
+                    )));
                 }
                 "UploadNotFoundException" => {
-                    return UploadLayerPartError::UploadNotFound(String::from(error_message));
+                    return RusotoError::Service(UploadLayerPartError::UploadNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UploadLayerPartError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UploadLayerPartError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UploadLayerPartError {
-    fn from(err: serde_json::error::Error) -> UploadLayerPartError {
-        UploadLayerPartError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UploadLayerPartError {
-    fn from(err: CredentialsError) -> UploadLayerPartError {
-        UploadLayerPartError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UploadLayerPartError {
-    fn from(err: HttpDispatchError) -> UploadLayerPartError {
-        UploadLayerPartError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UploadLayerPartError {
-    fn from(err: io::Error) -> UploadLayerPartError {
-        UploadLayerPartError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UploadLayerPartError {
@@ -3550,11 +2762,6 @@ impl Error for UploadLayerPartError {
             UploadLayerPartError::RepositoryNotFound(ref cause) => cause,
             UploadLayerPartError::Server(ref cause) => cause,
             UploadLayerPartError::UploadNotFound(ref cause) => cause,
-            UploadLayerPartError::Validation(ref cause) => cause,
-            UploadLayerPartError::Credentials(ref err) => err.description(),
-            UploadLayerPartError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UploadLayerPartError::ParseError(ref cause) => cause,
-            UploadLayerPartError::Unknown(_) => "unknown error",
         }
     }
 }

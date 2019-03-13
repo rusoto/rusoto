@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -220,22 +217,12 @@ pub enum GetHLSStreamingSessionURLError {
     ResourceNotFound(String),
     /// <p>The type of the media (for example, h.264 video or ACC audio) could not be determined from the codec IDs of the tracks in the first fragment for a playback session. The codec ID for track 1 should be <code>V_MPEG/ISO/AVC</code> and, optionally, the codec ID for track 2 should be <code>A_AAC</code>.</p>
     UnsupportedStreamMediaType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHLSStreamingSessionURLError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetHLSStreamingSessionURLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHLSStreamingSessionURLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -260,73 +247,58 @@ impl GetHLSStreamingSessionURLError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetHLSStreamingSessionURLError::ClientLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetHLSStreamingSessionURLError::ClientLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidArgumentException" => {
-                    return GetHLSStreamingSessionURLError::InvalidArgument(String::from(
-                        error_message,
+                    return RusotoError::Service(GetHLSStreamingSessionURLError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidCodecPrivateDataException" => {
-                    return GetHLSStreamingSessionURLError::InvalidCodecPrivateData(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetHLSStreamingSessionURLError::InvalidCodecPrivateData(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MissingCodecPrivateDataException" => {
-                    return GetHLSStreamingSessionURLError::MissingCodecPrivateData(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetHLSStreamingSessionURLError::MissingCodecPrivateData(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "NoDataRetentionException" => {
-                    return GetHLSStreamingSessionURLError::NoDataRetention(String::from(
-                        error_message,
+                    return RusotoError::Service(GetHLSStreamingSessionURLError::NoDataRetention(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return GetHLSStreamingSessionURLError::NotAuthorized(String::from(
-                        error_message,
+                    return RusotoError::Service(GetHLSStreamingSessionURLError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetHLSStreamingSessionURLError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetHLSStreamingSessionURLError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedStreamMediaTypeException" => {
-                    return GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetHLSStreamingSessionURLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetHLSStreamingSessionURLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetHLSStreamingSessionURLError {
-    fn from(err: serde_json::error::Error) -> GetHLSStreamingSessionURLError {
-        GetHLSStreamingSessionURLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetHLSStreamingSessionURLError {
-    fn from(err: CredentialsError) -> GetHLSStreamingSessionURLError {
-        GetHLSStreamingSessionURLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHLSStreamingSessionURLError {
-    fn from(err: HttpDispatchError) -> GetHLSStreamingSessionURLError {
-        GetHLSStreamingSessionURLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHLSStreamingSessionURLError {
-    fn from(err: io::Error) -> GetHLSStreamingSessionURLError {
-        GetHLSStreamingSessionURLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetHLSStreamingSessionURLError {
@@ -345,13 +317,6 @@ impl Error for GetHLSStreamingSessionURLError {
             GetHLSStreamingSessionURLError::NotAuthorized(ref cause) => cause,
             GetHLSStreamingSessionURLError::ResourceNotFound(ref cause) => cause,
             GetHLSStreamingSessionURLError::UnsupportedStreamMediaType(ref cause) => cause,
-            GetHLSStreamingSessionURLError::Validation(ref cause) => cause,
-            GetHLSStreamingSessionURLError::Credentials(ref err) => err.description(),
-            GetHLSStreamingSessionURLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetHLSStreamingSessionURLError::ParseError(ref cause) => cause,
-            GetHLSStreamingSessionURLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -366,22 +331,12 @@ pub enum GetMediaForFragmentListError {
     NotAuthorized(String),
     /// <p> <code>GetMedia</code> throws this error when Kinesis Video Streams can't find the stream that you specified.</p> <p> <code>GetHLSStreamingSessionURL</code> throws this error if a session with a <code>PlaybackMode</code> of <code>ON_DEMAND</code> is requested for a stream that has no fragments within the requested time range, or if a session with a <code>PlaybackMode</code> of <code>LIVE</code> is requested for a stream that has no fragments within the last 30 seconds.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMediaForFragmentListError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetMediaForFragmentListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMediaForFragmentListError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -406,51 +361,30 @@ impl GetMediaForFragmentListError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return GetMediaForFragmentListError::ClientLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMediaForFragmentListError::ClientLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return GetMediaForFragmentListError::InvalidArgument(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMediaForFragmentListError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
                 "NotAuthorizedException" => {
-                    return GetMediaForFragmentListError::NotAuthorized(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return GetMediaForFragmentListError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMediaForFragmentListError::NotAuthorized(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetMediaForFragmentListError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetMediaForFragmentListError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMediaForFragmentListError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMediaForFragmentListError {
-    fn from(err: serde_json::error::Error) -> GetMediaForFragmentListError {
-        GetMediaForFragmentListError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMediaForFragmentListError {
-    fn from(err: CredentialsError) -> GetMediaForFragmentListError {
-        GetMediaForFragmentListError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMediaForFragmentListError {
-    fn from(err: HttpDispatchError) -> GetMediaForFragmentListError {
-        GetMediaForFragmentListError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMediaForFragmentListError {
-    fn from(err: io::Error) -> GetMediaForFragmentListError {
-        GetMediaForFragmentListError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMediaForFragmentListError {
@@ -465,13 +399,6 @@ impl Error for GetMediaForFragmentListError {
             GetMediaForFragmentListError::InvalidArgument(ref cause) => cause,
             GetMediaForFragmentListError::NotAuthorized(ref cause) => cause,
             GetMediaForFragmentListError::ResourceNotFound(ref cause) => cause,
-            GetMediaForFragmentListError::Validation(ref cause) => cause,
-            GetMediaForFragmentListError::Credentials(ref err) => err.description(),
-            GetMediaForFragmentListError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetMediaForFragmentListError::ParseError(ref cause) => cause,
-            GetMediaForFragmentListError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -486,22 +413,12 @@ pub enum ListFragmentsError {
     NotAuthorized(String),
     /// <p> <code>GetMedia</code> throws this error when Kinesis Video Streams can't find the stream that you specified.</p> <p> <code>GetHLSStreamingSessionURL</code> throws this error if a session with a <code>PlaybackMode</code> of <code>ON_DEMAND</code> is requested for a stream that has no fragments within the requested time range, or if a session with a <code>PlaybackMode</code> of <code>LIVE</code> is requested for a stream that has no fragments within the last 30 seconds.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFragmentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFragmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFragmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -526,45 +443,30 @@ impl ListFragmentsError {
 
             match error_type {
                 "ClientLimitExceededException" => {
-                    return ListFragmentsError::ClientLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListFragmentsError::ClientLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return ListFragmentsError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(ListFragmentsError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "NotAuthorizedException" => {
-                    return ListFragmentsError::NotAuthorized(String::from(error_message));
+                    return RusotoError::Service(ListFragmentsError::NotAuthorized(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFragmentsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListFragmentsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListFragmentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFragmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFragmentsError {
-    fn from(err: serde_json::error::Error) -> ListFragmentsError {
-        ListFragmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFragmentsError {
-    fn from(err: CredentialsError) -> ListFragmentsError {
-        ListFragmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFragmentsError {
-    fn from(err: HttpDispatchError) -> ListFragmentsError {
-        ListFragmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFragmentsError {
-    fn from(err: io::Error) -> ListFragmentsError {
-        ListFragmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFragmentsError {
@@ -579,11 +481,6 @@ impl Error for ListFragmentsError {
             ListFragmentsError::InvalidArgument(ref cause) => cause,
             ListFragmentsError::NotAuthorized(ref cause) => cause,
             ListFragmentsError::ResourceNotFound(ref cause) => cause,
-            ListFragmentsError::Validation(ref cause) => cause,
-            ListFragmentsError::Credentials(ref err) => err.description(),
-            ListFragmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFragmentsError::ParseError(ref cause) => cause,
-            ListFragmentsError::Unknown(_) => "unknown error",
         }
     }
 }

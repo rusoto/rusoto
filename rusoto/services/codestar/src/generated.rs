@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -748,20 +745,10 @@ pub enum AssociateTeamMemberError {
     ProjectNotFound(String),
     /// <p>The team member is already associated with a role in this project.</p>
     TeamMemberAlreadyAssociated(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateTeamMemberError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateTeamMemberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateTeamMemberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -774,57 +761,42 @@ impl AssociateTeamMemberError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return AssociateTeamMemberError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateTeamMemberError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidServiceRoleException" => {
-                    return AssociateTeamMemberError::InvalidServiceRole(String::from(error_message));
+                    return RusotoError::Service(AssociateTeamMemberError::InvalidServiceRole(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AssociateTeamMemberError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AssociateTeamMemberError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectConfigurationException" => {
-                    return AssociateTeamMemberError::ProjectConfiguration(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateTeamMemberError::ProjectConfiguration(
+                        String::from(error_message),
                     ));
                 }
                 "ProjectNotFoundException" => {
-                    return AssociateTeamMemberError::ProjectNotFound(String::from(error_message));
-                }
-                "TeamMemberAlreadyAssociatedException" => {
-                    return AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateTeamMemberError::ProjectNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AssociateTeamMemberError::Validation(error_message.to_string());
+                "TeamMemberAlreadyAssociatedException" => {
+                    return RusotoError::Service(
+                        AssociateTeamMemberError::TeamMemberAlreadyAssociated(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateTeamMemberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateTeamMemberError {
-    fn from(err: serde_json::error::Error) -> AssociateTeamMemberError {
-        AssociateTeamMemberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateTeamMemberError {
-    fn from(err: CredentialsError) -> AssociateTeamMemberError {
-        AssociateTeamMemberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateTeamMemberError {
-    fn from(err: HttpDispatchError) -> AssociateTeamMemberError {
-        AssociateTeamMemberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateTeamMemberError {
-    fn from(err: io::Error) -> AssociateTeamMemberError {
-        AssociateTeamMemberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateTeamMemberError {
@@ -841,13 +813,6 @@ impl Error for AssociateTeamMemberError {
             AssociateTeamMemberError::ProjectConfiguration(ref cause) => cause,
             AssociateTeamMemberError::ProjectNotFound(ref cause) => cause,
             AssociateTeamMemberError::TeamMemberAlreadyAssociated(ref cause) => cause,
-            AssociateTeamMemberError::Validation(ref cause) => cause,
-            AssociateTeamMemberError::Credentials(ref err) => err.description(),
-            AssociateTeamMemberError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateTeamMemberError::ParseError(ref cause) => cause,
-            AssociateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -866,20 +831,10 @@ pub enum CreateProjectError {
     ProjectConfiguration(String),
     /// <p>The project creation request was valid, but a nonspecific exception or error occurred during project creation. The project could not be created in AWS CodeStar.</p>
     ProjectCreationFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -892,51 +847,40 @@ impl CreateProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return CreateProjectError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidServiceRoleException" => {
-                    return CreateProjectError::InvalidServiceRole(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::InvalidServiceRole(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ProjectAlreadyExistsException" => {
-                    return CreateProjectError::ProjectAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ProjectAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectConfigurationException" => {
-                    return CreateProjectError::ProjectConfiguration(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ProjectConfiguration(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectCreationFailedException" => {
-                    return CreateProjectError::ProjectCreationFailed(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ProjectCreationFailed(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateProjectError {
-    fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateProjectError {
-    fn from(err: CredentialsError) -> CreateProjectError {
-        CreateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateProjectError {
-    fn from(err: HttpDispatchError) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateProjectError {
-    fn from(err: io::Error) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -953,11 +897,6 @@ impl Error for CreateProjectError {
             CreateProjectError::ProjectAlreadyExists(ref cause) => cause,
             CreateProjectError::ProjectConfiguration(ref cause) => cause,
             CreateProjectError::ProjectCreationFailed(ref cause) => cause,
-            CreateProjectError::Validation(ref cause) => cause,
-            CreateProjectError::Credentials(ref err) => err.description(),
-            CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::ParseError(ref cause) => cause,
-            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -966,20 +905,10 @@ impl Error for CreateProjectError {
 pub enum CreateUserProfileError {
     /// <p>A user profile with that name already exists in this region for the AWS account. AWS CodeStar user profile names must be unique within a region for the AWS account. </p>
     UserProfileAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -992,38 +921,15 @@ impl CreateUserProfileError {
 
             match *error_type {
                 "UserProfileAlreadyExistsException" => {
-                    return CreateUserProfileError::UserProfileAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserProfileError::UserProfileAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateUserProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserProfileError {
-    fn from(err: serde_json::error::Error) -> CreateUserProfileError {
-        CreateUserProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserProfileError {
-    fn from(err: CredentialsError) -> CreateUserProfileError {
-        CreateUserProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserProfileError {
-    fn from(err: HttpDispatchError) -> CreateUserProfileError {
-        CreateUserProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserProfileError {
-    fn from(err: io::Error) -> CreateUserProfileError {
-        CreateUserProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserProfileError {
@@ -1035,13 +941,6 @@ impl Error for CreateUserProfileError {
     fn description(&self) -> &str {
         match *self {
             CreateUserProfileError::UserProfileAlreadyExists(ref cause) => cause,
-            CreateUserProfileError::Validation(ref cause) => cause,
-            CreateUserProfileError::Credentials(ref err) => err.description(),
-            CreateUserProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateUserProfileError::ParseError(ref cause) => cause,
-            CreateUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1052,20 +951,10 @@ pub enum DeleteProjectError {
     ConcurrentModification(String),
     /// <p>The service role is not valid.</p>
     InvalidServiceRole(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1078,39 +967,20 @@ impl DeleteProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteProjectError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidServiceRoleException" => {
-                    return DeleteProjectError::InvalidServiceRole(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::InvalidServiceRole(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteProjectError {
-    fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteProjectError {
-    fn from(err: CredentialsError) -> DeleteProjectError {
-        DeleteProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteProjectError {
-    fn from(err: HttpDispatchError) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteProjectError {
-    fn from(err: io::Error) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -1123,31 +993,15 @@ impl Error for DeleteProjectError {
         match *self {
             DeleteProjectError::ConcurrentModification(ref cause) => cause,
             DeleteProjectError::InvalidServiceRole(ref cause) => cause,
-            DeleteProjectError::Validation(ref cause) => cause,
-            DeleteProjectError::Credentials(ref err) => err.description(),
-            DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::ParseError(ref cause) => cause,
-            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteUserProfile
 #[derive(Debug, PartialEq)]
-pub enum DeleteUserProfileError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteUserProfileError {}
 
 impl DeleteUserProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1159,34 +1013,11 @@ impl DeleteUserProfileError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DeleteUserProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserProfileError {
-    fn from(err: serde_json::error::Error) -> DeleteUserProfileError {
-        DeleteUserProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserProfileError {
-    fn from(err: CredentialsError) -> DeleteUserProfileError {
-        DeleteUserProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserProfileError {
-    fn from(err: HttpDispatchError) -> DeleteUserProfileError {
-        DeleteUserProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserProfileError {
-    fn from(err: io::Error) -> DeleteUserProfileError {
-        DeleteUserProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserProfileError {
@@ -1196,15 +1027,7 @@ impl fmt::Display for DeleteUserProfileError {
 }
 impl Error for DeleteUserProfileError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteUserProfileError::Validation(ref cause) => cause,
-            DeleteUserProfileError::Credentials(ref err) => err.description(),
-            DeleteUserProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserProfileError::ParseError(ref cause) => cause,
-            DeleteUserProfileError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeProject
@@ -1218,20 +1041,10 @@ pub enum DescribeProjectError {
     ProjectConfiguration(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1244,45 +1057,30 @@ impl DescribeProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DescribeProjectError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidServiceRoleException" => {
-                    return DescribeProjectError::InvalidServiceRole(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::InvalidServiceRole(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectConfigurationException" => {
-                    return DescribeProjectError::ProjectConfiguration(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::ProjectConfiguration(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return DescribeProjectError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::ProjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeProjectError {
-    fn from(err: serde_json::error::Error) -> DescribeProjectError {
-        DescribeProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeProjectError {
-    fn from(err: CredentialsError) -> DescribeProjectError {
-        DescribeProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeProjectError {
-    fn from(err: HttpDispatchError) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeProjectError {
-    fn from(err: io::Error) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeProjectError {
@@ -1297,11 +1095,6 @@ impl Error for DescribeProjectError {
             DescribeProjectError::InvalidServiceRole(ref cause) => cause,
             DescribeProjectError::ProjectConfiguration(ref cause) => cause,
             DescribeProjectError::ProjectNotFound(ref cause) => cause,
-            DescribeProjectError::Validation(ref cause) => cause,
-            DescribeProjectError::Credentials(ref err) => err.description(),
-            DescribeProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeProjectError::ParseError(ref cause) => cause,
-            DescribeProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1310,20 +1103,10 @@ impl Error for DescribeProjectError {
 pub enum DescribeUserProfileError {
     /// <p>The user profile was not found.</p>
     UserProfileNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1336,38 +1119,15 @@ impl DescribeUserProfileError {
 
             match *error_type {
                 "UserProfileNotFoundException" => {
-                    return DescribeUserProfileError::UserProfileNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUserProfileError::UserProfileNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeUserProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserProfileError {
-    fn from(err: serde_json::error::Error) -> DescribeUserProfileError {
-        DescribeUserProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserProfileError {
-    fn from(err: CredentialsError) -> DescribeUserProfileError {
-        DescribeUserProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserProfileError {
-    fn from(err: HttpDispatchError) -> DescribeUserProfileError {
-        DescribeUserProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserProfileError {
-    fn from(err: io::Error) -> DescribeUserProfileError {
-        DescribeUserProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserProfileError {
@@ -1379,13 +1139,6 @@ impl Error for DescribeUserProfileError {
     fn description(&self) -> &str {
         match *self {
             DescribeUserProfileError::UserProfileNotFound(ref cause) => cause,
-            DescribeUserProfileError::Validation(ref cause) => cause,
-            DescribeUserProfileError::Credentials(ref err) => err.description(),
-            DescribeUserProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeUserProfileError::ParseError(ref cause) => cause,
-            DescribeUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1398,20 +1151,10 @@ pub enum DisassociateTeamMemberError {
     InvalidServiceRole(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateTeamMemberError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateTeamMemberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateTeamMemberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1424,46 +1167,27 @@ impl DisassociateTeamMemberError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DisassociateTeamMemberError::ConcurrentModification(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateTeamMemberError::ConcurrentModification(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidServiceRoleException" => {
-                    return DisassociateTeamMemberError::InvalidServiceRole(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateTeamMemberError::InvalidServiceRole(
+                        String::from(error_message),
                     ));
                 }
                 "ProjectNotFoundException" => {
-                    return DisassociateTeamMemberError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(DisassociateTeamMemberError::ProjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateTeamMemberError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateTeamMemberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateTeamMemberError {
-    fn from(err: serde_json::error::Error) -> DisassociateTeamMemberError {
-        DisassociateTeamMemberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateTeamMemberError {
-    fn from(err: CredentialsError) -> DisassociateTeamMemberError {
-        DisassociateTeamMemberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateTeamMemberError {
-    fn from(err: HttpDispatchError) -> DisassociateTeamMemberError {
-        DisassociateTeamMemberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateTeamMemberError {
-    fn from(err: io::Error) -> DisassociateTeamMemberError {
-        DisassociateTeamMemberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateTeamMemberError {
@@ -1477,13 +1201,6 @@ impl Error for DisassociateTeamMemberError {
             DisassociateTeamMemberError::ConcurrentModification(ref cause) => cause,
             DisassociateTeamMemberError::InvalidServiceRole(ref cause) => cause,
             DisassociateTeamMemberError::ProjectNotFound(ref cause) => cause,
-            DisassociateTeamMemberError::Validation(ref cause) => cause,
-            DisassociateTeamMemberError::Credentials(ref err) => err.description(),
-            DisassociateTeamMemberError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateTeamMemberError::ParseError(ref cause) => cause,
-            DisassociateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1492,20 +1209,10 @@ impl Error for DisassociateTeamMemberError {
 pub enum ListProjectsError {
     /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1518,36 +1225,15 @@ impl ListProjectsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListProjectsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProjectsError {
-    fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProjectsError {
-    fn from(err: CredentialsError) -> ListProjectsError {
-        ListProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProjectsError {
-    fn from(err: HttpDispatchError) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProjectsError {
-    fn from(err: io::Error) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -1559,11 +1245,6 @@ impl Error for ListProjectsError {
     fn description(&self) -> &str {
         match *self {
             ListProjectsError::InvalidNextToken(ref cause) => cause,
-            ListProjectsError::Validation(ref cause) => cause,
-            ListProjectsError::Credentials(ref err) => err.description(),
-            ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::ParseError(ref cause) => cause,
-            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1574,20 +1255,10 @@ pub enum ListResourcesError {
     InvalidNextToken(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1600,39 +1271,20 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListResourcesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "ProjectNotFoundException" => {
-                    return ListResourcesError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::ProjectNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourcesError {
-    fn from(err: serde_json::error::Error) -> ListResourcesError {
-        ListResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourcesError {
-    fn from(err: CredentialsError) -> ListResourcesError {
-        ListResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourcesError {
-    fn from(err: HttpDispatchError) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourcesError {
-    fn from(err: io::Error) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -1645,11 +1297,6 @@ impl Error for ListResourcesError {
         match *self {
             ListResourcesError::InvalidNextToken(ref cause) => cause,
             ListResourcesError::ProjectNotFound(ref cause) => cause,
-            ListResourcesError::Validation(ref cause) => cause,
-            ListResourcesError::Credentials(ref err) => err.description(),
-            ListResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourcesError::ParseError(ref cause) => cause,
-            ListResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1660,20 +1307,10 @@ pub enum ListTagsForProjectError {
     InvalidNextToken(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1686,39 +1323,20 @@ impl ListTagsForProjectError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListTagsForProjectError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListTagsForProjectError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return ListTagsForProjectError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForProjectError::ProjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForProjectError {
-    fn from(err: serde_json::error::Error) -> ListTagsForProjectError {
-        ListTagsForProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForProjectError {
-    fn from(err: CredentialsError) -> ListTagsForProjectError {
-        ListTagsForProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForProjectError {
-    fn from(err: HttpDispatchError) -> ListTagsForProjectError {
-        ListTagsForProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForProjectError {
-    fn from(err: io::Error) -> ListTagsForProjectError {
-        ListTagsForProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForProjectError {
@@ -1731,13 +1349,6 @@ impl Error for ListTagsForProjectError {
         match *self {
             ListTagsForProjectError::InvalidNextToken(ref cause) => cause,
             ListTagsForProjectError::ProjectNotFound(ref cause) => cause,
-            ListTagsForProjectError::Validation(ref cause) => cause,
-            ListTagsForProjectError::Credentials(ref err) => err.description(),
-            ListTagsForProjectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForProjectError::ParseError(ref cause) => cause,
-            ListTagsForProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1748,20 +1359,10 @@ pub enum ListTeamMembersError {
     InvalidNextToken(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTeamMembersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTeamMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTeamMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1774,39 +1375,20 @@ impl ListTeamMembersError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListTeamMembersError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListTeamMembersError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return ListTeamMembersError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTeamMembersError::ProjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTeamMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTeamMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTeamMembersError {
-    fn from(err: serde_json::error::Error) -> ListTeamMembersError {
-        ListTeamMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTeamMembersError {
-    fn from(err: CredentialsError) -> ListTeamMembersError {
-        ListTeamMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTeamMembersError {
-    fn from(err: HttpDispatchError) -> ListTeamMembersError {
-        ListTeamMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTeamMembersError {
-    fn from(err: io::Error) -> ListTeamMembersError {
-        ListTeamMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTeamMembersError {
@@ -1819,11 +1401,6 @@ impl Error for ListTeamMembersError {
         match *self {
             ListTeamMembersError::InvalidNextToken(ref cause) => cause,
             ListTeamMembersError::ProjectNotFound(ref cause) => cause,
-            ListTeamMembersError::Validation(ref cause) => cause,
-            ListTeamMembersError::Credentials(ref err) => err.description(),
-            ListTeamMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTeamMembersError::ParseError(ref cause) => cause,
-            ListTeamMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1832,20 +1409,10 @@ impl Error for ListTeamMembersError {
 pub enum ListUserProfilesError {
     /// <p>The next token is not valid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUserProfilesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUserProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUserProfilesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1858,36 +1425,15 @@ impl ListUserProfilesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListUserProfilesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListUserProfilesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListUserProfilesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUserProfilesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUserProfilesError {
-    fn from(err: serde_json::error::Error) -> ListUserProfilesError {
-        ListUserProfilesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUserProfilesError {
-    fn from(err: CredentialsError) -> ListUserProfilesError {
-        ListUserProfilesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUserProfilesError {
-    fn from(err: HttpDispatchError) -> ListUserProfilesError {
-        ListUserProfilesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUserProfilesError {
-    fn from(err: io::Error) -> ListUserProfilesError {
-        ListUserProfilesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUserProfilesError {
@@ -1899,11 +1445,6 @@ impl Error for ListUserProfilesError {
     fn description(&self) -> &str {
         match *self {
             ListUserProfilesError::InvalidNextToken(ref cause) => cause,
-            ListUserProfilesError::Validation(ref cause) => cause,
-            ListUserProfilesError::Credentials(ref err) => err.description(),
-            ListUserProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUserProfilesError::ParseError(ref cause) => cause,
-            ListUserProfilesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1916,20 +1457,10 @@ pub enum TagProjectError {
     LimitExceeded(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1942,42 +1473,25 @@ impl TagProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return TagProjectError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(TagProjectError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return TagProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ProjectNotFoundException" => {
-                    return TagProjectError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(TagProjectError::ProjectNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagProjectError {
-    fn from(err: serde_json::error::Error) -> TagProjectError {
-        TagProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagProjectError {
-    fn from(err: CredentialsError) -> TagProjectError {
-        TagProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagProjectError {
-    fn from(err: HttpDispatchError) -> TagProjectError {
-        TagProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagProjectError {
-    fn from(err: io::Error) -> TagProjectError {
-        TagProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagProjectError {
@@ -1991,11 +1505,6 @@ impl Error for TagProjectError {
             TagProjectError::ConcurrentModification(ref cause) => cause,
             TagProjectError::LimitExceeded(ref cause) => cause,
             TagProjectError::ProjectNotFound(ref cause) => cause,
-            TagProjectError::Validation(ref cause) => cause,
-            TagProjectError::Credentials(ref err) => err.description(),
-            TagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagProjectError::ParseError(ref cause) => cause,
-            TagProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2008,20 +1517,10 @@ pub enum UntagProjectError {
     LimitExceeded(String),
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2034,42 +1533,25 @@ impl UntagProjectError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UntagProjectError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UntagProjectError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UntagProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UntagProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ProjectNotFoundException" => {
-                    return UntagProjectError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagProjectError::ProjectNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagProjectError {
-    fn from(err: serde_json::error::Error) -> UntagProjectError {
-        UntagProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagProjectError {
-    fn from(err: CredentialsError) -> UntagProjectError {
-        UntagProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagProjectError {
-    fn from(err: HttpDispatchError) -> UntagProjectError {
-        UntagProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagProjectError {
-    fn from(err: io::Error) -> UntagProjectError {
-        UntagProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagProjectError {
@@ -2083,11 +1565,6 @@ impl Error for UntagProjectError {
             UntagProjectError::ConcurrentModification(ref cause) => cause,
             UntagProjectError::LimitExceeded(ref cause) => cause,
             UntagProjectError::ProjectNotFound(ref cause) => cause,
-            UntagProjectError::Validation(ref cause) => cause,
-            UntagProjectError::Credentials(ref err) => err.description(),
-            UntagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagProjectError::ParseError(ref cause) => cause,
-            UntagProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2096,20 +1573,10 @@ impl Error for UntagProjectError {
 pub enum UpdateProjectError {
     /// <p>The specified AWS CodeStar project was not found.</p>
     ProjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2122,36 +1589,15 @@ impl UpdateProjectError {
 
             match *error_type {
                 "ProjectNotFoundException" => {
-                    return UpdateProjectError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::ProjectNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateProjectError {
-    fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateProjectError {
-    fn from(err: CredentialsError) -> UpdateProjectError {
-        UpdateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateProjectError {
-    fn from(err: HttpDispatchError) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateProjectError {
-    fn from(err: io::Error) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -2163,11 +1609,6 @@ impl Error for UpdateProjectError {
     fn description(&self) -> &str {
         match *self {
             UpdateProjectError::ProjectNotFound(ref cause) => cause,
-            UpdateProjectError::Validation(ref cause) => cause,
-            UpdateProjectError::Credentials(ref err) => err.description(),
-            UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::ParseError(ref cause) => cause,
-            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2186,20 +1627,10 @@ pub enum UpdateTeamMemberError {
     ProjectNotFound(String),
     /// <p>The specified team member was not found.</p>
     TeamMemberNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTeamMemberError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTeamMemberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTeamMemberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2212,53 +1643,40 @@ impl UpdateTeamMemberError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateTeamMemberError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateTeamMemberError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidServiceRoleException" => {
-                    return UpdateTeamMemberError::InvalidServiceRole(String::from(error_message));
+                    return RusotoError::Service(UpdateTeamMemberError::InvalidServiceRole(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateTeamMemberError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateTeamMemberError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ProjectConfigurationException" => {
-                    return UpdateTeamMemberError::ProjectConfiguration(String::from(error_message));
+                    return RusotoError::Service(UpdateTeamMemberError::ProjectConfiguration(
+                        String::from(error_message),
+                    ));
                 }
                 "ProjectNotFoundException" => {
-                    return UpdateTeamMemberError::ProjectNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTeamMemberError::ProjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TeamMemberNotFoundException" => {
-                    return UpdateTeamMemberError::TeamMemberNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTeamMemberError::TeamMemberNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateTeamMemberError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTeamMemberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTeamMemberError {
-    fn from(err: serde_json::error::Error) -> UpdateTeamMemberError {
-        UpdateTeamMemberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTeamMemberError {
-    fn from(err: CredentialsError) -> UpdateTeamMemberError {
-        UpdateTeamMemberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTeamMemberError {
-    fn from(err: HttpDispatchError) -> UpdateTeamMemberError {
-        UpdateTeamMemberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTeamMemberError {
-    fn from(err: io::Error) -> UpdateTeamMemberError {
-        UpdateTeamMemberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTeamMemberError {
@@ -2275,11 +1693,6 @@ impl Error for UpdateTeamMemberError {
             UpdateTeamMemberError::ProjectConfiguration(ref cause) => cause,
             UpdateTeamMemberError::ProjectNotFound(ref cause) => cause,
             UpdateTeamMemberError::TeamMemberNotFound(ref cause) => cause,
-            UpdateTeamMemberError::Validation(ref cause) => cause,
-            UpdateTeamMemberError::Credentials(ref err) => err.description(),
-            UpdateTeamMemberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTeamMemberError::ParseError(ref cause) => cause,
-            UpdateTeamMemberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2288,20 +1701,10 @@ impl Error for UpdateTeamMemberError {
 pub enum UpdateUserProfileError {
     /// <p>The user profile was not found.</p>
     UserProfileNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserProfileError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserProfileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2314,36 +1717,15 @@ impl UpdateUserProfileError {
 
             match *error_type {
                 "UserProfileNotFoundException" => {
-                    return UpdateUserProfileError::UserProfileNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateUserProfileError::UserProfileNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateUserProfileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserProfileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserProfileError {
-    fn from(err: serde_json::error::Error) -> UpdateUserProfileError {
-        UpdateUserProfileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserProfileError {
-    fn from(err: CredentialsError) -> UpdateUserProfileError {
-        UpdateUserProfileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserProfileError {
-    fn from(err: HttpDispatchError) -> UpdateUserProfileError {
-        UpdateUserProfileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserProfileError {
-    fn from(err: io::Error) -> UpdateUserProfileError {
-        UpdateUserProfileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserProfileError {
@@ -2355,13 +1737,6 @@ impl Error for UpdateUserProfileError {
     fn description(&self) -> &str {
         match *self {
             UpdateUserProfileError::UserProfileNotFound(ref cause) => cause,
-            UpdateUserProfileError::Validation(ref cause) => cause,
-            UpdateUserProfileError::Credentials(ref err) => err.description(),
-            UpdateUserProfileError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateUserProfileError::ParseError(ref cause) => cause,
-            UpdateUserProfileError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -14463,20 +14460,12 @@ pub enum AcceptReservedNodeExchangeError {
     ReservedNodeOfferingNotFoundFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptReservedNodeExchangeError {
-    pub fn from_response(res: BufferedHttpResponse) -> AcceptReservedNodeExchangeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AcceptReservedNodeExchangeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14484,45 +14473,59 @@ impl AcceptReservedNodeExchangeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DependentServiceUnavailableFault" => {
-                        return AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::DependentServiceUnavailableFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidReservedNodeState" => {
-                        return AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::InvalidReservedNodeStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeAlreadyExists" => {
-                        return AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::ReservedNodeAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeAlreadyMigrated" => {
-                        return AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::ReservedNodeAlreadyMigratedFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeNotFound" => {
-                        return AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeOfferingNotFound" => {
-                        return AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnsupportedOperation" => {
-                        return AcceptReservedNodeExchangeError::UnsupportedOperationFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AcceptReservedNodeExchangeError::UnsupportedOperationFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        AcceptReservedNodeExchangeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14531,28 +14534,6 @@ impl AcceptReservedNodeExchangeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AcceptReservedNodeExchangeError {
-    fn from(err: XmlParseError) -> AcceptReservedNodeExchangeError {
-        let XmlParseError(message) = err;
-        AcceptReservedNodeExchangeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AcceptReservedNodeExchangeError {
-    fn from(err: CredentialsError) -> AcceptReservedNodeExchangeError {
-        AcceptReservedNodeExchangeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcceptReservedNodeExchangeError {
-    fn from(err: HttpDispatchError) -> AcceptReservedNodeExchangeError {
-        AcceptReservedNodeExchangeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcceptReservedNodeExchangeError {
-    fn from(err: io::Error) -> AcceptReservedNodeExchangeError {
-        AcceptReservedNodeExchangeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AcceptReservedNodeExchangeError {
@@ -14570,13 +14551,6 @@ impl Error for AcceptReservedNodeExchangeError {
             AcceptReservedNodeExchangeError::ReservedNodeNotFoundFault(ref cause) => cause,
             AcceptReservedNodeExchangeError::ReservedNodeOfferingNotFoundFault(ref cause) => cause,
             AcceptReservedNodeExchangeError::UnsupportedOperationFault(ref cause) => cause,
-            AcceptReservedNodeExchangeError::Validation(ref cause) => cause,
-            AcceptReservedNodeExchangeError::Credentials(ref err) => err.description(),
-            AcceptReservedNodeExchangeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AcceptReservedNodeExchangeError::ParseError(ref cause) => cause,
-            AcceptReservedNodeExchangeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14591,31 +14565,23 @@ pub enum AuthorizeClusterSecurityGroupIngressError {
     ClusterSecurityGroupNotFoundFault(String),
     /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeClusterSecurityGroupIngressError {
-    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeClusterSecurityGroupIngressError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AuthorizeClusterSecurityGroupIngressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message)),"AuthorizationQuotaExceeded" => return AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message))),"AuthorizationQuotaExceeded" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::AuthorizationQuotaExceededFault(String::from(parsed_error.message))),"ClusterSecurityGroupNotFound" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message))),"InvalidClusterSecurityGroupState" => return RusotoError::Service(AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        AuthorizeClusterSecurityGroupIngressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14624,28 +14590,6 @@ impl AuthorizeClusterSecurityGroupIngressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AuthorizeClusterSecurityGroupIngressError {
-    fn from(err: XmlParseError) -> AuthorizeClusterSecurityGroupIngressError {
-        let XmlParseError(message) = err;
-        AuthorizeClusterSecurityGroupIngressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AuthorizeClusterSecurityGroupIngressError {
-    fn from(err: CredentialsError) -> AuthorizeClusterSecurityGroupIngressError {
-        AuthorizeClusterSecurityGroupIngressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AuthorizeClusterSecurityGroupIngressError {
-    fn from(err: HttpDispatchError) -> AuthorizeClusterSecurityGroupIngressError {
-        AuthorizeClusterSecurityGroupIngressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AuthorizeClusterSecurityGroupIngressError {
-    fn from(err: io::Error) -> AuthorizeClusterSecurityGroupIngressError {
-        AuthorizeClusterSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeClusterSecurityGroupIngressError {
@@ -14668,13 +14612,6 @@ impl Error for AuthorizeClusterSecurityGroupIngressError {
             AuthorizeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                 ref cause,
             ) => cause,
-            AuthorizeClusterSecurityGroupIngressError::Validation(ref cause) => cause,
-            AuthorizeClusterSecurityGroupIngressError::Credentials(ref err) => err.description(),
-            AuthorizeClusterSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AuthorizeClusterSecurityGroupIngressError::ParseError(ref cause) => cause,
-            AuthorizeClusterSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14693,20 +14630,10 @@ pub enum AuthorizeSnapshotAccessError {
     InvalidClusterSnapshotStateFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AuthorizeSnapshotAccessError {
-    pub fn from_response(res: BufferedHttpResponse) -> AuthorizeSnapshotAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeSnapshotAccessError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14714,40 +14641,52 @@ impl AuthorizeSnapshotAccessError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AuthorizationAlreadyExists" => {
-                        return AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::AuthorizationAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "AuthorizationQuotaExceeded" => {
-                        return AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::AuthorizationQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSnapshotNotFound" => {
-                        return AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::ClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterSnapshotState" => {
-                        return AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "LimitExceededFault" => {
-                        return AuthorizeSnapshotAccessError::LimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AuthorizeSnapshotAccessError::LimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AuthorizeSnapshotAccessError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14756,28 +14695,6 @@ impl AuthorizeSnapshotAccessError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AuthorizeSnapshotAccessError {
-    fn from(err: XmlParseError) -> AuthorizeSnapshotAccessError {
-        let XmlParseError(message) = err;
-        AuthorizeSnapshotAccessError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AuthorizeSnapshotAccessError {
-    fn from(err: CredentialsError) -> AuthorizeSnapshotAccessError {
-        AuthorizeSnapshotAccessError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AuthorizeSnapshotAccessError {
-    fn from(err: HttpDispatchError) -> AuthorizeSnapshotAccessError {
-        AuthorizeSnapshotAccessError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AuthorizeSnapshotAccessError {
-    fn from(err: io::Error) -> AuthorizeSnapshotAccessError {
-        AuthorizeSnapshotAccessError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AuthorizeSnapshotAccessError {
@@ -14796,13 +14713,6 @@ impl Error for AuthorizeSnapshotAccessError {
             }
             AuthorizeSnapshotAccessError::InvalidClusterSnapshotStateFault(ref cause) => cause,
             AuthorizeSnapshotAccessError::LimitExceededFault(ref cause) => cause,
-            AuthorizeSnapshotAccessError::Validation(ref cause) => cause,
-            AuthorizeSnapshotAccessError::Credentials(ref err) => err.description(),
-            AuthorizeSnapshotAccessError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AuthorizeSnapshotAccessError::ParseError(ref cause) => cause,
-            AuthorizeSnapshotAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14811,20 +14721,12 @@ impl Error for AuthorizeSnapshotAccessError {
 pub enum BatchDeleteClusterSnapshotsError {
     /// <p>The maximum number for a batch delete of snapshots has been reached. The limit is 100. </p>
     BatchDeleteRequestSizeExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteClusterSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteClusterSnapshotsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchDeleteClusterSnapshotsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14832,15 +14734,17 @@ impl BatchDeleteClusterSnapshotsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BatchDeleteRequestSizeExceeded" => {
-                        return BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        BatchDeleteClusterSnapshotsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14849,28 +14753,6 @@ impl BatchDeleteClusterSnapshotsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for BatchDeleteClusterSnapshotsError {
-    fn from(err: XmlParseError) -> BatchDeleteClusterSnapshotsError {
-        let XmlParseError(message) = err;
-        BatchDeleteClusterSnapshotsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteClusterSnapshotsError {
-    fn from(err: CredentialsError) -> BatchDeleteClusterSnapshotsError {
-        BatchDeleteClusterSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteClusterSnapshotsError {
-    fn from(err: HttpDispatchError) -> BatchDeleteClusterSnapshotsError {
-        BatchDeleteClusterSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteClusterSnapshotsError {
-    fn from(err: io::Error) -> BatchDeleteClusterSnapshotsError {
-        BatchDeleteClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchDeleteClusterSnapshotsError {
@@ -14884,13 +14766,6 @@ impl Error for BatchDeleteClusterSnapshotsError {
             BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(ref cause) => {
                 cause
             }
-            BatchDeleteClusterSnapshotsError::Validation(ref cause) => cause,
-            BatchDeleteClusterSnapshotsError::Credentials(ref err) => err.description(),
-            BatchDeleteClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteClusterSnapshotsError::ParseError(ref cause) => cause,
-            BatchDeleteClusterSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14901,31 +14776,23 @@ pub enum BatchModifyClusterSnapshotsError {
     BatchModifyClusterSnapshotsLimitExceededFault(String),
     /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
     InvalidRetentionPeriodFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchModifyClusterSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchModifyClusterSnapshotsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchModifyClusterSnapshotsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(String::from(parsed_error.message)),"InvalidRetentionPeriodFault" => return BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(String::from(parsed_error.message)),_ => {}
+                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(String::from(parsed_error.message))),"InvalidRetentionPeriodFault" => return RusotoError::Service(BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        BatchModifyClusterSnapshotsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14934,28 +14801,6 @@ impl BatchModifyClusterSnapshotsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for BatchModifyClusterSnapshotsError {
-    fn from(err: XmlParseError) -> BatchModifyClusterSnapshotsError {
-        let XmlParseError(message) = err;
-        BatchModifyClusterSnapshotsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BatchModifyClusterSnapshotsError {
-    fn from(err: CredentialsError) -> BatchModifyClusterSnapshotsError {
-        BatchModifyClusterSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchModifyClusterSnapshotsError {
-    fn from(err: HttpDispatchError) -> BatchModifyClusterSnapshotsError {
-        BatchModifyClusterSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchModifyClusterSnapshotsError {
-    fn from(err: io::Error) -> BatchModifyClusterSnapshotsError {
-        BatchModifyClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchModifyClusterSnapshotsError {
@@ -14970,13 +14815,6 @@ impl Error for BatchModifyClusterSnapshotsError {
                 ref cause,
             ) => cause,
             BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(ref cause) => cause,
-            BatchModifyClusterSnapshotsError::Validation(ref cause) => cause,
-            BatchModifyClusterSnapshotsError::Credentials(ref err) => err.description(),
-            BatchModifyClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchModifyClusterSnapshotsError::ParseError(ref cause) => cause,
-            BatchModifyClusterSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14991,20 +14829,10 @@ pub enum CancelResizeError {
     ResizeNotFoundFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelResizeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelResizeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelResizeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15012,30 +14840,30 @@ impl CancelResizeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return CancelResizeError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CancelResizeError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidClusterState" => {
-                        return CancelResizeError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CancelResizeError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResizeNotFound" => {
-                        return CancelResizeError::ResizeNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CancelResizeError::ResizeNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedOperation" => {
-                        return CancelResizeError::UnsupportedOperationFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CancelResizeError::UnsupportedOperationFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CancelResizeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15044,28 +14872,6 @@ impl CancelResizeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CancelResizeError {
-    fn from(err: XmlParseError) -> CancelResizeError {
-        let XmlParseError(message) = err;
-        CancelResizeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CancelResizeError {
-    fn from(err: CredentialsError) -> CancelResizeError {
-        CancelResizeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelResizeError {
-    fn from(err: HttpDispatchError) -> CancelResizeError {
-        CancelResizeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelResizeError {
-    fn from(err: io::Error) -> CancelResizeError {
-        CancelResizeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CancelResizeError {
@@ -15080,11 +14886,6 @@ impl Error for CancelResizeError {
             CancelResizeError::InvalidClusterStateFault(ref cause) => cause,
             CancelResizeError::ResizeNotFoundFault(ref cause) => cause,
             CancelResizeError::UnsupportedOperationFault(ref cause) => cause,
-            CancelResizeError::Validation(ref cause) => cause,
-            CancelResizeError::Credentials(ref err) => err.description(),
-            CancelResizeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelResizeError::ParseError(ref cause) => cause,
-            CancelResizeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15101,20 +14902,10 @@ pub enum CopyClusterSnapshotError {
     InvalidClusterSnapshotStateFault(String),
     /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
     InvalidRetentionPeriodFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15122,35 +14913,45 @@ impl CopyClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSnapshotAlreadyExists" => {
-                        return CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSnapshotNotFound" => {
-                        return CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSnapshotQuotaExceeded" => {
-                        return CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterSnapshotState" => {
-                        return CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return CopyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CopyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CopyClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15159,28 +14960,6 @@ impl CopyClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CopyClusterSnapshotError {
-    fn from(err: XmlParseError) -> CopyClusterSnapshotError {
-        let XmlParseError(message) = err;
-        CopyClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CopyClusterSnapshotError {
-    fn from(err: CredentialsError) -> CopyClusterSnapshotError {
-        CopyClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> CopyClusterSnapshotError {
-        CopyClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyClusterSnapshotError {
-    fn from(err: io::Error) -> CopyClusterSnapshotError {
-        CopyClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CopyClusterSnapshotError {
@@ -15196,13 +14975,6 @@ impl Error for CopyClusterSnapshotError {
             CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
             CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
             CopyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
-            CopyClusterSnapshotError::Validation(ref cause) => cause,
-            CopyClusterSnapshotError::Credentials(ref err) => err.description(),
-            CopyClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CopyClusterSnapshotError::ParseError(ref cause) => cause,
-            CopyClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15253,20 +15025,10 @@ pub enum CreateClusterError {
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15274,118 +15036,146 @@ impl CreateClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterAlreadyExists" => {
-                        return CreateClusterError::ClusterAlreadyExistsFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::ClusterAlreadyExistsFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterParameterGroupNotFound" => {
-                        return CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::ClusterParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterQuotaExceeded" => {
-                        return CreateClusterError::ClusterQuotaExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::ClusterQuotaExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterSecurityGroupNotFound" => {
-                        return CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::ClusterSecurityGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSubnetGroupNotFoundFault" => {
-                        return CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::ClusterSubnetGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return CreateClusterError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "HsmClientCertificateNotFoundFault" => {
-                        return CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::HsmClientCertificateNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "HsmConfigurationNotFoundFault" => {
-                        return CreateClusterError::HsmConfigurationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::HsmConfigurationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientClusterCapacity" => {
-                        return CreateClusterError::InsufficientClusterCapacityFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::InsufficientClusterCapacityFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
-                        return CreateClusterError::InvalidClusterSubnetGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterError::InvalidClusterSubnetGroupStateFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidClusterTrack" => {
-                        return CreateClusterError::InvalidClusterTrackFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::InvalidClusterTrackFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidElasticIpFault" => {
-                        return CreateClusterError::InvalidElasticIpFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::InvalidElasticIpFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return CreateClusterError::InvalidRetentionPeriodFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return CreateClusterError::InvalidSubnet(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateClusterError::InvalidSubnet(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "InvalidTagFault" => {
-                        return CreateClusterError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidVPCNetworkStateFault" => {
-                        return CreateClusterError::InvalidVPCNetworkStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::InvalidVPCNetworkStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceededFault" => {
-                        return CreateClusterError::LimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::LimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
-                        return CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NumberOfNodesQuotaExceeded" => {
-                        return CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotScheduleNotFound" => {
-                        return CreateClusterError::SnapshotScheduleNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterError::SnapshotScheduleNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TagLimitExceededFault" => {
-                        return CreateClusterError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::TagLimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnauthorizedOperation" => {
-                        return CreateClusterError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterError::UnauthorizedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15394,28 +15184,6 @@ impl CreateClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateClusterError {
-    fn from(err: XmlParseError) -> CreateClusterError {
-        let XmlParseError(message) = err;
-        CreateClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterError {
-    fn from(err: CredentialsError) -> CreateClusterError {
-        CreateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterError {
-    fn from(err: HttpDispatchError) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterError {
-    fn from(err: io::Error) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -15448,11 +15216,6 @@ impl Error for CreateClusterError {
             CreateClusterError::SnapshotScheduleNotFoundFault(ref cause) => cause,
             CreateClusterError::TagLimitExceededFault(ref cause) => cause,
             CreateClusterError::UnauthorizedOperation(ref cause) => cause,
-            CreateClusterError::Validation(ref cause) => cause,
-            CreateClusterError::Credentials(ref err) => err.description(),
-            CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::ParseError(ref cause) => cause,
-            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15467,31 +15230,47 @@ pub enum CreateClusterParameterGroupError {
     InvalidTagFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterParameterGroupAlreadyExists" => return CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupQuotaExceeded" => return CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateClusterParameterGroupError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateClusterParameterGroupError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterParameterGroupAlreadyExists" => return RusotoError::Service(
+                        CreateClusterParameterGroupError::ClusterParameterGroupAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "ClusterParameterGroupQuotaExceeded" => return RusotoError::Service(
+                        CreateClusterParameterGroupError::ClusterParameterGroupQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            CreateClusterParameterGroupError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(
+                            CreateClusterParameterGroupError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15500,28 +15279,6 @@ impl CreateClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateClusterParameterGroupError {
-    fn from(err: XmlParseError) -> CreateClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        CreateClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterParameterGroupError {
-    fn from(err: CredentialsError) -> CreateClusterParameterGroupError {
-        CreateClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> CreateClusterParameterGroupError {
-        CreateClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterParameterGroupError {
-    fn from(err: io::Error) -> CreateClusterParameterGroupError {
-        CreateClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterParameterGroupError {
@@ -15540,13 +15297,6 @@ impl Error for CreateClusterParameterGroupError {
             ) => cause,
             CreateClusterParameterGroupError::InvalidTagFault(ref cause) => cause,
             CreateClusterParameterGroupError::TagLimitExceededFault(ref cause) => cause,
-            CreateClusterParameterGroupError::Validation(ref cause) => cause,
-            CreateClusterParameterGroupError::Credentials(ref err) => err.description(),
-            CreateClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateClusterParameterGroupError::ParseError(ref cause) => cause,
-            CreateClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15561,31 +15311,51 @@ pub enum CreateClusterSecurityGroupError {
     InvalidTagFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSecurityGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSecurityGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateClusterSecurityGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterSecurityGroupAlreadyExists" => return CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(String::from(parsed_error.message)),"QuotaExceeded.ClusterSecurityGroup" => return CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateClusterSecurityGroupError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateClusterSecurityGroupError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterSecurityGroupAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateClusterSecurityGroupError::ClusterSecurityGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "QuotaExceeded.ClusterSecurityGroup" => {
+                        return RusotoError::Service(
+                            CreateClusterSecurityGroupError::ClusterSecurityGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            CreateClusterSecurityGroupError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(
+                            CreateClusterSecurityGroupError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateClusterSecurityGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15594,28 +15364,6 @@ impl CreateClusterSecurityGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateClusterSecurityGroupError {
-    fn from(err: XmlParseError) -> CreateClusterSecurityGroupError {
-        let XmlParseError(message) = err;
-        CreateClusterSecurityGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterSecurityGroupError {
-    fn from(err: CredentialsError) -> CreateClusterSecurityGroupError {
-        CreateClusterSecurityGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterSecurityGroupError {
-    fn from(err: HttpDispatchError) -> CreateClusterSecurityGroupError {
-        CreateClusterSecurityGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterSecurityGroupError {
-    fn from(err: io::Error) -> CreateClusterSecurityGroupError {
-        CreateClusterSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSecurityGroupError {
@@ -15634,13 +15382,6 @@ impl Error for CreateClusterSecurityGroupError {
             }
             CreateClusterSecurityGroupError::InvalidTagFault(ref cause) => cause,
             CreateClusterSecurityGroupError::TagLimitExceededFault(ref cause) => cause,
-            CreateClusterSecurityGroupError::Validation(ref cause) => cause,
-            CreateClusterSecurityGroupError::Credentials(ref err) => err.description(),
-            CreateClusterSecurityGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateClusterSecurityGroupError::ParseError(ref cause) => cause,
-            CreateClusterSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15661,20 +15402,10 @@ pub enum CreateClusterSnapshotError {
     InvalidTagFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15682,45 +15413,57 @@ impl CreateClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return CreateClusterSnapshotError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSnapshotAlreadyExists" => {
-                        return CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSnapshotQuotaExceeded" => {
-                        return CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterState" => {
-                        return CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return CreateClusterSnapshotError::InvalidRetentionPeriodFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidTagFault" => {
-                        return CreateClusterSnapshotError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterSnapshotError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TagLimitExceededFault" => {
-                        return CreateClusterSnapshotError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSnapshotError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15729,28 +15472,6 @@ impl CreateClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateClusterSnapshotError {
-    fn from(err: XmlParseError) -> CreateClusterSnapshotError {
-        let XmlParseError(message) = err;
-        CreateClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterSnapshotError {
-    fn from(err: CredentialsError) -> CreateClusterSnapshotError {
-        CreateClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> CreateClusterSnapshotError {
-        CreateClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterSnapshotError {
-    fn from(err: io::Error) -> CreateClusterSnapshotError {
-        CreateClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSnapshotError {
@@ -15768,13 +15489,6 @@ impl Error for CreateClusterSnapshotError {
             CreateClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
             CreateClusterSnapshotError::InvalidTagFault(ref cause) => cause,
             CreateClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
-            CreateClusterSnapshotError::Validation(ref cause) => cause,
-            CreateClusterSnapshotError::Credentials(ref err) => err.description(),
-            CreateClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateClusterSnapshotError::ParseError(ref cause) => cause,
-            CreateClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15797,20 +15511,10 @@ pub enum CreateClusterSubnetGroupError {
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15818,50 +15522,62 @@ impl CreateClusterSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSubnetGroupAlreadyExists" => {
-                        return CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::ClusterSubnetGroupAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSubnetGroupQuotaExceeded" => {
-                        return CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::ClusterSubnetGroupQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSubnetQuotaExceededFault" => {
-                        return CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidSubnet" => {
-                        return CreateClusterSubnetGroupError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterSubnetGroupError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidTagFault" => {
-                        return CreateClusterSubnetGroupError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateClusterSubnetGroupError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TagLimitExceededFault" => {
-                        return CreateClusterSubnetGroupError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnauthorizedOperation" => {
-                        return CreateClusterSubnetGroupError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateClusterSubnetGroupError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateClusterSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -15870,28 +15586,6 @@ impl CreateClusterSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateClusterSubnetGroupError {
-    fn from(err: XmlParseError) -> CreateClusterSubnetGroupError {
-        let XmlParseError(message) = err;
-        CreateClusterSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterSubnetGroupError {
-    fn from(err: CredentialsError) -> CreateClusterSubnetGroupError {
-        CreateClusterSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterSubnetGroupError {
-    fn from(err: HttpDispatchError) -> CreateClusterSubnetGroupError {
-        CreateClusterSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterSubnetGroupError {
-    fn from(err: io::Error) -> CreateClusterSubnetGroupError {
-        CreateClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateClusterSubnetGroupError {
@@ -15912,13 +15606,6 @@ impl Error for CreateClusterSubnetGroupError {
             CreateClusterSubnetGroupError::InvalidTagFault(ref cause) => cause,
             CreateClusterSubnetGroupError::TagLimitExceededFault(ref cause) => cause,
             CreateClusterSubnetGroupError::UnauthorizedOperation(ref cause) => cause,
-            CreateClusterSubnetGroupError::Validation(ref cause) => cause,
-            CreateClusterSubnetGroupError::Credentials(ref err) => err.description(),
-            CreateClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateClusterSubnetGroupError::ParseError(ref cause) => cause,
-            CreateClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -15947,20 +15634,10 @@ pub enum CreateEventSubscriptionError {
     SubscriptionSeverityNotFoundFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15968,65 +15645,85 @@ impl CreateEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "EventSubscriptionQuotaExceeded" => {
-                        return CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return CreateEventSubscriptionError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateEventSubscriptionError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SNSInvalidTopic" => {
-                        return CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSNoAuthorization" => {
-                        return CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSTopicArnNotFound" => {
-                        return CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SourceNotFound" => {
-                        return CreateEventSubscriptionError::SourceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SourceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubscriptionAlreadyExist" => {
-                        return CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionCategoryNotFound" => {
-                        return CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionEventIdNotFound" => {
-                        return CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionSeverityNotFound" => {
-                        return CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TagLimitExceededFault" => {
-                        return CreateEventSubscriptionError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16035,28 +15732,6 @@ impl CreateEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateEventSubscriptionError {
-    fn from(err: XmlParseError) -> CreateEventSubscriptionError {
-        let XmlParseError(message) = err;
-        CreateEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateEventSubscriptionError {
-    fn from(err: CredentialsError) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEventSubscriptionError {
-    fn from(err: io::Error) -> CreateEventSubscriptionError {
-        CreateEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateEventSubscriptionError {
@@ -16078,13 +15753,6 @@ impl Error for CreateEventSubscriptionError {
             CreateEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => cause,
             CreateEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => cause,
             CreateEventSubscriptionError::TagLimitExceededFault(ref cause) => cause,
-            CreateEventSubscriptionError::Validation(ref cause) => cause,
-            CreateEventSubscriptionError::Credentials(ref err) => err.description(),
-            CreateEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEventSubscriptionError::ParseError(ref cause) => cause,
-            CreateEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16099,31 +15767,51 @@ pub enum CreateHsmClientCertificateError {
     InvalidTagFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmClientCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmClientCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateHsmClientCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "HsmClientCertificateAlreadyExistsFault" => return CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(String::from(parsed_error.message)),"HsmClientCertificateQuotaExceededFault" => return CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(String::from(parsed_error.message)),"InvalidTagFault" => return CreateHsmClientCertificateError::InvalidTagFault(String::from(parsed_error.message)),"TagLimitExceededFault" => return CreateHsmClientCertificateError::TagLimitExceededFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "HsmClientCertificateAlreadyExistsFault" => {
+                        return RusotoError::Service(
+                            CreateHsmClientCertificateError::HsmClientCertificateAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "HsmClientCertificateQuotaExceededFault" => {
+                        return RusotoError::Service(
+                            CreateHsmClientCertificateError::HsmClientCertificateQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            CreateHsmClientCertificateError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "TagLimitExceededFault" => {
+                        return RusotoError::Service(
+                            CreateHsmClientCertificateError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateHsmClientCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16132,28 +15820,6 @@ impl CreateHsmClientCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateHsmClientCertificateError {
-    fn from(err: XmlParseError) -> CreateHsmClientCertificateError {
-        let XmlParseError(message) = err;
-        CreateHsmClientCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateHsmClientCertificateError {
-    fn from(err: CredentialsError) -> CreateHsmClientCertificateError {
-        CreateHsmClientCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHsmClientCertificateError {
-    fn from(err: HttpDispatchError) -> CreateHsmClientCertificateError {
-        CreateHsmClientCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHsmClientCertificateError {
-    fn from(err: io::Error) -> CreateHsmClientCertificateError {
-        CreateHsmClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHsmClientCertificateError {
@@ -16172,13 +15838,6 @@ impl Error for CreateHsmClientCertificateError {
             }
             CreateHsmClientCertificateError::InvalidTagFault(ref cause) => cause,
             CreateHsmClientCertificateError::TagLimitExceededFault(ref cause) => cause,
-            CreateHsmClientCertificateError::Validation(ref cause) => cause,
-            CreateHsmClientCertificateError::Credentials(ref err) => err.description(),
-            CreateHsmClientCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateHsmClientCertificateError::ParseError(ref cause) => cause,
-            CreateHsmClientCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16193,20 +15852,10 @@ pub enum CreateHsmConfigurationError {
     InvalidTagFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16214,30 +15863,36 @@ impl CreateHsmConfigurationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HsmConfigurationAlreadyExistsFault" => {
-                        return CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateHsmConfigurationError::HsmConfigurationAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "HsmConfigurationQuotaExceededFault" => {
-                        return CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return CreateHsmConfigurationError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateHsmConfigurationError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TagLimitExceededFault" => {
-                        return CreateHsmConfigurationError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateHsmConfigurationError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateHsmConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16246,28 +15901,6 @@ impl CreateHsmConfigurationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateHsmConfigurationError {
-    fn from(err: XmlParseError) -> CreateHsmConfigurationError {
-        let XmlParseError(message) = err;
-        CreateHsmConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateHsmConfigurationError {
-    fn from(err: CredentialsError) -> CreateHsmConfigurationError {
-        CreateHsmConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHsmConfigurationError {
-    fn from(err: HttpDispatchError) -> CreateHsmConfigurationError {
-        CreateHsmConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHsmConfigurationError {
-    fn from(err: io::Error) -> CreateHsmConfigurationError {
-        CreateHsmConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateHsmConfigurationError {
@@ -16282,13 +15915,6 @@ impl Error for CreateHsmConfigurationError {
             CreateHsmConfigurationError::HsmConfigurationQuotaExceededFault(ref cause) => cause,
             CreateHsmConfigurationError::InvalidTagFault(ref cause) => cause,
             CreateHsmConfigurationError::TagLimitExceededFault(ref cause) => cause,
-            CreateHsmConfigurationError::Validation(ref cause) => cause,
-            CreateHsmConfigurationError::Credentials(ref err) => err.description(),
-            CreateHsmConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateHsmConfigurationError::ParseError(ref cause) => cause,
-            CreateHsmConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16307,20 +15933,10 @@ pub enum CreateSnapshotCopyGrantError {
     SnapshotCopyGrantQuotaExceededFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotCopyGrantError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotCopyGrantError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotCopyGrantError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16328,40 +15944,50 @@ impl CreateSnapshotCopyGrantError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DependentServiceRequestThrottlingFault" => {
-                        return CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotCopyGrantError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return CreateSnapshotCopyGrantError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateSnapshotCopyGrantError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceededFault" => {
-                        return CreateSnapshotCopyGrantError::LimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateSnapshotCopyGrantError::LimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotCopyGrantAlreadyExistsFault" => {
-                        return CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotCopyGrantQuotaExceededFault" => {
-                        return CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TagLimitExceededFault" => {
-                        return CreateSnapshotCopyGrantError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateSnapshotCopyGrantError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateSnapshotCopyGrantError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16370,28 +15996,6 @@ impl CreateSnapshotCopyGrantError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateSnapshotCopyGrantError {
-    fn from(err: XmlParseError) -> CreateSnapshotCopyGrantError {
-        let XmlParseError(message) = err;
-        CreateSnapshotCopyGrantError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateSnapshotCopyGrantError {
-    fn from(err: CredentialsError) -> CreateSnapshotCopyGrantError {
-        CreateSnapshotCopyGrantError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSnapshotCopyGrantError {
-    fn from(err: HttpDispatchError) -> CreateSnapshotCopyGrantError {
-        CreateSnapshotCopyGrantError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSnapshotCopyGrantError {
-    fn from(err: io::Error) -> CreateSnapshotCopyGrantError {
-        CreateSnapshotCopyGrantError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSnapshotCopyGrantError {
@@ -16410,13 +16014,6 @@ impl Error for CreateSnapshotCopyGrantError {
             CreateSnapshotCopyGrantError::SnapshotCopyGrantAlreadyExistsFault(ref cause) => cause,
             CreateSnapshotCopyGrantError::SnapshotCopyGrantQuotaExceededFault(ref cause) => cause,
             CreateSnapshotCopyGrantError::TagLimitExceededFault(ref cause) => cause,
-            CreateSnapshotCopyGrantError::Validation(ref cause) => cause,
-            CreateSnapshotCopyGrantError::Credentials(ref err) => err.description(),
-            CreateSnapshotCopyGrantError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSnapshotCopyGrantError::ParseError(ref cause) => cause,
-            CreateSnapshotCopyGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16433,20 +16030,10 @@ pub enum CreateSnapshotScheduleError {
     SnapshotScheduleQuotaExceededFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSnapshotScheduleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16454,35 +16041,45 @@ impl CreateSnapshotScheduleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidSchedule" => {
-                        return CreateSnapshotScheduleError::InvalidScheduleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateSnapshotScheduleError::InvalidScheduleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ScheduleDefinitionTypeUnsupported" => {
-                        return CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotScheduleAlreadyExists" => {
-                        return CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotScheduleQuotaExceeded" => {
-                        return CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TagLimitExceededFault" => {
-                        return CreateSnapshotScheduleError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateSnapshotScheduleError::TagLimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        CreateSnapshotScheduleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16491,28 +16088,6 @@ impl CreateSnapshotScheduleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateSnapshotScheduleError {
-    fn from(err: XmlParseError) -> CreateSnapshotScheduleError {
-        let XmlParseError(message) = err;
-        CreateSnapshotScheduleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateSnapshotScheduleError {
-    fn from(err: CredentialsError) -> CreateSnapshotScheduleError {
-        CreateSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> CreateSnapshotScheduleError {
-        CreateSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSnapshotScheduleError {
-    fn from(err: io::Error) -> CreateSnapshotScheduleError {
-        CreateSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateSnapshotScheduleError {
@@ -16528,13 +16103,6 @@ impl Error for CreateSnapshotScheduleError {
             CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(ref cause) => cause,
             CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(ref cause) => cause,
             CreateSnapshotScheduleError::TagLimitExceededFault(ref cause) => cause,
-            CreateSnapshotScheduleError::Validation(ref cause) => cause,
-            CreateSnapshotScheduleError::Credentials(ref err) => err.description(),
-            CreateSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSnapshotScheduleError::ParseError(ref cause) => cause,
-            CreateSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16547,20 +16115,10 @@ pub enum CreateTagsError {
     ResourceNotFoundFault(String),
     /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16568,23 +16126,25 @@ impl CreateTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return CreateTagsError::InvalidTagFault(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateTagsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ResourceNotFoundFault" => {
-                        return CreateTagsError::ResourceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTagsError::ResourceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TagLimitExceededFault" => {
-                        return CreateTagsError::TagLimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTagsError::TagLimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16593,28 +16153,6 @@ impl CreateTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTagsError {
-    fn from(err: XmlParseError) -> CreateTagsError {
-        let XmlParseError(message) = err;
-        CreateTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTagsError {
-    fn from(err: CredentialsError) -> CreateTagsError {
-        CreateTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTagsError {
-    fn from(err: HttpDispatchError) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTagsError {
-    fn from(err: io::Error) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -16628,11 +16166,6 @@ impl Error for CreateTagsError {
             CreateTagsError::InvalidTagFault(ref cause) => cause,
             CreateTagsError::ResourceNotFoundFault(ref cause) => cause,
             CreateTagsError::TagLimitExceededFault(ref cause) => cause,
-            CreateTagsError::Validation(ref cause) => cause,
-            CreateTagsError::Credentials(ref err) => err.description(),
-            CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::ParseError(ref cause) => cause,
-            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16649,20 +16182,10 @@ pub enum DeleteClusterError {
     InvalidClusterStateFault(String),
     /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
     InvalidRetentionPeriodFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16670,35 +16193,41 @@ impl DeleteClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DeleteClusterError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteClusterError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterSnapshotAlreadyExists" => {
-                        return DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteClusterError::ClusterSnapshotAlreadyExistsFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSnapshotQuotaExceeded" => {
-                        return DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteClusterError::ClusterSnapshotQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterState" => {
-                        return DeleteClusterError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteClusterError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return DeleteClusterError::InvalidRetentionPeriodFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteClusterError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16707,28 +16236,6 @@ impl DeleteClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteClusterError {
-    fn from(err: XmlParseError) -> DeleteClusterError {
-        let XmlParseError(message) = err;
-        DeleteClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterError {
-    fn from(err: CredentialsError) -> DeleteClusterError {
-        DeleteClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterError {
-    fn from(err: HttpDispatchError) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterError {
-    fn from(err: io::Error) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -16744,11 +16251,6 @@ impl Error for DeleteClusterError {
             DeleteClusterError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
             DeleteClusterError::InvalidClusterStateFault(ref cause) => cause,
             DeleteClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
-            DeleteClusterError::Validation(ref cause) => cause,
-            DeleteClusterError::Credentials(ref err) => err.description(),
-            DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::ParseError(ref cause) => cause,
-            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16759,31 +16261,35 @@ pub enum DeleteClusterParameterGroupError {
     ClusterParameterGroupNotFoundFault(String),
     /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterParameterGroupNotFound" => return DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            DeleteClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterParameterGroupState" => return RusotoError::Service(
+                        DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        DeleteClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16792,28 +16298,6 @@ impl DeleteClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteClusterParameterGroupError {
-    fn from(err: XmlParseError) -> DeleteClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        DeleteClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterParameterGroupError {
-    fn from(err: CredentialsError) -> DeleteClusterParameterGroupError {
-        DeleteClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> DeleteClusterParameterGroupError {
-        DeleteClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterParameterGroupError {
-    fn from(err: io::Error) -> DeleteClusterParameterGroupError {
-        DeleteClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterParameterGroupError {
@@ -16830,13 +16314,6 @@ impl Error for DeleteClusterParameterGroupError {
             DeleteClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
                 cause
             }
-            DeleteClusterParameterGroupError::Validation(ref cause) => cause,
-            DeleteClusterParameterGroupError::Credentials(ref err) => err.description(),
-            DeleteClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteClusterParameterGroupError::ParseError(ref cause) => cause,
-            DeleteClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16847,31 +16324,37 @@ pub enum DeleteClusterSecurityGroupError {
     ClusterSecurityGroupNotFoundFault(String),
     /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSecurityGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSecurityGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteClusterSecurityGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterSecurityGroupNotFound" => return DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            DeleteClusterSecurityGroupError::ClusterSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return RusotoError::Service(
+                            DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        DeleteClusterSecurityGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16880,28 +16363,6 @@ impl DeleteClusterSecurityGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteClusterSecurityGroupError {
-    fn from(err: XmlParseError) -> DeleteClusterSecurityGroupError {
-        let XmlParseError(message) = err;
-        DeleteClusterSecurityGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterSecurityGroupError {
-    fn from(err: CredentialsError) -> DeleteClusterSecurityGroupError {
-        DeleteClusterSecurityGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterSecurityGroupError {
-    fn from(err: HttpDispatchError) -> DeleteClusterSecurityGroupError {
-        DeleteClusterSecurityGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterSecurityGroupError {
-    fn from(err: io::Error) -> DeleteClusterSecurityGroupError {
-        DeleteClusterSecurityGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterSecurityGroupError {
@@ -16916,13 +16377,6 @@ impl Error for DeleteClusterSecurityGroupError {
             DeleteClusterSecurityGroupError::InvalidClusterSecurityGroupStateFault(ref cause) => {
                 cause
             }
-            DeleteClusterSecurityGroupError::Validation(ref cause) => cause,
-            DeleteClusterSecurityGroupError::Credentials(ref err) => err.description(),
-            DeleteClusterSecurityGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteClusterSecurityGroupError::ParseError(ref cause) => cause,
-            DeleteClusterSecurityGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16933,20 +16387,10 @@ pub enum DeleteClusterSnapshotError {
     ClusterSnapshotNotFoundFault(String),
     /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -16954,20 +16398,24 @@ impl DeleteClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSnapshotNotFound" => {
-                        return DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidClusterSnapshotState" => {
-                        return DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -16976,28 +16424,6 @@ impl DeleteClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteClusterSnapshotError {
-    fn from(err: XmlParseError) -> DeleteClusterSnapshotError {
-        let XmlParseError(message) = err;
-        DeleteClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterSnapshotError {
-    fn from(err: CredentialsError) -> DeleteClusterSnapshotError {
-        DeleteClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> DeleteClusterSnapshotError {
-        DeleteClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterSnapshotError {
-    fn from(err: io::Error) -> DeleteClusterSnapshotError {
-        DeleteClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterSnapshotError {
@@ -17010,13 +16436,6 @@ impl Error for DeleteClusterSnapshotError {
         match *self {
             DeleteClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
             DeleteClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
-            DeleteClusterSnapshotError::Validation(ref cause) => cause,
-            DeleteClusterSnapshotError::Credentials(ref err) => err.description(),
-            DeleteClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteClusterSnapshotError::ParseError(ref cause) => cause,
-            DeleteClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17029,20 +16448,10 @@ pub enum DeleteClusterSubnetGroupError {
     InvalidClusterSubnetGroupStateFault(String),
     /// <p>The state of the subnet is invalid.</p>
     InvalidClusterSubnetStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17050,25 +16459,31 @@ impl DeleteClusterSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSubnetGroupNotFoundFault" => {
-                        return DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterSubnetGroupStateFault" => {
-                        return DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterSubnetStateFault" => {
-                        return DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteClusterSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17077,28 +16492,6 @@ impl DeleteClusterSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteClusterSubnetGroupError {
-    fn from(err: XmlParseError) -> DeleteClusterSubnetGroupError {
-        let XmlParseError(message) = err;
-        DeleteClusterSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterSubnetGroupError {
-    fn from(err: CredentialsError) -> DeleteClusterSubnetGroupError {
-        DeleteClusterSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterSubnetGroupError {
-    fn from(err: HttpDispatchError) -> DeleteClusterSubnetGroupError {
-        DeleteClusterSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterSubnetGroupError {
-    fn from(err: io::Error) -> DeleteClusterSubnetGroupError {
-        DeleteClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteClusterSubnetGroupError {
@@ -17112,13 +16505,6 @@ impl Error for DeleteClusterSubnetGroupError {
             DeleteClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
             DeleteClusterSubnetGroupError::InvalidClusterSubnetGroupStateFault(ref cause) => cause,
             DeleteClusterSubnetGroupError::InvalidClusterSubnetStateFault(ref cause) => cause,
-            DeleteClusterSubnetGroupError::Validation(ref cause) => cause,
-            DeleteClusterSubnetGroupError::Credentials(ref err) => err.description(),
-            DeleteClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteClusterSubnetGroupError::ParseError(ref cause) => cause,
-            DeleteClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17129,20 +16515,10 @@ pub enum DeleteEventSubscriptionError {
     InvalidSubscriptionStateFault(String),
     /// <p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17150,20 +16526,24 @@ impl DeleteEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidSubscriptionStateFault" => {
-                        return DeleteEventSubscriptionError::InvalidSubscriptionStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::InvalidSubscriptionStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionNotFound" => {
-                        return DeleteEventSubscriptionError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17172,28 +16552,6 @@ impl DeleteEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteEventSubscriptionError {
-    fn from(err: XmlParseError) -> DeleteEventSubscriptionError {
-        let XmlParseError(message) = err;
-        DeleteEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEventSubscriptionError {
-    fn from(err: CredentialsError) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEventSubscriptionError {
-    fn from(err: io::Error) -> DeleteEventSubscriptionError {
-        DeleteEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteEventSubscriptionError {
@@ -17206,13 +16564,6 @@ impl Error for DeleteEventSubscriptionError {
         match *self {
             DeleteEventSubscriptionError::InvalidSubscriptionStateFault(ref cause) => cause,
             DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
-            DeleteEventSubscriptionError::Validation(ref cause) => cause,
-            DeleteEventSubscriptionError::Credentials(ref err) => err.description(),
-            DeleteEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEventSubscriptionError::ParseError(ref cause) => cause,
-            DeleteEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17223,31 +16574,37 @@ pub enum DeleteHsmClientCertificateError {
     HsmClientCertificateNotFoundFault(String),
     /// <p>The specified HSM client certificate is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
     InvalidHsmClientCertificateStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmClientCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmClientCertificateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteHsmClientCertificateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "HsmClientCertificateNotFoundFault" => return DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"InvalidHsmClientCertificateStateFault" => return DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "HsmClientCertificateNotFoundFault" => {
+                        return RusotoError::Service(
+                            DeleteHsmClientCertificateError::HsmClientCertificateNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidHsmClientCertificateStateFault" => {
+                        return RusotoError::Service(
+                            DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        DeleteHsmClientCertificateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17256,28 +16613,6 @@ impl DeleteHsmClientCertificateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteHsmClientCertificateError {
-    fn from(err: XmlParseError) -> DeleteHsmClientCertificateError {
-        let XmlParseError(message) = err;
-        DeleteHsmClientCertificateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHsmClientCertificateError {
-    fn from(err: CredentialsError) -> DeleteHsmClientCertificateError {
-        DeleteHsmClientCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHsmClientCertificateError {
-    fn from(err: HttpDispatchError) -> DeleteHsmClientCertificateError {
-        DeleteHsmClientCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHsmClientCertificateError {
-    fn from(err: io::Error) -> DeleteHsmClientCertificateError {
-        DeleteHsmClientCertificateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHsmClientCertificateError {
@@ -17292,13 +16627,6 @@ impl Error for DeleteHsmClientCertificateError {
             DeleteHsmClientCertificateError::InvalidHsmClientCertificateStateFault(ref cause) => {
                 cause
             }
-            DeleteHsmClientCertificateError::Validation(ref cause) => cause,
-            DeleteHsmClientCertificateError::Credentials(ref err) => err.description(),
-            DeleteHsmClientCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteHsmClientCertificateError::ParseError(ref cause) => cause,
-            DeleteHsmClientCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17309,20 +16637,10 @@ pub enum DeleteHsmConfigurationError {
     HsmConfigurationNotFoundFault(String),
     /// <p>The specified HSM configuration is not in the <code>available</code> state, or it is still in use by one or more Amazon Redshift clusters.</p>
     InvalidHsmConfigurationStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmConfigurationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17330,20 +16648,24 @@ impl DeleteHsmConfigurationError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HsmConfigurationNotFoundFault" => {
-                        return DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidHsmConfigurationStateFault" => {
-                        return DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteHsmConfigurationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17352,28 +16674,6 @@ impl DeleteHsmConfigurationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteHsmConfigurationError {
-    fn from(err: XmlParseError) -> DeleteHsmConfigurationError {
-        let XmlParseError(message) = err;
-        DeleteHsmConfigurationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHsmConfigurationError {
-    fn from(err: CredentialsError) -> DeleteHsmConfigurationError {
-        DeleteHsmConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHsmConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteHsmConfigurationError {
-        DeleteHsmConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHsmConfigurationError {
-    fn from(err: io::Error) -> DeleteHsmConfigurationError {
-        DeleteHsmConfigurationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteHsmConfigurationError {
@@ -17386,13 +16686,6 @@ impl Error for DeleteHsmConfigurationError {
         match *self {
             DeleteHsmConfigurationError::HsmConfigurationNotFoundFault(ref cause) => cause,
             DeleteHsmConfigurationError::InvalidHsmConfigurationStateFault(ref cause) => cause,
-            DeleteHsmConfigurationError::Validation(ref cause) => cause,
-            DeleteHsmConfigurationError::Credentials(ref err) => err.description(),
-            DeleteHsmConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteHsmConfigurationError::ParseError(ref cause) => cause,
-            DeleteHsmConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17403,20 +16696,10 @@ pub enum DeleteSnapshotCopyGrantError {
     InvalidSnapshotCopyGrantStateFault(String),
     /// <p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
     SnapshotCopyGrantNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotCopyGrantError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotCopyGrantError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotCopyGrantError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17424,20 +16707,24 @@ impl DeleteSnapshotCopyGrantError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidSnapshotCopyGrantStateFault" => {
-                        return DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
-                        return DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSnapshotCopyGrantError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17446,28 +16733,6 @@ impl DeleteSnapshotCopyGrantError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSnapshotCopyGrantError {
-    fn from(err: XmlParseError) -> DeleteSnapshotCopyGrantError {
-        let XmlParseError(message) = err;
-        DeleteSnapshotCopyGrantError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSnapshotCopyGrantError {
-    fn from(err: CredentialsError) -> DeleteSnapshotCopyGrantError {
-        DeleteSnapshotCopyGrantError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSnapshotCopyGrantError {
-    fn from(err: HttpDispatchError) -> DeleteSnapshotCopyGrantError {
-        DeleteSnapshotCopyGrantError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSnapshotCopyGrantError {
-    fn from(err: io::Error) -> DeleteSnapshotCopyGrantError {
-        DeleteSnapshotCopyGrantError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSnapshotCopyGrantError {
@@ -17480,13 +16745,6 @@ impl Error for DeleteSnapshotCopyGrantError {
         match *self {
             DeleteSnapshotCopyGrantError::InvalidSnapshotCopyGrantStateFault(ref cause) => cause,
             DeleteSnapshotCopyGrantError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
-            DeleteSnapshotCopyGrantError::Validation(ref cause) => cause,
-            DeleteSnapshotCopyGrantError::Credentials(ref err) => err.description(),
-            DeleteSnapshotCopyGrantError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSnapshotCopyGrantError::ParseError(ref cause) => cause,
-            DeleteSnapshotCopyGrantError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17497,20 +16755,10 @@ pub enum DeleteSnapshotScheduleError {
     InvalidClusterSnapshotScheduleStateFault(String),
     /// <p>We could not find the specified snapshot schedule. </p>
     SnapshotScheduleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSnapshotScheduleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17518,20 +16766,24 @@ impl DeleteSnapshotScheduleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidClusterSnapshotScheduleState" => {
-                        return DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotScheduleNotFound" => {
-                        return DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteSnapshotScheduleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17540,28 +16792,6 @@ impl DeleteSnapshotScheduleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteSnapshotScheduleError {
-    fn from(err: XmlParseError) -> DeleteSnapshotScheduleError {
-        let XmlParseError(message) = err;
-        DeleteSnapshotScheduleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSnapshotScheduleError {
-    fn from(err: CredentialsError) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSnapshotScheduleError {
-    fn from(err: io::Error) -> DeleteSnapshotScheduleError {
-        DeleteSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteSnapshotScheduleError {
@@ -17576,13 +16806,6 @@ impl Error for DeleteSnapshotScheduleError {
                 cause
             }
             DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
-            DeleteSnapshotScheduleError::Validation(ref cause) => cause,
-            DeleteSnapshotScheduleError::Credentials(ref err) => err.description(),
-            DeleteSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSnapshotScheduleError::ParseError(ref cause) => cause,
-            DeleteSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17593,20 +16816,10 @@ pub enum DeleteTagsError {
     InvalidTagFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17614,18 +16827,20 @@ impl DeleteTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return DeleteTagsError::InvalidTagFault(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteTagsError::InvalidTagFault(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "ResourceNotFoundFault" => {
-                        return DeleteTagsError::ResourceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTagsError::ResourceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17634,28 +16849,6 @@ impl DeleteTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteTagsError {
-    fn from(err: XmlParseError) -> DeleteTagsError {
-        let XmlParseError(message) = err;
-        DeleteTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTagsError {
-    fn from(err: CredentialsError) -> DeleteTagsError {
-        DeleteTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTagsError {
-    fn from(err: HttpDispatchError) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTagsError {
-    fn from(err: io::Error) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -17668,31 +16861,15 @@ impl Error for DeleteTagsError {
         match *self {
             DeleteTagsError::InvalidTagFault(ref cause) => cause,
             DeleteTagsError::ResourceNotFoundFault(ref cause) => cause,
-            DeleteTagsError::Validation(ref cause) => cause,
-            DeleteTagsError::Credentials(ref err) => err.description(),
-            DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::ParseError(ref cause) => cause,
-            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeAccountAttributes
 #[derive(Debug, PartialEq)]
-pub enum DescribeAccountAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeAccountAttributesError {}
 
 impl DescribeAccountAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17703,7 +16880,7 @@ impl DescribeAccountAttributesError {
                 }
             }
         }
-        DescribeAccountAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17712,28 +16889,6 @@ impl DescribeAccountAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAccountAttributesError {
-    fn from(err: XmlParseError) -> DescribeAccountAttributesError {
-        let XmlParseError(message) = err;
-        DescribeAccountAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountAttributesError {
-    fn from(err: CredentialsError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountAttributesError {
-    fn from(err: io::Error) -> DescribeAccountAttributesError {
-        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountAttributesError {
@@ -17743,15 +16898,7 @@ impl fmt::Display for DescribeAccountAttributesError {
 }
 impl Error for DescribeAccountAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeAccountAttributesError::Validation(ref cause) => cause,
-            DescribeAccountAttributesError::Credentials(ref err) => err.description(),
-            DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAccountAttributesError::ParseError(ref cause) => cause,
-            DescribeAccountAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeClusterDbRevisions
@@ -17761,20 +16908,12 @@ pub enum DescribeClusterDbRevisionsError {
     ClusterNotFoundFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterDbRevisionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterDbRevisionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeClusterDbRevisionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17782,20 +16921,24 @@ impl DescribeClusterDbRevisionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterState" => {
-                        return DescribeClusterDbRevisionsError::InvalidClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeClusterDbRevisionsError::InvalidClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterDbRevisionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17804,28 +16947,6 @@ impl DescribeClusterDbRevisionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterDbRevisionsError {
-    fn from(err: XmlParseError) -> DescribeClusterDbRevisionsError {
-        let XmlParseError(message) = err;
-        DescribeClusterDbRevisionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterDbRevisionsError {
-    fn from(err: CredentialsError) -> DescribeClusterDbRevisionsError {
-        DescribeClusterDbRevisionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterDbRevisionsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterDbRevisionsError {
-        DescribeClusterDbRevisionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterDbRevisionsError {
-    fn from(err: io::Error) -> DescribeClusterDbRevisionsError {
-        DescribeClusterDbRevisionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterDbRevisionsError {
@@ -17838,13 +16959,6 @@ impl Error for DescribeClusterDbRevisionsError {
         match *self {
             DescribeClusterDbRevisionsError::ClusterNotFoundFault(ref cause) => cause,
             DescribeClusterDbRevisionsError::InvalidClusterStateFault(ref cause) => cause,
-            DescribeClusterDbRevisionsError::Validation(ref cause) => cause,
-            DescribeClusterDbRevisionsError::Credentials(ref err) => err.description(),
-            DescribeClusterDbRevisionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterDbRevisionsError::ParseError(ref cause) => cause,
-            DescribeClusterDbRevisionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17855,31 +16969,37 @@ pub enum DescribeClusterParameterGroupsError {
     ClusterParameterGroupNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterParameterGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterParameterGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeClusterParameterGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterParameterGroupNotFound" => return DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidTagFault" => return DescribeClusterParameterGroupsError::InvalidTagFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            DescribeClusterParameterGroupsError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidTagFault" => {
+                        return RusotoError::Service(
+                            DescribeClusterParameterGroupsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        DescribeClusterParameterGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17888,28 +17008,6 @@ impl DescribeClusterParameterGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterParameterGroupsError {
-    fn from(err: XmlParseError) -> DescribeClusterParameterGroupsError {
-        let XmlParseError(message) = err;
-        DescribeClusterParameterGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterParameterGroupsError {
-    fn from(err: CredentialsError) -> DescribeClusterParameterGroupsError {
-        DescribeClusterParameterGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterParameterGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterParameterGroupsError {
-        DescribeClusterParameterGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterParameterGroupsError {
-    fn from(err: io::Error) -> DescribeClusterParameterGroupsError {
-        DescribeClusterParameterGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterParameterGroupsError {
@@ -17924,13 +17022,6 @@ impl Error for DescribeClusterParameterGroupsError {
                 cause
             }
             DescribeClusterParameterGroupsError::InvalidTagFault(ref cause) => cause,
-            DescribeClusterParameterGroupsError::Validation(ref cause) => cause,
-            DescribeClusterParameterGroupsError::Credentials(ref err) => err.description(),
-            DescribeClusterParameterGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterParameterGroupsError::ParseError(ref cause) => cause,
-            DescribeClusterParameterGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -17939,20 +17030,10 @@ impl Error for DescribeClusterParameterGroupsError {
 pub enum DescribeClusterParametersError {
     /// <p>The parameter group name does not refer to an existing parameter group.</p>
     ClusterParameterGroupNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -17960,15 +17041,17 @@ impl DescribeClusterParametersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterParameterGroupNotFound" => {
-                        return DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -17977,28 +17060,6 @@ impl DescribeClusterParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterParametersError {
-    fn from(err: XmlParseError) -> DescribeClusterParametersError {
-        let XmlParseError(message) = err;
-        DescribeClusterParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterParametersError {
-    fn from(err: CredentialsError) -> DescribeClusterParametersError {
-        DescribeClusterParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterParametersError {
-    fn from(err: HttpDispatchError) -> DescribeClusterParametersError {
-        DescribeClusterParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterParametersError {
-    fn from(err: io::Error) -> DescribeClusterParametersError {
-        DescribeClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterParametersError {
@@ -18010,13 +17071,6 @@ impl Error for DescribeClusterParametersError {
     fn description(&self) -> &str {
         match *self {
             DescribeClusterParametersError::ClusterParameterGroupNotFoundFault(ref cause) => cause,
-            DescribeClusterParametersError::Validation(ref cause) => cause,
-            DescribeClusterParametersError::Credentials(ref err) => err.description(),
-            DescribeClusterParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterParametersError::ParseError(ref cause) => cause,
-            DescribeClusterParametersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18027,20 +17081,12 @@ pub enum DescribeClusterSecurityGroupsError {
     ClusterSecurityGroupNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSecurityGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSecurityGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeClusterSecurityGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18048,20 +17094,24 @@ impl DescribeClusterSecurityGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSecurityGroupNotFound" => {
-                        return DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeClusterSecurityGroupsError::ClusterSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return DescribeClusterSecurityGroupsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterSecurityGroupsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterSecurityGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18070,28 +17120,6 @@ impl DescribeClusterSecurityGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterSecurityGroupsError {
-    fn from(err: XmlParseError) -> DescribeClusterSecurityGroupsError {
-        let XmlParseError(message) = err;
-        DescribeClusterSecurityGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterSecurityGroupsError {
-    fn from(err: CredentialsError) -> DescribeClusterSecurityGroupsError {
-        DescribeClusterSecurityGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterSecurityGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterSecurityGroupsError {
-        DescribeClusterSecurityGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterSecurityGroupsError {
-    fn from(err: io::Error) -> DescribeClusterSecurityGroupsError {
-        DescribeClusterSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterSecurityGroupsError {
@@ -18106,13 +17134,6 @@ impl Error for DescribeClusterSecurityGroupsError {
                 cause
             }
             DescribeClusterSecurityGroupsError::InvalidTagFault(ref cause) => cause,
-            DescribeClusterSecurityGroupsError::Validation(ref cause) => cause,
-            DescribeClusterSecurityGroupsError::Credentials(ref err) => err.description(),
-            DescribeClusterSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterSecurityGroupsError::ParseError(ref cause) => cause,
-            DescribeClusterSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18125,20 +17146,10 @@ pub enum DescribeClusterSnapshotsError {
     ClusterSnapshotNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSnapshotsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterSnapshotsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18146,25 +17157,29 @@ impl DescribeClusterSnapshotsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeClusterSnapshotsError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterSnapshotsError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSnapshotNotFound" => {
-                        return DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return DescribeClusterSnapshotsError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeClusterSnapshotsError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterSnapshotsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18173,28 +17188,6 @@ impl DescribeClusterSnapshotsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterSnapshotsError {
-    fn from(err: XmlParseError) -> DescribeClusterSnapshotsError {
-        let XmlParseError(message) = err;
-        DescribeClusterSnapshotsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterSnapshotsError {
-    fn from(err: CredentialsError) -> DescribeClusterSnapshotsError {
-        DescribeClusterSnapshotsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterSnapshotsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterSnapshotsError {
-        DescribeClusterSnapshotsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterSnapshotsError {
-    fn from(err: io::Error) -> DescribeClusterSnapshotsError {
-        DescribeClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterSnapshotsError {
@@ -18208,13 +17201,6 @@ impl Error for DescribeClusterSnapshotsError {
             DescribeClusterSnapshotsError::ClusterNotFoundFault(ref cause) => cause,
             DescribeClusterSnapshotsError::ClusterSnapshotNotFoundFault(ref cause) => cause,
             DescribeClusterSnapshotsError::InvalidTagFault(ref cause) => cause,
-            DescribeClusterSnapshotsError::Validation(ref cause) => cause,
-            DescribeClusterSnapshotsError::Credentials(ref err) => err.description(),
-            DescribeClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterSnapshotsError::ParseError(ref cause) => cause,
-            DescribeClusterSnapshotsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18225,20 +17211,12 @@ pub enum DescribeClusterSubnetGroupsError {
     ClusterSubnetGroupNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterSubnetGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterSubnetGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeClusterSubnetGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18246,20 +17224,24 @@ impl DescribeClusterSubnetGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSubnetGroupNotFoundFault" => {
-                        return DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return DescribeClusterSubnetGroupsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterSubnetGroupsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterSubnetGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18268,28 +17250,6 @@ impl DescribeClusterSubnetGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterSubnetGroupsError {
-    fn from(err: XmlParseError) -> DescribeClusterSubnetGroupsError {
-        let XmlParseError(message) = err;
-        DescribeClusterSubnetGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterSubnetGroupsError {
-    fn from(err: CredentialsError) -> DescribeClusterSubnetGroupsError {
-        DescribeClusterSubnetGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterSubnetGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterSubnetGroupsError {
-        DescribeClusterSubnetGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterSubnetGroupsError {
-    fn from(err: io::Error) -> DescribeClusterSubnetGroupsError {
-        DescribeClusterSubnetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterSubnetGroupsError {
@@ -18302,13 +17262,6 @@ impl Error for DescribeClusterSubnetGroupsError {
         match *self {
             DescribeClusterSubnetGroupsError::ClusterSubnetGroupNotFoundFault(ref cause) => cause,
             DescribeClusterSubnetGroupsError::InvalidTagFault(ref cause) => cause,
-            DescribeClusterSubnetGroupsError::Validation(ref cause) => cause,
-            DescribeClusterSubnetGroupsError::Credentials(ref err) => err.description(),
-            DescribeClusterSubnetGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterSubnetGroupsError::ParseError(ref cause) => cause,
-            DescribeClusterSubnetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18319,20 +17272,10 @@ pub enum DescribeClusterTracksError {
     InvalidClusterTrackFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterTracksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterTracksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterTracksError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18340,20 +17283,24 @@ impl DescribeClusterTracksError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidClusterTrack" => {
-                        return DescribeClusterTracksError::InvalidClusterTrackFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterTracksError::InvalidClusterTrackFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnauthorizedOperation" => {
-                        return DescribeClusterTracksError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeClusterTracksError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClusterTracksError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18362,28 +17309,6 @@ impl DescribeClusterTracksError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterTracksError {
-    fn from(err: XmlParseError) -> DescribeClusterTracksError {
-        let XmlParseError(message) = err;
-        DescribeClusterTracksError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterTracksError {
-    fn from(err: CredentialsError) -> DescribeClusterTracksError {
-        DescribeClusterTracksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterTracksError {
-    fn from(err: HttpDispatchError) -> DescribeClusterTracksError {
-        DescribeClusterTracksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterTracksError {
-    fn from(err: io::Error) -> DescribeClusterTracksError {
-        DescribeClusterTracksError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterTracksError {
@@ -18396,33 +17321,15 @@ impl Error for DescribeClusterTracksError {
         match *self {
             DescribeClusterTracksError::InvalidClusterTrackFault(ref cause) => cause,
             DescribeClusterTracksError::UnauthorizedOperation(ref cause) => cause,
-            DescribeClusterTracksError::Validation(ref cause) => cause,
-            DescribeClusterTracksError::Credentials(ref err) => err.description(),
-            DescribeClusterTracksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterTracksError::ParseError(ref cause) => cause,
-            DescribeClusterTracksError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeClusterVersions
 #[derive(Debug, PartialEq)]
-pub enum DescribeClusterVersionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeClusterVersionsError {}
 
 impl DescribeClusterVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterVersionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18433,7 +17340,7 @@ impl DescribeClusterVersionsError {
                 }
             }
         }
-        DescribeClusterVersionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18442,28 +17349,6 @@ impl DescribeClusterVersionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClusterVersionsError {
-    fn from(err: XmlParseError) -> DescribeClusterVersionsError {
-        let XmlParseError(message) = err;
-        DescribeClusterVersionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterVersionsError {
-    fn from(err: CredentialsError) -> DescribeClusterVersionsError {
-        DescribeClusterVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterVersionsError {
-    fn from(err: HttpDispatchError) -> DescribeClusterVersionsError {
-        DescribeClusterVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterVersionsError {
-    fn from(err: io::Error) -> DescribeClusterVersionsError {
-        DescribeClusterVersionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClusterVersionsError {
@@ -18473,15 +17358,7 @@ impl fmt::Display for DescribeClusterVersionsError {
 }
 impl Error for DescribeClusterVersionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeClusterVersionsError::Validation(ref cause) => cause,
-            DescribeClusterVersionsError::Credentials(ref err) => err.description(),
-            DescribeClusterVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeClusterVersionsError::ParseError(ref cause) => cause,
-            DescribeClusterVersionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeClusters
@@ -18491,20 +17368,10 @@ pub enum DescribeClustersError {
     ClusterNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18512,20 +17379,20 @@ impl DescribeClustersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeClustersError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeClustersError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidTagFault" => {
-                        return DescribeClustersError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeClustersError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeClustersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18534,28 +17401,6 @@ impl DescribeClustersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeClustersError {
-    fn from(err: XmlParseError) -> DescribeClustersError {
-        let XmlParseError(message) = err;
-        DescribeClustersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClustersError {
-    fn from(err: CredentialsError) -> DescribeClustersError {
-        DescribeClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClustersError {
-    fn from(err: HttpDispatchError) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClustersError {
-    fn from(err: io::Error) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -18568,31 +17413,17 @@ impl Error for DescribeClustersError {
         match *self {
             DescribeClustersError::ClusterNotFoundFault(ref cause) => cause,
             DescribeClustersError::InvalidTagFault(ref cause) => cause,
-            DescribeClustersError::Validation(ref cause) => cause,
-            DescribeClustersError::Credentials(ref err) => err.description(),
-            DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::ParseError(ref cause) => cause,
-            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeDefaultClusterParameters
 #[derive(Debug, PartialEq)]
-pub enum DescribeDefaultClusterParametersError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeDefaultClusterParametersError {}
 
 impl DescribeDefaultClusterParametersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDefaultClusterParametersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDefaultClusterParametersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18603,7 +17434,7 @@ impl DescribeDefaultClusterParametersError {
                 }
             }
         }
-        DescribeDefaultClusterParametersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18612,28 +17443,6 @@ impl DescribeDefaultClusterParametersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeDefaultClusterParametersError {
-    fn from(err: XmlParseError) -> DescribeDefaultClusterParametersError {
-        let XmlParseError(message) = err;
-        DescribeDefaultClusterParametersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDefaultClusterParametersError {
-    fn from(err: CredentialsError) -> DescribeDefaultClusterParametersError {
-        DescribeDefaultClusterParametersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDefaultClusterParametersError {
-    fn from(err: HttpDispatchError) -> DescribeDefaultClusterParametersError {
-        DescribeDefaultClusterParametersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDefaultClusterParametersError {
-    fn from(err: io::Error) -> DescribeDefaultClusterParametersError {
-        DescribeDefaultClusterParametersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeDefaultClusterParametersError {
@@ -18643,34 +17452,15 @@ impl fmt::Display for DescribeDefaultClusterParametersError {
 }
 impl Error for DescribeDefaultClusterParametersError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeDefaultClusterParametersError::Validation(ref cause) => cause,
-            DescribeDefaultClusterParametersError::Credentials(ref err) => err.description(),
-            DescribeDefaultClusterParametersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDefaultClusterParametersError::ParseError(ref cause) => cause,
-            DescribeDefaultClusterParametersError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
-pub enum DescribeEventCategoriesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEventCategoriesError {}
 
 impl DescribeEventCategoriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventCategoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventCategoriesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18681,7 +17471,7 @@ impl DescribeEventCategoriesError {
                 }
             }
         }
-        DescribeEventCategoriesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18690,28 +17480,6 @@ impl DescribeEventCategoriesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventCategoriesError {
-    fn from(err: XmlParseError) -> DescribeEventCategoriesError {
-        let XmlParseError(message) = err;
-        DescribeEventCategoriesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventCategoriesError {
-    fn from(err: CredentialsError) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventCategoriesError {
-    fn from(err: HttpDispatchError) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventCategoriesError {
-    fn from(err: io::Error) -> DescribeEventCategoriesError {
-        DescribeEventCategoriesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventCategoriesError {
@@ -18721,15 +17489,7 @@ impl fmt::Display for DescribeEventCategoriesError {
 }
 impl Error for DescribeEventCategoriesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEventCategoriesError::Validation(ref cause) => cause,
-            DescribeEventCategoriesError::Credentials(ref err) => err.description(),
-            DescribeEventCategoriesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventCategoriesError::ParseError(ref cause) => cause,
-            DescribeEventCategoriesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEventSubscriptions
@@ -18739,20 +17499,12 @@ pub enum DescribeEventSubscriptionsError {
     InvalidTagFault(String),
     /// <p>An Amazon Redshift event notification subscription with the specified name does not exist.</p>
     SubscriptionNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventSubscriptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventSubscriptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventSubscriptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18760,20 +17512,24 @@ impl DescribeEventSubscriptionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return DescribeEventSubscriptionsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeEventSubscriptionsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubscriptionNotFound" => {
-                        return DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeEventSubscriptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18782,28 +17538,6 @@ impl DescribeEventSubscriptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventSubscriptionsError {
-    fn from(err: XmlParseError) -> DescribeEventSubscriptionsError {
-        let XmlParseError(message) = err;
-        DescribeEventSubscriptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventSubscriptionsError {
-    fn from(err: CredentialsError) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventSubscriptionsError {
-    fn from(err: HttpDispatchError) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventSubscriptionsError {
-    fn from(err: io::Error) -> DescribeEventSubscriptionsError {
-        DescribeEventSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventSubscriptionsError {
@@ -18816,33 +17550,15 @@ impl Error for DescribeEventSubscriptionsError {
         match *self {
             DescribeEventSubscriptionsError::InvalidTagFault(ref cause) => cause,
             DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => cause,
-            DescribeEventSubscriptionsError::Validation(ref cause) => cause,
-            DescribeEventSubscriptionsError::Credentials(ref err) => err.description(),
-            DescribeEventSubscriptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventSubscriptionsError::ParseError(ref cause) => cause,
-            DescribeEventSubscriptionsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
-pub enum DescribeEventsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEventsError {}
 
 impl DescribeEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18853,7 +17569,7 @@ impl DescribeEventsError {
                 }
             }
         }
-        DescribeEventsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18862,28 +17578,6 @@ impl DescribeEventsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeEventsError {
-    fn from(err: XmlParseError) -> DescribeEventsError {
-        let XmlParseError(message) = err;
-        DescribeEventsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventsError {
-    fn from(err: CredentialsError) -> DescribeEventsError {
-        DescribeEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventsError {
-    fn from(err: HttpDispatchError) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventsError {
-    fn from(err: io::Error) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -18893,13 +17587,7 @@ impl fmt::Display for DescribeEventsError {
 }
 impl Error for DescribeEventsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEventsError::Validation(ref cause) => cause,
-            DescribeEventsError::Credentials(ref err) => err.description(),
-            DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::ParseError(ref cause) => cause,
-            DescribeEventsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeHsmClientCertificates
@@ -18909,20 +17597,12 @@ pub enum DescribeHsmClientCertificatesError {
     HsmClientCertificateNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmClientCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmClientCertificatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeHsmClientCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -18930,20 +17610,24 @@ impl DescribeHsmClientCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HsmClientCertificateNotFoundFault" => {
-                        return DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeHsmClientCertificatesError::HsmClientCertificateNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return DescribeHsmClientCertificatesError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeHsmClientCertificatesError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeHsmClientCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -18952,28 +17636,6 @@ impl DescribeHsmClientCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeHsmClientCertificatesError {
-    fn from(err: XmlParseError) -> DescribeHsmClientCertificatesError {
-        let XmlParseError(message) = err;
-        DescribeHsmClientCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHsmClientCertificatesError {
-    fn from(err: CredentialsError) -> DescribeHsmClientCertificatesError {
-        DescribeHsmClientCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHsmClientCertificatesError {
-    fn from(err: HttpDispatchError) -> DescribeHsmClientCertificatesError {
-        DescribeHsmClientCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHsmClientCertificatesError {
-    fn from(err: io::Error) -> DescribeHsmClientCertificatesError {
-        DescribeHsmClientCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeHsmClientCertificatesError {
@@ -18988,13 +17650,6 @@ impl Error for DescribeHsmClientCertificatesError {
                 cause
             }
             DescribeHsmClientCertificatesError::InvalidTagFault(ref cause) => cause,
-            DescribeHsmClientCertificatesError::Validation(ref cause) => cause,
-            DescribeHsmClientCertificatesError::Credentials(ref err) => err.description(),
-            DescribeHsmClientCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeHsmClientCertificatesError::ParseError(ref cause) => cause,
-            DescribeHsmClientCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19005,20 +17660,10 @@ pub enum DescribeHsmConfigurationsError {
     HsmConfigurationNotFoundFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeHsmConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeHsmConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHsmConfigurationsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19026,20 +17671,24 @@ impl DescribeHsmConfigurationsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HsmConfigurationNotFoundFault" => {
-                        return DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidTagFault" => {
-                        return DescribeHsmConfigurationsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeHsmConfigurationsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeHsmConfigurationsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19048,28 +17697,6 @@ impl DescribeHsmConfigurationsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeHsmConfigurationsError {
-    fn from(err: XmlParseError) -> DescribeHsmConfigurationsError {
-        let XmlParseError(message) = err;
-        DescribeHsmConfigurationsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeHsmConfigurationsError {
-    fn from(err: CredentialsError) -> DescribeHsmConfigurationsError {
-        DescribeHsmConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeHsmConfigurationsError {
-    fn from(err: HttpDispatchError) -> DescribeHsmConfigurationsError {
-        DescribeHsmConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeHsmConfigurationsError {
-    fn from(err: io::Error) -> DescribeHsmConfigurationsError {
-        DescribeHsmConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeHsmConfigurationsError {
@@ -19082,13 +17709,6 @@ impl Error for DescribeHsmConfigurationsError {
         match *self {
             DescribeHsmConfigurationsError::HsmConfigurationNotFoundFault(ref cause) => cause,
             DescribeHsmConfigurationsError::InvalidTagFault(ref cause) => cause,
-            DescribeHsmConfigurationsError::Validation(ref cause) => cause,
-            DescribeHsmConfigurationsError::Credentials(ref err) => err.description(),
-            DescribeHsmConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeHsmConfigurationsError::ParseError(ref cause) => cause,
-            DescribeHsmConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19097,20 +17717,10 @@ impl Error for DescribeHsmConfigurationsError {
 pub enum DescribeLoggingStatusError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoggingStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoggingStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoggingStatusError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19118,15 +17728,17 @@ impl DescribeLoggingStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeLoggingStatusError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoggingStatusError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoggingStatusError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19135,28 +17747,6 @@ impl DescribeLoggingStatusError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoggingStatusError {
-    fn from(err: XmlParseError) -> DescribeLoggingStatusError {
-        let XmlParseError(message) = err;
-        DescribeLoggingStatusError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoggingStatusError {
-    fn from(err: CredentialsError) -> DescribeLoggingStatusError {
-        DescribeLoggingStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoggingStatusError {
-    fn from(err: HttpDispatchError) -> DescribeLoggingStatusError {
-        DescribeLoggingStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoggingStatusError {
-    fn from(err: io::Error) -> DescribeLoggingStatusError {
-        DescribeLoggingStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoggingStatusError {
@@ -19168,33 +17758,17 @@ impl Error for DescribeLoggingStatusError {
     fn description(&self) -> &str {
         match *self {
             DescribeLoggingStatusError::ClusterNotFoundFault(ref cause) => cause,
-            DescribeLoggingStatusError::Validation(ref cause) => cause,
-            DescribeLoggingStatusError::Credentials(ref err) => err.description(),
-            DescribeLoggingStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoggingStatusError::ParseError(ref cause) => cause,
-            DescribeLoggingStatusError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeOrderableClusterOptions
 #[derive(Debug, PartialEq)]
-pub enum DescribeOrderableClusterOptionsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeOrderableClusterOptionsError {}
 
 impl DescribeOrderableClusterOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrderableClusterOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeOrderableClusterOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19205,7 +17779,7 @@ impl DescribeOrderableClusterOptionsError {
                 }
             }
         }
-        DescribeOrderableClusterOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19216,28 +17790,6 @@ impl DescribeOrderableClusterOptionsError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for DescribeOrderableClusterOptionsError {
-    fn from(err: XmlParseError) -> DescribeOrderableClusterOptionsError {
-        let XmlParseError(message) = err;
-        DescribeOrderableClusterOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOrderableClusterOptionsError {
-    fn from(err: CredentialsError) -> DescribeOrderableClusterOptionsError {
-        DescribeOrderableClusterOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOrderableClusterOptionsError {
-    fn from(err: HttpDispatchError) -> DescribeOrderableClusterOptionsError {
-        DescribeOrderableClusterOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOrderableClusterOptionsError {
-    fn from(err: io::Error) -> DescribeOrderableClusterOptionsError {
-        DescribeOrderableClusterOptionsError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for DescribeOrderableClusterOptionsError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -19245,15 +17797,7 @@ impl fmt::Display for DescribeOrderableClusterOptionsError {
 }
 impl Error for DescribeOrderableClusterOptionsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeOrderableClusterOptionsError::Validation(ref cause) => cause,
-            DescribeOrderableClusterOptionsError::Credentials(ref err) => err.description(),
-            DescribeOrderableClusterOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOrderableClusterOptionsError::ParseError(ref cause) => cause,
-            DescribeOrderableClusterOptionsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeReservedNodeOfferings
@@ -19265,20 +17809,12 @@ pub enum DescribeReservedNodeOfferingsError {
     ReservedNodeOfferingNotFoundFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedNodeOfferingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedNodeOfferingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeReservedNodeOfferingsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19286,25 +17822,31 @@ impl DescribeReservedNodeOfferingsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DependentServiceUnavailableFault" => {
-                        return DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeReservedNodeOfferingsError::DependentServiceUnavailableFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeOfferingNotFound" => {
-                        return DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeReservedNodeOfferingsError::ReservedNodeOfferingNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnsupportedOperation" => {
-                        return DescribeReservedNodeOfferingsError::UnsupportedOperationFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeReservedNodeOfferingsError::UnsupportedOperationFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeReservedNodeOfferingsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19313,28 +17855,6 @@ impl DescribeReservedNodeOfferingsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReservedNodeOfferingsError {
-    fn from(err: XmlParseError) -> DescribeReservedNodeOfferingsError {
-        let XmlParseError(message) = err;
-        DescribeReservedNodeOfferingsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReservedNodeOfferingsError {
-    fn from(err: CredentialsError) -> DescribeReservedNodeOfferingsError {
-        DescribeReservedNodeOfferingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReservedNodeOfferingsError {
-    fn from(err: HttpDispatchError) -> DescribeReservedNodeOfferingsError {
-        DescribeReservedNodeOfferingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReservedNodeOfferingsError {
-    fn from(err: io::Error) -> DescribeReservedNodeOfferingsError {
-        DescribeReservedNodeOfferingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedNodeOfferingsError {
@@ -19352,13 +17872,6 @@ impl Error for DescribeReservedNodeOfferingsError {
                 cause
             }
             DescribeReservedNodeOfferingsError::UnsupportedOperationFault(ref cause) => cause,
-            DescribeReservedNodeOfferingsError::Validation(ref cause) => cause,
-            DescribeReservedNodeOfferingsError::Credentials(ref err) => err.description(),
-            DescribeReservedNodeOfferingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReservedNodeOfferingsError::ParseError(ref cause) => cause,
-            DescribeReservedNodeOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19369,20 +17882,10 @@ pub enum DescribeReservedNodesError {
     DependentServiceUnavailableFault(String),
     /// <p>The specified reserved compute node not found.</p>
     ReservedNodeNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReservedNodesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReservedNodesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReservedNodesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19390,20 +17893,24 @@ impl DescribeReservedNodesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DependentServiceUnavailableFault" => {
-                        return DescribeReservedNodesError::DependentServiceUnavailableFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeReservedNodesError::DependentServiceUnavailableFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeNotFound" => {
-                        return DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeReservedNodesError::ReservedNodeNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeReservedNodesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19412,28 +17919,6 @@ impl DescribeReservedNodesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReservedNodesError {
-    fn from(err: XmlParseError) -> DescribeReservedNodesError {
-        let XmlParseError(message) = err;
-        DescribeReservedNodesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReservedNodesError {
-    fn from(err: CredentialsError) -> DescribeReservedNodesError {
-        DescribeReservedNodesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReservedNodesError {
-    fn from(err: HttpDispatchError) -> DescribeReservedNodesError {
-        DescribeReservedNodesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReservedNodesError {
-    fn from(err: io::Error) -> DescribeReservedNodesError {
-        DescribeReservedNodesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReservedNodesError {
@@ -19446,13 +17931,6 @@ impl Error for DescribeReservedNodesError {
         match *self {
             DescribeReservedNodesError::DependentServiceUnavailableFault(ref cause) => cause,
             DescribeReservedNodesError::ReservedNodeNotFoundFault(ref cause) => cause,
-            DescribeReservedNodesError::Validation(ref cause) => cause,
-            DescribeReservedNodesError::Credentials(ref err) => err.description(),
-            DescribeReservedNodesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReservedNodesError::ParseError(ref cause) => cause,
-            DescribeReservedNodesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19463,20 +17941,10 @@ pub enum DescribeResizeError {
     ClusterNotFoundFault(String),
     /// <p>A resize operation for the specified cluster is not found.</p>
     ResizeNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResizeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeResizeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResizeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19484,20 +17952,20 @@ impl DescribeResizeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeResizeError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeResizeError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResizeNotFound" => {
-                        return DescribeResizeError::ResizeNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeResizeError::ResizeNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeResizeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19506,28 +17974,6 @@ impl DescribeResizeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeResizeError {
-    fn from(err: XmlParseError) -> DescribeResizeError {
-        let XmlParseError(message) = err;
-        DescribeResizeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeResizeError {
-    fn from(err: CredentialsError) -> DescribeResizeError {
-        DescribeResizeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeResizeError {
-    fn from(err: HttpDispatchError) -> DescribeResizeError {
-        DescribeResizeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeResizeError {
-    fn from(err: io::Error) -> DescribeResizeError {
-        DescribeResizeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeResizeError {
@@ -19540,11 +17986,6 @@ impl Error for DescribeResizeError {
         match *self {
             DescribeResizeError::ClusterNotFoundFault(ref cause) => cause,
             DescribeResizeError::ResizeNotFoundFault(ref cause) => cause,
-            DescribeResizeError::Validation(ref cause) => cause,
-            DescribeResizeError::Credentials(ref err) => err.description(),
-            DescribeResizeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeResizeError::ParseError(ref cause) => cause,
-            DescribeResizeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19555,20 +17996,12 @@ pub enum DescribeSnapshotCopyGrantsError {
     InvalidTagFault(String),
     /// <p>The specified snapshot copy grant can't be found. Make sure that the name is typed correctly and that the grant exists in the destination region.</p>
     SnapshotCopyGrantNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSnapshotCopyGrantsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotCopyGrantsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeSnapshotCopyGrantsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19576,20 +18009,24 @@ impl DescribeSnapshotCopyGrantsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return DescribeSnapshotCopyGrantsError::InvalidTagFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeSnapshotCopyGrantsError::InvalidTagFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
-                        return DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeSnapshotCopyGrantsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19598,28 +18035,6 @@ impl DescribeSnapshotCopyGrantsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeSnapshotCopyGrantsError {
-    fn from(err: XmlParseError) -> DescribeSnapshotCopyGrantsError {
-        let XmlParseError(message) = err;
-        DescribeSnapshotCopyGrantsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSnapshotCopyGrantsError {
-    fn from(err: CredentialsError) -> DescribeSnapshotCopyGrantsError {
-        DescribeSnapshotCopyGrantsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSnapshotCopyGrantsError {
-    fn from(err: HttpDispatchError) -> DescribeSnapshotCopyGrantsError {
-        DescribeSnapshotCopyGrantsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSnapshotCopyGrantsError {
-    fn from(err: io::Error) -> DescribeSnapshotCopyGrantsError {
-        DescribeSnapshotCopyGrantsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSnapshotCopyGrantsError {
@@ -19632,33 +18047,15 @@ impl Error for DescribeSnapshotCopyGrantsError {
         match *self {
             DescribeSnapshotCopyGrantsError::InvalidTagFault(ref cause) => cause,
             DescribeSnapshotCopyGrantsError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
-            DescribeSnapshotCopyGrantsError::Validation(ref cause) => cause,
-            DescribeSnapshotCopyGrantsError::Credentials(ref err) => err.description(),
-            DescribeSnapshotCopyGrantsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSnapshotCopyGrantsError::ParseError(ref cause) => cause,
-            DescribeSnapshotCopyGrantsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeSnapshotSchedules
 #[derive(Debug, PartialEq)]
-pub enum DescribeSnapshotSchedulesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeSnapshotSchedulesError {}
 
 impl DescribeSnapshotSchedulesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotSchedulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSnapshotSchedulesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19669,7 +18066,7 @@ impl DescribeSnapshotSchedulesError {
                 }
             }
         }
-        DescribeSnapshotSchedulesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19678,28 +18075,6 @@ impl DescribeSnapshotSchedulesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeSnapshotSchedulesError {
-    fn from(err: XmlParseError) -> DescribeSnapshotSchedulesError {
-        let XmlParseError(message) = err;
-        DescribeSnapshotSchedulesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSnapshotSchedulesError {
-    fn from(err: CredentialsError) -> DescribeSnapshotSchedulesError {
-        DescribeSnapshotSchedulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSnapshotSchedulesError {
-    fn from(err: HttpDispatchError) -> DescribeSnapshotSchedulesError {
-        DescribeSnapshotSchedulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSnapshotSchedulesError {
-    fn from(err: io::Error) -> DescribeSnapshotSchedulesError {
-        DescribeSnapshotSchedulesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSnapshotSchedulesError {
@@ -19709,34 +18084,15 @@ impl fmt::Display for DescribeSnapshotSchedulesError {
 }
 impl Error for DescribeSnapshotSchedulesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeSnapshotSchedulesError::Validation(ref cause) => cause,
-            DescribeSnapshotSchedulesError::Credentials(ref err) => err.description(),
-            DescribeSnapshotSchedulesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSnapshotSchedulesError::ParseError(ref cause) => cause,
-            DescribeSnapshotSchedulesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeStorage
 #[derive(Debug, PartialEq)]
-pub enum DescribeStorageError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeStorageError {}
 
 impl DescribeStorageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeStorageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeStorageError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19747,7 +18103,7 @@ impl DescribeStorageError {
                 }
             }
         }
-        DescribeStorageError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19756,28 +18112,6 @@ impl DescribeStorageError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeStorageError {
-    fn from(err: XmlParseError) -> DescribeStorageError {
-        let XmlParseError(message) = err;
-        DescribeStorageError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeStorageError {
-    fn from(err: CredentialsError) -> DescribeStorageError {
-        DescribeStorageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeStorageError {
-    fn from(err: HttpDispatchError) -> DescribeStorageError {
-        DescribeStorageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeStorageError {
-    fn from(err: io::Error) -> DescribeStorageError {
-        DescribeStorageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeStorageError {
@@ -19787,13 +18121,7 @@ impl fmt::Display for DescribeStorageError {
 }
 impl Error for DescribeStorageError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeStorageError::Validation(ref cause) => cause,
-            DescribeStorageError::Credentials(ref err) => err.description(),
-            DescribeStorageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeStorageError::ParseError(ref cause) => cause,
-            DescribeStorageError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeTableRestoreStatus
@@ -19803,20 +18131,12 @@ pub enum DescribeTableRestoreStatusError {
     ClusterNotFoundFault(String),
     /// <p>The specified <code>TableRestoreRequestId</code> value was not found.</p>
     TableRestoreNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTableRestoreStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTableRestoreStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTableRestoreStatusError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19824,20 +18144,24 @@ impl DescribeTableRestoreStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DescribeTableRestoreStatusError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeTableRestoreStatusError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TableRestoreNotFoundFault" => {
-                        return DescribeTableRestoreStatusError::TableRestoreNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeTableRestoreStatusError::TableRestoreNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTableRestoreStatusError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19846,28 +18170,6 @@ impl DescribeTableRestoreStatusError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTableRestoreStatusError {
-    fn from(err: XmlParseError) -> DescribeTableRestoreStatusError {
-        let XmlParseError(message) = err;
-        DescribeTableRestoreStatusError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTableRestoreStatusError {
-    fn from(err: CredentialsError) -> DescribeTableRestoreStatusError {
-        DescribeTableRestoreStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTableRestoreStatusError {
-    fn from(err: HttpDispatchError) -> DescribeTableRestoreStatusError {
-        DescribeTableRestoreStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTableRestoreStatusError {
-    fn from(err: io::Error) -> DescribeTableRestoreStatusError {
-        DescribeTableRestoreStatusError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTableRestoreStatusError {
@@ -19880,13 +18182,6 @@ impl Error for DescribeTableRestoreStatusError {
         match *self {
             DescribeTableRestoreStatusError::ClusterNotFoundFault(ref cause) => cause,
             DescribeTableRestoreStatusError::TableRestoreNotFoundFault(ref cause) => cause,
-            DescribeTableRestoreStatusError::Validation(ref cause) => cause,
-            DescribeTableRestoreStatusError::Credentials(ref err) => err.description(),
-            DescribeTableRestoreStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTableRestoreStatusError::ParseError(ref cause) => cause,
-            DescribeTableRestoreStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19897,20 +18192,10 @@ pub enum DescribeTagsError {
     InvalidTagFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -19918,20 +18203,20 @@ impl DescribeTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTagFault" => {
-                        return DescribeTagsError::InvalidTagFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::InvalidTagFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceNotFoundFault" => {
-                        return DescribeTagsError::ResourceNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::ResourceNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -19940,28 +18225,6 @@ impl DescribeTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTagsError {
-    fn from(err: XmlParseError) -> DescribeTagsError {
-        let XmlParseError(message) = err;
-        DescribeTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -19974,11 +18237,6 @@ impl Error for DescribeTagsError {
         match *self {
             DescribeTagsError::InvalidTagFault(ref cause) => cause,
             DescribeTagsError::ResourceNotFoundFault(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -19987,20 +18245,10 @@ impl Error for DescribeTagsError {
 pub enum DisableLoggingError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableLoggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableLoggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20008,15 +18256,15 @@ impl DisableLoggingError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DisableLoggingError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DisableLoggingError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DisableLoggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20025,28 +18273,6 @@ impl DisableLoggingError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DisableLoggingError {
-    fn from(err: XmlParseError) -> DisableLoggingError {
-        let XmlParseError(message) = err;
-        DisableLoggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DisableLoggingError {
-    fn from(err: CredentialsError) -> DisableLoggingError {
-        DisableLoggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableLoggingError {
-    fn from(err: HttpDispatchError) -> DisableLoggingError {
-        DisableLoggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableLoggingError {
-    fn from(err: io::Error) -> DisableLoggingError {
-        DisableLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableLoggingError {
@@ -20058,11 +18284,6 @@ impl Error for DisableLoggingError {
     fn description(&self) -> &str {
         match *self {
             DisableLoggingError::ClusterNotFoundFault(ref cause) => cause,
-            DisableLoggingError::Validation(ref cause) => cause,
-            DisableLoggingError::Credentials(ref err) => err.description(),
-            DisableLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableLoggingError::ParseError(ref cause) => cause,
-            DisableLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20077,20 +18298,10 @@ pub enum DisableSnapshotCopyError {
     SnapshotCopyAlreadyDisabledFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableSnapshotCopyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableSnapshotCopyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableSnapshotCopyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20098,30 +18309,36 @@ impl DisableSnapshotCopyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return DisableSnapshotCopyError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DisableSnapshotCopyError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidClusterState" => {
-                        return DisableSnapshotCopyError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisableSnapshotCopyError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotCopyAlreadyDisabledFault" => {
-                        return DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnauthorizedOperation" => {
-                        return DisableSnapshotCopyError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DisableSnapshotCopyError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DisableSnapshotCopyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20130,28 +18347,6 @@ impl DisableSnapshotCopyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DisableSnapshotCopyError {
-    fn from(err: XmlParseError) -> DisableSnapshotCopyError {
-        let XmlParseError(message) = err;
-        DisableSnapshotCopyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DisableSnapshotCopyError {
-    fn from(err: CredentialsError) -> DisableSnapshotCopyError {
-        DisableSnapshotCopyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableSnapshotCopyError {
-    fn from(err: HttpDispatchError) -> DisableSnapshotCopyError {
-        DisableSnapshotCopyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableSnapshotCopyError {
-    fn from(err: io::Error) -> DisableSnapshotCopyError {
-        DisableSnapshotCopyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DisableSnapshotCopyError {
@@ -20166,13 +18361,6 @@ impl Error for DisableSnapshotCopyError {
             DisableSnapshotCopyError::InvalidClusterStateFault(ref cause) => cause,
             DisableSnapshotCopyError::SnapshotCopyAlreadyDisabledFault(ref cause) => cause,
             DisableSnapshotCopyError::UnauthorizedOperation(ref cause) => cause,
-            DisableSnapshotCopyError::Validation(ref cause) => cause,
-            DisableSnapshotCopyError::Credentials(ref err) => err.description(),
-            DisableSnapshotCopyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableSnapshotCopyError::ParseError(ref cause) => cause,
-            DisableSnapshotCopyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20189,20 +18377,10 @@ pub enum EnableLoggingError {
     InvalidS3BucketNameFault(String),
     /// <p>The string specified for the logging S3 key prefix does not comply with the documented constraints.</p>
     InvalidS3KeyPrefixFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableLoggingError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableLoggingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20210,35 +18388,37 @@ impl EnableLoggingError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BucketNotFoundFault" => {
-                        return EnableLoggingError::BucketNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableLoggingError::BucketNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterNotFound" => {
-                        return EnableLoggingError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableLoggingError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InsufficientS3BucketPolicyFault" => {
-                        return EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableLoggingError::InsufficientS3BucketPolicyFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidS3BucketNameFault" => {
-                        return EnableLoggingError::InvalidS3BucketNameFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableLoggingError::InvalidS3BucketNameFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidS3KeyPrefixFault" => {
-                        return EnableLoggingError::InvalidS3KeyPrefixFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableLoggingError::InvalidS3KeyPrefixFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        EnableLoggingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20247,28 +18427,6 @@ impl EnableLoggingError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for EnableLoggingError {
-    fn from(err: XmlParseError) -> EnableLoggingError {
-        let XmlParseError(message) = err;
-        EnableLoggingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for EnableLoggingError {
-    fn from(err: CredentialsError) -> EnableLoggingError {
-        EnableLoggingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableLoggingError {
-    fn from(err: HttpDispatchError) -> EnableLoggingError {
-        EnableLoggingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableLoggingError {
-    fn from(err: io::Error) -> EnableLoggingError {
-        EnableLoggingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableLoggingError {
@@ -20284,11 +18442,6 @@ impl Error for EnableLoggingError {
             EnableLoggingError::InsufficientS3BucketPolicyFault(ref cause) => cause,
             EnableLoggingError::InvalidS3BucketNameFault(ref cause) => cause,
             EnableLoggingError::InvalidS3KeyPrefixFault(ref cause) => cause,
-            EnableLoggingError::Validation(ref cause) => cause,
-            EnableLoggingError::Credentials(ref err) => err.description(),
-            EnableLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableLoggingError::ParseError(ref cause) => cause,
-            EnableLoggingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20317,20 +18470,10 @@ pub enum EnableSnapshotCopyError {
     UnauthorizedOperation(String),
     /// <p>The specified region is incorrect or does not exist.</p>
     UnknownSnapshotCopyRegionFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableSnapshotCopyError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableSnapshotCopyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableSnapshotCopyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20338,65 +18481,81 @@ impl EnableSnapshotCopyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return EnableSnapshotCopyError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableSnapshotCopyError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "CopyToRegionDisabledFault" => {
-                        return EnableSnapshotCopyError::CopyToRegionDisabledFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::CopyToRegionDisabledFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "IncompatibleOrderableOptions" => {
-                        return EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::IncompatibleOrderableOptions(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterState" => {
-                        return EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return EnableSnapshotCopyError::InvalidRetentionPeriodFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceededFault" => {
-                        return EnableSnapshotCopyError::LimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableSnapshotCopyError::LimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SnapshotCopyAlreadyEnabledFault" => {
-                        return EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "SnapshotCopyGrantNotFoundFault" => {
-                        return EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "UnauthorizedOperation" => {
-                        return EnableSnapshotCopyError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(EnableSnapshotCopyError::UnauthorizedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnknownSnapshotCopyRegionFault" => {
-                        return EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        EnableSnapshotCopyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20405,28 +18564,6 @@ impl EnableSnapshotCopyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for EnableSnapshotCopyError {
-    fn from(err: XmlParseError) -> EnableSnapshotCopyError {
-        let XmlParseError(message) = err;
-        EnableSnapshotCopyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for EnableSnapshotCopyError {
-    fn from(err: CredentialsError) -> EnableSnapshotCopyError {
-        EnableSnapshotCopyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableSnapshotCopyError {
-    fn from(err: HttpDispatchError) -> EnableSnapshotCopyError {
-        EnableSnapshotCopyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableSnapshotCopyError {
-    fn from(err: io::Error) -> EnableSnapshotCopyError {
-        EnableSnapshotCopyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for EnableSnapshotCopyError {
@@ -20448,13 +18585,6 @@ impl Error for EnableSnapshotCopyError {
             EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
             EnableSnapshotCopyError::UnauthorizedOperation(ref cause) => cause,
             EnableSnapshotCopyError::UnknownSnapshotCopyRegionFault(ref cause) => cause,
-            EnableSnapshotCopyError::Validation(ref cause) => cause,
-            EnableSnapshotCopyError::Credentials(ref err) => err.description(),
-            EnableSnapshotCopyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableSnapshotCopyError::ParseError(ref cause) => cause,
-            EnableSnapshotCopyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20465,20 +18595,10 @@ pub enum GetClusterCredentialsError {
     ClusterNotFoundFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetClusterCredentialsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetClusterCredentialsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClusterCredentialsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20486,20 +18606,24 @@ impl GetClusterCredentialsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return GetClusterCredentialsError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetClusterCredentialsError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnsupportedOperation" => {
-                        return GetClusterCredentialsError::UnsupportedOperationFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetClusterCredentialsError::UnsupportedOperationFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        GetClusterCredentialsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20508,28 +18632,6 @@ impl GetClusterCredentialsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetClusterCredentialsError {
-    fn from(err: XmlParseError) -> GetClusterCredentialsError {
-        let XmlParseError(message) = err;
-        GetClusterCredentialsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetClusterCredentialsError {
-    fn from(err: CredentialsError) -> GetClusterCredentialsError {
-        GetClusterCredentialsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetClusterCredentialsError {
-    fn from(err: HttpDispatchError) -> GetClusterCredentialsError {
-        GetClusterCredentialsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetClusterCredentialsError {
-    fn from(err: io::Error) -> GetClusterCredentialsError {
-        GetClusterCredentialsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetClusterCredentialsError {
@@ -20542,13 +18644,6 @@ impl Error for GetClusterCredentialsError {
         match *self {
             GetClusterCredentialsError::ClusterNotFoundFault(ref cause) => cause,
             GetClusterCredentialsError::UnsupportedOperationFault(ref cause) => cause,
-            GetClusterCredentialsError::Validation(ref cause) => cause,
-            GetClusterCredentialsError::Credentials(ref err) => err.description(),
-            GetClusterCredentialsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetClusterCredentialsError::ParseError(ref cause) => cause,
-            GetClusterCredentialsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20567,31 +18662,63 @@ pub enum GetReservedNodeExchangeOfferingsError {
     ReservedNodeOfferingNotFoundFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetReservedNodeExchangeOfferingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetReservedNodeExchangeOfferingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetReservedNodeExchangeOfferingsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "DependentServiceUnavailableFault" => return GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(String::from(parsed_error.message)),"InvalidReservedNodeState" => return GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(String::from(parsed_error.message)),"ReservedNodeAlreadyMigrated" => return GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(String::from(parsed_error.message)),"ReservedNodeNotFound" => return GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(String::from(parsed_error.message)),"ReservedNodeOfferingNotFound" => return GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(String::from(parsed_error.message)),"UnsupportedOperation" => return GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "DependentServiceUnavailableFault" => {
+                        return RusotoError::Service(
+                            GetReservedNodeExchangeOfferingsError::DependentServiceUnavailableFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidReservedNodeState" => {
+                        return RusotoError::Service(
+                            GetReservedNodeExchangeOfferingsError::InvalidReservedNodeStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ReservedNodeAlreadyMigrated" => {
+                        return RusotoError::Service(
+                            GetReservedNodeExchangeOfferingsError::ReservedNodeAlreadyMigratedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ReservedNodeNotFound" => {
+                        return RusotoError::Service(
+                            GetReservedNodeExchangeOfferingsError::ReservedNodeNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ReservedNodeOfferingNotFound" => return RusotoError::Service(
+                        GetReservedNodeExchangeOfferingsError::ReservedNodeOfferingNotFoundFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        GetReservedNodeExchangeOfferingsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20600,28 +18727,6 @@ impl GetReservedNodeExchangeOfferingsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetReservedNodeExchangeOfferingsError {
-    fn from(err: XmlParseError) -> GetReservedNodeExchangeOfferingsError {
-        let XmlParseError(message) = err;
-        GetReservedNodeExchangeOfferingsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetReservedNodeExchangeOfferingsError {
-    fn from(err: CredentialsError) -> GetReservedNodeExchangeOfferingsError {
-        GetReservedNodeExchangeOfferingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetReservedNodeExchangeOfferingsError {
-    fn from(err: HttpDispatchError) -> GetReservedNodeExchangeOfferingsError {
-        GetReservedNodeExchangeOfferingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetReservedNodeExchangeOfferingsError {
-    fn from(err: io::Error) -> GetReservedNodeExchangeOfferingsError {
-        GetReservedNodeExchangeOfferingsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetReservedNodeExchangeOfferingsError {
@@ -20646,13 +18751,6 @@ impl Error for GetReservedNodeExchangeOfferingsError {
                 cause
             }
             GetReservedNodeExchangeOfferingsError::UnsupportedOperationFault(ref cause) => cause,
-            GetReservedNodeExchangeOfferingsError::Validation(ref cause) => cause,
-            GetReservedNodeExchangeOfferingsError::Credentials(ref err) => err.description(),
-            GetReservedNodeExchangeOfferingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetReservedNodeExchangeOfferingsError::ParseError(ref cause) => cause,
-            GetReservedNodeExchangeOfferingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20697,20 +18795,10 @@ pub enum ModifyClusterError {
     UnauthorizedOperation(String),
     /// <p>A request option was specified that is not supported.</p>
     UnsupportedOptionFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20718,105 +18806,125 @@ impl ModifyClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterAlreadyExists" => {
-                        return ModifyClusterError::ClusterAlreadyExistsFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::ClusterAlreadyExistsFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterNotFound" => {
-                        return ModifyClusterError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ClusterParameterGroupNotFound" => {
-                        return ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::ClusterParameterGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSecurityGroupNotFound" => {
-                        return ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::ClusterSecurityGroupNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return ModifyClusterError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "HsmClientCertificateNotFoundFault" => {
-                        return ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::HsmClientCertificateNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "HsmConfigurationNotFoundFault" => {
-                        return ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::HsmConfigurationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InsufficientClusterCapacity" => {
-                        return ModifyClusterError::InsufficientClusterCapacityFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::InsufficientClusterCapacityFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterSecurityGroupState" => {
-                        return ModifyClusterError::InvalidClusterSecurityGroupStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterError::InvalidClusterSecurityGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterState" => {
-                        return ModifyClusterError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidClusterTrack" => {
-                        return ModifyClusterError::InvalidClusterTrackFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::InvalidClusterTrackFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidElasticIpFault" => {
-                        return ModifyClusterError::InvalidElasticIpFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::InvalidElasticIpFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return ModifyClusterError::InvalidRetentionPeriodFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceededFault" => {
-                        return ModifyClusterError::LimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::LimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
-                        return ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NumberOfNodesQuotaExceeded" => {
-                        return ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TableLimitExceeded" => {
-                        return ModifyClusterError::TableLimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::TableLimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnauthorizedOperation" => {
-                        return ModifyClusterError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::UnauthorizedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedOptionFault" => {
-                        return ModifyClusterError::UnsupportedOptionFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterError::UnsupportedOptionFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20825,28 +18933,6 @@ impl ModifyClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterError {
-    fn from(err: XmlParseError) -> ModifyClusterError {
-        let XmlParseError(message) = err;
-        ModifyClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterError {
-    fn from(err: CredentialsError) -> ModifyClusterError {
-        ModifyClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterError {
-    fn from(err: HttpDispatchError) -> ModifyClusterError {
-        ModifyClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterError {
-    fn from(err: io::Error) -> ModifyClusterError {
-        ModifyClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterError {
@@ -20876,11 +18962,6 @@ impl Error for ModifyClusterError {
             ModifyClusterError::TableLimitExceededFault(ref cause) => cause,
             ModifyClusterError::UnauthorizedOperation(ref cause) => cause,
             ModifyClusterError::UnsupportedOptionFault(ref cause) => cause,
-            ModifyClusterError::Validation(ref cause) => cause,
-            ModifyClusterError::Credentials(ref err) => err.description(),
-            ModifyClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyClusterError::ParseError(ref cause) => cause,
-            ModifyClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20893,20 +18974,10 @@ pub enum ModifyClusterDbRevisionError {
     ClusterOnLatestRevisionFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterDbRevisionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterDbRevisionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterDbRevisionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -20914,25 +18985,31 @@ impl ModifyClusterDbRevisionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return ModifyClusterDbRevisionError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterDbRevisionError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterOnLatestRevision" => {
-                        return ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterState" => {
-                        return ModifyClusterDbRevisionError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterDbRevisionError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterDbRevisionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -20941,28 +19018,6 @@ impl ModifyClusterDbRevisionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterDbRevisionError {
-    fn from(err: XmlParseError) -> ModifyClusterDbRevisionError {
-        let XmlParseError(message) = err;
-        ModifyClusterDbRevisionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterDbRevisionError {
-    fn from(err: CredentialsError) -> ModifyClusterDbRevisionError {
-        ModifyClusterDbRevisionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterDbRevisionError {
-    fn from(err: HttpDispatchError) -> ModifyClusterDbRevisionError {
-        ModifyClusterDbRevisionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterDbRevisionError {
-    fn from(err: io::Error) -> ModifyClusterDbRevisionError {
-        ModifyClusterDbRevisionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterDbRevisionError {
@@ -20976,13 +19031,6 @@ impl Error for ModifyClusterDbRevisionError {
             ModifyClusterDbRevisionError::ClusterNotFoundFault(ref cause) => cause,
             ModifyClusterDbRevisionError::ClusterOnLatestRevisionFault(ref cause) => cause,
             ModifyClusterDbRevisionError::InvalidClusterStateFault(ref cause) => cause,
-            ModifyClusterDbRevisionError::Validation(ref cause) => cause,
-            ModifyClusterDbRevisionError::Credentials(ref err) => err.description(),
-            ModifyClusterDbRevisionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterDbRevisionError::ParseError(ref cause) => cause,
-            ModifyClusterDbRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -20993,20 +19041,10 @@ pub enum ModifyClusterIamRolesError {
     ClusterNotFoundFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterIamRolesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterIamRolesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterIamRolesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21014,20 +19052,24 @@ impl ModifyClusterIamRolesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return ModifyClusterIamRolesError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterIamRolesError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterState" => {
-                        return ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterIamRolesError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterIamRolesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21036,28 +19078,6 @@ impl ModifyClusterIamRolesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterIamRolesError {
-    fn from(err: XmlParseError) -> ModifyClusterIamRolesError {
-        let XmlParseError(message) = err;
-        ModifyClusterIamRolesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterIamRolesError {
-    fn from(err: CredentialsError) -> ModifyClusterIamRolesError {
-        ModifyClusterIamRolesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterIamRolesError {
-    fn from(err: HttpDispatchError) -> ModifyClusterIamRolesError {
-        ModifyClusterIamRolesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterIamRolesError {
-    fn from(err: io::Error) -> ModifyClusterIamRolesError {
-        ModifyClusterIamRolesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterIamRolesError {
@@ -21070,13 +19090,6 @@ impl Error for ModifyClusterIamRolesError {
         match *self {
             ModifyClusterIamRolesError::ClusterNotFoundFault(ref cause) => cause,
             ModifyClusterIamRolesError::InvalidClusterStateFault(ref cause) => cause,
-            ModifyClusterIamRolesError::Validation(ref cause) => cause,
-            ModifyClusterIamRolesError::Credentials(ref err) => err.description(),
-            ModifyClusterIamRolesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterIamRolesError::ParseError(ref cause) => cause,
-            ModifyClusterIamRolesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21085,20 +19098,10 @@ impl Error for ModifyClusterIamRolesError {
 pub enum ModifyClusterMaintenanceError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterMaintenanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterMaintenanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterMaintenanceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21106,15 +19109,17 @@ impl ModifyClusterMaintenanceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return ModifyClusterMaintenanceError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterMaintenanceError::ClusterNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterMaintenanceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21123,28 +19128,6 @@ impl ModifyClusterMaintenanceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterMaintenanceError {
-    fn from(err: XmlParseError) -> ModifyClusterMaintenanceError {
-        let XmlParseError(message) = err;
-        ModifyClusterMaintenanceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterMaintenanceError {
-    fn from(err: CredentialsError) -> ModifyClusterMaintenanceError {
-        ModifyClusterMaintenanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterMaintenanceError {
-    fn from(err: HttpDispatchError) -> ModifyClusterMaintenanceError {
-        ModifyClusterMaintenanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterMaintenanceError {
-    fn from(err: io::Error) -> ModifyClusterMaintenanceError {
-        ModifyClusterMaintenanceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterMaintenanceError {
@@ -21156,13 +19139,6 @@ impl Error for ModifyClusterMaintenanceError {
     fn description(&self) -> &str {
         match *self {
             ModifyClusterMaintenanceError::ClusterNotFoundFault(ref cause) => cause,
-            ModifyClusterMaintenanceError::Validation(ref cause) => cause,
-            ModifyClusterMaintenanceError::Credentials(ref err) => err.description(),
-            ModifyClusterMaintenanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterMaintenanceError::ParseError(ref cause) => cause,
-            ModifyClusterMaintenanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21173,31 +19149,35 @@ pub enum ModifyClusterParameterGroupError {
     ClusterParameterGroupNotFoundFault(String),
     /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterParameterGroupNotFound" => return ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            ModifyClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterParameterGroupState" => return RusotoError::Service(
+                        ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        ModifyClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21206,28 +19186,6 @@ impl ModifyClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterParameterGroupError {
-    fn from(err: XmlParseError) -> ModifyClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        ModifyClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterParameterGroupError {
-    fn from(err: CredentialsError) -> ModifyClusterParameterGroupError {
-        ModifyClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> ModifyClusterParameterGroupError {
-        ModifyClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterParameterGroupError {
-    fn from(err: io::Error) -> ModifyClusterParameterGroupError {
-        ModifyClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterParameterGroupError {
@@ -21244,13 +19202,6 @@ impl Error for ModifyClusterParameterGroupError {
             ModifyClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
                 cause
             }
-            ModifyClusterParameterGroupError::Validation(ref cause) => cause,
-            ModifyClusterParameterGroupError::Credentials(ref err) => err.description(),
-            ModifyClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterParameterGroupError::ParseError(ref cause) => cause,
-            ModifyClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21263,20 +19214,10 @@ pub enum ModifyClusterSnapshotError {
     InvalidClusterSnapshotStateFault(String),
     /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
     InvalidRetentionPeriodFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21284,25 +19225,31 @@ impl ModifyClusterSnapshotError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSnapshotNotFound" => {
-                        return ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "InvalidClusterSnapshotState" => {
-                        return ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return ModifyClusterSnapshotError::InvalidRetentionPeriodFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21311,28 +19258,6 @@ impl ModifyClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterSnapshotError {
-    fn from(err: XmlParseError) -> ModifyClusterSnapshotError {
-        let XmlParseError(message) = err;
-        ModifyClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterSnapshotError {
-    fn from(err: CredentialsError) -> ModifyClusterSnapshotError {
-        ModifyClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> ModifyClusterSnapshotError {
-        ModifyClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterSnapshotError {
-    fn from(err: io::Error) -> ModifyClusterSnapshotError {
-        ModifyClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterSnapshotError {
@@ -21346,13 +19271,6 @@ impl Error for ModifyClusterSnapshotError {
             ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
             ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
             ModifyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
-            ModifyClusterSnapshotError::Validation(ref cause) => cause,
-            ModifyClusterSnapshotError::Credentials(ref err) => err.description(),
-            ModifyClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterSnapshotError::ParseError(ref cause) => cause,
-            ModifyClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21365,31 +19283,23 @@ pub enum ModifyClusterSnapshotScheduleError {
     InvalidClusterSnapshotScheduleStateFault(String),
     /// <p>We could not find the specified snapshot schedule. </p>
     SnapshotScheduleNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterSnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSnapshotScheduleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyClusterSnapshotScheduleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(String::from(parsed_error.message)),"SnapshotScheduleNotFound" => return ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(String::from(parsed_error.message))),"InvalidClusterSnapshotScheduleState" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(String::from(parsed_error.message))),"SnapshotScheduleNotFound" => return RusotoError::Service(ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        ModifyClusterSnapshotScheduleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21398,28 +19308,6 @@ impl ModifyClusterSnapshotScheduleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterSnapshotScheduleError {
-    fn from(err: XmlParseError) -> ModifyClusterSnapshotScheduleError {
-        let XmlParseError(message) = err;
-        ModifyClusterSnapshotScheduleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterSnapshotScheduleError {
-    fn from(err: CredentialsError) -> ModifyClusterSnapshotScheduleError {
-        ModifyClusterSnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterSnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> ModifyClusterSnapshotScheduleError {
-        ModifyClusterSnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterSnapshotScheduleError {
-    fn from(err: io::Error) -> ModifyClusterSnapshotScheduleError {
-        ModifyClusterSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterSnapshotScheduleError {
@@ -21435,13 +19323,6 @@ impl Error for ModifyClusterSnapshotScheduleError {
                 ref cause,
             ) => cause,
             ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
-            ModifyClusterSnapshotScheduleError::Validation(ref cause) => cause,
-            ModifyClusterSnapshotScheduleError::Credentials(ref err) => err.description(),
-            ModifyClusterSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterSnapshotScheduleError::ParseError(ref cause) => cause,
-            ModifyClusterSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21460,20 +19341,10 @@ pub enum ModifyClusterSubnetGroupError {
     SubnetAlreadyInUse(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyClusterSubnetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSubnetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyClusterSubnetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21481,40 +19352,50 @@ impl ModifyClusterSubnetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterSubnetGroupNotFoundFault" => {
-                        return ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSubnetGroupError::ClusterSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ClusterSubnetQuotaExceededFault" => {
-                        return ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSubnetGroupError::ClusterSubnetQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyClusterSubnetGroupError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidSubnet" => {
-                        return ModifyClusterSubnetGroupError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyClusterSubnetGroupError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SubnetAlreadyInUse" => {
-                        return ModifyClusterSubnetGroupError::SubnetAlreadyInUse(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterSubnetGroupError::SubnetAlreadyInUse(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnauthorizedOperation" => {
-                        return ModifyClusterSubnetGroupError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyClusterSubnetGroupError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyClusterSubnetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21523,28 +19404,6 @@ impl ModifyClusterSubnetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyClusterSubnetGroupError {
-    fn from(err: XmlParseError) -> ModifyClusterSubnetGroupError {
-        let XmlParseError(message) = err;
-        ModifyClusterSubnetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyClusterSubnetGroupError {
-    fn from(err: CredentialsError) -> ModifyClusterSubnetGroupError {
-        ModifyClusterSubnetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyClusterSubnetGroupError {
-    fn from(err: HttpDispatchError) -> ModifyClusterSubnetGroupError {
-        ModifyClusterSubnetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyClusterSubnetGroupError {
-    fn from(err: io::Error) -> ModifyClusterSubnetGroupError {
-        ModifyClusterSubnetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyClusterSubnetGroupError {
@@ -21563,13 +19422,6 @@ impl Error for ModifyClusterSubnetGroupError {
             ModifyClusterSubnetGroupError::InvalidSubnet(ref cause) => cause,
             ModifyClusterSubnetGroupError::SubnetAlreadyInUse(ref cause) => cause,
             ModifyClusterSubnetGroupError::UnauthorizedOperation(ref cause) => cause,
-            ModifyClusterSubnetGroupError::Validation(ref cause) => cause,
-            ModifyClusterSubnetGroupError::Credentials(ref err) => err.description(),
-            ModifyClusterSubnetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyClusterSubnetGroupError::ParseError(ref cause) => cause,
-            ModifyClusterSubnetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21594,20 +19446,10 @@ pub enum ModifyEventSubscriptionError {
     SubscriptionNotFoundFault(String),
     /// <p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
     SubscriptionSeverityNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyEventSubscriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21615,55 +19457,73 @@ impl ModifyEventSubscriptionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidSubscriptionStateFault" => {
-                        return ModifyEventSubscriptionError::InvalidSubscriptionStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::InvalidSubscriptionStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SNSInvalidTopic" => {
-                        return ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSNoAuthorization" => {
-                        return ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SNSTopicArnNotFound" => {
-                        return ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SourceNotFound" => {
-                        return ModifyEventSubscriptionError::SourceNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SourceNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SubscriptionCategoryNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionEventIdNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SubscriptionNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "SubscriptionSeverityNotFound" => {
-                        return ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyEventSubscriptionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21672,28 +19532,6 @@ impl ModifyEventSubscriptionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyEventSubscriptionError {
-    fn from(err: XmlParseError) -> ModifyEventSubscriptionError {
-        let XmlParseError(message) = err;
-        ModifyEventSubscriptionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyEventSubscriptionError {
-    fn from(err: CredentialsError) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyEventSubscriptionError {
-    fn from(err: HttpDispatchError) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyEventSubscriptionError {
-    fn from(err: io::Error) -> ModifyEventSubscriptionError {
-        ModifyEventSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyEventSubscriptionError {
@@ -21713,13 +19551,6 @@ impl Error for ModifyEventSubscriptionError {
             ModifyEventSubscriptionError::SubscriptionEventIdNotFoundFault(ref cause) => cause,
             ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => cause,
             ModifyEventSubscriptionError::SubscriptionSeverityNotFoundFault(ref cause) => cause,
-            ModifyEventSubscriptionError::Validation(ref cause) => cause,
-            ModifyEventSubscriptionError::Credentials(ref err) => err.description(),
-            ModifyEventSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyEventSubscriptionError::ParseError(ref cause) => cause,
-            ModifyEventSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21736,20 +19567,12 @@ pub enum ModifySnapshotCopyRetentionPeriodError {
     SnapshotCopyDisabledFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifySnapshotCopyRetentionPeriodError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifySnapshotCopyRetentionPeriodError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifySnapshotCopyRetentionPeriodError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21757,35 +19580,45 @@ impl ModifySnapshotCopyRetentionPeriodError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterState" => {
-                        return ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidRetentionPeriodFault" => {
-                        return ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotCopyDisabledFault" => {
-                        return ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnauthorizedOperation" => {
-                        return ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifySnapshotCopyRetentionPeriodError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21794,28 +19627,6 @@ impl ModifySnapshotCopyRetentionPeriodError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifySnapshotCopyRetentionPeriodError {
-    fn from(err: XmlParseError) -> ModifySnapshotCopyRetentionPeriodError {
-        let XmlParseError(message) = err;
-        ModifySnapshotCopyRetentionPeriodError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifySnapshotCopyRetentionPeriodError {
-    fn from(err: CredentialsError) -> ModifySnapshotCopyRetentionPeriodError {
-        ModifySnapshotCopyRetentionPeriodError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifySnapshotCopyRetentionPeriodError {
-    fn from(err: HttpDispatchError) -> ModifySnapshotCopyRetentionPeriodError {
-        ModifySnapshotCopyRetentionPeriodError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifySnapshotCopyRetentionPeriodError {
-    fn from(err: io::Error) -> ModifySnapshotCopyRetentionPeriodError {
-        ModifySnapshotCopyRetentionPeriodError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifySnapshotCopyRetentionPeriodError {
@@ -21831,13 +19642,6 @@ impl Error for ModifySnapshotCopyRetentionPeriodError {
             ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::Validation(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::Credentials(ref err) => err.description(),
-            ModifySnapshotCopyRetentionPeriodError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifySnapshotCopyRetentionPeriodError::ParseError(ref cause) => cause,
-            ModifySnapshotCopyRetentionPeriodError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21850,20 +19654,10 @@ pub enum ModifySnapshotScheduleError {
     SnapshotScheduleNotFoundFault(String),
     /// <p>The specified snapshot schedule is already being updated.</p>
     SnapshotScheduleUpdateInProgressFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifySnapshotScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifySnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifySnapshotScheduleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21871,25 +19665,31 @@ impl ModifySnapshotScheduleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidSchedule" => {
-                        return ModifySnapshotScheduleError::InvalidScheduleFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifySnapshotScheduleError::InvalidScheduleFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "SnapshotScheduleNotFound" => {
-                        return ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "SnapshotScheduleUpdateInProgress" => {
-                        return ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifySnapshotScheduleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -21898,28 +19698,6 @@ impl ModifySnapshotScheduleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifySnapshotScheduleError {
-    fn from(err: XmlParseError) -> ModifySnapshotScheduleError {
-        let XmlParseError(message) = err;
-        ModifySnapshotScheduleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifySnapshotScheduleError {
-    fn from(err: CredentialsError) -> ModifySnapshotScheduleError {
-        ModifySnapshotScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifySnapshotScheduleError {
-    fn from(err: HttpDispatchError) -> ModifySnapshotScheduleError {
-        ModifySnapshotScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifySnapshotScheduleError {
-    fn from(err: io::Error) -> ModifySnapshotScheduleError {
-        ModifySnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifySnapshotScheduleError {
@@ -21933,13 +19711,6 @@ impl Error for ModifySnapshotScheduleError {
             ModifySnapshotScheduleError::InvalidScheduleFault(ref cause) => cause,
             ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
             ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(ref cause) => cause,
-            ModifySnapshotScheduleError::Validation(ref cause) => cause,
-            ModifySnapshotScheduleError::Credentials(ref err) => err.description(),
-            ModifySnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifySnapshotScheduleError::ParseError(ref cause) => cause,
-            ModifySnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21954,20 +19725,12 @@ pub enum PurchaseReservedNodeOfferingError {
     ReservedNodeQuotaExceededFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PurchaseReservedNodeOfferingError {
-    pub fn from_response(res: BufferedHttpResponse) -> PurchaseReservedNodeOfferingError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PurchaseReservedNodeOfferingError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -21975,30 +19738,38 @@ impl PurchaseReservedNodeOfferingError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ReservedNodeAlreadyExists" => {
-                        return PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PurchaseReservedNodeOfferingError::ReservedNodeAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeOfferingNotFound" => {
-                        return PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PurchaseReservedNodeOfferingError::ReservedNodeOfferingNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ReservedNodeQuotaExceeded" => {
-                        return PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "UnsupportedOperation" => {
-                        return PurchaseReservedNodeOfferingError::UnsupportedOperationFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            PurchaseReservedNodeOfferingError::UnsupportedOperationFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        PurchaseReservedNodeOfferingError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22007,28 +19778,6 @@ impl PurchaseReservedNodeOfferingError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PurchaseReservedNodeOfferingError {
-    fn from(err: XmlParseError) -> PurchaseReservedNodeOfferingError {
-        let XmlParseError(message) = err;
-        PurchaseReservedNodeOfferingError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PurchaseReservedNodeOfferingError {
-    fn from(err: CredentialsError) -> PurchaseReservedNodeOfferingError {
-        PurchaseReservedNodeOfferingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PurchaseReservedNodeOfferingError {
-    fn from(err: HttpDispatchError) -> PurchaseReservedNodeOfferingError {
-        PurchaseReservedNodeOfferingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PurchaseReservedNodeOfferingError {
-    fn from(err: io::Error) -> PurchaseReservedNodeOfferingError {
-        PurchaseReservedNodeOfferingError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurchaseReservedNodeOfferingError {
@@ -22045,13 +19794,6 @@ impl Error for PurchaseReservedNodeOfferingError {
             }
             PurchaseReservedNodeOfferingError::ReservedNodeQuotaExceededFault(ref cause) => cause,
             PurchaseReservedNodeOfferingError::UnsupportedOperationFault(ref cause) => cause,
-            PurchaseReservedNodeOfferingError::Validation(ref cause) => cause,
-            PurchaseReservedNodeOfferingError::Credentials(ref err) => err.description(),
-            PurchaseReservedNodeOfferingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PurchaseReservedNodeOfferingError::ParseError(ref cause) => cause,
-            PurchaseReservedNodeOfferingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22062,20 +19804,10 @@ pub enum RebootClusterError {
     ClusterNotFoundFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RebootClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> RebootClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RebootClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22083,20 +19815,20 @@ impl RebootClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return RebootClusterError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RebootClusterError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidClusterState" => {
-                        return RebootClusterError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RebootClusterError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        RebootClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22105,28 +19837,6 @@ impl RebootClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RebootClusterError {
-    fn from(err: XmlParseError) -> RebootClusterError {
-        let XmlParseError(message) = err;
-        RebootClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RebootClusterError {
-    fn from(err: CredentialsError) -> RebootClusterError {
-        RebootClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RebootClusterError {
-    fn from(err: HttpDispatchError) -> RebootClusterError {
-        RebootClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RebootClusterError {
-    fn from(err: io::Error) -> RebootClusterError {
-        RebootClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RebootClusterError {
@@ -22139,11 +19849,6 @@ impl Error for RebootClusterError {
         match *self {
             RebootClusterError::ClusterNotFoundFault(ref cause) => cause,
             RebootClusterError::InvalidClusterStateFault(ref cause) => cause,
-            RebootClusterError::Validation(ref cause) => cause,
-            RebootClusterError::Credentials(ref err) => err.description(),
-            RebootClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RebootClusterError::ParseError(ref cause) => cause,
-            RebootClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22154,31 +19859,37 @@ pub enum ResetClusterParameterGroupError {
     ClusterParameterGroupNotFoundFault(String),
     /// <p>The cluster parameter group action can not be completed because another task is in progress that involves the parameter group. Wait a few moments and try the operation again.</p>
     InvalidClusterParameterGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetClusterParameterGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetClusterParameterGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ResetClusterParameterGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterParameterGroupNotFound" => return ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterParameterGroupState" => return ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            ResetClusterParameterGroupError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterParameterGroupState" => {
+                        return RusotoError::Service(
+                            ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        ResetClusterParameterGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22187,28 +19898,6 @@ impl ResetClusterParameterGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResetClusterParameterGroupError {
-    fn from(err: XmlParseError) -> ResetClusterParameterGroupError {
-        let XmlParseError(message) = err;
-        ResetClusterParameterGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResetClusterParameterGroupError {
-    fn from(err: CredentialsError) -> ResetClusterParameterGroupError {
-        ResetClusterParameterGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetClusterParameterGroupError {
-    fn from(err: HttpDispatchError) -> ResetClusterParameterGroupError {
-        ResetClusterParameterGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetClusterParameterGroupError {
-    fn from(err: io::Error) -> ResetClusterParameterGroupError {
-        ResetClusterParameterGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResetClusterParameterGroupError {
@@ -22223,13 +19912,6 @@ impl Error for ResetClusterParameterGroupError {
             ResetClusterParameterGroupError::InvalidClusterParameterGroupStateFault(ref cause) => {
                 cause
             }
-            ResetClusterParameterGroupError::Validation(ref cause) => cause,
-            ResetClusterParameterGroupError::Credentials(ref err) => err.description(),
-            ResetClusterParameterGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResetClusterParameterGroupError::ParseError(ref cause) => cause,
-            ResetClusterParameterGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22254,20 +19936,10 @@ pub enum ResizeClusterError {
     UnsupportedOperationFault(String),
     /// <p>A request option was specified that is not supported.</p>
     UnsupportedOptionFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResizeClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResizeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResizeClusterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22275,55 +19947,61 @@ impl ResizeClusterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return ResizeClusterError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InsufficientClusterCapacity" => {
-                        return ResizeClusterError::InsufficientClusterCapacityFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ResizeClusterError::InsufficientClusterCapacityFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidClusterState" => {
-                        return ResizeClusterError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceededFault" => {
-                        return ResizeClusterError::LimitExceededFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::LimitExceededFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberOfNodesPerClusterLimitExceeded" => {
-                        return ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NumberOfNodesQuotaExceeded" => {
-                        return ResizeClusterError::NumberOfNodesQuotaExceededFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ResizeClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "UnauthorizedOperation" => {
-                        return ResizeClusterError::UnauthorizedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::UnauthorizedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedOperation" => {
-                        return ResizeClusterError::UnsupportedOperationFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::UnsupportedOperationFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedOptionFault" => {
-                        return ResizeClusterError::UnsupportedOptionFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ResizeClusterError::UnsupportedOptionFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ResizeClusterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22332,28 +20010,6 @@ impl ResizeClusterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ResizeClusterError {
-    fn from(err: XmlParseError) -> ResizeClusterError {
-        let XmlParseError(message) = err;
-        ResizeClusterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ResizeClusterError {
-    fn from(err: CredentialsError) -> ResizeClusterError {
-        ResizeClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResizeClusterError {
-    fn from(err: HttpDispatchError) -> ResizeClusterError {
-        ResizeClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResizeClusterError {
-    fn from(err: io::Error) -> ResizeClusterError {
-        ResizeClusterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ResizeClusterError {
@@ -22373,11 +20029,6 @@ impl Error for ResizeClusterError {
             ResizeClusterError::UnauthorizedOperation(ref cause) => cause,
             ResizeClusterError::UnsupportedOperationFault(ref cause) => cause,
             ResizeClusterError::UnsupportedOptionFault(ref cause) => cause,
-            ResizeClusterError::Validation(ref cause) => cause,
-            ResizeClusterError::Credentials(ref err) => err.description(),
-            ResizeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResizeClusterError::ParseError(ref cause) => cause,
-            ResizeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22430,31 +20081,180 @@ pub enum RestoreFromClusterSnapshotError {
     SnapshotScheduleNotFoundFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreFromClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreFromClusterSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreFromClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessToSnapshotDenied" => return RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(parsed_error.message)),"ClusterAlreadyExists" => return RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaExceeded" => return RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"ClusterSubnetGroupNotFoundFault" => return RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DependentServiceRequestThrottlingFault" => return RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(String::from(parsed_error.message)),"HsmClientCertificateNotFoundFault" => return RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"HsmConfigurationNotFoundFault" => return RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(String::from(parsed_error.message)),"InsufficientClusterCapacity" => return RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterSubnetGroupStateFault" => return RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidClusterTrack" => return RestoreFromClusterSnapshotError::InvalidClusterTrackFault(String::from(parsed_error.message)),"InvalidElasticIpFault" => return RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(parsed_error.message)),"InvalidRestore" => return RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreFromClusterSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"LimitExceededFault" => return RestoreFromClusterSnapshotError::LimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesPerClusterLimitExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesQuotaExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(parsed_error.message)),"SnapshotScheduleNotFound" => return RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(String::from(parsed_error.message)),"UnauthorizedOperation" => return RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(parsed_error.message)),_ => {}
-                                }
+                    "AccessToSnapshotDenied" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterAlreadyExists" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterSecurityGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterSnapshotNotFound" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "DependentServiceRequestThrottlingFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "HsmClientCertificateNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "HsmConfigurationNotFoundFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InsufficientClusterCapacity" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterSubnetGroupStateFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidClusterTrack" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidClusterTrackFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidElasticIpFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidRestore" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "InvalidSubnet" => {
+                        return RusotoError::Service(RestoreFromClusterSnapshotError::InvalidSubnet(
+                            String::from(parsed_error.message),
+                        ));
+                    }
+                    "InvalidVPCNetworkStateFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "LimitExceededFault" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::LimitExceededFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    "NumberOfNodesPerClusterLimitExceeded" => return RusotoError::Service(
+                        RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "NumberOfNodesQuotaExceeded" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "SnapshotScheduleNotFound" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(
+                                parsed_error.message,
+                            )),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        RestoreFromClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22463,28 +20263,6 @@ impl RestoreFromClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreFromClusterSnapshotError {
-    fn from(err: XmlParseError) -> RestoreFromClusterSnapshotError {
-        let XmlParseError(message) = err;
-        RestoreFromClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreFromClusterSnapshotError {
-    fn from(err: CredentialsError) -> RestoreFromClusterSnapshotError {
-        RestoreFromClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreFromClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> RestoreFromClusterSnapshotError {
-        RestoreFromClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreFromClusterSnapshotError {
-    fn from(err: io::Error) -> RestoreFromClusterSnapshotError {
-        RestoreFromClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreFromClusterSnapshotError {
@@ -22524,13 +20302,6 @@ impl Error for RestoreFromClusterSnapshotError {
             RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => cause,
-            RestoreFromClusterSnapshotError::Validation(ref cause) => cause,
-            RestoreFromClusterSnapshotError::Credentials(ref err) => err.description(),
-            RestoreFromClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreFromClusterSnapshotError::ParseError(ref cause) => cause,
-            RestoreFromClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22551,31 +20322,23 @@ pub enum RestoreTableFromClusterSnapshotError {
     InvalidTableRestoreArgumentFault(String),
     /// <p>The requested operation isn't supported.</p>
     UnsupportedOperationFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableFromClusterSnapshotError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableFromClusterSnapshotError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RestoreTableFromClusterSnapshotError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ClusterNotFound" => return RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"InProgressTableRestoreQuotaExceededFault" => return RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterState" => return RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(parsed_error.message)),"InvalidTableRestoreArgument" => return RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(String::from(parsed_error.message)),"UnsupportedOperation" => return RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(parsed_error.message)),_ => {}
+                                    "ClusterNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterNotFoundFault(String::from(parsed_error.message))),"ClusterSnapshotNotFound" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message))),"InProgressTableRestoreQuotaExceededFault" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InProgressTableRestoreQuotaExceededFault(String::from(parsed_error.message))),"InvalidClusterSnapshotState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message))),"InvalidClusterState" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidClusterStateFault(String::from(parsed_error.message))),"InvalidTableRestoreArgument" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::InvalidTableRestoreArgumentFault(String::from(parsed_error.message))),"UnsupportedOperation" => return RusotoError::Service(RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        RestoreTableFromClusterSnapshotError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22584,28 +20347,6 @@ impl RestoreTableFromClusterSnapshotError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RestoreTableFromClusterSnapshotError {
-    fn from(err: XmlParseError) -> RestoreTableFromClusterSnapshotError {
-        let XmlParseError(message) = err;
-        RestoreTableFromClusterSnapshotError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RestoreTableFromClusterSnapshotError {
-    fn from(err: CredentialsError) -> RestoreTableFromClusterSnapshotError {
-        RestoreTableFromClusterSnapshotError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreTableFromClusterSnapshotError {
-    fn from(err: HttpDispatchError) -> RestoreTableFromClusterSnapshotError {
-        RestoreTableFromClusterSnapshotError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreTableFromClusterSnapshotError {
-    fn from(err: io::Error) -> RestoreTableFromClusterSnapshotError {
-        RestoreTableFromClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RestoreTableFromClusterSnapshotError {
@@ -22629,13 +20370,6 @@ impl Error for RestoreTableFromClusterSnapshotError {
                 cause
             }
             RestoreTableFromClusterSnapshotError::UnsupportedOperationFault(ref cause) => cause,
-            RestoreTableFromClusterSnapshotError::Validation(ref cause) => cause,
-            RestoreTableFromClusterSnapshotError::Credentials(ref err) => err.description(),
-            RestoreTableFromClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreTableFromClusterSnapshotError::ParseError(ref cause) => cause,
-            RestoreTableFromClusterSnapshotError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22648,31 +20382,23 @@ pub enum RevokeClusterSecurityGroupIngressError {
     ClusterSecurityGroupNotFoundFault(String),
     /// <p>The state of the cluster security group is not <code>available</code>. </p>
     InvalidClusterSecurityGroupStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeClusterSecurityGroupIngressError {
-    pub fn from_response(res: BufferedHttpResponse) -> RevokeClusterSecurityGroupIngressError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RevokeClusterSecurityGroupIngressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationNotFound" => return RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSecurityGroupState" => return RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message)),_ => {}
+                                    "AuthorizationNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::AuthorizationNotFoundFault(String::from(parsed_error.message))),"ClusterSecurityGroupNotFound" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message))),"InvalidClusterSecurityGroupState" => return RusotoError::Service(RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        RevokeClusterSecurityGroupIngressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22681,28 +20407,6 @@ impl RevokeClusterSecurityGroupIngressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RevokeClusterSecurityGroupIngressError {
-    fn from(err: XmlParseError) -> RevokeClusterSecurityGroupIngressError {
-        let XmlParseError(message) = err;
-        RevokeClusterSecurityGroupIngressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RevokeClusterSecurityGroupIngressError {
-    fn from(err: CredentialsError) -> RevokeClusterSecurityGroupIngressError {
-        RevokeClusterSecurityGroupIngressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RevokeClusterSecurityGroupIngressError {
-    fn from(err: HttpDispatchError) -> RevokeClusterSecurityGroupIngressError {
-        RevokeClusterSecurityGroupIngressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RevokeClusterSecurityGroupIngressError {
-    fn from(err: io::Error) -> RevokeClusterSecurityGroupIngressError {
-        RevokeClusterSecurityGroupIngressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeClusterSecurityGroupIngressError {
@@ -22720,13 +20424,6 @@ impl Error for RevokeClusterSecurityGroupIngressError {
             RevokeClusterSecurityGroupIngressError::InvalidClusterSecurityGroupStateFault(
                 ref cause,
             ) => cause,
-            RevokeClusterSecurityGroupIngressError::Validation(ref cause) => cause,
-            RevokeClusterSecurityGroupIngressError::Credentials(ref err) => err.description(),
-            RevokeClusterSecurityGroupIngressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RevokeClusterSecurityGroupIngressError::ParseError(ref cause) => cause,
-            RevokeClusterSecurityGroupIngressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22739,20 +20436,10 @@ pub enum RevokeSnapshotAccessError {
     AuthorizationNotFoundFault(String),
     /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
     ClusterSnapshotNotFoundFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RevokeSnapshotAccessError {
-    pub fn from_response(res: BufferedHttpResponse) -> RevokeSnapshotAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeSnapshotAccessError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22760,25 +20447,31 @@ impl RevokeSnapshotAccessError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessToSnapshotDenied" => {
-                        return RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AuthorizationNotFound" => {
-                        return RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RevokeSnapshotAccessError::AuthorizationNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ClusterSnapshotNotFound" => {
-                        return RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        RevokeSnapshotAccessError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22787,28 +20480,6 @@ impl RevokeSnapshotAccessError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RevokeSnapshotAccessError {
-    fn from(err: XmlParseError) -> RevokeSnapshotAccessError {
-        let XmlParseError(message) = err;
-        RevokeSnapshotAccessError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RevokeSnapshotAccessError {
-    fn from(err: CredentialsError) -> RevokeSnapshotAccessError {
-        RevokeSnapshotAccessError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RevokeSnapshotAccessError {
-    fn from(err: HttpDispatchError) -> RevokeSnapshotAccessError {
-        RevokeSnapshotAccessError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RevokeSnapshotAccessError {
-    fn from(err: io::Error) -> RevokeSnapshotAccessError {
-        RevokeSnapshotAccessError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RevokeSnapshotAccessError {
@@ -22822,13 +20493,6 @@ impl Error for RevokeSnapshotAccessError {
             RevokeSnapshotAccessError::AccessToSnapshotDeniedFault(ref cause) => cause,
             RevokeSnapshotAccessError::AuthorizationNotFoundFault(ref cause) => cause,
             RevokeSnapshotAccessError::ClusterSnapshotNotFoundFault(ref cause) => cause,
-            RevokeSnapshotAccessError::Validation(ref cause) => cause,
-            RevokeSnapshotAccessError::Credentials(ref err) => err.description(),
-            RevokeSnapshotAccessError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RevokeSnapshotAccessError::ParseError(ref cause) => cause,
-            RevokeSnapshotAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22841,20 +20505,10 @@ pub enum RotateEncryptionKeyError {
     DependentServiceRequestThrottlingFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RotateEncryptionKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> RotateEncryptionKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RotateEncryptionKeyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -22862,25 +20516,29 @@ impl RotateEncryptionKeyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
-                        return RotateEncryptionKeyError::ClusterNotFoundFault(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RotateEncryptionKeyError::ClusterNotFoundFault(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DependentServiceRequestThrottlingFault" => {
-                        return RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidClusterState" => {
-                        return RotateEncryptionKeyError::InvalidClusterStateFault(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RotateEncryptionKeyError::InvalidClusterStateFault(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RotateEncryptionKeyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -22889,28 +20547,6 @@ impl RotateEncryptionKeyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RotateEncryptionKeyError {
-    fn from(err: XmlParseError) -> RotateEncryptionKeyError {
-        let XmlParseError(message) = err;
-        RotateEncryptionKeyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RotateEncryptionKeyError {
-    fn from(err: CredentialsError) -> RotateEncryptionKeyError {
-        RotateEncryptionKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RotateEncryptionKeyError {
-    fn from(err: HttpDispatchError) -> RotateEncryptionKeyError {
-        RotateEncryptionKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RotateEncryptionKeyError {
-    fn from(err: io::Error) -> RotateEncryptionKeyError {
-        RotateEncryptionKeyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RotateEncryptionKeyError {
@@ -22924,13 +20560,6 @@ impl Error for RotateEncryptionKeyError {
             RotateEncryptionKeyError::ClusterNotFoundFault(ref cause) => cause,
             RotateEncryptionKeyError::DependentServiceRequestThrottlingFault(ref cause) => cause,
             RotateEncryptionKeyError::InvalidClusterStateFault(ref cause) => cause,
-            RotateEncryptionKeyError::Validation(ref cause) => cause,
-            RotateEncryptionKeyError::Credentials(ref err) => err.description(),
-            RotateEncryptionKeyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RotateEncryptionKeyError::ParseError(ref cause) => cause,
-            RotateEncryptionKeyError::Unknown(_) => "unknown error",
         }
     }
 }

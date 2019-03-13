@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1702,22 +1699,12 @@ pub enum AcceptInvitationError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptInvitationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AcceptInvitationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcceptInvitationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1742,39 +1729,20 @@ impl AcceptInvitationError {
 
             match error_type {
                 "BadRequestException" => {
-                    return AcceptInvitationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(AcceptInvitationError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return AcceptInvitationError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(AcceptInvitationError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AcceptInvitationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AcceptInvitationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcceptInvitationError {
-    fn from(err: serde_json::error::Error) -> AcceptInvitationError {
-        AcceptInvitationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcceptInvitationError {
-    fn from(err: CredentialsError) -> AcceptInvitationError {
-        AcceptInvitationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcceptInvitationError {
-    fn from(err: HttpDispatchError) -> AcceptInvitationError {
-        AcceptInvitationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcceptInvitationError {
-    fn from(err: io::Error) -> AcceptInvitationError {
-        AcceptInvitationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcceptInvitationError {
@@ -1787,11 +1755,6 @@ impl Error for AcceptInvitationError {
         match *self {
             AcceptInvitationError::BadRequest(ref cause) => cause,
             AcceptInvitationError::InternalServerError(ref cause) => cause,
-            AcceptInvitationError::Validation(ref cause) => cause,
-            AcceptInvitationError::Credentials(ref err) => err.description(),
-            AcceptInvitationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AcceptInvitationError::ParseError(ref cause) => cause,
-            AcceptInvitationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1802,22 +1765,12 @@ pub enum ArchiveFindingsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ArchiveFindingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ArchiveFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ArchiveFindingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1842,39 +1795,20 @@ impl ArchiveFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ArchiveFindingsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ArchiveFindingsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ArchiveFindingsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ArchiveFindingsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ArchiveFindingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ArchiveFindingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ArchiveFindingsError {
-    fn from(err: serde_json::error::Error) -> ArchiveFindingsError {
-        ArchiveFindingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ArchiveFindingsError {
-    fn from(err: CredentialsError) -> ArchiveFindingsError {
-        ArchiveFindingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ArchiveFindingsError {
-    fn from(err: HttpDispatchError) -> ArchiveFindingsError {
-        ArchiveFindingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ArchiveFindingsError {
-    fn from(err: io::Error) -> ArchiveFindingsError {
-        ArchiveFindingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ArchiveFindingsError {
@@ -1887,11 +1821,6 @@ impl Error for ArchiveFindingsError {
         match *self {
             ArchiveFindingsError::BadRequest(ref cause) => cause,
             ArchiveFindingsError::InternalServerError(ref cause) => cause,
-            ArchiveFindingsError::Validation(ref cause) => cause,
-            ArchiveFindingsError::Credentials(ref err) => err.description(),
-            ArchiveFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ArchiveFindingsError::ParseError(ref cause) => cause,
-            ArchiveFindingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1902,22 +1831,12 @@ pub enum CreateDetectorError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDetectorError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDetectorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1942,39 +1861,20 @@ impl CreateDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateDetectorError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateDetectorError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateDetectorError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateDetectorError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDetectorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDetectorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDetectorError {
-    fn from(err: serde_json::error::Error) -> CreateDetectorError {
-        CreateDetectorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDetectorError {
-    fn from(err: CredentialsError) -> CreateDetectorError {
-        CreateDetectorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDetectorError {
-    fn from(err: HttpDispatchError) -> CreateDetectorError {
-        CreateDetectorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDetectorError {
-    fn from(err: io::Error) -> CreateDetectorError {
-        CreateDetectorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDetectorError {
@@ -1987,11 +1887,6 @@ impl Error for CreateDetectorError {
         match *self {
             CreateDetectorError::BadRequest(ref cause) => cause,
             CreateDetectorError::InternalServerError(ref cause) => cause,
-            CreateDetectorError::Validation(ref cause) => cause,
-            CreateDetectorError::Credentials(ref err) => err.description(),
-            CreateDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDetectorError::ParseError(ref cause) => cause,
-            CreateDetectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2002,22 +1897,12 @@ pub enum CreateFilterError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFilterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2042,39 +1927,20 @@ impl CreateFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateFilterError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateFilterError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateFilterError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateFilterError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFilterError {
-    fn from(err: serde_json::error::Error) -> CreateFilterError {
-        CreateFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFilterError {
-    fn from(err: CredentialsError) -> CreateFilterError {
-        CreateFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFilterError {
-    fn from(err: HttpDispatchError) -> CreateFilterError {
-        CreateFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFilterError {
-    fn from(err: io::Error) -> CreateFilterError {
-        CreateFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFilterError {
@@ -2087,11 +1953,6 @@ impl Error for CreateFilterError {
         match *self {
             CreateFilterError::BadRequest(ref cause) => cause,
             CreateFilterError::InternalServerError(ref cause) => cause,
-            CreateFilterError::Validation(ref cause) => cause,
-            CreateFilterError::Credentials(ref err) => err.description(),
-            CreateFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFilterError::ParseError(ref cause) => cause,
-            CreateFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2102,22 +1963,12 @@ pub enum CreateIPSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIPSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2142,39 +1993,20 @@ impl CreateIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateIPSetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateIPSetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateIPSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIPSetError {
-    fn from(err: serde_json::error::Error) -> CreateIPSetError {
-        CreateIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIPSetError {
-    fn from(err: CredentialsError) -> CreateIPSetError {
-        CreateIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIPSetError {
-    fn from(err: HttpDispatchError) -> CreateIPSetError {
-        CreateIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIPSetError {
-    fn from(err: io::Error) -> CreateIPSetError {
-        CreateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIPSetError {
@@ -2187,11 +2019,6 @@ impl Error for CreateIPSetError {
         match *self {
             CreateIPSetError::BadRequest(ref cause) => cause,
             CreateIPSetError::InternalServerError(ref cause) => cause,
-            CreateIPSetError::Validation(ref cause) => cause,
-            CreateIPSetError::Credentials(ref err) => err.description(),
-            CreateIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateIPSetError::ParseError(ref cause) => cause,
-            CreateIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2202,22 +2029,12 @@ pub enum CreateMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2242,39 +2059,20 @@ impl CreateMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateMembersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateMembersError {
-    fn from(err: serde_json::error::Error) -> CreateMembersError {
-        CreateMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateMembersError {
-    fn from(err: CredentialsError) -> CreateMembersError {
-        CreateMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateMembersError {
-    fn from(err: HttpDispatchError) -> CreateMembersError {
-        CreateMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateMembersError {
-    fn from(err: io::Error) -> CreateMembersError {
-        CreateMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateMembersError {
@@ -2287,11 +2085,6 @@ impl Error for CreateMembersError {
         match *self {
             CreateMembersError::BadRequest(ref cause) => cause,
             CreateMembersError::InternalServerError(ref cause) => cause,
-            CreateMembersError::Validation(ref cause) => cause,
-            CreateMembersError::Credentials(ref err) => err.description(),
-            CreateMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateMembersError::ParseError(ref cause) => cause,
-            CreateMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2302,22 +2095,12 @@ pub enum CreateSampleFindingsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSampleFindingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSampleFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSampleFindingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2342,41 +2125,20 @@ impl CreateSampleFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateSampleFindingsError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return CreateSampleFindingsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSampleFindingsError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateSampleFindingsError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateSampleFindingsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSampleFindingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSampleFindingsError {
-    fn from(err: serde_json::error::Error) -> CreateSampleFindingsError {
-        CreateSampleFindingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSampleFindingsError {
-    fn from(err: CredentialsError) -> CreateSampleFindingsError {
-        CreateSampleFindingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSampleFindingsError {
-    fn from(err: HttpDispatchError) -> CreateSampleFindingsError {
-        CreateSampleFindingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSampleFindingsError {
-    fn from(err: io::Error) -> CreateSampleFindingsError {
-        CreateSampleFindingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSampleFindingsError {
@@ -2389,13 +2151,6 @@ impl Error for CreateSampleFindingsError {
         match *self {
             CreateSampleFindingsError::BadRequest(ref cause) => cause,
             CreateSampleFindingsError::InternalServerError(ref cause) => cause,
-            CreateSampleFindingsError::Validation(ref cause) => cause,
-            CreateSampleFindingsError::Credentials(ref err) => err.description(),
-            CreateSampleFindingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSampleFindingsError::ParseError(ref cause) => cause,
-            CreateSampleFindingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2406,22 +2161,12 @@ pub enum CreateThreatIntelSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateThreatIntelSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateThreatIntelSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateThreatIntelSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2446,41 +2191,20 @@ impl CreateThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateThreatIntelSetError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return CreateThreatIntelSetError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateThreatIntelSetError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateThreatIntelSetError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateThreatIntelSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateThreatIntelSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateThreatIntelSetError {
-    fn from(err: serde_json::error::Error) -> CreateThreatIntelSetError {
-        CreateThreatIntelSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateThreatIntelSetError {
-    fn from(err: CredentialsError) -> CreateThreatIntelSetError {
-        CreateThreatIntelSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateThreatIntelSetError {
-    fn from(err: HttpDispatchError) -> CreateThreatIntelSetError {
-        CreateThreatIntelSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateThreatIntelSetError {
-    fn from(err: io::Error) -> CreateThreatIntelSetError {
-        CreateThreatIntelSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateThreatIntelSetError {
@@ -2493,13 +2217,6 @@ impl Error for CreateThreatIntelSetError {
         match *self {
             CreateThreatIntelSetError::BadRequest(ref cause) => cause,
             CreateThreatIntelSetError::InternalServerError(ref cause) => cause,
-            CreateThreatIntelSetError::Validation(ref cause) => cause,
-            CreateThreatIntelSetError::Credentials(ref err) => err.description(),
-            CreateThreatIntelSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateThreatIntelSetError::ParseError(ref cause) => cause,
-            CreateThreatIntelSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2510,22 +2227,12 @@ pub enum DeclineInvitationsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeclineInvitationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeclineInvitationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeclineInvitationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2550,39 +2257,20 @@ impl DeclineInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeclineInvitationsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeclineInvitationsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeclineInvitationsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeclineInvitationsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeclineInvitationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeclineInvitationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeclineInvitationsError {
-    fn from(err: serde_json::error::Error) -> DeclineInvitationsError {
-        DeclineInvitationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeclineInvitationsError {
-    fn from(err: CredentialsError) -> DeclineInvitationsError {
-        DeclineInvitationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeclineInvitationsError {
-    fn from(err: HttpDispatchError) -> DeclineInvitationsError {
-        DeclineInvitationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeclineInvitationsError {
-    fn from(err: io::Error) -> DeclineInvitationsError {
-        DeclineInvitationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeclineInvitationsError {
@@ -2595,13 +2283,6 @@ impl Error for DeclineInvitationsError {
         match *self {
             DeclineInvitationsError::BadRequest(ref cause) => cause,
             DeclineInvitationsError::InternalServerError(ref cause) => cause,
-            DeclineInvitationsError::Validation(ref cause) => cause,
-            DeclineInvitationsError::Credentials(ref err) => err.description(),
-            DeclineInvitationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeclineInvitationsError::ParseError(ref cause) => cause,
-            DeclineInvitationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2612,22 +2293,12 @@ pub enum DeleteDetectorError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDetectorError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDetectorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2652,39 +2323,20 @@ impl DeleteDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteDetectorError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteDetectorError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteDetectorError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteDetectorError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDetectorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDetectorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDetectorError {
-    fn from(err: serde_json::error::Error) -> DeleteDetectorError {
-        DeleteDetectorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDetectorError {
-    fn from(err: CredentialsError) -> DeleteDetectorError {
-        DeleteDetectorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDetectorError {
-    fn from(err: HttpDispatchError) -> DeleteDetectorError {
-        DeleteDetectorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDetectorError {
-    fn from(err: io::Error) -> DeleteDetectorError {
-        DeleteDetectorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDetectorError {
@@ -2697,11 +2349,6 @@ impl Error for DeleteDetectorError {
         match *self {
             DeleteDetectorError::BadRequest(ref cause) => cause,
             DeleteDetectorError::InternalServerError(ref cause) => cause,
-            DeleteDetectorError::Validation(ref cause) => cause,
-            DeleteDetectorError::Credentials(ref err) => err.description(),
-            DeleteDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDetectorError::ParseError(ref cause) => cause,
-            DeleteDetectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2712,22 +2359,12 @@ pub enum DeleteFilterError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFilterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2752,39 +2389,20 @@ impl DeleteFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteFilterError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteFilterError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteFilterError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteFilterError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFilterError {
-    fn from(err: serde_json::error::Error) -> DeleteFilterError {
-        DeleteFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFilterError {
-    fn from(err: CredentialsError) -> DeleteFilterError {
-        DeleteFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFilterError {
-    fn from(err: HttpDispatchError) -> DeleteFilterError {
-        DeleteFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFilterError {
-    fn from(err: io::Error) -> DeleteFilterError {
-        DeleteFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFilterError {
@@ -2797,11 +2415,6 @@ impl Error for DeleteFilterError {
         match *self {
             DeleteFilterError::BadRequest(ref cause) => cause,
             DeleteFilterError::InternalServerError(ref cause) => cause,
-            DeleteFilterError::Validation(ref cause) => cause,
-            DeleteFilterError::Credentials(ref err) => err.description(),
-            DeleteFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFilterError::ParseError(ref cause) => cause,
-            DeleteFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2812,22 +2425,12 @@ pub enum DeleteIPSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteIPSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2852,39 +2455,20 @@ impl DeleteIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteIPSetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteIPSetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteIPSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteIPSetError {
-    fn from(err: serde_json::error::Error) -> DeleteIPSetError {
-        DeleteIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIPSetError {
-    fn from(err: CredentialsError) -> DeleteIPSetError {
-        DeleteIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIPSetError {
-    fn from(err: HttpDispatchError) -> DeleteIPSetError {
-        DeleteIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIPSetError {
-    fn from(err: io::Error) -> DeleteIPSetError {
-        DeleteIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteIPSetError {
@@ -2897,11 +2481,6 @@ impl Error for DeleteIPSetError {
         match *self {
             DeleteIPSetError::BadRequest(ref cause) => cause,
             DeleteIPSetError::InternalServerError(ref cause) => cause,
-            DeleteIPSetError::Validation(ref cause) => cause,
-            DeleteIPSetError::Credentials(ref err) => err.description(),
-            DeleteIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIPSetError::ParseError(ref cause) => cause,
-            DeleteIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2912,22 +2491,12 @@ pub enum DeleteInvitationsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteInvitationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteInvitationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteInvitationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2952,39 +2521,20 @@ impl DeleteInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteInvitationsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteInvitationsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteInvitationsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteInvitationsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteInvitationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteInvitationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteInvitationsError {
-    fn from(err: serde_json::error::Error) -> DeleteInvitationsError {
-        DeleteInvitationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteInvitationsError {
-    fn from(err: CredentialsError) -> DeleteInvitationsError {
-        DeleteInvitationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteInvitationsError {
-    fn from(err: HttpDispatchError) -> DeleteInvitationsError {
-        DeleteInvitationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteInvitationsError {
-    fn from(err: io::Error) -> DeleteInvitationsError {
-        DeleteInvitationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteInvitationsError {
@@ -2997,13 +2547,6 @@ impl Error for DeleteInvitationsError {
         match *self {
             DeleteInvitationsError::BadRequest(ref cause) => cause,
             DeleteInvitationsError::InternalServerError(ref cause) => cause,
-            DeleteInvitationsError::Validation(ref cause) => cause,
-            DeleteInvitationsError::Credentials(ref err) => err.description(),
-            DeleteInvitationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteInvitationsError::ParseError(ref cause) => cause,
-            DeleteInvitationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3014,22 +2557,12 @@ pub enum DeleteMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3054,39 +2587,20 @@ impl DeleteMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteMembersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteMembersError {
-    fn from(err: serde_json::error::Error) -> DeleteMembersError {
-        DeleteMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMembersError {
-    fn from(err: CredentialsError) -> DeleteMembersError {
-        DeleteMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMembersError {
-    fn from(err: HttpDispatchError) -> DeleteMembersError {
-        DeleteMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMembersError {
-    fn from(err: io::Error) -> DeleteMembersError {
-        DeleteMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteMembersError {
@@ -3099,11 +2613,6 @@ impl Error for DeleteMembersError {
         match *self {
             DeleteMembersError::BadRequest(ref cause) => cause,
             DeleteMembersError::InternalServerError(ref cause) => cause,
-            DeleteMembersError::Validation(ref cause) => cause,
-            DeleteMembersError::Credentials(ref err) => err.description(),
-            DeleteMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteMembersError::ParseError(ref cause) => cause,
-            DeleteMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3114,22 +2623,12 @@ pub enum DeleteThreatIntelSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteThreatIntelSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteThreatIntelSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteThreatIntelSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3154,41 +2653,20 @@ impl DeleteThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DeleteThreatIntelSetError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return DeleteThreatIntelSetError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteThreatIntelSetError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteThreatIntelSetError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteThreatIntelSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteThreatIntelSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteThreatIntelSetError {
-    fn from(err: serde_json::error::Error) -> DeleteThreatIntelSetError {
-        DeleteThreatIntelSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteThreatIntelSetError {
-    fn from(err: CredentialsError) -> DeleteThreatIntelSetError {
-        DeleteThreatIntelSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteThreatIntelSetError {
-    fn from(err: HttpDispatchError) -> DeleteThreatIntelSetError {
-        DeleteThreatIntelSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteThreatIntelSetError {
-    fn from(err: io::Error) -> DeleteThreatIntelSetError {
-        DeleteThreatIntelSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteThreatIntelSetError {
@@ -3201,13 +2679,6 @@ impl Error for DeleteThreatIntelSetError {
         match *self {
             DeleteThreatIntelSetError::BadRequest(ref cause) => cause,
             DeleteThreatIntelSetError::InternalServerError(ref cause) => cause,
-            DeleteThreatIntelSetError::Validation(ref cause) => cause,
-            DeleteThreatIntelSetError::Credentials(ref err) => err.description(),
-            DeleteThreatIntelSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteThreatIntelSetError::ParseError(ref cause) => cause,
-            DeleteThreatIntelSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3218,22 +2689,14 @@ pub enum DisassociateFromMasterAccountError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateFromMasterAccountError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateFromMasterAccountError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateFromMasterAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3258,43 +2721,22 @@ impl DisassociateFromMasterAccountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DisassociateFromMasterAccountError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateFromMasterAccountError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerErrorException" => {
-                    return DisassociateFromMasterAccountError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateFromMasterAccountError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DisassociateFromMasterAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateFromMasterAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateFromMasterAccountError {
-    fn from(err: serde_json::error::Error) -> DisassociateFromMasterAccountError {
-        DisassociateFromMasterAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateFromMasterAccountError {
-    fn from(err: CredentialsError) -> DisassociateFromMasterAccountError {
-        DisassociateFromMasterAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateFromMasterAccountError {
-    fn from(err: HttpDispatchError) -> DisassociateFromMasterAccountError {
-        DisassociateFromMasterAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateFromMasterAccountError {
-    fn from(err: io::Error) -> DisassociateFromMasterAccountError {
-        DisassociateFromMasterAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateFromMasterAccountError {
@@ -3307,13 +2749,6 @@ impl Error for DisassociateFromMasterAccountError {
         match *self {
             DisassociateFromMasterAccountError::BadRequest(ref cause) => cause,
             DisassociateFromMasterAccountError::InternalServerError(ref cause) => cause,
-            DisassociateFromMasterAccountError::Validation(ref cause) => cause,
-            DisassociateFromMasterAccountError::Credentials(ref err) => err.description(),
-            DisassociateFromMasterAccountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateFromMasterAccountError::ParseError(ref cause) => cause,
-            DisassociateFromMasterAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3324,22 +2759,12 @@ pub enum DisassociateMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3364,41 +2789,20 @@ impl DisassociateMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DisassociateMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DisassociateMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DisassociateMembersError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateMembersError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DisassociateMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateMembersError {
-    fn from(err: serde_json::error::Error) -> DisassociateMembersError {
-        DisassociateMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateMembersError {
-    fn from(err: CredentialsError) -> DisassociateMembersError {
-        DisassociateMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateMembersError {
-    fn from(err: HttpDispatchError) -> DisassociateMembersError {
-        DisassociateMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateMembersError {
-    fn from(err: io::Error) -> DisassociateMembersError {
-        DisassociateMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateMembersError {
@@ -3411,13 +2815,6 @@ impl Error for DisassociateMembersError {
         match *self {
             DisassociateMembersError::BadRequest(ref cause) => cause,
             DisassociateMembersError::InternalServerError(ref cause) => cause,
-            DisassociateMembersError::Validation(ref cause) => cause,
-            DisassociateMembersError::Credentials(ref err) => err.description(),
-            DisassociateMembersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateMembersError::ParseError(ref cause) => cause,
-            DisassociateMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3428,22 +2825,12 @@ pub enum GetDetectorError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDetectorError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDetectorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3468,39 +2855,20 @@ impl GetDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetDetectorError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetDetectorError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetDetectorError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetDetectorError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDetectorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDetectorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDetectorError {
-    fn from(err: serde_json::error::Error) -> GetDetectorError {
-        GetDetectorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDetectorError {
-    fn from(err: CredentialsError) -> GetDetectorError {
-        GetDetectorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDetectorError {
-    fn from(err: HttpDispatchError) -> GetDetectorError {
-        GetDetectorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDetectorError {
-    fn from(err: io::Error) -> GetDetectorError {
-        GetDetectorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDetectorError {
@@ -3513,11 +2881,6 @@ impl Error for GetDetectorError {
         match *self {
             GetDetectorError::BadRequest(ref cause) => cause,
             GetDetectorError::InternalServerError(ref cause) => cause,
-            GetDetectorError::Validation(ref cause) => cause,
-            GetDetectorError::Credentials(ref err) => err.description(),
-            GetDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDetectorError::ParseError(ref cause) => cause,
-            GetDetectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3528,22 +2891,12 @@ pub enum GetFilterError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFilterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3568,39 +2921,20 @@ impl GetFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFilterError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetFilterError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetFilterError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetFilterError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFilterError {
-    fn from(err: serde_json::error::Error) -> GetFilterError {
-        GetFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFilterError {
-    fn from(err: CredentialsError) -> GetFilterError {
-        GetFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFilterError {
-    fn from(err: HttpDispatchError) -> GetFilterError {
-        GetFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFilterError {
-    fn from(err: io::Error) -> GetFilterError {
-        GetFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFilterError {
@@ -3613,11 +2947,6 @@ impl Error for GetFilterError {
         match *self {
             GetFilterError::BadRequest(ref cause) => cause,
             GetFilterError::InternalServerError(ref cause) => cause,
-            GetFilterError::Validation(ref cause) => cause,
-            GetFilterError::Credentials(ref err) => err.description(),
-            GetFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFilterError::ParseError(ref cause) => cause,
-            GetFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3628,22 +2957,12 @@ pub enum GetFindingsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFindingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3668,39 +2987,20 @@ impl GetFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFindingsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetFindingsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetFindingsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetFindingsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetFindingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFindingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFindingsError {
-    fn from(err: serde_json::error::Error) -> GetFindingsError {
-        GetFindingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFindingsError {
-    fn from(err: CredentialsError) -> GetFindingsError {
-        GetFindingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFindingsError {
-    fn from(err: HttpDispatchError) -> GetFindingsError {
-        GetFindingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFindingsError {
-    fn from(err: io::Error) -> GetFindingsError {
-        GetFindingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFindingsError {
@@ -3713,11 +3013,6 @@ impl Error for GetFindingsError {
         match *self {
             GetFindingsError::BadRequest(ref cause) => cause,
             GetFindingsError::InternalServerError(ref cause) => cause,
-            GetFindingsError::Validation(ref cause) => cause,
-            GetFindingsError::Credentials(ref err) => err.description(),
-            GetFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFindingsError::ParseError(ref cause) => cause,
-            GetFindingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3728,22 +3023,12 @@ pub enum GetFindingsStatisticsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFindingsStatisticsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFindingsStatisticsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFindingsStatisticsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3768,41 +3053,20 @@ impl GetFindingsStatisticsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetFindingsStatisticsError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return GetFindingsStatisticsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFindingsStatisticsError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetFindingsStatisticsError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(GetFindingsStatisticsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFindingsStatisticsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFindingsStatisticsError {
-    fn from(err: serde_json::error::Error) -> GetFindingsStatisticsError {
-        GetFindingsStatisticsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFindingsStatisticsError {
-    fn from(err: CredentialsError) -> GetFindingsStatisticsError {
-        GetFindingsStatisticsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFindingsStatisticsError {
-    fn from(err: HttpDispatchError) -> GetFindingsStatisticsError {
-        GetFindingsStatisticsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFindingsStatisticsError {
-    fn from(err: io::Error) -> GetFindingsStatisticsError {
-        GetFindingsStatisticsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFindingsStatisticsError {
@@ -3815,13 +3079,6 @@ impl Error for GetFindingsStatisticsError {
         match *self {
             GetFindingsStatisticsError::BadRequest(ref cause) => cause,
             GetFindingsStatisticsError::InternalServerError(ref cause) => cause,
-            GetFindingsStatisticsError::Validation(ref cause) => cause,
-            GetFindingsStatisticsError::Credentials(ref err) => err.description(),
-            GetFindingsStatisticsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetFindingsStatisticsError::ParseError(ref cause) => cause,
-            GetFindingsStatisticsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3832,22 +3089,12 @@ pub enum GetIPSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetIPSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3872,39 +3119,20 @@ impl GetIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetIPSetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetIPSetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetIPSetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetIPSetError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetIPSetError {
-    fn from(err: serde_json::error::Error) -> GetIPSetError {
-        GetIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetIPSetError {
-    fn from(err: CredentialsError) -> GetIPSetError {
-        GetIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIPSetError {
-    fn from(err: HttpDispatchError) -> GetIPSetError {
-        GetIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIPSetError {
-    fn from(err: io::Error) -> GetIPSetError {
-        GetIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetIPSetError {
@@ -3917,11 +3145,6 @@ impl Error for GetIPSetError {
         match *self {
             GetIPSetError::BadRequest(ref cause) => cause,
             GetIPSetError::InternalServerError(ref cause) => cause,
-            GetIPSetError::Validation(ref cause) => cause,
-            GetIPSetError::Credentials(ref err) => err.description(),
-            GetIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetIPSetError::ParseError(ref cause) => cause,
-            GetIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3932,22 +3155,12 @@ pub enum GetInvitationsCountError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetInvitationsCountError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetInvitationsCountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetInvitationsCountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3972,41 +3185,20 @@ impl GetInvitationsCountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetInvitationsCountError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetInvitationsCountError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetInvitationsCountError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetInvitationsCountError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetInvitationsCountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetInvitationsCountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetInvitationsCountError {
-    fn from(err: serde_json::error::Error) -> GetInvitationsCountError {
-        GetInvitationsCountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetInvitationsCountError {
-    fn from(err: CredentialsError) -> GetInvitationsCountError {
-        GetInvitationsCountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetInvitationsCountError {
-    fn from(err: HttpDispatchError) -> GetInvitationsCountError {
-        GetInvitationsCountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetInvitationsCountError {
-    fn from(err: io::Error) -> GetInvitationsCountError {
-        GetInvitationsCountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetInvitationsCountError {
@@ -4019,13 +3211,6 @@ impl Error for GetInvitationsCountError {
         match *self {
             GetInvitationsCountError::BadRequest(ref cause) => cause,
             GetInvitationsCountError::InternalServerError(ref cause) => cause,
-            GetInvitationsCountError::Validation(ref cause) => cause,
-            GetInvitationsCountError::Credentials(ref err) => err.description(),
-            GetInvitationsCountError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetInvitationsCountError::ParseError(ref cause) => cause,
-            GetInvitationsCountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4036,22 +3221,12 @@ pub enum GetMasterAccountError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMasterAccountError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetMasterAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMasterAccountError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4076,39 +3251,20 @@ impl GetMasterAccountError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetMasterAccountError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetMasterAccountError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetMasterAccountError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetMasterAccountError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetMasterAccountError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMasterAccountError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMasterAccountError {
-    fn from(err: serde_json::error::Error) -> GetMasterAccountError {
-        GetMasterAccountError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMasterAccountError {
-    fn from(err: CredentialsError) -> GetMasterAccountError {
-        GetMasterAccountError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMasterAccountError {
-    fn from(err: HttpDispatchError) -> GetMasterAccountError {
-        GetMasterAccountError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMasterAccountError {
-    fn from(err: io::Error) -> GetMasterAccountError {
-        GetMasterAccountError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMasterAccountError {
@@ -4121,11 +3277,6 @@ impl Error for GetMasterAccountError {
         match *self {
             GetMasterAccountError::BadRequest(ref cause) => cause,
             GetMasterAccountError::InternalServerError(ref cause) => cause,
-            GetMasterAccountError::Validation(ref cause) => cause,
-            GetMasterAccountError::Credentials(ref err) => err.description(),
-            GetMasterAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMasterAccountError::ParseError(ref cause) => cause,
-            GetMasterAccountError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4136,22 +3287,12 @@ pub enum GetMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4176,39 +3317,20 @@ impl GetMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetMembersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetMembersError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMembersError {
-    fn from(err: serde_json::error::Error) -> GetMembersError {
-        GetMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMembersError {
-    fn from(err: CredentialsError) -> GetMembersError {
-        GetMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMembersError {
-    fn from(err: HttpDispatchError) -> GetMembersError {
-        GetMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMembersError {
-    fn from(err: io::Error) -> GetMembersError {
-        GetMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMembersError {
@@ -4221,11 +3343,6 @@ impl Error for GetMembersError {
         match *self {
             GetMembersError::BadRequest(ref cause) => cause,
             GetMembersError::InternalServerError(ref cause) => cause,
-            GetMembersError::Validation(ref cause) => cause,
-            GetMembersError::Credentials(ref err) => err.description(),
-            GetMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMembersError::ParseError(ref cause) => cause,
-            GetMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4236,22 +3353,12 @@ pub enum GetThreatIntelSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetThreatIntelSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetThreatIntelSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThreatIntelSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4276,39 +3383,20 @@ impl GetThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return GetThreatIntelSetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetThreatIntelSetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return GetThreatIntelSetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetThreatIntelSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetThreatIntelSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetThreatIntelSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetThreatIntelSetError {
-    fn from(err: serde_json::error::Error) -> GetThreatIntelSetError {
-        GetThreatIntelSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetThreatIntelSetError {
-    fn from(err: CredentialsError) -> GetThreatIntelSetError {
-        GetThreatIntelSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetThreatIntelSetError {
-    fn from(err: HttpDispatchError) -> GetThreatIntelSetError {
-        GetThreatIntelSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetThreatIntelSetError {
-    fn from(err: io::Error) -> GetThreatIntelSetError {
-        GetThreatIntelSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetThreatIntelSetError {
@@ -4321,13 +3409,6 @@ impl Error for GetThreatIntelSetError {
         match *self {
             GetThreatIntelSetError::BadRequest(ref cause) => cause,
             GetThreatIntelSetError::InternalServerError(ref cause) => cause,
-            GetThreatIntelSetError::Validation(ref cause) => cause,
-            GetThreatIntelSetError::Credentials(ref err) => err.description(),
-            GetThreatIntelSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetThreatIntelSetError::ParseError(ref cause) => cause,
-            GetThreatIntelSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4338,22 +3419,12 @@ pub enum InviteMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InviteMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InviteMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InviteMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4378,39 +3449,20 @@ impl InviteMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return InviteMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(InviteMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return InviteMembersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(InviteMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return InviteMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InviteMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InviteMembersError {
-    fn from(err: serde_json::error::Error) -> InviteMembersError {
-        InviteMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InviteMembersError {
-    fn from(err: CredentialsError) -> InviteMembersError {
-        InviteMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InviteMembersError {
-    fn from(err: HttpDispatchError) -> InviteMembersError {
-        InviteMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InviteMembersError {
-    fn from(err: io::Error) -> InviteMembersError {
-        InviteMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InviteMembersError {
@@ -4423,11 +3475,6 @@ impl Error for InviteMembersError {
         match *self {
             InviteMembersError::BadRequest(ref cause) => cause,
             InviteMembersError::InternalServerError(ref cause) => cause,
-            InviteMembersError::Validation(ref cause) => cause,
-            InviteMembersError::Credentials(ref err) => err.description(),
-            InviteMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InviteMembersError::ParseError(ref cause) => cause,
-            InviteMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4438,22 +3485,12 @@ pub enum ListDetectorsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDetectorsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListDetectorsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDetectorsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4478,39 +3515,20 @@ impl ListDetectorsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListDetectorsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListDetectorsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListDetectorsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListDetectorsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDetectorsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDetectorsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDetectorsError {
-    fn from(err: serde_json::error::Error) -> ListDetectorsError {
-        ListDetectorsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDetectorsError {
-    fn from(err: CredentialsError) -> ListDetectorsError {
-        ListDetectorsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDetectorsError {
-    fn from(err: HttpDispatchError) -> ListDetectorsError {
-        ListDetectorsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDetectorsError {
-    fn from(err: io::Error) -> ListDetectorsError {
-        ListDetectorsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDetectorsError {
@@ -4523,11 +3541,6 @@ impl Error for ListDetectorsError {
         match *self {
             ListDetectorsError::BadRequest(ref cause) => cause,
             ListDetectorsError::InternalServerError(ref cause) => cause,
-            ListDetectorsError::Validation(ref cause) => cause,
-            ListDetectorsError::Credentials(ref err) => err.description(),
-            ListDetectorsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDetectorsError::ParseError(ref cause) => cause,
-            ListDetectorsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4538,22 +3551,12 @@ pub enum ListFiltersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFiltersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFiltersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4578,39 +3581,20 @@ impl ListFiltersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListFiltersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListFiltersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListFiltersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListFiltersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListFiltersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFiltersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFiltersError {
-    fn from(err: serde_json::error::Error) -> ListFiltersError {
-        ListFiltersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFiltersError {
-    fn from(err: CredentialsError) -> ListFiltersError {
-        ListFiltersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFiltersError {
-    fn from(err: HttpDispatchError) -> ListFiltersError {
-        ListFiltersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFiltersError {
-    fn from(err: io::Error) -> ListFiltersError {
-        ListFiltersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFiltersError {
@@ -4623,11 +3607,6 @@ impl Error for ListFiltersError {
         match *self {
             ListFiltersError::BadRequest(ref cause) => cause,
             ListFiltersError::InternalServerError(ref cause) => cause,
-            ListFiltersError::Validation(ref cause) => cause,
-            ListFiltersError::Credentials(ref err) => err.description(),
-            ListFiltersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFiltersError::ParseError(ref cause) => cause,
-            ListFiltersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4638,22 +3617,12 @@ pub enum ListFindingsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFindingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFindingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4678,39 +3647,20 @@ impl ListFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListFindingsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListFindingsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListFindingsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListFindingsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListFindingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFindingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFindingsError {
-    fn from(err: serde_json::error::Error) -> ListFindingsError {
-        ListFindingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFindingsError {
-    fn from(err: CredentialsError) -> ListFindingsError {
-        ListFindingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFindingsError {
-    fn from(err: HttpDispatchError) -> ListFindingsError {
-        ListFindingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFindingsError {
-    fn from(err: io::Error) -> ListFindingsError {
-        ListFindingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFindingsError {
@@ -4723,11 +3673,6 @@ impl Error for ListFindingsError {
         match *self {
             ListFindingsError::BadRequest(ref cause) => cause,
             ListFindingsError::InternalServerError(ref cause) => cause,
-            ListFindingsError::Validation(ref cause) => cause,
-            ListFindingsError::Credentials(ref err) => err.description(),
-            ListFindingsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFindingsError::ParseError(ref cause) => cause,
-            ListFindingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4738,22 +3683,12 @@ pub enum ListIPSetsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIPSetsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListIPSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIPSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4778,39 +3713,20 @@ impl ListIPSetsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListIPSetsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListIPSetsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListIPSetsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListIPSetsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListIPSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIPSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIPSetsError {
-    fn from(err: serde_json::error::Error) -> ListIPSetsError {
-        ListIPSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIPSetsError {
-    fn from(err: CredentialsError) -> ListIPSetsError {
-        ListIPSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIPSetsError {
-    fn from(err: HttpDispatchError) -> ListIPSetsError {
-        ListIPSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIPSetsError {
-    fn from(err: io::Error) -> ListIPSetsError {
-        ListIPSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIPSetsError {
@@ -4823,11 +3739,6 @@ impl Error for ListIPSetsError {
         match *self {
             ListIPSetsError::BadRequest(ref cause) => cause,
             ListIPSetsError::InternalServerError(ref cause) => cause,
-            ListIPSetsError::Validation(ref cause) => cause,
-            ListIPSetsError::Credentials(ref err) => err.description(),
-            ListIPSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIPSetsError::ParseError(ref cause) => cause,
-            ListIPSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4838,22 +3749,12 @@ pub enum ListInvitationsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListInvitationsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListInvitationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListInvitationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4878,39 +3779,20 @@ impl ListInvitationsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListInvitationsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListInvitationsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListInvitationsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListInvitationsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListInvitationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListInvitationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListInvitationsError {
-    fn from(err: serde_json::error::Error) -> ListInvitationsError {
-        ListInvitationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListInvitationsError {
-    fn from(err: CredentialsError) -> ListInvitationsError {
-        ListInvitationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListInvitationsError {
-    fn from(err: HttpDispatchError) -> ListInvitationsError {
-        ListInvitationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListInvitationsError {
-    fn from(err: io::Error) -> ListInvitationsError {
-        ListInvitationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListInvitationsError {
@@ -4923,11 +3805,6 @@ impl Error for ListInvitationsError {
         match *self {
             ListInvitationsError::BadRequest(ref cause) => cause,
             ListInvitationsError::InternalServerError(ref cause) => cause,
-            ListInvitationsError::Validation(ref cause) => cause,
-            ListInvitationsError::Credentials(ref err) => err.description(),
-            ListInvitationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListInvitationsError::ParseError(ref cause) => cause,
-            ListInvitationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4938,22 +3815,12 @@ pub enum ListMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4978,39 +3845,20 @@ impl ListMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListMembersError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListMembersError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListMembersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListMembersError {
-    fn from(err: serde_json::error::Error) -> ListMembersError {
-        ListMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListMembersError {
-    fn from(err: CredentialsError) -> ListMembersError {
-        ListMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMembersError {
-    fn from(err: HttpDispatchError) -> ListMembersError {
-        ListMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMembersError {
-    fn from(err: io::Error) -> ListMembersError {
-        ListMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListMembersError {
@@ -5023,11 +3871,6 @@ impl Error for ListMembersError {
         match *self {
             ListMembersError::BadRequest(ref cause) => cause,
             ListMembersError::InternalServerError(ref cause) => cause,
-            ListMembersError::Validation(ref cause) => cause,
-            ListMembersError::Credentials(ref err) => err.description(),
-            ListMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListMembersError::ParseError(ref cause) => cause,
-            ListMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5038,22 +3881,12 @@ pub enum ListThreatIntelSetsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListThreatIntelSetsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListThreatIntelSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListThreatIntelSetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5078,41 +3911,20 @@ impl ListThreatIntelSetsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListThreatIntelSetsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListThreatIntelSetsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListThreatIntelSetsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListThreatIntelSetsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListThreatIntelSetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListThreatIntelSetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListThreatIntelSetsError {
-    fn from(err: serde_json::error::Error) -> ListThreatIntelSetsError {
-        ListThreatIntelSetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListThreatIntelSetsError {
-    fn from(err: CredentialsError) -> ListThreatIntelSetsError {
-        ListThreatIntelSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListThreatIntelSetsError {
-    fn from(err: HttpDispatchError) -> ListThreatIntelSetsError {
-        ListThreatIntelSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListThreatIntelSetsError {
-    fn from(err: io::Error) -> ListThreatIntelSetsError {
-        ListThreatIntelSetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListThreatIntelSetsError {
@@ -5125,13 +3937,6 @@ impl Error for ListThreatIntelSetsError {
         match *self {
             ListThreatIntelSetsError::BadRequest(ref cause) => cause,
             ListThreatIntelSetsError::InternalServerError(ref cause) => cause,
-            ListThreatIntelSetsError::Validation(ref cause) => cause,
-            ListThreatIntelSetsError::Credentials(ref err) => err.description(),
-            ListThreatIntelSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListThreatIntelSetsError::ParseError(ref cause) => cause,
-            ListThreatIntelSetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5142,22 +3947,12 @@ pub enum StartMonitoringMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartMonitoringMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> StartMonitoringMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMonitoringMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5182,41 +3977,20 @@ impl StartMonitoringMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StartMonitoringMembersError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return StartMonitoringMembersError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StartMonitoringMembersError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartMonitoringMembersError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(StartMonitoringMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartMonitoringMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartMonitoringMembersError {
-    fn from(err: serde_json::error::Error) -> StartMonitoringMembersError {
-        StartMonitoringMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartMonitoringMembersError {
-    fn from(err: CredentialsError) -> StartMonitoringMembersError {
-        StartMonitoringMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartMonitoringMembersError {
-    fn from(err: HttpDispatchError) -> StartMonitoringMembersError {
-        StartMonitoringMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartMonitoringMembersError {
-    fn from(err: io::Error) -> StartMonitoringMembersError {
-        StartMonitoringMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartMonitoringMembersError {
@@ -5229,13 +4003,6 @@ impl Error for StartMonitoringMembersError {
         match *self {
             StartMonitoringMembersError::BadRequest(ref cause) => cause,
             StartMonitoringMembersError::InternalServerError(ref cause) => cause,
-            StartMonitoringMembersError::Validation(ref cause) => cause,
-            StartMonitoringMembersError::Credentials(ref err) => err.description(),
-            StartMonitoringMembersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartMonitoringMembersError::ParseError(ref cause) => cause,
-            StartMonitoringMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5246,22 +4013,12 @@ pub enum StopMonitoringMembersError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopMonitoringMembersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> StopMonitoringMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMonitoringMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5286,41 +4043,20 @@ impl StopMonitoringMembersError {
 
             match error_type {
                 "BadRequestException" => {
-                    return StopMonitoringMembersError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return StopMonitoringMembersError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(StopMonitoringMembersError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StopMonitoringMembersError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(StopMonitoringMembersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopMonitoringMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopMonitoringMembersError {
-    fn from(err: serde_json::error::Error) -> StopMonitoringMembersError {
-        StopMonitoringMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopMonitoringMembersError {
-    fn from(err: CredentialsError) -> StopMonitoringMembersError {
-        StopMonitoringMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopMonitoringMembersError {
-    fn from(err: HttpDispatchError) -> StopMonitoringMembersError {
-        StopMonitoringMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopMonitoringMembersError {
-    fn from(err: io::Error) -> StopMonitoringMembersError {
-        StopMonitoringMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopMonitoringMembersError {
@@ -5333,13 +4069,6 @@ impl Error for StopMonitoringMembersError {
         match *self {
             StopMonitoringMembersError::BadRequest(ref cause) => cause,
             StopMonitoringMembersError::InternalServerError(ref cause) => cause,
-            StopMonitoringMembersError::Validation(ref cause) => cause,
-            StopMonitoringMembersError::Credentials(ref err) => err.description(),
-            StopMonitoringMembersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopMonitoringMembersError::ParseError(ref cause) => cause,
-            StopMonitoringMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5350,22 +4079,12 @@ pub enum UnarchiveFindingsError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UnarchiveFindingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UnarchiveFindingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnarchiveFindingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5390,39 +4109,20 @@ impl UnarchiveFindingsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UnarchiveFindingsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UnarchiveFindingsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UnarchiveFindingsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UnarchiveFindingsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UnarchiveFindingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UnarchiveFindingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UnarchiveFindingsError {
-    fn from(err: serde_json::error::Error) -> UnarchiveFindingsError {
-        UnarchiveFindingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UnarchiveFindingsError {
-    fn from(err: CredentialsError) -> UnarchiveFindingsError {
-        UnarchiveFindingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UnarchiveFindingsError {
-    fn from(err: HttpDispatchError) -> UnarchiveFindingsError {
-        UnarchiveFindingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UnarchiveFindingsError {
-    fn from(err: io::Error) -> UnarchiveFindingsError {
-        UnarchiveFindingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UnarchiveFindingsError {
@@ -5435,13 +4135,6 @@ impl Error for UnarchiveFindingsError {
         match *self {
             UnarchiveFindingsError::BadRequest(ref cause) => cause,
             UnarchiveFindingsError::InternalServerError(ref cause) => cause,
-            UnarchiveFindingsError::Validation(ref cause) => cause,
-            UnarchiveFindingsError::Credentials(ref err) => err.description(),
-            UnarchiveFindingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UnarchiveFindingsError::ParseError(ref cause) => cause,
-            UnarchiveFindingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5452,22 +4145,12 @@ pub enum UpdateDetectorError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDetectorError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDetectorError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDetectorError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5492,39 +4175,20 @@ impl UpdateDetectorError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateDetectorError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateDetectorError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateDetectorError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateDetectorError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDetectorError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDetectorError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDetectorError {
-    fn from(err: serde_json::error::Error) -> UpdateDetectorError {
-        UpdateDetectorError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDetectorError {
-    fn from(err: CredentialsError) -> UpdateDetectorError {
-        UpdateDetectorError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDetectorError {
-    fn from(err: HttpDispatchError) -> UpdateDetectorError {
-        UpdateDetectorError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDetectorError {
-    fn from(err: io::Error) -> UpdateDetectorError {
-        UpdateDetectorError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDetectorError {
@@ -5537,11 +4201,6 @@ impl Error for UpdateDetectorError {
         match *self {
             UpdateDetectorError::BadRequest(ref cause) => cause,
             UpdateDetectorError::InternalServerError(ref cause) => cause,
-            UpdateDetectorError::Validation(ref cause) => cause,
-            UpdateDetectorError::Credentials(ref err) => err.description(),
-            UpdateDetectorError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDetectorError::ParseError(ref cause) => cause,
-            UpdateDetectorError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5552,22 +4211,12 @@ pub enum UpdateFilterError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFilterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5592,39 +4241,20 @@ impl UpdateFilterError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateFilterError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateFilterError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateFilterError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateFilterError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFilterError {
-    fn from(err: serde_json::error::Error) -> UpdateFilterError {
-        UpdateFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFilterError {
-    fn from(err: CredentialsError) -> UpdateFilterError {
-        UpdateFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFilterError {
-    fn from(err: HttpDispatchError) -> UpdateFilterError {
-        UpdateFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFilterError {
-    fn from(err: io::Error) -> UpdateFilterError {
-        UpdateFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFilterError {
@@ -5637,11 +4267,6 @@ impl Error for UpdateFilterError {
         match *self {
             UpdateFilterError::BadRequest(ref cause) => cause,
             UpdateFilterError::InternalServerError(ref cause) => cause,
-            UpdateFilterError::Validation(ref cause) => cause,
-            UpdateFilterError::Credentials(ref err) => err.description(),
-            UpdateFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFilterError::ParseError(ref cause) => cause,
-            UpdateFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5652,22 +4277,12 @@ pub enum UpdateFindingsFeedbackError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFindingsFeedbackError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFindingsFeedbackError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFindingsFeedbackError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5692,41 +4307,20 @@ impl UpdateFindingsFeedbackError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateFindingsFeedbackError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return UpdateFindingsFeedbackError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFindingsFeedbackError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateFindingsFeedbackError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateFindingsFeedbackError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFindingsFeedbackError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFindingsFeedbackError {
-    fn from(err: serde_json::error::Error) -> UpdateFindingsFeedbackError {
-        UpdateFindingsFeedbackError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFindingsFeedbackError {
-    fn from(err: CredentialsError) -> UpdateFindingsFeedbackError {
-        UpdateFindingsFeedbackError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFindingsFeedbackError {
-    fn from(err: HttpDispatchError) -> UpdateFindingsFeedbackError {
-        UpdateFindingsFeedbackError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFindingsFeedbackError {
-    fn from(err: io::Error) -> UpdateFindingsFeedbackError {
-        UpdateFindingsFeedbackError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFindingsFeedbackError {
@@ -5739,13 +4333,6 @@ impl Error for UpdateFindingsFeedbackError {
         match *self {
             UpdateFindingsFeedbackError::BadRequest(ref cause) => cause,
             UpdateFindingsFeedbackError::InternalServerError(ref cause) => cause,
-            UpdateFindingsFeedbackError::Validation(ref cause) => cause,
-            UpdateFindingsFeedbackError::Credentials(ref err) => err.description(),
-            UpdateFindingsFeedbackError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateFindingsFeedbackError::ParseError(ref cause) => cause,
-            UpdateFindingsFeedbackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5756,22 +4343,12 @@ pub enum UpdateIPSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateIPSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateIPSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateIPSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5796,39 +4373,20 @@ impl UpdateIPSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateIPSetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateIPSetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateIPSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateIPSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateIPSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateIPSetError {
-    fn from(err: serde_json::error::Error) -> UpdateIPSetError {
-        UpdateIPSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateIPSetError {
-    fn from(err: CredentialsError) -> UpdateIPSetError {
-        UpdateIPSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateIPSetError {
-    fn from(err: HttpDispatchError) -> UpdateIPSetError {
-        UpdateIPSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateIPSetError {
-    fn from(err: io::Error) -> UpdateIPSetError {
-        UpdateIPSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateIPSetError {
@@ -5841,11 +4399,6 @@ impl Error for UpdateIPSetError {
         match *self {
             UpdateIPSetError::BadRequest(ref cause) => cause,
             UpdateIPSetError::InternalServerError(ref cause) => cause,
-            UpdateIPSetError::Validation(ref cause) => cause,
-            UpdateIPSetError::Credentials(ref err) => err.description(),
-            UpdateIPSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateIPSetError::ParseError(ref cause) => cause,
-            UpdateIPSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5856,22 +4409,12 @@ pub enum UpdateThreatIntelSetError {
     BadRequest(String),
     /// <p>Error response object.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateThreatIntelSetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateThreatIntelSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateThreatIntelSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5896,41 +4439,20 @@ impl UpdateThreatIntelSetError {
 
             match error_type {
                 "BadRequestException" => {
-                    return UpdateThreatIntelSetError::BadRequest(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return UpdateThreatIntelSetError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateThreatIntelSetError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateThreatIntelSetError::Validation(error_message.to_string());
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateThreatIntelSetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateThreatIntelSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateThreatIntelSetError {
-    fn from(err: serde_json::error::Error) -> UpdateThreatIntelSetError {
-        UpdateThreatIntelSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateThreatIntelSetError {
-    fn from(err: CredentialsError) -> UpdateThreatIntelSetError {
-        UpdateThreatIntelSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateThreatIntelSetError {
-    fn from(err: HttpDispatchError) -> UpdateThreatIntelSetError {
-        UpdateThreatIntelSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateThreatIntelSetError {
-    fn from(err: io::Error) -> UpdateThreatIntelSetError {
-        UpdateThreatIntelSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateThreatIntelSetError {
@@ -5943,13 +4465,6 @@ impl Error for UpdateThreatIntelSetError {
         match *self {
             UpdateThreatIntelSetError::BadRequest(ref cause) => cause,
             UpdateThreatIntelSetError::InternalServerError(ref cause) => cause,
-            UpdateThreatIntelSetError::Validation(ref cause) => cause,
-            UpdateThreatIntelSetError::Credentials(ref err) => err.description(),
-            UpdateThreatIntelSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateThreatIntelSetError::ParseError(ref cause) => cause,
-            UpdateThreatIntelSetError::Unknown(_) => "unknown error",
         }
     }
 }

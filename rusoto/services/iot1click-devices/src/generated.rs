@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -340,22 +337,12 @@ pub enum ClaimDevicesByClaimCodeError {
     InternalFailure(String),
 
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ClaimDevicesByClaimCodeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ClaimDevicesByClaimCodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClaimDevicesByClaimCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -380,44 +367,25 @@ impl ClaimDevicesByClaimCodeError {
 
             match error_type {
                 "ForbiddenException" => {
-                    return ClaimDevicesByClaimCodeError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ClaimDevicesByClaimCodeError::Forbidden(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return ClaimDevicesByClaimCodeError::InternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(ClaimDevicesByClaimCodeError::InternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ClaimDevicesByClaimCodeError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ClaimDevicesByClaimCodeError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ClaimDevicesByClaimCodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ClaimDevicesByClaimCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ClaimDevicesByClaimCodeError {
-    fn from(err: serde_json::error::Error) -> ClaimDevicesByClaimCodeError {
-        ClaimDevicesByClaimCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ClaimDevicesByClaimCodeError {
-    fn from(err: CredentialsError) -> ClaimDevicesByClaimCodeError {
-        ClaimDevicesByClaimCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ClaimDevicesByClaimCodeError {
-    fn from(err: HttpDispatchError) -> ClaimDevicesByClaimCodeError {
-        ClaimDevicesByClaimCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ClaimDevicesByClaimCodeError {
-    fn from(err: io::Error) -> ClaimDevicesByClaimCodeError {
-        ClaimDevicesByClaimCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ClaimDevicesByClaimCodeError {
@@ -431,13 +399,6 @@ impl Error for ClaimDevicesByClaimCodeError {
             ClaimDevicesByClaimCodeError::Forbidden(ref cause) => cause,
             ClaimDevicesByClaimCodeError::InternalFailure(ref cause) => cause,
             ClaimDevicesByClaimCodeError::InvalidRequest(ref cause) => cause,
-            ClaimDevicesByClaimCodeError::Validation(ref cause) => cause,
-            ClaimDevicesByClaimCodeError::Credentials(ref err) => err.description(),
-            ClaimDevicesByClaimCodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ClaimDevicesByClaimCodeError::ParseError(ref cause) => cause,
-            ClaimDevicesByClaimCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -449,22 +410,12 @@ pub enum DescribeDeviceError {
     InvalidRequest(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDeviceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -489,42 +440,25 @@ impl DescribeDeviceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DescribeDeviceError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DescribeDeviceError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DescribeDeviceError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeDeviceError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeDeviceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDeviceError {
-    fn from(err: serde_json::error::Error) -> DescribeDeviceError {
-        DescribeDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDeviceError {
-    fn from(err: CredentialsError) -> DescribeDeviceError {
-        DescribeDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDeviceError {
-    fn from(err: HttpDispatchError) -> DescribeDeviceError {
-        DescribeDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDeviceError {
-    fn from(err: io::Error) -> DescribeDeviceError {
-        DescribeDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDeviceError {
@@ -538,11 +472,6 @@ impl Error for DescribeDeviceError {
             DescribeDeviceError::InternalFailure(ref cause) => cause,
             DescribeDeviceError::InvalidRequest(ref cause) => cause,
             DescribeDeviceError::ResourceNotFound(ref cause) => cause,
-            DescribeDeviceError::Validation(ref cause) => cause,
-            DescribeDeviceError::Credentials(ref err) => err.description(),
-            DescribeDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeDeviceError::ParseError(ref cause) => cause,
-            DescribeDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -558,22 +487,12 @@ pub enum FinalizeDeviceClaimError {
     ResourceConflict(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl FinalizeDeviceClaimError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> FinalizeDeviceClaimError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FinalizeDeviceClaimError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -598,48 +517,35 @@ impl FinalizeDeviceClaimError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return FinalizeDeviceClaimError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(FinalizeDeviceClaimError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return FinalizeDeviceClaimError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(FinalizeDeviceClaimError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return FinalizeDeviceClaimError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(FinalizeDeviceClaimError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return FinalizeDeviceClaimError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(FinalizeDeviceClaimError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return FinalizeDeviceClaimError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(FinalizeDeviceClaimError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return FinalizeDeviceClaimError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return FinalizeDeviceClaimError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for FinalizeDeviceClaimError {
-    fn from(err: serde_json::error::Error) -> FinalizeDeviceClaimError {
-        FinalizeDeviceClaimError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for FinalizeDeviceClaimError {
-    fn from(err: CredentialsError) -> FinalizeDeviceClaimError {
-        FinalizeDeviceClaimError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for FinalizeDeviceClaimError {
-    fn from(err: HttpDispatchError) -> FinalizeDeviceClaimError {
-        FinalizeDeviceClaimError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for FinalizeDeviceClaimError {
-    fn from(err: io::Error) -> FinalizeDeviceClaimError {
-        FinalizeDeviceClaimError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for FinalizeDeviceClaimError {
@@ -655,13 +561,6 @@ impl Error for FinalizeDeviceClaimError {
             FinalizeDeviceClaimError::PreconditionFailed(ref cause) => cause,
             FinalizeDeviceClaimError::ResourceConflict(ref cause) => cause,
             FinalizeDeviceClaimError::ResourceNotFound(ref cause) => cause,
-            FinalizeDeviceClaimError::Validation(ref cause) => cause,
-            FinalizeDeviceClaimError::Credentials(ref err) => err.description(),
-            FinalizeDeviceClaimError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            FinalizeDeviceClaimError::ParseError(ref cause) => cause,
-            FinalizeDeviceClaimError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -673,22 +572,12 @@ pub enum GetDeviceMethodsError {
     InvalidRequest(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDeviceMethodsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDeviceMethodsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDeviceMethodsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -713,42 +602,25 @@ impl GetDeviceMethodsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return GetDeviceMethodsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetDeviceMethodsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return GetDeviceMethodsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetDeviceMethodsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetDeviceMethodsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDeviceMethodsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDeviceMethodsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDeviceMethodsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDeviceMethodsError {
-    fn from(err: serde_json::error::Error) -> GetDeviceMethodsError {
-        GetDeviceMethodsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDeviceMethodsError {
-    fn from(err: CredentialsError) -> GetDeviceMethodsError {
-        GetDeviceMethodsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDeviceMethodsError {
-    fn from(err: HttpDispatchError) -> GetDeviceMethodsError {
-        GetDeviceMethodsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDeviceMethodsError {
-    fn from(err: io::Error) -> GetDeviceMethodsError {
-        GetDeviceMethodsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDeviceMethodsError {
@@ -762,11 +634,6 @@ impl Error for GetDeviceMethodsError {
             GetDeviceMethodsError::InternalFailure(ref cause) => cause,
             GetDeviceMethodsError::InvalidRequest(ref cause) => cause,
             GetDeviceMethodsError::ResourceNotFound(ref cause) => cause,
-            GetDeviceMethodsError::Validation(ref cause) => cause,
-            GetDeviceMethodsError::Credentials(ref err) => err.description(),
-            GetDeviceMethodsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDeviceMethodsError::ParseError(ref cause) => cause,
-            GetDeviceMethodsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -780,22 +647,12 @@ pub enum InitiateDeviceClaimError {
     ResourceConflict(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateDeviceClaimError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateDeviceClaimError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitiateDeviceClaimError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -820,45 +677,30 @@ impl InitiateDeviceClaimError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return InitiateDeviceClaimError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(InitiateDeviceClaimError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return InitiateDeviceClaimError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(InitiateDeviceClaimError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return InitiateDeviceClaimError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(InitiateDeviceClaimError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return InitiateDeviceClaimError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InitiateDeviceClaimError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return InitiateDeviceClaimError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateDeviceClaimError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateDeviceClaimError {
-    fn from(err: serde_json::error::Error) -> InitiateDeviceClaimError {
-        InitiateDeviceClaimError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateDeviceClaimError {
-    fn from(err: CredentialsError) -> InitiateDeviceClaimError {
-        InitiateDeviceClaimError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateDeviceClaimError {
-    fn from(err: HttpDispatchError) -> InitiateDeviceClaimError {
-        InitiateDeviceClaimError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateDeviceClaimError {
-    fn from(err: io::Error) -> InitiateDeviceClaimError {
-        InitiateDeviceClaimError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateDeviceClaimError {
@@ -873,13 +715,6 @@ impl Error for InitiateDeviceClaimError {
             InitiateDeviceClaimError::InvalidRequest(ref cause) => cause,
             InitiateDeviceClaimError::ResourceConflict(ref cause) => cause,
             InitiateDeviceClaimError::ResourceNotFound(ref cause) => cause,
-            InitiateDeviceClaimError::Validation(ref cause) => cause,
-            InitiateDeviceClaimError::Credentials(ref err) => err.description(),
-            InitiateDeviceClaimError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitiateDeviceClaimError::ParseError(ref cause) => cause,
-            InitiateDeviceClaimError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -897,22 +732,12 @@ pub enum InvokeDeviceMethodError {
     ResourceConflict(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InvokeDeviceMethodError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InvokeDeviceMethodError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeDeviceMethodError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -937,51 +762,40 @@ impl InvokeDeviceMethodError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return InvokeDeviceMethodError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return InvokeDeviceMethodError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return InvokeDeviceMethodError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "RangeNotSatisfiableException" => {
-                    return InvokeDeviceMethodError::RangeNotSatisfiable(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::RangeNotSatisfiable(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return InvokeDeviceMethodError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeDeviceMethodError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InvokeDeviceMethodError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return InvokeDeviceMethodError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InvokeDeviceMethodError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InvokeDeviceMethodError {
-    fn from(err: serde_json::error::Error) -> InvokeDeviceMethodError {
-        InvokeDeviceMethodError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InvokeDeviceMethodError {
-    fn from(err: CredentialsError) -> InvokeDeviceMethodError {
-        InvokeDeviceMethodError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InvokeDeviceMethodError {
-    fn from(err: HttpDispatchError) -> InvokeDeviceMethodError {
-        InvokeDeviceMethodError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InvokeDeviceMethodError {
-    fn from(err: io::Error) -> InvokeDeviceMethodError {
-        InvokeDeviceMethodError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InvokeDeviceMethodError {
@@ -998,13 +812,6 @@ impl Error for InvokeDeviceMethodError {
             InvokeDeviceMethodError::RangeNotSatisfiable(ref cause) => cause,
             InvokeDeviceMethodError::ResourceConflict(ref cause) => cause,
             InvokeDeviceMethodError::ResourceNotFound(ref cause) => cause,
-            InvokeDeviceMethodError::Validation(ref cause) => cause,
-            InvokeDeviceMethodError::Credentials(ref err) => err.description(),
-            InvokeDeviceMethodError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InvokeDeviceMethodError::ParseError(ref cause) => cause,
-            InvokeDeviceMethodError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1018,22 +825,12 @@ pub enum ListDeviceEventsError {
     RangeNotSatisfiable(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeviceEventsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeviceEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDeviceEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1058,45 +855,30 @@ impl ListDeviceEventsError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDeviceEventsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListDeviceEventsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListDeviceEventsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListDeviceEventsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "RangeNotSatisfiableException" => {
-                    return ListDeviceEventsError::RangeNotSatisfiable(String::from(error_message));
+                    return RusotoError::Service(ListDeviceEventsError::RangeNotSatisfiable(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListDeviceEventsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListDeviceEventsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDeviceEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDeviceEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDeviceEventsError {
-    fn from(err: serde_json::error::Error) -> ListDeviceEventsError {
-        ListDeviceEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDeviceEventsError {
-    fn from(err: CredentialsError) -> ListDeviceEventsError {
-        ListDeviceEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeviceEventsError {
-    fn from(err: HttpDispatchError) -> ListDeviceEventsError {
-        ListDeviceEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeviceEventsError {
-    fn from(err: io::Error) -> ListDeviceEventsError {
-        ListDeviceEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDeviceEventsError {
@@ -1111,11 +893,6 @@ impl Error for ListDeviceEventsError {
             ListDeviceEventsError::InvalidRequest(ref cause) => cause,
             ListDeviceEventsError::RangeNotSatisfiable(ref cause) => cause,
             ListDeviceEventsError::ResourceNotFound(ref cause) => cause,
-            ListDeviceEventsError::Validation(ref cause) => cause,
-            ListDeviceEventsError::Credentials(ref err) => err.description(),
-            ListDeviceEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDeviceEventsError::ParseError(ref cause) => cause,
-            ListDeviceEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1127,22 +904,12 @@ pub enum ListDevicesError {
     InvalidRequest(String),
 
     RangeNotSatisfiable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevicesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListDevicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1167,42 +934,25 @@ impl ListDevicesError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return ListDevicesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return ListDevicesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "RangeNotSatisfiableException" => {
-                    return ListDevicesError::RangeNotSatisfiable(String::from(error_message));
+                    return RusotoError::Service(ListDevicesError::RangeNotSatisfiable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDevicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDevicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDevicesError {
-    fn from(err: serde_json::error::Error) -> ListDevicesError {
-        ListDevicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDevicesError {
-    fn from(err: CredentialsError) -> ListDevicesError {
-        ListDevicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDevicesError {
-    fn from(err: HttpDispatchError) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDevicesError {
-    fn from(err: io::Error) -> ListDevicesError {
-        ListDevicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDevicesError {
@@ -1216,11 +966,6 @@ impl Error for ListDevicesError {
             ListDevicesError::InternalFailure(ref cause) => cause,
             ListDevicesError::InvalidRequest(ref cause) => cause,
             ListDevicesError::RangeNotSatisfiable(ref cause) => cause,
-            ListDevicesError::Validation(ref cause) => cause,
-            ListDevicesError::Credentials(ref err) => err.description(),
-            ListDevicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDevicesError::ParseError(ref cause) => cause,
-            ListDevicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1232,22 +977,12 @@ pub enum UnclaimDeviceError {
     InvalidRequest(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UnclaimDeviceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UnclaimDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnclaimDeviceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1272,42 +1007,25 @@ impl UnclaimDeviceError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UnclaimDeviceError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UnclaimDeviceError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return UnclaimDeviceError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UnclaimDeviceError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UnclaimDeviceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UnclaimDeviceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UnclaimDeviceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UnclaimDeviceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UnclaimDeviceError {
-    fn from(err: serde_json::error::Error) -> UnclaimDeviceError {
-        UnclaimDeviceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UnclaimDeviceError {
-    fn from(err: CredentialsError) -> UnclaimDeviceError {
-        UnclaimDeviceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UnclaimDeviceError {
-    fn from(err: HttpDispatchError) -> UnclaimDeviceError {
-        UnclaimDeviceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UnclaimDeviceError {
-    fn from(err: io::Error) -> UnclaimDeviceError {
-        UnclaimDeviceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UnclaimDeviceError {
@@ -1321,11 +1039,6 @@ impl Error for UnclaimDeviceError {
             UnclaimDeviceError::InternalFailure(ref cause) => cause,
             UnclaimDeviceError::InvalidRequest(ref cause) => cause,
             UnclaimDeviceError::ResourceNotFound(ref cause) => cause,
-            UnclaimDeviceError::Validation(ref cause) => cause,
-            UnclaimDeviceError::Credentials(ref err) => err.description(),
-            UnclaimDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UnclaimDeviceError::ParseError(ref cause) => cause,
-            UnclaimDeviceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1337,22 +1050,12 @@ pub enum UpdateDeviceStateError {
     InvalidRequest(String),
 
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDeviceStateError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDeviceStateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDeviceStateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1377,42 +1080,25 @@ impl UpdateDeviceStateError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return UpdateDeviceStateError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStateError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateDeviceStateError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStateError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateDeviceStateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDeviceStateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDeviceStateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDeviceStateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDeviceStateError {
-    fn from(err: serde_json::error::Error) -> UpdateDeviceStateError {
-        UpdateDeviceStateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDeviceStateError {
-    fn from(err: CredentialsError) -> UpdateDeviceStateError {
-        UpdateDeviceStateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDeviceStateError {
-    fn from(err: HttpDispatchError) -> UpdateDeviceStateError {
-        UpdateDeviceStateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDeviceStateError {
-    fn from(err: io::Error) -> UpdateDeviceStateError {
-        UpdateDeviceStateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDeviceStateError {
@@ -1426,13 +1112,6 @@ impl Error for UpdateDeviceStateError {
             UpdateDeviceStateError::InternalFailure(ref cause) => cause,
             UpdateDeviceStateError::InvalidRequest(ref cause) => cause,
             UpdateDeviceStateError::ResourceNotFound(ref cause) => cause,
-            UpdateDeviceStateError::Validation(ref cause) => cause,
-            UpdateDeviceStateError::Credentials(ref err) => err.description(),
-            UpdateDeviceStateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDeviceStateError::ParseError(ref cause) => cause,
-            UpdateDeviceStateError::Unknown(_) => "unknown error",
         }
     }
 }

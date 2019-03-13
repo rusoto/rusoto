@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -712,20 +709,10 @@ pub enum ActivatePipelineError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ActivatePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> ActivatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -738,45 +725,30 @@ impl ActivatePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ActivatePipelineError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(ActivatePipelineError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ActivatePipelineError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ActivatePipelineError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return ActivatePipelineError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(ActivatePipelineError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return ActivatePipelineError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(ActivatePipelineError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ActivatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ActivatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ActivatePipelineError {
-    fn from(err: serde_json::error::Error) -> ActivatePipelineError {
-        ActivatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ActivatePipelineError {
-    fn from(err: CredentialsError) -> ActivatePipelineError {
-        ActivatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ActivatePipelineError {
-    fn from(err: HttpDispatchError) -> ActivatePipelineError {
-        ActivatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ActivatePipelineError {
-    fn from(err: io::Error) -> ActivatePipelineError {
-        ActivatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ActivatePipelineError {
@@ -791,11 +763,6 @@ impl Error for ActivatePipelineError {
             ActivatePipelineError::InvalidRequest(ref cause) => cause,
             ActivatePipelineError::PipelineDeleted(ref cause) => cause,
             ActivatePipelineError::PipelineNotFound(ref cause) => cause,
-            ActivatePipelineError::Validation(ref cause) => cause,
-            ActivatePipelineError::Credentials(ref err) => err.description(),
-            ActivatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ActivatePipelineError::ParseError(ref cause) => cause,
-            ActivatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -810,20 +777,10 @@ pub enum AddTagsError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -836,43 +793,30 @@ impl AddTagsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return AddTagsError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(AddTagsError::InternalServiceError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return AddTagsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(AddTagsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return AddTagsError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(AddTagsError::PipelineDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return AddTagsError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(AddTagsError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return AddTagsError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsError {
-    fn from(err: serde_json::error::Error) -> AddTagsError {
-        AddTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsError {
-    fn from(err: CredentialsError) -> AddTagsError {
-        AddTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsError {
-    fn from(err: HttpDispatchError) -> AddTagsError {
-        AddTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsError {
-    fn from(err: io::Error) -> AddTagsError {
-        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsError {
@@ -887,11 +831,6 @@ impl Error for AddTagsError {
             AddTagsError::InvalidRequest(ref cause) => cause,
             AddTagsError::PipelineDeleted(ref cause) => cause,
             AddTagsError::PipelineNotFound(ref cause) => cause,
-            AddTagsError::Validation(ref cause) => cause,
-            AddTagsError::Credentials(ref err) => err.description(),
-            AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsError::ParseError(ref cause) => cause,
-            AddTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -902,20 +841,10 @@ pub enum CreatePipelineError {
     InternalServiceError(String),
     /// <p>The request was not valid. Verify that your request was properly formatted, that the signature was generated with the correct credentials, and that you haven't exceeded any of the service limits for your account.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -928,39 +857,20 @@ impl CreatePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return CreatePipelineError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreatePipelineError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePipelineError {
-    fn from(err: serde_json::error::Error) -> CreatePipelineError {
-        CreatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePipelineError {
-    fn from(err: CredentialsError) -> CreatePipelineError {
-        CreatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePipelineError {
-    fn from(err: HttpDispatchError) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePipelineError {
-    fn from(err: io::Error) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -973,11 +883,6 @@ impl Error for CreatePipelineError {
         match *self {
             CreatePipelineError::InternalServiceError(ref cause) => cause,
             CreatePipelineError::InvalidRequest(ref cause) => cause,
-            CreatePipelineError::Validation(ref cause) => cause,
-            CreatePipelineError::Credentials(ref err) => err.description(),
-            CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePipelineError::ParseError(ref cause) => cause,
-            CreatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -992,20 +897,10 @@ pub enum DeactivatePipelineError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeactivatePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeactivatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1018,47 +913,30 @@ impl DeactivatePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DeactivatePipelineError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeactivatePipelineError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DeactivatePipelineError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeactivatePipelineError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return DeactivatePipelineError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(DeactivatePipelineError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return DeactivatePipelineError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(DeactivatePipelineError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeactivatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeactivatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeactivatePipelineError {
-    fn from(err: serde_json::error::Error) -> DeactivatePipelineError {
-        DeactivatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeactivatePipelineError {
-    fn from(err: CredentialsError) -> DeactivatePipelineError {
-        DeactivatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeactivatePipelineError {
-    fn from(err: HttpDispatchError) -> DeactivatePipelineError {
-        DeactivatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeactivatePipelineError {
-    fn from(err: io::Error) -> DeactivatePipelineError {
-        DeactivatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeactivatePipelineError {
@@ -1073,13 +951,6 @@ impl Error for DeactivatePipelineError {
             DeactivatePipelineError::InvalidRequest(ref cause) => cause,
             DeactivatePipelineError::PipelineDeleted(ref cause) => cause,
             DeactivatePipelineError::PipelineNotFound(ref cause) => cause,
-            DeactivatePipelineError::Validation(ref cause) => cause,
-            DeactivatePipelineError::Credentials(ref err) => err.description(),
-            DeactivatePipelineError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeactivatePipelineError::ParseError(ref cause) => cause,
-            DeactivatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1092,20 +963,10 @@ pub enum DeletePipelineError {
     InvalidRequest(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1118,42 +979,25 @@ impl DeletePipelineError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DeletePipelineError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeletePipelineError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return DeletePipelineError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePipelineError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePipelineError {
-    fn from(err: serde_json::error::Error) -> DeletePipelineError {
-        DeletePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePipelineError {
-    fn from(err: CredentialsError) -> DeletePipelineError {
-        DeletePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePipelineError {
-    fn from(err: HttpDispatchError) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePipelineError {
-    fn from(err: io::Error) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -1167,11 +1011,6 @@ impl Error for DeletePipelineError {
             DeletePipelineError::InternalServiceError(ref cause) => cause,
             DeletePipelineError::InvalidRequest(ref cause) => cause,
             DeletePipelineError::PipelineNotFound(ref cause) => cause,
-            DeletePipelineError::Validation(ref cause) => cause,
-            DeletePipelineError::Credentials(ref err) => err.description(),
-            DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePipelineError::ParseError(ref cause) => cause,
-            DeletePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1186,20 +1025,10 @@ pub enum DescribeObjectsError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeObjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeObjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeObjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1212,45 +1041,30 @@ impl DescribeObjectsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribeObjectsError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(DescribeObjectsError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeObjectsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeObjectsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return DescribeObjectsError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(DescribeObjectsError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return DescribeObjectsError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeObjectsError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeObjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeObjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeObjectsError {
-    fn from(err: serde_json::error::Error) -> DescribeObjectsError {
-        DescribeObjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeObjectsError {
-    fn from(err: CredentialsError) -> DescribeObjectsError {
-        DescribeObjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeObjectsError {
-    fn from(err: HttpDispatchError) -> DescribeObjectsError {
-        DescribeObjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeObjectsError {
-    fn from(err: io::Error) -> DescribeObjectsError {
-        DescribeObjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeObjectsError {
@@ -1265,11 +1079,6 @@ impl Error for DescribeObjectsError {
             DescribeObjectsError::InvalidRequest(ref cause) => cause,
             DescribeObjectsError::PipelineDeleted(ref cause) => cause,
             DescribeObjectsError::PipelineNotFound(ref cause) => cause,
-            DescribeObjectsError::Validation(ref cause) => cause,
-            DescribeObjectsError::Credentials(ref err) => err.description(),
-            DescribeObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeObjectsError::ParseError(ref cause) => cause,
-            DescribeObjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1284,20 +1093,10 @@ pub enum DescribePipelinesError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePipelinesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePipelinesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePipelinesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1310,45 +1109,30 @@ impl DescribePipelinesError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return DescribePipelinesError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(DescribePipelinesError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DescribePipelinesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribePipelinesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return DescribePipelinesError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(DescribePipelinesError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return DescribePipelinesError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribePipelinesError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribePipelinesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribePipelinesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribePipelinesError {
-    fn from(err: serde_json::error::Error) -> DescribePipelinesError {
-        DescribePipelinesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribePipelinesError {
-    fn from(err: CredentialsError) -> DescribePipelinesError {
-        DescribePipelinesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePipelinesError {
-    fn from(err: HttpDispatchError) -> DescribePipelinesError {
-        DescribePipelinesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePipelinesError {
-    fn from(err: io::Error) -> DescribePipelinesError {
-        DescribePipelinesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribePipelinesError {
@@ -1363,13 +1147,6 @@ impl Error for DescribePipelinesError {
             DescribePipelinesError::InvalidRequest(ref cause) => cause,
             DescribePipelinesError::PipelineDeleted(ref cause) => cause,
             DescribePipelinesError::PipelineNotFound(ref cause) => cause,
-            DescribePipelinesError::Validation(ref cause) => cause,
-            DescribePipelinesError::Credentials(ref err) => err.description(),
-            DescribePipelinesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePipelinesError::ParseError(ref cause) => cause,
-            DescribePipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1386,20 +1163,10 @@ pub enum EvaluateExpressionError {
     PipelineNotFound(String),
     /// <p>The specified task was not found. </p>
     TaskNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EvaluateExpressionError {
-    pub fn from_response(res: BufferedHttpResponse) -> EvaluateExpressionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EvaluateExpressionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1412,50 +1179,35 @@ impl EvaluateExpressionError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return EvaluateExpressionError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(EvaluateExpressionError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return EvaluateExpressionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(EvaluateExpressionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return EvaluateExpressionError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(EvaluateExpressionError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return EvaluateExpressionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(EvaluateExpressionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TaskNotFoundException" => {
-                    return EvaluateExpressionError::TaskNotFound(String::from(error_message));
+                    return RusotoError::Service(EvaluateExpressionError::TaskNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EvaluateExpressionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EvaluateExpressionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EvaluateExpressionError {
-    fn from(err: serde_json::error::Error) -> EvaluateExpressionError {
-        EvaluateExpressionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EvaluateExpressionError {
-    fn from(err: CredentialsError) -> EvaluateExpressionError {
-        EvaluateExpressionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EvaluateExpressionError {
-    fn from(err: HttpDispatchError) -> EvaluateExpressionError {
-        EvaluateExpressionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EvaluateExpressionError {
-    fn from(err: io::Error) -> EvaluateExpressionError {
-        EvaluateExpressionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EvaluateExpressionError {
@@ -1471,13 +1223,6 @@ impl Error for EvaluateExpressionError {
             EvaluateExpressionError::PipelineDeleted(ref cause) => cause,
             EvaluateExpressionError::PipelineNotFound(ref cause) => cause,
             EvaluateExpressionError::TaskNotFound(ref cause) => cause,
-            EvaluateExpressionError::Validation(ref cause) => cause,
-            EvaluateExpressionError::Credentials(ref err) => err.description(),
-            EvaluateExpressionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EvaluateExpressionError::ParseError(ref cause) => cause,
-            EvaluateExpressionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1492,20 +1237,10 @@ pub enum GetPipelineDefinitionError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1518,47 +1253,30 @@ impl GetPipelineDefinitionError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return GetPipelineDefinitionError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPipelineDefinitionError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return GetPipelineDefinitionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(GetPipelineDefinitionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return GetPipelineDefinitionError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(GetPipelineDefinitionError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return GetPipelineDefinitionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPipelineDefinitionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPipelineDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPipelineDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPipelineDefinitionError {
-    fn from(err: serde_json::error::Error) -> GetPipelineDefinitionError {
-        GetPipelineDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPipelineDefinitionError {
-    fn from(err: CredentialsError) -> GetPipelineDefinitionError {
-        GetPipelineDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPipelineDefinitionError {
-    fn from(err: HttpDispatchError) -> GetPipelineDefinitionError {
-        GetPipelineDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPipelineDefinitionError {
-    fn from(err: io::Error) -> GetPipelineDefinitionError {
-        GetPipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPipelineDefinitionError {
@@ -1573,13 +1291,6 @@ impl Error for GetPipelineDefinitionError {
             GetPipelineDefinitionError::InvalidRequest(ref cause) => cause,
             GetPipelineDefinitionError::PipelineDeleted(ref cause) => cause,
             GetPipelineDefinitionError::PipelineNotFound(ref cause) => cause,
-            GetPipelineDefinitionError::Validation(ref cause) => cause,
-            GetPipelineDefinitionError::Credentials(ref err) => err.description(),
-            GetPipelineDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPipelineDefinitionError::ParseError(ref cause) => cause,
-            GetPipelineDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1590,20 +1301,10 @@ pub enum ListPipelinesError {
     InternalServiceError(String),
     /// <p>The request was not valid. Verify that your request was properly formatted, that the signature was generated with the correct credentials, and that you haven't exceeded any of the service limits for your account.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelinesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPipelinesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1616,39 +1317,20 @@ impl ListPipelinesError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ListPipelinesError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListPipelinesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPipelinesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPipelinesError {
-    fn from(err: serde_json::error::Error) -> ListPipelinesError {
-        ListPipelinesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPipelinesError {
-    fn from(err: CredentialsError) -> ListPipelinesError {
-        ListPipelinesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPipelinesError {
-    fn from(err: HttpDispatchError) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPipelinesError {
-    fn from(err: io::Error) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -1661,11 +1343,6 @@ impl Error for ListPipelinesError {
         match *self {
             ListPipelinesError::InternalServiceError(ref cause) => cause,
             ListPipelinesError::InvalidRequest(ref cause) => cause,
-            ListPipelinesError::Validation(ref cause) => cause,
-            ListPipelinesError::Credentials(ref err) => err.description(),
-            ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPipelinesError::ParseError(ref cause) => cause,
-            ListPipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1678,20 +1355,10 @@ pub enum PollForTaskError {
     InvalidRequest(String),
     /// <p>The specified task was not found. </p>
     TaskNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PollForTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> PollForTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1704,42 +1371,25 @@ impl PollForTaskError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return PollForTaskError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(PollForTaskError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return PollForTaskError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PollForTaskError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "TaskNotFoundException" => {
-                    return PollForTaskError::TaskNotFound(String::from(error_message));
+                    return RusotoError::Service(PollForTaskError::TaskNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PollForTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PollForTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PollForTaskError {
-    fn from(err: serde_json::error::Error) -> PollForTaskError {
-        PollForTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PollForTaskError {
-    fn from(err: CredentialsError) -> PollForTaskError {
-        PollForTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PollForTaskError {
-    fn from(err: HttpDispatchError) -> PollForTaskError {
-        PollForTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PollForTaskError {
-    fn from(err: io::Error) -> PollForTaskError {
-        PollForTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PollForTaskError {
@@ -1753,11 +1403,6 @@ impl Error for PollForTaskError {
             PollForTaskError::InternalServiceError(ref cause) => cause,
             PollForTaskError::InvalidRequest(ref cause) => cause,
             PollForTaskError::TaskNotFound(ref cause) => cause,
-            PollForTaskError::Validation(ref cause) => cause,
-            PollForTaskError::Credentials(ref err) => err.description(),
-            PollForTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PollForTaskError::ParseError(ref cause) => cause,
-            PollForTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1772,20 +1417,10 @@ pub enum PutPipelineDefinitionError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutPipelineDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutPipelineDefinitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutPipelineDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1798,47 +1433,30 @@ impl PutPipelineDefinitionError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return PutPipelineDefinitionError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(PutPipelineDefinitionError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return PutPipelineDefinitionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(PutPipelineDefinitionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return PutPipelineDefinitionError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(PutPipelineDefinitionError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return PutPipelineDefinitionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(PutPipelineDefinitionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutPipelineDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutPipelineDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutPipelineDefinitionError {
-    fn from(err: serde_json::error::Error) -> PutPipelineDefinitionError {
-        PutPipelineDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutPipelineDefinitionError {
-    fn from(err: CredentialsError) -> PutPipelineDefinitionError {
-        PutPipelineDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutPipelineDefinitionError {
-    fn from(err: HttpDispatchError) -> PutPipelineDefinitionError {
-        PutPipelineDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutPipelineDefinitionError {
-    fn from(err: io::Error) -> PutPipelineDefinitionError {
-        PutPipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutPipelineDefinitionError {
@@ -1853,13 +1471,6 @@ impl Error for PutPipelineDefinitionError {
             PutPipelineDefinitionError::InvalidRequest(ref cause) => cause,
             PutPipelineDefinitionError::PipelineDeleted(ref cause) => cause,
             PutPipelineDefinitionError::PipelineNotFound(ref cause) => cause,
-            PutPipelineDefinitionError::Validation(ref cause) => cause,
-            PutPipelineDefinitionError::Credentials(ref err) => err.description(),
-            PutPipelineDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutPipelineDefinitionError::ParseError(ref cause) => cause,
-            PutPipelineDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1874,20 +1485,10 @@ pub enum QueryObjectsError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl QueryObjectsError {
-    pub fn from_response(res: BufferedHttpResponse) -> QueryObjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryObjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1900,45 +1501,30 @@ impl QueryObjectsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return QueryObjectsError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(QueryObjectsError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return QueryObjectsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(QueryObjectsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return QueryObjectsError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(QueryObjectsError::PipelineDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return QueryObjectsError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(QueryObjectsError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return QueryObjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return QueryObjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for QueryObjectsError {
-    fn from(err: serde_json::error::Error) -> QueryObjectsError {
-        QueryObjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for QueryObjectsError {
-    fn from(err: CredentialsError) -> QueryObjectsError {
-        QueryObjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for QueryObjectsError {
-    fn from(err: HttpDispatchError) -> QueryObjectsError {
-        QueryObjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for QueryObjectsError {
-    fn from(err: io::Error) -> QueryObjectsError {
-        QueryObjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for QueryObjectsError {
@@ -1953,11 +1539,6 @@ impl Error for QueryObjectsError {
             QueryObjectsError::InvalidRequest(ref cause) => cause,
             QueryObjectsError::PipelineDeleted(ref cause) => cause,
             QueryObjectsError::PipelineNotFound(ref cause) => cause,
-            QueryObjectsError::Validation(ref cause) => cause,
-            QueryObjectsError::Credentials(ref err) => err.description(),
-            QueryObjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            QueryObjectsError::ParseError(ref cause) => cause,
-            QueryObjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1972,20 +1553,10 @@ pub enum RemoveTagsError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1998,45 +1569,30 @@ impl RemoveTagsError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return RemoveTagsError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return RemoveTagsError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return RemoveTagsError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsError::PipelineDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return RemoveTagsError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(RemoveTagsError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RemoveTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsError {
-        RemoveTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsError {
-    fn from(err: CredentialsError) -> RemoveTagsError {
-        RemoveTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsError {
-    fn from(err: HttpDispatchError) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsError {
-    fn from(err: io::Error) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -2051,11 +1607,6 @@ impl Error for RemoveTagsError {
             RemoveTagsError::InvalidRequest(ref cause) => cause,
             RemoveTagsError::PipelineDeleted(ref cause) => cause,
             RemoveTagsError::PipelineNotFound(ref cause) => cause,
-            RemoveTagsError::Validation(ref cause) => cause,
-            RemoveTagsError::Credentials(ref err) => err.description(),
-            RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemoveTagsError::ParseError(ref cause) => cause,
-            RemoveTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2072,20 +1623,10 @@ pub enum ReportTaskProgressError {
     PipelineNotFound(String),
     /// <p>The specified task was not found. </p>
     TaskNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReportTaskProgressError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReportTaskProgressError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskProgressError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2098,50 +1639,35 @@ impl ReportTaskProgressError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ReportTaskProgressError::InternalServiceError(String::from(
-                        error_message,
+                    return RusotoError::Service(ReportTaskProgressError::InternalServiceError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ReportTaskProgressError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ReportTaskProgressError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineDeletedException" => {
-                    return ReportTaskProgressError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(ReportTaskProgressError::PipelineDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return ReportTaskProgressError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(ReportTaskProgressError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TaskNotFoundException" => {
-                    return ReportTaskProgressError::TaskNotFound(String::from(error_message));
+                    return RusotoError::Service(ReportTaskProgressError::TaskNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ReportTaskProgressError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReportTaskProgressError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReportTaskProgressError {
-    fn from(err: serde_json::error::Error) -> ReportTaskProgressError {
-        ReportTaskProgressError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReportTaskProgressError {
-    fn from(err: CredentialsError) -> ReportTaskProgressError {
-        ReportTaskProgressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReportTaskProgressError {
-    fn from(err: HttpDispatchError) -> ReportTaskProgressError {
-        ReportTaskProgressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReportTaskProgressError {
-    fn from(err: io::Error) -> ReportTaskProgressError {
-        ReportTaskProgressError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReportTaskProgressError {
@@ -2157,13 +1683,6 @@ impl Error for ReportTaskProgressError {
             ReportTaskProgressError::PipelineDeleted(ref cause) => cause,
             ReportTaskProgressError::PipelineNotFound(ref cause) => cause,
             ReportTaskProgressError::TaskNotFound(ref cause) => cause,
-            ReportTaskProgressError::Validation(ref cause) => cause,
-            ReportTaskProgressError::Credentials(ref err) => err.description(),
-            ReportTaskProgressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ReportTaskProgressError::ParseError(ref cause) => cause,
-            ReportTaskProgressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2174,20 +1693,10 @@ pub enum ReportTaskRunnerHeartbeatError {
     InternalServiceError(String),
     /// <p>The request was not valid. Verify that your request was properly formatted, that the signature was generated with the correct credentials, and that you haven't exceeded any of the service limits for your account.</p>
     InvalidRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReportTaskRunnerHeartbeatError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReportTaskRunnerHeartbeatError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReportTaskRunnerHeartbeatError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2200,43 +1709,22 @@ impl ReportTaskRunnerHeartbeatError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ReportTaskRunnerHeartbeatError::InternalServiceError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRequestException" => {
-                    return ReportTaskRunnerHeartbeatError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ReportTaskRunnerHeartbeatError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ReportTaskRunnerHeartbeatError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ReportTaskRunnerHeartbeatError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ReportTaskRunnerHeartbeatError {
-    fn from(err: serde_json::error::Error) -> ReportTaskRunnerHeartbeatError {
-        ReportTaskRunnerHeartbeatError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ReportTaskRunnerHeartbeatError {
-    fn from(err: CredentialsError) -> ReportTaskRunnerHeartbeatError {
-        ReportTaskRunnerHeartbeatError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReportTaskRunnerHeartbeatError {
-    fn from(err: HttpDispatchError) -> ReportTaskRunnerHeartbeatError {
-        ReportTaskRunnerHeartbeatError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReportTaskRunnerHeartbeatError {
-    fn from(err: io::Error) -> ReportTaskRunnerHeartbeatError {
-        ReportTaskRunnerHeartbeatError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ReportTaskRunnerHeartbeatError {
@@ -2249,13 +1737,6 @@ impl Error for ReportTaskRunnerHeartbeatError {
         match *self {
             ReportTaskRunnerHeartbeatError::InternalServiceError(ref cause) => cause,
             ReportTaskRunnerHeartbeatError::InvalidRequest(ref cause) => cause,
-            ReportTaskRunnerHeartbeatError::Validation(ref cause) => cause,
-            ReportTaskRunnerHeartbeatError::Credentials(ref err) => err.description(),
-            ReportTaskRunnerHeartbeatError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ReportTaskRunnerHeartbeatError::ParseError(ref cause) => cause,
-            ReportTaskRunnerHeartbeatError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2270,20 +1751,10 @@ pub enum SetStatusError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2296,45 +1767,30 @@ impl SetStatusError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return SetStatusError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(SetStatusError::InternalServiceError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return SetStatusError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(SetStatusError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return SetStatusError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(SetStatusError::PipelineDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return SetStatusError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(SetStatusError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SetStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetStatusError {
-    fn from(err: serde_json::error::Error) -> SetStatusError {
-        SetStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetStatusError {
-    fn from(err: CredentialsError) -> SetStatusError {
-        SetStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetStatusError {
-    fn from(err: HttpDispatchError) -> SetStatusError {
-        SetStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetStatusError {
-    fn from(err: io::Error) -> SetStatusError {
-        SetStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetStatusError {
@@ -2349,11 +1805,6 @@ impl Error for SetStatusError {
             SetStatusError::InvalidRequest(ref cause) => cause,
             SetStatusError::PipelineDeleted(ref cause) => cause,
             SetStatusError::PipelineNotFound(ref cause) => cause,
-            SetStatusError::Validation(ref cause) => cause,
-            SetStatusError::Credentials(ref err) => err.description(),
-            SetStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetStatusError::ParseError(ref cause) => cause,
-            SetStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2370,20 +1821,10 @@ pub enum SetTaskStatusError {
     PipelineNotFound(String),
     /// <p>The specified task was not found. </p>
     TaskNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetTaskStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetTaskStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetTaskStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2396,48 +1837,35 @@ impl SetTaskStatusError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return SetTaskStatusError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(SetTaskStatusError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return SetTaskStatusError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(SetTaskStatusError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineDeletedException" => {
-                    return SetTaskStatusError::PipelineDeleted(String::from(error_message));
+                    return RusotoError::Service(SetTaskStatusError::PipelineDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return SetTaskStatusError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(SetTaskStatusError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TaskNotFoundException" => {
-                    return SetTaskStatusError::TaskNotFound(String::from(error_message));
+                    return RusotoError::Service(SetTaskStatusError::TaskNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return SetTaskStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SetTaskStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SetTaskStatusError {
-    fn from(err: serde_json::error::Error) -> SetTaskStatusError {
-        SetTaskStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SetTaskStatusError {
-    fn from(err: CredentialsError) -> SetTaskStatusError {
-        SetTaskStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetTaskStatusError {
-    fn from(err: HttpDispatchError) -> SetTaskStatusError {
-        SetTaskStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetTaskStatusError {
-    fn from(err: io::Error) -> SetTaskStatusError {
-        SetTaskStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SetTaskStatusError {
@@ -2453,11 +1881,6 @@ impl Error for SetTaskStatusError {
             SetTaskStatusError::PipelineDeleted(ref cause) => cause,
             SetTaskStatusError::PipelineNotFound(ref cause) => cause,
             SetTaskStatusError::TaskNotFound(ref cause) => cause,
-            SetTaskStatusError::Validation(ref cause) => cause,
-            SetTaskStatusError::Credentials(ref err) => err.description(),
-            SetTaskStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetTaskStatusError::ParseError(ref cause) => cause,
-            SetTaskStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2472,20 +1895,12 @@ pub enum ValidatePipelineDefinitionError {
     PipelineDeleted(String),
     /// <p>The specified pipeline was not found. Verify that you used the correct user and account identifiers.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ValidatePipelineDefinitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> ValidatePipelineDefinitionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ValidatePipelineDefinitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2498,53 +1913,32 @@ impl ValidatePipelineDefinitionError {
 
             match *error_type {
                 "InternalServiceError" => {
-                    return ValidatePipelineDefinitionError::InternalServiceError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ValidatePipelineDefinitionError::InternalServiceError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRequestException" => {
-                    return ValidatePipelineDefinitionError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ValidatePipelineDefinitionError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "PipelineDeletedException" => {
-                    return ValidatePipelineDefinitionError::PipelineDeleted(String::from(
-                        error_message,
+                    return RusotoError::Service(ValidatePipelineDefinitionError::PipelineDeleted(
+                        String::from(error_message),
                     ));
                 }
                 "PipelineNotFoundException" => {
-                    return ValidatePipelineDefinitionError::PipelineNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ValidatePipelineDefinitionError::PipelineNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ValidatePipelineDefinitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ValidatePipelineDefinitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ValidatePipelineDefinitionError {
-    fn from(err: serde_json::error::Error) -> ValidatePipelineDefinitionError {
-        ValidatePipelineDefinitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ValidatePipelineDefinitionError {
-    fn from(err: CredentialsError) -> ValidatePipelineDefinitionError {
-        ValidatePipelineDefinitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ValidatePipelineDefinitionError {
-    fn from(err: HttpDispatchError) -> ValidatePipelineDefinitionError {
-        ValidatePipelineDefinitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ValidatePipelineDefinitionError {
-    fn from(err: io::Error) -> ValidatePipelineDefinitionError {
-        ValidatePipelineDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ValidatePipelineDefinitionError {
@@ -2559,13 +1953,6 @@ impl Error for ValidatePipelineDefinitionError {
             ValidatePipelineDefinitionError::InvalidRequest(ref cause) => cause,
             ValidatePipelineDefinitionError::PipelineDeleted(ref cause) => cause,
             ValidatePipelineDefinitionError::PipelineNotFound(ref cause) => cause,
-            ValidatePipelineDefinitionError::Validation(ref cause) => cause,
-            ValidatePipelineDefinitionError::Credentials(ref err) => err.description(),
-            ValidatePipelineDefinitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ValidatePipelineDefinitionError::ParseError(ref cause) => cause,
-            ValidatePipelineDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }

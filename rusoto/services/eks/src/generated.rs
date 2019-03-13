@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -355,22 +352,12 @@ pub enum CreateClusterError {
     ServiceUnavailable(String),
     /// <p>At least one of your specified cluster subnets is in an Availability Zone that does not support Amazon EKS. The exception output specifies the supported Availability Zones for your account, from which you can choose subnets for your cluster.</p>
     UnsupportedAvailabilityZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -394,53 +381,46 @@ impl CreateClusterError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return CreateClusterError::Client(String::from(error_message)),
+                "ClientException" => {
+                    return RusotoError::Service(CreateClusterError::Client(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidParameterException" => {
-                    return CreateClusterError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return CreateClusterError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateClusterError::ResourceLimitExceeded(String::from(error_message));
-                }
-                "ServerException" => return CreateClusterError::Server(String::from(error_message)),
-                "ServiceUnavailableException" => {
-                    return CreateClusterError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnsupportedAvailabilityZoneException" => {
-                    return CreateClusterError::UnsupportedAvailabilityZone(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateClusterError::ResourceLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string());
+                "ServerException" => {
+                    return RusotoError::Service(CreateClusterError::Server(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateClusterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnsupportedAvailabilityZoneException" => {
+                    return RusotoError::Service(CreateClusterError::UnsupportedAvailabilityZone(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateClusterError {
-    fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterError {
-    fn from(err: CredentialsError) -> CreateClusterError {
-        CreateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterError {
-    fn from(err: HttpDispatchError) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterError {
-    fn from(err: io::Error) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -458,11 +438,6 @@ impl Error for CreateClusterError {
             CreateClusterError::Server(ref cause) => cause,
             CreateClusterError::ServiceUnavailable(ref cause) => cause,
             CreateClusterError::UnsupportedAvailabilityZone(ref cause) => cause,
-            CreateClusterError::Validation(ref cause) => cause,
-            CreateClusterError::Credentials(ref err) => err.description(),
-            CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::ParseError(ref cause) => cause,
-            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -479,22 +454,12 @@ pub enum DeleteClusterError {
     Server(String),
     /// <p>The service is unavailable. Back off and retry the operation.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -518,45 +483,36 @@ impl DeleteClusterError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return DeleteClusterError::Client(String::from(error_message)),
+                "ClientException" => {
+                    return RusotoError::Service(DeleteClusterError::Client(String::from(
+                        error_message,
+                    )));
+                }
                 "ResourceInUseException" => {
-                    return DeleteClusterError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteClusterError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return DeleteClusterError::Server(String::from(error_message)),
+                "ServerException" => {
+                    return RusotoError::Service(DeleteClusterError::Server(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceUnavailableException" => {
-                    return DeleteClusterError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteClusterError {
-    fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterError {
-    fn from(err: CredentialsError) -> DeleteClusterError {
-        DeleteClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterError {
-    fn from(err: HttpDispatchError) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterError {
-    fn from(err: io::Error) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -572,11 +528,6 @@ impl Error for DeleteClusterError {
             DeleteClusterError::ResourceNotFound(ref cause) => cause,
             DeleteClusterError::Server(ref cause) => cause,
             DeleteClusterError::ServiceUnavailable(ref cause) => cause,
-            DeleteClusterError::Validation(ref cause) => cause,
-            DeleteClusterError::Credentials(ref err) => err.description(),
-            DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::ParseError(ref cause) => cause,
-            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -591,22 +542,12 @@ pub enum DescribeClusterError {
     Server(String),
     /// <p>The service is unavailable. Back off and retry the operation.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -631,45 +572,30 @@ impl DescribeClusterError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeClusterError::Client(String::from(error_message));
+                    return RusotoError::Service(DescribeClusterError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeClusterError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeClusterError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeClusterError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeClusterError::Server(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeClusterError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeClusterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeClusterError {
-    fn from(err: serde_json::error::Error) -> DescribeClusterError {
-        DescribeClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterError {
-    fn from(err: CredentialsError) -> DescribeClusterError {
-        DescribeClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterError {
-    fn from(err: HttpDispatchError) -> DescribeClusterError {
-        DescribeClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterError {
-    fn from(err: io::Error) -> DescribeClusterError {
-        DescribeClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeClusterError {
@@ -684,11 +610,6 @@ impl Error for DescribeClusterError {
             DescribeClusterError::ResourceNotFound(ref cause) => cause,
             DescribeClusterError::Server(ref cause) => cause,
             DescribeClusterError::ServiceUnavailable(ref cause) => cause,
-            DescribeClusterError::Validation(ref cause) => cause,
-            DescribeClusterError::Credentials(ref err) => err.description(),
-            DescribeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClusterError::ParseError(ref cause) => cause,
-            DescribeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -703,22 +624,12 @@ pub enum DescribeUpdateError {
     ResourceNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUpdateError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUpdateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUpdateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -743,45 +654,30 @@ impl DescribeUpdateError {
 
             match error_type {
                 "ClientException" => {
-                    return DescribeUpdateError::Client(String::from(error_message));
+                    return RusotoError::Service(DescribeUpdateError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUpdateError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeUpdateError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeUpdateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUpdateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return DescribeUpdateError::Server(String::from(error_message));
+                    return RusotoError::Service(DescribeUpdateError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeUpdateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUpdateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUpdateError {
-    fn from(err: serde_json::error::Error) -> DescribeUpdateError {
-        DescribeUpdateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUpdateError {
-    fn from(err: CredentialsError) -> DescribeUpdateError {
-        DescribeUpdateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUpdateError {
-    fn from(err: HttpDispatchError) -> DescribeUpdateError {
-        DescribeUpdateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUpdateError {
-    fn from(err: io::Error) -> DescribeUpdateError {
-        DescribeUpdateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUpdateError {
@@ -796,11 +692,6 @@ impl Error for DescribeUpdateError {
             DescribeUpdateError::InvalidParameter(ref cause) => cause,
             DescribeUpdateError::ResourceNotFound(ref cause) => cause,
             DescribeUpdateError::Server(ref cause) => cause,
-            DescribeUpdateError::Validation(ref cause) => cause,
-            DescribeUpdateError::Credentials(ref err) => err.description(),
-            DescribeUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUpdateError::ParseError(ref cause) => cause,
-            DescribeUpdateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -815,22 +706,12 @@ pub enum ListClustersError {
     Server(String),
     /// <p>The service is unavailable. Back off and retry the operation.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListClustersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -854,42 +735,31 @@ impl ListClustersError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return ListClustersError::Client(String::from(error_message)),
+                "ClientException" => {
+                    return RusotoError::Service(ListClustersError::Client(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidParameterException" => {
-                    return ListClustersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListClustersError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return ListClustersError::Server(String::from(error_message)),
+                "ServerException" => {
+                    return RusotoError::Service(ListClustersError::Server(String::from(
+                        error_message,
+                    )));
+                }
                 "ServiceUnavailableException" => {
-                    return ListClustersError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListClustersError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListClustersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListClustersError {
-    fn from(err: serde_json::error::Error) -> ListClustersError {
-        ListClustersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListClustersError {
-    fn from(err: CredentialsError) -> ListClustersError {
-        ListClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListClustersError {
-    fn from(err: HttpDispatchError) -> ListClustersError {
-        ListClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListClustersError {
-    fn from(err: io::Error) -> ListClustersError {
-        ListClustersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListClustersError {
@@ -904,11 +774,6 @@ impl Error for ListClustersError {
             ListClustersError::InvalidParameter(ref cause) => cause,
             ListClustersError::Server(ref cause) => cause,
             ListClustersError::ServiceUnavailable(ref cause) => cause,
-            ListClustersError::Validation(ref cause) => cause,
-            ListClustersError::Credentials(ref err) => err.description(),
-            ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClustersError::ParseError(ref cause) => cause,
-            ListClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -923,22 +788,12 @@ pub enum ListUpdatesError {
     ResourceNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUpdatesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListUpdatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUpdatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -962,42 +817,31 @@ impl ListUpdatesError {
                 .unwrap_or("");
 
             match error_type {
-                "ClientException" => return ListUpdatesError::Client(String::from(error_message)),
+                "ClientException" => {
+                    return RusotoError::Service(ListUpdatesError::Client(String::from(
+                        error_message,
+                    )));
+                }
                 "InvalidParameterException" => {
-                    return ListUpdatesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUpdatesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListUpdatesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUpdatesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServerException" => return ListUpdatesError::Server(String::from(error_message)),
-                "ValidationException" => {
-                    return ListUpdatesError::Validation(error_message.to_string());
+                "ServerException" => {
+                    return RusotoError::Service(ListUpdatesError::Server(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUpdatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUpdatesError {
-    fn from(err: serde_json::error::Error) -> ListUpdatesError {
-        ListUpdatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUpdatesError {
-    fn from(err: CredentialsError) -> ListUpdatesError {
-        ListUpdatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUpdatesError {
-    fn from(err: HttpDispatchError) -> ListUpdatesError {
-        ListUpdatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUpdatesError {
-    fn from(err: io::Error) -> ListUpdatesError {
-        ListUpdatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUpdatesError {
@@ -1012,11 +856,6 @@ impl Error for ListUpdatesError {
             ListUpdatesError::InvalidParameter(ref cause) => cause,
             ListUpdatesError::ResourceNotFound(ref cause) => cause,
             ListUpdatesError::Server(ref cause) => cause,
-            ListUpdatesError::Validation(ref cause) => cause,
-            ListUpdatesError::Credentials(ref err) => err.description(),
-            ListUpdatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUpdatesError::ParseError(ref cause) => cause,
-            ListUpdatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1035,22 +874,12 @@ pub enum UpdateClusterVersionError {
     ResourceNotFound(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClusterVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateClusterVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1075,51 +904,40 @@ impl UpdateClusterVersionError {
 
             match error_type {
                 "ClientException" => {
-                    return UpdateClusterVersionError::Client(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::Client(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UpdateClusterVersionError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return UpdateClusterVersionError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateClusterVersionError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateClusterVersionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServerException" => {
-                    return UpdateClusterVersionError::Server(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterVersionError::Server(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateClusterVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateClusterVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateClusterVersionError {
-    fn from(err: serde_json::error::Error) -> UpdateClusterVersionError {
-        UpdateClusterVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateClusterVersionError {
-    fn from(err: CredentialsError) -> UpdateClusterVersionError {
-        UpdateClusterVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateClusterVersionError {
-    fn from(err: HttpDispatchError) -> UpdateClusterVersionError {
-        UpdateClusterVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateClusterVersionError {
-    fn from(err: io::Error) -> UpdateClusterVersionError {
-        UpdateClusterVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateClusterVersionError {
@@ -1136,13 +954,6 @@ impl Error for UpdateClusterVersionError {
             UpdateClusterVersionError::ResourceInUse(ref cause) => cause,
             UpdateClusterVersionError::ResourceNotFound(ref cause) => cause,
             UpdateClusterVersionError::Server(ref cause) => cause,
-            UpdateClusterVersionError::Validation(ref cause) => cause,
-            UpdateClusterVersionError::Credentials(ref err) => err.description(),
-            UpdateClusterVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateClusterVersionError::ParseError(ref cause) => cause,
-            UpdateClusterVersionError::Unknown(_) => "unknown error",
         }
     }
 }

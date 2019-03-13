@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1544,20 +1541,12 @@ pub enum AcceptQualificationRequestError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcceptQualificationRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> AcceptQualificationRequestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AcceptQualificationRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1570,43 +1559,20 @@ impl AcceptQualificationRequestError {
 
             match *error_type {
                 "RequestError" => {
-                    return AcceptQualificationRequestError::RequestError(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptQualificationRequestError::RequestError(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceFault" => {
-                    return AcceptQualificationRequestError::ServiceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(AcceptQualificationRequestError::ServiceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AcceptQualificationRequestError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AcceptQualificationRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcceptQualificationRequestError {
-    fn from(err: serde_json::error::Error) -> AcceptQualificationRequestError {
-        AcceptQualificationRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcceptQualificationRequestError {
-    fn from(err: CredentialsError) -> AcceptQualificationRequestError {
-        AcceptQualificationRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcceptQualificationRequestError {
-    fn from(err: HttpDispatchError) -> AcceptQualificationRequestError {
-        AcceptQualificationRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcceptQualificationRequestError {
-    fn from(err: io::Error) -> AcceptQualificationRequestError {
-        AcceptQualificationRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcceptQualificationRequestError {
@@ -1619,13 +1585,6 @@ impl Error for AcceptQualificationRequestError {
         match *self {
             AcceptQualificationRequestError::RequestError(ref cause) => cause,
             AcceptQualificationRequestError::ServiceFault(ref cause) => cause,
-            AcceptQualificationRequestError::Validation(ref cause) => cause,
-            AcceptQualificationRequestError::Credentials(ref err) => err.description(),
-            AcceptQualificationRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AcceptQualificationRequestError::ParseError(ref cause) => cause,
-            AcceptQualificationRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1636,20 +1595,10 @@ pub enum ApproveAssignmentError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ApproveAssignmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> ApproveAssignmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApproveAssignmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1662,39 +1611,20 @@ impl ApproveAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return ApproveAssignmentError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ApproveAssignmentError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return ApproveAssignmentError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ApproveAssignmentError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ApproveAssignmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ApproveAssignmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ApproveAssignmentError {
-    fn from(err: serde_json::error::Error) -> ApproveAssignmentError {
-        ApproveAssignmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ApproveAssignmentError {
-    fn from(err: CredentialsError) -> ApproveAssignmentError {
-        ApproveAssignmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ApproveAssignmentError {
-    fn from(err: HttpDispatchError) -> ApproveAssignmentError {
-        ApproveAssignmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ApproveAssignmentError {
-    fn from(err: io::Error) -> ApproveAssignmentError {
-        ApproveAssignmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ApproveAssignmentError {
@@ -1707,13 +1637,6 @@ impl Error for ApproveAssignmentError {
         match *self {
             ApproveAssignmentError::RequestError(ref cause) => cause,
             ApproveAssignmentError::ServiceFault(ref cause) => cause,
-            ApproveAssignmentError::Validation(ref cause) => cause,
-            ApproveAssignmentError::Credentials(ref err) => err.description(),
-            ApproveAssignmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ApproveAssignmentError::ParseError(ref cause) => cause,
-            ApproveAssignmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1724,20 +1647,12 @@ pub enum AssociateQualificationWithWorkerError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateQualificationWithWorkerError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateQualificationWithWorkerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateQualificationWithWorkerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1750,45 +1665,24 @@ impl AssociateQualificationWithWorkerError {
 
             match *error_type {
                 "RequestError" => {
-                    return AssociateQualificationWithWorkerError::RequestError(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceFault" => {
-                    return AssociateQualificationWithWorkerError::ServiceFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return AssociateQualificationWithWorkerError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        AssociateQualificationWithWorkerError::RequestError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(
+                        AssociateQualificationWithWorkerError::ServiceFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateQualificationWithWorkerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateQualificationWithWorkerError {
-    fn from(err: serde_json::error::Error) -> AssociateQualificationWithWorkerError {
-        AssociateQualificationWithWorkerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateQualificationWithWorkerError {
-    fn from(err: CredentialsError) -> AssociateQualificationWithWorkerError {
-        AssociateQualificationWithWorkerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateQualificationWithWorkerError {
-    fn from(err: HttpDispatchError) -> AssociateQualificationWithWorkerError {
-        AssociateQualificationWithWorkerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateQualificationWithWorkerError {
-    fn from(err: io::Error) -> AssociateQualificationWithWorkerError {
-        AssociateQualificationWithWorkerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateQualificationWithWorkerError {
@@ -1801,13 +1695,6 @@ impl Error for AssociateQualificationWithWorkerError {
         match *self {
             AssociateQualificationWithWorkerError::RequestError(ref cause) => cause,
             AssociateQualificationWithWorkerError::ServiceFault(ref cause) => cause,
-            AssociateQualificationWithWorkerError::Validation(ref cause) => cause,
-            AssociateQualificationWithWorkerError::Credentials(ref err) => err.description(),
-            AssociateQualificationWithWorkerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateQualificationWithWorkerError::ParseError(ref cause) => cause,
-            AssociateQualificationWithWorkerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1818,20 +1705,12 @@ pub enum CreateAdditionalAssignmentsForHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAdditionalAssignmentsForHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAdditionalAssignmentsForHITError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateAdditionalAssignmentsForHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1844,45 +1723,24 @@ impl CreateAdditionalAssignmentsForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateAdditionalAssignmentsForHITError::RequestError(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceFault" => {
-                    return CreateAdditionalAssignmentsForHITError::ServiceFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return CreateAdditionalAssignmentsForHITError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        CreateAdditionalAssignmentsForHITError::RequestError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(
+                        CreateAdditionalAssignmentsForHITError::ServiceFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAdditionalAssignmentsForHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAdditionalAssignmentsForHITError {
-    fn from(err: serde_json::error::Error) -> CreateAdditionalAssignmentsForHITError {
-        CreateAdditionalAssignmentsForHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAdditionalAssignmentsForHITError {
-    fn from(err: CredentialsError) -> CreateAdditionalAssignmentsForHITError {
-        CreateAdditionalAssignmentsForHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAdditionalAssignmentsForHITError {
-    fn from(err: HttpDispatchError) -> CreateAdditionalAssignmentsForHITError {
-        CreateAdditionalAssignmentsForHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAdditionalAssignmentsForHITError {
-    fn from(err: io::Error) -> CreateAdditionalAssignmentsForHITError {
-        CreateAdditionalAssignmentsForHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAdditionalAssignmentsForHITError {
@@ -1895,13 +1753,6 @@ impl Error for CreateAdditionalAssignmentsForHITError {
         match *self {
             CreateAdditionalAssignmentsForHITError::RequestError(ref cause) => cause,
             CreateAdditionalAssignmentsForHITError::ServiceFault(ref cause) => cause,
-            CreateAdditionalAssignmentsForHITError::Validation(ref cause) => cause,
-            CreateAdditionalAssignmentsForHITError::Credentials(ref err) => err.description(),
-            CreateAdditionalAssignmentsForHITError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateAdditionalAssignmentsForHITError::ParseError(ref cause) => cause,
-            CreateAdditionalAssignmentsForHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1912,20 +1763,10 @@ pub enum CreateHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1937,36 +1778,21 @@ impl CreateHITError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "RequestError" => return CreateHITError::RequestError(String::from(error_message)),
-                "ServiceFault" => return CreateHITError::ServiceFault(String::from(error_message)),
-                "ValidationException" => {
-                    return CreateHITError::Validation(error_message.to_string());
+                "RequestError" => {
+                    return RusotoError::Service(CreateHITError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(CreateHITError::ServiceFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHITError {
-    fn from(err: serde_json::error::Error) -> CreateHITError {
-        CreateHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHITError {
-    fn from(err: CredentialsError) -> CreateHITError {
-        CreateHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHITError {
-    fn from(err: HttpDispatchError) -> CreateHITError {
-        CreateHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHITError {
-    fn from(err: io::Error) -> CreateHITError {
-        CreateHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHITError {
@@ -1979,11 +1805,6 @@ impl Error for CreateHITError {
         match *self {
             CreateHITError::RequestError(ref cause) => cause,
             CreateHITError::ServiceFault(ref cause) => cause,
-            CreateHITError::Validation(ref cause) => cause,
-            CreateHITError::Credentials(ref err) => err.description(),
-            CreateHITError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHITError::ParseError(ref cause) => cause,
-            CreateHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1994,20 +1815,10 @@ pub enum CreateHITTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHITTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHITTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2020,39 +1831,20 @@ impl CreateHITTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateHITTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(CreateHITTypeError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return CreateHITTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(CreateHITTypeError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateHITTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHITTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHITTypeError {
-    fn from(err: serde_json::error::Error) -> CreateHITTypeError {
-        CreateHITTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHITTypeError {
-    fn from(err: CredentialsError) -> CreateHITTypeError {
-        CreateHITTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHITTypeError {
-    fn from(err: HttpDispatchError) -> CreateHITTypeError {
-        CreateHITTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHITTypeError {
-    fn from(err: io::Error) -> CreateHITTypeError {
-        CreateHITTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHITTypeError {
@@ -2065,11 +1857,6 @@ impl Error for CreateHITTypeError {
         match *self {
             CreateHITTypeError::RequestError(ref cause) => cause,
             CreateHITTypeError::ServiceFault(ref cause) => cause,
-            CreateHITTypeError::Validation(ref cause) => cause,
-            CreateHITTypeError::Credentials(ref err) => err.description(),
-            CreateHITTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHITTypeError::ParseError(ref cause) => cause,
-            CreateHITTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2080,20 +1867,10 @@ pub enum CreateHITWithHITTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHITWithHITTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHITWithHITTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHITWithHITTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2106,39 +1883,20 @@ impl CreateHITWithHITTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateHITWithHITTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(CreateHITWithHITTypeError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return CreateHITWithHITTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(CreateHITWithHITTypeError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateHITWithHITTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHITWithHITTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHITWithHITTypeError {
-    fn from(err: serde_json::error::Error) -> CreateHITWithHITTypeError {
-        CreateHITWithHITTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHITWithHITTypeError {
-    fn from(err: CredentialsError) -> CreateHITWithHITTypeError {
-        CreateHITWithHITTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHITWithHITTypeError {
-    fn from(err: HttpDispatchError) -> CreateHITWithHITTypeError {
-        CreateHITWithHITTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHITWithHITTypeError {
-    fn from(err: io::Error) -> CreateHITWithHITTypeError {
-        CreateHITWithHITTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHITWithHITTypeError {
@@ -2151,13 +1909,6 @@ impl Error for CreateHITWithHITTypeError {
         match *self {
             CreateHITWithHITTypeError::RequestError(ref cause) => cause,
             CreateHITWithHITTypeError::ServiceFault(ref cause) => cause,
-            CreateHITWithHITTypeError::Validation(ref cause) => cause,
-            CreateHITWithHITTypeError::Credentials(ref err) => err.description(),
-            CreateHITWithHITTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateHITWithHITTypeError::ParseError(ref cause) => cause,
-            CreateHITWithHITTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2168,20 +1919,10 @@ pub enum CreateQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateQualificationTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2194,39 +1935,20 @@ impl CreateQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateQualificationTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(CreateQualificationTypeError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return CreateQualificationTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(CreateQualificationTypeError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateQualificationTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> CreateQualificationTypeError {
-        CreateQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateQualificationTypeError {
-    fn from(err: CredentialsError) -> CreateQualificationTypeError {
-        CreateQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateQualificationTypeError {
-    fn from(err: HttpDispatchError) -> CreateQualificationTypeError {
-        CreateQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateQualificationTypeError {
-    fn from(err: io::Error) -> CreateQualificationTypeError {
-        CreateQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateQualificationTypeError {
@@ -2239,13 +1961,6 @@ impl Error for CreateQualificationTypeError {
         match *self {
             CreateQualificationTypeError::RequestError(ref cause) => cause,
             CreateQualificationTypeError::ServiceFault(ref cause) => cause,
-            CreateQualificationTypeError::Validation(ref cause) => cause,
-            CreateQualificationTypeError::Credentials(ref err) => err.description(),
-            CreateQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateQualificationTypeError::ParseError(ref cause) => cause,
-            CreateQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2256,20 +1971,10 @@ pub enum CreateWorkerBlockError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateWorkerBlockError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateWorkerBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkerBlockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2282,39 +1987,20 @@ impl CreateWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return CreateWorkerBlockError::RequestError(String::from(error_message));
+                    return RusotoError::Service(CreateWorkerBlockError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return CreateWorkerBlockError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(CreateWorkerBlockError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateWorkerBlockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateWorkerBlockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateWorkerBlockError {
-    fn from(err: serde_json::error::Error) -> CreateWorkerBlockError {
-        CreateWorkerBlockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateWorkerBlockError {
-    fn from(err: CredentialsError) -> CreateWorkerBlockError {
-        CreateWorkerBlockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateWorkerBlockError {
-    fn from(err: HttpDispatchError) -> CreateWorkerBlockError {
-        CreateWorkerBlockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateWorkerBlockError {
-    fn from(err: io::Error) -> CreateWorkerBlockError {
-        CreateWorkerBlockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateWorkerBlockError {
@@ -2327,13 +2013,6 @@ impl Error for CreateWorkerBlockError {
         match *self {
             CreateWorkerBlockError::RequestError(ref cause) => cause,
             CreateWorkerBlockError::ServiceFault(ref cause) => cause,
-            CreateWorkerBlockError::Validation(ref cause) => cause,
-            CreateWorkerBlockError::Credentials(ref err) => err.description(),
-            CreateWorkerBlockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateWorkerBlockError::ParseError(ref cause) => cause,
-            CreateWorkerBlockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2344,20 +2023,10 @@ pub enum DeleteHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2369,36 +2038,21 @@ impl DeleteHITError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "RequestError" => return DeleteHITError::RequestError(String::from(error_message)),
-                "ServiceFault" => return DeleteHITError::ServiceFault(String::from(error_message)),
-                "ValidationException" => {
-                    return DeleteHITError::Validation(error_message.to_string());
+                "RequestError" => {
+                    return RusotoError::Service(DeleteHITError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(DeleteHITError::ServiceFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteHITError {
-    fn from(err: serde_json::error::Error) -> DeleteHITError {
-        DeleteHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHITError {
-    fn from(err: CredentialsError) -> DeleteHITError {
-        DeleteHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHITError {
-    fn from(err: HttpDispatchError) -> DeleteHITError {
-        DeleteHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHITError {
-    fn from(err: io::Error) -> DeleteHITError {
-        DeleteHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteHITError {
@@ -2411,11 +2065,6 @@ impl Error for DeleteHITError {
         match *self {
             DeleteHITError::RequestError(ref cause) => cause,
             DeleteHITError::ServiceFault(ref cause) => cause,
-            DeleteHITError::Validation(ref cause) => cause,
-            DeleteHITError::Credentials(ref err) => err.description(),
-            DeleteHITError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHITError::ParseError(ref cause) => cause,
-            DeleteHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2426,20 +2075,10 @@ pub enum DeleteQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteQualificationTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2452,39 +2091,20 @@ impl DeleteQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return DeleteQualificationTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(DeleteQualificationTypeError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return DeleteQualificationTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(DeleteQualificationTypeError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteQualificationTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> DeleteQualificationTypeError {
-        DeleteQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteQualificationTypeError {
-    fn from(err: CredentialsError) -> DeleteQualificationTypeError {
-        DeleteQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteQualificationTypeError {
-    fn from(err: HttpDispatchError) -> DeleteQualificationTypeError {
-        DeleteQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteQualificationTypeError {
-    fn from(err: io::Error) -> DeleteQualificationTypeError {
-        DeleteQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteQualificationTypeError {
@@ -2497,13 +2117,6 @@ impl Error for DeleteQualificationTypeError {
         match *self {
             DeleteQualificationTypeError::RequestError(ref cause) => cause,
             DeleteQualificationTypeError::ServiceFault(ref cause) => cause,
-            DeleteQualificationTypeError::Validation(ref cause) => cause,
-            DeleteQualificationTypeError::Credentials(ref err) => err.description(),
-            DeleteQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteQualificationTypeError::ParseError(ref cause) => cause,
-            DeleteQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2514,20 +2127,10 @@ pub enum DeleteWorkerBlockError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteWorkerBlockError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteWorkerBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkerBlockError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2540,39 +2143,20 @@ impl DeleteWorkerBlockError {
 
             match *error_type {
                 "RequestError" => {
-                    return DeleteWorkerBlockError::RequestError(String::from(error_message));
+                    return RusotoError::Service(DeleteWorkerBlockError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return DeleteWorkerBlockError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(DeleteWorkerBlockError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteWorkerBlockError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteWorkerBlockError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteWorkerBlockError {
-    fn from(err: serde_json::error::Error) -> DeleteWorkerBlockError {
-        DeleteWorkerBlockError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteWorkerBlockError {
-    fn from(err: CredentialsError) -> DeleteWorkerBlockError {
-        DeleteWorkerBlockError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteWorkerBlockError {
-    fn from(err: HttpDispatchError) -> DeleteWorkerBlockError {
-        DeleteWorkerBlockError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteWorkerBlockError {
-    fn from(err: io::Error) -> DeleteWorkerBlockError {
-        DeleteWorkerBlockError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteWorkerBlockError {
@@ -2585,13 +2169,6 @@ impl Error for DeleteWorkerBlockError {
         match *self {
             DeleteWorkerBlockError::RequestError(ref cause) => cause,
             DeleteWorkerBlockError::ServiceFault(ref cause) => cause,
-            DeleteWorkerBlockError::Validation(ref cause) => cause,
-            DeleteWorkerBlockError::Credentials(ref err) => err.description(),
-            DeleteWorkerBlockError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteWorkerBlockError::ParseError(ref cause) => cause,
-            DeleteWorkerBlockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2602,20 +2179,12 @@ pub enum DisassociateQualificationFromWorkerError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateQualificationFromWorkerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateQualificationFromWorkerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateQualificationFromWorkerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2628,45 +2197,24 @@ impl DisassociateQualificationFromWorkerError {
 
             match *error_type {
                 "RequestError" => {
-                    return DisassociateQualificationFromWorkerError::RequestError(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceFault" => {
-                    return DisassociateQualificationFromWorkerError::ServiceFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DisassociateQualificationFromWorkerError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DisassociateQualificationFromWorkerError::RequestError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(
+                        DisassociateQualificationFromWorkerError::ServiceFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateQualificationFromWorkerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateQualificationFromWorkerError {
-    fn from(err: serde_json::error::Error) -> DisassociateQualificationFromWorkerError {
-        DisassociateQualificationFromWorkerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateQualificationFromWorkerError {
-    fn from(err: CredentialsError) -> DisassociateQualificationFromWorkerError {
-        DisassociateQualificationFromWorkerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateQualificationFromWorkerError {
-    fn from(err: HttpDispatchError) -> DisassociateQualificationFromWorkerError {
-        DisassociateQualificationFromWorkerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateQualificationFromWorkerError {
-    fn from(err: io::Error) -> DisassociateQualificationFromWorkerError {
-        DisassociateQualificationFromWorkerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateQualificationFromWorkerError {
@@ -2679,13 +2227,6 @@ impl Error for DisassociateQualificationFromWorkerError {
         match *self {
             DisassociateQualificationFromWorkerError::RequestError(ref cause) => cause,
             DisassociateQualificationFromWorkerError::ServiceFault(ref cause) => cause,
-            DisassociateQualificationFromWorkerError::Validation(ref cause) => cause,
-            DisassociateQualificationFromWorkerError::Credentials(ref err) => err.description(),
-            DisassociateQualificationFromWorkerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateQualificationFromWorkerError::ParseError(ref cause) => cause,
-            DisassociateQualificationFromWorkerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2696,20 +2237,10 @@ pub enum GetAccountBalanceError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountBalanceError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountBalanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountBalanceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2722,39 +2253,20 @@ impl GetAccountBalanceError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetAccountBalanceError::RequestError(String::from(error_message));
+                    return RusotoError::Service(GetAccountBalanceError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return GetAccountBalanceError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(GetAccountBalanceError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetAccountBalanceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAccountBalanceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAccountBalanceError {
-    fn from(err: serde_json::error::Error) -> GetAccountBalanceError {
-        GetAccountBalanceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountBalanceError {
-    fn from(err: CredentialsError) -> GetAccountBalanceError {
-        GetAccountBalanceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountBalanceError {
-    fn from(err: HttpDispatchError) -> GetAccountBalanceError {
-        GetAccountBalanceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountBalanceError {
-    fn from(err: io::Error) -> GetAccountBalanceError {
-        GetAccountBalanceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAccountBalanceError {
@@ -2767,13 +2279,6 @@ impl Error for GetAccountBalanceError {
         match *self {
             GetAccountBalanceError::RequestError(ref cause) => cause,
             GetAccountBalanceError::ServiceFault(ref cause) => cause,
-            GetAccountBalanceError::Validation(ref cause) => cause,
-            GetAccountBalanceError::Credentials(ref err) => err.description(),
-            GetAccountBalanceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountBalanceError::ParseError(ref cause) => cause,
-            GetAccountBalanceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2784,20 +2289,10 @@ pub enum GetAssignmentError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAssignmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAssignmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAssignmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2810,39 +2305,20 @@ impl GetAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetAssignmentError::RequestError(String::from(error_message));
+                    return RusotoError::Service(GetAssignmentError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return GetAssignmentError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(GetAssignmentError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetAssignmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAssignmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAssignmentError {
-    fn from(err: serde_json::error::Error) -> GetAssignmentError {
-        GetAssignmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAssignmentError {
-    fn from(err: CredentialsError) -> GetAssignmentError {
-        GetAssignmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAssignmentError {
-    fn from(err: HttpDispatchError) -> GetAssignmentError {
-        GetAssignmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAssignmentError {
-    fn from(err: io::Error) -> GetAssignmentError {
-        GetAssignmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAssignmentError {
@@ -2855,11 +2331,6 @@ impl Error for GetAssignmentError {
         match *self {
             GetAssignmentError::RequestError(ref cause) => cause,
             GetAssignmentError::ServiceFault(ref cause) => cause,
-            GetAssignmentError::Validation(ref cause) => cause,
-            GetAssignmentError::Credentials(ref err) => err.description(),
-            GetAssignmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAssignmentError::ParseError(ref cause) => cause,
-            GetAssignmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2870,20 +2341,10 @@ pub enum GetFileUploadURLError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFileUploadURLError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFileUploadURLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFileUploadURLError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2896,39 +2357,20 @@ impl GetFileUploadURLError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetFileUploadURLError::RequestError(String::from(error_message));
+                    return RusotoError::Service(GetFileUploadURLError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return GetFileUploadURLError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(GetFileUploadURLError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFileUploadURLError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFileUploadURLError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFileUploadURLError {
-    fn from(err: serde_json::error::Error) -> GetFileUploadURLError {
-        GetFileUploadURLError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFileUploadURLError {
-    fn from(err: CredentialsError) -> GetFileUploadURLError {
-        GetFileUploadURLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFileUploadURLError {
-    fn from(err: HttpDispatchError) -> GetFileUploadURLError {
-        GetFileUploadURLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFileUploadURLError {
-    fn from(err: io::Error) -> GetFileUploadURLError {
-        GetFileUploadURLError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFileUploadURLError {
@@ -2941,11 +2383,6 @@ impl Error for GetFileUploadURLError {
         match *self {
             GetFileUploadURLError::RequestError(ref cause) => cause,
             GetFileUploadURLError::ServiceFault(ref cause) => cause,
-            GetFileUploadURLError::Validation(ref cause) => cause,
-            GetFileUploadURLError::Credentials(ref err) => err.description(),
-            GetFileUploadURLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFileUploadURLError::ParseError(ref cause) => cause,
-            GetFileUploadURLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2956,20 +2393,10 @@ pub enum GetHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2981,34 +2408,21 @@ impl GetHITError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "RequestError" => return GetHITError::RequestError(String::from(error_message)),
-                "ServiceFault" => return GetHITError::ServiceFault(String::from(error_message)),
-                "ValidationException" => return GetHITError::Validation(error_message.to_string()),
+                "RequestError" => {
+                    return RusotoError::Service(GetHITError::RequestError(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceFault" => {
+                    return RusotoError::Service(GetHITError::ServiceFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetHITError {
-    fn from(err: serde_json::error::Error) -> GetHITError {
-        GetHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetHITError {
-    fn from(err: CredentialsError) -> GetHITError {
-        GetHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetHITError {
-    fn from(err: HttpDispatchError) -> GetHITError {
-        GetHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetHITError {
-    fn from(err: io::Error) -> GetHITError {
-        GetHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetHITError {
@@ -3021,11 +2435,6 @@ impl Error for GetHITError {
         match *self {
             GetHITError::RequestError(ref cause) => cause,
             GetHITError::ServiceFault(ref cause) => cause,
-            GetHITError::Validation(ref cause) => cause,
-            GetHITError::Credentials(ref err) => err.description(),
-            GetHITError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetHITError::ParseError(ref cause) => cause,
-            GetHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3036,20 +2445,10 @@ pub enum GetQualificationScoreError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQualificationScoreError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQualificationScoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQualificationScoreError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3062,39 +2461,20 @@ impl GetQualificationScoreError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetQualificationScoreError::RequestError(String::from(error_message));
+                    return RusotoError::Service(GetQualificationScoreError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return GetQualificationScoreError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(GetQualificationScoreError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetQualificationScoreError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetQualificationScoreError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetQualificationScoreError {
-    fn from(err: serde_json::error::Error) -> GetQualificationScoreError {
-        GetQualificationScoreError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetQualificationScoreError {
-    fn from(err: CredentialsError) -> GetQualificationScoreError {
-        GetQualificationScoreError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQualificationScoreError {
-    fn from(err: HttpDispatchError) -> GetQualificationScoreError {
-        GetQualificationScoreError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQualificationScoreError {
-    fn from(err: io::Error) -> GetQualificationScoreError {
-        GetQualificationScoreError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetQualificationScoreError {
@@ -3107,13 +2487,6 @@ impl Error for GetQualificationScoreError {
         match *self {
             GetQualificationScoreError::RequestError(ref cause) => cause,
             GetQualificationScoreError::ServiceFault(ref cause) => cause,
-            GetQualificationScoreError::Validation(ref cause) => cause,
-            GetQualificationScoreError::Credentials(ref err) => err.description(),
-            GetQualificationScoreError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetQualificationScoreError::ParseError(ref cause) => cause,
-            GetQualificationScoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3124,20 +2497,10 @@ pub enum GetQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQualificationTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3150,39 +2513,20 @@ impl GetQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return GetQualificationTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(GetQualificationTypeError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return GetQualificationTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(GetQualificationTypeError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetQualificationTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> GetQualificationTypeError {
-        GetQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetQualificationTypeError {
-    fn from(err: CredentialsError) -> GetQualificationTypeError {
-        GetQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQualificationTypeError {
-    fn from(err: HttpDispatchError) -> GetQualificationTypeError {
-        GetQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQualificationTypeError {
-    fn from(err: io::Error) -> GetQualificationTypeError {
-        GetQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetQualificationTypeError {
@@ -3195,13 +2539,6 @@ impl Error for GetQualificationTypeError {
         match *self {
             GetQualificationTypeError::RequestError(ref cause) => cause,
             GetQualificationTypeError::ServiceFault(ref cause) => cause,
-            GetQualificationTypeError::Validation(ref cause) => cause,
-            GetQualificationTypeError::Credentials(ref err) => err.description(),
-            GetQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetQualificationTypeError::ParseError(ref cause) => cause,
-            GetQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3212,20 +2549,10 @@ pub enum ListAssignmentsForHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAssignmentsForHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAssignmentsForHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAssignmentsForHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3238,39 +2565,20 @@ impl ListAssignmentsForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListAssignmentsForHITError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListAssignmentsForHITError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return ListAssignmentsForHITError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListAssignmentsForHITError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListAssignmentsForHITError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAssignmentsForHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAssignmentsForHITError {
-    fn from(err: serde_json::error::Error) -> ListAssignmentsForHITError {
-        ListAssignmentsForHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAssignmentsForHITError {
-    fn from(err: CredentialsError) -> ListAssignmentsForHITError {
-        ListAssignmentsForHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAssignmentsForHITError {
-    fn from(err: HttpDispatchError) -> ListAssignmentsForHITError {
-        ListAssignmentsForHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAssignmentsForHITError {
-    fn from(err: io::Error) -> ListAssignmentsForHITError {
-        ListAssignmentsForHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAssignmentsForHITError {
@@ -3283,13 +2591,6 @@ impl Error for ListAssignmentsForHITError {
         match *self {
             ListAssignmentsForHITError::RequestError(ref cause) => cause,
             ListAssignmentsForHITError::ServiceFault(ref cause) => cause,
-            ListAssignmentsForHITError::Validation(ref cause) => cause,
-            ListAssignmentsForHITError::Credentials(ref err) => err.description(),
-            ListAssignmentsForHITError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAssignmentsForHITError::ParseError(ref cause) => cause,
-            ListAssignmentsForHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3300,20 +2601,10 @@ pub enum ListBonusPaymentsError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBonusPaymentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBonusPaymentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBonusPaymentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3326,39 +2617,20 @@ impl ListBonusPaymentsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListBonusPaymentsError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListBonusPaymentsError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return ListBonusPaymentsError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListBonusPaymentsError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListBonusPaymentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBonusPaymentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBonusPaymentsError {
-    fn from(err: serde_json::error::Error) -> ListBonusPaymentsError {
-        ListBonusPaymentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBonusPaymentsError {
-    fn from(err: CredentialsError) -> ListBonusPaymentsError {
-        ListBonusPaymentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBonusPaymentsError {
-    fn from(err: HttpDispatchError) -> ListBonusPaymentsError {
-        ListBonusPaymentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBonusPaymentsError {
-    fn from(err: io::Error) -> ListBonusPaymentsError {
-        ListBonusPaymentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBonusPaymentsError {
@@ -3371,13 +2643,6 @@ impl Error for ListBonusPaymentsError {
         match *self {
             ListBonusPaymentsError::RequestError(ref cause) => cause,
             ListBonusPaymentsError::ServiceFault(ref cause) => cause,
-            ListBonusPaymentsError::Validation(ref cause) => cause,
-            ListBonusPaymentsError::Credentials(ref err) => err.description(),
-            ListBonusPaymentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListBonusPaymentsError::ParseError(ref cause) => cause,
-            ListBonusPaymentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3388,20 +2653,10 @@ pub enum ListHITsError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHITsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHITsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListHITsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3413,36 +2668,21 @@ impl ListHITsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "RequestError" => return ListHITsError::RequestError(String::from(error_message)),
-                "ServiceFault" => return ListHITsError::ServiceFault(String::from(error_message)),
-                "ValidationException" => {
-                    return ListHITsError::Validation(error_message.to_string());
+                "RequestError" => {
+                    return RusotoError::Service(ListHITsError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(ListHITsError::ServiceFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHITsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHITsError {
-    fn from(err: serde_json::error::Error) -> ListHITsError {
-        ListHITsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHITsError {
-    fn from(err: CredentialsError) -> ListHITsError {
-        ListHITsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHITsError {
-    fn from(err: HttpDispatchError) -> ListHITsError {
-        ListHITsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHITsError {
-    fn from(err: io::Error) -> ListHITsError {
-        ListHITsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHITsError {
@@ -3455,11 +2695,6 @@ impl Error for ListHITsError {
         match *self {
             ListHITsError::RequestError(ref cause) => cause,
             ListHITsError::ServiceFault(ref cause) => cause,
-            ListHITsError::Validation(ref cause) => cause,
-            ListHITsError::Credentials(ref err) => err.description(),
-            ListHITsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListHITsError::ParseError(ref cause) => cause,
-            ListHITsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3470,20 +2705,12 @@ pub enum ListHITsForQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListHITsForQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListHITsForQualificationTypeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListHITsForQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3496,43 +2723,20 @@ impl ListHITsForQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListHITsForQualificationTypeError::RequestError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHITsForQualificationTypeError::RequestError(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceFault" => {
-                    return ListHITsForQualificationTypeError::ServiceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(ListHITsForQualificationTypeError::ServiceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListHITsForQualificationTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListHITsForQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListHITsForQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> ListHITsForQualificationTypeError {
-        ListHITsForQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListHITsForQualificationTypeError {
-    fn from(err: CredentialsError) -> ListHITsForQualificationTypeError {
-        ListHITsForQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListHITsForQualificationTypeError {
-    fn from(err: HttpDispatchError) -> ListHITsForQualificationTypeError {
-        ListHITsForQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListHITsForQualificationTypeError {
-    fn from(err: io::Error) -> ListHITsForQualificationTypeError {
-        ListHITsForQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListHITsForQualificationTypeError {
@@ -3545,13 +2749,6 @@ impl Error for ListHITsForQualificationTypeError {
         match *self {
             ListHITsForQualificationTypeError::RequestError(ref cause) => cause,
             ListHITsForQualificationTypeError::ServiceFault(ref cause) => cause,
-            ListHITsForQualificationTypeError::Validation(ref cause) => cause,
-            ListHITsForQualificationTypeError::Credentials(ref err) => err.description(),
-            ListHITsForQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListHITsForQualificationTypeError::ParseError(ref cause) => cause,
-            ListHITsForQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3562,20 +2759,10 @@ pub enum ListQualificationRequestsError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListQualificationRequestsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQualificationRequestsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQualificationRequestsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3588,39 +2775,20 @@ impl ListQualificationRequestsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListQualificationRequestsError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListQualificationRequestsError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return ListQualificationRequestsError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListQualificationRequestsError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListQualificationRequestsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListQualificationRequestsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListQualificationRequestsError {
-    fn from(err: serde_json::error::Error) -> ListQualificationRequestsError {
-        ListQualificationRequestsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListQualificationRequestsError {
-    fn from(err: CredentialsError) -> ListQualificationRequestsError {
-        ListQualificationRequestsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQualificationRequestsError {
-    fn from(err: HttpDispatchError) -> ListQualificationRequestsError {
-        ListQualificationRequestsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQualificationRequestsError {
-    fn from(err: io::Error) -> ListQualificationRequestsError {
-        ListQualificationRequestsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListQualificationRequestsError {
@@ -3633,13 +2801,6 @@ impl Error for ListQualificationRequestsError {
         match *self {
             ListQualificationRequestsError::RequestError(ref cause) => cause,
             ListQualificationRequestsError::ServiceFault(ref cause) => cause,
-            ListQualificationRequestsError::Validation(ref cause) => cause,
-            ListQualificationRequestsError::Credentials(ref err) => err.description(),
-            ListQualificationRequestsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListQualificationRequestsError::ParseError(ref cause) => cause,
-            ListQualificationRequestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3650,20 +2811,10 @@ pub enum ListQualificationTypesError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListQualificationTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQualificationTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQualificationTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3676,39 +2827,20 @@ impl ListQualificationTypesError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListQualificationTypesError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListQualificationTypesError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return ListQualificationTypesError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListQualificationTypesError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListQualificationTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListQualificationTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListQualificationTypesError {
-    fn from(err: serde_json::error::Error) -> ListQualificationTypesError {
-        ListQualificationTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListQualificationTypesError {
-    fn from(err: CredentialsError) -> ListQualificationTypesError {
-        ListQualificationTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQualificationTypesError {
-    fn from(err: HttpDispatchError) -> ListQualificationTypesError {
-        ListQualificationTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQualificationTypesError {
-    fn from(err: io::Error) -> ListQualificationTypesError {
-        ListQualificationTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListQualificationTypesError {
@@ -3721,13 +2853,6 @@ impl Error for ListQualificationTypesError {
         match *self {
             ListQualificationTypesError::RequestError(ref cause) => cause,
             ListQualificationTypesError::ServiceFault(ref cause) => cause,
-            ListQualificationTypesError::Validation(ref cause) => cause,
-            ListQualificationTypesError::Credentials(ref err) => err.description(),
-            ListQualificationTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListQualificationTypesError::ParseError(ref cause) => cause,
-            ListQualificationTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3738,20 +2863,12 @@ pub enum ListReviewPolicyResultsForHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListReviewPolicyResultsForHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListReviewPolicyResultsForHITError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListReviewPolicyResultsForHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3764,43 +2881,20 @@ impl ListReviewPolicyResultsForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListReviewPolicyResultsForHITError::RequestError(String::from(
-                        error_message,
+                    return RusotoError::Service(ListReviewPolicyResultsForHITError::RequestError(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceFault" => {
-                    return ListReviewPolicyResultsForHITError::ServiceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(ListReviewPolicyResultsForHITError::ServiceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListReviewPolicyResultsForHITError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListReviewPolicyResultsForHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListReviewPolicyResultsForHITError {
-    fn from(err: serde_json::error::Error) -> ListReviewPolicyResultsForHITError {
-        ListReviewPolicyResultsForHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListReviewPolicyResultsForHITError {
-    fn from(err: CredentialsError) -> ListReviewPolicyResultsForHITError {
-        ListReviewPolicyResultsForHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListReviewPolicyResultsForHITError {
-    fn from(err: HttpDispatchError) -> ListReviewPolicyResultsForHITError {
-        ListReviewPolicyResultsForHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListReviewPolicyResultsForHITError {
-    fn from(err: io::Error) -> ListReviewPolicyResultsForHITError {
-        ListReviewPolicyResultsForHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListReviewPolicyResultsForHITError {
@@ -3813,13 +2907,6 @@ impl Error for ListReviewPolicyResultsForHITError {
         match *self {
             ListReviewPolicyResultsForHITError::RequestError(ref cause) => cause,
             ListReviewPolicyResultsForHITError::ServiceFault(ref cause) => cause,
-            ListReviewPolicyResultsForHITError::Validation(ref cause) => cause,
-            ListReviewPolicyResultsForHITError::Credentials(ref err) => err.description(),
-            ListReviewPolicyResultsForHITError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListReviewPolicyResultsForHITError::ParseError(ref cause) => cause,
-            ListReviewPolicyResultsForHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3830,20 +2917,10 @@ pub enum ListReviewableHITsError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListReviewableHITsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListReviewableHITsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReviewableHITsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3856,39 +2933,20 @@ impl ListReviewableHITsError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListReviewableHITsError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListReviewableHITsError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return ListReviewableHITsError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListReviewableHITsError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListReviewableHITsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListReviewableHITsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListReviewableHITsError {
-    fn from(err: serde_json::error::Error) -> ListReviewableHITsError {
-        ListReviewableHITsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListReviewableHITsError {
-    fn from(err: CredentialsError) -> ListReviewableHITsError {
-        ListReviewableHITsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListReviewableHITsError {
-    fn from(err: HttpDispatchError) -> ListReviewableHITsError {
-        ListReviewableHITsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListReviewableHITsError {
-    fn from(err: io::Error) -> ListReviewableHITsError {
-        ListReviewableHITsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListReviewableHITsError {
@@ -3901,13 +2959,6 @@ impl Error for ListReviewableHITsError {
         match *self {
             ListReviewableHITsError::RequestError(ref cause) => cause,
             ListReviewableHITsError::ServiceFault(ref cause) => cause,
-            ListReviewableHITsError::Validation(ref cause) => cause,
-            ListReviewableHITsError::Credentials(ref err) => err.description(),
-            ListReviewableHITsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListReviewableHITsError::ParseError(ref cause) => cause,
-            ListReviewableHITsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3918,20 +2969,10 @@ pub enum ListWorkerBlocksError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWorkerBlocksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWorkerBlocksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWorkerBlocksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3944,39 +2985,20 @@ impl ListWorkerBlocksError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListWorkerBlocksError::RequestError(String::from(error_message));
+                    return RusotoError::Service(ListWorkerBlocksError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return ListWorkerBlocksError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(ListWorkerBlocksError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListWorkerBlocksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWorkerBlocksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWorkerBlocksError {
-    fn from(err: serde_json::error::Error) -> ListWorkerBlocksError {
-        ListWorkerBlocksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWorkerBlocksError {
-    fn from(err: CredentialsError) -> ListWorkerBlocksError {
-        ListWorkerBlocksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWorkerBlocksError {
-    fn from(err: HttpDispatchError) -> ListWorkerBlocksError {
-        ListWorkerBlocksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWorkerBlocksError {
-    fn from(err: io::Error) -> ListWorkerBlocksError {
-        ListWorkerBlocksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWorkerBlocksError {
@@ -3989,11 +3011,6 @@ impl Error for ListWorkerBlocksError {
         match *self {
             ListWorkerBlocksError::RequestError(ref cause) => cause,
             ListWorkerBlocksError::ServiceFault(ref cause) => cause,
-            ListWorkerBlocksError::Validation(ref cause) => cause,
-            ListWorkerBlocksError::Credentials(ref err) => err.description(),
-            ListWorkerBlocksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListWorkerBlocksError::ParseError(ref cause) => cause,
-            ListWorkerBlocksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4004,20 +3021,12 @@ pub enum ListWorkersWithQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWorkersWithQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWorkersWithQualificationTypeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListWorkersWithQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4030,45 +3039,24 @@ impl ListWorkersWithQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return ListWorkersWithQualificationTypeError::RequestError(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceFault" => {
-                    return ListWorkersWithQualificationTypeError::ServiceFault(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ListWorkersWithQualificationTypeError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ListWorkersWithQualificationTypeError::RequestError(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(
+                        ListWorkersWithQualificationTypeError::ServiceFault(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWorkersWithQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWorkersWithQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> ListWorkersWithQualificationTypeError {
-        ListWorkersWithQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWorkersWithQualificationTypeError {
-    fn from(err: CredentialsError) -> ListWorkersWithQualificationTypeError {
-        ListWorkersWithQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWorkersWithQualificationTypeError {
-    fn from(err: HttpDispatchError) -> ListWorkersWithQualificationTypeError {
-        ListWorkersWithQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWorkersWithQualificationTypeError {
-    fn from(err: io::Error) -> ListWorkersWithQualificationTypeError {
-        ListWorkersWithQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWorkersWithQualificationTypeError {
@@ -4081,13 +3069,6 @@ impl Error for ListWorkersWithQualificationTypeError {
         match *self {
             ListWorkersWithQualificationTypeError::RequestError(ref cause) => cause,
             ListWorkersWithQualificationTypeError::ServiceFault(ref cause) => cause,
-            ListWorkersWithQualificationTypeError::Validation(ref cause) => cause,
-            ListWorkersWithQualificationTypeError::Credentials(ref err) => err.description(),
-            ListWorkersWithQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListWorkersWithQualificationTypeError::ParseError(ref cause) => cause,
-            ListWorkersWithQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4098,20 +3079,10 @@ pub enum NotifyWorkersError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl NotifyWorkersError {
-    pub fn from_response(res: BufferedHttpResponse) -> NotifyWorkersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<NotifyWorkersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4124,39 +3095,20 @@ impl NotifyWorkersError {
 
             match *error_type {
                 "RequestError" => {
-                    return NotifyWorkersError::RequestError(String::from(error_message));
+                    return RusotoError::Service(NotifyWorkersError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return NotifyWorkersError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(NotifyWorkersError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return NotifyWorkersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return NotifyWorkersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for NotifyWorkersError {
-    fn from(err: serde_json::error::Error) -> NotifyWorkersError {
-        NotifyWorkersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for NotifyWorkersError {
-    fn from(err: CredentialsError) -> NotifyWorkersError {
-        NotifyWorkersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for NotifyWorkersError {
-    fn from(err: HttpDispatchError) -> NotifyWorkersError {
-        NotifyWorkersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for NotifyWorkersError {
-    fn from(err: io::Error) -> NotifyWorkersError {
-        NotifyWorkersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for NotifyWorkersError {
@@ -4169,11 +3121,6 @@ impl Error for NotifyWorkersError {
         match *self {
             NotifyWorkersError::RequestError(ref cause) => cause,
             NotifyWorkersError::ServiceFault(ref cause) => cause,
-            NotifyWorkersError::Validation(ref cause) => cause,
-            NotifyWorkersError::Credentials(ref err) => err.description(),
-            NotifyWorkersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            NotifyWorkersError::ParseError(ref cause) => cause,
-            NotifyWorkersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4184,20 +3131,10 @@ pub enum RejectAssignmentError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RejectAssignmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> RejectAssignmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RejectAssignmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4210,39 +3147,20 @@ impl RejectAssignmentError {
 
             match *error_type {
                 "RequestError" => {
-                    return RejectAssignmentError::RequestError(String::from(error_message));
+                    return RusotoError::Service(RejectAssignmentError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceFault" => {
-                    return RejectAssignmentError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(RejectAssignmentError::ServiceFault(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RejectAssignmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RejectAssignmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RejectAssignmentError {
-    fn from(err: serde_json::error::Error) -> RejectAssignmentError {
-        RejectAssignmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RejectAssignmentError {
-    fn from(err: CredentialsError) -> RejectAssignmentError {
-        RejectAssignmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RejectAssignmentError {
-    fn from(err: HttpDispatchError) -> RejectAssignmentError {
-        RejectAssignmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RejectAssignmentError {
-    fn from(err: io::Error) -> RejectAssignmentError {
-        RejectAssignmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RejectAssignmentError {
@@ -4255,11 +3173,6 @@ impl Error for RejectAssignmentError {
         match *self {
             RejectAssignmentError::RequestError(ref cause) => cause,
             RejectAssignmentError::ServiceFault(ref cause) => cause,
-            RejectAssignmentError::Validation(ref cause) => cause,
-            RejectAssignmentError::Credentials(ref err) => err.description(),
-            RejectAssignmentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RejectAssignmentError::ParseError(ref cause) => cause,
-            RejectAssignmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4270,20 +3183,12 @@ pub enum RejectQualificationRequestError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RejectQualificationRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> RejectQualificationRequestError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RejectQualificationRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4296,43 +3201,20 @@ impl RejectQualificationRequestError {
 
             match *error_type {
                 "RequestError" => {
-                    return RejectQualificationRequestError::RequestError(String::from(
-                        error_message,
+                    return RusotoError::Service(RejectQualificationRequestError::RequestError(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceFault" => {
-                    return RejectQualificationRequestError::ServiceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(RejectQualificationRequestError::ServiceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RejectQualificationRequestError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RejectQualificationRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RejectQualificationRequestError {
-    fn from(err: serde_json::error::Error) -> RejectQualificationRequestError {
-        RejectQualificationRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RejectQualificationRequestError {
-    fn from(err: CredentialsError) -> RejectQualificationRequestError {
-        RejectQualificationRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RejectQualificationRequestError {
-    fn from(err: HttpDispatchError) -> RejectQualificationRequestError {
-        RejectQualificationRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RejectQualificationRequestError {
-    fn from(err: io::Error) -> RejectQualificationRequestError {
-        RejectQualificationRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RejectQualificationRequestError {
@@ -4345,13 +3227,6 @@ impl Error for RejectQualificationRequestError {
         match *self {
             RejectQualificationRequestError::RequestError(ref cause) => cause,
             RejectQualificationRequestError::ServiceFault(ref cause) => cause,
-            RejectQualificationRequestError::Validation(ref cause) => cause,
-            RejectQualificationRequestError::Credentials(ref err) => err.description(),
-            RejectQualificationRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RejectQualificationRequestError::ParseError(ref cause) => cause,
-            RejectQualificationRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4362,20 +3237,10 @@ pub enum SendBonusError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendBonusError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendBonusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBonusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4387,36 +3252,21 @@ impl SendBonusError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "RequestError" => return SendBonusError::RequestError(String::from(error_message)),
-                "ServiceFault" => return SendBonusError::ServiceFault(String::from(error_message)),
-                "ValidationException" => {
-                    return SendBonusError::Validation(error_message.to_string());
+                "RequestError" => {
+                    return RusotoError::Service(SendBonusError::RequestError(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceFault" => {
+                    return RusotoError::Service(SendBonusError::ServiceFault(String::from(
+                        error_message,
+                    )));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SendBonusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SendBonusError {
-    fn from(err: serde_json::error::Error) -> SendBonusError {
-        SendBonusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SendBonusError {
-    fn from(err: CredentialsError) -> SendBonusError {
-        SendBonusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendBonusError {
-    fn from(err: HttpDispatchError) -> SendBonusError {
-        SendBonusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendBonusError {
-    fn from(err: io::Error) -> SendBonusError {
-        SendBonusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SendBonusError {
@@ -4429,11 +3279,6 @@ impl Error for SendBonusError {
         match *self {
             SendBonusError::RequestError(ref cause) => cause,
             SendBonusError::ServiceFault(ref cause) => cause,
-            SendBonusError::Validation(ref cause) => cause,
-            SendBonusError::Credentials(ref err) => err.description(),
-            SendBonusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendBonusError::ParseError(ref cause) => cause,
-            SendBonusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4444,20 +3289,10 @@ pub enum SendTestEventNotificationError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendTestEventNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendTestEventNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTestEventNotificationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4470,39 +3305,20 @@ impl SendTestEventNotificationError {
 
             match *error_type {
                 "RequestError" => {
-                    return SendTestEventNotificationError::RequestError(String::from(error_message));
+                    return RusotoError::Service(SendTestEventNotificationError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return SendTestEventNotificationError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(SendTestEventNotificationError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return SendTestEventNotificationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return SendTestEventNotificationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for SendTestEventNotificationError {
-    fn from(err: serde_json::error::Error) -> SendTestEventNotificationError {
-        SendTestEventNotificationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for SendTestEventNotificationError {
-    fn from(err: CredentialsError) -> SendTestEventNotificationError {
-        SendTestEventNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendTestEventNotificationError {
-    fn from(err: HttpDispatchError) -> SendTestEventNotificationError {
-        SendTestEventNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendTestEventNotificationError {
-    fn from(err: io::Error) -> SendTestEventNotificationError {
-        SendTestEventNotificationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for SendTestEventNotificationError {
@@ -4515,13 +3331,6 @@ impl Error for SendTestEventNotificationError {
         match *self {
             SendTestEventNotificationError::RequestError(ref cause) => cause,
             SendTestEventNotificationError::ServiceFault(ref cause) => cause,
-            SendTestEventNotificationError::Validation(ref cause) => cause,
-            SendTestEventNotificationError::Credentials(ref err) => err.description(),
-            SendTestEventNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SendTestEventNotificationError::ParseError(ref cause) => cause,
-            SendTestEventNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4532,20 +3341,10 @@ pub enum UpdateExpirationForHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateExpirationForHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateExpirationForHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateExpirationForHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4558,39 +3357,20 @@ impl UpdateExpirationForHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateExpirationForHITError::RequestError(String::from(error_message));
+                    return RusotoError::Service(UpdateExpirationForHITError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return UpdateExpirationForHITError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(UpdateExpirationForHITError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateExpirationForHITError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateExpirationForHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateExpirationForHITError {
-    fn from(err: serde_json::error::Error) -> UpdateExpirationForHITError {
-        UpdateExpirationForHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateExpirationForHITError {
-    fn from(err: CredentialsError) -> UpdateExpirationForHITError {
-        UpdateExpirationForHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateExpirationForHITError {
-    fn from(err: HttpDispatchError) -> UpdateExpirationForHITError {
-        UpdateExpirationForHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateExpirationForHITError {
-    fn from(err: io::Error) -> UpdateExpirationForHITError {
-        UpdateExpirationForHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateExpirationForHITError {
@@ -4603,13 +3383,6 @@ impl Error for UpdateExpirationForHITError {
         match *self {
             UpdateExpirationForHITError::RequestError(ref cause) => cause,
             UpdateExpirationForHITError::ServiceFault(ref cause) => cause,
-            UpdateExpirationForHITError::Validation(ref cause) => cause,
-            UpdateExpirationForHITError::Credentials(ref err) => err.description(),
-            UpdateExpirationForHITError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateExpirationForHITError::ParseError(ref cause) => cause,
-            UpdateExpirationForHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4620,20 +3393,10 @@ pub enum UpdateHITReviewStatusError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHITReviewStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateHITReviewStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHITReviewStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4646,39 +3409,20 @@ impl UpdateHITReviewStatusError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateHITReviewStatusError::RequestError(String::from(error_message));
+                    return RusotoError::Service(UpdateHITReviewStatusError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return UpdateHITReviewStatusError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(UpdateHITReviewStatusError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateHITReviewStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateHITReviewStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateHITReviewStatusError {
-    fn from(err: serde_json::error::Error) -> UpdateHITReviewStatusError {
-        UpdateHITReviewStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateHITReviewStatusError {
-    fn from(err: CredentialsError) -> UpdateHITReviewStatusError {
-        UpdateHITReviewStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateHITReviewStatusError {
-    fn from(err: HttpDispatchError) -> UpdateHITReviewStatusError {
-        UpdateHITReviewStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateHITReviewStatusError {
-    fn from(err: io::Error) -> UpdateHITReviewStatusError {
-        UpdateHITReviewStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateHITReviewStatusError {
@@ -4691,13 +3435,6 @@ impl Error for UpdateHITReviewStatusError {
         match *self {
             UpdateHITReviewStatusError::RequestError(ref cause) => cause,
             UpdateHITReviewStatusError::ServiceFault(ref cause) => cause,
-            UpdateHITReviewStatusError::Validation(ref cause) => cause,
-            UpdateHITReviewStatusError::Credentials(ref err) => err.description(),
-            UpdateHITReviewStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateHITReviewStatusError::ParseError(ref cause) => cause,
-            UpdateHITReviewStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4708,20 +3445,10 @@ pub enum UpdateHITTypeOfHITError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateHITTypeOfHITError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateHITTypeOfHITError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateHITTypeOfHITError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4734,39 +3461,20 @@ impl UpdateHITTypeOfHITError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateHITTypeOfHITError::RequestError(String::from(error_message));
+                    return RusotoError::Service(UpdateHITTypeOfHITError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return UpdateHITTypeOfHITError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(UpdateHITTypeOfHITError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateHITTypeOfHITError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateHITTypeOfHITError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateHITTypeOfHITError {
-    fn from(err: serde_json::error::Error) -> UpdateHITTypeOfHITError {
-        UpdateHITTypeOfHITError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateHITTypeOfHITError {
-    fn from(err: CredentialsError) -> UpdateHITTypeOfHITError {
-        UpdateHITTypeOfHITError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateHITTypeOfHITError {
-    fn from(err: HttpDispatchError) -> UpdateHITTypeOfHITError {
-        UpdateHITTypeOfHITError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateHITTypeOfHITError {
-    fn from(err: io::Error) -> UpdateHITTypeOfHITError {
-        UpdateHITTypeOfHITError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateHITTypeOfHITError {
@@ -4779,13 +3487,6 @@ impl Error for UpdateHITTypeOfHITError {
         match *self {
             UpdateHITTypeOfHITError::RequestError(ref cause) => cause,
             UpdateHITTypeOfHITError::ServiceFault(ref cause) => cause,
-            UpdateHITTypeOfHITError::Validation(ref cause) => cause,
-            UpdateHITTypeOfHITError::Credentials(ref err) => err.description(),
-            UpdateHITTypeOfHITError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateHITTypeOfHITError::ParseError(ref cause) => cause,
-            UpdateHITTypeOfHITError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4796,20 +3497,12 @@ pub enum UpdateNotificationSettingsError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNotificationSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateNotificationSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateNotificationSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4822,43 +3515,20 @@ impl UpdateNotificationSettingsError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateNotificationSettingsError::RequestError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateNotificationSettingsError::RequestError(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceFault" => {
-                    return UpdateNotificationSettingsError::ServiceFault(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateNotificationSettingsError::ServiceFault(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateNotificationSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateNotificationSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateNotificationSettingsError {
-    fn from(err: serde_json::error::Error) -> UpdateNotificationSettingsError {
-        UpdateNotificationSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateNotificationSettingsError {
-    fn from(err: CredentialsError) -> UpdateNotificationSettingsError {
-        UpdateNotificationSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateNotificationSettingsError {
-    fn from(err: HttpDispatchError) -> UpdateNotificationSettingsError {
-        UpdateNotificationSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateNotificationSettingsError {
-    fn from(err: io::Error) -> UpdateNotificationSettingsError {
-        UpdateNotificationSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateNotificationSettingsError {
@@ -4871,13 +3541,6 @@ impl Error for UpdateNotificationSettingsError {
         match *self {
             UpdateNotificationSettingsError::RequestError(ref cause) => cause,
             UpdateNotificationSettingsError::ServiceFault(ref cause) => cause,
-            UpdateNotificationSettingsError::Validation(ref cause) => cause,
-            UpdateNotificationSettingsError::Credentials(ref err) => err.description(),
-            UpdateNotificationSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateNotificationSettingsError::ParseError(ref cause) => cause,
-            UpdateNotificationSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4888,20 +3551,10 @@ pub enum UpdateQualificationTypeError {
     RequestError(String),
     /// <p>Amazon Mechanical Turk is temporarily unable to process your request. Try your call again.</p>
     ServiceFault(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateQualificationTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateQualificationTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQualificationTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4914,39 +3567,20 @@ impl UpdateQualificationTypeError {
 
             match *error_type {
                 "RequestError" => {
-                    return UpdateQualificationTypeError::RequestError(String::from(error_message));
+                    return RusotoError::Service(UpdateQualificationTypeError::RequestError(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceFault" => {
-                    return UpdateQualificationTypeError::ServiceFault(String::from(error_message));
+                    return RusotoError::Service(UpdateQualificationTypeError::ServiceFault(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateQualificationTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateQualificationTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateQualificationTypeError {
-    fn from(err: serde_json::error::Error) -> UpdateQualificationTypeError {
-        UpdateQualificationTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateQualificationTypeError {
-    fn from(err: CredentialsError) -> UpdateQualificationTypeError {
-        UpdateQualificationTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateQualificationTypeError {
-    fn from(err: HttpDispatchError) -> UpdateQualificationTypeError {
-        UpdateQualificationTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateQualificationTypeError {
-    fn from(err: io::Error) -> UpdateQualificationTypeError {
-        UpdateQualificationTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateQualificationTypeError {
@@ -4959,13 +3593,6 @@ impl Error for UpdateQualificationTypeError {
         match *self {
             UpdateQualificationTypeError::RequestError(ref cause) => cause,
             UpdateQualificationTypeError::ServiceFault(ref cause) => cause,
-            UpdateQualificationTypeError::Validation(ref cause) => cause,
-            UpdateQualificationTypeError::Credentials(ref err) => err.description(),
-            UpdateQualificationTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateQualificationTypeError::ParseError(ref cause) => cause,
-            UpdateQualificationTypeError::Unknown(_) => "unknown error",
         }
     }
 }

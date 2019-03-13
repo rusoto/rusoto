@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1625,20 +1622,10 @@ pub enum AcknowledgeJobError {
     InvalidNonce(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcknowledgeJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> AcknowledgeJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1651,39 +1638,20 @@ impl AcknowledgeJobError {
 
             match *error_type {
                 "InvalidNonceException" => {
-                    return AcknowledgeJobError::InvalidNonce(String::from(error_message));
+                    return RusotoError::Service(AcknowledgeJobError::InvalidNonce(String::from(
+                        error_message,
+                    )));
                 }
                 "JobNotFoundException" => {
-                    return AcknowledgeJobError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(AcknowledgeJobError::JobNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AcknowledgeJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AcknowledgeJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcknowledgeJobError {
-    fn from(err: serde_json::error::Error) -> AcknowledgeJobError {
-        AcknowledgeJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcknowledgeJobError {
-    fn from(err: CredentialsError) -> AcknowledgeJobError {
-        AcknowledgeJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcknowledgeJobError {
-    fn from(err: HttpDispatchError) -> AcknowledgeJobError {
-        AcknowledgeJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcknowledgeJobError {
-    fn from(err: io::Error) -> AcknowledgeJobError {
-        AcknowledgeJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcknowledgeJobError {
@@ -1696,11 +1664,6 @@ impl Error for AcknowledgeJobError {
         match *self {
             AcknowledgeJobError::InvalidNonce(ref cause) => cause,
             AcknowledgeJobError::JobNotFound(ref cause) => cause,
-            AcknowledgeJobError::Validation(ref cause) => cause,
-            AcknowledgeJobError::Credentials(ref err) => err.description(),
-            AcknowledgeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AcknowledgeJobError::ParseError(ref cause) => cause,
-            AcknowledgeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1713,20 +1676,10 @@ pub enum AcknowledgeThirdPartyJobError {
     InvalidNonce(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AcknowledgeThirdPartyJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> AcknowledgeThirdPartyJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AcknowledgeThirdPartyJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1739,44 +1692,25 @@ impl AcknowledgeThirdPartyJobError {
 
             match *error_type {
                 "InvalidClientTokenException" => {
-                    return AcknowledgeThirdPartyJobError::InvalidClientToken(String::from(
-                        error_message,
+                    return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidClientToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNonceException" => {
-                    return AcknowledgeThirdPartyJobError::InvalidNonce(String::from(error_message));
+                    return RusotoError::Service(AcknowledgeThirdPartyJobError::InvalidNonce(
+                        String::from(error_message),
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return AcknowledgeThirdPartyJobError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(AcknowledgeThirdPartyJobError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AcknowledgeThirdPartyJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AcknowledgeThirdPartyJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AcknowledgeThirdPartyJobError {
-    fn from(err: serde_json::error::Error) -> AcknowledgeThirdPartyJobError {
-        AcknowledgeThirdPartyJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AcknowledgeThirdPartyJobError {
-    fn from(err: CredentialsError) -> AcknowledgeThirdPartyJobError {
-        AcknowledgeThirdPartyJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AcknowledgeThirdPartyJobError {
-    fn from(err: HttpDispatchError) -> AcknowledgeThirdPartyJobError {
-        AcknowledgeThirdPartyJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AcknowledgeThirdPartyJobError {
-    fn from(err: io::Error) -> AcknowledgeThirdPartyJobError {
-        AcknowledgeThirdPartyJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AcknowledgeThirdPartyJobError {
@@ -1790,13 +1724,6 @@ impl Error for AcknowledgeThirdPartyJobError {
             AcknowledgeThirdPartyJobError::InvalidClientToken(ref cause) => cause,
             AcknowledgeThirdPartyJobError::InvalidNonce(ref cause) => cause,
             AcknowledgeThirdPartyJobError::JobNotFound(ref cause) => cause,
-            AcknowledgeThirdPartyJobError::Validation(ref cause) => cause,
-            AcknowledgeThirdPartyJobError::Credentials(ref err) => err.description(),
-            AcknowledgeThirdPartyJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AcknowledgeThirdPartyJobError::ParseError(ref cause) => cause,
-            AcknowledgeThirdPartyJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1805,20 +1732,10 @@ impl Error for AcknowledgeThirdPartyJobError {
 pub enum CreateCustomActionTypeError {
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomActionTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomActionTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomActionTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1831,36 +1748,15 @@ impl CreateCustomActionTypeError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return CreateCustomActionTypeError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateCustomActionTypeError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateCustomActionTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCustomActionTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCustomActionTypeError {
-    fn from(err: serde_json::error::Error) -> CreateCustomActionTypeError {
-        CreateCustomActionTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCustomActionTypeError {
-    fn from(err: CredentialsError) -> CreateCustomActionTypeError {
-        CreateCustomActionTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCustomActionTypeError {
-    fn from(err: HttpDispatchError) -> CreateCustomActionTypeError {
-        CreateCustomActionTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCustomActionTypeError {
-    fn from(err: io::Error) -> CreateCustomActionTypeError {
-        CreateCustomActionTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCustomActionTypeError {
@@ -1872,13 +1768,6 @@ impl Error for CreateCustomActionTypeError {
     fn description(&self) -> &str {
         match *self {
             CreateCustomActionTypeError::LimitExceeded(ref cause) => cause,
-            CreateCustomActionTypeError::Validation(ref cause) => cause,
-            CreateCustomActionTypeError::Credentials(ref err) => err.description(),
-            CreateCustomActionTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCustomActionTypeError::ParseError(ref cause) => cause,
-            CreateCustomActionTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1897,20 +1786,10 @@ pub enum CreatePipelineError {
     LimitExceeded(String),
     /// <p>The specified pipeline name is already in use.</p>
     PipelineNameInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1923,55 +1802,40 @@ impl CreatePipelineError {
 
             match *error_type {
                 "InvalidActionDeclarationException" => {
-                    return CreatePipelineError::InvalidActionDeclaration(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePipelineError::InvalidActionDeclaration(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidBlockerDeclarationException" => {
-                    return CreatePipelineError::InvalidBlockerDeclaration(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePipelineError::InvalidBlockerDeclaration(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidStageDeclarationException" => {
-                    return CreatePipelineError::InvalidStageDeclaration(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::InvalidStageDeclaration(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStructureException" => {
-                    return CreatePipelineError::InvalidStructure(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::InvalidStructure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreatePipelineError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNameInUseException" => {
-                    return CreatePipelineError::PipelineNameInUse(String::from(error_message));
+                    return RusotoError::Service(CreatePipelineError::PipelineNameInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePipelineError {
-    fn from(err: serde_json::error::Error) -> CreatePipelineError {
-        CreatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePipelineError {
-    fn from(err: CredentialsError) -> CreatePipelineError {
-        CreatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePipelineError {
-    fn from(err: HttpDispatchError) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePipelineError {
-    fn from(err: io::Error) -> CreatePipelineError {
-        CreatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePipelineError {
@@ -1988,31 +1852,15 @@ impl Error for CreatePipelineError {
             CreatePipelineError::InvalidStructure(ref cause) => cause,
             CreatePipelineError::LimitExceeded(ref cause) => cause,
             CreatePipelineError::PipelineNameInUse(ref cause) => cause,
-            CreatePipelineError::Validation(ref cause) => cause,
-            CreatePipelineError::Credentials(ref err) => err.description(),
-            CreatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePipelineError::ParseError(ref cause) => cause,
-            CreatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteCustomActionType
 #[derive(Debug, PartialEq)]
-pub enum DeleteCustomActionTypeError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteCustomActionTypeError {}
 
 impl DeleteCustomActionTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomActionTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomActionTypeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2024,34 +1872,11 @@ impl DeleteCustomActionTypeError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DeleteCustomActionTypeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCustomActionTypeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCustomActionTypeError {
-    fn from(err: serde_json::error::Error) -> DeleteCustomActionTypeError {
-        DeleteCustomActionTypeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCustomActionTypeError {
-    fn from(err: CredentialsError) -> DeleteCustomActionTypeError {
-        DeleteCustomActionTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCustomActionTypeError {
-    fn from(err: HttpDispatchError) -> DeleteCustomActionTypeError {
-        DeleteCustomActionTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCustomActionTypeError {
-    fn from(err: io::Error) -> DeleteCustomActionTypeError {
-        DeleteCustomActionTypeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCustomActionTypeError {
@@ -2061,34 +1886,15 @@ impl fmt::Display for DeleteCustomActionTypeError {
 }
 impl Error for DeleteCustomActionTypeError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteCustomActionTypeError::Validation(ref cause) => cause,
-            DeleteCustomActionTypeError::Credentials(ref err) => err.description(),
-            DeleteCustomActionTypeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCustomActionTypeError::ParseError(ref cause) => cause,
-            DeleteCustomActionTypeError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
-pub enum DeletePipelineError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeletePipelineError {}
 
 impl DeletePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2100,34 +1906,11 @@ impl DeletePipelineError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DeletePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePipelineError {
-    fn from(err: serde_json::error::Error) -> DeletePipelineError {
-        DeletePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePipelineError {
-    fn from(err: CredentialsError) -> DeletePipelineError {
-        DeletePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePipelineError {
-    fn from(err: HttpDispatchError) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePipelineError {
-    fn from(err: io::Error) -> DeletePipelineError {
-        DeletePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePipelineError {
@@ -2137,32 +1920,15 @@ impl fmt::Display for DeletePipelineError {
 }
 impl Error for DeletePipelineError {
     fn description(&self) -> &str {
-        match *self {
-            DeletePipelineError::Validation(ref cause) => cause,
-            DeletePipelineError::Credentials(ref err) => err.description(),
-            DeletePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePipelineError::ParseError(ref cause) => cause,
-            DeletePipelineError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
-pub enum DeleteWebhookError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteWebhookError {}
 
 impl DeleteWebhookError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2174,34 +1940,11 @@ impl DeleteWebhookError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DeleteWebhookError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteWebhookError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteWebhookError {
-    fn from(err: serde_json::error::Error) -> DeleteWebhookError {
-        DeleteWebhookError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteWebhookError {
-    fn from(err: CredentialsError) -> DeleteWebhookError {
-        DeleteWebhookError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteWebhookError {
-    fn from(err: HttpDispatchError) -> DeleteWebhookError {
-        DeleteWebhookError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteWebhookError {
-    fn from(err: io::Error) -> DeleteWebhookError {
-        DeleteWebhookError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteWebhookError {
@@ -2211,13 +1954,7 @@ impl fmt::Display for DeleteWebhookError {
 }
 impl Error for DeleteWebhookError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteWebhookError::Validation(ref cause) => cause,
-            DeleteWebhookError::Credentials(ref err) => err.description(),
-            DeleteWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteWebhookError::ParseError(ref cause) => cause,
-            DeleteWebhookError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeregisterWebhookWithThirdParty
@@ -2225,20 +1962,12 @@ impl Error for DeleteWebhookError {
 pub enum DeregisterWebhookWithThirdPartyError {
     /// <p>The specified webhook was entered in an invalid format or cannot be found.</p>
     WebhookNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterWebhookWithThirdPartyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterWebhookWithThirdPartyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeregisterWebhookWithThirdPartyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2251,40 +1980,17 @@ impl DeregisterWebhookWithThirdPartyError {
 
             match *error_type {
                 "WebhookNotFoundException" => {
-                    return DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DeregisterWebhookWithThirdPartyError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DeregisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterWebhookWithThirdPartyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterWebhookWithThirdPartyError {
-    fn from(err: serde_json::error::Error) -> DeregisterWebhookWithThirdPartyError {
-        DeregisterWebhookWithThirdPartyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterWebhookWithThirdPartyError {
-    fn from(err: CredentialsError) -> DeregisterWebhookWithThirdPartyError {
-        DeregisterWebhookWithThirdPartyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterWebhookWithThirdPartyError {
-    fn from(err: HttpDispatchError) -> DeregisterWebhookWithThirdPartyError {
-        DeregisterWebhookWithThirdPartyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterWebhookWithThirdPartyError {
-    fn from(err: io::Error) -> DeregisterWebhookWithThirdPartyError {
-        DeregisterWebhookWithThirdPartyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterWebhookWithThirdPartyError {
@@ -2296,13 +2002,6 @@ impl Error for DeregisterWebhookWithThirdPartyError {
     fn description(&self) -> &str {
         match *self {
             DeregisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => cause,
-            DeregisterWebhookWithThirdPartyError::Validation(ref cause) => cause,
-            DeregisterWebhookWithThirdPartyError::Credentials(ref err) => err.description(),
-            DeregisterWebhookWithThirdPartyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterWebhookWithThirdPartyError::ParseError(ref cause) => cause,
-            DeregisterWebhookWithThirdPartyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2313,20 +2012,10 @@ pub enum DisableStageTransitionError {
     PipelineNotFound(String),
     /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableStageTransitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisableStageTransitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableStageTransitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2339,41 +2028,20 @@ impl DisableStageTransitionError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return DisableStageTransitionError::PipelineNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DisableStageTransitionError::PipelineNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "StageNotFoundException" => {
-                    return DisableStageTransitionError::StageNotFound(String::from(error_message));
+                    return RusotoError::Service(DisableStageTransitionError::StageNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisableStageTransitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableStageTransitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableStageTransitionError {
-    fn from(err: serde_json::error::Error) -> DisableStageTransitionError {
-        DisableStageTransitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableStageTransitionError {
-    fn from(err: CredentialsError) -> DisableStageTransitionError {
-        DisableStageTransitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableStageTransitionError {
-    fn from(err: HttpDispatchError) -> DisableStageTransitionError {
-        DisableStageTransitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableStageTransitionError {
-    fn from(err: io::Error) -> DisableStageTransitionError {
-        DisableStageTransitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableStageTransitionError {
@@ -2386,13 +2054,6 @@ impl Error for DisableStageTransitionError {
         match *self {
             DisableStageTransitionError::PipelineNotFound(ref cause) => cause,
             DisableStageTransitionError::StageNotFound(ref cause) => cause,
-            DisableStageTransitionError::Validation(ref cause) => cause,
-            DisableStageTransitionError::Credentials(ref err) => err.description(),
-            DisableStageTransitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisableStageTransitionError::ParseError(ref cause) => cause,
-            DisableStageTransitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2403,20 +2064,10 @@ pub enum EnableStageTransitionError {
     PipelineNotFound(String),
     /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableStageTransitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> EnableStageTransitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableStageTransitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2429,39 +2080,20 @@ impl EnableStageTransitionError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return EnableStageTransitionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(EnableStageTransitionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "StageNotFoundException" => {
-                    return EnableStageTransitionError::StageNotFound(String::from(error_message));
+                    return RusotoError::Service(EnableStageTransitionError::StageNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableStageTransitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableStageTransitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableStageTransitionError {
-    fn from(err: serde_json::error::Error) -> EnableStageTransitionError {
-        EnableStageTransitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableStageTransitionError {
-    fn from(err: CredentialsError) -> EnableStageTransitionError {
-        EnableStageTransitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableStageTransitionError {
-    fn from(err: HttpDispatchError) -> EnableStageTransitionError {
-        EnableStageTransitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableStageTransitionError {
-    fn from(err: io::Error) -> EnableStageTransitionError {
-        EnableStageTransitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableStageTransitionError {
@@ -2474,13 +2106,6 @@ impl Error for EnableStageTransitionError {
         match *self {
             EnableStageTransitionError::PipelineNotFound(ref cause) => cause,
             EnableStageTransitionError::StageNotFound(ref cause) => cause,
-            EnableStageTransitionError::Validation(ref cause) => cause,
-            EnableStageTransitionError::Credentials(ref err) => err.description(),
-            EnableStageTransitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            EnableStageTransitionError::ParseError(ref cause) => cause,
-            EnableStageTransitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2489,20 +2114,10 @@ impl Error for EnableStageTransitionError {
 pub enum GetJobDetailsError {
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobDetailsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2515,36 +2130,15 @@ impl GetJobDetailsError {
 
             match *error_type {
                 "JobNotFoundException" => {
-                    return GetJobDetailsError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobDetailsError::JobNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetJobDetailsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobDetailsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobDetailsError {
-    fn from(err: serde_json::error::Error) -> GetJobDetailsError {
-        GetJobDetailsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobDetailsError {
-    fn from(err: CredentialsError) -> GetJobDetailsError {
-        GetJobDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobDetailsError {
-    fn from(err: HttpDispatchError) -> GetJobDetailsError {
-        GetJobDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobDetailsError {
-    fn from(err: io::Error) -> GetJobDetailsError {
-        GetJobDetailsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobDetailsError {
@@ -2556,11 +2150,6 @@ impl Error for GetJobDetailsError {
     fn description(&self) -> &str {
         match *self {
             GetJobDetailsError::JobNotFound(ref cause) => cause,
-            GetJobDetailsError::Validation(ref cause) => cause,
-            GetJobDetailsError::Credentials(ref err) => err.description(),
-            GetJobDetailsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobDetailsError::ParseError(ref cause) => cause,
-            GetJobDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2571,20 +2160,10 @@ pub enum GetPipelineError {
     PipelineNotFound(String),
     /// <p>The specified pipeline version was specified in an invalid format or cannot be found.</p>
     PipelineVersionNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2597,39 +2176,20 @@ impl GetPipelineError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return GetPipelineError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPipelineError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineVersionNotFoundException" => {
-                    return GetPipelineError::PipelineVersionNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPipelineError::PipelineVersionNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPipelineError {
-    fn from(err: serde_json::error::Error) -> GetPipelineError {
-        GetPipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPipelineError {
-    fn from(err: CredentialsError) -> GetPipelineError {
-        GetPipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPipelineError {
-    fn from(err: HttpDispatchError) -> GetPipelineError {
-        GetPipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPipelineError {
-    fn from(err: io::Error) -> GetPipelineError {
-        GetPipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPipelineError {
@@ -2642,11 +2202,6 @@ impl Error for GetPipelineError {
         match *self {
             GetPipelineError::PipelineNotFound(ref cause) => cause,
             GetPipelineError::PipelineVersionNotFound(ref cause) => cause,
-            GetPipelineError::Validation(ref cause) => cause,
-            GetPipelineError::Credentials(ref err) => err.description(),
-            GetPipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPipelineError::ParseError(ref cause) => cause,
-            GetPipelineError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2657,20 +2212,10 @@ pub enum GetPipelineExecutionError {
     PipelineExecutionNotFound(String),
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2683,41 +2228,22 @@ impl GetPipelineExecutionError {
 
             match *error_type {
                 "PipelineExecutionNotFoundException" => {
-                    return GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetPipelineExecutionError::PipelineExecutionNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PipelineNotFoundException" => {
-                    return GetPipelineExecutionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPipelineExecutionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPipelineExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPipelineExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPipelineExecutionError {
-    fn from(err: serde_json::error::Error) -> GetPipelineExecutionError {
-        GetPipelineExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPipelineExecutionError {
-    fn from(err: CredentialsError) -> GetPipelineExecutionError {
-        GetPipelineExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPipelineExecutionError {
-    fn from(err: HttpDispatchError) -> GetPipelineExecutionError {
-        GetPipelineExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPipelineExecutionError {
-    fn from(err: io::Error) -> GetPipelineExecutionError {
-        GetPipelineExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPipelineExecutionError {
@@ -2730,13 +2256,6 @@ impl Error for GetPipelineExecutionError {
         match *self {
             GetPipelineExecutionError::PipelineExecutionNotFound(ref cause) => cause,
             GetPipelineExecutionError::PipelineNotFound(ref cause) => cause,
-            GetPipelineExecutionError::Validation(ref cause) => cause,
-            GetPipelineExecutionError::Credentials(ref err) => err.description(),
-            GetPipelineExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetPipelineExecutionError::ParseError(ref cause) => cause,
-            GetPipelineExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2745,20 +2264,10 @@ impl Error for GetPipelineExecutionError {
 pub enum GetPipelineStateError {
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPipelineStateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPipelineStateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPipelineStateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2771,36 +2280,15 @@ impl GetPipelineStateError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return GetPipelineStateError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPipelineStateError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPipelineStateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPipelineStateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPipelineStateError {
-    fn from(err: serde_json::error::Error) -> GetPipelineStateError {
-        GetPipelineStateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPipelineStateError {
-    fn from(err: CredentialsError) -> GetPipelineStateError {
-        GetPipelineStateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPipelineStateError {
-    fn from(err: HttpDispatchError) -> GetPipelineStateError {
-        GetPipelineStateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPipelineStateError {
-    fn from(err: io::Error) -> GetPipelineStateError {
-        GetPipelineStateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPipelineStateError {
@@ -2812,11 +2300,6 @@ impl Error for GetPipelineStateError {
     fn description(&self) -> &str {
         match *self {
             GetPipelineStateError::PipelineNotFound(ref cause) => cause,
-            GetPipelineStateError::Validation(ref cause) => cause,
-            GetPipelineStateError::Credentials(ref err) => err.description(),
-            GetPipelineStateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPipelineStateError::ParseError(ref cause) => cause,
-            GetPipelineStateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2829,20 +2312,10 @@ pub enum GetThirdPartyJobDetailsError {
     InvalidJob(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetThirdPartyJobDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetThirdPartyJobDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetThirdPartyJobDetailsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2855,44 +2328,25 @@ impl GetThirdPartyJobDetailsError {
 
             match *error_type {
                 "InvalidClientTokenException" => {
-                    return GetThirdPartyJobDetailsError::InvalidClientToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidClientToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidJobException" => {
-                    return GetThirdPartyJobDetailsError::InvalidJob(String::from(error_message));
+                    return RusotoError::Service(GetThirdPartyJobDetailsError::InvalidJob(
+                        String::from(error_message),
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return GetThirdPartyJobDetailsError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(GetThirdPartyJobDetailsError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetThirdPartyJobDetailsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetThirdPartyJobDetailsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetThirdPartyJobDetailsError {
-    fn from(err: serde_json::error::Error) -> GetThirdPartyJobDetailsError {
-        GetThirdPartyJobDetailsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetThirdPartyJobDetailsError {
-    fn from(err: CredentialsError) -> GetThirdPartyJobDetailsError {
-        GetThirdPartyJobDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetThirdPartyJobDetailsError {
-    fn from(err: HttpDispatchError) -> GetThirdPartyJobDetailsError {
-        GetThirdPartyJobDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetThirdPartyJobDetailsError {
-    fn from(err: io::Error) -> GetThirdPartyJobDetailsError {
-        GetThirdPartyJobDetailsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetThirdPartyJobDetailsError {
@@ -2906,13 +2360,6 @@ impl Error for GetThirdPartyJobDetailsError {
             GetThirdPartyJobDetailsError::InvalidClientToken(ref cause) => cause,
             GetThirdPartyJobDetailsError::InvalidJob(ref cause) => cause,
             GetThirdPartyJobDetailsError::JobNotFound(ref cause) => cause,
-            GetThirdPartyJobDetailsError::Validation(ref cause) => cause,
-            GetThirdPartyJobDetailsError::Credentials(ref err) => err.description(),
-            GetThirdPartyJobDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetThirdPartyJobDetailsError::ParseError(ref cause) => cause,
-            GetThirdPartyJobDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2921,20 +2368,10 @@ impl Error for GetThirdPartyJobDetailsError {
 pub enum ListActionTypesError {
     /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListActionTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListActionTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2947,36 +2384,15 @@ impl ListActionTypesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListActionTypesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListActionTypesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListActionTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListActionTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListActionTypesError {
-    fn from(err: serde_json::error::Error) -> ListActionTypesError {
-        ListActionTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListActionTypesError {
-    fn from(err: CredentialsError) -> ListActionTypesError {
-        ListActionTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListActionTypesError {
-    fn from(err: HttpDispatchError) -> ListActionTypesError {
-        ListActionTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListActionTypesError {
-    fn from(err: io::Error) -> ListActionTypesError {
-        ListActionTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListActionTypesError {
@@ -2988,11 +2404,6 @@ impl Error for ListActionTypesError {
     fn description(&self) -> &str {
         match *self {
             ListActionTypesError::InvalidNextToken(ref cause) => cause,
-            ListActionTypesError::Validation(ref cause) => cause,
-            ListActionTypesError::Credentials(ref err) => err.description(),
-            ListActionTypesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListActionTypesError::ParseError(ref cause) => cause,
-            ListActionTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3003,20 +2414,10 @@ pub enum ListPipelineExecutionsError {
     InvalidNextToken(String),
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelineExecutionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPipelineExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelineExecutionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3029,43 +2430,20 @@ impl ListPipelineExecutionsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListPipelineExecutionsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPipelineExecutionsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "PipelineNotFoundException" => {
-                    return ListPipelineExecutionsError::PipelineNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPipelineExecutionsError::PipelineNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListPipelineExecutionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPipelineExecutionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPipelineExecutionsError {
-    fn from(err: serde_json::error::Error) -> ListPipelineExecutionsError {
-        ListPipelineExecutionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPipelineExecutionsError {
-    fn from(err: CredentialsError) -> ListPipelineExecutionsError {
-        ListPipelineExecutionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPipelineExecutionsError {
-    fn from(err: HttpDispatchError) -> ListPipelineExecutionsError {
-        ListPipelineExecutionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPipelineExecutionsError {
-    fn from(err: io::Error) -> ListPipelineExecutionsError {
-        ListPipelineExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPipelineExecutionsError {
@@ -3078,13 +2456,6 @@ impl Error for ListPipelineExecutionsError {
         match *self {
             ListPipelineExecutionsError::InvalidNextToken(ref cause) => cause,
             ListPipelineExecutionsError::PipelineNotFound(ref cause) => cause,
-            ListPipelineExecutionsError::Validation(ref cause) => cause,
-            ListPipelineExecutionsError::Credentials(ref err) => err.description(),
-            ListPipelineExecutionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPipelineExecutionsError::ParseError(ref cause) => cause,
-            ListPipelineExecutionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3093,20 +2464,10 @@ impl Error for ListPipelineExecutionsError {
 pub enum ListPipelinesError {
     /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPipelinesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPipelinesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPipelinesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3119,36 +2480,15 @@ impl ListPipelinesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListPipelinesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListPipelinesError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListPipelinesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPipelinesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPipelinesError {
-    fn from(err: serde_json::error::Error) -> ListPipelinesError {
-        ListPipelinesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPipelinesError {
-    fn from(err: CredentialsError) -> ListPipelinesError {
-        ListPipelinesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPipelinesError {
-    fn from(err: HttpDispatchError) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPipelinesError {
-    fn from(err: io::Error) -> ListPipelinesError {
-        ListPipelinesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPipelinesError {
@@ -3160,11 +2500,6 @@ impl Error for ListPipelinesError {
     fn description(&self) -> &str {
         match *self {
             ListPipelinesError::InvalidNextToken(ref cause) => cause,
-            ListPipelinesError::Validation(ref cause) => cause,
-            ListPipelinesError::Credentials(ref err) => err.description(),
-            ListPipelinesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPipelinesError::ParseError(ref cause) => cause,
-            ListPipelinesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3173,20 +2508,10 @@ impl Error for ListPipelinesError {
 pub enum ListWebhooksError {
     /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListWebhooksError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListWebhooksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListWebhooksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3199,36 +2524,15 @@ impl ListWebhooksError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListWebhooksError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListWebhooksError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListWebhooksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListWebhooksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListWebhooksError {
-    fn from(err: serde_json::error::Error) -> ListWebhooksError {
-        ListWebhooksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListWebhooksError {
-    fn from(err: CredentialsError) -> ListWebhooksError {
-        ListWebhooksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListWebhooksError {
-    fn from(err: HttpDispatchError) -> ListWebhooksError {
-        ListWebhooksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListWebhooksError {
-    fn from(err: io::Error) -> ListWebhooksError {
-        ListWebhooksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListWebhooksError {
@@ -3240,11 +2544,6 @@ impl Error for ListWebhooksError {
     fn description(&self) -> &str {
         match *self {
             ListWebhooksError::InvalidNextToken(ref cause) => cause,
-            ListWebhooksError::Validation(ref cause) => cause,
-            ListWebhooksError::Credentials(ref err) => err.description(),
-            ListWebhooksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListWebhooksError::ParseError(ref cause) => cause,
-            ListWebhooksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3253,20 +2552,10 @@ impl Error for ListWebhooksError {
 pub enum PollForJobsError {
     /// <p>The specified action type cannot be found.</p>
     ActionTypeNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PollForJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PollForJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3279,36 +2568,15 @@ impl PollForJobsError {
 
             match *error_type {
                 "ActionTypeNotFoundException" => {
-                    return PollForJobsError::ActionTypeNotFound(String::from(error_message));
+                    return RusotoError::Service(PollForJobsError::ActionTypeNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PollForJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PollForJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PollForJobsError {
-    fn from(err: serde_json::error::Error) -> PollForJobsError {
-        PollForJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PollForJobsError {
-    fn from(err: CredentialsError) -> PollForJobsError {
-        PollForJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PollForJobsError {
-    fn from(err: HttpDispatchError) -> PollForJobsError {
-        PollForJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PollForJobsError {
-    fn from(err: io::Error) -> PollForJobsError {
-        PollForJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PollForJobsError {
@@ -3320,11 +2588,6 @@ impl Error for PollForJobsError {
     fn description(&self) -> &str {
         match *self {
             PollForJobsError::ActionTypeNotFound(ref cause) => cause,
-            PollForJobsError::Validation(ref cause) => cause,
-            PollForJobsError::Credentials(ref err) => err.description(),
-            PollForJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PollForJobsError::ParseError(ref cause) => cause,
-            PollForJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3333,20 +2596,10 @@ impl Error for PollForJobsError {
 pub enum PollForThirdPartyJobsError {
     /// <p>The specified action type cannot be found.</p>
     ActionTypeNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PollForThirdPartyJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PollForThirdPartyJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PollForThirdPartyJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3359,38 +2612,15 @@ impl PollForThirdPartyJobsError {
 
             match *error_type {
                 "ActionTypeNotFoundException" => {
-                    return PollForThirdPartyJobsError::ActionTypeNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PollForThirdPartyJobsError::ActionTypeNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PollForThirdPartyJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PollForThirdPartyJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PollForThirdPartyJobsError {
-    fn from(err: serde_json::error::Error) -> PollForThirdPartyJobsError {
-        PollForThirdPartyJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PollForThirdPartyJobsError {
-    fn from(err: CredentialsError) -> PollForThirdPartyJobsError {
-        PollForThirdPartyJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PollForThirdPartyJobsError {
-    fn from(err: HttpDispatchError) -> PollForThirdPartyJobsError {
-        PollForThirdPartyJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PollForThirdPartyJobsError {
-    fn from(err: io::Error) -> PollForThirdPartyJobsError {
-        PollForThirdPartyJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PollForThirdPartyJobsError {
@@ -3402,13 +2632,6 @@ impl Error for PollForThirdPartyJobsError {
     fn description(&self) -> &str {
         match *self {
             PollForThirdPartyJobsError::ActionTypeNotFound(ref cause) => cause,
-            PollForThirdPartyJobsError::Validation(ref cause) => cause,
-            PollForThirdPartyJobsError::Credentials(ref err) => err.description(),
-            PollForThirdPartyJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PollForThirdPartyJobsError::ParseError(ref cause) => cause,
-            PollForThirdPartyJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3421,20 +2644,10 @@ pub enum PutActionRevisionError {
     PipelineNotFound(String),
     /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutActionRevisionError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutActionRevisionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutActionRevisionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3447,42 +2660,25 @@ impl PutActionRevisionError {
 
             match *error_type {
                 "ActionNotFoundException" => {
-                    return PutActionRevisionError::ActionNotFound(String::from(error_message));
+                    return RusotoError::Service(PutActionRevisionError::ActionNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return PutActionRevisionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(PutActionRevisionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "StageNotFoundException" => {
-                    return PutActionRevisionError::StageNotFound(String::from(error_message));
+                    return RusotoError::Service(PutActionRevisionError::StageNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutActionRevisionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutActionRevisionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutActionRevisionError {
-    fn from(err: serde_json::error::Error) -> PutActionRevisionError {
-        PutActionRevisionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutActionRevisionError {
-    fn from(err: CredentialsError) -> PutActionRevisionError {
-        PutActionRevisionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutActionRevisionError {
-    fn from(err: HttpDispatchError) -> PutActionRevisionError {
-        PutActionRevisionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutActionRevisionError {
-    fn from(err: io::Error) -> PutActionRevisionError {
-        PutActionRevisionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutActionRevisionError {
@@ -3496,13 +2692,6 @@ impl Error for PutActionRevisionError {
             PutActionRevisionError::ActionNotFound(ref cause) => cause,
             PutActionRevisionError::PipelineNotFound(ref cause) => cause,
             PutActionRevisionError::StageNotFound(ref cause) => cause,
-            PutActionRevisionError::Validation(ref cause) => cause,
-            PutActionRevisionError::Credentials(ref err) => err.description(),
-            PutActionRevisionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutActionRevisionError::ParseError(ref cause) => cause,
-            PutActionRevisionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3519,20 +2708,10 @@ pub enum PutApprovalResultError {
     PipelineNotFound(String),
     /// <p>The specified stage was specified in an invalid format or cannot be found.</p>
     StageNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutApprovalResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutApprovalResultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutApprovalResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3545,50 +2724,35 @@ impl PutApprovalResultError {
 
             match *error_type {
                 "ActionNotFoundException" => {
-                    return PutApprovalResultError::ActionNotFound(String::from(error_message));
+                    return RusotoError::Service(PutApprovalResultError::ActionNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ApprovalAlreadyCompletedException" => {
-                    return PutApprovalResultError::ApprovalAlreadyCompleted(String::from(
-                        error_message,
+                    return RusotoError::Service(PutApprovalResultError::ApprovalAlreadyCompleted(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidApprovalTokenException" => {
-                    return PutApprovalResultError::InvalidApprovalToken(String::from(error_message));
+                    return RusotoError::Service(PutApprovalResultError::InvalidApprovalToken(
+                        String::from(error_message),
+                    ));
                 }
                 "PipelineNotFoundException" => {
-                    return PutApprovalResultError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(PutApprovalResultError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "StageNotFoundException" => {
-                    return PutApprovalResultError::StageNotFound(String::from(error_message));
+                    return RusotoError::Service(PutApprovalResultError::StageNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutApprovalResultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutApprovalResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutApprovalResultError {
-    fn from(err: serde_json::error::Error) -> PutApprovalResultError {
-        PutApprovalResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutApprovalResultError {
-    fn from(err: CredentialsError) -> PutApprovalResultError {
-        PutApprovalResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutApprovalResultError {
-    fn from(err: HttpDispatchError) -> PutApprovalResultError {
-        PutApprovalResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutApprovalResultError {
-    fn from(err: io::Error) -> PutApprovalResultError {
-        PutApprovalResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutApprovalResultError {
@@ -3604,13 +2768,6 @@ impl Error for PutApprovalResultError {
             PutApprovalResultError::InvalidApprovalToken(ref cause) => cause,
             PutApprovalResultError::PipelineNotFound(ref cause) => cause,
             PutApprovalResultError::StageNotFound(ref cause) => cause,
-            PutApprovalResultError::Validation(ref cause) => cause,
-            PutApprovalResultError::Credentials(ref err) => err.description(),
-            PutApprovalResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutApprovalResultError::ParseError(ref cause) => cause,
-            PutApprovalResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3621,20 +2778,10 @@ pub enum PutJobFailureResultError {
     InvalidJobState(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutJobFailureResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutJobFailureResultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobFailureResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3647,39 +2794,20 @@ impl PutJobFailureResultError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return PutJobFailureResultError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(PutJobFailureResultError::InvalidJobState(
+                        String::from(error_message),
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return PutJobFailureResultError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(PutJobFailureResultError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutJobFailureResultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutJobFailureResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutJobFailureResultError {
-    fn from(err: serde_json::error::Error) -> PutJobFailureResultError {
-        PutJobFailureResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutJobFailureResultError {
-    fn from(err: CredentialsError) -> PutJobFailureResultError {
-        PutJobFailureResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutJobFailureResultError {
-    fn from(err: HttpDispatchError) -> PutJobFailureResultError {
-        PutJobFailureResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutJobFailureResultError {
-    fn from(err: io::Error) -> PutJobFailureResultError {
-        PutJobFailureResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutJobFailureResultError {
@@ -3692,13 +2820,6 @@ impl Error for PutJobFailureResultError {
         match *self {
             PutJobFailureResultError::InvalidJobState(ref cause) => cause,
             PutJobFailureResultError::JobNotFound(ref cause) => cause,
-            PutJobFailureResultError::Validation(ref cause) => cause,
-            PutJobFailureResultError::Credentials(ref err) => err.description(),
-            PutJobFailureResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutJobFailureResultError::ParseError(ref cause) => cause,
-            PutJobFailureResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3709,20 +2830,10 @@ pub enum PutJobSuccessResultError {
     InvalidJobState(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutJobSuccessResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutJobSuccessResultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutJobSuccessResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3735,39 +2846,20 @@ impl PutJobSuccessResultError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return PutJobSuccessResultError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(PutJobSuccessResultError::InvalidJobState(
+                        String::from(error_message),
+                    ));
                 }
                 "JobNotFoundException" => {
-                    return PutJobSuccessResultError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(PutJobSuccessResultError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutJobSuccessResultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutJobSuccessResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutJobSuccessResultError {
-    fn from(err: serde_json::error::Error) -> PutJobSuccessResultError {
-        PutJobSuccessResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutJobSuccessResultError {
-    fn from(err: CredentialsError) -> PutJobSuccessResultError {
-        PutJobSuccessResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutJobSuccessResultError {
-    fn from(err: HttpDispatchError) -> PutJobSuccessResultError {
-        PutJobSuccessResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutJobSuccessResultError {
-    fn from(err: io::Error) -> PutJobSuccessResultError {
-        PutJobSuccessResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutJobSuccessResultError {
@@ -3780,13 +2872,6 @@ impl Error for PutJobSuccessResultError {
         match *self {
             PutJobSuccessResultError::InvalidJobState(ref cause) => cause,
             PutJobSuccessResultError::JobNotFound(ref cause) => cause,
-            PutJobSuccessResultError::Validation(ref cause) => cause,
-            PutJobSuccessResultError::Credentials(ref err) => err.description(),
-            PutJobSuccessResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutJobSuccessResultError::ParseError(ref cause) => cause,
-            PutJobSuccessResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3799,20 +2884,12 @@ pub enum PutThirdPartyJobFailureResultError {
     InvalidJobState(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutThirdPartyJobFailureResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutThirdPartyJobFailureResultError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutThirdPartyJobFailureResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3825,48 +2902,29 @@ impl PutThirdPartyJobFailureResultError {
 
             match *error_type {
                 "InvalidClientTokenException" => {
-                    return PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutThirdPartyJobFailureResultError::InvalidClientToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidJobStateException" => {
-                    return PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutThirdPartyJobFailureResultError::InvalidJobState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "JobNotFoundException" => {
-                    return PutThirdPartyJobFailureResultError::JobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutThirdPartyJobFailureResultError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutThirdPartyJobFailureResultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutThirdPartyJobFailureResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutThirdPartyJobFailureResultError {
-    fn from(err: serde_json::error::Error) -> PutThirdPartyJobFailureResultError {
-        PutThirdPartyJobFailureResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutThirdPartyJobFailureResultError {
-    fn from(err: CredentialsError) -> PutThirdPartyJobFailureResultError {
-        PutThirdPartyJobFailureResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutThirdPartyJobFailureResultError {
-    fn from(err: HttpDispatchError) -> PutThirdPartyJobFailureResultError {
-        PutThirdPartyJobFailureResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutThirdPartyJobFailureResultError {
-    fn from(err: io::Error) -> PutThirdPartyJobFailureResultError {
-        PutThirdPartyJobFailureResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutThirdPartyJobFailureResultError {
@@ -3880,13 +2938,6 @@ impl Error for PutThirdPartyJobFailureResultError {
             PutThirdPartyJobFailureResultError::InvalidClientToken(ref cause) => cause,
             PutThirdPartyJobFailureResultError::InvalidJobState(ref cause) => cause,
             PutThirdPartyJobFailureResultError::JobNotFound(ref cause) => cause,
-            PutThirdPartyJobFailureResultError::Validation(ref cause) => cause,
-            PutThirdPartyJobFailureResultError::Credentials(ref err) => err.description(),
-            PutThirdPartyJobFailureResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutThirdPartyJobFailureResultError::ParseError(ref cause) => cause,
-            PutThirdPartyJobFailureResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3899,20 +2950,12 @@ pub enum PutThirdPartyJobSuccessResultError {
     InvalidJobState(String),
     /// <p>The specified job was specified in an invalid format or cannot be found.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutThirdPartyJobSuccessResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutThirdPartyJobSuccessResultError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutThirdPartyJobSuccessResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3925,48 +2968,29 @@ impl PutThirdPartyJobSuccessResultError {
 
             match *error_type {
                 "InvalidClientTokenException" => {
-                    return PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutThirdPartyJobSuccessResultError::InvalidClientToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidJobStateException" => {
-                    return PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutThirdPartyJobSuccessResultError::InvalidJobState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "JobNotFoundException" => {
-                    return PutThirdPartyJobSuccessResultError::JobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutThirdPartyJobSuccessResultError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutThirdPartyJobSuccessResultError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutThirdPartyJobSuccessResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutThirdPartyJobSuccessResultError {
-    fn from(err: serde_json::error::Error) -> PutThirdPartyJobSuccessResultError {
-        PutThirdPartyJobSuccessResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutThirdPartyJobSuccessResultError {
-    fn from(err: CredentialsError) -> PutThirdPartyJobSuccessResultError {
-        PutThirdPartyJobSuccessResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutThirdPartyJobSuccessResultError {
-    fn from(err: HttpDispatchError) -> PutThirdPartyJobSuccessResultError {
-        PutThirdPartyJobSuccessResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutThirdPartyJobSuccessResultError {
-    fn from(err: io::Error) -> PutThirdPartyJobSuccessResultError {
-        PutThirdPartyJobSuccessResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutThirdPartyJobSuccessResultError {
@@ -3980,13 +3004,6 @@ impl Error for PutThirdPartyJobSuccessResultError {
             PutThirdPartyJobSuccessResultError::InvalidClientToken(ref cause) => cause,
             PutThirdPartyJobSuccessResultError::InvalidJobState(ref cause) => cause,
             PutThirdPartyJobSuccessResultError::JobNotFound(ref cause) => cause,
-            PutThirdPartyJobSuccessResultError::Validation(ref cause) => cause,
-            PutThirdPartyJobSuccessResultError::Credentials(ref err) => err.description(),
-            PutThirdPartyJobSuccessResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutThirdPartyJobSuccessResultError::ParseError(ref cause) => cause,
-            PutThirdPartyJobSuccessResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4001,20 +3018,10 @@ pub enum PutWebhookError {
     LimitExceeded(String),
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutWebhookError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutWebhookError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWebhookError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4027,47 +3034,32 @@ impl PutWebhookError {
 
             match *error_type {
                 "InvalidWebhookAuthenticationParametersException" => {
-                    return PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutWebhookError::InvalidWebhookAuthenticationParameters(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidWebhookFilterPatternException" => {
-                    return PutWebhookError::InvalidWebhookFilterPattern(String::from(error_message));
+                    return RusotoError::Service(PutWebhookError::InvalidWebhookFilterPattern(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutWebhookError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutWebhookError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "PipelineNotFoundException" => {
-                    return PutWebhookError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(PutWebhookError::PipelineNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PutWebhookError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutWebhookError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutWebhookError {
-    fn from(err: serde_json::error::Error) -> PutWebhookError {
-        PutWebhookError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutWebhookError {
-    fn from(err: CredentialsError) -> PutWebhookError {
-        PutWebhookError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutWebhookError {
-    fn from(err: HttpDispatchError) -> PutWebhookError {
-        PutWebhookError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutWebhookError {
-    fn from(err: io::Error) -> PutWebhookError {
-        PutWebhookError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutWebhookError {
@@ -4082,11 +3074,6 @@ impl Error for PutWebhookError {
             PutWebhookError::InvalidWebhookFilterPattern(ref cause) => cause,
             PutWebhookError::LimitExceeded(ref cause) => cause,
             PutWebhookError::PipelineNotFound(ref cause) => cause,
-            PutWebhookError::Validation(ref cause) => cause,
-            PutWebhookError::Credentials(ref err) => err.description(),
-            PutWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutWebhookError::ParseError(ref cause) => cause,
-            PutWebhookError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4095,20 +3082,12 @@ impl Error for PutWebhookError {
 pub enum RegisterWebhookWithThirdPartyError {
     /// <p>The specified webhook was entered in an invalid format or cannot be found.</p>
     WebhookNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterWebhookWithThirdPartyError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterWebhookWithThirdPartyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RegisterWebhookWithThirdPartyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4121,38 +3100,17 @@ impl RegisterWebhookWithThirdPartyError {
 
             match *error_type {
                 "WebhookNotFoundException" => {
-                    return RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RegisterWebhookWithThirdPartyError::WebhookNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RegisterWebhookWithThirdPartyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterWebhookWithThirdPartyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterWebhookWithThirdPartyError {
-    fn from(err: serde_json::error::Error) -> RegisterWebhookWithThirdPartyError {
-        RegisterWebhookWithThirdPartyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterWebhookWithThirdPartyError {
-    fn from(err: CredentialsError) -> RegisterWebhookWithThirdPartyError {
-        RegisterWebhookWithThirdPartyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterWebhookWithThirdPartyError {
-    fn from(err: HttpDispatchError) -> RegisterWebhookWithThirdPartyError {
-        RegisterWebhookWithThirdPartyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterWebhookWithThirdPartyError {
-    fn from(err: io::Error) -> RegisterWebhookWithThirdPartyError {
-        RegisterWebhookWithThirdPartyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterWebhookWithThirdPartyError {
@@ -4164,13 +3122,6 @@ impl Error for RegisterWebhookWithThirdPartyError {
     fn description(&self) -> &str {
         match *self {
             RegisterWebhookWithThirdPartyError::WebhookNotFound(ref cause) => cause,
-            RegisterWebhookWithThirdPartyError::Validation(ref cause) => cause,
-            RegisterWebhookWithThirdPartyError::Credentials(ref err) => err.description(),
-            RegisterWebhookWithThirdPartyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterWebhookWithThirdPartyError::ParseError(ref cause) => cause,
-            RegisterWebhookWithThirdPartyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4185,20 +3136,10 @@ pub enum RetryStageExecutionError {
     StageNotFound(String),
     /// <p>The specified stage can't be retried because the pipeline structure or stage state changed after the stage was not completed; the stage contains no failed actions; one or more actions are still in progress; or another retry attempt is already in progress. </p>
     StageNotRetryable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RetryStageExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RetryStageExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RetryStageExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4211,47 +3152,32 @@ impl RetryStageExecutionError {
 
             match *error_type {
                 "NotLatestPipelineExecutionException" => {
-                    return RetryStageExecutionError::NotLatestPipelineExecution(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RetryStageExecutionError::NotLatestPipelineExecution(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PipelineNotFoundException" => {
-                    return RetryStageExecutionError::PipelineNotFound(String::from(error_message));
+                    return RusotoError::Service(RetryStageExecutionError::PipelineNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "StageNotFoundException" => {
-                    return RetryStageExecutionError::StageNotFound(String::from(error_message));
+                    return RusotoError::Service(RetryStageExecutionError::StageNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "StageNotRetryableException" => {
-                    return RetryStageExecutionError::StageNotRetryable(String::from(error_message));
+                    return RusotoError::Service(RetryStageExecutionError::StageNotRetryable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RetryStageExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RetryStageExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RetryStageExecutionError {
-    fn from(err: serde_json::error::Error) -> RetryStageExecutionError {
-        RetryStageExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RetryStageExecutionError {
-    fn from(err: CredentialsError) -> RetryStageExecutionError {
-        RetryStageExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RetryStageExecutionError {
-    fn from(err: HttpDispatchError) -> RetryStageExecutionError {
-        RetryStageExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RetryStageExecutionError {
-    fn from(err: io::Error) -> RetryStageExecutionError {
-        RetryStageExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RetryStageExecutionError {
@@ -4266,13 +3192,6 @@ impl Error for RetryStageExecutionError {
             RetryStageExecutionError::PipelineNotFound(ref cause) => cause,
             RetryStageExecutionError::StageNotFound(ref cause) => cause,
             RetryStageExecutionError::StageNotRetryable(ref cause) => cause,
-            RetryStageExecutionError::Validation(ref cause) => cause,
-            RetryStageExecutionError::Credentials(ref err) => err.description(),
-            RetryStageExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RetryStageExecutionError::ParseError(ref cause) => cause,
-            RetryStageExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4281,20 +3200,10 @@ impl Error for RetryStageExecutionError {
 pub enum StartPipelineExecutionError {
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartPipelineExecutionError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartPipelineExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartPipelineExecutionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4307,38 +3216,15 @@ impl StartPipelineExecutionError {
 
             match *error_type {
                 "PipelineNotFoundException" => {
-                    return StartPipelineExecutionError::PipelineNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(StartPipelineExecutionError::PipelineNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartPipelineExecutionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartPipelineExecutionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartPipelineExecutionError {
-    fn from(err: serde_json::error::Error) -> StartPipelineExecutionError {
-        StartPipelineExecutionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartPipelineExecutionError {
-    fn from(err: CredentialsError) -> StartPipelineExecutionError {
-        StartPipelineExecutionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartPipelineExecutionError {
-    fn from(err: HttpDispatchError) -> StartPipelineExecutionError {
-        StartPipelineExecutionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartPipelineExecutionError {
-    fn from(err: io::Error) -> StartPipelineExecutionError {
-        StartPipelineExecutionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartPipelineExecutionError {
@@ -4350,13 +3236,6 @@ impl Error for StartPipelineExecutionError {
     fn description(&self) -> &str {
         match *self {
             StartPipelineExecutionError::PipelineNotFound(ref cause) => cause,
-            StartPipelineExecutionError::Validation(ref cause) => cause,
-            StartPipelineExecutionError::Credentials(ref err) => err.description(),
-            StartPipelineExecutionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartPipelineExecutionError::ParseError(ref cause) => cause,
-            StartPipelineExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4373,20 +3252,10 @@ pub enum UpdatePipelineError {
     InvalidStructure(String),
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePipelineError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePipelineError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePipelineError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4399,52 +3268,35 @@ impl UpdatePipelineError {
 
             match *error_type {
                 "InvalidActionDeclarationException" => {
-                    return UpdatePipelineError::InvalidActionDeclaration(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineError::InvalidActionDeclaration(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidBlockerDeclarationException" => {
-                    return UpdatePipelineError::InvalidBlockerDeclaration(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePipelineError::InvalidBlockerDeclaration(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidStageDeclarationException" => {
-                    return UpdatePipelineError::InvalidStageDeclaration(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::InvalidStageDeclaration(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidStructureException" => {
-                    return UpdatePipelineError::InvalidStructure(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::InvalidStructure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdatePipelineError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdatePipelineError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdatePipelineError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePipelineError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePipelineError {
-    fn from(err: serde_json::error::Error) -> UpdatePipelineError {
-        UpdatePipelineError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePipelineError {
-    fn from(err: CredentialsError) -> UpdatePipelineError {
-        UpdatePipelineError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePipelineError {
-    fn from(err: HttpDispatchError) -> UpdatePipelineError {
-        UpdatePipelineError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePipelineError {
-    fn from(err: io::Error) -> UpdatePipelineError {
-        UpdatePipelineError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePipelineError {
@@ -4460,11 +3312,6 @@ impl Error for UpdatePipelineError {
             UpdatePipelineError::InvalidStageDeclaration(ref cause) => cause,
             UpdatePipelineError::InvalidStructure(ref cause) => cause,
             UpdatePipelineError::LimitExceeded(ref cause) => cause,
-            UpdatePipelineError::Validation(ref cause) => cause,
-            UpdatePipelineError::Credentials(ref err) => err.description(),
-            UpdatePipelineError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePipelineError::ParseError(ref cause) => cause,
-            UpdatePipelineError::Unknown(_) => "unknown error",
         }
     }
 }
