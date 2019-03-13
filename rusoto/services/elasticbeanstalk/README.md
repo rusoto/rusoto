@@ -23,7 +23,7 @@ To use `rusoto_elasticbeanstalk` in your application, add it as a dependency in 
 
 ```toml
 [dependencies]
-rusoto_elasticbeanstalk = "0.36.0"
+rusoto_elasticbeanstalk = "0.37.0"
 ```
 
 ## Contributing

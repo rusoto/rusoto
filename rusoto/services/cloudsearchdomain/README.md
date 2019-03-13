@@ -23,7 +23,7 @@ To use `rusoto_cloudsearchdomain` in your application, add it as a dependency in
 
 ```toml
 [dependencies]
-rusoto_cloudsearchdomain = "0.36.0"
+rusoto_cloudsearchdomain = "0.37.0"
 ```
 
 ## Contributing

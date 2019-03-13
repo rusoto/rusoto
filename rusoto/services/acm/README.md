@@ -23,7 +23,7 @@ To use `rusoto_acm` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_acm = "0.36.0"
+rusoto_acm = "0.37.0"
 ```
 
 ## Contributing

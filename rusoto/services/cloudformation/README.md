@@ -23,7 +23,7 @@ To use `rusoto_cloudformation` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_cloudformation = "0.36.0"
+rusoto_cloudformation = "0.37.0"
 ```
 
 ## Contributing

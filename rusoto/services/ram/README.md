@@ -23,7 +23,7 @@ To use `rusoto_ram` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_ram = "0.36.0"
+rusoto_ram = "0.37.0"
 ```
 
 ## Contributing
