@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -585,20 +582,10 @@ pub enum CreateBudgetError {
     InternalError(String),
     /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidParameter(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBudgetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBudgetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBudgetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -611,45 +598,30 @@ impl CreateBudgetError {
 
             match *error_type {
                 "CreationLimitExceededException" => {
-                    return CreateBudgetError::CreationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateBudgetError::CreationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateRecordException" => {
-                    return CreateBudgetError::DuplicateRecord(String::from(error_message));
+                    return RusotoError::Service(CreateBudgetError::DuplicateRecord(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return CreateBudgetError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateBudgetError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateBudgetError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateBudgetError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateBudgetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateBudgetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateBudgetError {
-    fn from(err: serde_json::error::Error) -> CreateBudgetError {
-        CreateBudgetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateBudgetError {
-    fn from(err: CredentialsError) -> CreateBudgetError {
-        CreateBudgetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBudgetError {
-    fn from(err: HttpDispatchError) -> CreateBudgetError {
-        CreateBudgetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBudgetError {
-    fn from(err: io::Error) -> CreateBudgetError {
-        CreateBudgetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateBudgetError {
@@ -664,11 +636,6 @@ impl Error for CreateBudgetError {
             CreateBudgetError::DuplicateRecord(ref cause) => cause,
             CreateBudgetError::InternalError(ref cause) => cause,
             CreateBudgetError::InvalidParameter(ref cause) => cause,
-            CreateBudgetError::Validation(ref cause) => cause,
-            CreateBudgetError::Credentials(ref err) => err.description(),
-            CreateBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBudgetError::ParseError(ref cause) => cause,
-            CreateBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -685,20 +652,10 @@ pub enum CreateNotificationError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNotificationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -711,50 +668,35 @@ impl CreateNotificationError {
 
             match *error_type {
                 "CreationLimitExceededException" => {
-                    return CreateNotificationError::CreationLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateNotificationError::CreationLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "DuplicateRecordException" => {
-                    return CreateNotificationError::DuplicateRecord(String::from(error_message));
+                    return RusotoError::Service(CreateNotificationError::DuplicateRecord(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return CreateNotificationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateNotificationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateNotificationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateNotificationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateNotificationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateNotificationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateNotificationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateNotificationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateNotificationError {
-    fn from(err: serde_json::error::Error) -> CreateNotificationError {
-        CreateNotificationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateNotificationError {
-    fn from(err: CredentialsError) -> CreateNotificationError {
-        CreateNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateNotificationError {
-    fn from(err: HttpDispatchError) -> CreateNotificationError {
-        CreateNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateNotificationError {
-    fn from(err: io::Error) -> CreateNotificationError {
-        CreateNotificationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateNotificationError {
@@ -770,13 +712,6 @@ impl Error for CreateNotificationError {
             CreateNotificationError::InternalError(ref cause) => cause,
             CreateNotificationError::InvalidParameter(ref cause) => cause,
             CreateNotificationError::NotFound(ref cause) => cause,
-            CreateNotificationError::Validation(ref cause) => cause,
-            CreateNotificationError::Credentials(ref err) => err.description(),
-            CreateNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateNotificationError::ParseError(ref cause) => cause,
-            CreateNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -793,20 +728,10 @@ pub enum CreateSubscriberError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSubscriberError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSubscriberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSubscriberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -819,48 +744,35 @@ impl CreateSubscriberError {
 
             match *error_type {
                 "CreationLimitExceededException" => {
-                    return CreateSubscriberError::CreationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateSubscriberError::CreationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DuplicateRecordException" => {
-                    return CreateSubscriberError::DuplicateRecord(String::from(error_message));
+                    return RusotoError::Service(CreateSubscriberError::DuplicateRecord(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return CreateSubscriberError::InternalError(String::from(error_message));
+                    return RusotoError::Service(CreateSubscriberError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateSubscriberError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateSubscriberError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateSubscriberError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateSubscriberError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateSubscriberError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSubscriberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSubscriberError {
-    fn from(err: serde_json::error::Error) -> CreateSubscriberError {
-        CreateSubscriberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSubscriberError {
-    fn from(err: CredentialsError) -> CreateSubscriberError {
-        CreateSubscriberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSubscriberError {
-    fn from(err: HttpDispatchError) -> CreateSubscriberError {
-        CreateSubscriberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSubscriberError {
-    fn from(err: io::Error) -> CreateSubscriberError {
-        CreateSubscriberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSubscriberError {
@@ -876,11 +788,6 @@ impl Error for CreateSubscriberError {
             CreateSubscriberError::InternalError(ref cause) => cause,
             CreateSubscriberError::InvalidParameter(ref cause) => cause,
             CreateSubscriberError::NotFound(ref cause) => cause,
-            CreateSubscriberError::Validation(ref cause) => cause,
-            CreateSubscriberError::Credentials(ref err) => err.description(),
-            CreateSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSubscriberError::ParseError(ref cause) => cause,
-            CreateSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -893,20 +800,10 @@ pub enum DeleteBudgetError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBudgetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBudgetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBudgetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -919,42 +816,25 @@ impl DeleteBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteBudgetError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteBudgetError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteBudgetError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteBudgetError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteBudgetError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBudgetError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBudgetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBudgetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBudgetError {
-    fn from(err: serde_json::error::Error) -> DeleteBudgetError {
-        DeleteBudgetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBudgetError {
-    fn from(err: CredentialsError) -> DeleteBudgetError {
-        DeleteBudgetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBudgetError {
-    fn from(err: HttpDispatchError) -> DeleteBudgetError {
-        DeleteBudgetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBudgetError {
-    fn from(err: io::Error) -> DeleteBudgetError {
-        DeleteBudgetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBudgetError {
@@ -968,11 +848,6 @@ impl Error for DeleteBudgetError {
             DeleteBudgetError::InternalError(ref cause) => cause,
             DeleteBudgetError::InvalidParameter(ref cause) => cause,
             DeleteBudgetError::NotFound(ref cause) => cause,
-            DeleteBudgetError::Validation(ref cause) => cause,
-            DeleteBudgetError::Credentials(ref err) => err.description(),
-            DeleteBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBudgetError::ParseError(ref cause) => cause,
-            DeleteBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -985,20 +860,10 @@ pub enum DeleteNotificationError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNotificationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1011,42 +876,25 @@ impl DeleteNotificationError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteNotificationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteNotificationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteNotificationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteNotificationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteNotificationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteNotificationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteNotificationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNotificationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNotificationError {
-    fn from(err: serde_json::error::Error) -> DeleteNotificationError {
-        DeleteNotificationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNotificationError {
-    fn from(err: CredentialsError) -> DeleteNotificationError {
-        DeleteNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNotificationError {
-    fn from(err: HttpDispatchError) -> DeleteNotificationError {
-        DeleteNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNotificationError {
-    fn from(err: io::Error) -> DeleteNotificationError {
-        DeleteNotificationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNotificationError {
@@ -1060,13 +908,6 @@ impl Error for DeleteNotificationError {
             DeleteNotificationError::InternalError(ref cause) => cause,
             DeleteNotificationError::InvalidParameter(ref cause) => cause,
             DeleteNotificationError::NotFound(ref cause) => cause,
-            DeleteNotificationError::Validation(ref cause) => cause,
-            DeleteNotificationError::Credentials(ref err) => err.description(),
-            DeleteNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteNotificationError::ParseError(ref cause) => cause,
-            DeleteNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1079,20 +920,10 @@ pub enum DeleteSubscriberError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubscriberError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubscriberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1105,42 +936,25 @@ impl DeleteSubscriberError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DeleteSubscriberError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DeleteSubscriberError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteSubscriberError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteSubscriberError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteSubscriberError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteSubscriberError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteSubscriberError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSubscriberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSubscriberError {
-    fn from(err: serde_json::error::Error) -> DeleteSubscriberError {
-        DeleteSubscriberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSubscriberError {
-    fn from(err: CredentialsError) -> DeleteSubscriberError {
-        DeleteSubscriberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSubscriberError {
-    fn from(err: HttpDispatchError) -> DeleteSubscriberError {
-        DeleteSubscriberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSubscriberError {
-    fn from(err: io::Error) -> DeleteSubscriberError {
-        DeleteSubscriberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSubscriberError {
@@ -1154,11 +968,6 @@ impl Error for DeleteSubscriberError {
             DeleteSubscriberError::InternalError(ref cause) => cause,
             DeleteSubscriberError::InvalidParameter(ref cause) => cause,
             DeleteSubscriberError::NotFound(ref cause) => cause,
-            DeleteSubscriberError::Validation(ref cause) => cause,
-            DeleteSubscriberError::Credentials(ref err) => err.description(),
-            DeleteSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSubscriberError::ParseError(ref cause) => cause,
-            DeleteSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1171,20 +980,10 @@ pub enum DescribeBudgetError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBudgetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1197,42 +996,25 @@ impl DescribeBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return DescribeBudgetError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeBudgetError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeBudgetError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeBudgetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBudgetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBudgetError {
-    fn from(err: serde_json::error::Error) -> DescribeBudgetError {
-        DescribeBudgetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBudgetError {
-    fn from(err: CredentialsError) -> DescribeBudgetError {
-        DescribeBudgetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBudgetError {
-    fn from(err: HttpDispatchError) -> DescribeBudgetError {
-        DescribeBudgetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBudgetError {
-    fn from(err: io::Error) -> DescribeBudgetError {
-        DescribeBudgetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBudgetError {
@@ -1246,11 +1028,6 @@ impl Error for DescribeBudgetError {
             DescribeBudgetError::InternalError(ref cause) => cause,
             DescribeBudgetError::InvalidParameter(ref cause) => cause,
             DescribeBudgetError::NotFound(ref cause) => cause,
-            DescribeBudgetError::Validation(ref cause) => cause,
-            DescribeBudgetError::Credentials(ref err) => err.description(),
-            DescribeBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBudgetError::ParseError(ref cause) => cause,
-            DescribeBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1267,20 +1044,12 @@ pub enum DescribeBudgetPerformanceHistoryError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBudgetPerformanceHistoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetPerformanceHistoryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeBudgetPerformanceHistoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1293,60 +1062,43 @@ impl DescribeBudgetPerformanceHistoryError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeBudgetPerformanceHistoryError::ExpiredNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InternalErrorException" => {
-                    return DescribeBudgetPerformanceHistoryError::InternalError(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidNextTokenException" => {
-                    return DescribeBudgetPerformanceHistoryError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterException" => {
-                    return DescribeBudgetPerformanceHistoryError::InvalidParameter(String::from(
-                        error_message,
-                    ));
-                }
-                "NotFoundException" => {
-                    return DescribeBudgetPerformanceHistoryError::NotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeBudgetPerformanceHistoryError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeBudgetPerformanceHistoryError::ExpiredNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InternalErrorException" => {
+                    return RusotoError::Service(
+                        DescribeBudgetPerformanceHistoryError::InternalError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeBudgetPerformanceHistoryError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DescribeBudgetPerformanceHistoryError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeBudgetPerformanceHistoryError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBudgetPerformanceHistoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBudgetPerformanceHistoryError {
-    fn from(err: serde_json::error::Error) -> DescribeBudgetPerformanceHistoryError {
-        DescribeBudgetPerformanceHistoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBudgetPerformanceHistoryError {
-    fn from(err: CredentialsError) -> DescribeBudgetPerformanceHistoryError {
-        DescribeBudgetPerformanceHistoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBudgetPerformanceHistoryError {
-    fn from(err: HttpDispatchError) -> DescribeBudgetPerformanceHistoryError {
-        DescribeBudgetPerformanceHistoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBudgetPerformanceHistoryError {
-    fn from(err: io::Error) -> DescribeBudgetPerformanceHistoryError {
-        DescribeBudgetPerformanceHistoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBudgetPerformanceHistoryError {
@@ -1362,13 +1114,6 @@ impl Error for DescribeBudgetPerformanceHistoryError {
             DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::InvalidParameter(ref cause) => cause,
             DescribeBudgetPerformanceHistoryError::NotFound(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::Validation(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::Credentials(ref err) => err.description(),
-            DescribeBudgetPerformanceHistoryError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeBudgetPerformanceHistoryError::ParseError(ref cause) => cause,
-            DescribeBudgetPerformanceHistoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1385,20 +1130,10 @@ pub enum DescribeBudgetsError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBudgetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBudgetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1411,48 +1146,35 @@ impl DescribeBudgetsError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeBudgetsError::ExpiredNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetsError::ExpiredNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return DescribeBudgetsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetsError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeBudgetsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeBudgetsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeBudgetsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeBudgetsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeBudgetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBudgetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBudgetsError {
-    fn from(err: serde_json::error::Error) -> DescribeBudgetsError {
-        DescribeBudgetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBudgetsError {
-    fn from(err: CredentialsError) -> DescribeBudgetsError {
-        DescribeBudgetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBudgetsError {
-    fn from(err: HttpDispatchError) -> DescribeBudgetsError {
-        DescribeBudgetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBudgetsError {
-    fn from(err: io::Error) -> DescribeBudgetsError {
-        DescribeBudgetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBudgetsError {
@@ -1468,11 +1190,6 @@ impl Error for DescribeBudgetsError {
             DescribeBudgetsError::InvalidNextToken(ref cause) => cause,
             DescribeBudgetsError::InvalidParameter(ref cause) => cause,
             DescribeBudgetsError::NotFound(ref cause) => cause,
-            DescribeBudgetsError::Validation(ref cause) => cause,
-            DescribeBudgetsError::Credentials(ref err) => err.description(),
-            DescribeBudgetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBudgetsError::ParseError(ref cause) => cause,
-            DescribeBudgetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1489,20 +1206,12 @@ pub enum DescribeNotificationsForBudgetError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNotificationsForBudgetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeNotificationsForBudgetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeNotificationsForBudgetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1515,60 +1224,41 @@ impl DescribeNotificationsForBudgetError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeNotificationsForBudgetError::ExpiredNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalErrorException" => {
-                    return DescribeNotificationsForBudgetError::InternalError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeNotificationsForBudgetError::InternalError(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterException" => {
-                    return DescribeNotificationsForBudgetError::InvalidParameter(String::from(
-                        error_message,
-                    ));
-                }
-                "NotFoundException" => {
-                    return DescribeNotificationsForBudgetError::NotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeNotificationsForBudgetError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeNotificationsForBudgetError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DescribeNotificationsForBudgetError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeNotificationsForBudgetError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeNotificationsForBudgetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeNotificationsForBudgetError {
-    fn from(err: serde_json::error::Error) -> DescribeNotificationsForBudgetError {
-        DescribeNotificationsForBudgetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeNotificationsForBudgetError {
-    fn from(err: CredentialsError) -> DescribeNotificationsForBudgetError {
-        DescribeNotificationsForBudgetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeNotificationsForBudgetError {
-    fn from(err: HttpDispatchError) -> DescribeNotificationsForBudgetError {
-        DescribeNotificationsForBudgetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeNotificationsForBudgetError {
-    fn from(err: io::Error) -> DescribeNotificationsForBudgetError {
-        DescribeNotificationsForBudgetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeNotificationsForBudgetError {
@@ -1584,13 +1274,6 @@ impl Error for DescribeNotificationsForBudgetError {
             DescribeNotificationsForBudgetError::InvalidNextToken(ref cause) => cause,
             DescribeNotificationsForBudgetError::InvalidParameter(ref cause) => cause,
             DescribeNotificationsForBudgetError::NotFound(ref cause) => cause,
-            DescribeNotificationsForBudgetError::Validation(ref cause) => cause,
-            DescribeNotificationsForBudgetError::Credentials(ref err) => err.description(),
-            DescribeNotificationsForBudgetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeNotificationsForBudgetError::ParseError(ref cause) => cause,
-            DescribeNotificationsForBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1607,20 +1290,12 @@ pub enum DescribeSubscribersForNotificationError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSubscribersForNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSubscribersForNotificationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeSubscribersForNotificationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1633,60 +1308,43 @@ impl DescribeSubscribersForNotificationError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InternalErrorException" => {
-                    return DescribeSubscribersForNotificationError::InternalError(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidNextTokenException" => {
-                    return DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidParameterException" => {
-                    return DescribeSubscribersForNotificationError::InvalidParameter(String::from(
-                        error_message,
-                    ));
-                }
-                "NotFoundException" => {
-                    return DescribeSubscribersForNotificationError::NotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeSubscribersForNotificationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeSubscribersForNotificationError::ExpiredNextToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InternalErrorException" => {
+                    return RusotoError::Service(
+                        DescribeSubscribersForNotificationError::InternalError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(
+                        DescribeSubscribersForNotificationError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DescribeSubscribersForNotificationError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeSubscribersForNotificationError::NotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSubscribersForNotificationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSubscribersForNotificationError {
-    fn from(err: serde_json::error::Error) -> DescribeSubscribersForNotificationError {
-        DescribeSubscribersForNotificationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSubscribersForNotificationError {
-    fn from(err: CredentialsError) -> DescribeSubscribersForNotificationError {
-        DescribeSubscribersForNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSubscribersForNotificationError {
-    fn from(err: HttpDispatchError) -> DescribeSubscribersForNotificationError {
-        DescribeSubscribersForNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSubscribersForNotificationError {
-    fn from(err: io::Error) -> DescribeSubscribersForNotificationError {
-        DescribeSubscribersForNotificationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSubscribersForNotificationError {
@@ -1702,13 +1360,6 @@ impl Error for DescribeSubscribersForNotificationError {
             DescribeSubscribersForNotificationError::InvalidNextToken(ref cause) => cause,
             DescribeSubscribersForNotificationError::InvalidParameter(ref cause) => cause,
             DescribeSubscribersForNotificationError::NotFound(ref cause) => cause,
-            DescribeSubscribersForNotificationError::Validation(ref cause) => cause,
-            DescribeSubscribersForNotificationError::Credentials(ref err) => err.description(),
-            DescribeSubscribersForNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSubscribersForNotificationError::ParseError(ref cause) => cause,
-            DescribeSubscribersForNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1721,20 +1372,10 @@ pub enum UpdateBudgetError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateBudgetError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateBudgetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBudgetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1747,42 +1388,25 @@ impl UpdateBudgetError {
 
             match *error_type {
                 "InternalErrorException" => {
-                    return UpdateBudgetError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateBudgetError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UpdateBudgetError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateBudgetError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateBudgetError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateBudgetError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateBudgetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateBudgetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateBudgetError {
-    fn from(err: serde_json::error::Error) -> UpdateBudgetError {
-        UpdateBudgetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateBudgetError {
-    fn from(err: CredentialsError) -> UpdateBudgetError {
-        UpdateBudgetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateBudgetError {
-    fn from(err: HttpDispatchError) -> UpdateBudgetError {
-        UpdateBudgetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateBudgetError {
-    fn from(err: io::Error) -> UpdateBudgetError {
-        UpdateBudgetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateBudgetError {
@@ -1796,11 +1420,6 @@ impl Error for UpdateBudgetError {
             UpdateBudgetError::InternalError(ref cause) => cause,
             UpdateBudgetError::InvalidParameter(ref cause) => cause,
             UpdateBudgetError::NotFound(ref cause) => cause,
-            UpdateBudgetError::Validation(ref cause) => cause,
-            UpdateBudgetError::Credentials(ref err) => err.description(),
-            UpdateBudgetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateBudgetError::ParseError(ref cause) => cause,
-            UpdateBudgetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1815,20 +1434,10 @@ pub enum UpdateNotificationError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateNotificationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateNotificationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNotificationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1841,45 +1450,30 @@ impl UpdateNotificationError {
 
             match *error_type {
                 "DuplicateRecordException" => {
-                    return UpdateNotificationError::DuplicateRecord(String::from(error_message));
+                    return RusotoError::Service(UpdateNotificationError::DuplicateRecord(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return UpdateNotificationError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateNotificationError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdateNotificationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateNotificationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateNotificationError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateNotificationError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateNotificationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateNotificationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateNotificationError {
-    fn from(err: serde_json::error::Error) -> UpdateNotificationError {
-        UpdateNotificationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateNotificationError {
-    fn from(err: CredentialsError) -> UpdateNotificationError {
-        UpdateNotificationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateNotificationError {
-    fn from(err: HttpDispatchError) -> UpdateNotificationError {
-        UpdateNotificationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateNotificationError {
-    fn from(err: io::Error) -> UpdateNotificationError {
-        UpdateNotificationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateNotificationError {
@@ -1894,13 +1488,6 @@ impl Error for UpdateNotificationError {
             UpdateNotificationError::InternalError(ref cause) => cause,
             UpdateNotificationError::InvalidParameter(ref cause) => cause,
             UpdateNotificationError::NotFound(ref cause) => cause,
-            UpdateNotificationError::Validation(ref cause) => cause,
-            UpdateNotificationError::Credentials(ref err) => err.description(),
-            UpdateNotificationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateNotificationError::ParseError(ref cause) => cause,
-            UpdateNotificationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1915,20 +1502,10 @@ pub enum UpdateSubscriberError {
     InvalidParameter(String),
     /// <p>We can’t locate the resource that you specified.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSubscriberError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSubscriberError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSubscriberError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1941,45 +1518,30 @@ impl UpdateSubscriberError {
 
             match *error_type {
                 "DuplicateRecordException" => {
-                    return UpdateSubscriberError::DuplicateRecord(String::from(error_message));
+                    return RusotoError::Service(UpdateSubscriberError::DuplicateRecord(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return UpdateSubscriberError::InternalError(String::from(error_message));
+                    return RusotoError::Service(UpdateSubscriberError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return UpdateSubscriberError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(UpdateSubscriberError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateSubscriberError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateSubscriberError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateSubscriberError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSubscriberError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSubscriberError {
-    fn from(err: serde_json::error::Error) -> UpdateSubscriberError {
-        UpdateSubscriberError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSubscriberError {
-    fn from(err: CredentialsError) -> UpdateSubscriberError {
-        UpdateSubscriberError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSubscriberError {
-    fn from(err: HttpDispatchError) -> UpdateSubscriberError {
-        UpdateSubscriberError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSubscriberError {
-    fn from(err: io::Error) -> UpdateSubscriberError {
-        UpdateSubscriberError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSubscriberError {
@@ -1994,11 +1556,6 @@ impl Error for UpdateSubscriberError {
             UpdateSubscriberError::InternalError(ref cause) => cause,
             UpdateSubscriberError::InvalidParameter(ref cause) => cause,
             UpdateSubscriberError::NotFound(ref cause) => cause,
-            UpdateSubscriberError::Validation(ref cause) => cause,
-            UpdateSubscriberError::Credentials(ref err) => err.description(),
-            UpdateSubscriberError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSubscriberError::ParseError(ref cause) => cause,
-            UpdateSubscriberError::Unknown(_) => "unknown error",
         }
     }
 }

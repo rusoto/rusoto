@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -923,20 +920,10 @@ pub enum CancelClusterError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -949,42 +936,25 @@ impl CancelClusterError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return CancelClusterError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(CancelClusterError::InvalidJobState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceException" => {
-                    return CancelClusterError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(CancelClusterError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return CancelClusterError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(CancelClusterError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CancelClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelClusterError {
-    fn from(err: serde_json::error::Error) -> CancelClusterError {
-        CancelClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelClusterError {
-    fn from(err: CredentialsError) -> CancelClusterError {
-        CancelClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelClusterError {
-    fn from(err: HttpDispatchError) -> CancelClusterError {
-        CancelClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelClusterError {
-    fn from(err: io::Error) -> CancelClusterError {
-        CancelClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelClusterError {
@@ -998,11 +968,6 @@ impl Error for CancelClusterError {
             CancelClusterError::InvalidJobState(ref cause) => cause,
             CancelClusterError::InvalidResource(ref cause) => cause,
             CancelClusterError::KMSRequestFailed(ref cause) => cause,
-            CancelClusterError::Validation(ref cause) => cause,
-            CancelClusterError::Credentials(ref err) => err.description(),
-            CancelClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelClusterError::ParseError(ref cause) => cause,
-            CancelClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1015,20 +980,10 @@ pub enum CancelJobError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1041,42 +996,25 @@ impl CancelJobError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return CancelJobError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::InvalidJobState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceException" => {
-                    return CancelJobError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return CancelJobError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(CancelJobError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CancelJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelJobError {
-    fn from(err: serde_json::error::Error) -> CancelJobError {
-        CancelJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelJobError {
-    fn from(err: CredentialsError) -> CancelJobError {
-        CancelJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelJobError {
-    fn from(err: HttpDispatchError) -> CancelJobError {
-        CancelJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelJobError {
-    fn from(err: io::Error) -> CancelJobError {
-        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelJobError {
@@ -1090,11 +1028,6 @@ impl Error for CancelJobError {
             CancelJobError::InvalidJobState(ref cause) => cause,
             CancelJobError::InvalidResource(ref cause) => cause,
             CancelJobError::KMSRequestFailed(ref cause) => cause,
-            CancelJobError::Validation(ref cause) => cause,
-            CancelJobError::Credentials(ref err) => err.description(),
-            CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelJobError::ParseError(ref cause) => cause,
-            CancelJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1105,20 +1038,10 @@ pub enum CreateAddressError {
     InvalidAddress(String),
     /// <p>The address is either outside the serviceable area for your region, or an error occurred. Check the address with your region's carrier and try again. If the issue persists, contact AWS Support.</p>
     UnsupportedAddress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAddressError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAddressError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAddressError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1131,39 +1054,20 @@ impl CreateAddressError {
 
             match *error_type {
                 "InvalidAddressException" => {
-                    return CreateAddressError::InvalidAddress(String::from(error_message));
+                    return RusotoError::Service(CreateAddressError::InvalidAddress(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedAddressException" => {
-                    return CreateAddressError::UnsupportedAddress(String::from(error_message));
+                    return RusotoError::Service(CreateAddressError::UnsupportedAddress(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateAddressError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAddressError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAddressError {
-    fn from(err: serde_json::error::Error) -> CreateAddressError {
-        CreateAddressError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAddressError {
-    fn from(err: CredentialsError) -> CreateAddressError {
-        CreateAddressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAddressError {
-    fn from(err: HttpDispatchError) -> CreateAddressError {
-        CreateAddressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAddressError {
-    fn from(err: io::Error) -> CreateAddressError {
-        CreateAddressError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAddressError {
@@ -1176,11 +1080,6 @@ impl Error for CreateAddressError {
         match *self {
             CreateAddressError::InvalidAddress(ref cause) => cause,
             CreateAddressError::UnsupportedAddress(ref cause) => cause,
-            CreateAddressError::Validation(ref cause) => cause,
-            CreateAddressError::Credentials(ref err) => err.description(),
-            CreateAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAddressError::ParseError(ref cause) => cause,
-            CreateAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1195,20 +1094,10 @@ pub enum CreateClusterError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1221,45 +1110,30 @@ impl CreateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return CreateClusterError::Ec2RequestFailed(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::Ec2RequestFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputCombinationException" => {
-                    return CreateClusterError::InvalidInputCombination(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::InvalidInputCombination(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceException" => {
-                    return CreateClusterError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return CreateClusterError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateClusterError {
-    fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterError {
-    fn from(err: CredentialsError) -> CreateClusterError {
-        CreateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterError {
-    fn from(err: HttpDispatchError) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterError {
-    fn from(err: io::Error) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -1274,11 +1148,6 @@ impl Error for CreateClusterError {
             CreateClusterError::InvalidInputCombination(ref cause) => cause,
             CreateClusterError::InvalidResource(ref cause) => cause,
             CreateClusterError::KMSRequestFailed(ref cause) => cause,
-            CreateClusterError::Validation(ref cause) => cause,
-            CreateClusterError::Credentials(ref err) => err.description(),
-            CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::ParseError(ref cause) => cause,
-            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1295,20 +1164,10 @@ pub enum CreateJobError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1321,48 +1180,35 @@ impl CreateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return CreateJobError::ClusterLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::ClusterLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "Ec2RequestFailedException" => {
-                    return CreateJobError::Ec2RequestFailed(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::Ec2RequestFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputCombinationException" => {
-                    return CreateJobError::InvalidInputCombination(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::InvalidInputCombination(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceException" => {
-                    return CreateJobError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return CreateJobError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateJobError {
-    fn from(err: serde_json::error::Error) -> CreateJobError {
-        CreateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateJobError {
-    fn from(err: CredentialsError) -> CreateJobError {
-        CreateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateJobError {
-    fn from(err: HttpDispatchError) -> CreateJobError {
-        CreateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateJobError {
-    fn from(err: io::Error) -> CreateJobError {
-        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateJobError {
@@ -1378,11 +1224,6 @@ impl Error for CreateJobError {
             CreateJobError::InvalidInputCombination(ref cause) => cause,
             CreateJobError::InvalidResource(ref cause) => cause,
             CreateJobError::KMSRequestFailed(ref cause) => cause,
-            CreateJobError::Validation(ref cause) => cause,
-            CreateJobError::Credentials(ref err) => err.description(),
-            CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::ParseError(ref cause) => cause,
-            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1391,20 +1232,10 @@ impl Error for CreateJobError {
 pub enum DescribeAddressError {
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAddressError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAddressError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1417,36 +1248,15 @@ impl DescribeAddressError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeAddressError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(DescribeAddressError::InvalidResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeAddressError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAddressError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAddressError {
-    fn from(err: serde_json::error::Error) -> DescribeAddressError {
-        DescribeAddressError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAddressError {
-    fn from(err: CredentialsError) -> DescribeAddressError {
-        DescribeAddressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAddressError {
-    fn from(err: HttpDispatchError) -> DescribeAddressError {
-        DescribeAddressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAddressError {
-    fn from(err: io::Error) -> DescribeAddressError {
-        DescribeAddressError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAddressError {
@@ -1458,11 +1268,6 @@ impl Error for DescribeAddressError {
     fn description(&self) -> &str {
         match *self {
             DescribeAddressError::InvalidResource(ref cause) => cause,
-            DescribeAddressError::Validation(ref cause) => cause,
-            DescribeAddressError::Credentials(ref err) => err.description(),
-            DescribeAddressError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeAddressError::ParseError(ref cause) => cause,
-            DescribeAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1473,20 +1278,10 @@ pub enum DescribeAddressesError {
     InvalidNextToken(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAddressesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAddressesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAddressesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1499,39 +1294,20 @@ impl DescribeAddressesError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return DescribeAddressesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeAddressesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceException" => {
-                    return DescribeAddressesError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(DescribeAddressesError::InvalidResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeAddressesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAddressesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAddressesError {
-    fn from(err: serde_json::error::Error) -> DescribeAddressesError {
-        DescribeAddressesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAddressesError {
-    fn from(err: CredentialsError) -> DescribeAddressesError {
-        DescribeAddressesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAddressesError {
-    fn from(err: HttpDispatchError) -> DescribeAddressesError {
-        DescribeAddressesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAddressesError {
-    fn from(err: io::Error) -> DescribeAddressesError {
-        DescribeAddressesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAddressesError {
@@ -1544,13 +1320,6 @@ impl Error for DescribeAddressesError {
         match *self {
             DescribeAddressesError::InvalidNextToken(ref cause) => cause,
             DescribeAddressesError::InvalidResource(ref cause) => cause,
-            DescribeAddressesError::Validation(ref cause) => cause,
-            DescribeAddressesError::Credentials(ref err) => err.description(),
-            DescribeAddressesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAddressesError::ParseError(ref cause) => cause,
-            DescribeAddressesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1559,20 +1328,10 @@ impl Error for DescribeAddressesError {
 pub enum DescribeClusterError {
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1585,36 +1344,15 @@ impl DescribeClusterError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeClusterError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(DescribeClusterError::InvalidResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeClusterError {
-    fn from(err: serde_json::error::Error) -> DescribeClusterError {
-        DescribeClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClusterError {
-    fn from(err: CredentialsError) -> DescribeClusterError {
-        DescribeClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClusterError {
-    fn from(err: HttpDispatchError) -> DescribeClusterError {
-        DescribeClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClusterError {
-    fn from(err: io::Error) -> DescribeClusterError {
-        DescribeClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeClusterError {
@@ -1626,11 +1364,6 @@ impl Error for DescribeClusterError {
     fn description(&self) -> &str {
         match *self {
             DescribeClusterError::InvalidResource(ref cause) => cause,
-            DescribeClusterError::Validation(ref cause) => cause,
-            DescribeClusterError::Credentials(ref err) => err.description(),
-            DescribeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClusterError::ParseError(ref cause) => cause,
-            DescribeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1639,20 +1372,10 @@ impl Error for DescribeClusterError {
 pub enum DescribeJobError {
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1665,36 +1388,15 @@ impl DescribeJobError {
 
             match *error_type {
                 "InvalidResourceException" => {
-                    return DescribeJobError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(DescribeJobError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeJobError {
-    fn from(err: serde_json::error::Error) -> DescribeJobError {
-        DescribeJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeJobError {
-    fn from(err: CredentialsError) -> DescribeJobError {
-        DescribeJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeJobError {
-    fn from(err: HttpDispatchError) -> DescribeJobError {
-        DescribeJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeJobError {
-    fn from(err: io::Error) -> DescribeJobError {
-        DescribeJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeJobError {
@@ -1706,11 +1408,6 @@ impl Error for DescribeJobError {
     fn description(&self) -> &str {
         match *self {
             DescribeJobError::InvalidResource(ref cause) => cause,
-            DescribeJobError::Validation(ref cause) => cause,
-            DescribeJobError::Credentials(ref err) => err.description(),
-            DescribeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeJobError::ParseError(ref cause) => cause,
-            DescribeJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1721,20 +1418,10 @@ pub enum GetJobManifestError {
     InvalidJobState(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobManifestError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobManifestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobManifestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1747,39 +1434,20 @@ impl GetJobManifestError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return GetJobManifestError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(GetJobManifestError::InvalidJobState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceException" => {
-                    return GetJobManifestError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(GetJobManifestError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetJobManifestError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobManifestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobManifestError {
-    fn from(err: serde_json::error::Error) -> GetJobManifestError {
-        GetJobManifestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobManifestError {
-    fn from(err: CredentialsError) -> GetJobManifestError {
-        GetJobManifestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobManifestError {
-    fn from(err: HttpDispatchError) -> GetJobManifestError {
-        GetJobManifestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobManifestError {
-    fn from(err: io::Error) -> GetJobManifestError {
-        GetJobManifestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobManifestError {
@@ -1792,11 +1460,6 @@ impl Error for GetJobManifestError {
         match *self {
             GetJobManifestError::InvalidJobState(ref cause) => cause,
             GetJobManifestError::InvalidResource(ref cause) => cause,
-            GetJobManifestError::Validation(ref cause) => cause,
-            GetJobManifestError::Credentials(ref err) => err.description(),
-            GetJobManifestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobManifestError::ParseError(ref cause) => cause,
-            GetJobManifestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1807,20 +1470,10 @@ pub enum GetJobUnlockCodeError {
     InvalidJobState(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobUnlockCodeError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobUnlockCodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobUnlockCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1833,39 +1486,20 @@ impl GetJobUnlockCodeError {
 
             match *error_type {
                 "InvalidJobStateException" => {
-                    return GetJobUnlockCodeError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(GetJobUnlockCodeError::InvalidJobState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceException" => {
-                    return GetJobUnlockCodeError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(GetJobUnlockCodeError::InvalidResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetJobUnlockCodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobUnlockCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobUnlockCodeError {
-    fn from(err: serde_json::error::Error) -> GetJobUnlockCodeError {
-        GetJobUnlockCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobUnlockCodeError {
-    fn from(err: CredentialsError) -> GetJobUnlockCodeError {
-        GetJobUnlockCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobUnlockCodeError {
-    fn from(err: HttpDispatchError) -> GetJobUnlockCodeError {
-        GetJobUnlockCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobUnlockCodeError {
-    fn from(err: io::Error) -> GetJobUnlockCodeError {
-        GetJobUnlockCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobUnlockCodeError {
@@ -1878,31 +1512,15 @@ impl Error for GetJobUnlockCodeError {
         match *self {
             GetJobUnlockCodeError::InvalidJobState(ref cause) => cause,
             GetJobUnlockCodeError::InvalidResource(ref cause) => cause,
-            GetJobUnlockCodeError::Validation(ref cause) => cause,
-            GetJobUnlockCodeError::Credentials(ref err) => err.description(),
-            GetJobUnlockCodeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobUnlockCodeError::ParseError(ref cause) => cause,
-            GetJobUnlockCodeError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetSnowballUsage
 #[derive(Debug, PartialEq)]
-pub enum GetSnowballUsageError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetSnowballUsageError {}
 
 impl GetSnowballUsageError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSnowballUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSnowballUsageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1914,34 +1532,11 @@ impl GetSnowballUsageError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return GetSnowballUsageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSnowballUsageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSnowballUsageError {
-    fn from(err: serde_json::error::Error) -> GetSnowballUsageError {
-        GetSnowballUsageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSnowballUsageError {
-    fn from(err: CredentialsError) -> GetSnowballUsageError {
-        GetSnowballUsageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSnowballUsageError {
-    fn from(err: HttpDispatchError) -> GetSnowballUsageError {
-        GetSnowballUsageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSnowballUsageError {
-    fn from(err: io::Error) -> GetSnowballUsageError {
-        GetSnowballUsageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSnowballUsageError {
@@ -1951,13 +1546,7 @@ impl fmt::Display for GetSnowballUsageError {
 }
 impl Error for GetSnowballUsageError {
     fn description(&self) -> &str {
-        match *self {
-            GetSnowballUsageError::Validation(ref cause) => cause,
-            GetSnowballUsageError::Credentials(ref err) => err.description(),
-            GetSnowballUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSnowballUsageError::ParseError(ref cause) => cause,
-            GetSnowballUsageError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListClusterJobs
@@ -1967,20 +1556,10 @@ pub enum ListClusterJobsError {
     InvalidNextToken(String),
     /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
     InvalidResource(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListClusterJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListClusterJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClusterJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1993,39 +1572,20 @@ impl ListClusterJobsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListClusterJobsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListClusterJobsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidResourceException" => {
-                    return ListClusterJobsError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(ListClusterJobsError::InvalidResource(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListClusterJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListClusterJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListClusterJobsError {
-    fn from(err: serde_json::error::Error) -> ListClusterJobsError {
-        ListClusterJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListClusterJobsError {
-    fn from(err: CredentialsError) -> ListClusterJobsError {
-        ListClusterJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListClusterJobsError {
-    fn from(err: HttpDispatchError) -> ListClusterJobsError {
-        ListClusterJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListClusterJobsError {
-    fn from(err: io::Error) -> ListClusterJobsError {
-        ListClusterJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListClusterJobsError {
@@ -2038,11 +1598,6 @@ impl Error for ListClusterJobsError {
         match *self {
             ListClusterJobsError::InvalidNextToken(ref cause) => cause,
             ListClusterJobsError::InvalidResource(ref cause) => cause,
-            ListClusterJobsError::Validation(ref cause) => cause,
-            ListClusterJobsError::Credentials(ref err) => err.description(),
-            ListClusterJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClusterJobsError::ParseError(ref cause) => cause,
-            ListClusterJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2051,20 +1606,10 @@ impl Error for ListClusterJobsError {
 pub enum ListClustersError {
     /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListClustersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2077,36 +1622,15 @@ impl ListClustersError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListClustersError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListClustersError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListClustersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListClustersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListClustersError {
-    fn from(err: serde_json::error::Error) -> ListClustersError {
-        ListClustersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListClustersError {
-    fn from(err: CredentialsError) -> ListClustersError {
-        ListClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListClustersError {
-    fn from(err: HttpDispatchError) -> ListClustersError {
-        ListClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListClustersError {
-    fn from(err: io::Error) -> ListClustersError {
-        ListClustersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListClustersError {
@@ -2118,11 +1642,6 @@ impl Error for ListClustersError {
     fn description(&self) -> &str {
         match *self {
             ListClustersError::InvalidNextToken(ref cause) => cause,
-            ListClustersError::Validation(ref cause) => cause,
-            ListClustersError::Credentials(ref err) => err.description(),
-            ListClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListClustersError::ParseError(ref cause) => cause,
-            ListClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2133,20 +1652,10 @@ pub enum ListCompatibleImagesError {
     Ec2RequestFailed(String),
     /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListCompatibleImagesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCompatibleImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCompatibleImagesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2159,39 +1668,20 @@ impl ListCompatibleImagesError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return ListCompatibleImagesError::Ec2RequestFailed(String::from(error_message));
+                    return RusotoError::Service(ListCompatibleImagesError::Ec2RequestFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListCompatibleImagesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListCompatibleImagesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListCompatibleImagesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCompatibleImagesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCompatibleImagesError {
-    fn from(err: serde_json::error::Error) -> ListCompatibleImagesError {
-        ListCompatibleImagesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCompatibleImagesError {
-    fn from(err: CredentialsError) -> ListCompatibleImagesError {
-        ListCompatibleImagesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCompatibleImagesError {
-    fn from(err: HttpDispatchError) -> ListCompatibleImagesError {
-        ListCompatibleImagesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCompatibleImagesError {
-    fn from(err: io::Error) -> ListCompatibleImagesError {
-        ListCompatibleImagesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCompatibleImagesError {
@@ -2204,13 +1694,6 @@ impl Error for ListCompatibleImagesError {
         match *self {
             ListCompatibleImagesError::Ec2RequestFailed(ref cause) => cause,
             ListCompatibleImagesError::InvalidNextToken(ref cause) => cause,
-            ListCompatibleImagesError::Validation(ref cause) => cause,
-            ListCompatibleImagesError::Credentials(ref err) => err.description(),
-            ListCompatibleImagesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListCompatibleImagesError::ParseError(ref cause) => cause,
-            ListCompatibleImagesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2219,20 +1702,10 @@ impl Error for ListCompatibleImagesError {
 pub enum ListJobsError {
     /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2245,36 +1718,15 @@ impl ListJobsError {
 
             match *error_type {
                 "InvalidNextTokenException" => {
-                    return ListJobsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListJobsError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListJobsError {
-    fn from(err: serde_json::error::Error) -> ListJobsError {
-        ListJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListJobsError {
-    fn from(err: CredentialsError) -> ListJobsError {
-        ListJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListJobsError {
-    fn from(err: HttpDispatchError) -> ListJobsError {
-        ListJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListJobsError {
-    fn from(err: io::Error) -> ListJobsError {
-        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListJobsError {
@@ -2286,11 +1738,6 @@ impl Error for ListJobsError {
     fn description(&self) -> &str {
         match *self {
             ListJobsError::InvalidNextToken(ref cause) => cause,
-            ListJobsError::Validation(ref cause) => cause,
-            ListJobsError::Credentials(ref err) => err.description(),
-            ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListJobsError::ParseError(ref cause) => cause,
-            ListJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2307,20 +1754,10 @@ pub enum UpdateClusterError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2333,48 +1770,35 @@ impl UpdateClusterError {
 
             match *error_type {
                 "Ec2RequestFailedException" => {
-                    return UpdateClusterError::Ec2RequestFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::Ec2RequestFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputCombinationException" => {
-                    return UpdateClusterError::InvalidInputCombination(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::InvalidInputCombination(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidJobStateException" => {
-                    return UpdateClusterError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::InvalidJobState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceException" => {
-                    return UpdateClusterError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return UpdateClusterError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateClusterError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateClusterError {
-    fn from(err: serde_json::error::Error) -> UpdateClusterError {
-        UpdateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateClusterError {
-    fn from(err: CredentialsError) -> UpdateClusterError {
-        UpdateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateClusterError {
-    fn from(err: HttpDispatchError) -> UpdateClusterError {
-        UpdateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateClusterError {
-    fn from(err: io::Error) -> UpdateClusterError {
-        UpdateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateClusterError {
@@ -2390,11 +1814,6 @@ impl Error for UpdateClusterError {
             UpdateClusterError::InvalidJobState(ref cause) => cause,
             UpdateClusterError::InvalidResource(ref cause) => cause,
             UpdateClusterError::KMSRequestFailed(ref cause) => cause,
-            UpdateClusterError::Validation(ref cause) => cause,
-            UpdateClusterError::Credentials(ref err) => err.description(),
-            UpdateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateClusterError::ParseError(ref cause) => cause,
-            UpdateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2413,20 +1832,10 @@ pub enum UpdateJobError {
     InvalidResource(String),
     /// <p>The provided AWS Key Management Service key lacks the permissions to perform the specified <a>CreateJob</a> or <a>UpdateJob</a> action.</p>
     KMSRequestFailed(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2439,51 +1848,40 @@ impl UpdateJobError {
 
             match *error_type {
                 "ClusterLimitExceededException" => {
-                    return UpdateJobError::ClusterLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::ClusterLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "Ec2RequestFailedException" => {
-                    return UpdateJobError::Ec2RequestFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::Ec2RequestFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputCombinationException" => {
-                    return UpdateJobError::InvalidInputCombination(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::InvalidInputCombination(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidJobStateException" => {
-                    return UpdateJobError::InvalidJobState(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::InvalidJobState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidResourceException" => {
-                    return UpdateJobError::InvalidResource(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::InvalidResource(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSRequestFailedException" => {
-                    return UpdateJobError::KMSRequestFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::KMSRequestFailed(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateJobError {
-    fn from(err: serde_json::error::Error) -> UpdateJobError {
-        UpdateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateJobError {
-    fn from(err: CredentialsError) -> UpdateJobError {
-        UpdateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateJobError {
-    fn from(err: HttpDispatchError) -> UpdateJobError {
-        UpdateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateJobError {
-    fn from(err: io::Error) -> UpdateJobError {
-        UpdateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -2500,11 +1898,6 @@ impl Error for UpdateJobError {
             UpdateJobError::InvalidJobState(ref cause) => cause,
             UpdateJobError::InvalidResource(ref cause) => cause,
             UpdateJobError::KMSRequestFailed(ref cause) => cause,
-            UpdateJobError::Validation(ref cause) => cause,
-            UpdateJobError::Credentials(ref err) => err.description(),
-            UpdateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateJobError::ParseError(ref cause) => cause,
-            UpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }

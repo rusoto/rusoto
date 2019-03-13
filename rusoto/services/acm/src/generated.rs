@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -541,20 +538,10 @@ pub enum AddTagsToCertificateError {
     ResourceNotFound(String),
     /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsToCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsToCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsToCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -567,45 +554,30 @@ impl AddTagsToCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return AddTagsToCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AddTagsToCertificateError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTagException" => {
-                    return AddTagsToCertificateError::InvalidTag(String::from(error_message));
+                    return RusotoError::Service(AddTagsToCertificateError::InvalidTag(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AddTagsToCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AddTagsToCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyTagsException" => {
-                    return AddTagsToCertificateError::TooManyTags(String::from(error_message));
+                    return RusotoError::Service(AddTagsToCertificateError::TooManyTags(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AddTagsToCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddTagsToCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddTagsToCertificateError {
-    fn from(err: serde_json::error::Error) -> AddTagsToCertificateError {
-        AddTagsToCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsToCertificateError {
-    fn from(err: CredentialsError) -> AddTagsToCertificateError {
-        AddTagsToCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsToCertificateError {
-    fn from(err: HttpDispatchError) -> AddTagsToCertificateError {
-        AddTagsToCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsToCertificateError {
-    fn from(err: io::Error) -> AddTagsToCertificateError {
-        AddTagsToCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddTagsToCertificateError {
@@ -620,13 +592,6 @@ impl Error for AddTagsToCertificateError {
             AddTagsToCertificateError::InvalidTag(ref cause) => cause,
             AddTagsToCertificateError::ResourceNotFound(ref cause) => cause,
             AddTagsToCertificateError::TooManyTags(ref cause) => cause,
-            AddTagsToCertificateError::Validation(ref cause) => cause,
-            AddTagsToCertificateError::Credentials(ref err) => err.description(),
-            AddTagsToCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddTagsToCertificateError::ParseError(ref cause) => cause,
-            AddTagsToCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -639,20 +604,10 @@ pub enum DeleteCertificateError {
     ResourceInUse(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -665,42 +620,25 @@ impl DeleteCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return DeleteCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteCertificateError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteCertificateError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCertificateError {
-    fn from(err: serde_json::error::Error) -> DeleteCertificateError {
-        DeleteCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCertificateError {
-    fn from(err: CredentialsError) -> DeleteCertificateError {
-        DeleteCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCertificateError {
-    fn from(err: HttpDispatchError) -> DeleteCertificateError {
-        DeleteCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCertificateError {
-    fn from(err: io::Error) -> DeleteCertificateError {
-        DeleteCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCertificateError {
@@ -714,13 +652,6 @@ impl Error for DeleteCertificateError {
             DeleteCertificateError::InvalidArn(ref cause) => cause,
             DeleteCertificateError::ResourceInUse(ref cause) => cause,
             DeleteCertificateError::ResourceNotFound(ref cause) => cause,
-            DeleteCertificateError::Validation(ref cause) => cause,
-            DeleteCertificateError::Credentials(ref err) => err.description(),
-            DeleteCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCertificateError::ParseError(ref cause) => cause,
-            DeleteCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -731,20 +662,10 @@ pub enum DescribeCertificateError {
     InvalidArn(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -757,39 +678,20 @@ impl DescribeCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return DescribeCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DescribeCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCertificateError {
-    fn from(err: serde_json::error::Error) -> DescribeCertificateError {
-        DescribeCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCertificateError {
-    fn from(err: CredentialsError) -> DescribeCertificateError {
-        DescribeCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCertificateError {
-    fn from(err: HttpDispatchError) -> DescribeCertificateError {
-        DescribeCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCertificateError {
-    fn from(err: io::Error) -> DescribeCertificateError {
-        DescribeCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCertificateError {
@@ -802,13 +704,6 @@ impl Error for DescribeCertificateError {
         match *self {
             DescribeCertificateError::InvalidArn(ref cause) => cause,
             DescribeCertificateError::ResourceNotFound(ref cause) => cause,
-            DescribeCertificateError::Validation(ref cause) => cause,
-            DescribeCertificateError::Credentials(ref err) => err.description(),
-            DescribeCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCertificateError::ParseError(ref cause) => cause,
-            DescribeCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -821,20 +716,10 @@ pub enum ExportCertificateError {
     RequestInProgress(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ExportCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> ExportCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -847,42 +732,25 @@ impl ExportCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ExportCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ExportCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestInProgressException" => {
-                    return ExportCertificateError::RequestInProgress(String::from(error_message));
+                    return RusotoError::Service(ExportCertificateError::RequestInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ExportCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ExportCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ExportCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExportCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExportCertificateError {
-    fn from(err: serde_json::error::Error) -> ExportCertificateError {
-        ExportCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExportCertificateError {
-    fn from(err: CredentialsError) -> ExportCertificateError {
-        ExportCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExportCertificateError {
-    fn from(err: HttpDispatchError) -> ExportCertificateError {
-        ExportCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExportCertificateError {
-    fn from(err: io::Error) -> ExportCertificateError {
-        ExportCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExportCertificateError {
@@ -896,13 +764,6 @@ impl Error for ExportCertificateError {
             ExportCertificateError::InvalidArn(ref cause) => cause,
             ExportCertificateError::RequestInProgress(ref cause) => cause,
             ExportCertificateError::ResourceNotFound(ref cause) => cause,
-            ExportCertificateError::Validation(ref cause) => cause,
-            ExportCertificateError::Credentials(ref err) => err.description(),
-            ExportCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ExportCertificateError::ParseError(ref cause) => cause,
-            ExportCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -915,20 +776,10 @@ pub enum GetCertificateError {
     RequestInProgress(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -941,42 +792,25 @@ impl GetCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return GetCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestInProgressException" => {
-                    return GetCertificateError::RequestInProgress(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::RequestInProgress(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCertificateError {
-    fn from(err: serde_json::error::Error) -> GetCertificateError {
-        GetCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCertificateError {
-    fn from(err: CredentialsError) -> GetCertificateError {
-        GetCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCertificateError {
-    fn from(err: HttpDispatchError) -> GetCertificateError {
-        GetCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCertificateError {
-    fn from(err: io::Error) -> GetCertificateError {
-        GetCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCertificateError {
@@ -990,11 +824,6 @@ impl Error for GetCertificateError {
             GetCertificateError::InvalidArn(ref cause) => cause,
             GetCertificateError::RequestInProgress(ref cause) => cause,
             GetCertificateError::ResourceNotFound(ref cause) => cause,
-            GetCertificateError::Validation(ref cause) => cause,
-            GetCertificateError::Credentials(ref err) => err.description(),
-            GetCertificateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCertificateError::ParseError(ref cause) => cause,
-            GetCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1005,20 +834,10 @@ pub enum ImportCertificateError {
     LimitExceeded(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1031,39 +850,20 @@ impl ImportCertificateError {
 
             match *error_type {
                 "LimitExceededException" => {
-                    return ImportCertificateError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ImportCertificateError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ImportCertificateError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ImportCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ImportCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportCertificateError {
-    fn from(err: serde_json::error::Error) -> ImportCertificateError {
-        ImportCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportCertificateError {
-    fn from(err: CredentialsError) -> ImportCertificateError {
-        ImportCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportCertificateError {
-    fn from(err: HttpDispatchError) -> ImportCertificateError {
-        ImportCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportCertificateError {
-    fn from(err: io::Error) -> ImportCertificateError {
-        ImportCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportCertificateError {
@@ -1076,33 +876,15 @@ impl Error for ImportCertificateError {
         match *self {
             ImportCertificateError::LimitExceeded(ref cause) => cause,
             ImportCertificateError::ResourceNotFound(ref cause) => cause,
-            ImportCertificateError::Validation(ref cause) => cause,
-            ImportCertificateError::Credentials(ref err) => err.description(),
-            ImportCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportCertificateError::ParseError(ref cause) => cause,
-            ImportCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListCertificates
 #[derive(Debug, PartialEq)]
-pub enum ListCertificatesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListCertificatesError {}
 
 impl ListCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCertificatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1114,34 +896,11 @@ impl ListCertificatesError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return ListCertificatesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListCertificatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListCertificatesError {
-    fn from(err: serde_json::error::Error) -> ListCertificatesError {
-        ListCertificatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListCertificatesError {
-    fn from(err: CredentialsError) -> ListCertificatesError {
-        ListCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCertificatesError {
-    fn from(err: HttpDispatchError) -> ListCertificatesError {
-        ListCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCertificatesError {
-    fn from(err: io::Error) -> ListCertificatesError {
-        ListCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListCertificatesError {
@@ -1151,13 +910,7 @@ impl fmt::Display for ListCertificatesError {
 }
 impl Error for ListCertificatesError {
     fn description(&self) -> &str {
-        match *self {
-            ListCertificatesError::Validation(ref cause) => cause,
-            ListCertificatesError::Credentials(ref err) => err.description(),
-            ListCertificatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListCertificatesError::ParseError(ref cause) => cause,
-            ListCertificatesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListTagsForCertificate
@@ -1167,20 +920,10 @@ pub enum ListTagsForCertificateError {
     InvalidArn(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1193,41 +936,20 @@ impl ListTagsForCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ListTagsForCertificateError::InvalidArn(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return ListTagsForCertificateError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForCertificateError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListTagsForCertificateError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForCertificateError {
-    fn from(err: serde_json::error::Error) -> ListTagsForCertificateError {
-        ListTagsForCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForCertificateError {
-    fn from(err: CredentialsError) -> ListTagsForCertificateError {
-        ListTagsForCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForCertificateError {
-    fn from(err: HttpDispatchError) -> ListTagsForCertificateError {
-        ListTagsForCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForCertificateError {
-    fn from(err: io::Error) -> ListTagsForCertificateError {
-        ListTagsForCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForCertificateError {
@@ -1240,13 +962,6 @@ impl Error for ListTagsForCertificateError {
         match *self {
             ListTagsForCertificateError::InvalidArn(ref cause) => cause,
             ListTagsForCertificateError::ResourceNotFound(ref cause) => cause,
-            ListTagsForCertificateError::Validation(ref cause) => cause,
-            ListTagsForCertificateError::Credentials(ref err) => err.description(),
-            ListTagsForCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForCertificateError::ParseError(ref cause) => cause,
-            ListTagsForCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1259,20 +974,10 @@ pub enum RemoveTagsFromCertificateError {
     InvalidTag(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsFromCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsFromCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsFromCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1285,44 +990,25 @@ impl RemoveTagsFromCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return RemoveTagsFromCertificateError::InvalidArn(String::from(error_message));
-                }
-                "InvalidTagException" => {
-                    return RemoveTagsFromCertificateError::InvalidTag(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return RemoveTagsFromCertificateError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveTagsFromCertificateError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RemoveTagsFromCertificateError::Validation(error_message.to_string());
+                "InvalidTagException" => {
+                    return RusotoError::Service(RemoveTagsFromCertificateError::InvalidTag(
+                        String::from(error_message),
+                    ));
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RemoveTagsFromCertificateError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveTagsFromCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveTagsFromCertificateError {
-    fn from(err: serde_json::error::Error) -> RemoveTagsFromCertificateError {
-        RemoveTagsFromCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsFromCertificateError {
-    fn from(err: CredentialsError) -> RemoveTagsFromCertificateError {
-        RemoveTagsFromCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsFromCertificateError {
-    fn from(err: HttpDispatchError) -> RemoveTagsFromCertificateError {
-        RemoveTagsFromCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsFromCertificateError {
-    fn from(err: io::Error) -> RemoveTagsFromCertificateError {
-        RemoveTagsFromCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveTagsFromCertificateError {
@@ -1336,13 +1022,6 @@ impl Error for RemoveTagsFromCertificateError {
             RemoveTagsFromCertificateError::InvalidArn(ref cause) => cause,
             RemoveTagsFromCertificateError::InvalidTag(ref cause) => cause,
             RemoveTagsFromCertificateError::ResourceNotFound(ref cause) => cause,
-            RemoveTagsFromCertificateError::Validation(ref cause) => cause,
-            RemoveTagsFromCertificateError::Credentials(ref err) => err.description(),
-            RemoveTagsFromCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveTagsFromCertificateError::ParseError(ref cause) => cause,
-            RemoveTagsFromCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1355,20 +1034,10 @@ pub enum RequestCertificateError {
     InvalidDomainValidationOptions(String),
     /// <p>An ACM limit has been exceeded.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RequestCertificateError {
-    pub fn from_response(res: BufferedHttpResponse) -> RequestCertificateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RequestCertificateError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1381,44 +1050,27 @@ impl RequestCertificateError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return RequestCertificateError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(RequestCertificateError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidDomainValidationOptionsException" => {
-                    return RequestCertificateError::InvalidDomainValidationOptions(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RequestCertificateError::InvalidDomainValidationOptions(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return RequestCertificateError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RequestCertificateError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RequestCertificateError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RequestCertificateError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RequestCertificateError {
-    fn from(err: serde_json::error::Error) -> RequestCertificateError {
-        RequestCertificateError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RequestCertificateError {
-    fn from(err: CredentialsError) -> RequestCertificateError {
-        RequestCertificateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RequestCertificateError {
-    fn from(err: HttpDispatchError) -> RequestCertificateError {
-        RequestCertificateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RequestCertificateError {
-    fn from(err: io::Error) -> RequestCertificateError {
-        RequestCertificateError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RequestCertificateError {
@@ -1432,13 +1084,6 @@ impl Error for RequestCertificateError {
             RequestCertificateError::InvalidArn(ref cause) => cause,
             RequestCertificateError::InvalidDomainValidationOptions(ref cause) => cause,
             RequestCertificateError::LimitExceeded(ref cause) => cause,
-            RequestCertificateError::Validation(ref cause) => cause,
-            RequestCertificateError::Credentials(ref err) => err.description(),
-            RequestCertificateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RequestCertificateError::ParseError(ref cause) => cause,
-            RequestCertificateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1453,20 +1098,10 @@ pub enum ResendValidationEmailError {
     InvalidState(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResendValidationEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResendValidationEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResendValidationEmailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1479,47 +1114,32 @@ impl ResendValidationEmailError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return ResendValidationEmailError::InvalidArn(String::from(error_message));
-                }
-                "InvalidDomainValidationOptionsException" => {
-                    return ResendValidationEmailError::InvalidDomainValidationOptions(String::from(
-                        error_message,
+                    return RusotoError::Service(ResendValidationEmailError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidDomainValidationOptionsException" => {
+                    return RusotoError::Service(
+                        ResendValidationEmailError::InvalidDomainValidationOptions(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidStateException" => {
-                    return ResendValidationEmailError::InvalidState(String::from(error_message));
+                    return RusotoError::Service(ResendValidationEmailError::InvalidState(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ResendValidationEmailError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ResendValidationEmailError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResendValidationEmailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResendValidationEmailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResendValidationEmailError {
-    fn from(err: serde_json::error::Error) -> ResendValidationEmailError {
-        ResendValidationEmailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResendValidationEmailError {
-    fn from(err: CredentialsError) -> ResendValidationEmailError {
-        ResendValidationEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResendValidationEmailError {
-    fn from(err: HttpDispatchError) -> ResendValidationEmailError {
-        ResendValidationEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResendValidationEmailError {
-    fn from(err: io::Error) -> ResendValidationEmailError {
-        ResendValidationEmailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResendValidationEmailError {
@@ -1534,13 +1154,6 @@ impl Error for ResendValidationEmailError {
             ResendValidationEmailError::InvalidDomainValidationOptions(ref cause) => cause,
             ResendValidationEmailError::InvalidState(ref cause) => cause,
             ResendValidationEmailError::ResourceNotFound(ref cause) => cause,
-            ResendValidationEmailError::Validation(ref cause) => cause,
-            ResendValidationEmailError::Credentials(ref err) => err.description(),
-            ResendValidationEmailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ResendValidationEmailError::ParseError(ref cause) => cause,
-            ResendValidationEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1555,20 +1168,10 @@ pub enum UpdateCertificateOptionsError {
     LimitExceeded(String),
     /// <p>The specified certificate cannot be found in the caller's account or the caller's account cannot be found.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCertificateOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCertificateOptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCertificateOptionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1581,47 +1184,30 @@ impl UpdateCertificateOptionsError {
 
             match *error_type {
                 "InvalidArnException" => {
-                    return UpdateCertificateOptionsError::InvalidArn(String::from(error_message));
-                }
-                "InvalidStateException" => {
-                    return UpdateCertificateOptionsError::InvalidState(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return UpdateCertificateOptionsError::LimitExceeded(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return UpdateCertificateOptionsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCertificateOptionsError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateCertificateOptionsError::Validation(error_message.to_string());
+                "InvalidStateException" => {
+                    return RusotoError::Service(UpdateCertificateOptionsError::InvalidState(
+                        String::from(error_message),
+                    ));
                 }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateCertificateOptionsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateCertificateOptionsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCertificateOptionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCertificateOptionsError {
-    fn from(err: serde_json::error::Error) -> UpdateCertificateOptionsError {
-        UpdateCertificateOptionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCertificateOptionsError {
-    fn from(err: CredentialsError) -> UpdateCertificateOptionsError {
-        UpdateCertificateOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCertificateOptionsError {
-    fn from(err: HttpDispatchError) -> UpdateCertificateOptionsError {
-        UpdateCertificateOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCertificateOptionsError {
-    fn from(err: io::Error) -> UpdateCertificateOptionsError {
-        UpdateCertificateOptionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCertificateOptionsError {
@@ -1636,13 +1222,6 @@ impl Error for UpdateCertificateOptionsError {
             UpdateCertificateOptionsError::InvalidState(ref cause) => cause,
             UpdateCertificateOptionsError::LimitExceeded(ref cause) => cause,
             UpdateCertificateOptionsError::ResourceNotFound(ref cause) => cause,
-            UpdateCertificateOptionsError::Validation(ref cause) => cause,
-            UpdateCertificateOptionsError::Credentials(ref err) => err.description(),
-            UpdateCertificateOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateCertificateOptionsError::ParseError(ref cause) => cause,
-            UpdateCertificateOptionsError::Unknown(_) => "unknown error",
         }
     }
 }

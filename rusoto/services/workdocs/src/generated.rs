@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1764,22 +1761,14 @@ pub enum AbortDocumentVersionUploadError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AbortDocumentVersionUploadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AbortDocumentVersionUploadError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AbortDocumentVersionUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1804,63 +1793,46 @@ impl AbortDocumentVersionUploadError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return AbortDocumentVersionUploadError::EntityNotExists(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortDocumentVersionUploadError::EntityNotExists(
+                        String::from(error_message),
                     ));
                 }
                 "FailedDependencyException" => {
-                    return AbortDocumentVersionUploadError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortDocumentVersionUploadError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "ProhibitedStateException" => {
-                    return AbortDocumentVersionUploadError::ProhibitedState(String::from(
-                        error_message,
+                    return RusotoError::Service(AbortDocumentVersionUploadError::ProhibitedState(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return AbortDocumentVersionUploadError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return AbortDocumentVersionUploadError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return AbortDocumentVersionUploadError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AbortDocumentVersionUploadError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return AbortDocumentVersionUploadError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        AbortDocumentVersionUploadError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(
+                        AbortDocumentVersionUploadError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AbortDocumentVersionUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AbortDocumentVersionUploadError {
-    fn from(err: serde_json::error::Error) -> AbortDocumentVersionUploadError {
-        AbortDocumentVersionUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AbortDocumentVersionUploadError {
-    fn from(err: CredentialsError) -> AbortDocumentVersionUploadError {
-        AbortDocumentVersionUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AbortDocumentVersionUploadError {
-    fn from(err: HttpDispatchError) -> AbortDocumentVersionUploadError {
-        AbortDocumentVersionUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AbortDocumentVersionUploadError {
-    fn from(err: io::Error) -> AbortDocumentVersionUploadError {
-        AbortDocumentVersionUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AbortDocumentVersionUploadError {
@@ -1877,13 +1849,6 @@ impl Error for AbortDocumentVersionUploadError {
             AbortDocumentVersionUploadError::ServiceUnavailable(ref cause) => cause,
             AbortDocumentVersionUploadError::UnauthorizedOperation(ref cause) => cause,
             AbortDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => cause,
-            AbortDocumentVersionUploadError::Validation(ref cause) => cause,
-            AbortDocumentVersionUploadError::Credentials(ref err) => err.description(),
-            AbortDocumentVersionUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AbortDocumentVersionUploadError::ParseError(ref cause) => cause,
-            AbortDocumentVersionUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1900,22 +1865,12 @@ pub enum ActivateUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ActivateUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ActivateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ActivateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1940,50 +1895,35 @@ impl ActivateUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return ActivateUserError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(ActivateUserError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return ActivateUserError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(ActivateUserError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ActivateUserError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return ActivateUserError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return ActivateUserError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(ActivateUserError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ActivateUserError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(ActivateUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(ActivateUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ActivateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ActivateUserError {
-    fn from(err: serde_json::error::Error) -> ActivateUserError {
-        ActivateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ActivateUserError {
-    fn from(err: CredentialsError) -> ActivateUserError {
-        ActivateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ActivateUserError {
-    fn from(err: HttpDispatchError) -> ActivateUserError {
-        ActivateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ActivateUserError {
-    fn from(err: io::Error) -> ActivateUserError {
-        ActivateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ActivateUserError {
@@ -1999,11 +1939,6 @@ impl Error for ActivateUserError {
             ActivateUserError::ServiceUnavailable(ref cause) => cause,
             ActivateUserError::UnauthorizedOperation(ref cause) => cause,
             ActivateUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            ActivateUserError::Validation(ref cause) => cause,
-            ActivateUserError::Credentials(ref err) => err.description(),
-            ActivateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ActivateUserError::ParseError(ref cause) => cause,
-            ActivateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2018,22 +1953,12 @@ pub enum AddResourcePermissionsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddResourcePermissionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AddResourcePermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddResourcePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2058,53 +1983,32 @@ impl AddResourcePermissionsError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return AddResourcePermissionsError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(AddResourcePermissionsError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return AddResourcePermissionsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(AddResourcePermissionsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return AddResourcePermissionsError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(AddResourcePermissionsError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return AddResourcePermissionsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddResourcePermissionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AddResourcePermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddResourcePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddResourcePermissionsError {
-    fn from(err: serde_json::error::Error) -> AddResourcePermissionsError {
-        AddResourcePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddResourcePermissionsError {
-    fn from(err: CredentialsError) -> AddResourcePermissionsError {
-        AddResourcePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddResourcePermissionsError {
-    fn from(err: HttpDispatchError) -> AddResourcePermissionsError {
-        AddResourcePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddResourcePermissionsError {
-    fn from(err: io::Error) -> AddResourcePermissionsError {
-        AddResourcePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddResourcePermissionsError {
@@ -2119,13 +2023,6 @@ impl Error for AddResourcePermissionsError {
             AddResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
             AddResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
             AddResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
-            AddResourcePermissionsError::Validation(ref cause) => cause,
-            AddResourcePermissionsError::Credentials(ref err) => err.description(),
-            AddResourcePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddResourcePermissionsError::ParseError(ref cause) => cause,
-            AddResourcePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2148,22 +2045,12 @@ pub enum CreateCommentError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCommentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCommentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCommentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2188,61 +2075,50 @@ impl CreateCommentError {
 
             match error_type {
                 "DocumentLockedForCommentsException" => {
-                    return CreateCommentError::DocumentLockedForComments(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommentError::DocumentLockedForComments(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotExistsException" => {
-                    return CreateCommentError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(CreateCommentError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return CreateCommentError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(CreateCommentError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommentOperationException" => {
-                    return CreateCommentError::InvalidCommentOperation(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return CreateCommentError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return CreateCommentError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return CreateCommentError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return CreateCommentError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommentError::InvalidCommentOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCommentError::Validation(error_message.to_string());
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(CreateCommentError::ProhibitedState(String::from(
+                        error_message,
+                    )));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateCommentError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(CreateCommentError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(CreateCommentError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCommentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCommentError {
-    fn from(err: serde_json::error::Error) -> CreateCommentError {
-        CreateCommentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCommentError {
-    fn from(err: CredentialsError) -> CreateCommentError {
-        CreateCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCommentError {
-    fn from(err: HttpDispatchError) -> CreateCommentError {
-        CreateCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCommentError {
-    fn from(err: io::Error) -> CreateCommentError {
-        CreateCommentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCommentError {
@@ -2261,11 +2137,6 @@ impl Error for CreateCommentError {
             CreateCommentError::ServiceUnavailable(ref cause) => cause,
             CreateCommentError::UnauthorizedOperation(ref cause) => cause,
             CreateCommentError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateCommentError::Validation(ref cause) => cause,
-            CreateCommentError::Credentials(ref err) => err.description(),
-            CreateCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCommentError::ParseError(ref cause) => cause,
-            CreateCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2286,22 +2157,12 @@ pub enum CreateCustomMetadataError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomMetadataError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomMetadataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2326,62 +2187,49 @@ impl CreateCustomMetadataError {
 
             match error_type {
                 "CustomMetadataLimitExceededException" => {
-                    return CreateCustomMetadataError::CustomMetadataLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCustomMetadataError::CustomMetadataLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EntityNotExistsException" => {
-                    return CreateCustomMetadataError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(CreateCustomMetadataError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return CreateCustomMetadataError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(CreateCustomMetadataError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return CreateCustomMetadataError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(CreateCustomMetadataError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateCustomMetadataError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomMetadataError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateCustomMetadataError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCustomMetadataError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return CreateCustomMetadataError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCustomMetadataError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return CreateCustomMetadataError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCustomMetadataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCustomMetadataError {
-    fn from(err: serde_json::error::Error) -> CreateCustomMetadataError {
-        CreateCustomMetadataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCustomMetadataError {
-    fn from(err: CredentialsError) -> CreateCustomMetadataError {
-        CreateCustomMetadataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCustomMetadataError {
-    fn from(err: HttpDispatchError) -> CreateCustomMetadataError {
-        CreateCustomMetadataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCustomMetadataError {
-    fn from(err: io::Error) -> CreateCustomMetadataError {
-        CreateCustomMetadataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCustomMetadataError {
@@ -2399,13 +2247,6 @@ impl Error for CreateCustomMetadataError {
             CreateCustomMetadataError::ServiceUnavailable(ref cause) => cause,
             CreateCustomMetadataError::UnauthorizedOperation(ref cause) => cause,
             CreateCustomMetadataError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateCustomMetadataError::Validation(ref cause) => cause,
-            CreateCustomMetadataError::Credentials(ref err) => err.description(),
-            CreateCustomMetadataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateCustomMetadataError::ParseError(ref cause) => cause,
-            CreateCustomMetadataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2430,22 +2271,12 @@ pub enum CreateFolderError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFolderError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFolderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2470,62 +2301,55 @@ impl CreateFolderError {
 
             match error_type {
                 "ConflictingOperationException" => {
-                    return CreateFolderError::ConflictingOperation(String::from(error_message));
-                }
-                "EntityAlreadyExistsException" => {
-                    return CreateFolderError::EntityAlreadyExists(String::from(error_message));
-                }
-                "EntityNotExistsException" => {
-                    return CreateFolderError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return CreateFolderError::FailedDependency(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return CreateFolderError::LimitExceeded(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return CreateFolderError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return CreateFolderError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return CreateFolderError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return CreateFolderError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateFolderError::ConflictingOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateFolderError::Validation(error_message.to_string());
+                "EntityAlreadyExistsException" => {
+                    return RusotoError::Service(CreateFolderError::EntityAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
+                "EntityNotExistsException" => {
+                    return RusotoError::Service(CreateFolderError::EntityNotExists(String::from(
+                        error_message,
+                    )));
+                }
+                "FailedDependencyException" => {
+                    return RusotoError::Service(CreateFolderError::FailedDependency(String::from(
+                        error_message,
+                    )));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFolderError::LimitExceeded(String::from(
+                        error_message,
+                    )));
+                }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(CreateFolderError::ProhibitedState(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateFolderError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(CreateFolderError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(CreateFolderError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFolderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFolderError {
-    fn from(err: serde_json::error::Error) -> CreateFolderError {
-        CreateFolderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFolderError {
-    fn from(err: CredentialsError) -> CreateFolderError {
-        CreateFolderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFolderError {
-    fn from(err: HttpDispatchError) -> CreateFolderError {
-        CreateFolderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFolderError {
-    fn from(err: io::Error) -> CreateFolderError {
-        CreateFolderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFolderError {
@@ -2545,11 +2369,6 @@ impl Error for CreateFolderError {
             CreateFolderError::ServiceUnavailable(ref cause) => cause,
             CreateFolderError::UnauthorizedOperation(ref cause) => cause,
             CreateFolderError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateFolderError::Validation(ref cause) => cause,
-            CreateFolderError::Credentials(ref err) => err.description(),
-            CreateFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFolderError::ParseError(ref cause) => cause,
-            CreateFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2568,22 +2387,12 @@ pub enum CreateLabelsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLabelsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLabelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLabelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2608,53 +2417,40 @@ impl CreateLabelsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return CreateLabelsError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(CreateLabelsError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return CreateLabelsError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(CreateLabelsError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLabelsError::ServiceUnavailable(String::from(error_message));
-                }
-                "TooManyLabelsException" => {
-                    return CreateLabelsError::TooManyLabels(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return CreateLabelsError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return CreateLabelsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateLabelsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateLabelsError::Validation(error_message.to_string());
+                "TooManyLabelsException" => {
+                    return RusotoError::Service(CreateLabelsError::TooManyLabels(String::from(
+                        error_message,
+                    )));
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(CreateLabelsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(CreateLabelsError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLabelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLabelsError {
-    fn from(err: serde_json::error::Error) -> CreateLabelsError {
-        CreateLabelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLabelsError {
-    fn from(err: CredentialsError) -> CreateLabelsError {
-        CreateLabelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLabelsError {
-    fn from(err: HttpDispatchError) -> CreateLabelsError {
-        CreateLabelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLabelsError {
-    fn from(err: io::Error) -> CreateLabelsError {
-        CreateLabelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLabelsError {
@@ -2671,11 +2467,6 @@ impl Error for CreateLabelsError {
             CreateLabelsError::TooManyLabels(ref cause) => cause,
             CreateLabelsError::UnauthorizedOperation(ref cause) => cause,
             CreateLabelsError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateLabelsError::Validation(ref cause) => cause,
-            CreateLabelsError::Credentials(ref err) => err.description(),
-            CreateLabelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLabelsError::ParseError(ref cause) => cause,
-            CreateLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2688,22 +2479,14 @@ pub enum CreateNotificationSubscriptionError {
     TooManySubscriptions(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateNotificationSubscriptionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateNotificationSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateNotificationSubscriptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2728,50 +2511,31 @@ impl CreateNotificationSubscriptionError {
 
             match error_type {
                 "ServiceUnavailableException" => {
-                    return CreateNotificationSubscriptionError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateNotificationSubscriptionError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManySubscriptionsException" => {
-                    return CreateNotificationSubscriptionError::TooManySubscriptions(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateNotificationSubscriptionError::TooManySubscriptions(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return CreateNotificationSubscriptionError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateNotificationSubscriptionError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return CreateNotificationSubscriptionError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateNotificationSubscriptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateNotificationSubscriptionError {
-    fn from(err: serde_json::error::Error) -> CreateNotificationSubscriptionError {
-        CreateNotificationSubscriptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateNotificationSubscriptionError {
-    fn from(err: CredentialsError) -> CreateNotificationSubscriptionError {
-        CreateNotificationSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateNotificationSubscriptionError {
-    fn from(err: HttpDispatchError) -> CreateNotificationSubscriptionError {
-        CreateNotificationSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateNotificationSubscriptionError {
-    fn from(err: io::Error) -> CreateNotificationSubscriptionError {
-        CreateNotificationSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateNotificationSubscriptionError {
@@ -2785,13 +2549,6 @@ impl Error for CreateNotificationSubscriptionError {
             CreateNotificationSubscriptionError::ServiceUnavailable(ref cause) => cause,
             CreateNotificationSubscriptionError::TooManySubscriptions(ref cause) => cause,
             CreateNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateNotificationSubscriptionError::Validation(ref cause) => cause,
-            CreateNotificationSubscriptionError::Credentials(ref err) => err.description(),
-            CreateNotificationSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateNotificationSubscriptionError::ParseError(ref cause) => cause,
-            CreateNotificationSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2808,22 +2565,12 @@ pub enum CreateUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2848,48 +2595,35 @@ impl CreateUserError {
 
             match error_type {
                 "EntityAlreadyExistsException" => {
-                    return CreateUserError::EntityAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::EntityAlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return CreateUserError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateUserError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return CreateUserError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return CreateUserError::UnauthorizedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserError {
-    fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserError {
-    fn from(err: CredentialsError) -> CreateUserError {
-        CreateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserError {
-    fn from(err: HttpDispatchError) -> CreateUserError {
-        CreateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserError {
-    fn from(err: io::Error) -> CreateUserError {
-        CreateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserError {
@@ -2905,11 +2639,6 @@ impl Error for CreateUserError {
             CreateUserError::ServiceUnavailable(ref cause) => cause,
             CreateUserError::UnauthorizedOperation(ref cause) => cause,
             CreateUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            CreateUserError::Validation(ref cause) => cause,
-            CreateUserError::Credentials(ref err) => err.description(),
-            CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::ParseError(ref cause) => cause,
-            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2926,22 +2655,12 @@ pub enum DeactivateUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeactivateUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeactivateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeactivateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2966,50 +2685,35 @@ impl DeactivateUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeactivateUserError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeactivateUserError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return DeactivateUserError::FailedDependency(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeactivateUserError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DeactivateUserError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DeactivateUserError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DeactivateUserError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeactivateUserError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeactivateUserError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DeactivateUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DeactivateUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeactivateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeactivateUserError {
-    fn from(err: serde_json::error::Error) -> DeactivateUserError {
-        DeactivateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeactivateUserError {
-    fn from(err: CredentialsError) -> DeactivateUserError {
-        DeactivateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeactivateUserError {
-    fn from(err: HttpDispatchError) -> DeactivateUserError {
-        DeactivateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeactivateUserError {
-    fn from(err: io::Error) -> DeactivateUserError {
-        DeactivateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeactivateUserError {
@@ -3025,11 +2729,6 @@ impl Error for DeactivateUserError {
             DeactivateUserError::ServiceUnavailable(ref cause) => cause,
             DeactivateUserError::UnauthorizedOperation(ref cause) => cause,
             DeactivateUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeactivateUserError::Validation(ref cause) => cause,
-            DeactivateUserError::Credentials(ref err) => err.description(),
-            DeactivateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeactivateUserError::ParseError(ref cause) => cause,
-            DeactivateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3050,22 +2749,12 @@ pub enum DeleteCommentError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCommentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCommentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCommentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3090,58 +2779,45 @@ impl DeleteCommentError {
 
             match error_type {
                 "DocumentLockedForCommentsException" => {
-                    return DeleteCommentError::DocumentLockedForComments(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCommentError::DocumentLockedForComments(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotExistsException" => {
-                    return DeleteCommentError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return DeleteCommentError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteCommentError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentError::ProhibitedState(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteCommentError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DeleteCommentError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DeleteCommentError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCommentError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteCommentError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DeleteCommentError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DeleteCommentError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCommentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCommentError {
-    fn from(err: serde_json::error::Error) -> DeleteCommentError {
-        DeleteCommentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCommentError {
-    fn from(err: CredentialsError) -> DeleteCommentError {
-        DeleteCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCommentError {
-    fn from(err: HttpDispatchError) -> DeleteCommentError {
-        DeleteCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCommentError {
-    fn from(err: io::Error) -> DeleteCommentError {
-        DeleteCommentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCommentError {
@@ -3159,11 +2835,6 @@ impl Error for DeleteCommentError {
             DeleteCommentError::ServiceUnavailable(ref cause) => cause,
             DeleteCommentError::UnauthorizedOperation(ref cause) => cause,
             DeleteCommentError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteCommentError::Validation(ref cause) => cause,
-            DeleteCommentError::Credentials(ref err) => err.description(),
-            DeleteCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCommentError::ParseError(ref cause) => cause,
-            DeleteCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3182,22 +2853,12 @@ pub enum DeleteCustomMetadataError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCustomMetadataError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomMetadataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3222,57 +2883,42 @@ impl DeleteCustomMetadataError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteCustomMetadataError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeleteCustomMetadataError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return DeleteCustomMetadataError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DeleteCustomMetadataError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteCustomMetadataError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(DeleteCustomMetadataError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteCustomMetadataError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCustomMetadataError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteCustomMetadataError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCustomMetadataError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DeleteCustomMetadataError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteCustomMetadataError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteCustomMetadataError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCustomMetadataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCustomMetadataError {
-    fn from(err: serde_json::error::Error) -> DeleteCustomMetadataError {
-        DeleteCustomMetadataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCustomMetadataError {
-    fn from(err: CredentialsError) -> DeleteCustomMetadataError {
-        DeleteCustomMetadataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCustomMetadataError {
-    fn from(err: HttpDispatchError) -> DeleteCustomMetadataError {
-        DeleteCustomMetadataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCustomMetadataError {
-    fn from(err: io::Error) -> DeleteCustomMetadataError {
-        DeleteCustomMetadataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCustomMetadataError {
@@ -3289,13 +2935,6 @@ impl Error for DeleteCustomMetadataError {
             DeleteCustomMetadataError::ServiceUnavailable(ref cause) => cause,
             DeleteCustomMetadataError::UnauthorizedOperation(ref cause) => cause,
             DeleteCustomMetadataError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteCustomMetadataError::Validation(ref cause) => cause,
-            DeleteCustomMetadataError::Credentials(ref err) => err.description(),
-            DeleteCustomMetadataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCustomMetadataError::ParseError(ref cause) => cause,
-            DeleteCustomMetadataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3318,22 +2957,12 @@ pub enum DeleteDocumentError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDocumentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDocumentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3358,59 +2987,50 @@ impl DeleteDocumentError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteDocumentError::ConcurrentModification(String::from(error_message));
-                }
-                "ConflictingOperationException" => {
-                    return DeleteDocumentError::ConflictingOperation(String::from(error_message));
-                }
-                "EntityNotExistsException" => {
-                    return DeleteDocumentError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return DeleteDocumentError::FailedDependency(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return DeleteDocumentError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeleteDocumentError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DeleteDocumentError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DeleteDocumentError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteDocumentError::Validation(error_message.to_string());
+                "ConflictingOperationException" => {
+                    return RusotoError::Service(DeleteDocumentError::ConflictingOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "EntityNotExistsException" => {
+                    return RusotoError::Service(DeleteDocumentError::EntityNotExists(String::from(
+                        error_message,
+                    )));
+                }
+                "FailedDependencyException" => {
+                    return RusotoError::Service(DeleteDocumentError::FailedDependency(
+                        String::from(error_message),
+                    ));
+                }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(DeleteDocumentError::ProhibitedState(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteDocumentError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DeleteDocumentError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DeleteDocumentError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDocumentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDocumentError {
-    fn from(err: serde_json::error::Error) -> DeleteDocumentError {
-        DeleteDocumentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDocumentError {
-    fn from(err: CredentialsError) -> DeleteDocumentError {
-        DeleteDocumentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDocumentError {
-    fn from(err: HttpDispatchError) -> DeleteDocumentError {
-        DeleteDocumentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDocumentError {
-    fn from(err: io::Error) -> DeleteDocumentError {
-        DeleteDocumentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDocumentError {
@@ -3429,11 +3049,6 @@ impl Error for DeleteDocumentError {
             DeleteDocumentError::ServiceUnavailable(ref cause) => cause,
             DeleteDocumentError::UnauthorizedOperation(ref cause) => cause,
             DeleteDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteDocumentError::Validation(ref cause) => cause,
-            DeleteDocumentError::Credentials(ref err) => err.description(),
-            DeleteDocumentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDocumentError::ParseError(ref cause) => cause,
-            DeleteDocumentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3456,22 +3071,12 @@ pub enum DeleteFolderError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFolderError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3496,59 +3101,50 @@ impl DeleteFolderError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteFolderError::ConcurrentModification(String::from(error_message));
-                }
-                "ConflictingOperationException" => {
-                    return DeleteFolderError::ConflictingOperation(String::from(error_message));
-                }
-                "EntityNotExistsException" => {
-                    return DeleteFolderError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return DeleteFolderError::FailedDependency(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return DeleteFolderError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeleteFolderError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DeleteFolderError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DeleteFolderError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFolderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteFolderError::Validation(error_message.to_string());
+                "ConflictingOperationException" => {
+                    return RusotoError::Service(DeleteFolderError::ConflictingOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "EntityNotExistsException" => {
+                    return RusotoError::Service(DeleteFolderError::EntityNotExists(String::from(
+                        error_message,
+                    )));
+                }
+                "FailedDependencyException" => {
+                    return RusotoError::Service(DeleteFolderError::FailedDependency(String::from(
+                        error_message,
+                    )));
+                }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(DeleteFolderError::ProhibitedState(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteFolderError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DeleteFolderError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DeleteFolderError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFolderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFolderError {
-    fn from(err: serde_json::error::Error) -> DeleteFolderError {
-        DeleteFolderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFolderError {
-    fn from(err: CredentialsError) -> DeleteFolderError {
-        DeleteFolderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFolderError {
-    fn from(err: HttpDispatchError) -> DeleteFolderError {
-        DeleteFolderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFolderError {
-    fn from(err: io::Error) -> DeleteFolderError {
-        DeleteFolderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFolderError {
@@ -3567,11 +3163,6 @@ impl Error for DeleteFolderError {
             DeleteFolderError::ServiceUnavailable(ref cause) => cause,
             DeleteFolderError::UnauthorizedOperation(ref cause) => cause,
             DeleteFolderError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteFolderError::Validation(ref cause) => cause,
-            DeleteFolderError::Credentials(ref err) => err.description(),
-            DeleteFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFolderError::ParseError(ref cause) => cause,
-            DeleteFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3592,22 +3183,12 @@ pub enum DeleteFolderContentsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFolderContentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFolderContentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderContentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3632,62 +3213,47 @@ impl DeleteFolderContentsError {
 
             match error_type {
                 "ConflictingOperationException" => {
-                    return DeleteFolderContentsError::ConflictingOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFolderContentsError::ConflictingOperation(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotExistsException" => {
-                    return DeleteFolderContentsError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeleteFolderContentsError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return DeleteFolderContentsError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DeleteFolderContentsError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return DeleteFolderContentsError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(DeleteFolderContentsError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteFolderContentsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFolderContentsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteFolderContentsError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFolderContentsError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DeleteFolderContentsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteFolderContentsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DeleteFolderContentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFolderContentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFolderContentsError {
-    fn from(err: serde_json::error::Error) -> DeleteFolderContentsError {
-        DeleteFolderContentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFolderContentsError {
-    fn from(err: CredentialsError) -> DeleteFolderContentsError {
-        DeleteFolderContentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFolderContentsError {
-    fn from(err: HttpDispatchError) -> DeleteFolderContentsError {
-        DeleteFolderContentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFolderContentsError {
-    fn from(err: io::Error) -> DeleteFolderContentsError {
-        DeleteFolderContentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFolderContentsError {
@@ -3705,13 +3271,6 @@ impl Error for DeleteFolderContentsError {
             DeleteFolderContentsError::ServiceUnavailable(ref cause) => cause,
             DeleteFolderContentsError::UnauthorizedOperation(ref cause) => cause,
             DeleteFolderContentsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteFolderContentsError::Validation(ref cause) => cause,
-            DeleteFolderContentsError::Credentials(ref err) => err.description(),
-            DeleteFolderContentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteFolderContentsError::ParseError(ref cause) => cause,
-            DeleteFolderContentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3728,22 +3287,12 @@ pub enum DeleteLabelsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLabelsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLabelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLabelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3768,50 +3317,35 @@ impl DeleteLabelsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteLabelsError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeleteLabelsError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return DeleteLabelsError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DeleteLabelsError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLabelsError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DeleteLabelsError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DeleteLabelsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLabelsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteLabelsError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DeleteLabelsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DeleteLabelsError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLabelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLabelsError {
-    fn from(err: serde_json::error::Error) -> DeleteLabelsError {
-        DeleteLabelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLabelsError {
-    fn from(err: CredentialsError) -> DeleteLabelsError {
-        DeleteLabelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLabelsError {
-    fn from(err: HttpDispatchError) -> DeleteLabelsError {
-        DeleteLabelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLabelsError {
-    fn from(err: io::Error) -> DeleteLabelsError {
-        DeleteLabelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLabelsError {
@@ -3827,11 +3361,6 @@ impl Error for DeleteLabelsError {
             DeleteLabelsError::ServiceUnavailable(ref cause) => cause,
             DeleteLabelsError::UnauthorizedOperation(ref cause) => cause,
             DeleteLabelsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteLabelsError::Validation(ref cause) => cause,
-            DeleteLabelsError::Credentials(ref err) => err.description(),
-            DeleteLabelsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLabelsError::ParseError(ref cause) => cause,
-            DeleteLabelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3846,22 +3375,14 @@ pub enum DeleteNotificationSubscriptionError {
     ServiceUnavailable(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteNotificationSubscriptionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteNotificationSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteNotificationSubscriptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3886,55 +3407,38 @@ impl DeleteNotificationSubscriptionError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteNotificationSubscriptionError::EntityNotExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteNotificationSubscriptionError::EntityNotExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ProhibitedStateException" => {
-                    return DeleteNotificationSubscriptionError::ProhibitedState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteNotificationSubscriptionError::ProhibitedState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteNotificationSubscriptionError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteNotificationSubscriptionError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DeleteNotificationSubscriptionError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteNotificationSubscriptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteNotificationSubscriptionError {
-    fn from(err: serde_json::error::Error) -> DeleteNotificationSubscriptionError {
-        DeleteNotificationSubscriptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteNotificationSubscriptionError {
-    fn from(err: CredentialsError) -> DeleteNotificationSubscriptionError {
-        DeleteNotificationSubscriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteNotificationSubscriptionError {
-    fn from(err: HttpDispatchError) -> DeleteNotificationSubscriptionError {
-        DeleteNotificationSubscriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteNotificationSubscriptionError {
-    fn from(err: io::Error) -> DeleteNotificationSubscriptionError {
-        DeleteNotificationSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteNotificationSubscriptionError {
@@ -3949,13 +3453,6 @@ impl Error for DeleteNotificationSubscriptionError {
             DeleteNotificationSubscriptionError::ProhibitedState(ref cause) => cause,
             DeleteNotificationSubscriptionError::ServiceUnavailable(ref cause) => cause,
             DeleteNotificationSubscriptionError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteNotificationSubscriptionError::Validation(ref cause) => cause,
-            DeleteNotificationSubscriptionError::Credentials(ref err) => err.description(),
-            DeleteNotificationSubscriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteNotificationSubscriptionError::ParseError(ref cause) => cause,
-            DeleteNotificationSubscriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3972,22 +3469,12 @@ pub enum DeleteUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4012,48 +3499,35 @@ impl DeleteUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DeleteUserError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return DeleteUserError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteUserError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return DeleteUserError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DeleteUserError::UnauthorizedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserError {
-    fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserError {
-    fn from(err: CredentialsError) -> DeleteUserError {
-        DeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserError {
-    fn from(err: HttpDispatchError) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserError {
-    fn from(err: io::Error) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -4069,11 +3543,6 @@ impl Error for DeleteUserError {
             DeleteUserError::ServiceUnavailable(ref cause) => cause,
             DeleteUserError::UnauthorizedOperation(ref cause) => cause,
             DeleteUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            DeleteUserError::Validation(ref cause) => cause,
-            DeleteUserError::Credentials(ref err) => err.description(),
-            DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::ParseError(ref cause) => cause,
-            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4090,22 +3559,12 @@ pub enum DescribeActivitiesError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeActivitiesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeActivitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeActivitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4130,52 +3589,37 @@ impl DescribeActivitiesError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeActivitiesError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DescribeActivitiesError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeActivitiesError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeActivitiesError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeActivitiesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeActivitiesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeActivitiesError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeActivitiesError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DescribeActivitiesError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeActivitiesError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeActivitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeActivitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeActivitiesError {
-    fn from(err: serde_json::error::Error) -> DescribeActivitiesError {
-        DescribeActivitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeActivitiesError {
-    fn from(err: CredentialsError) -> DescribeActivitiesError {
-        DescribeActivitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeActivitiesError {
-    fn from(err: HttpDispatchError) -> DescribeActivitiesError {
-        DescribeActivitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeActivitiesError {
-    fn from(err: io::Error) -> DescribeActivitiesError {
-        DescribeActivitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeActivitiesError {
@@ -4191,13 +3635,6 @@ impl Error for DescribeActivitiesError {
             DescribeActivitiesError::ServiceUnavailable(ref cause) => cause,
             DescribeActivitiesError::UnauthorizedOperation(ref cause) => cause,
             DescribeActivitiesError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeActivitiesError::Validation(ref cause) => cause,
-            DescribeActivitiesError::Credentials(ref err) => err.description(),
-            DescribeActivitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeActivitiesError::ParseError(ref cause) => cause,
-            DescribeActivitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4216,22 +3653,12 @@ pub enum DescribeCommentsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCommentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCommentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4256,53 +3683,40 @@ impl DescribeCommentsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeCommentsError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return DescribeCommentsError::FailedDependency(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return DescribeCommentsError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DescribeCommentsError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DescribeCommentsError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DescribeCommentsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCommentsError::EntityNotExists(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeCommentsError::Validation(error_message.to_string());
+                "FailedDependencyException" => {
+                    return RusotoError::Service(DescribeCommentsError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(DescribeCommentsError::ProhibitedState(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeCommentsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DescribeCommentsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DescribeCommentsError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCommentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCommentsError {
-    fn from(err: serde_json::error::Error) -> DescribeCommentsError {
-        DescribeCommentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCommentsError {
-    fn from(err: CredentialsError) -> DescribeCommentsError {
-        DescribeCommentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCommentsError {
-    fn from(err: HttpDispatchError) -> DescribeCommentsError {
-        DescribeCommentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCommentsError {
-    fn from(err: io::Error) -> DescribeCommentsError {
-        DescribeCommentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCommentsError {
@@ -4319,11 +3733,6 @@ impl Error for DescribeCommentsError {
             DescribeCommentsError::ServiceUnavailable(ref cause) => cause,
             DescribeCommentsError::UnauthorizedOperation(ref cause) => cause,
             DescribeCommentsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeCommentsError::Validation(ref cause) => cause,
-            DescribeCommentsError::Credentials(ref err) => err.description(),
-            DescribeCommentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeCommentsError::ParseError(ref cause) => cause,
-            DescribeCommentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4344,22 +3753,12 @@ pub enum DescribeDocumentVersionsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDocumentVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDocumentVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDocumentVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4384,68 +3783,49 @@ impl DescribeDocumentVersionsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeDocumentVersionsError::EntityNotExists(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentVersionsError::EntityNotExists(
+                        String::from(error_message),
                     ));
                 }
                 "FailedDependencyException" => {
-                    return DescribeDocumentVersionsError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentVersionsError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeDocumentVersionsError::InvalidArgument(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentVersionsError::InvalidArgument(
+                        String::from(error_message),
                     ));
                 }
                 "ProhibitedStateException" => {
-                    return DescribeDocumentVersionsError::ProhibitedState(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentVersionsError::ProhibitedState(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeDocumentVersionsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentVersionsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeDocumentVersionsError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDocumentVersionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DescribeDocumentVersionsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeDocumentVersionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeDocumentVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDocumentVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDocumentVersionsError {
-    fn from(err: serde_json::error::Error) -> DescribeDocumentVersionsError {
-        DescribeDocumentVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDocumentVersionsError {
-    fn from(err: CredentialsError) -> DescribeDocumentVersionsError {
-        DescribeDocumentVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDocumentVersionsError {
-    fn from(err: HttpDispatchError) -> DescribeDocumentVersionsError {
-        DescribeDocumentVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDocumentVersionsError {
-    fn from(err: io::Error) -> DescribeDocumentVersionsError {
-        DescribeDocumentVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDocumentVersionsError {
@@ -4463,13 +3843,6 @@ impl Error for DescribeDocumentVersionsError {
             DescribeDocumentVersionsError::ServiceUnavailable(ref cause) => cause,
             DescribeDocumentVersionsError::UnauthorizedOperation(ref cause) => cause,
             DescribeDocumentVersionsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeDocumentVersionsError::Validation(ref cause) => cause,
-            DescribeDocumentVersionsError::Credentials(ref err) => err.description(),
-            DescribeDocumentVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDocumentVersionsError::ParseError(ref cause) => cause,
-            DescribeDocumentVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4488,22 +3861,12 @@ pub enum DescribeFolderContentsError {
     ServiceUnavailable(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFolderContentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeFolderContentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFolderContentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4528,57 +3891,42 @@ impl DescribeFolderContentsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeFolderContentsError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DescribeFolderContentsError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return DescribeFolderContentsError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeFolderContentsError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeFolderContentsError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeFolderContentsError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return DescribeFolderContentsError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(DescribeFolderContentsError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeFolderContentsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeFolderContentsError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DescribeFolderContentsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeFolderContentsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeFolderContentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeFolderContentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeFolderContentsError {
-    fn from(err: serde_json::error::Error) -> DescribeFolderContentsError {
-        DescribeFolderContentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeFolderContentsError {
-    fn from(err: CredentialsError) -> DescribeFolderContentsError {
-        DescribeFolderContentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeFolderContentsError {
-    fn from(err: HttpDispatchError) -> DescribeFolderContentsError {
-        DescribeFolderContentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeFolderContentsError {
-    fn from(err: io::Error) -> DescribeFolderContentsError {
-        DescribeFolderContentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeFolderContentsError {
@@ -4595,13 +3943,6 @@ impl Error for DescribeFolderContentsError {
             DescribeFolderContentsError::ProhibitedState(ref cause) => cause,
             DescribeFolderContentsError::ServiceUnavailable(ref cause) => cause,
             DescribeFolderContentsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeFolderContentsError::Validation(ref cause) => cause,
-            DescribeFolderContentsError::Credentials(ref err) => err.description(),
-            DescribeFolderContentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeFolderContentsError::ParseError(ref cause) => cause,
-            DescribeFolderContentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4616,22 +3957,12 @@ pub enum DescribeGroupsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGroupsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4656,47 +3987,30 @@ impl DescribeGroupsError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeGroupsError::FailedDependency(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DescribeGroupsError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DescribeGroupsError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DescribeGroupsError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeGroupsError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeGroupsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeGroupsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DescribeGroupsError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DescribeGroupsError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeGroupsError {
-    fn from(err: serde_json::error::Error) -> DescribeGroupsError {
-        DescribeGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGroupsError {
-    fn from(err: CredentialsError) -> DescribeGroupsError {
-        DescribeGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeGroupsError {
-        DescribeGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGroupsError {
-    fn from(err: io::Error) -> DescribeGroupsError {
-        DescribeGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeGroupsError {
@@ -4711,11 +4025,6 @@ impl Error for DescribeGroupsError {
             DescribeGroupsError::ServiceUnavailable(ref cause) => cause,
             DescribeGroupsError::UnauthorizedOperation(ref cause) => cause,
             DescribeGroupsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeGroupsError::Validation(ref cause) => cause,
-            DescribeGroupsError::Credentials(ref err) => err.description(),
-            DescribeGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeGroupsError::ParseError(ref cause) => cause,
-            DescribeGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4728,22 +4037,14 @@ pub enum DescribeNotificationSubscriptionsError {
     ServiceUnavailable(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeNotificationSubscriptionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeNotificationSubscriptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeNotificationSubscriptionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4768,50 +4069,31 @@ impl DescribeNotificationSubscriptionsError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeNotificationSubscriptionsError::EntityNotExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeNotificationSubscriptionsError::EntityNotExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeNotificationSubscriptionsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeNotificationSubscriptionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeNotificationSubscriptionsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeNotificationSubscriptionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeNotificationSubscriptionsError {
-    fn from(err: serde_json::error::Error) -> DescribeNotificationSubscriptionsError {
-        DescribeNotificationSubscriptionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeNotificationSubscriptionsError {
-    fn from(err: CredentialsError) -> DescribeNotificationSubscriptionsError {
-        DescribeNotificationSubscriptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeNotificationSubscriptionsError {
-    fn from(err: HttpDispatchError) -> DescribeNotificationSubscriptionsError {
-        DescribeNotificationSubscriptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeNotificationSubscriptionsError {
-    fn from(err: io::Error) -> DescribeNotificationSubscriptionsError {
-        DescribeNotificationSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeNotificationSubscriptionsError {
@@ -4825,13 +4107,6 @@ impl Error for DescribeNotificationSubscriptionsError {
             DescribeNotificationSubscriptionsError::EntityNotExists(ref cause) => cause,
             DescribeNotificationSubscriptionsError::ServiceUnavailable(ref cause) => cause,
             DescribeNotificationSubscriptionsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeNotificationSubscriptionsError::Validation(ref cause) => cause,
-            DescribeNotificationSubscriptionsError::Credentials(ref err) => err.description(),
-            DescribeNotificationSubscriptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeNotificationSubscriptionsError::ParseError(ref cause) => cause,
-            DescribeNotificationSubscriptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4846,22 +4121,14 @@ pub enum DescribeResourcePermissionsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResourcePermissionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeResourcePermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeResourcePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4886,53 +4153,36 @@ impl DescribeResourcePermissionsError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeResourcePermissionsError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeResourcePermissionsError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeResourcePermissionsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return DescribeResourcePermissionsError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DescribeResourcePermissionsError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeResourcePermissionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeResourcePermissionsError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        DescribeResourcePermissionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(
+                        DescribeResourcePermissionsError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeResourcePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeResourcePermissionsError {
-    fn from(err: serde_json::error::Error) -> DescribeResourcePermissionsError {
-        DescribeResourcePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeResourcePermissionsError {
-    fn from(err: CredentialsError) -> DescribeResourcePermissionsError {
-        DescribeResourcePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeResourcePermissionsError {
-    fn from(err: HttpDispatchError) -> DescribeResourcePermissionsError {
-        DescribeResourcePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeResourcePermissionsError {
-    fn from(err: io::Error) -> DescribeResourcePermissionsError {
-        DescribeResourcePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeResourcePermissionsError {
@@ -4947,13 +4197,6 @@ impl Error for DescribeResourcePermissionsError {
             DescribeResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
             DescribeResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
             DescribeResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeResourcePermissionsError::Validation(ref cause) => cause,
-            DescribeResourcePermissionsError::Credentials(ref err) => err.description(),
-            DescribeResourcePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeResourcePermissionsError::ParseError(ref cause) => cause,
-            DescribeResourcePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4970,22 +4213,12 @@ pub enum DescribeRootFoldersError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRootFoldersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeRootFoldersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRootFoldersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5010,52 +4243,37 @@ impl DescribeRootFoldersError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return DescribeRootFoldersError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DescribeRootFoldersError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeRootFoldersError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeRootFoldersError::InvalidArgument(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeRootFoldersError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeRootFoldersError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return DescribeRootFoldersError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeRootFoldersError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return DescribeRootFoldersError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeRootFoldersError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeRootFoldersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeRootFoldersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeRootFoldersError {
-    fn from(err: serde_json::error::Error) -> DescribeRootFoldersError {
-        DescribeRootFoldersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeRootFoldersError {
-    fn from(err: CredentialsError) -> DescribeRootFoldersError {
-        DescribeRootFoldersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeRootFoldersError {
-    fn from(err: HttpDispatchError) -> DescribeRootFoldersError {
-        DescribeRootFoldersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeRootFoldersError {
-    fn from(err: io::Error) -> DescribeRootFoldersError {
-        DescribeRootFoldersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeRootFoldersError {
@@ -5071,13 +4289,6 @@ impl Error for DescribeRootFoldersError {
             DescribeRootFoldersError::ServiceUnavailable(ref cause) => cause,
             DescribeRootFoldersError::UnauthorizedOperation(ref cause) => cause,
             DescribeRootFoldersError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeRootFoldersError::Validation(ref cause) => cause,
-            DescribeRootFoldersError::Credentials(ref err) => err.description(),
-            DescribeRootFoldersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeRootFoldersError::ParseError(ref cause) => cause,
-            DescribeRootFoldersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5098,22 +4309,12 @@ pub enum DescribeUsersError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUsersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUsersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5138,56 +4339,45 @@ impl DescribeUsersError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return DescribeUsersError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(DescribeUsersError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return DescribeUsersError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(DescribeUsersError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return DescribeUsersError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(DescribeUsersError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestedEntityTooLargeException" => {
-                    return DescribeUsersError::RequestedEntityTooLarge(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DescribeUsersError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return DescribeUsersError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return DescribeUsersError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeUsersError::RequestedEntityTooLarge(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeUsersError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeUsersError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(DescribeUsersError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(DescribeUsersError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUsersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUsersError {
-    fn from(err: serde_json::error::Error) -> DescribeUsersError {
-        DescribeUsersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUsersError {
-    fn from(err: CredentialsError) -> DescribeUsersError {
-        DescribeUsersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUsersError {
-    fn from(err: HttpDispatchError) -> DescribeUsersError {
-        DescribeUsersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUsersError {
-    fn from(err: io::Error) -> DescribeUsersError {
-        DescribeUsersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUsersError {
@@ -5205,11 +4395,6 @@ impl Error for DescribeUsersError {
             DescribeUsersError::ServiceUnavailable(ref cause) => cause,
             DescribeUsersError::UnauthorizedOperation(ref cause) => cause,
             DescribeUsersError::UnauthorizedResourceAccess(ref cause) => cause,
-            DescribeUsersError::Validation(ref cause) => cause,
-            DescribeUsersError::Credentials(ref err) => err.description(),
-            DescribeUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUsersError::ParseError(ref cause) => cause,
-            DescribeUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5226,22 +4411,12 @@ pub enum GetCurrentUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCurrentUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetCurrentUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCurrentUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5266,50 +4441,35 @@ impl GetCurrentUserError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetCurrentUserError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(GetCurrentUserError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return GetCurrentUserError::FailedDependency(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return GetCurrentUserError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return GetCurrentUserError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return GetCurrentUserError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCurrentUserError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCurrentUserError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetCurrentUserError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(GetCurrentUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(GetCurrentUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCurrentUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCurrentUserError {
-    fn from(err: serde_json::error::Error) -> GetCurrentUserError {
-        GetCurrentUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCurrentUserError {
-    fn from(err: CredentialsError) -> GetCurrentUserError {
-        GetCurrentUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCurrentUserError {
-    fn from(err: HttpDispatchError) -> GetCurrentUserError {
-        GetCurrentUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCurrentUserError {
-    fn from(err: io::Error) -> GetCurrentUserError {
-        GetCurrentUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCurrentUserError {
@@ -5325,11 +4485,6 @@ impl Error for GetCurrentUserError {
             GetCurrentUserError::ServiceUnavailable(ref cause) => cause,
             GetCurrentUserError::UnauthorizedOperation(ref cause) => cause,
             GetCurrentUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetCurrentUserError::Validation(ref cause) => cause,
-            GetCurrentUserError::Credentials(ref err) => err.description(),
-            GetCurrentUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCurrentUserError::ParseError(ref cause) => cause,
-            GetCurrentUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5350,22 +4505,12 @@ pub enum GetDocumentError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDocumentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDocumentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5390,54 +4535,45 @@ impl GetDocumentError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return GetDocumentError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return GetDocumentError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPasswordException" => {
-                    return GetDocumentError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDocumentError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetDocumentError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return GetDocumentError::UnauthorizedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(GetDocumentError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDocumentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDocumentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDocumentError {
-    fn from(err: serde_json::error::Error) -> GetDocumentError {
-        GetDocumentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDocumentError {
-    fn from(err: CredentialsError) -> GetDocumentError {
-        GetDocumentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDocumentError {
-    fn from(err: HttpDispatchError) -> GetDocumentError {
-        GetDocumentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDocumentError {
-    fn from(err: io::Error) -> GetDocumentError {
-        GetDocumentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDocumentError {
@@ -5455,11 +4591,6 @@ impl Error for GetDocumentError {
             GetDocumentError::ServiceUnavailable(ref cause) => cause,
             GetDocumentError::UnauthorizedOperation(ref cause) => cause,
             GetDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetDocumentError::Validation(ref cause) => cause,
-            GetDocumentError::Credentials(ref err) => err.description(),
-            GetDocumentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDocumentError::ParseError(ref cause) => cause,
-            GetDocumentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5476,22 +4607,12 @@ pub enum GetDocumentPathError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDocumentPathError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDocumentPathError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentPathError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5516,50 +4637,35 @@ impl GetDocumentPathError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentPathError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return GetDocumentPathError::FailedDependency(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return GetDocumentPathError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return GetDocumentPathError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return GetDocumentPathError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDocumentPathError::EntityNotExists(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetDocumentPathError::Validation(error_message.to_string());
+                "FailedDependencyException" => {
+                    return RusotoError::Service(GetDocumentPathError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetDocumentPathError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(GetDocumentPathError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(GetDocumentPathError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDocumentPathError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDocumentPathError {
-    fn from(err: serde_json::error::Error) -> GetDocumentPathError {
-        GetDocumentPathError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDocumentPathError {
-    fn from(err: CredentialsError) -> GetDocumentPathError {
-        GetDocumentPathError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDocumentPathError {
-    fn from(err: HttpDispatchError) -> GetDocumentPathError {
-        GetDocumentPathError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDocumentPathError {
-    fn from(err: io::Error) -> GetDocumentPathError {
-        GetDocumentPathError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDocumentPathError {
@@ -5575,11 +4681,6 @@ impl Error for GetDocumentPathError {
             GetDocumentPathError::ServiceUnavailable(ref cause) => cause,
             GetDocumentPathError::UnauthorizedOperation(ref cause) => cause,
             GetDocumentPathError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetDocumentPathError::Validation(ref cause) => cause,
-            GetDocumentPathError::Credentials(ref err) => err.description(),
-            GetDocumentPathError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDocumentPathError::ParseError(ref cause) => cause,
-            GetDocumentPathError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5600,22 +4701,12 @@ pub enum GetDocumentVersionError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDocumentVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDocumentVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDocumentVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5640,58 +4731,47 @@ impl GetDocumentVersionError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetDocumentVersionError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(GetDocumentVersionError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return GetDocumentVersionError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(GetDocumentVersionError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPasswordException" => {
-                    return GetDocumentVersionError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(GetDocumentVersionError::InvalidPassword(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return GetDocumentVersionError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(GetDocumentVersionError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetDocumentVersionError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetDocumentVersionError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetDocumentVersionError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDocumentVersionError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return GetDocumentVersionError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetDocumentVersionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetDocumentVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDocumentVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDocumentVersionError {
-    fn from(err: serde_json::error::Error) -> GetDocumentVersionError {
-        GetDocumentVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDocumentVersionError {
-    fn from(err: CredentialsError) -> GetDocumentVersionError {
-        GetDocumentVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDocumentVersionError {
-    fn from(err: HttpDispatchError) -> GetDocumentVersionError {
-        GetDocumentVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDocumentVersionError {
-    fn from(err: io::Error) -> GetDocumentVersionError {
-        GetDocumentVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDocumentVersionError {
@@ -5709,13 +4789,6 @@ impl Error for GetDocumentVersionError {
             GetDocumentVersionError::ServiceUnavailable(ref cause) => cause,
             GetDocumentVersionError::UnauthorizedOperation(ref cause) => cause,
             GetDocumentVersionError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetDocumentVersionError::Validation(ref cause) => cause,
-            GetDocumentVersionError::Credentials(ref err) => err.description(),
-            GetDocumentVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDocumentVersionError::ParseError(ref cause) => cause,
-            GetDocumentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5736,22 +4809,12 @@ pub enum GetFolderError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFolderError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5776,54 +4839,45 @@ impl GetFolderError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetFolderError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return GetFolderError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return GetFolderError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "ProhibitedStateException" => {
-                    return GetFolderError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::ProhibitedState(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetFolderError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return GetFolderError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return GetFolderError::UnauthorizedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetFolderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFolderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFolderError {
-    fn from(err: serde_json::error::Error) -> GetFolderError {
-        GetFolderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFolderError {
-    fn from(err: CredentialsError) -> GetFolderError {
-        GetFolderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFolderError {
-    fn from(err: HttpDispatchError) -> GetFolderError {
-        GetFolderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFolderError {
-    fn from(err: io::Error) -> GetFolderError {
-        GetFolderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFolderError {
@@ -5841,11 +4895,6 @@ impl Error for GetFolderError {
             GetFolderError::ServiceUnavailable(ref cause) => cause,
             GetFolderError::UnauthorizedOperation(ref cause) => cause,
             GetFolderError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetFolderError::Validation(ref cause) => cause,
-            GetFolderError::Credentials(ref err) => err.description(),
-            GetFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFolderError::ParseError(ref cause) => cause,
-            GetFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5862,22 +4911,12 @@ pub enum GetFolderPathError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFolderPathError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFolderPathError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderPathError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5902,50 +4941,35 @@ impl GetFolderPathError {
 
             match error_type {
                 "EntityNotExistsException" => {
-                    return GetFolderPathError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(GetFolderPathError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return GetFolderPathError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(GetFolderPathError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetFolderPathError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return GetFolderPathError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return GetFolderPathError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFolderPathError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetFolderPathError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(GetFolderPathError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(GetFolderPathError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFolderPathError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFolderPathError {
-    fn from(err: serde_json::error::Error) -> GetFolderPathError {
-        GetFolderPathError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFolderPathError {
-    fn from(err: CredentialsError) -> GetFolderPathError {
-        GetFolderPathError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFolderPathError {
-    fn from(err: HttpDispatchError) -> GetFolderPathError {
-        GetFolderPathError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFolderPathError {
-    fn from(err: io::Error) -> GetFolderPathError {
-        GetFolderPathError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFolderPathError {
@@ -5961,11 +4985,6 @@ impl Error for GetFolderPathError {
             GetFolderPathError::ServiceUnavailable(ref cause) => cause,
             GetFolderPathError::UnauthorizedOperation(ref cause) => cause,
             GetFolderPathError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetFolderPathError::Validation(ref cause) => cause,
-            GetFolderPathError::Credentials(ref err) => err.description(),
-            GetFolderPathError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFolderPathError::ParseError(ref cause) => cause,
-            GetFolderPathError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5982,22 +5001,12 @@ pub enum GetResourcesError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourcesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6022,50 +5031,35 @@ impl GetResourcesError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return GetResourcesError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return GetResourcesError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(GetResourcesError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetResourcesError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return GetResourcesError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return GetResourcesError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(GetResourcesError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetResourcesError::Validation(error_message.to_string());
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(GetResourcesError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(GetResourcesError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourcesError {
-    fn from(err: serde_json::error::Error) -> GetResourcesError {
-        GetResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourcesError {
-    fn from(err: CredentialsError) -> GetResourcesError {
-        GetResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourcesError {
-    fn from(err: HttpDispatchError) -> GetResourcesError {
-        GetResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourcesError {
-    fn from(err: io::Error) -> GetResourcesError {
-        GetResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourcesError {
@@ -6081,11 +5075,6 @@ impl Error for GetResourcesError {
             GetResourcesError::ServiceUnavailable(ref cause) => cause,
             GetResourcesError::UnauthorizedOperation(ref cause) => cause,
             GetResourcesError::UnauthorizedResourceAccess(ref cause) => cause,
-            GetResourcesError::Validation(ref cause) => cause,
-            GetResourcesError::Credentials(ref err) => err.description(),
-            GetResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetResourcesError::ParseError(ref cause) => cause,
-            GetResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6114,22 +5103,14 @@ pub enum InitiateDocumentVersionUploadError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitiateDocumentVersionUploadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InitiateDocumentVersionUploadError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<InitiateDocumentVersionUploadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6154,88 +5135,87 @@ impl InitiateDocumentVersionUploadError {
 
             match error_type {
                 "DraftUploadOutOfSyncException" => {
-                    return InitiateDocumentVersionUploadError::DraftUploadOutOfSync(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::DraftUploadOutOfSync(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EntityAlreadyExistsException" => {
-                    return InitiateDocumentVersionUploadError::EntityAlreadyExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::EntityAlreadyExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EntityNotExistsException" => {
-                    return InitiateDocumentVersionUploadError::EntityNotExists(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::EntityNotExists(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "FailedDependencyException" => {
-                    return InitiateDocumentVersionUploadError::FailedDependency(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::FailedDependency(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ProhibitedStateException" => {
-                    return InitiateDocumentVersionUploadError::ProhibitedState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::ProhibitedState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceAlreadyCheckedOutException" => {
-                    return InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::ResourceAlreadyCheckedOut(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ServiceUnavailableException" => {
-                    return InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "StorageLimitExceededException" => {
-                    return InitiateDocumentVersionUploadError::StorageLimitExceeded(String::from(
-                        error_message,
-                    ));
-                }
-                "StorageLimitWillExceedException" => {
-                    return InitiateDocumentVersionUploadError::StorageLimitWillExceed(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return InitiateDocumentVersionUploadError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return InitiateDocumentVersionUploadError::Validation(error_message.to_string());
+                "StorageLimitExceededException" => {
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::StorageLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "StorageLimitWillExceedException" => {
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::StorageLimitWillExceed(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(
+                        InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitiateDocumentVersionUploadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitiateDocumentVersionUploadError {
-    fn from(err: serde_json::error::Error) -> InitiateDocumentVersionUploadError {
-        InitiateDocumentVersionUploadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitiateDocumentVersionUploadError {
-    fn from(err: CredentialsError) -> InitiateDocumentVersionUploadError {
-        InitiateDocumentVersionUploadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitiateDocumentVersionUploadError {
-    fn from(err: HttpDispatchError) -> InitiateDocumentVersionUploadError {
-        InitiateDocumentVersionUploadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitiateDocumentVersionUploadError {
-    fn from(err: io::Error) -> InitiateDocumentVersionUploadError {
-        InitiateDocumentVersionUploadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitiateDocumentVersionUploadError {
@@ -6257,13 +5237,6 @@ impl Error for InitiateDocumentVersionUploadError {
             InitiateDocumentVersionUploadError::StorageLimitWillExceed(ref cause) => cause,
             InitiateDocumentVersionUploadError::UnauthorizedOperation(ref cause) => cause,
             InitiateDocumentVersionUploadError::UnauthorizedResourceAccess(ref cause) => cause,
-            InitiateDocumentVersionUploadError::Validation(ref cause) => cause,
-            InitiateDocumentVersionUploadError::Credentials(ref err) => err.description(),
-            InitiateDocumentVersionUploadError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitiateDocumentVersionUploadError::ParseError(ref cause) => cause,
-            InitiateDocumentVersionUploadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6278,22 +5251,14 @@ pub enum RemoveAllResourcePermissionsError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveAllResourcePermissionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveAllResourcePermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveAllResourcePermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6318,53 +5283,38 @@ impl RemoveAllResourcePermissionsError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return RemoveAllResourcePermissionsError::FailedDependency(String::from(
-                        error_message,
-                    ));
-                }
-                "ServiceUnavailableException" => {
-                    return RemoveAllResourcePermissionsError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedOperationException" => {
-                    return RemoveAllResourcePermissionsError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RemoveAllResourcePermissionsError::FailedDependency(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return RemoveAllResourcePermissionsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        RemoveAllResourcePermissionsError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(
+                        RemoveAllResourcePermissionsError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(
+                        RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveAllResourcePermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveAllResourcePermissionsError {
-    fn from(err: serde_json::error::Error) -> RemoveAllResourcePermissionsError {
-        RemoveAllResourcePermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveAllResourcePermissionsError {
-    fn from(err: CredentialsError) -> RemoveAllResourcePermissionsError {
-        RemoveAllResourcePermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveAllResourcePermissionsError {
-    fn from(err: HttpDispatchError) -> RemoveAllResourcePermissionsError {
-        RemoveAllResourcePermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveAllResourcePermissionsError {
-    fn from(err: io::Error) -> RemoveAllResourcePermissionsError {
-        RemoveAllResourcePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveAllResourcePermissionsError {
@@ -6379,13 +5329,6 @@ impl Error for RemoveAllResourcePermissionsError {
             RemoveAllResourcePermissionsError::ServiceUnavailable(ref cause) => cause,
             RemoveAllResourcePermissionsError::UnauthorizedOperation(ref cause) => cause,
             RemoveAllResourcePermissionsError::UnauthorizedResourceAccess(ref cause) => cause,
-            RemoveAllResourcePermissionsError::Validation(ref cause) => cause,
-            RemoveAllResourcePermissionsError::Credentials(ref err) => err.description(),
-            RemoveAllResourcePermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveAllResourcePermissionsError::ParseError(ref cause) => cause,
-            RemoveAllResourcePermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6400,22 +5343,12 @@ pub enum RemoveResourcePermissionError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveResourcePermissionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveResourcePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveResourcePermissionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6440,53 +5373,34 @@ impl RemoveResourcePermissionError {
 
             match error_type {
                 "FailedDependencyException" => {
-                    return RemoveResourcePermissionError::FailedDependency(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveResourcePermissionError::FailedDependency(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return RemoveResourcePermissionError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveResourcePermissionError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return RemoveResourcePermissionError::UnauthorizedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveResourcePermissionError::UnauthorizedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return RemoveResourcePermissionError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveResourcePermissionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RemoveResourcePermissionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveResourcePermissionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveResourcePermissionError {
-    fn from(err: serde_json::error::Error) -> RemoveResourcePermissionError {
-        RemoveResourcePermissionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveResourcePermissionError {
-    fn from(err: CredentialsError) -> RemoveResourcePermissionError {
-        RemoveResourcePermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveResourcePermissionError {
-    fn from(err: HttpDispatchError) -> RemoveResourcePermissionError {
-        RemoveResourcePermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveResourcePermissionError {
-    fn from(err: io::Error) -> RemoveResourcePermissionError {
-        RemoveResourcePermissionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveResourcePermissionError {
@@ -6501,13 +5415,6 @@ impl Error for RemoveResourcePermissionError {
             RemoveResourcePermissionError::ServiceUnavailable(ref cause) => cause,
             RemoveResourcePermissionError::UnauthorizedOperation(ref cause) => cause,
             RemoveResourcePermissionError::UnauthorizedResourceAccess(ref cause) => cause,
-            RemoveResourcePermissionError::Validation(ref cause) => cause,
-            RemoveResourcePermissionError::Credentials(ref err) => err.description(),
-            RemoveResourcePermissionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveResourcePermissionError::ParseError(ref cause) => cause,
-            RemoveResourcePermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6534,22 +5441,12 @@ pub enum UpdateDocumentError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDocumentError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDocumentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6574,65 +5471,60 @@ impl UpdateDocumentError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateDocumentError::ConcurrentModification(String::from(error_message));
-                }
-                "ConflictingOperationException" => {
-                    return UpdateDocumentError::ConflictingOperation(String::from(error_message));
-                }
-                "EntityAlreadyExistsException" => {
-                    return UpdateDocumentError::EntityAlreadyExists(String::from(error_message));
-                }
-                "EntityNotExistsException" => {
-                    return UpdateDocumentError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return UpdateDocumentError::FailedDependency(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return UpdateDocumentError::LimitExceeded(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return UpdateDocumentError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return UpdateDocumentError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return UpdateDocumentError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return UpdateDocumentError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDocumentError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateDocumentError::Validation(error_message.to_string());
+                "ConflictingOperationException" => {
+                    return RusotoError::Service(UpdateDocumentError::ConflictingOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "EntityAlreadyExistsException" => {
+                    return RusotoError::Service(UpdateDocumentError::EntityAlreadyExists(
+                        String::from(error_message),
+                    ));
+                }
+                "EntityNotExistsException" => {
+                    return RusotoError::Service(UpdateDocumentError::EntityNotExists(String::from(
+                        error_message,
+                    )));
+                }
+                "FailedDependencyException" => {
+                    return RusotoError::Service(UpdateDocumentError::FailedDependency(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateDocumentError::LimitExceeded(String::from(
+                        error_message,
+                    )));
+                }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(UpdateDocumentError::ProhibitedState(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateDocumentError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(UpdateDocumentError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(UpdateDocumentError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDocumentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDocumentError {
-    fn from(err: serde_json::error::Error) -> UpdateDocumentError {
-        UpdateDocumentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDocumentError {
-    fn from(err: CredentialsError) -> UpdateDocumentError {
-        UpdateDocumentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDocumentError {
-    fn from(err: HttpDispatchError) -> UpdateDocumentError {
-        UpdateDocumentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDocumentError {
-    fn from(err: io::Error) -> UpdateDocumentError {
-        UpdateDocumentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDocumentError {
@@ -6653,11 +5545,6 @@ impl Error for UpdateDocumentError {
             UpdateDocumentError::ServiceUnavailable(ref cause) => cause,
             UpdateDocumentError::UnauthorizedOperation(ref cause) => cause,
             UpdateDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
-            UpdateDocumentError::Validation(ref cause) => cause,
-            UpdateDocumentError::Credentials(ref err) => err.description(),
-            UpdateDocumentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDocumentError::ParseError(ref cause) => cause,
-            UpdateDocumentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6680,22 +5567,12 @@ pub enum UpdateDocumentVersionError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDocumentVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDocumentVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDocumentVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6720,65 +5597,52 @@ impl UpdateDocumentVersionError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateDocumentVersionError::ConcurrentModification(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDocumentVersionError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateDocumentVersionError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(UpdateDocumentVersionError::EntityNotExists(
+                        String::from(error_message),
+                    ));
                 }
                 "FailedDependencyException" => {
-                    return UpdateDocumentVersionError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(UpdateDocumentVersionError::FailedDependency(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidOperationException" => {
-                    return UpdateDocumentVersionError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateDocumentVersionError::InvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "ProhibitedStateException" => {
-                    return UpdateDocumentVersionError::ProhibitedState(String::from(error_message));
+                    return RusotoError::Service(UpdateDocumentVersionError::ProhibitedState(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateDocumentVersionError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDocumentVersionError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateDocumentVersionError::UnauthorizedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDocumentVersionError::UnauthorizedOperation(
+                        String::from(error_message),
                     ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return UpdateDocumentVersionError::UnauthorizedResourceAccess(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDocumentVersionError::UnauthorizedResourceAccess(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateDocumentVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDocumentVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDocumentVersionError {
-    fn from(err: serde_json::error::Error) -> UpdateDocumentVersionError {
-        UpdateDocumentVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDocumentVersionError {
-    fn from(err: CredentialsError) -> UpdateDocumentVersionError {
-        UpdateDocumentVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDocumentVersionError {
-    fn from(err: HttpDispatchError) -> UpdateDocumentVersionError {
-        UpdateDocumentVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDocumentVersionError {
-    fn from(err: io::Error) -> UpdateDocumentVersionError {
-        UpdateDocumentVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDocumentVersionError {
@@ -6797,13 +5661,6 @@ impl Error for UpdateDocumentVersionError {
             UpdateDocumentVersionError::ServiceUnavailable(ref cause) => cause,
             UpdateDocumentVersionError::UnauthorizedOperation(ref cause) => cause,
             UpdateDocumentVersionError::UnauthorizedResourceAccess(ref cause) => cause,
-            UpdateDocumentVersionError::Validation(ref cause) => cause,
-            UpdateDocumentVersionError::Credentials(ref err) => err.description(),
-            UpdateDocumentVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDocumentVersionError::ParseError(ref cause) => cause,
-            UpdateDocumentVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6830,22 +5687,12 @@ pub enum UpdateFolderError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFolderError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFolderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6870,65 +5717,60 @@ impl UpdateFolderError {
 
             match error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateFolderError::ConcurrentModification(String::from(error_message));
-                }
-                "ConflictingOperationException" => {
-                    return UpdateFolderError::ConflictingOperation(String::from(error_message));
-                }
-                "EntityAlreadyExistsException" => {
-                    return UpdateFolderError::EntityAlreadyExists(String::from(error_message));
-                }
-                "EntityNotExistsException" => {
-                    return UpdateFolderError::EntityNotExists(String::from(error_message));
-                }
-                "FailedDependencyException" => {
-                    return UpdateFolderError::FailedDependency(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return UpdateFolderError::LimitExceeded(String::from(error_message));
-                }
-                "ProhibitedStateException" => {
-                    return UpdateFolderError::ProhibitedState(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return UpdateFolderError::ServiceUnavailable(String::from(error_message));
-                }
-                "UnauthorizedOperationException" => {
-                    return UpdateFolderError::UnauthorizedOperation(String::from(error_message));
-                }
-                "UnauthorizedResourceAccessException" => {
-                    return UpdateFolderError::UnauthorizedResourceAccess(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFolderError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateFolderError::Validation(error_message.to_string());
+                "ConflictingOperationException" => {
+                    return RusotoError::Service(UpdateFolderError::ConflictingOperation(
+                        String::from(error_message),
+                    ));
                 }
+                "EntityAlreadyExistsException" => {
+                    return RusotoError::Service(UpdateFolderError::EntityAlreadyExists(
+                        String::from(error_message),
+                    ));
+                }
+                "EntityNotExistsException" => {
+                    return RusotoError::Service(UpdateFolderError::EntityNotExists(String::from(
+                        error_message,
+                    )));
+                }
+                "FailedDependencyException" => {
+                    return RusotoError::Service(UpdateFolderError::FailedDependency(String::from(
+                        error_message,
+                    )));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateFolderError::LimitExceeded(String::from(
+                        error_message,
+                    )));
+                }
+                "ProhibitedStateException" => {
+                    return RusotoError::Service(UpdateFolderError::ProhibitedState(String::from(
+                        error_message,
+                    )));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateFolderError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedOperationException" => {
+                    return RusotoError::Service(UpdateFolderError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return RusotoError::Service(UpdateFolderError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFolderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFolderError {
-    fn from(err: serde_json::error::Error) -> UpdateFolderError {
-        UpdateFolderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFolderError {
-    fn from(err: CredentialsError) -> UpdateFolderError {
-        UpdateFolderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFolderError {
-    fn from(err: HttpDispatchError) -> UpdateFolderError {
-        UpdateFolderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFolderError {
-    fn from(err: io::Error) -> UpdateFolderError {
-        UpdateFolderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFolderError {
@@ -6949,11 +5791,6 @@ impl Error for UpdateFolderError {
             UpdateFolderError::ServiceUnavailable(ref cause) => cause,
             UpdateFolderError::UnauthorizedOperation(ref cause) => cause,
             UpdateFolderError::UnauthorizedResourceAccess(ref cause) => cause,
-            UpdateFolderError::Validation(ref cause) => cause,
-            UpdateFolderError::Credentials(ref err) => err.description(),
-            UpdateFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFolderError::ParseError(ref cause) => cause,
-            UpdateFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6976,22 +5813,12 @@ pub enum UpdateUserError {
     UnauthorizedOperation(String),
     /// <p>The caller does not have access to perform the action on the resource.</p>
     UnauthorizedResourceAccess(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7016,57 +5843,50 @@ impl UpdateUserError {
 
             match error_type {
                 "DeactivatingLastSystemUserException" => {
-                    return UpdateUserError::DeactivatingLastSystemUser(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::DeactivatingLastSystemUser(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotExistsException" => {
-                    return UpdateUserError::EntityNotExists(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::EntityNotExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FailedDependencyException" => {
-                    return UpdateUserError::FailedDependency(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::FailedDependency(String::from(
+                        error_message,
+                    )));
                 }
                 "IllegalUserStateException" => {
-                    return UpdateUserError::IllegalUserState(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::IllegalUserState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArgumentException" => {
-                    return UpdateUserError::InvalidArgument(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::InvalidArgument(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateUserError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedOperationException" => {
-                    return UpdateUserError::UnauthorizedOperation(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::UnauthorizedOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedResourceAccessException" => {
-                    return UpdateUserError::UnauthorizedResourceAccess(String::from(error_message));
+                    return RusotoError::Service(UpdateUserError::UnauthorizedResourceAccess(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserError {
-    fn from(err: serde_json::error::Error) -> UpdateUserError {
-        UpdateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserError {
-    fn from(err: CredentialsError) -> UpdateUserError {
-        UpdateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserError {
-    fn from(err: HttpDispatchError) -> UpdateUserError {
-        UpdateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserError {
-    fn from(err: io::Error) -> UpdateUserError {
-        UpdateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserError {
@@ -7085,11 +5905,6 @@ impl Error for UpdateUserError {
             UpdateUserError::ServiceUnavailable(ref cause) => cause,
             UpdateUserError::UnauthorizedOperation(ref cause) => cause,
             UpdateUserError::UnauthorizedResourceAccess(ref cause) => cause,
-            UpdateUserError::Validation(ref cause) => cause,
-            UpdateUserError::Credentials(ref err) => err.description(),
-            UpdateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateUserError::ParseError(ref cause) => cause,
-            UpdateUserError::Unknown(_) => "unknown error",
         }
     }
 }

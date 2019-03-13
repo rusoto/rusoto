@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -7532,20 +7529,10 @@ pub enum AddListenerCertificatesError {
     ListenerNotFound(String),
     /// <p>You've reached the limit on the number of certificates per load balancer.</p>
     TooManyCertificates(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddListenerCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddListenerCertificatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddListenerCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7553,25 +7540,29 @@ impl AddListenerCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CertificateNotFound" => {
-                        return AddListenerCertificatesError::CertificateNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddListenerCertificatesError::CertificateNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ListenerNotFound" => {
-                        return AddListenerCertificatesError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddListenerCertificatesError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyCertificates" => {
-                        return AddListenerCertificatesError::TooManyCertificates(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AddListenerCertificatesError::TooManyCertificates(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        AddListenerCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7580,28 +7571,6 @@ impl AddListenerCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddListenerCertificatesError {
-    fn from(err: XmlParseError) -> AddListenerCertificatesError {
-        let XmlParseError(message) = err;
-        AddListenerCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddListenerCertificatesError {
-    fn from(err: CredentialsError) -> AddListenerCertificatesError {
-        AddListenerCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddListenerCertificatesError {
-    fn from(err: HttpDispatchError) -> AddListenerCertificatesError {
-        AddListenerCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddListenerCertificatesError {
-    fn from(err: io::Error) -> AddListenerCertificatesError {
-        AddListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddListenerCertificatesError {
@@ -7615,13 +7584,6 @@ impl Error for AddListenerCertificatesError {
             AddListenerCertificatesError::CertificateNotFound(ref cause) => cause,
             AddListenerCertificatesError::ListenerNotFound(ref cause) => cause,
             AddListenerCertificatesError::TooManyCertificates(ref cause) => cause,
-            AddListenerCertificatesError::Validation(ref cause) => cause,
-            AddListenerCertificatesError::Credentials(ref err) => err.description(),
-            AddListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddListenerCertificatesError::ParseError(ref cause) => cause,
-            AddListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7636,20 +7598,10 @@ pub enum AddTagsError {
     TargetGroupNotFound(String),
     /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7657,24 +7609,30 @@ impl AddTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateTagKeys" => {
-                        return AddTagsError::DuplicateTagKeys(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::DuplicateTagKeys(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LoadBalancerNotFound" => {
-                        return AddTagsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AddTagsError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return AddTagsError::TargetGroupNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "TooManyTags" => {
-                        return AddTagsError::TooManyTags(String::from(parsed_error.message));
+                        return RusotoError::Service(AddTagsError::TooManyTags(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        AddTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7683,28 +7641,6 @@ impl AddTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddTagsError {
-    fn from(err: XmlParseError) -> AddTagsError {
-        let XmlParseError(message) = err;
-        AddTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddTagsError {
-    fn from(err: CredentialsError) -> AddTagsError {
-        AddTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddTagsError {
-    fn from(err: HttpDispatchError) -> AddTagsError {
-        AddTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddTagsError {
-    fn from(err: io::Error) -> AddTagsError {
-        AddTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddTagsError {
@@ -7719,11 +7655,6 @@ impl Error for AddTagsError {
             AddTagsError::LoadBalancerNotFound(ref cause) => cause,
             AddTagsError::TargetGroupNotFound(ref cause) => cause,
             AddTagsError::TooManyTags(ref cause) => cause,
-            AddTagsError::Validation(ref cause) => cause,
-            AddTagsError::Credentials(ref err) => err.description(),
-            AddTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddTagsError::ParseError(ref cause) => cause,
-            AddTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7760,20 +7691,10 @@ pub enum CreateListenerError {
     TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateListenerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateListenerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateListenerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7781,85 +7702,91 @@ impl CreateListenerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CertificateNotFound" => {
-                        return CreateListenerError::CertificateNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::CertificateNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DuplicateListener" => {
-                        return CreateListenerError::DuplicateListener(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::DuplicateListener(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "IncompatibleProtocols" => {
-                        return CreateListenerError::IncompatibleProtocols(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::IncompatibleProtocols(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateListenerError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateListenerError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidLoadBalancerAction" => {
-                        return CreateListenerError::InvalidLoadBalancerAction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::InvalidLoadBalancerAction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LoadBalancerNotFound" => {
-                        return CreateListenerError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SSLPolicyNotFound" => {
-                        return CreateListenerError::SSLPolicyNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::SSLPolicyNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupAssociationLimit" => {
-                        return CreateListenerError::TargetGroupAssociationLimit(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateListenerError::TargetGroupAssociationLimit(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TargetGroupNotFound" => {
-                        return CreateListenerError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyActions" => {
-                        return CreateListenerError::TooManyActions(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::TooManyActions(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyCertificates" => {
-                        return CreateListenerError::TooManyCertificates(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::TooManyCertificates(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyListeners" => {
-                        return CreateListenerError::TooManyListeners(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::TooManyListeners(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyRegistrationsForTargetId" => {
-                        return CreateListenerError::TooManyRegistrationsForTargetId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateListenerError::TooManyRegistrationsForTargetId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTargets" => {
-                        return CreateListenerError::TooManyTargets(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::TooManyTargets(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedProtocol" => {
-                        return CreateListenerError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateListenerError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateListenerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -7868,28 +7795,6 @@ impl CreateListenerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateListenerError {
-    fn from(err: XmlParseError) -> CreateListenerError {
-        let XmlParseError(message) = err;
-        CreateListenerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateListenerError {
-    fn from(err: CredentialsError) -> CreateListenerError {
-        CreateListenerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateListenerError {
-    fn from(err: HttpDispatchError) -> CreateListenerError {
-        CreateListenerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateListenerError {
-    fn from(err: io::Error) -> CreateListenerError {
-        CreateListenerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateListenerError {
@@ -7915,11 +7820,6 @@ impl Error for CreateListenerError {
             CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
             CreateListenerError::TooManyTargets(ref cause) => cause,
             CreateListenerError::UnsupportedProtocol(ref cause) => cause,
-            CreateListenerError::Validation(ref cause) => cause,
-            CreateListenerError::Credentials(ref err) => err.description(),
-            CreateListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateListenerError::ParseError(ref cause) => cause,
-            CreateListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7952,20 +7852,10 @@ pub enum CreateLoadBalancerError {
     TooManyLoadBalancers(String),
     /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -7973,75 +7863,81 @@ impl CreateLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AllocationIdNotFound" => {
-                        return CreateLoadBalancerError::AllocationIdNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::AllocationIdNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AvailabilityZoneNotSupported" => {
-                        return CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DuplicateLoadBalancerName" => {
-                        return CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "DuplicateTagKeys" => {
-                        return CreateLoadBalancerError::DuplicateTagKeys(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::DuplicateTagKeys(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateLoadBalancerError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidScheme" => {
-                        return CreateLoadBalancerError::InvalidScheme(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidScheme(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSecurityGroup" => {
-                        return CreateLoadBalancerError::InvalidSecurityGroup(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidSecurityGroup(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSubnet" => {
-                        return CreateLoadBalancerError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "OperationNotPermitted" => {
-                        return CreateLoadBalancerError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceInUse" => {
-                        return CreateLoadBalancerError::ResourceInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::ResourceInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SubnetNotFound" => {
-                        return CreateLoadBalancerError::SubnetNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::SubnetNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyLoadBalancers" => {
-                        return CreateLoadBalancerError::TooManyLoadBalancers(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::TooManyLoadBalancers(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyTags" => {
-                        return CreateLoadBalancerError::TooManyTags(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateLoadBalancerError::TooManyTags(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8050,28 +7946,6 @@ impl CreateLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateLoadBalancerError {
-    fn from(err: XmlParseError) -> CreateLoadBalancerError {
-        let XmlParseError(message) = err;
-        CreateLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateLoadBalancerError {
-    fn from(err: CredentialsError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLoadBalancerError {
-    fn from(err: HttpDispatchError) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLoadBalancerError {
-    fn from(err: io::Error) -> CreateLoadBalancerError {
-        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateLoadBalancerError {
@@ -8095,13 +7969,6 @@ impl Error for CreateLoadBalancerError {
             CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
             CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => cause,
             CreateLoadBalancerError::TooManyTags(ref cause) => cause,
-            CreateLoadBalancerError::Validation(ref cause) => cause,
-            CreateLoadBalancerError::Credentials(ref err) => err.description(),
-            CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateLoadBalancerError::ParseError(ref cause) => cause,
-            CreateLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8134,20 +8001,10 @@ pub enum CreateRuleError {
     TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8155,65 +8012,77 @@ impl CreateRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "IncompatibleProtocols" => {
-                        return CreateRuleError::IncompatibleProtocols(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::IncompatibleProtocols(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateRuleError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidLoadBalancerAction" => {
-                        return CreateRuleError::InvalidLoadBalancerAction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::InvalidLoadBalancerAction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ListenerNotFound" => {
-                        return CreateRuleError::ListenerNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRuleError::ListenerNotFound(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "PriorityInUse" => {
-                        return CreateRuleError::PriorityInUse(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRuleError::PriorityInUse(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TargetGroupAssociationLimit" => {
-                        return CreateRuleError::TargetGroupAssociationLimit(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::TargetGroupAssociationLimit(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return CreateRuleError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyActions" => {
-                        return CreateRuleError::TooManyActions(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRuleError::TooManyActions(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TooManyRegistrationsForTargetId" => {
-                        return CreateRuleError::TooManyRegistrationsForTargetId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateRuleError::TooManyRegistrationsForTargetId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyRules" => {
-                        return CreateRuleError::TooManyRules(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRuleError::TooManyRules(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TooManyTargetGroups" => {
-                        return CreateRuleError::TooManyTargetGroups(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::TooManyTargetGroups(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyTargets" => {
-                        return CreateRuleError::TooManyTargets(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateRuleError::TooManyTargets(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "UnsupportedProtocol" => {
-                        return CreateRuleError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateRuleError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8222,28 +8091,6 @@ impl CreateRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateRuleError {
-    fn from(err: XmlParseError) -> CreateRuleError {
-        let XmlParseError(message) = err;
-        CreateRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateRuleError {
-    fn from(err: CredentialsError) -> CreateRuleError {
-        CreateRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRuleError {
-    fn from(err: HttpDispatchError) -> CreateRuleError {
-        CreateRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRuleError {
-    fn from(err: io::Error) -> CreateRuleError {
-        CreateRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateRuleError {
@@ -8267,11 +8114,6 @@ impl Error for CreateRuleError {
             CreateRuleError::TooManyTargetGroups(ref cause) => cause,
             CreateRuleError::TooManyTargets(ref cause) => cause,
             CreateRuleError::UnsupportedProtocol(ref cause) => cause,
-            CreateRuleError::Validation(ref cause) => cause,
-            CreateRuleError::Credentials(ref err) => err.description(),
-            CreateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRuleError::ParseError(ref cause) => cause,
-            CreateRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8284,20 +8126,10 @@ pub enum CreateTargetGroupError {
     InvalidConfigurationRequest(String),
     /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTargetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTargetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTargetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8305,25 +8137,29 @@ impl CreateTargetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateTargetGroupName" => {
-                        return CreateTargetGroupError::DuplicateTargetGroupName(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTargetGroupError::DuplicateTargetGroupName(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidConfigurationRequest" => {
-                        return CreateTargetGroupError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateTargetGroupError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTargetGroups" => {
-                        return CreateTargetGroupError::TooManyTargetGroups(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTargetGroupError::TooManyTargetGroups(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateTargetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8332,28 +8168,6 @@ impl CreateTargetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTargetGroupError {
-    fn from(err: XmlParseError) -> CreateTargetGroupError {
-        let XmlParseError(message) = err;
-        CreateTargetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTargetGroupError {
-    fn from(err: CredentialsError) -> CreateTargetGroupError {
-        CreateTargetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTargetGroupError {
-    fn from(err: HttpDispatchError) -> CreateTargetGroupError {
-        CreateTargetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTargetGroupError {
-    fn from(err: io::Error) -> CreateTargetGroupError {
-        CreateTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTargetGroupError {
@@ -8367,13 +8181,6 @@ impl Error for CreateTargetGroupError {
             CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => cause,
             CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
             CreateTargetGroupError::TooManyTargetGroups(ref cause) => cause,
-            CreateTargetGroupError::Validation(ref cause) => cause,
-            CreateTargetGroupError::Credentials(ref err) => err.description(),
-            CreateTargetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTargetGroupError::ParseError(ref cause) => cause,
-            CreateTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8382,20 +8189,10 @@ impl Error for CreateTargetGroupError {
 pub enum DeleteListenerError {
     /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteListenerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteListenerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteListenerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8403,15 +8200,15 @@ impl DeleteListenerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return DeleteListenerError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteListenerError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteListenerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8420,28 +8217,6 @@ impl DeleteListenerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteListenerError {
-    fn from(err: XmlParseError) -> DeleteListenerError {
-        let XmlParseError(message) = err;
-        DeleteListenerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteListenerError {
-    fn from(err: CredentialsError) -> DeleteListenerError {
-        DeleteListenerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteListenerError {
-    fn from(err: HttpDispatchError) -> DeleteListenerError {
-        DeleteListenerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteListenerError {
-    fn from(err: io::Error) -> DeleteListenerError {
-        DeleteListenerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteListenerError {
@@ -8453,11 +8228,6 @@ impl Error for DeleteListenerError {
     fn description(&self) -> &str {
         match *self {
             DeleteListenerError::ListenerNotFound(ref cause) => cause,
-            DeleteListenerError::Validation(ref cause) => cause,
-            DeleteListenerError::Credentials(ref err) => err.description(),
-            DeleteListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteListenerError::ParseError(ref cause) => cause,
-            DeleteListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8470,20 +8240,10 @@ pub enum DeleteLoadBalancerError {
     OperationNotPermitted(String),
     /// <p>A specified resource is in use.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLoadBalancerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLoadBalancerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLoadBalancerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8491,25 +8251,25 @@ impl DeleteLoadBalancerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DeleteLoadBalancerError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoadBalancerError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "OperationNotPermitted" => {
-                        return DeleteLoadBalancerError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoadBalancerError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ResourceInUse" => {
-                        return DeleteLoadBalancerError::ResourceInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteLoadBalancerError::ResourceInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteLoadBalancerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8518,28 +8278,6 @@ impl DeleteLoadBalancerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteLoadBalancerError {
-    fn from(err: XmlParseError) -> DeleteLoadBalancerError {
-        let XmlParseError(message) = err;
-        DeleteLoadBalancerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLoadBalancerError {
-    fn from(err: CredentialsError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLoadBalancerError {
-    fn from(err: HttpDispatchError) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLoadBalancerError {
-    fn from(err: io::Error) -> DeleteLoadBalancerError {
-        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteLoadBalancerError {
@@ -8553,13 +8291,6 @@ impl Error for DeleteLoadBalancerError {
             DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => cause,
             DeleteLoadBalancerError::OperationNotPermitted(ref cause) => cause,
             DeleteLoadBalancerError::ResourceInUse(ref cause) => cause,
-            DeleteLoadBalancerError::Validation(ref cause) => cause,
-            DeleteLoadBalancerError::Credentials(ref err) => err.description(),
-            DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLoadBalancerError::ParseError(ref cause) => cause,
-            DeleteLoadBalancerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8570,20 +8301,10 @@ pub enum DeleteRuleError {
     OperationNotPermitted(String),
     /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8591,18 +8312,20 @@ impl DeleteRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OperationNotPermitted" => {
-                        return DeleteRuleError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteRuleError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return DeleteRuleError::RuleNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(DeleteRuleError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8611,28 +8334,6 @@ impl DeleteRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteRuleError {
-    fn from(err: XmlParseError) -> DeleteRuleError {
-        let XmlParseError(message) = err;
-        DeleteRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRuleError {
-    fn from(err: CredentialsError) -> DeleteRuleError {
-        DeleteRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRuleError {
-    fn from(err: HttpDispatchError) -> DeleteRuleError {
-        DeleteRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRuleError {
-    fn from(err: io::Error) -> DeleteRuleError {
-        DeleteRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteRuleError {
@@ -8645,11 +8346,6 @@ impl Error for DeleteRuleError {
         match *self {
             DeleteRuleError::OperationNotPermitted(ref cause) => cause,
             DeleteRuleError::RuleNotFound(ref cause) => cause,
-            DeleteRuleError::Validation(ref cause) => cause,
-            DeleteRuleError::Credentials(ref err) => err.description(),
-            DeleteRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRuleError::ParseError(ref cause) => cause,
-            DeleteRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8658,20 +8354,10 @@ impl Error for DeleteRuleError {
 pub enum DeleteTargetGroupError {
     /// <p>A specified resource is in use.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTargetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTargetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTargetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8679,15 +8365,15 @@ impl DeleteTargetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ResourceInUse" => {
-                        return DeleteTargetGroupError::ResourceInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteTargetGroupError::ResourceInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteTargetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8696,28 +8382,6 @@ impl DeleteTargetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteTargetGroupError {
-    fn from(err: XmlParseError) -> DeleteTargetGroupError {
-        let XmlParseError(message) = err;
-        DeleteTargetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTargetGroupError {
-    fn from(err: CredentialsError) -> DeleteTargetGroupError {
-        DeleteTargetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTargetGroupError {
-    fn from(err: HttpDispatchError) -> DeleteTargetGroupError {
-        DeleteTargetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTargetGroupError {
-    fn from(err: io::Error) -> DeleteTargetGroupError {
-        DeleteTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTargetGroupError {
@@ -8729,13 +8393,6 @@ impl Error for DeleteTargetGroupError {
     fn description(&self) -> &str {
         match *self {
             DeleteTargetGroupError::ResourceInUse(ref cause) => cause,
-            DeleteTargetGroupError::Validation(ref cause) => cause,
-            DeleteTargetGroupError::Credentials(ref err) => err.description(),
-            DeleteTargetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTargetGroupError::ParseError(ref cause) => cause,
-            DeleteTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8746,20 +8403,10 @@ pub enum DeregisterTargetsError {
     InvalidTarget(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterTargetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterTargetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8767,20 +8414,20 @@ impl DeregisterTargetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTarget" => {
-                        return DeregisterTargetsError::InvalidTarget(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeregisterTargetsError::InvalidTarget(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return DeregisterTargetsError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeregisterTargetsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeregisterTargetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8789,28 +8436,6 @@ impl DeregisterTargetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeregisterTargetsError {
-    fn from(err: XmlParseError) -> DeregisterTargetsError {
-        let XmlParseError(message) = err;
-        DeregisterTargetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterTargetsError {
-    fn from(err: CredentialsError) -> DeregisterTargetsError {
-        DeregisterTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterTargetsError {
-    fn from(err: HttpDispatchError) -> DeregisterTargetsError {
-        DeregisterTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterTargetsError {
-    fn from(err: io::Error) -> DeregisterTargetsError {
-        DeregisterTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeregisterTargetsError {
@@ -8823,33 +8448,15 @@ impl Error for DeregisterTargetsError {
         match *self {
             DeregisterTargetsError::InvalidTarget(ref cause) => cause,
             DeregisterTargetsError::TargetGroupNotFound(ref cause) => cause,
-            DeregisterTargetsError::Validation(ref cause) => cause,
-            DeregisterTargetsError::Credentials(ref err) => err.description(),
-            DeregisterTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterTargetsError::ParseError(ref cause) => cause,
-            DeregisterTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
-pub enum DescribeAccountLimitsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeAccountLimitsError {}
 
 impl DescribeAccountLimitsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountLimitsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccountLimitsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8860,7 +8467,7 @@ impl DescribeAccountLimitsError {
                 }
             }
         }
-        DescribeAccountLimitsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8869,28 +8476,6 @@ impl DescribeAccountLimitsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeAccountLimitsError {
-    fn from(err: XmlParseError) -> DescribeAccountLimitsError {
-        let XmlParseError(message) = err;
-        DescribeAccountLimitsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAccountLimitsError {
-    fn from(err: CredentialsError) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAccountLimitsError {
-    fn from(err: HttpDispatchError) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAccountLimitsError {
-    fn from(err: io::Error) -> DescribeAccountLimitsError {
-        DescribeAccountLimitsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeAccountLimitsError {
@@ -8900,15 +8485,7 @@ impl fmt::Display for DescribeAccountLimitsError {
 }
 impl Error for DescribeAccountLimitsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeAccountLimitsError::Validation(ref cause) => cause,
-            DescribeAccountLimitsError::Credentials(ref err) => err.description(),
-            DescribeAccountLimitsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAccountLimitsError::ParseError(ref cause) => cause,
-            DescribeAccountLimitsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeListenerCertificates
@@ -8916,20 +8493,12 @@ impl Error for DescribeAccountLimitsError {
 pub enum DescribeListenerCertificatesError {
     /// <p>The specified listener does not exist.</p>
     ListenerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeListenerCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeListenerCertificatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeListenerCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8937,15 +8506,17 @@ impl DescribeListenerCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return DescribeListenerCertificatesError::ListenerNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeListenerCertificatesError::ListenerNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeListenerCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8954,28 +8525,6 @@ impl DescribeListenerCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeListenerCertificatesError {
-    fn from(err: XmlParseError) -> DescribeListenerCertificatesError {
-        let XmlParseError(message) = err;
-        DescribeListenerCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeListenerCertificatesError {
-    fn from(err: CredentialsError) -> DescribeListenerCertificatesError {
-        DescribeListenerCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeListenerCertificatesError {
-    fn from(err: HttpDispatchError) -> DescribeListenerCertificatesError {
-        DescribeListenerCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeListenerCertificatesError {
-    fn from(err: io::Error) -> DescribeListenerCertificatesError {
-        DescribeListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeListenerCertificatesError {
@@ -8987,13 +8536,6 @@ impl Error for DescribeListenerCertificatesError {
     fn description(&self) -> &str {
         match *self {
             DescribeListenerCertificatesError::ListenerNotFound(ref cause) => cause,
-            DescribeListenerCertificatesError::Validation(ref cause) => cause,
-            DescribeListenerCertificatesError::Credentials(ref err) => err.description(),
-            DescribeListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeListenerCertificatesError::ParseError(ref cause) => cause,
-            DescribeListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9006,20 +8548,10 @@ pub enum DescribeListenersError {
     LoadBalancerNotFound(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeListenersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeListenersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeListenersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9027,25 +8559,25 @@ impl DescribeListenersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return DescribeListenersError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeListenersError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LoadBalancerNotFound" => {
-                        return DescribeListenersError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeListenersError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedProtocol" => {
-                        return DescribeListenersError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeListenersError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeListenersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9054,28 +8586,6 @@ impl DescribeListenersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeListenersError {
-    fn from(err: XmlParseError) -> DescribeListenersError {
-        let XmlParseError(message) = err;
-        DescribeListenersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeListenersError {
-    fn from(err: CredentialsError) -> DescribeListenersError {
-        DescribeListenersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeListenersError {
-    fn from(err: HttpDispatchError) -> DescribeListenersError {
-        DescribeListenersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeListenersError {
-    fn from(err: io::Error) -> DescribeListenersError {
-        DescribeListenersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeListenersError {
@@ -9089,13 +8599,6 @@ impl Error for DescribeListenersError {
             DescribeListenersError::ListenerNotFound(ref cause) => cause,
             DescribeListenersError::LoadBalancerNotFound(ref cause) => cause,
             DescribeListenersError::UnsupportedProtocol(ref cause) => cause,
-            DescribeListenersError::Validation(ref cause) => cause,
-            DescribeListenersError::Credentials(ref err) => err.description(),
-            DescribeListenersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeListenersError::ParseError(ref cause) => cause,
-            DescribeListenersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9104,20 +8607,12 @@ impl Error for DescribeListenersError {
 pub enum DescribeLoadBalancerAttributesError {
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancerAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancerAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLoadBalancerAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9125,15 +8620,17 @@ impl DescribeLoadBalancerAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeLoadBalancerAttributesError::LoadBalancerNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeLoadBalancerAttributesError::LoadBalancerNotFound(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancerAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9142,28 +8639,6 @@ impl DescribeLoadBalancerAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancerAttributesError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancerAttributesError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancerAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancerAttributesError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancerAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancerAttributesError {
-    fn from(err: io::Error) -> DescribeLoadBalancerAttributesError {
-        DescribeLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancerAttributesError {
@@ -9175,13 +8650,6 @@ impl Error for DescribeLoadBalancerAttributesError {
     fn description(&self) -> &str {
         match *self {
             DescribeLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Validation(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancerAttributesError::ParseError(ref cause) => cause,
-            DescribeLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9190,20 +8658,10 @@ impl Error for DescribeLoadBalancerAttributesError {
 pub enum DescribeLoadBalancersError {
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLoadBalancersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLoadBalancersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLoadBalancersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9211,15 +8669,17 @@ impl DescribeLoadBalancersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeLoadBalancersError::LoadBalancerNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeLoadBalancersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9228,28 +8688,6 @@ impl DescribeLoadBalancersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeLoadBalancersError {
-    fn from(err: XmlParseError) -> DescribeLoadBalancersError {
-        let XmlParseError(message) = err;
-        DescribeLoadBalancersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLoadBalancersError {
-    fn from(err: CredentialsError) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLoadBalancersError {
-    fn from(err: HttpDispatchError) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLoadBalancersError {
-    fn from(err: io::Error) -> DescribeLoadBalancersError {
-        DescribeLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeLoadBalancersError {
@@ -9261,13 +8699,6 @@ impl Error for DescribeLoadBalancersError {
     fn description(&self) -> &str {
         match *self {
             DescribeLoadBalancersError::LoadBalancerNotFound(ref cause) => cause,
-            DescribeLoadBalancersError::Validation(ref cause) => cause,
-            DescribeLoadBalancersError::Credentials(ref err) => err.description(),
-            DescribeLoadBalancersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLoadBalancersError::ParseError(ref cause) => cause,
-            DescribeLoadBalancersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9280,20 +8711,10 @@ pub enum DescribeRulesError {
     RuleNotFound(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeRulesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeRulesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9301,23 +8722,25 @@ impl DescribeRulesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return DescribeRulesError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeRulesError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return DescribeRulesError::RuleNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeRulesError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "UnsupportedProtocol" => {
-                        return DescribeRulesError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeRulesError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeRulesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9326,28 +8749,6 @@ impl DescribeRulesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeRulesError {
-    fn from(err: XmlParseError) -> DescribeRulesError {
-        let XmlParseError(message) = err;
-        DescribeRulesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeRulesError {
-    fn from(err: CredentialsError) -> DescribeRulesError {
-        DescribeRulesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeRulesError {
-    fn from(err: HttpDispatchError) -> DescribeRulesError {
-        DescribeRulesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeRulesError {
-    fn from(err: io::Error) -> DescribeRulesError {
-        DescribeRulesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeRulesError {
@@ -9361,11 +8762,6 @@ impl Error for DescribeRulesError {
             DescribeRulesError::ListenerNotFound(ref cause) => cause,
             DescribeRulesError::RuleNotFound(ref cause) => cause,
             DescribeRulesError::UnsupportedProtocol(ref cause) => cause,
-            DescribeRulesError::Validation(ref cause) => cause,
-            DescribeRulesError::Credentials(ref err) => err.description(),
-            DescribeRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeRulesError::ParseError(ref cause) => cause,
-            DescribeRulesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9374,20 +8770,10 @@ impl Error for DescribeRulesError {
 pub enum DescribeSSLPoliciesError {
     /// <p>The specified SSL policy does not exist.</p>
     SSLPolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSSLPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSSLPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSSLPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9395,15 +8781,15 @@ impl DescribeSSLPoliciesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "SSLPolicyNotFound" => {
-                        return DescribeSSLPoliciesError::SSLPolicyNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeSSLPoliciesError::SSLPolicyNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeSSLPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9412,28 +8798,6 @@ impl DescribeSSLPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeSSLPoliciesError {
-    fn from(err: XmlParseError) -> DescribeSSLPoliciesError {
-        let XmlParseError(message) = err;
-        DescribeSSLPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSSLPoliciesError {
-    fn from(err: CredentialsError) -> DescribeSSLPoliciesError {
-        DescribeSSLPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSSLPoliciesError {
-    fn from(err: HttpDispatchError) -> DescribeSSLPoliciesError {
-        DescribeSSLPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSSLPoliciesError {
-    fn from(err: io::Error) -> DescribeSSLPoliciesError {
-        DescribeSSLPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeSSLPoliciesError {
@@ -9445,13 +8809,6 @@ impl Error for DescribeSSLPoliciesError {
     fn description(&self) -> &str {
         match *self {
             DescribeSSLPoliciesError::SSLPolicyNotFound(ref cause) => cause,
-            DescribeSSLPoliciesError::Validation(ref cause) => cause,
-            DescribeSSLPoliciesError::Credentials(ref err) => err.description(),
-            DescribeSSLPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSSLPoliciesError::ParseError(ref cause) => cause,
-            DescribeSSLPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9466,20 +8823,10 @@ pub enum DescribeTagsError {
     RuleNotFound(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9487,28 +8834,30 @@ impl DescribeTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return DescribeTagsError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LoadBalancerNotFound" => {
-                        return DescribeTagsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return DescribeTagsError::RuleNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(DescribeTagsError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TargetGroupNotFound" => {
-                        return DescribeTagsError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTagsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9517,28 +8866,6 @@ impl DescribeTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTagsError {
-    fn from(err: XmlParseError) -> DescribeTagsError {
-        let XmlParseError(message) = err;
-        DescribeTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -9553,11 +8880,6 @@ impl Error for DescribeTagsError {
             DescribeTagsError::LoadBalancerNotFound(ref cause) => cause,
             DescribeTagsError::RuleNotFound(ref cause) => cause,
             DescribeTagsError::TargetGroupNotFound(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9566,20 +8888,12 @@ impl Error for DescribeTagsError {
 pub enum DescribeTargetGroupAttributesError {
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetGroupAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetGroupAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTargetGroupAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9587,15 +8901,17 @@ impl DescribeTargetGroupAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "TargetGroupNotFound" => {
-                        return DescribeTargetGroupAttributesError::TargetGroupNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeTargetGroupAttributesError::TargetGroupNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTargetGroupAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9604,28 +8920,6 @@ impl DescribeTargetGroupAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTargetGroupAttributesError {
-    fn from(err: XmlParseError) -> DescribeTargetGroupAttributesError {
-        let XmlParseError(message) = err;
-        DescribeTargetGroupAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTargetGroupAttributesError {
-    fn from(err: CredentialsError) -> DescribeTargetGroupAttributesError {
-        DescribeTargetGroupAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTargetGroupAttributesError {
-    fn from(err: HttpDispatchError) -> DescribeTargetGroupAttributesError {
-        DescribeTargetGroupAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTargetGroupAttributesError {
-    fn from(err: io::Error) -> DescribeTargetGroupAttributesError {
-        DescribeTargetGroupAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetGroupAttributesError {
@@ -9637,13 +8931,6 @@ impl Error for DescribeTargetGroupAttributesError {
     fn description(&self) -> &str {
         match *self {
             DescribeTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
-            DescribeTargetGroupAttributesError::Validation(ref cause) => cause,
-            DescribeTargetGroupAttributesError::Credentials(ref err) => err.description(),
-            DescribeTargetGroupAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTargetGroupAttributesError::ParseError(ref cause) => cause,
-            DescribeTargetGroupAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9654,20 +8941,10 @@ pub enum DescribeTargetGroupsError {
     LoadBalancerNotFound(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTargetGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9675,20 +8952,22 @@ impl DescribeTargetGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "LoadBalancerNotFound" => {
-                        return DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeTargetGroupsError::LoadBalancerNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TargetGroupNotFound" => {
-                        return DescribeTargetGroupsError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTargetGroupsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTargetGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9697,28 +8976,6 @@ impl DescribeTargetGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTargetGroupsError {
-    fn from(err: XmlParseError) -> DescribeTargetGroupsError {
-        let XmlParseError(message) = err;
-        DescribeTargetGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTargetGroupsError {
-    fn from(err: CredentialsError) -> DescribeTargetGroupsError {
-        DescribeTargetGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTargetGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeTargetGroupsError {
-        DescribeTargetGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTargetGroupsError {
-    fn from(err: io::Error) -> DescribeTargetGroupsError {
-        DescribeTargetGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetGroupsError {
@@ -9731,13 +8988,6 @@ impl Error for DescribeTargetGroupsError {
         match *self {
             DescribeTargetGroupsError::LoadBalancerNotFound(ref cause) => cause,
             DescribeTargetGroupsError::TargetGroupNotFound(ref cause) => cause,
-            DescribeTargetGroupsError::Validation(ref cause) => cause,
-            DescribeTargetGroupsError::Credentials(ref err) => err.description(),
-            DescribeTargetGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTargetGroupsError::ParseError(ref cause) => cause,
-            DescribeTargetGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9750,20 +9000,10 @@ pub enum DescribeTargetHealthError {
     InvalidTarget(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTargetHealthError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTargetHealthError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTargetHealthError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9771,25 +9011,25 @@ impl DescribeTargetHealthError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "HealthUnavailable" => {
-                        return DescribeTargetHealthError::HealthUnavailable(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTargetHealthError::HealthUnavailable(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidTarget" => {
-                        return DescribeTargetHealthError::InvalidTarget(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTargetHealthError::InvalidTarget(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return DescribeTargetHealthError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeTargetHealthError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeTargetHealthError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9798,28 +9038,6 @@ impl DescribeTargetHealthError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeTargetHealthError {
-    fn from(err: XmlParseError) -> DescribeTargetHealthError {
-        let XmlParseError(message) = err;
-        DescribeTargetHealthError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTargetHealthError {
-    fn from(err: CredentialsError) -> DescribeTargetHealthError {
-        DescribeTargetHealthError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTargetHealthError {
-    fn from(err: HttpDispatchError) -> DescribeTargetHealthError {
-        DescribeTargetHealthError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTargetHealthError {
-    fn from(err: io::Error) -> DescribeTargetHealthError {
-        DescribeTargetHealthError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeTargetHealthError {
@@ -9833,13 +9051,6 @@ impl Error for DescribeTargetHealthError {
             DescribeTargetHealthError::HealthUnavailable(ref cause) => cause,
             DescribeTargetHealthError::InvalidTarget(ref cause) => cause,
             DescribeTargetHealthError::TargetGroupNotFound(ref cause) => cause,
-            DescribeTargetHealthError::Validation(ref cause) => cause,
-            DescribeTargetHealthError::Credentials(ref err) => err.description(),
-            DescribeTargetHealthError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTargetHealthError::ParseError(ref cause) => cause,
-            DescribeTargetHealthError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9876,20 +9087,10 @@ pub enum ModifyListenerError {
     TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyListenerError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyListenerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyListenerError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9897,85 +9098,91 @@ impl ModifyListenerError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CertificateNotFound" => {
-                        return ModifyListenerError::CertificateNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::CertificateNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "DuplicateListener" => {
-                        return ModifyListenerError::DuplicateListener(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::DuplicateListener(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "IncompatibleProtocols" => {
-                        return ModifyListenerError::IncompatibleProtocols(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::IncompatibleProtocols(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return ModifyListenerError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyListenerError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidLoadBalancerAction" => {
-                        return ModifyListenerError::InvalidLoadBalancerAction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::InvalidLoadBalancerAction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ListenerNotFound" => {
-                        return ModifyListenerError::ListenerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::ListenerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SSLPolicyNotFound" => {
-                        return ModifyListenerError::SSLPolicyNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::SSLPolicyNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupAssociationLimit" => {
-                        return ModifyListenerError::TargetGroupAssociationLimit(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyListenerError::TargetGroupAssociationLimit(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TargetGroupNotFound" => {
-                        return ModifyListenerError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyActions" => {
-                        return ModifyListenerError::TooManyActions(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::TooManyActions(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyCertificates" => {
-                        return ModifyListenerError::TooManyCertificates(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::TooManyCertificates(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyListeners" => {
-                        return ModifyListenerError::TooManyListeners(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::TooManyListeners(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyRegistrationsForTargetId" => {
-                        return ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyListenerError::TooManyRegistrationsForTargetId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTargets" => {
-                        return ModifyListenerError::TooManyTargets(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::TooManyTargets(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "UnsupportedProtocol" => {
-                        return ModifyListenerError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyListenerError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyListenerError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9984,28 +9191,6 @@ impl ModifyListenerError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyListenerError {
-    fn from(err: XmlParseError) -> ModifyListenerError {
-        let XmlParseError(message) = err;
-        ModifyListenerError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyListenerError {
-    fn from(err: CredentialsError) -> ModifyListenerError {
-        ModifyListenerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyListenerError {
-    fn from(err: HttpDispatchError) -> ModifyListenerError {
-        ModifyListenerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyListenerError {
-    fn from(err: io::Error) -> ModifyListenerError {
-        ModifyListenerError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyListenerError {
@@ -10031,11 +9216,6 @@ impl Error for ModifyListenerError {
             ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
             ModifyListenerError::TooManyTargets(ref cause) => cause,
             ModifyListenerError::UnsupportedProtocol(ref cause) => cause,
-            ModifyListenerError::Validation(ref cause) => cause,
-            ModifyListenerError::Credentials(ref err) => err.description(),
-            ModifyListenerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyListenerError::ParseError(ref cause) => cause,
-            ModifyListenerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10046,20 +9226,12 @@ pub enum ModifyLoadBalancerAttributesError {
     InvalidConfigurationRequest(String),
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyLoadBalancerAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyLoadBalancerAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyLoadBalancerAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10067,20 +9239,24 @@ impl ModifyLoadBalancerAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidConfigurationRequest" => {
-                        return ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "LoadBalancerNotFound" => {
-                        return ModifyLoadBalancerAttributesError::LoadBalancerNotFound(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyLoadBalancerAttributesError::LoadBalancerNotFound(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyLoadBalancerAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10089,28 +9265,6 @@ impl ModifyLoadBalancerAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyLoadBalancerAttributesError {
-    fn from(err: XmlParseError) -> ModifyLoadBalancerAttributesError {
-        let XmlParseError(message) = err;
-        ModifyLoadBalancerAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyLoadBalancerAttributesError {
-    fn from(err: CredentialsError) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyLoadBalancerAttributesError {
-    fn from(err: HttpDispatchError) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyLoadBalancerAttributesError {
-    fn from(err: io::Error) -> ModifyLoadBalancerAttributesError {
-        ModifyLoadBalancerAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyLoadBalancerAttributesError {
@@ -10123,13 +9277,6 @@ impl Error for ModifyLoadBalancerAttributesError {
         match *self {
             ModifyLoadBalancerAttributesError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyLoadBalancerAttributesError::LoadBalancerNotFound(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Validation(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Credentials(ref err) => err.description(),
-            ModifyLoadBalancerAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyLoadBalancerAttributesError::ParseError(ref cause) => cause,
-            ModifyLoadBalancerAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10156,20 +9303,10 @@ pub enum ModifyRuleError {
     TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10177,54 +9314,62 @@ impl ModifyRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "IncompatibleProtocols" => {
-                        return ModifyRuleError::IncompatibleProtocols(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::IncompatibleProtocols(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidLoadBalancerAction" => {
-                        return ModifyRuleError::InvalidLoadBalancerAction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::InvalidLoadBalancerAction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "OperationNotPermitted" => {
-                        return ModifyRuleError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return ModifyRuleError::RuleNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(ModifyRuleError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TargetGroupAssociationLimit" => {
-                        return ModifyRuleError::TargetGroupAssociationLimit(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::TargetGroupAssociationLimit(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return ModifyRuleError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyActions" => {
-                        return ModifyRuleError::TooManyActions(String::from(parsed_error.message));
+                        return RusotoError::Service(ModifyRuleError::TooManyActions(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TooManyRegistrationsForTargetId" => {
-                        return ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyRuleError::TooManyRegistrationsForTargetId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTargets" => {
-                        return ModifyRuleError::TooManyTargets(String::from(parsed_error.message));
+                        return RusotoError::Service(ModifyRuleError::TooManyTargets(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "UnsupportedProtocol" => {
-                        return ModifyRuleError::UnsupportedProtocol(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyRuleError::UnsupportedProtocol(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10233,28 +9378,6 @@ impl ModifyRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyRuleError {
-    fn from(err: XmlParseError) -> ModifyRuleError {
-        let XmlParseError(message) = err;
-        ModifyRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyRuleError {
-    fn from(err: CredentialsError) -> ModifyRuleError {
-        ModifyRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyRuleError {
-    fn from(err: HttpDispatchError) -> ModifyRuleError {
-        ModifyRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyRuleError {
-    fn from(err: io::Error) -> ModifyRuleError {
-        ModifyRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyRuleError {
@@ -10275,11 +9398,6 @@ impl Error for ModifyRuleError {
             ModifyRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
             ModifyRuleError::TooManyTargets(ref cause) => cause,
             ModifyRuleError::UnsupportedProtocol(ref cause) => cause,
-            ModifyRuleError::Validation(ref cause) => cause,
-            ModifyRuleError::Credentials(ref err) => err.description(),
-            ModifyRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ModifyRuleError::ParseError(ref cause) => cause,
-            ModifyRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10290,20 +9408,10 @@ pub enum ModifyTargetGroupError {
     InvalidConfigurationRequest(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyTargetGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyTargetGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyTargetGroupError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10311,20 +9419,22 @@ impl ModifyTargetGroupError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidConfigurationRequest" => {
-                        return ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TargetGroupNotFound" => {
-                        return ModifyTargetGroupError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ModifyTargetGroupError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ModifyTargetGroupError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10333,28 +9443,6 @@ impl ModifyTargetGroupError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyTargetGroupError {
-    fn from(err: XmlParseError) -> ModifyTargetGroupError {
-        let XmlParseError(message) = err;
-        ModifyTargetGroupError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyTargetGroupError {
-    fn from(err: CredentialsError) -> ModifyTargetGroupError {
-        ModifyTargetGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyTargetGroupError {
-    fn from(err: HttpDispatchError) -> ModifyTargetGroupError {
-        ModifyTargetGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyTargetGroupError {
-    fn from(err: io::Error) -> ModifyTargetGroupError {
-        ModifyTargetGroupError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyTargetGroupError {
@@ -10367,13 +9455,6 @@ impl Error for ModifyTargetGroupError {
         match *self {
             ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyTargetGroupError::TargetGroupNotFound(ref cause) => cause,
-            ModifyTargetGroupError::Validation(ref cause) => cause,
-            ModifyTargetGroupError::Credentials(ref err) => err.description(),
-            ModifyTargetGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyTargetGroupError::ParseError(ref cause) => cause,
-            ModifyTargetGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10384,20 +9465,12 @@ pub enum ModifyTargetGroupAttributesError {
     InvalidConfigurationRequest(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyTargetGroupAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyTargetGroupAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyTargetGroupAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10405,20 +9478,24 @@ impl ModifyTargetGroupAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidConfigurationRequest" => {
-                        return ModifyTargetGroupAttributesError::InvalidConfigurationRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "TargetGroupNotFound" => {
-                        return ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ModifyTargetGroupAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10427,28 +9504,6 @@ impl ModifyTargetGroupAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ModifyTargetGroupAttributesError {
-    fn from(err: XmlParseError) -> ModifyTargetGroupAttributesError {
-        let XmlParseError(message) = err;
-        ModifyTargetGroupAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ModifyTargetGroupAttributesError {
-    fn from(err: CredentialsError) -> ModifyTargetGroupAttributesError {
-        ModifyTargetGroupAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyTargetGroupAttributesError {
-    fn from(err: HttpDispatchError) -> ModifyTargetGroupAttributesError {
-        ModifyTargetGroupAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyTargetGroupAttributesError {
-    fn from(err: io::Error) -> ModifyTargetGroupAttributesError {
-        ModifyTargetGroupAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ModifyTargetGroupAttributesError {
@@ -10461,13 +9516,6 @@ impl Error for ModifyTargetGroupAttributesError {
         match *self {
             ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
-            ModifyTargetGroupAttributesError::Validation(ref cause) => cause,
-            ModifyTargetGroupAttributesError::Credentials(ref err) => err.description(),
-            ModifyTargetGroupAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyTargetGroupAttributesError::ParseError(ref cause) => cause,
-            ModifyTargetGroupAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10482,20 +9530,10 @@ pub enum RegisterTargetsError {
     TooManyRegistrationsForTargetId(String),
     /// <p>You've reached the limit on the number of targets.</p>
     TooManyTargets(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterTargetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterTargetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10503,30 +9541,32 @@ impl RegisterTargetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTarget" => {
-                        return RegisterTargetsError::InvalidTarget(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RegisterTargetsError::InvalidTarget(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TargetGroupNotFound" => {
-                        return RegisterTargetsError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RegisterTargetsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyRegistrationsForTargetId" => {
-                        return RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RegisterTargetsError::TooManyRegistrationsForTargetId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TooManyTargets" => {
-                        return RegisterTargetsError::TooManyTargets(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RegisterTargetsError::TooManyTargets(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        RegisterTargetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10535,28 +9575,6 @@ impl RegisterTargetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RegisterTargetsError {
-    fn from(err: XmlParseError) -> RegisterTargetsError {
-        let XmlParseError(message) = err;
-        RegisterTargetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RegisterTargetsError {
-    fn from(err: CredentialsError) -> RegisterTargetsError {
-        RegisterTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterTargetsError {
-    fn from(err: HttpDispatchError) -> RegisterTargetsError {
-        RegisterTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterTargetsError {
-    fn from(err: io::Error) -> RegisterTargetsError {
-        RegisterTargetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RegisterTargetsError {
@@ -10571,11 +9589,6 @@ impl Error for RegisterTargetsError {
             RegisterTargetsError::TargetGroupNotFound(ref cause) => cause,
             RegisterTargetsError::TooManyRegistrationsForTargetId(ref cause) => cause,
             RegisterTargetsError::TooManyTargets(ref cause) => cause,
-            RegisterTargetsError::Validation(ref cause) => cause,
-            RegisterTargetsError::Credentials(ref err) => err.description(),
-            RegisterTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RegisterTargetsError::ParseError(ref cause) => cause,
-            RegisterTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10586,20 +9599,12 @@ pub enum RemoveListenerCertificatesError {
     ListenerNotFound(String),
     /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveListenerCertificatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveListenerCertificatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveListenerCertificatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10607,20 +9612,24 @@ impl RemoveListenerCertificatesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return RemoveListenerCertificatesError::ListenerNotFound(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveListenerCertificatesError::ListenerNotFound(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "OperationNotPermitted" => {
-                        return RemoveListenerCertificatesError::OperationNotPermitted(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            RemoveListenerCertificatesError::OperationNotPermitted(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        RemoveListenerCertificatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10629,28 +9638,6 @@ impl RemoveListenerCertificatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveListenerCertificatesError {
-    fn from(err: XmlParseError) -> RemoveListenerCertificatesError {
-        let XmlParseError(message) = err;
-        RemoveListenerCertificatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveListenerCertificatesError {
-    fn from(err: CredentialsError) -> RemoveListenerCertificatesError {
-        RemoveListenerCertificatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveListenerCertificatesError {
-    fn from(err: HttpDispatchError) -> RemoveListenerCertificatesError {
-        RemoveListenerCertificatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveListenerCertificatesError {
-    fn from(err: io::Error) -> RemoveListenerCertificatesError {
-        RemoveListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveListenerCertificatesError {
@@ -10663,13 +9650,6 @@ impl Error for RemoveListenerCertificatesError {
         match *self {
             RemoveListenerCertificatesError::ListenerNotFound(ref cause) => cause,
             RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => cause,
-            RemoveListenerCertificatesError::Validation(ref cause) => cause,
-            RemoveListenerCertificatesError::Credentials(ref err) => err.description(),
-            RemoveListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveListenerCertificatesError::ParseError(ref cause) => cause,
-            RemoveListenerCertificatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10686,20 +9666,10 @@ pub enum RemoveTagsError {
     TargetGroupNotFound(String),
     /// <p>You've reached the limit on the number of tags per load balancer.</p>
     TooManyTags(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10707,29 +9677,35 @@ impl RemoveTagsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ListenerNotFound" => {
-                        return RemoveTagsError::ListenerNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(RemoveTagsError::ListenerNotFound(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     "LoadBalancerNotFound" => {
-                        return RemoveTagsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveTagsError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return RemoveTagsError::RuleNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(RemoveTagsError::RuleNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TargetGroupNotFound" => {
-                        return RemoveTagsError::TargetGroupNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(RemoveTagsError::TargetGroupNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TooManyTags" => {
-                        return RemoveTagsError::TooManyTags(String::from(parsed_error.message));
+                        return RusotoError::Service(RemoveTagsError::TooManyTags(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        RemoveTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10738,28 +9714,6 @@ impl RemoveTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemoveTagsError {
-    fn from(err: XmlParseError) -> RemoveTagsError {
-        let XmlParseError(message) = err;
-        RemoveTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemoveTagsError {
-    fn from(err: CredentialsError) -> RemoveTagsError {
-        RemoveTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveTagsError {
-    fn from(err: HttpDispatchError) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveTagsError {
-    fn from(err: io::Error) -> RemoveTagsError {
-        RemoveTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemoveTagsError {
@@ -10775,11 +9729,6 @@ impl Error for RemoveTagsError {
             RemoveTagsError::RuleNotFound(ref cause) => cause,
             RemoveTagsError::TargetGroupNotFound(ref cause) => cause,
             RemoveTagsError::TooManyTags(ref cause) => cause,
-            RemoveTagsError::Validation(ref cause) => cause,
-            RemoveTagsError::Credentials(ref err) => err.description(),
-            RemoveTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemoveTagsError::ParseError(ref cause) => cause,
-            RemoveTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10792,20 +9741,10 @@ pub enum SetIpAddressTypeError {
     InvalidSubnet(String),
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetIpAddressTypeError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIpAddressTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIpAddressTypeError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10813,25 +9752,27 @@ impl SetIpAddressTypeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidConfigurationRequest" => {
-                        return SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SetIpAddressTypeError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSubnet" => {
-                        return SetIpAddressTypeError::InvalidSubnet(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetIpAddressTypeError::InvalidSubnet(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LoadBalancerNotFound" => {
-                        return SetIpAddressTypeError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetIpAddressTypeError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SetIpAddressTypeError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10840,28 +9781,6 @@ impl SetIpAddressTypeError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIpAddressTypeError {
-    fn from(err: XmlParseError) -> SetIpAddressTypeError {
-        let XmlParseError(message) = err;
-        SetIpAddressTypeError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIpAddressTypeError {
-    fn from(err: CredentialsError) -> SetIpAddressTypeError {
-        SetIpAddressTypeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIpAddressTypeError {
-    fn from(err: HttpDispatchError) -> SetIpAddressTypeError {
-        SetIpAddressTypeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIpAddressTypeError {
-    fn from(err: io::Error) -> SetIpAddressTypeError {
-        SetIpAddressTypeError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIpAddressTypeError {
@@ -10875,11 +9794,6 @@ impl Error for SetIpAddressTypeError {
             SetIpAddressTypeError::InvalidConfigurationRequest(ref cause) => cause,
             SetIpAddressTypeError::InvalidSubnet(ref cause) => cause,
             SetIpAddressTypeError::LoadBalancerNotFound(ref cause) => cause,
-            SetIpAddressTypeError::Validation(ref cause) => cause,
-            SetIpAddressTypeError::Credentials(ref err) => err.description(),
-            SetIpAddressTypeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetIpAddressTypeError::ParseError(ref cause) => cause,
-            SetIpAddressTypeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10892,20 +9806,10 @@ pub enum SetRulePrioritiesError {
     PriorityInUse(String),
     /// <p>The specified rule does not exist.</p>
     RuleNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetRulePrioritiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetRulePrioritiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetRulePrioritiesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10913,25 +9817,25 @@ impl SetRulePrioritiesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OperationNotPermitted" => {
-                        return SetRulePrioritiesError::OperationNotPermitted(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetRulePrioritiesError::OperationNotPermitted(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PriorityInUse" => {
-                        return SetRulePrioritiesError::PriorityInUse(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetRulePrioritiesError::PriorityInUse(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleNotFound" => {
-                        return SetRulePrioritiesError::RuleNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetRulePrioritiesError::RuleNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SetRulePrioritiesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10940,28 +9844,6 @@ impl SetRulePrioritiesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetRulePrioritiesError {
-    fn from(err: XmlParseError) -> SetRulePrioritiesError {
-        let XmlParseError(message) = err;
-        SetRulePrioritiesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetRulePrioritiesError {
-    fn from(err: CredentialsError) -> SetRulePrioritiesError {
-        SetRulePrioritiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetRulePrioritiesError {
-    fn from(err: HttpDispatchError) -> SetRulePrioritiesError {
-        SetRulePrioritiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetRulePrioritiesError {
-    fn from(err: io::Error) -> SetRulePrioritiesError {
-        SetRulePrioritiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetRulePrioritiesError {
@@ -10975,13 +9857,6 @@ impl Error for SetRulePrioritiesError {
             SetRulePrioritiesError::OperationNotPermitted(ref cause) => cause,
             SetRulePrioritiesError::PriorityInUse(ref cause) => cause,
             SetRulePrioritiesError::RuleNotFound(ref cause) => cause,
-            SetRulePrioritiesError::Validation(ref cause) => cause,
-            SetRulePrioritiesError::Credentials(ref err) => err.description(),
-            SetRulePrioritiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetRulePrioritiesError::ParseError(ref cause) => cause,
-            SetRulePrioritiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10994,20 +9869,10 @@ pub enum SetSecurityGroupsError {
     InvalidSecurityGroup(String),
     /// <p>The specified load balancer does not exist.</p>
     LoadBalancerNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetSecurityGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetSecurityGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSecurityGroupsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11015,25 +9880,27 @@ impl SetSecurityGroupsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidConfigurationRequest" => {
-                        return SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SetSecurityGroupsError::InvalidConfigurationRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidSecurityGroup" => {
-                        return SetSecurityGroupsError::InvalidSecurityGroup(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSecurityGroupsError::InvalidSecurityGroup(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LoadBalancerNotFound" => {
-                        return SetSecurityGroupsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSecurityGroupsError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SetSecurityGroupsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11042,28 +9909,6 @@ impl SetSecurityGroupsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetSecurityGroupsError {
-    fn from(err: XmlParseError) -> SetSecurityGroupsError {
-        let XmlParseError(message) = err;
-        SetSecurityGroupsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetSecurityGroupsError {
-    fn from(err: CredentialsError) -> SetSecurityGroupsError {
-        SetSecurityGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetSecurityGroupsError {
-    fn from(err: HttpDispatchError) -> SetSecurityGroupsError {
-        SetSecurityGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetSecurityGroupsError {
-    fn from(err: io::Error) -> SetSecurityGroupsError {
-        SetSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetSecurityGroupsError {
@@ -11077,13 +9922,6 @@ impl Error for SetSecurityGroupsError {
             SetSecurityGroupsError::InvalidConfigurationRequest(ref cause) => cause,
             SetSecurityGroupsError::InvalidSecurityGroup(ref cause) => cause,
             SetSecurityGroupsError::LoadBalancerNotFound(ref cause) => cause,
-            SetSecurityGroupsError::Validation(ref cause) => cause,
-            SetSecurityGroupsError::Credentials(ref err) => err.description(),
-            SetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetSecurityGroupsError::ParseError(ref cause) => cause,
-            SetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11102,20 +9940,10 @@ pub enum SetSubnetsError {
     LoadBalancerNotFound(String),
     /// <p>The specified subnet does not exist.</p>
     SubnetNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetSubnetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetSubnetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetSubnetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11123,36 +9951,40 @@ impl SetSubnetsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AllocationIdNotFound" => {
-                        return SetSubnetsError::AllocationIdNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSubnetsError::AllocationIdNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AvailabilityZoneNotSupported" => {
-                        return SetSubnetsError::AvailabilityZoneNotSupported(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSubnetsError::AvailabilityZoneNotSupported(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidConfigurationRequest" => {
-                        return SetSubnetsError::InvalidConfigurationRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSubnetsError::InvalidConfigurationRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSubnet" => {
-                        return SetSubnetsError::InvalidSubnet(String::from(parsed_error.message));
+                        return RusotoError::Service(SetSubnetsError::InvalidSubnet(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "LoadBalancerNotFound" => {
-                        return SetSubnetsError::LoadBalancerNotFound(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetSubnetsError::LoadBalancerNotFound(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "SubnetNotFound" => {
-                        return SetSubnetsError::SubnetNotFound(String::from(parsed_error.message));
+                        return RusotoError::Service(SetSubnetsError::SubnetNotFound(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        SetSubnetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11161,28 +9993,6 @@ impl SetSubnetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetSubnetsError {
-    fn from(err: XmlParseError) -> SetSubnetsError {
-        let XmlParseError(message) = err;
-        SetSubnetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetSubnetsError {
-    fn from(err: CredentialsError) -> SetSubnetsError {
-        SetSubnetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetSubnetsError {
-    fn from(err: HttpDispatchError) -> SetSubnetsError {
-        SetSubnetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetSubnetsError {
-    fn from(err: io::Error) -> SetSubnetsError {
-        SetSubnetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetSubnetsError {
@@ -11199,11 +10009,6 @@ impl Error for SetSubnetsError {
             SetSubnetsError::InvalidSubnet(ref cause) => cause,
             SetSubnetsError::LoadBalancerNotFound(ref cause) => cause,
             SetSubnetsError::SubnetNotFound(ref cause) => cause,
-            SetSubnetsError::Validation(ref cause) => cause,
-            SetSubnetsError::Credentials(ref err) => err.description(),
-            SetSubnetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SetSubnetsError::ParseError(ref cause) => cause,
-            SetSubnetsError::Unknown(_) => "unknown error",
         }
     }
 }

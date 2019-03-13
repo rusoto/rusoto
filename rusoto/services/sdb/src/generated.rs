@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1040,21 +1037,10 @@ impl UpdateConditionSerializer {
 
 /// Errors returned by BatchDeleteAttributes
 #[derive(Debug, PartialEq)]
-pub enum BatchDeleteAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum BatchDeleteAttributesError {}
 
 impl BatchDeleteAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1065,7 +1051,7 @@ impl BatchDeleteAttributesError {
                 }
             }
         }
-        BatchDeleteAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1076,28 +1062,6 @@ impl BatchDeleteAttributesError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for BatchDeleteAttributesError {
-    fn from(err: XmlParseError) -> BatchDeleteAttributesError {
-        let XmlParseError(message) = err;
-        BatchDeleteAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteAttributesError {
-    fn from(err: CredentialsError) -> BatchDeleteAttributesError {
-        BatchDeleteAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteAttributesError {
-    fn from(err: HttpDispatchError) -> BatchDeleteAttributesError {
-        BatchDeleteAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteAttributesError {
-    fn from(err: io::Error) -> BatchDeleteAttributesError {
-        BatchDeleteAttributesError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for BatchDeleteAttributesError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1105,15 +1069,7 @@ impl fmt::Display for BatchDeleteAttributesError {
 }
 impl Error for BatchDeleteAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            BatchDeleteAttributesError::Validation(ref cause) => cause,
-            BatchDeleteAttributesError::Credentials(ref err) => err.description(),
-            BatchDeleteAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteAttributesError::ParseError(ref cause) => cause,
-            BatchDeleteAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by BatchPutAttributes
@@ -1137,20 +1093,10 @@ pub enum BatchPutAttributesError {
     NumberSubmittedAttributesExceeded(String),
     /// <p>Too many items exist in a single call.</p>
     NumberSubmittedItemsExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchPutAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchPutAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchPutAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1158,55 +1104,65 @@ impl BatchPutAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "DuplicateItemName" => {
-                        return BatchPutAttributesError::DuplicateItemName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(BatchPutAttributesError::DuplicateItemName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidParameterValue" => {
-                        return BatchPutAttributesError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(BatchPutAttributesError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return BatchPutAttributesError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(BatchPutAttributesError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDomain" => {
-                        return BatchPutAttributesError::NoSuchDomain(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(BatchPutAttributesError::NoSuchDomain(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberDomainAttributesExceeded" => {
-                        return BatchPutAttributesError::NumberDomainAttributesExceeded(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            BatchPutAttributesError::NumberDomainAttributesExceeded(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "NumberDomainBytesExceeded" => {
-                        return BatchPutAttributesError::NumberDomainBytesExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            BatchPutAttributesError::NumberDomainBytesExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NumberItemAttributesExceeded" => {
-                        return BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            BatchPutAttributesError::NumberItemAttributesExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NumberSubmittedAttributesExceeded" => {
-                        return BatchPutAttributesError::NumberSubmittedAttributesExceeded(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            BatchPutAttributesError::NumberSubmittedAttributesExceeded(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "NumberSubmittedItemsExceeded" => {
-                        return BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            BatchPutAttributesError::NumberSubmittedItemsExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        BatchPutAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1215,28 +1171,6 @@ impl BatchPutAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for BatchPutAttributesError {
-    fn from(err: XmlParseError) -> BatchPutAttributesError {
-        let XmlParseError(message) = err;
-        BatchPutAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for BatchPutAttributesError {
-    fn from(err: CredentialsError) -> BatchPutAttributesError {
-        BatchPutAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchPutAttributesError {
-    fn from(err: HttpDispatchError) -> BatchPutAttributesError {
-        BatchPutAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchPutAttributesError {
-    fn from(err: io::Error) -> BatchPutAttributesError {
-        BatchPutAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for BatchPutAttributesError {
@@ -1256,13 +1190,6 @@ impl Error for BatchPutAttributesError {
             BatchPutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
             BatchPutAttributesError::NumberSubmittedAttributesExceeded(ref cause) => cause,
             BatchPutAttributesError::NumberSubmittedItemsExceeded(ref cause) => cause,
-            BatchPutAttributesError::Validation(ref cause) => cause,
-            BatchPutAttributesError::Credentials(ref err) => err.description(),
-            BatchPutAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchPutAttributesError::ParseError(ref cause) => cause,
-            BatchPutAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1275,20 +1202,10 @@ pub enum CreateDomainError {
     MissingParameter(String),
     /// <p>Too many domains exist per this account.</p>
     NumberDomainsExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDomainError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1296,25 +1213,25 @@ impl CreateDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidParameterValue" => {
-                        return CreateDomainError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDomainError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return CreateDomainError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDomainError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberDomainsExceeded" => {
-                        return CreateDomainError::NumberDomainsExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateDomainError::NumberDomainsExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateDomainError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1323,28 +1240,6 @@ impl CreateDomainError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateDomainError {
-    fn from(err: XmlParseError) -> CreateDomainError {
-        let XmlParseError(message) = err;
-        CreateDomainError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateDomainError {
-    fn from(err: CredentialsError) -> CreateDomainError {
-        CreateDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDomainError {
-    fn from(err: HttpDispatchError) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDomainError {
-    fn from(err: io::Error) -> CreateDomainError {
-        CreateDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateDomainError {
@@ -1358,11 +1253,6 @@ impl Error for CreateDomainError {
             CreateDomainError::InvalidParameterValue(ref cause) => cause,
             CreateDomainError::MissingParameter(ref cause) => cause,
             CreateDomainError::NumberDomainsExceeded(ref cause) => cause,
-            CreateDomainError::Validation(ref cause) => cause,
-            CreateDomainError::Credentials(ref err) => err.description(),
-            CreateDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDomainError::ParseError(ref cause) => cause,
-            CreateDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1377,20 +1267,10 @@ pub enum DeleteAttributesError {
     MissingParameter(String),
     /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1398,30 +1278,30 @@ impl DeleteAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AttributeDoesNotExist" => {
-                        return DeleteAttributesError::AttributeDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAttributesError::AttributeDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidParameterValue" => {
-                        return DeleteAttributesError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAttributesError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return DeleteAttributesError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAttributesError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDomain" => {
-                        return DeleteAttributesError::NoSuchDomain(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteAttributesError::NoSuchDomain(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1430,28 +1310,6 @@ impl DeleteAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteAttributesError {
-    fn from(err: XmlParseError) -> DeleteAttributesError {
-        let XmlParseError(message) = err;
-        DeleteAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAttributesError {
-    fn from(err: CredentialsError) -> DeleteAttributesError {
-        DeleteAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAttributesError {
-    fn from(err: HttpDispatchError) -> DeleteAttributesError {
-        DeleteAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAttributesError {
-    fn from(err: io::Error) -> DeleteAttributesError {
-        DeleteAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteAttributesError {
@@ -1466,11 +1324,6 @@ impl Error for DeleteAttributesError {
             DeleteAttributesError::InvalidParameterValue(ref cause) => cause,
             DeleteAttributesError::MissingParameter(ref cause) => cause,
             DeleteAttributesError::NoSuchDomain(ref cause) => cause,
-            DeleteAttributesError::Validation(ref cause) => cause,
-            DeleteAttributesError::Credentials(ref err) => err.description(),
-            DeleteAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAttributesError::ParseError(ref cause) => cause,
-            DeleteAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1479,20 +1332,10 @@ impl Error for DeleteAttributesError {
 pub enum DeleteDomainError {
     /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDomainError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1500,15 +1343,15 @@ impl DeleteDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MissingParameter" => {
-                        return DeleteDomainError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteDomainError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteDomainError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1517,28 +1360,6 @@ impl DeleteDomainError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteDomainError {
-    fn from(err: XmlParseError) -> DeleteDomainError {
-        let XmlParseError(message) = err;
-        DeleteDomainError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDomainError {
-    fn from(err: CredentialsError) -> DeleteDomainError {
-        DeleteDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDomainError {
-    fn from(err: HttpDispatchError) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDomainError {
-    fn from(err: io::Error) -> DeleteDomainError {
-        DeleteDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteDomainError {
@@ -1550,11 +1371,6 @@ impl Error for DeleteDomainError {
     fn description(&self) -> &str {
         match *self {
             DeleteDomainError::MissingParameter(ref cause) => cause,
-            DeleteDomainError::Validation(ref cause) => cause,
-            DeleteDomainError::Credentials(ref err) => err.description(),
-            DeleteDomainError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDomainError::ParseError(ref cause) => cause,
-            DeleteDomainError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1565,20 +1381,10 @@ pub enum DomainMetadataError {
     MissingParameter(String),
     /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DomainMetadataError {
-    pub fn from_response(res: BufferedHttpResponse) -> DomainMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DomainMetadataError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1586,18 +1392,20 @@ impl DomainMetadataError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MissingParameter" => {
-                        return DomainMetadataError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DomainMetadataError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDomain" => {
-                        return DomainMetadataError::NoSuchDomain(String::from(parsed_error.message));
+                        return RusotoError::Service(DomainMetadataError::NoSuchDomain(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        DomainMetadataError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1606,28 +1414,6 @@ impl DomainMetadataError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DomainMetadataError {
-    fn from(err: XmlParseError) -> DomainMetadataError {
-        let XmlParseError(message) = err;
-        DomainMetadataError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DomainMetadataError {
-    fn from(err: CredentialsError) -> DomainMetadataError {
-        DomainMetadataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DomainMetadataError {
-    fn from(err: HttpDispatchError) -> DomainMetadataError {
-        DomainMetadataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DomainMetadataError {
-    fn from(err: io::Error) -> DomainMetadataError {
-        DomainMetadataError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DomainMetadataError {
@@ -1640,11 +1426,6 @@ impl Error for DomainMetadataError {
         match *self {
             DomainMetadataError::MissingParameter(ref cause) => cause,
             DomainMetadataError::NoSuchDomain(ref cause) => cause,
-            DomainMetadataError::Validation(ref cause) => cause,
-            DomainMetadataError::Credentials(ref err) => err.description(),
-            DomainMetadataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DomainMetadataError::ParseError(ref cause) => cause,
-            DomainMetadataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1657,20 +1438,10 @@ pub enum GetAttributesError {
     MissingParameter(String),
     /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1678,23 +1449,25 @@ impl GetAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidParameterValue" => {
-                        return GetAttributesError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAttributesError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return GetAttributesError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetAttributesError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDomain" => {
-                        return GetAttributesError::NoSuchDomain(String::from(parsed_error.message));
+                        return RusotoError::Service(GetAttributesError::NoSuchDomain(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        GetAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1703,28 +1476,6 @@ impl GetAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAttributesError {
-    fn from(err: XmlParseError) -> GetAttributesError {
-        let XmlParseError(message) = err;
-        GetAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAttributesError {
-    fn from(err: CredentialsError) -> GetAttributesError {
-        GetAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAttributesError {
-    fn from(err: HttpDispatchError) -> GetAttributesError {
-        GetAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAttributesError {
-    fn from(err: io::Error) -> GetAttributesError {
-        GetAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAttributesError {
@@ -1738,11 +1489,6 @@ impl Error for GetAttributesError {
             GetAttributesError::InvalidParameterValue(ref cause) => cause,
             GetAttributesError::MissingParameter(ref cause) => cause,
             GetAttributesError::NoSuchDomain(ref cause) => cause,
-            GetAttributesError::Validation(ref cause) => cause,
-            GetAttributesError::Credentials(ref err) => err.description(),
-            GetAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAttributesError::ParseError(ref cause) => cause,
-            GetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1753,20 +1499,10 @@ pub enum ListDomainsError {
     InvalidNextToken(String),
     /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDomainsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1774,20 +1510,20 @@ impl ListDomainsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidNextToken" => {
-                        return ListDomainsError::InvalidNextToken(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListDomainsError::InvalidNextToken(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidParameterValue" => {
-                        return ListDomainsError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ListDomainsError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        ListDomainsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1796,28 +1532,6 @@ impl ListDomainsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListDomainsError {
-    fn from(err: XmlParseError) -> ListDomainsError {
-        let XmlParseError(message) = err;
-        ListDomainsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListDomainsError {
-    fn from(err: CredentialsError) -> ListDomainsError {
-        ListDomainsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDomainsError {
-    fn from(err: HttpDispatchError) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDomainsError {
-    fn from(err: io::Error) -> ListDomainsError {
-        ListDomainsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDomainsError {
@@ -1830,11 +1544,6 @@ impl Error for ListDomainsError {
         match *self {
             ListDomainsError::InvalidNextToken(ref cause) => cause,
             ListDomainsError::InvalidParameterValue(ref cause) => cause,
-            ListDomainsError::Validation(ref cause) => cause,
-            ListDomainsError::Credentials(ref err) => err.description(),
-            ListDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDomainsError::ParseError(ref cause) => cause,
-            ListDomainsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1855,20 +1564,10 @@ pub enum PutAttributesError {
     NumberDomainBytesExceeded(String),
     /// <p>Too many attributes in this item.</p>
     NumberItemAttributesExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1876,43 +1575,49 @@ impl PutAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AttributeDoesNotExist" => {
-                        return PutAttributesError::AttributeDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutAttributesError::AttributeDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidParameterValue" => {
-                        return PutAttributesError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutAttributesError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return PutAttributesError::MissingParameter(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutAttributesError::MissingParameter(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NoSuchDomain" => {
-                        return PutAttributesError::NoSuchDomain(String::from(parsed_error.message));
+                        return RusotoError::Service(PutAttributesError::NoSuchDomain(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NumberDomainAttributesExceeded" => {
-                        return PutAttributesError::NumberDomainAttributesExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutAttributesError::NumberDomainAttributesExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "NumberDomainBytesExceeded" => {
-                        return PutAttributesError::NumberDomainBytesExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutAttributesError::NumberDomainBytesExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "NumberItemAttributesExceeded" => {
-                        return PutAttributesError::NumberItemAttributesExceeded(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            PutAttributesError::NumberItemAttributesExceeded(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        PutAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1921,28 +1626,6 @@ impl PutAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutAttributesError {
-    fn from(err: XmlParseError) -> PutAttributesError {
-        let XmlParseError(message) = err;
-        PutAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutAttributesError {
-    fn from(err: CredentialsError) -> PutAttributesError {
-        PutAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutAttributesError {
-    fn from(err: HttpDispatchError) -> PutAttributesError {
-        PutAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutAttributesError {
-    fn from(err: io::Error) -> PutAttributesError {
-        PutAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutAttributesError {
@@ -1960,11 +1643,6 @@ impl Error for PutAttributesError {
             PutAttributesError::NumberDomainAttributesExceeded(ref cause) => cause,
             PutAttributesError::NumberDomainBytesExceeded(ref cause) => cause,
             PutAttributesError::NumberItemAttributesExceeded(ref cause) => cause,
-            PutAttributesError::Validation(ref cause) => cause,
-            PutAttributesError::Credentials(ref err) => err.description(),
-            PutAttributesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutAttributesError::ParseError(ref cause) => cause,
-            PutAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1989,20 +1667,10 @@ pub enum SelectError {
     RequestTimeout(String),
     /// <p>Too many attributes requested.</p>
     TooManyRequestedAttributes(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SelectError {
-    pub fn from_response(res: BufferedHttpResponse) -> SelectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SelectError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2010,47 +1678,55 @@ impl SelectError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidNextToken" => {
-                        return SelectError::InvalidNextToken(String::from(parsed_error.message));
+                        return RusotoError::Service(SelectError::InvalidNextToken(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "InvalidNumberPredicates" => {
-                        return SelectError::InvalidNumberPredicates(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SelectError::InvalidNumberPredicates(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidNumberValueTests" => {
-                        return SelectError::InvalidNumberValueTests(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SelectError::InvalidNumberValueTests(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidParameterValue" => {
-                        return SelectError::InvalidParameterValue(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SelectError::InvalidParameterValue(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidQueryExpression" => {
-                        return SelectError::InvalidQueryExpression(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SelectError::InvalidQueryExpression(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MissingParameter" => {
-                        return SelectError::MissingParameter(String::from(parsed_error.message));
+                        return RusotoError::Service(SelectError::MissingParameter(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "NoSuchDomain" => {
-                        return SelectError::NoSuchDomain(String::from(parsed_error.message));
+                        return RusotoError::Service(SelectError::NoSuchDomain(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "RequestTimeout" => {
-                        return SelectError::RequestTimeout(String::from(parsed_error.message));
+                        return RusotoError::Service(SelectError::RequestTimeout(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     "TooManyRequestedAttributes" => {
-                        return SelectError::TooManyRequestedAttributes(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SelectError::TooManyRequestedAttributes(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SelectError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2059,28 +1735,6 @@ impl SelectError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SelectError {
-    fn from(err: XmlParseError) -> SelectError {
-        let XmlParseError(message) = err;
-        SelectError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SelectError {
-    fn from(err: CredentialsError) -> SelectError {
-        SelectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SelectError {
-    fn from(err: HttpDispatchError) -> SelectError {
-        SelectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SelectError {
-    fn from(err: io::Error) -> SelectError {
-        SelectError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SelectError {
@@ -2100,11 +1754,6 @@ impl Error for SelectError {
             SelectError::NoSuchDomain(ref cause) => cause,
             SelectError::RequestTimeout(ref cause) => cause,
             SelectError::TooManyRequestedAttributes(ref cause) => cause,
-            SelectError::Validation(ref cause) => cause,
-            SelectError::Credentials(ref err) => err.description(),
-            SelectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SelectError::ParseError(ref cause) => cause,
-            SelectError::Unknown(_) => "unknown error",
         }
     }
 }

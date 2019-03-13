@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -435,22 +432,12 @@ pub enum CreateFileSystemError {
     InternalServerError(String),
     /// <p>Returned if the throughput mode or amount of provisioned throughput can't be changed because the throughput limit of 1024 MiB/s has been reached.</p>
     ThroughputLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFileSystemError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFileSystemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFileSystemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -475,59 +462,42 @@ impl CreateFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return CreateFileSystemError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateFileSystemError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "FileSystemAlreadyExists" => {
-                    return CreateFileSystemError::FileSystemAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateFileSystemError::FileSystemAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "FileSystemLimitExceeded" => {
-                    return CreateFileSystemError::FileSystemLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateFileSystemError::FileSystemLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InsufficientThroughputCapacity" => {
-                    return CreateFileSystemError::InsufficientThroughputCapacity(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateFileSystemError::InsufficientThroughputCapacity(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return CreateFileSystemError::InternalServerError(String::from(error_message));
-                }
-                "ThroughputLimitExceeded" => {
-                    return CreateFileSystemError::ThroughputLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateFileSystemError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateFileSystemError::Validation(error_message.to_string());
+                "ThroughputLimitExceeded" => {
+                    return RusotoError::Service(CreateFileSystemError::ThroughputLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFileSystemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFileSystemError {
-    fn from(err: serde_json::error::Error) -> CreateFileSystemError {
-        CreateFileSystemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFileSystemError {
-    fn from(err: CredentialsError) -> CreateFileSystemError {
-        CreateFileSystemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFileSystemError {
-    fn from(err: HttpDispatchError) -> CreateFileSystemError {
-        CreateFileSystemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFileSystemError {
-    fn from(err: io::Error) -> CreateFileSystemError {
-        CreateFileSystemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFileSystemError {
@@ -544,11 +514,6 @@ impl Error for CreateFileSystemError {
             CreateFileSystemError::InsufficientThroughputCapacity(ref cause) => cause,
             CreateFileSystemError::InternalServerError(ref cause) => cause,
             CreateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
-            CreateFileSystemError::Validation(ref cause) => cause,
-            CreateFileSystemError::Credentials(ref err) => err.description(),
-            CreateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFileSystemError::ParseError(ref cause) => cause,
-            CreateFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -579,22 +544,12 @@ pub enum CreateMountTargetError {
     SubnetNotFound(String),
     /// <p><p/></p>
     UnsupportedAvailabilityZone(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateMountTargetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateMountTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateMountTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -619,81 +574,76 @@ impl CreateMountTargetError {
 
             match error_type {
                 "BadRequest" => {
-                    return CreateMountTargetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateMountTargetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "FileSystemNotFound" => {
-                    return CreateMountTargetError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateMountTargetError::FileSystemNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "IncorrectFileSystemLifeCycleState" => {
-                    return CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateMountTargetError::IncorrectFileSystemLifeCycleState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return CreateMountTargetError::InternalServerError(String::from(error_message));
-                }
-                "IpAddressInUse" => {
-                    return CreateMountTargetError::IpAddressInUse(String::from(error_message));
-                }
-                "MountTargetConflict" => {
-                    return CreateMountTargetError::MountTargetConflict(String::from(error_message));
-                }
-                "NetworkInterfaceLimitExceeded" => {
-                    return CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateMountTargetError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "IpAddressInUse" => {
+                    return RusotoError::Service(CreateMountTargetError::IpAddressInUse(
+                        String::from(error_message),
+                    ));
+                }
+                "MountTargetConflict" => {
+                    return RusotoError::Service(CreateMountTargetError::MountTargetConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "NetworkInterfaceLimitExceeded" => {
+                    return RusotoError::Service(
+                        CreateMountTargetError::NetworkInterfaceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "NoFreeAddressesInSubnet" => {
-                    return CreateMountTargetError::NoFreeAddressesInSubnet(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateMountTargetError::NoFreeAddressesInSubnet(
+                        String::from(error_message),
                     ));
                 }
                 "SecurityGroupLimitExceeded" => {
-                    return CreateMountTargetError::SecurityGroupLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateMountTargetError::SecurityGroupLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "SecurityGroupNotFound" => {
-                    return CreateMountTargetError::SecurityGroupNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateMountTargetError::SecurityGroupNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "SubnetNotFound" => {
-                    return CreateMountTargetError::SubnetNotFound(String::from(error_message));
-                }
-                "UnsupportedAvailabilityZone" => {
-                    return CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateMountTargetError::SubnetNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateMountTargetError::Validation(error_message.to_string());
+                "UnsupportedAvailabilityZone" => {
+                    return RusotoError::Service(
+                        CreateMountTargetError::UnsupportedAvailabilityZone(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateMountTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateMountTargetError {
-    fn from(err: serde_json::error::Error) -> CreateMountTargetError {
-        CreateMountTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateMountTargetError {
-    fn from(err: CredentialsError) -> CreateMountTargetError {
-        CreateMountTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateMountTargetError {
-    fn from(err: HttpDispatchError) -> CreateMountTargetError {
-        CreateMountTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateMountTargetError {
-    fn from(err: io::Error) -> CreateMountTargetError {
-        CreateMountTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateMountTargetError {
@@ -716,13 +666,6 @@ impl Error for CreateMountTargetError {
             CreateMountTargetError::SecurityGroupNotFound(ref cause) => cause,
             CreateMountTargetError::SubnetNotFound(ref cause) => cause,
             CreateMountTargetError::UnsupportedAvailabilityZone(ref cause) => cause,
-            CreateMountTargetError::Validation(ref cause) => cause,
-            CreateMountTargetError::Credentials(ref err) => err.description(),
-            CreateMountTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateMountTargetError::ParseError(ref cause) => cause,
-            CreateMountTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -735,22 +678,12 @@ pub enum CreateTagsError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTagsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -774,41 +707,26 @@ impl CreateTagsError {
                 .unwrap_or("");
 
             match error_type {
-                "BadRequest" => return CreateTagsError::BadRequest(String::from(error_message)),
+                "BadRequest" => {
+                    return RusotoError::Service(CreateTagsError::BadRequest(String::from(
+                        error_message,
+                    )));
+                }
                 "FileSystemNotFound" => {
-                    return CreateTagsError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::FileSystemNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return CreateTagsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateTagsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTagsError {
-    fn from(err: serde_json::error::Error) -> CreateTagsError {
-        CreateTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTagsError {
-    fn from(err: CredentialsError) -> CreateTagsError {
-        CreateTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTagsError {
-    fn from(err: HttpDispatchError) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTagsError {
-    fn from(err: io::Error) -> CreateTagsError {
-        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTagsError {
@@ -822,11 +740,6 @@ impl Error for CreateTagsError {
             CreateTagsError::BadRequest(ref cause) => cause,
             CreateTagsError::FileSystemNotFound(ref cause) => cause,
             CreateTagsError::InternalServerError(ref cause) => cause,
-            CreateTagsError::Validation(ref cause) => cause,
-            CreateTagsError::Credentials(ref err) => err.description(),
-            CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTagsError::ParseError(ref cause) => cause,
-            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -841,22 +754,12 @@ pub enum DeleteFileSystemError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFileSystemError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileSystemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileSystemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -881,45 +784,30 @@ impl DeleteFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return DeleteFileSystemError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteFileSystemError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "FileSystemInUse" => {
-                    return DeleteFileSystemError::FileSystemInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteFileSystemError::FileSystemInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "FileSystemNotFound" => {
-                    return DeleteFileSystemError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFileSystemError::FileSystemNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteFileSystemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteFileSystemError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteFileSystemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFileSystemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFileSystemError {
-    fn from(err: serde_json::error::Error) -> DeleteFileSystemError {
-        DeleteFileSystemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFileSystemError {
-    fn from(err: CredentialsError) -> DeleteFileSystemError {
-        DeleteFileSystemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFileSystemError {
-    fn from(err: HttpDispatchError) -> DeleteFileSystemError {
-        DeleteFileSystemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFileSystemError {
-    fn from(err: io::Error) -> DeleteFileSystemError {
-        DeleteFileSystemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFileSystemError {
@@ -934,11 +822,6 @@ impl Error for DeleteFileSystemError {
             DeleteFileSystemError::FileSystemInUse(ref cause) => cause,
             DeleteFileSystemError::FileSystemNotFound(ref cause) => cause,
             DeleteFileSystemError::InternalServerError(ref cause) => cause,
-            DeleteFileSystemError::Validation(ref cause) => cause,
-            DeleteFileSystemError::Credentials(ref err) => err.description(),
-            DeleteFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFileSystemError::ParseError(ref cause) => cause,
-            DeleteFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -953,22 +836,12 @@ pub enum DeleteMountTargetError {
     InternalServerError(String),
     /// <p>Returned if there is no mount target with the specified ID found in the caller's account.</p>
     MountTargetNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMountTargetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMountTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMountTargetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -993,45 +866,30 @@ impl DeleteMountTargetError {
 
             match error_type {
                 "BadRequest" => {
-                    return DeleteMountTargetError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteMountTargetError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "DependencyTimeout" => {
-                    return DeleteMountTargetError::DependencyTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteMountTargetError::DependencyTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteMountTargetError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteMountTargetError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "MountTargetNotFound" => {
-                    return DeleteMountTargetError::MountTargetNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteMountTargetError::MountTargetNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteMountTargetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteMountTargetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteMountTargetError {
-    fn from(err: serde_json::error::Error) -> DeleteMountTargetError {
-        DeleteMountTargetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMountTargetError {
-    fn from(err: CredentialsError) -> DeleteMountTargetError {
-        DeleteMountTargetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMountTargetError {
-    fn from(err: HttpDispatchError) -> DeleteMountTargetError {
-        DeleteMountTargetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMountTargetError {
-    fn from(err: io::Error) -> DeleteMountTargetError {
-        DeleteMountTargetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteMountTargetError {
@@ -1046,13 +904,6 @@ impl Error for DeleteMountTargetError {
             DeleteMountTargetError::DependencyTimeout(ref cause) => cause,
             DeleteMountTargetError::InternalServerError(ref cause) => cause,
             DeleteMountTargetError::MountTargetNotFound(ref cause) => cause,
-            DeleteMountTargetError::Validation(ref cause) => cause,
-            DeleteMountTargetError::Credentials(ref err) => err.description(),
-            DeleteMountTargetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteMountTargetError::ParseError(ref cause) => cause,
-            DeleteMountTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1065,22 +916,12 @@ pub enum DeleteTagsError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTagsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1104,41 +945,26 @@ impl DeleteTagsError {
                 .unwrap_or("");
 
             match error_type {
-                "BadRequest" => return DeleteTagsError::BadRequest(String::from(error_message)),
+                "BadRequest" => {
+                    return RusotoError::Service(DeleteTagsError::BadRequest(String::from(
+                        error_message,
+                    )));
+                }
                 "FileSystemNotFound" => {
-                    return DeleteTagsError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::FileSystemNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DeleteTagsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteTagsError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTagsError {
-    fn from(err: serde_json::error::Error) -> DeleteTagsError {
-        DeleteTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTagsError {
-    fn from(err: CredentialsError) -> DeleteTagsError {
-        DeleteTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTagsError {
-    fn from(err: HttpDispatchError) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTagsError {
-    fn from(err: io::Error) -> DeleteTagsError {
-        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTagsError {
@@ -1152,11 +978,6 @@ impl Error for DeleteTagsError {
             DeleteTagsError::BadRequest(ref cause) => cause,
             DeleteTagsError::FileSystemNotFound(ref cause) => cause,
             DeleteTagsError::InternalServerError(ref cause) => cause,
-            DeleteTagsError::Validation(ref cause) => cause,
-            DeleteTagsError::Credentials(ref err) => err.description(),
-            DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTagsError::ParseError(ref cause) => cause,
-            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1169,22 +990,12 @@ pub enum DescribeFileSystemsError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeFileSystemsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeFileSystemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFileSystemsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1209,44 +1020,25 @@ impl DescribeFileSystemsError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeFileSystemsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeFileSystemsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "FileSystemNotFound" => {
-                    return DescribeFileSystemsError::FileSystemNotFound(String::from(error_message));
-                }
-                "InternalServerError" => {
-                    return DescribeFileSystemsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeFileSystemsError::FileSystemNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeFileSystemsError::Validation(error_message.to_string());
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeFileSystemsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeFileSystemsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeFileSystemsError {
-    fn from(err: serde_json::error::Error) -> DescribeFileSystemsError {
-        DescribeFileSystemsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeFileSystemsError {
-    fn from(err: CredentialsError) -> DescribeFileSystemsError {
-        DescribeFileSystemsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeFileSystemsError {
-    fn from(err: HttpDispatchError) -> DescribeFileSystemsError {
-        DescribeFileSystemsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeFileSystemsError {
-    fn from(err: io::Error) -> DescribeFileSystemsError {
-        DescribeFileSystemsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeFileSystemsError {
@@ -1260,13 +1052,6 @@ impl Error for DescribeFileSystemsError {
             DescribeFileSystemsError::BadRequest(ref cause) => cause,
             DescribeFileSystemsError::FileSystemNotFound(ref cause) => cause,
             DescribeFileSystemsError::InternalServerError(ref cause) => cause,
-            DescribeFileSystemsError::Validation(ref cause) => cause,
-            DescribeFileSystemsError::Credentials(ref err) => err.description(),
-            DescribeFileSystemsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeFileSystemsError::ParseError(ref cause) => cause,
-            DescribeFileSystemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1279,22 +1064,14 @@ pub enum DescribeLifecycleConfigurationError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLifecycleConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLifecycleConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeLifecycleConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1319,50 +1096,29 @@ impl DescribeLifecycleConfigurationError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeLifecycleConfigurationError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeLifecycleConfigurationError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "FileSystemNotFound" => {
-                    return DescribeLifecycleConfigurationError::FileSystemNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "InternalServerError" => {
-                    return DescribeLifecycleConfigurationError::InternalServerError(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeLifecycleConfigurationError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeLifecycleConfigurationError::FileSystemNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeLifecycleConfigurationError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLifecycleConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLifecycleConfigurationError {
-    fn from(err: serde_json::error::Error) -> DescribeLifecycleConfigurationError {
-        DescribeLifecycleConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLifecycleConfigurationError {
-    fn from(err: CredentialsError) -> DescribeLifecycleConfigurationError {
-        DescribeLifecycleConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLifecycleConfigurationError {
-    fn from(err: HttpDispatchError) -> DescribeLifecycleConfigurationError {
-        DescribeLifecycleConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLifecycleConfigurationError {
-    fn from(err: io::Error) -> DescribeLifecycleConfigurationError {
-        DescribeLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLifecycleConfigurationError {
@@ -1376,13 +1132,6 @@ impl Error for DescribeLifecycleConfigurationError {
             DescribeLifecycleConfigurationError::BadRequest(ref cause) => cause,
             DescribeLifecycleConfigurationError::FileSystemNotFound(ref cause) => cause,
             DescribeLifecycleConfigurationError::InternalServerError(ref cause) => cause,
-            DescribeLifecycleConfigurationError::Validation(ref cause) => cause,
-            DescribeLifecycleConfigurationError::Credentials(ref err) => err.description(),
-            DescribeLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLifecycleConfigurationError::ParseError(ref cause) => cause,
-            DescribeLifecycleConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1397,22 +1146,14 @@ pub enum DescribeMountTargetSecurityGroupsError {
     InternalServerError(String),
     /// <p>Returned if there is no mount target with the specified ID found in the caller's account.</p>
     MountTargetNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMountTargetSecurityGroupsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeMountTargetSecurityGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeMountTargetSecurityGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1437,55 +1178,36 @@ impl DescribeMountTargetSecurityGroupsError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeMountTargetSecurityGroupsError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeMountTargetSecurityGroupsError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "IncorrectMountTargetState" => {
-                    return DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InternalServerError" => {
-                    return DescribeMountTargetSecurityGroupsError::InternalServerError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeMountTargetSecurityGroupsError::InternalServerError(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "MountTargetNotFound" => {
-                    return DescribeMountTargetSecurityGroupsError::MountTargetNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeMountTargetSecurityGroupsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeMountTargetSecurityGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeMountTargetSecurityGroupsError {
-    fn from(err: serde_json::error::Error) -> DescribeMountTargetSecurityGroupsError {
-        DescribeMountTargetSecurityGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeMountTargetSecurityGroupsError {
-    fn from(err: CredentialsError) -> DescribeMountTargetSecurityGroupsError {
-        DescribeMountTargetSecurityGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeMountTargetSecurityGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeMountTargetSecurityGroupsError {
-        DescribeMountTargetSecurityGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeMountTargetSecurityGroupsError {
-    fn from(err: io::Error) -> DescribeMountTargetSecurityGroupsError {
-        DescribeMountTargetSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeMountTargetSecurityGroupsError {
@@ -1500,13 +1222,6 @@ impl Error for DescribeMountTargetSecurityGroupsError {
             DescribeMountTargetSecurityGroupsError::IncorrectMountTargetState(ref cause) => cause,
             DescribeMountTargetSecurityGroupsError::InternalServerError(ref cause) => cause,
             DescribeMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::Validation(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::Credentials(ref err) => err.description(),
-            DescribeMountTargetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeMountTargetSecurityGroupsError::ParseError(ref cause) => cause,
-            DescribeMountTargetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1521,22 +1236,12 @@ pub enum DescribeMountTargetsError {
     InternalServerError(String),
     /// <p>Returned if there is no mount target with the specified ID found in the caller's account.</p>
     MountTargetNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMountTargetsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeMountTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMountTargetsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1561,51 +1266,30 @@ impl DescribeMountTargetsError {
 
             match error_type {
                 "BadRequest" => {
-                    return DescribeMountTargetsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeMountTargetsError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "FileSystemNotFound" => {
-                    return DescribeMountTargetsError::FileSystemNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeMountTargetsError::FileSystemNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return DescribeMountTargetsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeMountTargetsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "MountTargetNotFound" => {
-                    return DescribeMountTargetsError::MountTargetNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeMountTargetsError::MountTargetNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeMountTargetsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeMountTargetsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeMountTargetsError {
-    fn from(err: serde_json::error::Error) -> DescribeMountTargetsError {
-        DescribeMountTargetsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeMountTargetsError {
-    fn from(err: CredentialsError) -> DescribeMountTargetsError {
-        DescribeMountTargetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeMountTargetsError {
-    fn from(err: HttpDispatchError) -> DescribeMountTargetsError {
-        DescribeMountTargetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeMountTargetsError {
-    fn from(err: io::Error) -> DescribeMountTargetsError {
-        DescribeMountTargetsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeMountTargetsError {
@@ -1620,13 +1304,6 @@ impl Error for DescribeMountTargetsError {
             DescribeMountTargetsError::FileSystemNotFound(ref cause) => cause,
             DescribeMountTargetsError::InternalServerError(ref cause) => cause,
             DescribeMountTargetsError::MountTargetNotFound(ref cause) => cause,
-            DescribeMountTargetsError::Validation(ref cause) => cause,
-            DescribeMountTargetsError::Credentials(ref err) => err.description(),
-            DescribeMountTargetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeMountTargetsError::ParseError(ref cause) => cause,
-            DescribeMountTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1639,22 +1316,12 @@ pub enum DescribeTagsError {
     FileSystemNotFound(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTagsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1678,41 +1345,26 @@ impl DescribeTagsError {
                 .unwrap_or("");
 
             match error_type {
-                "BadRequest" => return DescribeTagsError::BadRequest(String::from(error_message)),
+                "BadRequest" => {
+                    return RusotoError::Service(DescribeTagsError::BadRequest(String::from(
+                        error_message,
+                    )));
+                }
                 "FileSystemNotFound" => {
-                    return DescribeTagsError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::FileSystemNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DescribeTagsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeTagsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTagsError {
-    fn from(err: serde_json::error::Error) -> DescribeTagsError {
-        DescribeTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTagsError {
-    fn from(err: CredentialsError) -> DescribeTagsError {
-        DescribeTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTagsError {
-    fn from(err: HttpDispatchError) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTagsError {
-    fn from(err: io::Error) -> DescribeTagsError {
-        DescribeTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTagsError {
@@ -1726,11 +1378,6 @@ impl Error for DescribeTagsError {
             DescribeTagsError::BadRequest(ref cause) => cause,
             DescribeTagsError::FileSystemNotFound(ref cause) => cause,
             DescribeTagsError::InternalServerError(ref cause) => cause,
-            DescribeTagsError::Validation(ref cause) => cause,
-            DescribeTagsError::Credentials(ref err) => err.description(),
-            DescribeTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTagsError::ParseError(ref cause) => cause,
-            DescribeTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1749,22 +1396,14 @@ pub enum ModifyMountTargetSecurityGroupsError {
     SecurityGroupLimitExceeded(String),
     /// <p>Returned if one of the specified security groups doesn't exist in the subnet's VPC.</p>
     SecurityGroupNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ModifyMountTargetSecurityGroupsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ModifyMountTargetSecurityGroupsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyMountTargetSecurityGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1789,65 +1428,50 @@ impl ModifyMountTargetSecurityGroupsError {
 
             match error_type {
                 "BadRequest" => {
-                    return ModifyMountTargetSecurityGroupsError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ModifyMountTargetSecurityGroupsError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "IncorrectMountTargetState" => {
-                    return ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ModifyMountTargetSecurityGroupsError::IncorrectMountTargetState(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InternalServerError" => {
-                    return ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ModifyMountTargetSecurityGroupsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MountTargetNotFound" => {
-                    return ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ModifyMountTargetSecurityGroupsError::MountTargetNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "SecurityGroupLimitExceeded" => {
-                    return ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "SecurityGroupNotFound" => {
-                    return ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return ModifyMountTargetSecurityGroupsError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ModifyMountTargetSecurityGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ModifyMountTargetSecurityGroupsError {
-    fn from(err: serde_json::error::Error) -> ModifyMountTargetSecurityGroupsError {
-        ModifyMountTargetSecurityGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ModifyMountTargetSecurityGroupsError {
-    fn from(err: CredentialsError) -> ModifyMountTargetSecurityGroupsError {
-        ModifyMountTargetSecurityGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ModifyMountTargetSecurityGroupsError {
-    fn from(err: HttpDispatchError) -> ModifyMountTargetSecurityGroupsError {
-        ModifyMountTargetSecurityGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ModifyMountTargetSecurityGroupsError {
-    fn from(err: io::Error) -> ModifyMountTargetSecurityGroupsError {
-        ModifyMountTargetSecurityGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ModifyMountTargetSecurityGroupsError {
@@ -1864,13 +1488,6 @@ impl Error for ModifyMountTargetSecurityGroupsError {
             ModifyMountTargetSecurityGroupsError::MountTargetNotFound(ref cause) => cause,
             ModifyMountTargetSecurityGroupsError::SecurityGroupLimitExceeded(ref cause) => cause,
             ModifyMountTargetSecurityGroupsError::SecurityGroupNotFound(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::Validation(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::Credentials(ref err) => err.description(),
-            ModifyMountTargetSecurityGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ModifyMountTargetSecurityGroupsError::ParseError(ref cause) => cause,
-            ModifyMountTargetSecurityGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1885,22 +1502,12 @@ pub enum PutLifecycleConfigurationError {
     IncorrectFileSystemLifeCycleState(String),
     /// <p>Returned if an error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLifecycleConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutLifecycleConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecycleConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1925,51 +1532,34 @@ impl PutLifecycleConfigurationError {
 
             match error_type {
                 "BadRequest" => {
-                    return PutLifecycleConfigurationError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(PutLifecycleConfigurationError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "FileSystemNotFound" => {
-                    return PutLifecycleConfigurationError::FileSystemNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutLifecycleConfigurationError::FileSystemNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "IncorrectFileSystemLifeCycleState" => {
-                    return PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InternalServerError" => {
-                    return PutLifecycleConfigurationError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutLifecycleConfigurationError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PutLifecycleConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutLifecycleConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLifecycleConfigurationError {
-    fn from(err: serde_json::error::Error) -> PutLifecycleConfigurationError {
-        PutLifecycleConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLifecycleConfigurationError {
-    fn from(err: CredentialsError) -> PutLifecycleConfigurationError {
-        PutLifecycleConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLifecycleConfigurationError {
-    fn from(err: HttpDispatchError) -> PutLifecycleConfigurationError {
-        PutLifecycleConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLifecycleConfigurationError {
-    fn from(err: io::Error) -> PutLifecycleConfigurationError {
-        PutLifecycleConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLifecycleConfigurationError {
@@ -1984,13 +1574,6 @@ impl Error for PutLifecycleConfigurationError {
             PutLifecycleConfigurationError::FileSystemNotFound(ref cause) => cause,
             PutLifecycleConfigurationError::IncorrectFileSystemLifeCycleState(ref cause) => cause,
             PutLifecycleConfigurationError::InternalServerError(ref cause) => cause,
-            PutLifecycleConfigurationError::Validation(ref cause) => cause,
-            PutLifecycleConfigurationError::Credentials(ref err) => err.description(),
-            PutLifecycleConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutLifecycleConfigurationError::ParseError(ref cause) => cause,
-            PutLifecycleConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2011,22 +1594,12 @@ pub enum UpdateFileSystemError {
     ThroughputLimitExceeded(String),
     /// <p>Returned if you don’t wait at least 24 hours before changing the throughput mode, or decreasing the Provisioned Throughput value.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFileSystemError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFileSystemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFileSystemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2051,60 +1624,49 @@ impl UpdateFileSystemError {
 
             match error_type {
                 "BadRequest" => {
-                    return UpdateFileSystemError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateFileSystemError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "FileSystemNotFound" => {
-                    return UpdateFileSystemError::FileSystemNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateFileSystemError::FileSystemNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "IncorrectFileSystemLifeCycleState" => {
-                    return UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateFileSystemError::IncorrectFileSystemLifeCycleState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InsufficientThroughputCapacity" => {
-                    return UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateFileSystemError::InsufficientThroughputCapacity(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return UpdateFileSystemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateFileSystemError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ThroughputLimitExceeded" => {
-                    return UpdateFileSystemError::ThroughputLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFileSystemError::ThroughputLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequests" => {
-                    return UpdateFileSystemError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateFileSystemError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateFileSystemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFileSystemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFileSystemError {
-    fn from(err: serde_json::error::Error) -> UpdateFileSystemError {
-        UpdateFileSystemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFileSystemError {
-    fn from(err: CredentialsError) -> UpdateFileSystemError {
-        UpdateFileSystemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFileSystemError {
-    fn from(err: HttpDispatchError) -> UpdateFileSystemError {
-        UpdateFileSystemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFileSystemError {
-    fn from(err: io::Error) -> UpdateFileSystemError {
-        UpdateFileSystemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFileSystemError {
@@ -2122,11 +1684,6 @@ impl Error for UpdateFileSystemError {
             UpdateFileSystemError::InternalServerError(ref cause) => cause,
             UpdateFileSystemError::ThroughputLimitExceeded(ref cause) => cause,
             UpdateFileSystemError::TooManyRequests(ref cause) => cause,
-            UpdateFileSystemError::Validation(ref cause) => cause,
-            UpdateFileSystemError::Credentials(ref err) => err.description(),
-            UpdateFileSystemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFileSystemError::ParseError(ref cause) => cause,
-            UpdateFileSystemError::Unknown(_) => "unknown error",
         }
     }
 }

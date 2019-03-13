@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -119,20 +116,10 @@ pub enum GetEntitlementsError {
     InvalidParameter(String),
     /// <p>The calls to the GetEntitlements API are throttled.</p>
     Throttling(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetEntitlementsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetEntitlementsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEntitlementsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -145,42 +132,25 @@ impl GetEntitlementsError {
 
             match *error_type {
                 "InternalServiceErrorException" => {
-                    return GetEntitlementsError::InternalServiceError(String::from(error_message));
+                    return RusotoError::Service(GetEntitlementsError::InternalServiceError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetEntitlementsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetEntitlementsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ThrottlingException" => {
-                    return GetEntitlementsError::Throttling(String::from(error_message));
+                    return RusotoError::Service(GetEntitlementsError::Throttling(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetEntitlementsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetEntitlementsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetEntitlementsError {
-    fn from(err: serde_json::error::Error) -> GetEntitlementsError {
-        GetEntitlementsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetEntitlementsError {
-    fn from(err: CredentialsError) -> GetEntitlementsError {
-        GetEntitlementsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetEntitlementsError {
-    fn from(err: HttpDispatchError) -> GetEntitlementsError {
-        GetEntitlementsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetEntitlementsError {
-    fn from(err: io::Error) -> GetEntitlementsError {
-        GetEntitlementsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetEntitlementsError {
@@ -194,11 +164,6 @@ impl Error for GetEntitlementsError {
             GetEntitlementsError::InternalServiceError(ref cause) => cause,
             GetEntitlementsError::InvalidParameter(ref cause) => cause,
             GetEntitlementsError::Throttling(ref cause) => cause,
-            GetEntitlementsError::Validation(ref cause) => cause,
-            GetEntitlementsError::Credentials(ref err) => err.description(),
-            GetEntitlementsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetEntitlementsError::ParseError(ref cause) => cause,
-            GetEntitlementsError::Unknown(_) => "unknown error",
         }
     }
 }

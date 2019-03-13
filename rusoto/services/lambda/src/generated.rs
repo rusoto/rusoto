@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1472,22 +1469,12 @@ pub enum AddLayerVersionPermissionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddLayerVersionPermissionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AddLayerVersionPermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddLayerVersionPermissionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1512,66 +1499,49 @@ impl AddLayerVersionPermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AddLayerVersionPermissionError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddLayerVersionPermissionError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PolicyLengthExceededException" => {
-                    return AddLayerVersionPermissionError::PolicyLengthExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddLayerVersionPermissionError::PolicyLengthExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PreconditionFailedException" => {
-                    return AddLayerVersionPermissionError::PreconditionFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(AddLayerVersionPermissionError::PreconditionFailed(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceConflictException" => {
-                    return AddLayerVersionPermissionError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(AddLayerVersionPermissionError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return AddLayerVersionPermissionError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AddLayerVersionPermissionError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return AddLayerVersionPermissionError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return AddLayerVersionPermissionError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(AddLayerVersionPermissionError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddLayerVersionPermissionError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AddLayerVersionPermissionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddLayerVersionPermissionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddLayerVersionPermissionError {
-    fn from(err: serde_json::error::Error) -> AddLayerVersionPermissionError {
-        AddLayerVersionPermissionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddLayerVersionPermissionError {
-    fn from(err: CredentialsError) -> AddLayerVersionPermissionError {
-        AddLayerVersionPermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddLayerVersionPermissionError {
-    fn from(err: HttpDispatchError) -> AddLayerVersionPermissionError {
-        AddLayerVersionPermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddLayerVersionPermissionError {
-    fn from(err: io::Error) -> AddLayerVersionPermissionError {
-        AddLayerVersionPermissionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddLayerVersionPermissionError {
@@ -1589,13 +1559,6 @@ impl Error for AddLayerVersionPermissionError {
             AddLayerVersionPermissionError::ResourceNotFound(ref cause) => cause,
             AddLayerVersionPermissionError::Service(ref cause) => cause,
             AddLayerVersionPermissionError::TooManyRequests(ref cause) => cause,
-            AddLayerVersionPermissionError::Validation(ref cause) => cause,
-            AddLayerVersionPermissionError::Credentials(ref err) => err.description(),
-            AddLayerVersionPermissionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddLayerVersionPermissionError::ParseError(ref cause) => cause,
-            AddLayerVersionPermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1616,22 +1579,12 @@ pub enum AddPermissionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddPermissionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AddPermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPermissionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1656,54 +1609,45 @@ impl AddPermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return AddPermissionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyLengthExceededException" => {
-                    return AddPermissionError::PolicyLengthExceeded(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::PolicyLengthExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return AddPermissionError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return AddPermissionError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::ResourceConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AddPermissionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return AddPermissionError::Service(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return AddPermissionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(AddPermissionError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AddPermissionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddPermissionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddPermissionError {
-    fn from(err: serde_json::error::Error) -> AddPermissionError {
-        AddPermissionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddPermissionError {
-    fn from(err: CredentialsError) -> AddPermissionError {
-        AddPermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddPermissionError {
-    fn from(err: HttpDispatchError) -> AddPermissionError {
-        AddPermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddPermissionError {
-    fn from(err: io::Error) -> AddPermissionError {
-        AddPermissionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddPermissionError {
@@ -1721,11 +1665,6 @@ impl Error for AddPermissionError {
             AddPermissionError::ResourceNotFound(ref cause) => cause,
             AddPermissionError::Service(ref cause) => cause,
             AddPermissionError::TooManyRequests(ref cause) => cause,
-            AddPermissionError::Validation(ref cause) => cause,
-            AddPermissionError::Credentials(ref err) => err.description(),
-            AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddPermissionError::ParseError(ref cause) => cause,
-            AddPermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1742,22 +1681,12 @@ pub enum CreateAliasError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1782,46 +1711,35 @@ impl CreateAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CreateAliasError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return CreateAliasError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::ResourceConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateAliasError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return CreateAliasError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(CreateAliasError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return CreateAliasError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAliasError {
-    fn from(err: serde_json::error::Error) -> CreateAliasError {
-        CreateAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAliasError {
-    fn from(err: CredentialsError) -> CreateAliasError {
-        CreateAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAliasError {
-    fn from(err: HttpDispatchError) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAliasError {
-    fn from(err: io::Error) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1837,11 +1755,6 @@ impl Error for CreateAliasError {
             CreateAliasError::ResourceNotFound(ref cause) => cause,
             CreateAliasError::Service(ref cause) => cause,
             CreateAliasError::TooManyRequests(ref cause) => cause,
-            CreateAliasError::Validation(ref cause) => cause,
-            CreateAliasError::Credentials(ref err) => err.description(),
-            CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAliasError::ParseError(ref cause) => cause,
-            CreateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1858,22 +1771,12 @@ pub enum CreateEventSourceMappingError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEventSourceMappingError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEventSourceMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSourceMappingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1898,56 +1801,37 @@ impl CreateEventSourceMappingError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return CreateEventSourceMappingError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateEventSourceMappingError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceConflictException" => {
-                    return CreateEventSourceMappingError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEventSourceMappingError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateEventSourceMappingError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEventSourceMappingError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return CreateEventSourceMappingError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return CreateEventSourceMappingError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEventSourceMappingError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateEventSourceMappingError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEventSourceMappingError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateEventSourceMappingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateEventSourceMappingError {
-    fn from(err: serde_json::error::Error) -> CreateEventSourceMappingError {
-        CreateEventSourceMappingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateEventSourceMappingError {
-    fn from(err: CredentialsError) -> CreateEventSourceMappingError {
-        CreateEventSourceMappingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEventSourceMappingError {
-    fn from(err: HttpDispatchError) -> CreateEventSourceMappingError {
-        CreateEventSourceMappingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEventSourceMappingError {
-    fn from(err: io::Error) -> CreateEventSourceMappingError {
-        CreateEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateEventSourceMappingError {
@@ -1963,13 +1847,6 @@ impl Error for CreateEventSourceMappingError {
             CreateEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             CreateEventSourceMappingError::Service(ref cause) => cause,
             CreateEventSourceMappingError::TooManyRequests(ref cause) => cause,
-            CreateEventSourceMappingError::Validation(ref cause) => cause,
-            CreateEventSourceMappingError::Credentials(ref err) => err.description(),
-            CreateEventSourceMappingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEventSourceMappingError::ParseError(ref cause) => cause,
-            CreateEventSourceMappingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1988,22 +1865,12 @@ pub enum CreateFunctionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFunctionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2028,51 +1895,40 @@ impl CreateFunctionError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return CreateFunctionError::CodeStorageExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::CodeStorageExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return CreateFunctionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return CreateFunctionError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFunctionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return CreateFunctionError::Service(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateFunctionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateFunctionError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateFunctionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFunctionError {
-    fn from(err: serde_json::error::Error) -> CreateFunctionError {
-        CreateFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFunctionError {
-    fn from(err: CredentialsError) -> CreateFunctionError {
-        CreateFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFunctionError {
-    fn from(err: HttpDispatchError) -> CreateFunctionError {
-        CreateFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFunctionError {
-    fn from(err: io::Error) -> CreateFunctionError {
-        CreateFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFunctionError {
@@ -2089,11 +1945,6 @@ impl Error for CreateFunctionError {
             CreateFunctionError::ResourceNotFound(ref cause) => cause,
             CreateFunctionError::Service(ref cause) => cause,
             CreateFunctionError::TooManyRequests(ref cause) => cause,
-            CreateFunctionError::Validation(ref cause) => cause,
-            CreateFunctionError::Credentials(ref err) => err.description(),
-            CreateFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFunctionError::ParseError(ref cause) => cause,
-            CreateFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2106,22 +1957,12 @@ pub enum DeleteAliasError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2146,40 +1987,25 @@ impl DeleteAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteAliasError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
-                "ServiceException" => return DeleteAliasError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteAliasError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return DeleteAliasError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAliasError {
-    fn from(err: serde_json::error::Error) -> DeleteAliasError {
-        DeleteAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAliasError {
-    fn from(err: CredentialsError) -> DeleteAliasError {
-        DeleteAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAliasError {
-    fn from(err: HttpDispatchError) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAliasError {
-    fn from(err: io::Error) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -2193,11 +2019,6 @@ impl Error for DeleteAliasError {
             DeleteAliasError::InvalidParameterValue(ref cause) => cause,
             DeleteAliasError::Service(ref cause) => cause,
             DeleteAliasError::TooManyRequests(ref cause) => cause,
-            DeleteAliasError::Validation(ref cause) => cause,
-            DeleteAliasError::Credentials(ref err) => err.description(),
-            DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAliasError::ParseError(ref cause) => cause,
-            DeleteAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2214,22 +2035,12 @@ pub enum DeleteEventSourceMappingError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEventSourceMappingError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEventSourceMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSourceMappingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2254,54 +2065,37 @@ impl DeleteEventSourceMappingError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteEventSourceMappingError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteEventSourceMappingError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceInUseException" => {
-                    return DeleteEventSourceMappingError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteEventSourceMappingError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteEventSourceMappingError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEventSourceMappingError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DeleteEventSourceMappingError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DeleteEventSourceMappingError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEventSourceMappingError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteEventSourceMappingError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEventSourceMappingError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteEventSourceMappingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteEventSourceMappingError {
-    fn from(err: serde_json::error::Error) -> DeleteEventSourceMappingError {
-        DeleteEventSourceMappingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEventSourceMappingError {
-    fn from(err: CredentialsError) -> DeleteEventSourceMappingError {
-        DeleteEventSourceMappingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEventSourceMappingError {
-    fn from(err: HttpDispatchError) -> DeleteEventSourceMappingError {
-        DeleteEventSourceMappingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEventSourceMappingError {
-    fn from(err: io::Error) -> DeleteEventSourceMappingError {
-        DeleteEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteEventSourceMappingError {
@@ -2317,13 +2111,6 @@ impl Error for DeleteEventSourceMappingError {
             DeleteEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             DeleteEventSourceMappingError::Service(ref cause) => cause,
             DeleteEventSourceMappingError::TooManyRequests(ref cause) => cause,
-            DeleteEventSourceMappingError::Validation(ref cause) => cause,
-            DeleteEventSourceMappingError::Credentials(ref err) => err.description(),
-            DeleteEventSourceMappingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEventSourceMappingError::ParseError(ref cause) => cause,
-            DeleteEventSourceMappingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2340,22 +2127,12 @@ pub enum DeleteFunctionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFunctionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2380,48 +2157,35 @@ impl DeleteFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteFunctionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(DeleteFunctionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceConflictException" => {
-                    return DeleteFunctionError::ResourceConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteFunctionError::ResourceConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFunctionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFunctionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return DeleteFunctionError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteFunctionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteFunctionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteFunctionError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteFunctionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFunctionError {
-    fn from(err: serde_json::error::Error) -> DeleteFunctionError {
-        DeleteFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFunctionError {
-    fn from(err: CredentialsError) -> DeleteFunctionError {
-        DeleteFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFunctionError {
-    fn from(err: HttpDispatchError) -> DeleteFunctionError {
-        DeleteFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFunctionError {
-    fn from(err: io::Error) -> DeleteFunctionError {
-        DeleteFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFunctionError {
@@ -2437,11 +2201,6 @@ impl Error for DeleteFunctionError {
             DeleteFunctionError::ResourceNotFound(ref cause) => cause,
             DeleteFunctionError::Service(ref cause) => cause,
             DeleteFunctionError::TooManyRequests(ref cause) => cause,
-            DeleteFunctionError::Validation(ref cause) => cause,
-            DeleteFunctionError::Credentials(ref err) => err.description(),
-            DeleteFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFunctionError::ParseError(ref cause) => cause,
-            DeleteFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2456,22 +2215,12 @@ pub enum DeleteFunctionConcurrencyError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFunctionConcurrencyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionConcurrencyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionConcurrencyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2496,51 +2245,32 @@ impl DeleteFunctionConcurrencyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return DeleteFunctionConcurrencyError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteFunctionConcurrencyError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFunctionConcurrencyError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFunctionConcurrencyError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return DeleteFunctionConcurrencyError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DeleteFunctionConcurrencyError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFunctionConcurrencyError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteFunctionConcurrencyError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteFunctionConcurrencyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFunctionConcurrencyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFunctionConcurrencyError {
-    fn from(err: serde_json::error::Error) -> DeleteFunctionConcurrencyError {
-        DeleteFunctionConcurrencyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFunctionConcurrencyError {
-    fn from(err: CredentialsError) -> DeleteFunctionConcurrencyError {
-        DeleteFunctionConcurrencyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFunctionConcurrencyError {
-    fn from(err: HttpDispatchError) -> DeleteFunctionConcurrencyError {
-        DeleteFunctionConcurrencyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFunctionConcurrencyError {
-    fn from(err: io::Error) -> DeleteFunctionConcurrencyError {
-        DeleteFunctionConcurrencyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFunctionConcurrencyError {
@@ -2555,13 +2285,6 @@ impl Error for DeleteFunctionConcurrencyError {
             DeleteFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
             DeleteFunctionConcurrencyError::Service(ref cause) => cause,
             DeleteFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
-            DeleteFunctionConcurrencyError::Validation(ref cause) => cause,
-            DeleteFunctionConcurrencyError::Credentials(ref err) => err.description(),
-            DeleteFunctionConcurrencyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteFunctionConcurrencyError::ParseError(ref cause) => cause,
-            DeleteFunctionConcurrencyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2572,22 +2295,12 @@ pub enum DeleteLayerVersionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLayerVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLayerVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLayerVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2612,39 +2325,20 @@ impl DeleteLayerVersionError {
 
             match error_type {
                 "ServiceException" => {
-                    return DeleteLayerVersionError::Service(String::from(error_message));
+                    return RusotoError::Service(DeleteLayerVersionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteLayerVersionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteLayerVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLayerVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLayerVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLayerVersionError {
-    fn from(err: serde_json::error::Error) -> DeleteLayerVersionError {
-        DeleteLayerVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLayerVersionError {
-    fn from(err: CredentialsError) -> DeleteLayerVersionError {
-        DeleteLayerVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLayerVersionError {
-    fn from(err: HttpDispatchError) -> DeleteLayerVersionError {
-        DeleteLayerVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLayerVersionError {
-    fn from(err: io::Error) -> DeleteLayerVersionError {
-        DeleteLayerVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLayerVersionError {
@@ -2657,13 +2351,6 @@ impl Error for DeleteLayerVersionError {
         match *self {
             DeleteLayerVersionError::Service(ref cause) => cause,
             DeleteLayerVersionError::TooManyRequests(ref cause) => cause,
-            DeleteLayerVersionError::Validation(ref cause) => cause,
-            DeleteLayerVersionError::Credentials(ref err) => err.description(),
-            DeleteLayerVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLayerVersionError::ParseError(ref cause) => cause,
-            DeleteLayerVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2674,22 +2361,12 @@ pub enum GetAccountSettingsError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAccountSettingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2714,39 +2391,20 @@ impl GetAccountSettingsError {
 
             match error_type {
                 "ServiceException" => {
-                    return GetAccountSettingsError::Service(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetAccountSettingsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetAccountSettingsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetAccountSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAccountSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAccountSettingsError {
-    fn from(err: serde_json::error::Error) -> GetAccountSettingsError {
-        GetAccountSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountSettingsError {
-    fn from(err: CredentialsError) -> GetAccountSettingsError {
-        GetAccountSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountSettingsError {
-    fn from(err: HttpDispatchError) -> GetAccountSettingsError {
-        GetAccountSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountSettingsError {
-    fn from(err: io::Error) -> GetAccountSettingsError {
-        GetAccountSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAccountSettingsError {
@@ -2759,13 +2417,6 @@ impl Error for GetAccountSettingsError {
         match *self {
             GetAccountSettingsError::Service(ref cause) => cause,
             GetAccountSettingsError::TooManyRequests(ref cause) => cause,
-            GetAccountSettingsError::Validation(ref cause) => cause,
-            GetAccountSettingsError::Credentials(ref err) => err.description(),
-            GetAccountSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountSettingsError::ParseError(ref cause) => cause,
-            GetAccountSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2780,22 +2431,12 @@ pub enum GetAliasError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2820,43 +2461,28 @@ impl GetAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetAliasError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetAliasError::InvalidParameterValue(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetAliasError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetAliasError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetAliasError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetAliasError::Service(String::from(error_message)));
+                }
                 "TooManyRequestsException" => {
-                    return GetAliasError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetAliasError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAliasError {
-    fn from(err: serde_json::error::Error) -> GetAliasError {
-        GetAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAliasError {
-    fn from(err: CredentialsError) -> GetAliasError {
-        GetAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAliasError {
-    fn from(err: HttpDispatchError) -> GetAliasError {
-        GetAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAliasError {
-    fn from(err: io::Error) -> GetAliasError {
-        GetAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAliasError {
@@ -2871,11 +2497,6 @@ impl Error for GetAliasError {
             GetAliasError::ResourceNotFound(ref cause) => cause,
             GetAliasError::Service(ref cause) => cause,
             GetAliasError::TooManyRequests(ref cause) => cause,
-            GetAliasError::Validation(ref cause) => cause,
-            GetAliasError::Credentials(ref err) => err.description(),
-            GetAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetAliasError::ParseError(ref cause) => cause,
-            GetAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2890,22 +2511,12 @@ pub enum GetEventSourceMappingError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetEventSourceMappingError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetEventSourceMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEventSourceMappingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -2930,47 +2541,30 @@ impl GetEventSourceMappingError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetEventSourceMappingError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetEventSourceMappingError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetEventSourceMappingError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetEventSourceMappingError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetEventSourceMappingError::Service(String::from(error_message));
+                    return RusotoError::Service(GetEventSourceMappingError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetEventSourceMappingError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetEventSourceMappingError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetEventSourceMappingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetEventSourceMappingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetEventSourceMappingError {
-    fn from(err: serde_json::error::Error) -> GetEventSourceMappingError {
-        GetEventSourceMappingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetEventSourceMappingError {
-    fn from(err: CredentialsError) -> GetEventSourceMappingError {
-        GetEventSourceMappingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetEventSourceMappingError {
-    fn from(err: HttpDispatchError) -> GetEventSourceMappingError {
-        GetEventSourceMappingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetEventSourceMappingError {
-    fn from(err: io::Error) -> GetEventSourceMappingError {
-        GetEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetEventSourceMappingError {
@@ -2985,13 +2579,6 @@ impl Error for GetEventSourceMappingError {
             GetEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             GetEventSourceMappingError::Service(ref cause) => cause,
             GetEventSourceMappingError::TooManyRequests(ref cause) => cause,
-            GetEventSourceMappingError::Validation(ref cause) => cause,
-            GetEventSourceMappingError::Credentials(ref err) => err.description(),
-            GetEventSourceMappingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetEventSourceMappingError::ParseError(ref cause) => cause,
-            GetEventSourceMappingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3006,22 +2593,12 @@ pub enum GetFunctionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFunctionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3046,43 +2623,30 @@ impl GetFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetFunctionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetFunctionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFunctionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFunctionError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetFunctionError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetFunctionError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return GetFunctionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetFunctionError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFunctionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFunctionError {
-    fn from(err: serde_json::error::Error) -> GetFunctionError {
-        GetFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFunctionError {
-    fn from(err: CredentialsError) -> GetFunctionError {
-        GetFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFunctionError {
-    fn from(err: HttpDispatchError) -> GetFunctionError {
-        GetFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFunctionError {
-    fn from(err: io::Error) -> GetFunctionError {
-        GetFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFunctionError {
@@ -3097,11 +2661,6 @@ impl Error for GetFunctionError {
             GetFunctionError::ResourceNotFound(ref cause) => cause,
             GetFunctionError::Service(ref cause) => cause,
             GetFunctionError::TooManyRequests(ref cause) => cause,
-            GetFunctionError::Validation(ref cause) => cause,
-            GetFunctionError::Credentials(ref err) => err.description(),
-            GetFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFunctionError::ParseError(ref cause) => cause,
-            GetFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3116,22 +2675,12 @@ pub enum GetFunctionConfigurationError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFunctionConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFunctionConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3156,51 +2705,32 @@ impl GetFunctionConfigurationError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetFunctionConfigurationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetFunctionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return GetFunctionConfigurationError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFunctionConfigurationError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return GetFunctionConfigurationError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return GetFunctionConfigurationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFunctionConfigurationError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetFunctionConfigurationError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetFunctionConfigurationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFunctionConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFunctionConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetFunctionConfigurationError {
-        GetFunctionConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFunctionConfigurationError {
-    fn from(err: CredentialsError) -> GetFunctionConfigurationError {
-        GetFunctionConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFunctionConfigurationError {
-    fn from(err: HttpDispatchError) -> GetFunctionConfigurationError {
-        GetFunctionConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFunctionConfigurationError {
-    fn from(err: io::Error) -> GetFunctionConfigurationError {
-        GetFunctionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFunctionConfigurationError {
@@ -3215,13 +2745,6 @@ impl Error for GetFunctionConfigurationError {
             GetFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
             GetFunctionConfigurationError::Service(ref cause) => cause,
             GetFunctionConfigurationError::TooManyRequests(ref cause) => cause,
-            GetFunctionConfigurationError::Validation(ref cause) => cause,
-            GetFunctionConfigurationError::Credentials(ref err) => err.description(),
-            GetFunctionConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetFunctionConfigurationError::ParseError(ref cause) => cause,
-            GetFunctionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3236,22 +2759,12 @@ pub enum GetLayerVersionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLayerVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetLayerVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3276,45 +2789,30 @@ impl GetLayerVersionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetLayerVersionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLayerVersionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLayerVersionError::Service(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetLayerVersionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLayerVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLayerVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLayerVersionError {
-    fn from(err: serde_json::error::Error) -> GetLayerVersionError {
-        GetLayerVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLayerVersionError {
-    fn from(err: CredentialsError) -> GetLayerVersionError {
-        GetLayerVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLayerVersionError {
-    fn from(err: HttpDispatchError) -> GetLayerVersionError {
-        GetLayerVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLayerVersionError {
-    fn from(err: io::Error) -> GetLayerVersionError {
-        GetLayerVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLayerVersionError {
@@ -3329,11 +2827,6 @@ impl Error for GetLayerVersionError {
             GetLayerVersionError::ResourceNotFound(ref cause) => cause,
             GetLayerVersionError::Service(ref cause) => cause,
             GetLayerVersionError::TooManyRequests(ref cause) => cause,
-            GetLayerVersionError::Validation(ref cause) => cause,
-            GetLayerVersionError::Credentials(ref err) => err.description(),
-            GetLayerVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLayerVersionError::ParseError(ref cause) => cause,
-            GetLayerVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3348,22 +2841,12 @@ pub enum GetLayerVersionPolicyError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLayerVersionPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetLayerVersionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3388,47 +2871,30 @@ impl GetLayerVersionPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetLayerVersionPolicyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(GetLayerVersionPolicyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLayerVersionPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionPolicyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return GetLayerVersionPolicyError::Service(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionPolicyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return GetLayerVersionPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetLayerVersionPolicyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLayerVersionPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLayerVersionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLayerVersionPolicyError {
-    fn from(err: serde_json::error::Error) -> GetLayerVersionPolicyError {
-        GetLayerVersionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLayerVersionPolicyError {
-    fn from(err: CredentialsError) -> GetLayerVersionPolicyError {
-        GetLayerVersionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLayerVersionPolicyError {
-    fn from(err: HttpDispatchError) -> GetLayerVersionPolicyError {
-        GetLayerVersionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLayerVersionPolicyError {
-    fn from(err: io::Error) -> GetLayerVersionPolicyError {
-        GetLayerVersionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLayerVersionPolicyError {
@@ -3443,13 +2909,6 @@ impl Error for GetLayerVersionPolicyError {
             GetLayerVersionPolicyError::ResourceNotFound(ref cause) => cause,
             GetLayerVersionPolicyError::Service(ref cause) => cause,
             GetLayerVersionPolicyError::TooManyRequests(ref cause) => cause,
-            GetLayerVersionPolicyError::Validation(ref cause) => cause,
-            GetLayerVersionPolicyError::Credentials(ref err) => err.description(),
-            GetLayerVersionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLayerVersionPolicyError::ParseError(ref cause) => cause,
-            GetLayerVersionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3464,22 +2923,12 @@ pub enum GetPolicyError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3504,43 +2953,30 @@ impl GetPolicyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return GetPolicyError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return GetPolicyError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(GetPolicyError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return GetPolicyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(GetPolicyError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPolicyError {
-    fn from(err: serde_json::error::Error) -> GetPolicyError {
-        GetPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPolicyError {
-    fn from(err: CredentialsError) -> GetPolicyError {
-        GetPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPolicyError {
-    fn from(err: HttpDispatchError) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPolicyError {
-    fn from(err: io::Error) -> GetPolicyError {
-        GetPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPolicyError {
@@ -3555,11 +2991,6 @@ impl Error for GetPolicyError {
             GetPolicyError::ResourceNotFound(ref cause) => cause,
             GetPolicyError::Service(ref cause) => cause,
             GetPolicyError::TooManyRequests(ref cause) => cause,
-            GetPolicyError::Validation(ref cause) => cause,
-            GetPolicyError::Credentials(ref err) => err.description(),
-            GetPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPolicyError::ParseError(ref cause) => cause,
-            GetPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3606,22 +3037,12 @@ pub enum InvokeError {
     TooManyRequests(String),
     /// <p>The content type of the <code>Invoke</code> request body is not JSON.</p>
     UnsupportedMediaType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InvokeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InvokeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3646,89 +3067,108 @@ impl InvokeError {
 
             match error_type {
                 "EC2AccessDeniedException" => {
-                    return InvokeError::EC2AccessDenied(String::from(error_message));
+                    return RusotoError::Service(InvokeError::EC2AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "EC2ThrottledException" => {
-                    return InvokeError::EC2Throttled(String::from(error_message));
+                    return RusotoError::Service(InvokeError::EC2Throttled(String::from(
+                        error_message,
+                    )));
                 }
                 "EC2UnexpectedException" => {
-                    return InvokeError::EC2Unexpected(String::from(error_message));
+                    return RusotoError::Service(InvokeError::EC2Unexpected(String::from(
+                        error_message,
+                    )));
                 }
                 "ENILimitReachedException" => {
-                    return InvokeError::ENILimitReached(String::from(error_message));
+                    return RusotoError::Service(InvokeError::ENILimitReached(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterValueException" => {
-                    return InvokeError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidParameterValue(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestContentException" => {
-                    return InvokeError::InvalidRequestContent(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidRequestContent(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRuntimeException" => {
-                    return InvokeError::InvalidRuntime(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidRuntime(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSecurityGroupIDException" => {
-                    return InvokeError::InvalidSecurityGroupID(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidSecurityGroupID(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSubnetIDException" => {
-                    return InvokeError::InvalidSubnetID(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidSubnetID(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidZipFileException" => {
-                    return InvokeError::InvalidZipFile(String::from(error_message));
+                    return RusotoError::Service(InvokeError::InvalidZipFile(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSAccessDeniedException" => {
-                    return InvokeError::KMSAccessDenied(String::from(error_message));
+                    return RusotoError::Service(InvokeError::KMSAccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSDisabledException" => {
-                    return InvokeError::KMSDisabled(String::from(error_message));
+                    return RusotoError::Service(InvokeError::KMSDisabled(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSInvalidStateException" => {
-                    return InvokeError::KMSInvalidState(String::from(error_message));
+                    return RusotoError::Service(InvokeError::KMSInvalidState(String::from(
+                        error_message,
+                    )));
                 }
                 "KMSNotFoundException" => {
-                    return InvokeError::KMSNotFound(String::from(error_message));
+                    return RusotoError::Service(InvokeError::KMSNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RequestTooLargeException" => {
-                    return InvokeError::RequestTooLarge(String::from(error_message));
+                    return RusotoError::Service(InvokeError::RequestTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InvokeError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return InvokeError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(InvokeError::Service(String::from(error_message)));
+                }
                 "SubnetIPAddressLimitReachedException" => {
-                    return InvokeError::SubnetIPAddressLimitReached(String::from(error_message));
+                    return RusotoError::Service(InvokeError::SubnetIPAddressLimitReached(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return InvokeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(InvokeError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedMediaTypeException" => {
-                    return InvokeError::UnsupportedMediaType(String::from(error_message));
+                    return RusotoError::Service(InvokeError::UnsupportedMediaType(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return InvokeError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InvokeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InvokeError {
-    fn from(err: serde_json::error::Error) -> InvokeError {
-        InvokeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InvokeError {
-    fn from(err: CredentialsError) -> InvokeError {
-        InvokeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InvokeError {
-    fn from(err: HttpDispatchError) -> InvokeError {
-        InvokeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InvokeError {
-    fn from(err: io::Error) -> InvokeError {
-        InvokeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InvokeError {
@@ -3759,11 +3199,6 @@ impl Error for InvokeError {
             InvokeError::SubnetIPAddressLimitReached(ref cause) => cause,
             InvokeError::TooManyRequests(ref cause) => cause,
             InvokeError::UnsupportedMediaType(ref cause) => cause,
-            InvokeError::Validation(ref cause) => cause,
-            InvokeError::Credentials(ref err) => err.description(),
-            InvokeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InvokeError::ParseError(ref cause) => cause,
-            InvokeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3778,22 +3213,12 @@ pub enum InvokeAsyncError {
     ResourceNotFound(String),
     /// <p>The AWS Lambda service encountered an internal error.</p>
     Service(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InvokeAsyncError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> InvokeAsyncError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InvokeAsyncError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3818,43 +3243,30 @@ impl InvokeAsyncError {
 
             match error_type {
                 "InvalidRequestContentException" => {
-                    return InvokeAsyncError::InvalidRequestContent(String::from(error_message));
+                    return RusotoError::Service(InvokeAsyncError::InvalidRequestContent(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRuntimeException" => {
-                    return InvokeAsyncError::InvalidRuntime(String::from(error_message));
+                    return RusotoError::Service(InvokeAsyncError::InvalidRuntime(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return InvokeAsyncError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(InvokeAsyncError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return InvokeAsyncError::Service(String::from(error_message)),
-                "ValidationException" => {
-                    return InvokeAsyncError::Validation(error_message.to_string());
+                "ServiceException" => {
+                    return RusotoError::Service(InvokeAsyncError::Service(String::from(
+                        error_message,
+                    )));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InvokeAsyncError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InvokeAsyncError {
-    fn from(err: serde_json::error::Error) -> InvokeAsyncError {
-        InvokeAsyncError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InvokeAsyncError {
-    fn from(err: CredentialsError) -> InvokeAsyncError {
-        InvokeAsyncError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InvokeAsyncError {
-    fn from(err: HttpDispatchError) -> InvokeAsyncError {
-        InvokeAsyncError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InvokeAsyncError {
-    fn from(err: io::Error) -> InvokeAsyncError {
-        InvokeAsyncError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InvokeAsyncError {
@@ -3869,11 +3281,6 @@ impl Error for InvokeAsyncError {
             InvokeAsyncError::InvalidRuntime(ref cause) => cause,
             InvokeAsyncError::ResourceNotFound(ref cause) => cause,
             InvokeAsyncError::Service(ref cause) => cause,
-            InvokeAsyncError::Validation(ref cause) => cause,
-            InvokeAsyncError::Credentials(ref err) => err.description(),
-            InvokeAsyncError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            InvokeAsyncError::ParseError(ref cause) => cause,
-            InvokeAsyncError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3888,22 +3295,12 @@ pub enum ListAliasesError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAliasesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3928,43 +3325,30 @@ impl ListAliasesError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListAliasesError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListAliasesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return ListAliasesError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(ListAliasesError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return ListAliasesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAliasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAliasesError {
-    fn from(err: serde_json::error::Error) -> ListAliasesError {
-        ListAliasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAliasesError {
-    fn from(err: CredentialsError) -> ListAliasesError {
-        ListAliasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAliasesError {
-    fn from(err: HttpDispatchError) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAliasesError {
-    fn from(err: io::Error) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -3979,11 +3363,6 @@ impl Error for ListAliasesError {
             ListAliasesError::ResourceNotFound(ref cause) => cause,
             ListAliasesError::Service(ref cause) => cause,
             ListAliasesError::TooManyRequests(ref cause) => cause,
-            ListAliasesError::Validation(ref cause) => cause,
-            ListAliasesError::Credentials(ref err) => err.description(),
-            ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAliasesError::ParseError(ref cause) => cause,
-            ListAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3998,22 +3377,12 @@ pub enum ListEventSourceMappingsError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListEventSourceMappingsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListEventSourceMappingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEventSourceMappingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4038,51 +3407,32 @@ impl ListEventSourceMappingsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListEventSourceMappingsError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListEventSourceMappingsError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return ListEventSourceMappingsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEventSourceMappingsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return ListEventSourceMappingsError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListEventSourceMappingsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEventSourceMappingsError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListEventSourceMappingsError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListEventSourceMappingsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListEventSourceMappingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListEventSourceMappingsError {
-    fn from(err: serde_json::error::Error) -> ListEventSourceMappingsError {
-        ListEventSourceMappingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListEventSourceMappingsError {
-    fn from(err: CredentialsError) -> ListEventSourceMappingsError {
-        ListEventSourceMappingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListEventSourceMappingsError {
-    fn from(err: HttpDispatchError) -> ListEventSourceMappingsError {
-        ListEventSourceMappingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListEventSourceMappingsError {
-    fn from(err: io::Error) -> ListEventSourceMappingsError {
-        ListEventSourceMappingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListEventSourceMappingsError {
@@ -4097,13 +3447,6 @@ impl Error for ListEventSourceMappingsError {
             ListEventSourceMappingsError::ResourceNotFound(ref cause) => cause,
             ListEventSourceMappingsError::Service(ref cause) => cause,
             ListEventSourceMappingsError::TooManyRequests(ref cause) => cause,
-            ListEventSourceMappingsError::Validation(ref cause) => cause,
-            ListEventSourceMappingsError::Credentials(ref err) => err.description(),
-            ListEventSourceMappingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListEventSourceMappingsError::ParseError(ref cause) => cause,
-            ListEventSourceMappingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4116,22 +3459,12 @@ pub enum ListFunctionsError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFunctionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFunctionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFunctionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4156,42 +3489,25 @@ impl ListFunctionsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListFunctionsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListFunctionsError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ListFunctionsError::Service(String::from(error_message));
+                    return RusotoError::Service(ListFunctionsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListFunctionsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListFunctionsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListFunctionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFunctionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFunctionsError {
-    fn from(err: serde_json::error::Error) -> ListFunctionsError {
-        ListFunctionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFunctionsError {
-    fn from(err: CredentialsError) -> ListFunctionsError {
-        ListFunctionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFunctionsError {
-    fn from(err: HttpDispatchError) -> ListFunctionsError {
-        ListFunctionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFunctionsError {
-    fn from(err: io::Error) -> ListFunctionsError {
-        ListFunctionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFunctionsError {
@@ -4205,11 +3521,6 @@ impl Error for ListFunctionsError {
             ListFunctionsError::InvalidParameterValue(ref cause) => cause,
             ListFunctionsError::Service(ref cause) => cause,
             ListFunctionsError::TooManyRequests(ref cause) => cause,
-            ListFunctionsError::Validation(ref cause) => cause,
-            ListFunctionsError::Credentials(ref err) => err.description(),
-            ListFunctionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFunctionsError::ParseError(ref cause) => cause,
-            ListFunctionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4224,22 +3535,12 @@ pub enum ListLayerVersionsError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListLayerVersionsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListLayerVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLayerVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4264,47 +3565,30 @@ impl ListLayerVersionsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListLayerVersionsError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListLayerVersionsError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListLayerVersionsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListLayerVersionsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return ListLayerVersionsError::Service(String::from(error_message));
+                    return RusotoError::Service(ListLayerVersionsError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListLayerVersionsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListLayerVersionsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListLayerVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListLayerVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListLayerVersionsError {
-    fn from(err: serde_json::error::Error) -> ListLayerVersionsError {
-        ListLayerVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListLayerVersionsError {
-    fn from(err: CredentialsError) -> ListLayerVersionsError {
-        ListLayerVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListLayerVersionsError {
-    fn from(err: HttpDispatchError) -> ListLayerVersionsError {
-        ListLayerVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListLayerVersionsError {
-    fn from(err: io::Error) -> ListLayerVersionsError {
-        ListLayerVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListLayerVersionsError {
@@ -4319,13 +3603,6 @@ impl Error for ListLayerVersionsError {
             ListLayerVersionsError::ResourceNotFound(ref cause) => cause,
             ListLayerVersionsError::Service(ref cause) => cause,
             ListLayerVersionsError::TooManyRequests(ref cause) => cause,
-            ListLayerVersionsError::Validation(ref cause) => cause,
-            ListLayerVersionsError::Credentials(ref err) => err.description(),
-            ListLayerVersionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListLayerVersionsError::ParseError(ref cause) => cause,
-            ListLayerVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4338,22 +3615,12 @@ pub enum ListLayersError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListLayersError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListLayersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLayersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4378,40 +3645,25 @@ impl ListLayersError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListLayersError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListLayersError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
-                "ServiceException" => return ListLayersError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(ListLayersError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return ListLayersError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListLayersError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListLayersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListLayersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListLayersError {
-    fn from(err: serde_json::error::Error) -> ListLayersError {
-        ListLayersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListLayersError {
-    fn from(err: CredentialsError) -> ListLayersError {
-        ListLayersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListLayersError {
-    fn from(err: HttpDispatchError) -> ListLayersError {
-        ListLayersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListLayersError {
-    fn from(err: io::Error) -> ListLayersError {
-        ListLayersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListLayersError {
@@ -4425,11 +3677,6 @@ impl Error for ListLayersError {
             ListLayersError::InvalidParameterValue(ref cause) => cause,
             ListLayersError::Service(ref cause) => cause,
             ListLayersError::TooManyRequests(ref cause) => cause,
-            ListLayersError::Validation(ref cause) => cause,
-            ListLayersError::Credentials(ref err) => err.description(),
-            ListLayersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListLayersError::ParseError(ref cause) => cause,
-            ListLayersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4444,22 +3691,12 @@ pub enum ListTagsError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4484,43 +3721,28 @@ impl ListTagsError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListTagsError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::InvalidParameterValue(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return ListTagsError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(ListTagsError::Service(String::from(error_message)));
+                }
                 "TooManyRequestsException" => {
-                    return ListTagsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsError {
-    fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsError {
-    fn from(err: CredentialsError) -> ListTagsError {
-        ListTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsError {
-    fn from(err: HttpDispatchError) -> ListTagsError {
-        ListTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsError {
-    fn from(err: io::Error) -> ListTagsError {
-        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsError {
@@ -4535,11 +3757,6 @@ impl Error for ListTagsError {
             ListTagsError::ResourceNotFound(ref cause) => cause,
             ListTagsError::Service(ref cause) => cause,
             ListTagsError::TooManyRequests(ref cause) => cause,
-            ListTagsError::Validation(ref cause) => cause,
-            ListTagsError::Credentials(ref err) => err.description(),
-            ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::ParseError(ref cause) => cause,
-            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4554,22 +3771,12 @@ pub enum ListVersionsByFunctionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVersionsByFunctionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListVersionsByFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVersionsByFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4594,49 +3801,30 @@ impl ListVersionsByFunctionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return ListVersionsByFunctionError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(ListVersionsByFunctionError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListVersionsByFunctionError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListVersionsByFunctionError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return ListVersionsByFunctionError::Service(String::from(error_message));
+                    return RusotoError::Service(ListVersionsByFunctionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListVersionsByFunctionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListVersionsByFunctionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListVersionsByFunctionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVersionsByFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVersionsByFunctionError {
-    fn from(err: serde_json::error::Error) -> ListVersionsByFunctionError {
-        ListVersionsByFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVersionsByFunctionError {
-    fn from(err: CredentialsError) -> ListVersionsByFunctionError {
-        ListVersionsByFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVersionsByFunctionError {
-    fn from(err: HttpDispatchError) -> ListVersionsByFunctionError {
-        ListVersionsByFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVersionsByFunctionError {
-    fn from(err: io::Error) -> ListVersionsByFunctionError {
-        ListVersionsByFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVersionsByFunctionError {
@@ -4651,13 +3839,6 @@ impl Error for ListVersionsByFunctionError {
             ListVersionsByFunctionError::ResourceNotFound(ref cause) => cause,
             ListVersionsByFunctionError::Service(ref cause) => cause,
             ListVersionsByFunctionError::TooManyRequests(ref cause) => cause,
-            ListVersionsByFunctionError::Validation(ref cause) => cause,
-            ListVersionsByFunctionError::Credentials(ref err) => err.description(),
-            ListVersionsByFunctionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVersionsByFunctionError::ParseError(ref cause) => cause,
-            ListVersionsByFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4674,22 +3855,12 @@ pub enum PublishLayerVersionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PublishLayerVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PublishLayerVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishLayerVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4714,52 +3885,35 @@ impl PublishLayerVersionError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return PublishLayerVersionError::CodeStorageExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(PublishLayerVersionError::CodeStorageExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterValueException" => {
-                    return PublishLayerVersionError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(PublishLayerVersionError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return PublishLayerVersionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PublishLayerVersionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return PublishLayerVersionError::Service(String::from(error_message));
+                    return RusotoError::Service(PublishLayerVersionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return PublishLayerVersionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(PublishLayerVersionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PublishLayerVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PublishLayerVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PublishLayerVersionError {
-    fn from(err: serde_json::error::Error) -> PublishLayerVersionError {
-        PublishLayerVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PublishLayerVersionError {
-    fn from(err: CredentialsError) -> PublishLayerVersionError {
-        PublishLayerVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PublishLayerVersionError {
-    fn from(err: HttpDispatchError) -> PublishLayerVersionError {
-        PublishLayerVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PublishLayerVersionError {
-    fn from(err: io::Error) -> PublishLayerVersionError {
-        PublishLayerVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PublishLayerVersionError {
@@ -4775,13 +3929,6 @@ impl Error for PublishLayerVersionError {
             PublishLayerVersionError::ResourceNotFound(ref cause) => cause,
             PublishLayerVersionError::Service(ref cause) => cause,
             PublishLayerVersionError::TooManyRequests(ref cause) => cause,
-            PublishLayerVersionError::Validation(ref cause) => cause,
-            PublishLayerVersionError::Credentials(ref err) => err.description(),
-            PublishLayerVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PublishLayerVersionError::ParseError(ref cause) => cause,
-            PublishLayerVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4800,22 +3947,12 @@ pub enum PublishVersionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PublishVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PublishVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4840,51 +3977,40 @@ impl PublishVersionError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return PublishVersionError::CodeStorageExceeded(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::CodeStorageExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return PublishVersionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return PublishVersionError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PublishVersionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return PublishVersionError::Service(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return PublishVersionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(PublishVersionError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return PublishVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PublishVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PublishVersionError {
-    fn from(err: serde_json::error::Error) -> PublishVersionError {
-        PublishVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PublishVersionError {
-    fn from(err: CredentialsError) -> PublishVersionError {
-        PublishVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PublishVersionError {
-    fn from(err: HttpDispatchError) -> PublishVersionError {
-        PublishVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PublishVersionError {
-    fn from(err: io::Error) -> PublishVersionError {
-        PublishVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PublishVersionError {
@@ -4901,11 +4027,6 @@ impl Error for PublishVersionError {
             PublishVersionError::ResourceNotFound(ref cause) => cause,
             PublishVersionError::Service(ref cause) => cause,
             PublishVersionError::TooManyRequests(ref cause) => cause,
-            PublishVersionError::Validation(ref cause) => cause,
-            PublishVersionError::Credentials(ref err) => err.description(),
-            PublishVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PublishVersionError::ParseError(ref cause) => cause,
-            PublishVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4920,22 +4041,12 @@ pub enum PutFunctionConcurrencyError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutFunctionConcurrencyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutFunctionConcurrencyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFunctionConcurrencyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4960,49 +4071,30 @@ impl PutFunctionConcurrencyError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return PutFunctionConcurrencyError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFunctionConcurrencyError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutFunctionConcurrencyError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFunctionConcurrencyError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return PutFunctionConcurrencyError::Service(String::from(error_message));
+                    return RusotoError::Service(PutFunctionConcurrencyError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return PutFunctionConcurrencyError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(PutFunctionConcurrencyError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutFunctionConcurrencyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutFunctionConcurrencyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutFunctionConcurrencyError {
-    fn from(err: serde_json::error::Error) -> PutFunctionConcurrencyError {
-        PutFunctionConcurrencyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutFunctionConcurrencyError {
-    fn from(err: CredentialsError) -> PutFunctionConcurrencyError {
-        PutFunctionConcurrencyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutFunctionConcurrencyError {
-    fn from(err: HttpDispatchError) -> PutFunctionConcurrencyError {
-        PutFunctionConcurrencyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutFunctionConcurrencyError {
-    fn from(err: io::Error) -> PutFunctionConcurrencyError {
-        PutFunctionConcurrencyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutFunctionConcurrencyError {
@@ -5017,13 +4109,6 @@ impl Error for PutFunctionConcurrencyError {
             PutFunctionConcurrencyError::ResourceNotFound(ref cause) => cause,
             PutFunctionConcurrencyError::Service(ref cause) => cause,
             PutFunctionConcurrencyError::TooManyRequests(ref cause) => cause,
-            PutFunctionConcurrencyError::Validation(ref cause) => cause,
-            PutFunctionConcurrencyError::Credentials(ref err) => err.description(),
-            PutFunctionConcurrencyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutFunctionConcurrencyError::ParseError(ref cause) => cause,
-            PutFunctionConcurrencyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5040,22 +4125,14 @@ pub enum RemoveLayerVersionPermissionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveLayerVersionPermissionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveLayerVersionPermissionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveLayerVersionPermissionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5080,56 +4157,41 @@ impl RemoveLayerVersionPermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RemoveLayerVersionPermissionError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveLayerVersionPermissionError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PreconditionFailedException" => {
-                    return RemoveLayerVersionPermissionError::PreconditionFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveLayerVersionPermissionError::PreconditionFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return RemoveLayerVersionPermissionError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RemoveLayerVersionPermissionError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ServiceException" => {
-                    return RemoveLayerVersionPermissionError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return RemoveLayerVersionPermissionError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveLayerVersionPermissionError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RemoveLayerVersionPermissionError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RemoveLayerVersionPermissionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveLayerVersionPermissionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveLayerVersionPermissionError {
-    fn from(err: serde_json::error::Error) -> RemoveLayerVersionPermissionError {
-        RemoveLayerVersionPermissionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveLayerVersionPermissionError {
-    fn from(err: CredentialsError) -> RemoveLayerVersionPermissionError {
-        RemoveLayerVersionPermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveLayerVersionPermissionError {
-    fn from(err: HttpDispatchError) -> RemoveLayerVersionPermissionError {
-        RemoveLayerVersionPermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveLayerVersionPermissionError {
-    fn from(err: io::Error) -> RemoveLayerVersionPermissionError {
-        RemoveLayerVersionPermissionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveLayerVersionPermissionError {
@@ -5145,13 +4207,6 @@ impl Error for RemoveLayerVersionPermissionError {
             RemoveLayerVersionPermissionError::ResourceNotFound(ref cause) => cause,
             RemoveLayerVersionPermissionError::Service(ref cause) => cause,
             RemoveLayerVersionPermissionError::TooManyRequests(ref cause) => cause,
-            RemoveLayerVersionPermissionError::Validation(ref cause) => cause,
-            RemoveLayerVersionPermissionError::Credentials(ref err) => err.description(),
-            RemoveLayerVersionPermissionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveLayerVersionPermissionError::ParseError(ref cause) => cause,
-            RemoveLayerVersionPermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5168,22 +4223,12 @@ pub enum RemovePermissionError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemovePermissionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemovePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5208,48 +4253,35 @@ impl RemovePermissionError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return RemovePermissionError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(RemovePermissionError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return RemovePermissionError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(RemovePermissionError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return RemovePermissionError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(RemovePermissionError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return RemovePermissionError::Service(String::from(error_message));
+                    return RusotoError::Service(RemovePermissionError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return RemovePermissionError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(RemovePermissionError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RemovePermissionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemovePermissionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemovePermissionError {
-    fn from(err: serde_json::error::Error) -> RemovePermissionError {
-        RemovePermissionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemovePermissionError {
-    fn from(err: CredentialsError) -> RemovePermissionError {
-        RemovePermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemovePermissionError {
-    fn from(err: HttpDispatchError) -> RemovePermissionError {
-        RemovePermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemovePermissionError {
-    fn from(err: io::Error) -> RemovePermissionError {
-        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemovePermissionError {
@@ -5265,11 +4297,6 @@ impl Error for RemovePermissionError {
             RemovePermissionError::ResourceNotFound(ref cause) => cause,
             RemovePermissionError::Service(ref cause) => cause,
             RemovePermissionError::TooManyRequests(ref cause) => cause,
-            RemovePermissionError::Validation(ref cause) => cause,
-            RemovePermissionError::Credentials(ref err) => err.description(),
-            RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemovePermissionError::ParseError(ref cause) => cause,
-            RemovePermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5284,22 +4311,12 @@ pub enum TagResourceError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5324,43 +4341,30 @@ impl TagResourceError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return TagResourceError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return TagResourceError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(TagResourceError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return TagResourceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5375,11 +4379,6 @@ impl Error for TagResourceError {
             TagResourceError::ResourceNotFound(ref cause) => cause,
             TagResourceError::Service(ref cause) => cause,
             TagResourceError::TooManyRequests(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5394,22 +4393,12 @@ pub enum UntagResourceError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5434,45 +4423,30 @@ impl UntagResourceError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UntagResourceError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceException" => {
-                    return UntagResourceError::Service(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UntagResourceError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5487,11 +4461,6 @@ impl Error for UntagResourceError {
             UntagResourceError::ResourceNotFound(ref cause) => cause,
             UntagResourceError::Service(ref cause) => cause,
             UntagResourceError::TooManyRequests(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5508,22 +4477,12 @@ pub enum UpdateAliasError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateAliasError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5548,46 +4507,35 @@ impl UpdateAliasError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UpdateAliasError::InvalidParameterValue(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::InvalidParameterValue(
+                        String::from(error_message),
+                    ));
                 }
                 "PreconditionFailedException" => {
-                    return UpdateAliasError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::PreconditionFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateAliasError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ServiceException" => return UpdateAliasError::Service(String::from(error_message)),
+                "ServiceException" => {
+                    return RusotoError::Service(UpdateAliasError::Service(String::from(
+                        error_message,
+                    )));
+                }
                 "TooManyRequestsException" => {
-                    return UpdateAliasError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateAliasError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateAliasError {
-    fn from(err: serde_json::error::Error) -> UpdateAliasError {
-        UpdateAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAliasError {
-    fn from(err: CredentialsError) -> UpdateAliasError {
-        UpdateAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAliasError {
-    fn from(err: HttpDispatchError) -> UpdateAliasError {
-        UpdateAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAliasError {
-    fn from(err: io::Error) -> UpdateAliasError {
-        UpdateAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateAliasError {
@@ -5603,11 +4551,6 @@ impl Error for UpdateAliasError {
             UpdateAliasError::ResourceNotFound(ref cause) => cause,
             UpdateAliasError::Service(ref cause) => cause,
             UpdateAliasError::TooManyRequests(ref cause) => cause,
-            UpdateAliasError::Validation(ref cause) => cause,
-            UpdateAliasError::Credentials(ref err) => err.description(),
-            UpdateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateAliasError::ParseError(ref cause) => cause,
-            UpdateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5626,22 +4569,12 @@ pub enum UpdateEventSourceMappingError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEventSourceMappingError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateEventSourceMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEventSourceMappingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5666,59 +4599,42 @@ impl UpdateEventSourceMappingError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UpdateEventSourceMappingError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateEventSourceMappingError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceConflictException" => {
-                    return UpdateEventSourceMappingError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEventSourceMappingError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateEventSourceMappingError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateEventSourceMappingError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateEventSourceMappingError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEventSourceMappingError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return UpdateEventSourceMappingError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return UpdateEventSourceMappingError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEventSourceMappingError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateEventSourceMappingError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEventSourceMappingError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateEventSourceMappingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateEventSourceMappingError {
-    fn from(err: serde_json::error::Error) -> UpdateEventSourceMappingError {
-        UpdateEventSourceMappingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateEventSourceMappingError {
-    fn from(err: CredentialsError) -> UpdateEventSourceMappingError {
-        UpdateEventSourceMappingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateEventSourceMappingError {
-    fn from(err: HttpDispatchError) -> UpdateEventSourceMappingError {
-        UpdateEventSourceMappingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateEventSourceMappingError {
-    fn from(err: io::Error) -> UpdateEventSourceMappingError {
-        UpdateEventSourceMappingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateEventSourceMappingError {
@@ -5735,13 +4651,6 @@ impl Error for UpdateEventSourceMappingError {
             UpdateEventSourceMappingError::ResourceNotFound(ref cause) => cause,
             UpdateEventSourceMappingError::Service(ref cause) => cause,
             UpdateEventSourceMappingError::TooManyRequests(ref cause) => cause,
-            UpdateEventSourceMappingError::Validation(ref cause) => cause,
-            UpdateEventSourceMappingError::Credentials(ref err) => err.description(),
-            UpdateEventSourceMappingError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateEventSourceMappingError::ParseError(ref cause) => cause,
-            UpdateEventSourceMappingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5760,22 +4669,12 @@ pub enum UpdateFunctionCodeError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFunctionCodeError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionCodeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionCodeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5800,53 +4699,40 @@ impl UpdateFunctionCodeError {
 
             match error_type {
                 "CodeStorageExceededException" => {
-                    return UpdateFunctionCodeError::CodeStorageExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateFunctionCodeError::CodeStorageExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterValueException" => {
-                    return UpdateFunctionCodeError::InvalidParameterValue(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFunctionCodeError::InvalidParameterValue(
+                        String::from(error_message),
                     ));
                 }
                 "PreconditionFailedException" => {
-                    return UpdateFunctionCodeError::PreconditionFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateFunctionCodeError::PreconditionFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFunctionCodeError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateFunctionCodeError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceException" => {
-                    return UpdateFunctionCodeError::Service(String::from(error_message));
+                    return RusotoError::Service(UpdateFunctionCodeError::Service(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateFunctionCodeError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateFunctionCodeError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateFunctionCodeError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFunctionCodeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFunctionCodeError {
-    fn from(err: serde_json::error::Error) -> UpdateFunctionCodeError {
-        UpdateFunctionCodeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFunctionCodeError {
-    fn from(err: CredentialsError) -> UpdateFunctionCodeError {
-        UpdateFunctionCodeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFunctionCodeError {
-    fn from(err: HttpDispatchError) -> UpdateFunctionCodeError {
-        UpdateFunctionCodeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFunctionCodeError {
-    fn from(err: io::Error) -> UpdateFunctionCodeError {
-        UpdateFunctionCodeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFunctionCodeError {
@@ -5863,13 +4749,6 @@ impl Error for UpdateFunctionCodeError {
             UpdateFunctionCodeError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionCodeError::Service(ref cause) => cause,
             UpdateFunctionCodeError::TooManyRequests(ref cause) => cause,
-            UpdateFunctionCodeError::Validation(ref cause) => cause,
-            UpdateFunctionCodeError::Credentials(ref err) => err.description(),
-            UpdateFunctionCodeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateFunctionCodeError::ParseError(ref cause) => cause,
-            UpdateFunctionCodeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5888,22 +4767,14 @@ pub enum UpdateFunctionConfigurationError {
     Service(String),
     /// <p>Request throughput limit exceeded.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFunctionConfigurationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateFunctionConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5928,61 +4799,44 @@ impl UpdateFunctionConfigurationError {
 
             match error_type {
                 "InvalidParameterValueException" => {
-                    return UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::InvalidParameterValue(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PreconditionFailedException" => {
-                    return UpdateFunctionConfigurationError::PreconditionFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateFunctionConfigurationError::PreconditionFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceConflictException" => {
-                    return UpdateFunctionConfigurationError::ResourceConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFunctionConfigurationError::ResourceConflict(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFunctionConfigurationError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFunctionConfigurationError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceException" => {
-                    return UpdateFunctionConfigurationError::Service(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return UpdateFunctionConfigurationError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateFunctionConfigurationError::Service(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateFunctionConfigurationError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateFunctionConfigurationError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFunctionConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFunctionConfigurationError {
-    fn from(err: serde_json::error::Error) -> UpdateFunctionConfigurationError {
-        UpdateFunctionConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFunctionConfigurationError {
-    fn from(err: CredentialsError) -> UpdateFunctionConfigurationError {
-        UpdateFunctionConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFunctionConfigurationError {
-    fn from(err: HttpDispatchError) -> UpdateFunctionConfigurationError {
-        UpdateFunctionConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFunctionConfigurationError {
-    fn from(err: io::Error) -> UpdateFunctionConfigurationError {
-        UpdateFunctionConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFunctionConfigurationError {
@@ -5999,13 +4853,6 @@ impl Error for UpdateFunctionConfigurationError {
             UpdateFunctionConfigurationError::ResourceNotFound(ref cause) => cause,
             UpdateFunctionConfigurationError::Service(ref cause) => cause,
             UpdateFunctionConfigurationError::TooManyRequests(ref cause) => cause,
-            UpdateFunctionConfigurationError::Validation(ref cause) => cause,
-            UpdateFunctionConfigurationError::Credentials(ref err) => err.description(),
-            UpdateFunctionConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateFunctionConfigurationError::ParseError(ref cause) => cause,
-            UpdateFunctionConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }

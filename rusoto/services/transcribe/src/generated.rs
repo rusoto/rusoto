@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -434,20 +431,10 @@ pub enum CreateVocabularyError {
     InternalFailure(String),
     /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateVocabularyError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateVocabularyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateVocabularyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -460,45 +447,30 @@ impl CreateVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateVocabularyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateVocabularyError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return CreateVocabularyError::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateVocabularyError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return CreateVocabularyError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateVocabularyError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateVocabularyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateVocabularyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateVocabularyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateVocabularyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateVocabularyError {
-    fn from(err: serde_json::error::Error) -> CreateVocabularyError {
-        CreateVocabularyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateVocabularyError {
-    fn from(err: CredentialsError) -> CreateVocabularyError {
-        CreateVocabularyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateVocabularyError {
-    fn from(err: HttpDispatchError) -> CreateVocabularyError {
-        CreateVocabularyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateVocabularyError {
-    fn from(err: io::Error) -> CreateVocabularyError {
-        CreateVocabularyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateVocabularyError {
@@ -513,11 +485,6 @@ impl Error for CreateVocabularyError {
             CreateVocabularyError::Conflict(ref cause) => cause,
             CreateVocabularyError::InternalFailure(ref cause) => cause,
             CreateVocabularyError::LimitExceeded(ref cause) => cause,
-            CreateVocabularyError::Validation(ref cause) => cause,
-            CreateVocabularyError::Credentials(ref err) => err.description(),
-            CreateVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateVocabularyError::ParseError(ref cause) => cause,
-            CreateVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -530,20 +497,10 @@ pub enum DeleteTranscriptionJobError {
     InternalFailure(String),
     /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTranscriptionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTranscriptionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTranscriptionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -556,42 +513,25 @@ impl DeleteTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteTranscriptionJobError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteTranscriptionJobError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return DeleteTranscriptionJobError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteTranscriptionJobError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteTranscriptionJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteTranscriptionJobError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTranscriptionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTranscriptionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTranscriptionJobError {
-    fn from(err: serde_json::error::Error) -> DeleteTranscriptionJobError {
-        DeleteTranscriptionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTranscriptionJobError {
-    fn from(err: CredentialsError) -> DeleteTranscriptionJobError {
-        DeleteTranscriptionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTranscriptionJobError {
-    fn from(err: HttpDispatchError) -> DeleteTranscriptionJobError {
-        DeleteTranscriptionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTranscriptionJobError {
-    fn from(err: io::Error) -> DeleteTranscriptionJobError {
-        DeleteTranscriptionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTranscriptionJobError {
@@ -605,13 +545,6 @@ impl Error for DeleteTranscriptionJobError {
             DeleteTranscriptionJobError::BadRequest(ref cause) => cause,
             DeleteTranscriptionJobError::InternalFailure(ref cause) => cause,
             DeleteTranscriptionJobError::LimitExceeded(ref cause) => cause,
-            DeleteTranscriptionJobError::Validation(ref cause) => cause,
-            DeleteTranscriptionJobError::Credentials(ref err) => err.description(),
-            DeleteTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTranscriptionJobError::ParseError(ref cause) => cause,
-            DeleteTranscriptionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -626,20 +559,10 @@ pub enum DeleteVocabularyError {
     LimitExceeded(String),
     /// <p>We can't find the requested resource. Check the name and try your request again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteVocabularyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVocabularyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteVocabularyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -652,45 +575,30 @@ impl DeleteVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteVocabularyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteVocabularyError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DeleteVocabularyError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteVocabularyError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteVocabularyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteVocabularyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteVocabularyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteVocabularyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteVocabularyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteVocabularyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteVocabularyError {
-    fn from(err: serde_json::error::Error) -> DeleteVocabularyError {
-        DeleteVocabularyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVocabularyError {
-    fn from(err: CredentialsError) -> DeleteVocabularyError {
-        DeleteVocabularyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVocabularyError {
-    fn from(err: HttpDispatchError) -> DeleteVocabularyError {
-        DeleteVocabularyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVocabularyError {
-    fn from(err: io::Error) -> DeleteVocabularyError {
-        DeleteVocabularyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteVocabularyError {
@@ -705,11 +613,6 @@ impl Error for DeleteVocabularyError {
             DeleteVocabularyError::InternalFailure(ref cause) => cause,
             DeleteVocabularyError::LimitExceeded(ref cause) => cause,
             DeleteVocabularyError::NotFound(ref cause) => cause,
-            DeleteVocabularyError::Validation(ref cause) => cause,
-            DeleteVocabularyError::Credentials(ref err) => err.description(),
-            DeleteVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteVocabularyError::ParseError(ref cause) => cause,
-            DeleteVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -724,20 +627,10 @@ pub enum GetTranscriptionJobError {
     LimitExceeded(String),
     /// <p>We can't find the requested resource. Check the name and try your request again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTranscriptionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTranscriptionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTranscriptionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -750,45 +643,30 @@ impl GetTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return GetTranscriptionJobError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetTranscriptionJobError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetTranscriptionJobError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetTranscriptionJobError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetTranscriptionJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetTranscriptionJobError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetTranscriptionJobError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetTranscriptionJobError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTranscriptionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTranscriptionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTranscriptionJobError {
-    fn from(err: serde_json::error::Error) -> GetTranscriptionJobError {
-        GetTranscriptionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTranscriptionJobError {
-    fn from(err: CredentialsError) -> GetTranscriptionJobError {
-        GetTranscriptionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTranscriptionJobError {
-    fn from(err: HttpDispatchError) -> GetTranscriptionJobError {
-        GetTranscriptionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTranscriptionJobError {
-    fn from(err: io::Error) -> GetTranscriptionJobError {
-        GetTranscriptionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTranscriptionJobError {
@@ -803,13 +681,6 @@ impl Error for GetTranscriptionJobError {
             GetTranscriptionJobError::InternalFailure(ref cause) => cause,
             GetTranscriptionJobError::LimitExceeded(ref cause) => cause,
             GetTranscriptionJobError::NotFound(ref cause) => cause,
-            GetTranscriptionJobError::Validation(ref cause) => cause,
-            GetTranscriptionJobError::Credentials(ref err) => err.description(),
-            GetTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetTranscriptionJobError::ParseError(ref cause) => cause,
-            GetTranscriptionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -824,20 +695,10 @@ pub enum GetVocabularyError {
     LimitExceeded(String),
     /// <p>We can't find the requested resource. Check the name and try your request again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetVocabularyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetVocabularyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetVocabularyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -850,45 +711,30 @@ impl GetVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return GetVocabularyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(GetVocabularyError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return GetVocabularyError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(GetVocabularyError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetVocabularyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetVocabularyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetVocabularyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetVocabularyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetVocabularyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetVocabularyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetVocabularyError {
-    fn from(err: serde_json::error::Error) -> GetVocabularyError {
-        GetVocabularyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetVocabularyError {
-    fn from(err: CredentialsError) -> GetVocabularyError {
-        GetVocabularyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetVocabularyError {
-    fn from(err: HttpDispatchError) -> GetVocabularyError {
-        GetVocabularyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetVocabularyError {
-    fn from(err: io::Error) -> GetVocabularyError {
-        GetVocabularyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetVocabularyError {
@@ -903,11 +749,6 @@ impl Error for GetVocabularyError {
             GetVocabularyError::InternalFailure(ref cause) => cause,
             GetVocabularyError::LimitExceeded(ref cause) => cause,
             GetVocabularyError::NotFound(ref cause) => cause,
-            GetVocabularyError::Validation(ref cause) => cause,
-            GetVocabularyError::Credentials(ref err) => err.description(),
-            GetVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetVocabularyError::ParseError(ref cause) => cause,
-            GetVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -920,20 +761,10 @@ pub enum ListTranscriptionJobsError {
     InternalFailure(String),
     /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTranscriptionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTranscriptionJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTranscriptionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -946,42 +777,25 @@ impl ListTranscriptionJobsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListTranscriptionJobsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListTranscriptionJobsError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalFailureException" => {
-                    return ListTranscriptionJobsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListTranscriptionJobsError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListTranscriptionJobsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListTranscriptionJobsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTranscriptionJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTranscriptionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTranscriptionJobsError {
-    fn from(err: serde_json::error::Error) -> ListTranscriptionJobsError {
-        ListTranscriptionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTranscriptionJobsError {
-    fn from(err: CredentialsError) -> ListTranscriptionJobsError {
-        ListTranscriptionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTranscriptionJobsError {
-    fn from(err: HttpDispatchError) -> ListTranscriptionJobsError {
-        ListTranscriptionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTranscriptionJobsError {
-    fn from(err: io::Error) -> ListTranscriptionJobsError {
-        ListTranscriptionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTranscriptionJobsError {
@@ -995,13 +809,6 @@ impl Error for ListTranscriptionJobsError {
             ListTranscriptionJobsError::BadRequest(ref cause) => cause,
             ListTranscriptionJobsError::InternalFailure(ref cause) => cause,
             ListTranscriptionJobsError::LimitExceeded(ref cause) => cause,
-            ListTranscriptionJobsError::Validation(ref cause) => cause,
-            ListTranscriptionJobsError::Credentials(ref err) => err.description(),
-            ListTranscriptionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTranscriptionJobsError::ParseError(ref cause) => cause,
-            ListTranscriptionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1014,20 +821,10 @@ pub enum ListVocabulariesError {
     InternalFailure(String),
     /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListVocabulariesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVocabulariesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListVocabulariesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1040,42 +837,25 @@ impl ListVocabulariesError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListVocabulariesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListVocabulariesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return ListVocabulariesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListVocabulariesError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListVocabulariesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListVocabulariesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListVocabulariesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListVocabulariesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListVocabulariesError {
-    fn from(err: serde_json::error::Error) -> ListVocabulariesError {
-        ListVocabulariesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListVocabulariesError {
-    fn from(err: CredentialsError) -> ListVocabulariesError {
-        ListVocabulariesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVocabulariesError {
-    fn from(err: HttpDispatchError) -> ListVocabulariesError {
-        ListVocabulariesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVocabulariesError {
-    fn from(err: io::Error) -> ListVocabulariesError {
-        ListVocabulariesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListVocabulariesError {
@@ -1089,11 +869,6 @@ impl Error for ListVocabulariesError {
             ListVocabulariesError::BadRequest(ref cause) => cause,
             ListVocabulariesError::InternalFailure(ref cause) => cause,
             ListVocabulariesError::LimitExceeded(ref cause) => cause,
-            ListVocabulariesError::Validation(ref cause) => cause,
-            ListVocabulariesError::Credentials(ref err) => err.description(),
-            ListVocabulariesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListVocabulariesError::ParseError(ref cause) => cause,
-            ListVocabulariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1108,20 +883,10 @@ pub enum StartTranscriptionJobError {
     InternalFailure(String),
     /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartTranscriptionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartTranscriptionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTranscriptionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1134,45 +899,30 @@ impl StartTranscriptionJobError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return StartTranscriptionJobError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(StartTranscriptionJobError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return StartTranscriptionJobError::Conflict(String::from(error_message));
+                    return RusotoError::Service(StartTranscriptionJobError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return StartTranscriptionJobError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(StartTranscriptionJobError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return StartTranscriptionJobError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StartTranscriptionJobError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StartTranscriptionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartTranscriptionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartTranscriptionJobError {
-    fn from(err: serde_json::error::Error) -> StartTranscriptionJobError {
-        StartTranscriptionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartTranscriptionJobError {
-    fn from(err: CredentialsError) -> StartTranscriptionJobError {
-        StartTranscriptionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartTranscriptionJobError {
-    fn from(err: HttpDispatchError) -> StartTranscriptionJobError {
-        StartTranscriptionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartTranscriptionJobError {
-    fn from(err: io::Error) -> StartTranscriptionJobError {
-        StartTranscriptionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartTranscriptionJobError {
@@ -1187,13 +937,6 @@ impl Error for StartTranscriptionJobError {
             StartTranscriptionJobError::Conflict(ref cause) => cause,
             StartTranscriptionJobError::InternalFailure(ref cause) => cause,
             StartTranscriptionJobError::LimitExceeded(ref cause) => cause,
-            StartTranscriptionJobError::Validation(ref cause) => cause,
-            StartTranscriptionJobError::Credentials(ref err) => err.description(),
-            StartTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartTranscriptionJobError::ParseError(ref cause) => cause,
-            StartTranscriptionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1210,20 +953,10 @@ pub enum UpdateVocabularyError {
     LimitExceeded(String),
     /// <p>We can't find the requested resource. Check the name and try your request again.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateVocabularyError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateVocabularyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateVocabularyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1236,48 +969,35 @@ impl UpdateVocabularyError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateVocabularyError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateVocabularyError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return UpdateVocabularyError::Conflict(String::from(error_message));
+                    return RusotoError::Service(UpdateVocabularyError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return UpdateVocabularyError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateVocabularyError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateVocabularyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateVocabularyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateVocabularyError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateVocabularyError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateVocabularyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateVocabularyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateVocabularyError {
-    fn from(err: serde_json::error::Error) -> UpdateVocabularyError {
-        UpdateVocabularyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateVocabularyError {
-    fn from(err: CredentialsError) -> UpdateVocabularyError {
-        UpdateVocabularyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateVocabularyError {
-    fn from(err: HttpDispatchError) -> UpdateVocabularyError {
-        UpdateVocabularyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateVocabularyError {
-    fn from(err: io::Error) -> UpdateVocabularyError {
-        UpdateVocabularyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateVocabularyError {
@@ -1293,11 +1013,6 @@ impl Error for UpdateVocabularyError {
             UpdateVocabularyError::InternalFailure(ref cause) => cause,
             UpdateVocabularyError::LimitExceeded(ref cause) => cause,
             UpdateVocabularyError::NotFound(ref cause) => cause,
-            UpdateVocabularyError::Validation(ref cause) => cause,
-            UpdateVocabularyError::Credentials(ref err) => err.description(),
-            UpdateVocabularyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateVocabularyError::ParseError(ref cause) => cause,
-            UpdateVocabularyError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -485,20 +482,10 @@ pub enum CreateScalingPlanError {
     InternalService(String),
     /// <p>Your account exceeded a limit. This exception is thrown when a per-account resource limit is exceeded.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateScalingPlanError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateScalingPlanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScalingPlanError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -511,42 +498,25 @@ impl CreateScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return CreateScalingPlanError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(CreateScalingPlanError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateScalingPlanError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateScalingPlanError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateScalingPlanError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateScalingPlanError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateScalingPlanError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateScalingPlanError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateScalingPlanError {
-    fn from(err: serde_json::error::Error) -> CreateScalingPlanError {
-        CreateScalingPlanError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateScalingPlanError {
-    fn from(err: CredentialsError) -> CreateScalingPlanError {
-        CreateScalingPlanError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateScalingPlanError {
-    fn from(err: HttpDispatchError) -> CreateScalingPlanError {
-        CreateScalingPlanError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateScalingPlanError {
-    fn from(err: io::Error) -> CreateScalingPlanError {
-        CreateScalingPlanError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateScalingPlanError {
@@ -560,13 +530,6 @@ impl Error for CreateScalingPlanError {
             CreateScalingPlanError::ConcurrentUpdate(ref cause) => cause,
             CreateScalingPlanError::InternalService(ref cause) => cause,
             CreateScalingPlanError::LimitExceeded(ref cause) => cause,
-            CreateScalingPlanError::Validation(ref cause) => cause,
-            CreateScalingPlanError::Credentials(ref err) => err.description(),
-            CreateScalingPlanError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateScalingPlanError::ParseError(ref cause) => cause,
-            CreateScalingPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -579,20 +542,10 @@ pub enum DeleteScalingPlanError {
     InternalService(String),
     /// <p>The specified object could not be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteScalingPlanError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteScalingPlanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScalingPlanError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -605,42 +558,25 @@ impl DeleteScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DeleteScalingPlanError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPlanError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteScalingPlanError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPlanError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ObjectNotFoundException" => {
-                    return DeleteScalingPlanError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteScalingPlanError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteScalingPlanError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteScalingPlanError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteScalingPlanError {
-    fn from(err: serde_json::error::Error) -> DeleteScalingPlanError {
-        DeleteScalingPlanError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteScalingPlanError {
-    fn from(err: CredentialsError) -> DeleteScalingPlanError {
-        DeleteScalingPlanError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteScalingPlanError {
-    fn from(err: HttpDispatchError) -> DeleteScalingPlanError {
-        DeleteScalingPlanError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteScalingPlanError {
-    fn from(err: io::Error) -> DeleteScalingPlanError {
-        DeleteScalingPlanError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteScalingPlanError {
@@ -654,13 +590,6 @@ impl Error for DeleteScalingPlanError {
             DeleteScalingPlanError::ConcurrentUpdate(ref cause) => cause,
             DeleteScalingPlanError::InternalService(ref cause) => cause,
             DeleteScalingPlanError::ObjectNotFound(ref cause) => cause,
-            DeleteScalingPlanError::Validation(ref cause) => cause,
-            DeleteScalingPlanError::Credentials(ref err) => err.description(),
-            DeleteScalingPlanError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteScalingPlanError::ParseError(ref cause) => cause,
-            DeleteScalingPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -673,20 +602,12 @@ pub enum DescribeScalingPlanResourcesError {
     InternalService(String),
     /// <p>The token provided is not valid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingPlanResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingPlanResourcesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeScalingPlanResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -699,48 +620,29 @@ impl DescribeScalingPlanResourcesError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalingPlanResourcesError::ConcurrentUpdate(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeScalingPlanResourcesError::ConcurrentUpdate(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServiceException" => {
-                    return DescribeScalingPlanResourcesError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeScalingPlanResourcesError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalingPlanResourcesError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeScalingPlanResourcesError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeScalingPlanResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScalingPlanResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScalingPlanResourcesError {
-    fn from(err: serde_json::error::Error) -> DescribeScalingPlanResourcesError {
-        DescribeScalingPlanResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalingPlanResourcesError {
-    fn from(err: CredentialsError) -> DescribeScalingPlanResourcesError {
-        DescribeScalingPlanResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalingPlanResourcesError {
-    fn from(err: HttpDispatchError) -> DescribeScalingPlanResourcesError {
-        DescribeScalingPlanResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalingPlanResourcesError {
-    fn from(err: io::Error) -> DescribeScalingPlanResourcesError {
-        DescribeScalingPlanResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScalingPlanResourcesError {
@@ -754,13 +656,6 @@ impl Error for DescribeScalingPlanResourcesError {
             DescribeScalingPlanResourcesError::ConcurrentUpdate(ref cause) => cause,
             DescribeScalingPlanResourcesError::InternalService(ref cause) => cause,
             DescribeScalingPlanResourcesError::InvalidNextToken(ref cause) => cause,
-            DescribeScalingPlanResourcesError::Validation(ref cause) => cause,
-            DescribeScalingPlanResourcesError::Credentials(ref err) => err.description(),
-            DescribeScalingPlanResourcesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalingPlanResourcesError::ParseError(ref cause) => cause,
-            DescribeScalingPlanResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -773,20 +668,10 @@ pub enum DescribeScalingPlansError {
     InternalService(String),
     /// <p>The token provided is not valid.</p>
     InvalidNextToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeScalingPlansError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeScalingPlansError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeScalingPlansError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -799,42 +684,25 @@ impl DescribeScalingPlansError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return DescribeScalingPlansError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(DescribeScalingPlansError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DescribeScalingPlansError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DescribeScalingPlansError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeScalingPlansError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeScalingPlansError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeScalingPlansError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeScalingPlansError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeScalingPlansError {
-    fn from(err: serde_json::error::Error) -> DescribeScalingPlansError {
-        DescribeScalingPlansError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeScalingPlansError {
-    fn from(err: CredentialsError) -> DescribeScalingPlansError {
-        DescribeScalingPlansError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeScalingPlansError {
-    fn from(err: HttpDispatchError) -> DescribeScalingPlansError {
-        DescribeScalingPlansError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeScalingPlansError {
-    fn from(err: io::Error) -> DescribeScalingPlansError {
-        DescribeScalingPlansError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeScalingPlansError {
@@ -848,13 +716,6 @@ impl Error for DescribeScalingPlansError {
             DescribeScalingPlansError::ConcurrentUpdate(ref cause) => cause,
             DescribeScalingPlansError::InternalService(ref cause) => cause,
             DescribeScalingPlansError::InvalidNextToken(ref cause) => cause,
-            DescribeScalingPlansError::Validation(ref cause) => cause,
-            DescribeScalingPlansError::Credentials(ref err) => err.description(),
-            DescribeScalingPlansError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeScalingPlansError::ParseError(ref cause) => cause,
-            DescribeScalingPlansError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -863,20 +724,12 @@ impl Error for DescribeScalingPlansError {
 pub enum GetScalingPlanResourceForecastDataError {
     /// <p>The service encountered an internal error.</p>
     InternalService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetScalingPlanResourceForecastDataError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetScalingPlanResourceForecastDataError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetScalingPlanResourceForecastDataError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -889,40 +742,17 @@ impl GetScalingPlanResourceForecastDataError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetScalingPlanResourceForecastDataError::InternalService(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetScalingPlanResourceForecastDataError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetScalingPlanResourceForecastDataError::InternalService(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetScalingPlanResourceForecastDataError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetScalingPlanResourceForecastDataError {
-    fn from(err: serde_json::error::Error) -> GetScalingPlanResourceForecastDataError {
-        GetScalingPlanResourceForecastDataError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetScalingPlanResourceForecastDataError {
-    fn from(err: CredentialsError) -> GetScalingPlanResourceForecastDataError {
-        GetScalingPlanResourceForecastDataError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetScalingPlanResourceForecastDataError {
-    fn from(err: HttpDispatchError) -> GetScalingPlanResourceForecastDataError {
-        GetScalingPlanResourceForecastDataError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetScalingPlanResourceForecastDataError {
-    fn from(err: io::Error) -> GetScalingPlanResourceForecastDataError {
-        GetScalingPlanResourceForecastDataError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetScalingPlanResourceForecastDataError {
@@ -934,13 +764,6 @@ impl Error for GetScalingPlanResourceForecastDataError {
     fn description(&self) -> &str {
         match *self {
             GetScalingPlanResourceForecastDataError::InternalService(ref cause) => cause,
-            GetScalingPlanResourceForecastDataError::Validation(ref cause) => cause,
-            GetScalingPlanResourceForecastDataError::Credentials(ref err) => err.description(),
-            GetScalingPlanResourceForecastDataError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetScalingPlanResourceForecastDataError::ParseError(ref cause) => cause,
-            GetScalingPlanResourceForecastDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -953,20 +776,10 @@ pub enum UpdateScalingPlanError {
     InternalService(String),
     /// <p>The specified object could not be found.</p>
     ObjectNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateScalingPlanError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateScalingPlanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateScalingPlanError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -979,42 +792,25 @@ impl UpdateScalingPlanError {
 
             match *error_type {
                 "ConcurrentUpdateException" => {
-                    return UpdateScalingPlanError::ConcurrentUpdate(String::from(error_message));
+                    return RusotoError::Service(UpdateScalingPlanError::ConcurrentUpdate(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdateScalingPlanError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateScalingPlanError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "ObjectNotFoundException" => {
-                    return UpdateScalingPlanError::ObjectNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateScalingPlanError::ObjectNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateScalingPlanError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateScalingPlanError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateScalingPlanError {
-    fn from(err: serde_json::error::Error) -> UpdateScalingPlanError {
-        UpdateScalingPlanError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateScalingPlanError {
-    fn from(err: CredentialsError) -> UpdateScalingPlanError {
-        UpdateScalingPlanError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateScalingPlanError {
-    fn from(err: HttpDispatchError) -> UpdateScalingPlanError {
-        UpdateScalingPlanError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateScalingPlanError {
-    fn from(err: io::Error) -> UpdateScalingPlanError {
-        UpdateScalingPlanError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateScalingPlanError {
@@ -1028,13 +824,6 @@ impl Error for UpdateScalingPlanError {
             UpdateScalingPlanError::ConcurrentUpdate(ref cause) => cause,
             UpdateScalingPlanError::InternalService(ref cause) => cause,
             UpdateScalingPlanError::ObjectNotFound(ref cause) => cause,
-            UpdateScalingPlanError::Validation(ref cause) => cause,
-            UpdateScalingPlanError::Credentials(ref err) => err.description(),
-            UpdateScalingPlanError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateScalingPlanError::ParseError(ref cause) => cause,
-            UpdateScalingPlanError::Unknown(_) => "unknown error",
         }
     }
 }

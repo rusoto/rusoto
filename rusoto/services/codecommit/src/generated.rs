@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1875,20 +1872,10 @@ pub enum BatchGetRepositoriesError {
     MaximumRepositoryNamesExceeded(String),
     /// <p>A repository names object is required but was not specified.</p>
     RepositoryNamesRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetRepositoriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetRepositoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetRepositoriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1901,73 +1888,58 @@ impl BatchGetRepositoriesError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetRepositoriesError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetRepositoriesError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return BatchGetRepositoriesError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetRepositoriesError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return BatchGetRepositoriesError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetRepositoriesError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetRepositoriesError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return BatchGetRepositoriesError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetRepositoriesError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "MaximumRepositoryNamesExceededException" => {
-                    return BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryNamesRequiredException" => {
-                    return BatchGetRepositoriesError::RepositoryNamesRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetRepositoriesError::RepositoryNamesRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchGetRepositoriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetRepositoriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetRepositoriesError {
-    fn from(err: serde_json::error::Error) -> BatchGetRepositoriesError {
-        BatchGetRepositoriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetRepositoriesError {
-    fn from(err: CredentialsError) -> BatchGetRepositoriesError {
-        BatchGetRepositoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetRepositoriesError {
-    fn from(err: HttpDispatchError) -> BatchGetRepositoriesError {
-        BatchGetRepositoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetRepositoriesError {
-    fn from(err: io::Error) -> BatchGetRepositoriesError {
-        BatchGetRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetRepositoriesError {
@@ -1986,13 +1958,6 @@ impl Error for BatchGetRepositoriesError {
             BatchGetRepositoriesError::InvalidRepositoryName(ref cause) => cause,
             BatchGetRepositoriesError::MaximumRepositoryNamesExceeded(ref cause) => cause,
             BatchGetRepositoriesError::RepositoryNamesRequired(ref cause) => cause,
-            BatchGetRepositoriesError::Validation(ref cause) => cause,
-            BatchGetRepositoriesError::Credentials(ref err) => err.description(),
-            BatchGetRepositoriesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetRepositoriesError::ParseError(ref cause) => cause,
-            BatchGetRepositoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2027,20 +1992,10 @@ pub enum CreateBranchError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBranchError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBranchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBranchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2053,77 +2008,80 @@ impl CreateBranchError {
 
             match *error_type {
                 "BranchNameExistsException" => {
-                    return CreateBranchError::BranchNameExists(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::BranchNameExists(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameRequiredException" => {
-                    return CreateBranchError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::BranchNameRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "CommitDoesNotExistException" => {
-                    return CreateBranchError::CommitDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::CommitDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "CommitIdRequiredException" => {
-                    return CreateBranchError::CommitIdRequired(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::CommitIdRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return CreateBranchError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateBranchError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return CreateBranchError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return CreateBranchError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return CreateBranchError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return CreateBranchError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return CreateBranchError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommitIdException" => {
-                    return CreateBranchError::InvalidCommitId(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::InvalidCommitId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreateBranchError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return CreateBranchError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return CreateBranchError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(CreateBranchError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateBranchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateBranchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateBranchError {
-    fn from(err: serde_json::error::Error) -> CreateBranchError {
-        CreateBranchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateBranchError {
-    fn from(err: CredentialsError) -> CreateBranchError {
-        CreateBranchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBranchError {
-    fn from(err: HttpDispatchError) -> CreateBranchError {
-        CreateBranchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBranchError {
-    fn from(err: io::Error) -> CreateBranchError {
-        CreateBranchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateBranchError {
@@ -2148,11 +2106,6 @@ impl Error for CreateBranchError {
             CreateBranchError::InvalidRepositoryName(ref cause) => cause,
             CreateBranchError::RepositoryDoesNotExist(ref cause) => cause,
             CreateBranchError::RepositoryNameRequired(ref cause) => cause,
-            CreateBranchError::Validation(ref cause) => cause,
-            CreateBranchError::Credentials(ref err) => err.description(),
-            CreateBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBranchError::ParseError(ref cause) => cause,
-            CreateBranchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2235,20 +2188,10 @@ pub enum CreateCommitError {
     SamePathRequest(String),
     /// <p>The commit cannot be created because no source files or file content have been specified for the commit.</p>
     SourceFileOrContentRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCommitError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCommitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCommitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2261,167 +2204,208 @@ impl CreateCommitError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return CreateCommitError::BranchDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::BranchDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "BranchNameIsTagNameException" => {
-                    return CreateCommitError::BranchNameIsTagName(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::BranchNameIsTagName(
+                        String::from(error_message),
+                    ));
                 }
                 "BranchNameRequiredException" => {
-                    return CreateCommitError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::BranchNameRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "CommitMessageLengthExceededException" => {
-                    return CreateCommitError::CommitMessageLengthExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::CommitMessageLengthExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "DirectoryNameConflictsWithFileNameException" => {
-                    return CreateCommitError::DirectoryNameConflictsWithFileName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCommitError::DirectoryNameConflictsWithFileName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return CreateCommitError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return CreateCommitError::EncryptionKeyAccessDenied(String::from(error_message));
-                }
-                "EncryptionKeyDisabledException" => {
-                    return CreateCommitError::EncryptionKeyDisabled(String::from(error_message));
-                }
-                "EncryptionKeyNotFoundException" => {
-                    return CreateCommitError::EncryptionKeyNotFound(String::from(error_message));
-                }
-                "EncryptionKeyUnavailableException" => {
-                    return CreateCommitError::EncryptionKeyUnavailable(String::from(error_message));
-                }
-                "FileContentAndSourceFileSpecifiedException" => {
-                    return CreateCommitError::FileContentAndSourceFileSpecified(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
+                "EncryptionKeyDisabledException" => {
+                    return RusotoError::Service(CreateCommitError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return RusotoError::Service(CreateCommitError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return RusotoError::Service(CreateCommitError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "FileContentAndSourceFileSpecifiedException" => {
+                    return RusotoError::Service(
+                        CreateCommitError::FileContentAndSourceFileSpecified(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "FileContentSizeLimitExceededException" => {
-                    return CreateCommitError::FileContentSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::FileContentSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "FileDoesNotExistException" => {
-                    return CreateCommitError::FileDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::FileDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "FileEntryRequiredException" => {
-                    return CreateCommitError::FileEntryRequired(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::FileEntryRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "FileModeRequiredException" => {
-                    return CreateCommitError::FileModeRequired(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::FileModeRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "FileNameConflictsWithDirectoryNameException" => {
-                    return CreateCommitError::FileNameConflictsWithDirectoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCommitError::FileNameConflictsWithDirectoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "FilePathConflictsWithSubmodulePathException" => {
-                    return CreateCommitError::FilePathConflictsWithSubmodulePath(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateCommitError::FilePathConflictsWithSubmodulePath(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "FolderContentSizeLimitExceededException" => {
-                    return CreateCommitError::FolderContentSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::FolderContentSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidBranchNameException" => {
-                    return CreateCommitError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidDeletionParameterException" => {
-                    return CreateCommitError::InvalidDeletionParameter(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidDeletionParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidEmailException" => {
-                    return CreateCommitError::InvalidEmail(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidEmail(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidFileModeException" => {
-                    return CreateCommitError::InvalidFileMode(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidFileMode(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParentCommitIdException" => {
-                    return CreateCommitError::InvalidParentCommitId(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidParentCommitId(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPathException" => {
-                    return CreateCommitError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreateCommitError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(CreateCommitError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "MaximumFileEntriesExceededException" => {
-                    return CreateCommitError::MaximumFileEntriesExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::MaximumFileEntriesExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NameLengthExceededException" => {
-                    return CreateCommitError::NameLengthExceeded(String::from(error_message));
-                }
-                "NoChangeException" => {
-                    return CreateCommitError::NoChange(String::from(error_message));
-                }
-                "ParentCommitDoesNotExistException" => {
-                    return CreateCommitError::ParentCommitDoesNotExist(String::from(error_message));
-                }
-                "ParentCommitIdOutdatedException" => {
-                    return CreateCommitError::ParentCommitIdOutdated(String::from(error_message));
-                }
-                "ParentCommitIdRequiredException" => {
-                    return CreateCommitError::ParentCommitIdRequired(String::from(error_message));
-                }
-                "PathRequiredException" => {
-                    return CreateCommitError::PathRequired(String::from(error_message));
-                }
-                "PutFileEntryConflictException" => {
-                    return CreateCommitError::PutFileEntryConflict(String::from(error_message));
-                }
-                "RepositoryDoesNotExistException" => {
-                    return CreateCommitError::RepositoryDoesNotExist(String::from(error_message));
-                }
-                "RepositoryNameRequiredException" => {
-                    return CreateCommitError::RepositoryNameRequired(String::from(error_message));
-                }
-                "RestrictedSourceFileException" => {
-                    return CreateCommitError::RestrictedSourceFile(String::from(error_message));
-                }
-                "SamePathRequestException" => {
-                    return CreateCommitError::SamePathRequest(String::from(error_message));
-                }
-                "SourceFileOrContentRequiredException" => {
-                    return CreateCommitError::SourceFileOrContentRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCommitError::NameLengthExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCommitError::Validation(error_message.to_string());
+                "NoChangeException" => {
+                    return RusotoError::Service(CreateCommitError::NoChange(String::from(
+                        error_message,
+                    )));
                 }
+                "ParentCommitDoesNotExistException" => {
+                    return RusotoError::Service(CreateCommitError::ParentCommitDoesNotExist(
+                        String::from(error_message),
+                    ));
+                }
+                "ParentCommitIdOutdatedException" => {
+                    return RusotoError::Service(CreateCommitError::ParentCommitIdOutdated(
+                        String::from(error_message),
+                    ));
+                }
+                "ParentCommitIdRequiredException" => {
+                    return RusotoError::Service(CreateCommitError::ParentCommitIdRequired(
+                        String::from(error_message),
+                    ));
+                }
+                "PathRequiredException" => {
+                    return RusotoError::Service(CreateCommitError::PathRequired(String::from(
+                        error_message,
+                    )));
+                }
+                "PutFileEntryConflictException" => {
+                    return RusotoError::Service(CreateCommitError::PutFileEntryConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(CreateCommitError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
+                }
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(CreateCommitError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
+                }
+                "RestrictedSourceFileException" => {
+                    return RusotoError::Service(CreateCommitError::RestrictedSourceFile(
+                        String::from(error_message),
+                    ));
+                }
+                "SamePathRequestException" => {
+                    return RusotoError::Service(CreateCommitError::SamePathRequest(String::from(
+                        error_message,
+                    )));
+                }
+                "SourceFileOrContentRequiredException" => {
+                    return RusotoError::Service(CreateCommitError::SourceFileOrContentRequired(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCommitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCommitError {
-    fn from(err: serde_json::error::Error) -> CreateCommitError {
-        CreateCommitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCommitError {
-    fn from(err: CredentialsError) -> CreateCommitError {
-        CreateCommitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCommitError {
-    fn from(err: HttpDispatchError) -> CreateCommitError {
-        CreateCommitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCommitError {
-    fn from(err: io::Error) -> CreateCommitError {
-        CreateCommitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCommitError {
@@ -2470,11 +2454,6 @@ impl Error for CreateCommitError {
             CreateCommitError::RestrictedSourceFile(ref cause) => cause,
             CreateCommitError::SamePathRequest(ref cause) => cause,
             CreateCommitError::SourceFileOrContentRequired(ref cause) => cause,
-            CreateCommitError::Validation(ref cause) => cause,
-            CreateCommitError::Credentials(ref err) => err.description(),
-            CreateCommitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCommitError::ParseError(ref cause) => cause,
-            CreateCommitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2531,20 +2510,10 @@ pub enum CreatePullRequestError {
     TargetsRequired(String),
     /// <p>A pull request title is required. It cannot be empty or null.</p>
     TitleRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePullRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePullRequestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePullRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2557,142 +2526,145 @@ impl CreatePullRequestError {
 
             match *error_type {
                 "ClientRequestTokenRequiredException" => {
-                    return CreatePullRequestError::ClientRequestTokenRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::ClientRequestTokenRequired(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return CreatePullRequestError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return CreatePullRequestError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return CreatePullRequestError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return CreatePullRequestError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return CreatePullRequestError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "IdempotencyParameterMismatchException" => {
-                    return CreatePullRequestError::IdempotencyParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidClientRequestTokenException" => {
-                    return CreatePullRequestError::InvalidClientRequestToken(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::InvalidClientRequestToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidDescriptionException" => {
-                    return CreatePullRequestError::InvalidDescription(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::InvalidDescription(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidReferenceNameException" => {
-                    return CreatePullRequestError::InvalidReferenceName(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::InvalidReferenceName(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreatePullRequestError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTargetException" => {
-                    return CreatePullRequestError::InvalidTarget(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::InvalidTarget(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTargetsException" => {
-                    return CreatePullRequestError::InvalidTargets(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::InvalidTargets(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidTitleException" => {
-                    return CreatePullRequestError::InvalidTitle(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::InvalidTitle(String::from(
+                        error_message,
+                    )));
                 }
                 "MaximumOpenPullRequestsExceededException" => {
-                    return CreatePullRequestError::MaximumOpenPullRequestsExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::MaximumOpenPullRequestsExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MultipleRepositoriesInPullRequestException" => {
-                    return CreatePullRequestError::MultipleRepositoriesInPullRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::MultipleRepositoriesInPullRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ReferenceDoesNotExistException" => {
-                    return CreatePullRequestError::ReferenceDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::ReferenceDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "ReferenceNameRequiredException" => {
-                    return CreatePullRequestError::ReferenceNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::ReferenceNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "ReferenceTypeNotSupportedException" => {
-                    return CreatePullRequestError::ReferenceTypeNotSupported(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::ReferenceTypeNotSupported(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return CreatePullRequestError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return CreatePullRequestError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePullRequestError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "SourceAndDestinationAreSameException" => {
-                    return CreatePullRequestError::SourceAndDestinationAreSame(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreatePullRequestError::SourceAndDestinationAreSame(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TargetRequiredException" => {
-                    return CreatePullRequestError::TargetRequired(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::TargetRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "TargetsRequiredException" => {
-                    return CreatePullRequestError::TargetsRequired(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::TargetsRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "TitleRequiredException" => {
-                    return CreatePullRequestError::TitleRequired(String::from(error_message));
+                    return RusotoError::Service(CreatePullRequestError::TitleRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreatePullRequestError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePullRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePullRequestError {
-    fn from(err: serde_json::error::Error) -> CreatePullRequestError {
-        CreatePullRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePullRequestError {
-    fn from(err: CredentialsError) -> CreatePullRequestError {
-        CreatePullRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePullRequestError {
-    fn from(err: HttpDispatchError) -> CreatePullRequestError {
-        CreatePullRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePullRequestError {
-    fn from(err: io::Error) -> CreatePullRequestError {
-        CreatePullRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePullRequestError {
@@ -2728,13 +2700,6 @@ impl Error for CreatePullRequestError {
             CreatePullRequestError::TargetRequired(ref cause) => cause,
             CreatePullRequestError::TargetsRequired(ref cause) => cause,
             CreatePullRequestError::TitleRequired(ref cause) => cause,
-            CreatePullRequestError::Validation(ref cause) => cause,
-            CreatePullRequestError::Credentials(ref err) => err.description(),
-            CreatePullRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreatePullRequestError::ParseError(ref cause) => cause,
-            CreatePullRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2761,20 +2726,10 @@ pub enum CreateRepositoryError {
     RepositoryNameExists(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateRepositoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateRepositoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateRepositoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2787,75 +2742,64 @@ impl CreateRepositoryError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRepositoryError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return CreateRepositoryError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRepositoryError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return CreateRepositoryError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return CreateRepositoryError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return CreateRepositoryError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRepositoryError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRepositoryDescriptionException" => {
-                    return CreateRepositoryError::InvalidRepositoryDescription(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateRepositoryError::InvalidRepositoryDescription(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return CreateRepositoryError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(CreateRepositoryError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryLimitExceededException" => {
-                    return CreateRepositoryError::RepositoryLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRepositoryError::RepositoryLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameExistsException" => {
-                    return CreateRepositoryError::RepositoryNameExists(String::from(error_message));
-                }
-                "RepositoryNameRequiredException" => {
-                    return CreateRepositoryError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateRepositoryError::RepositoryNameExists(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateRepositoryError::Validation(error_message.to_string());
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(CreateRepositoryError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateRepositoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateRepositoryError {
-    fn from(err: serde_json::error::Error) -> CreateRepositoryError {
-        CreateRepositoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateRepositoryError {
-    fn from(err: CredentialsError) -> CreateRepositoryError {
-        CreateRepositoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateRepositoryError {
-    fn from(err: HttpDispatchError) -> CreateRepositoryError {
-        CreateRepositoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateRepositoryError {
-    fn from(err: io::Error) -> CreateRepositoryError {
-        CreateRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateRepositoryError {
@@ -2876,11 +2820,6 @@ impl Error for CreateRepositoryError {
             CreateRepositoryError::RepositoryLimitExceeded(ref cause) => cause,
             CreateRepositoryError::RepositoryNameExists(ref cause) => cause,
             CreateRepositoryError::RepositoryNameRequired(ref cause) => cause,
-            CreateRepositoryError::Validation(ref cause) => cause,
-            CreateRepositoryError::Credentials(ref err) => err.description(),
-            CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateRepositoryError::ParseError(ref cause) => cause,
-            CreateRepositoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2909,20 +2848,10 @@ pub enum DeleteBranchError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBranchError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBranchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBranchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2935,70 +2864,65 @@ impl DeleteBranchError {
 
             match *error_type {
                 "BranchNameRequiredException" => {
-                    return DeleteBranchError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::BranchNameRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "DefaultBranchCannotBeDeletedException" => {
-                    return DeleteBranchError::DefaultBranchCannotBeDeleted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteBranchError::DefaultBranchCannotBeDeleted(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return DeleteBranchError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteBranchError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return DeleteBranchError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DeleteBranchError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DeleteBranchError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return DeleteBranchError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return DeleteBranchError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return DeleteBranchError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return DeleteBranchError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return DeleteBranchError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteBranchError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteBranchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBranchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBranchError {
-    fn from(err: serde_json::error::Error) -> DeleteBranchError {
-        DeleteBranchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBranchError {
-    fn from(err: CredentialsError) -> DeleteBranchError {
-        DeleteBranchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBranchError {
-    fn from(err: HttpDispatchError) -> DeleteBranchError {
-        DeleteBranchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBranchError {
-    fn from(err: io::Error) -> DeleteBranchError {
-        DeleteBranchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBranchError {
@@ -3020,11 +2944,6 @@ impl Error for DeleteBranchError {
             DeleteBranchError::InvalidRepositoryName(ref cause) => cause,
             DeleteBranchError::RepositoryDoesNotExist(ref cause) => cause,
             DeleteBranchError::RepositoryNameRequired(ref cause) => cause,
-            DeleteBranchError::Validation(ref cause) => cause,
-            DeleteBranchError::Credentials(ref err) => err.description(),
-            DeleteBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBranchError::ParseError(ref cause) => cause,
-            DeleteBranchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3039,20 +2958,10 @@ pub enum DeleteCommentContentError {
     CommentIdRequired(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCommentContentError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCommentContentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCommentContentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3065,47 +2974,30 @@ impl DeleteCommentContentError {
 
             match *error_type {
                 "CommentDeletedException" => {
-                    return DeleteCommentContentError::CommentDeleted(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentContentError::CommentDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "CommentDoesNotExistException" => {
-                    return DeleteCommentContentError::CommentDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteCommentContentError::CommentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "CommentIdRequiredException" => {
-                    return DeleteCommentContentError::CommentIdRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentContentError::CommentIdRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidCommentIdException" => {
-                    return DeleteCommentContentError::InvalidCommentId(String::from(error_message));
+                    return RusotoError::Service(DeleteCommentContentError::InvalidCommentId(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteCommentContentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCommentContentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCommentContentError {
-    fn from(err: serde_json::error::Error) -> DeleteCommentContentError {
-        DeleteCommentContentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCommentContentError {
-    fn from(err: CredentialsError) -> DeleteCommentContentError {
-        DeleteCommentContentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCommentContentError {
-    fn from(err: HttpDispatchError) -> DeleteCommentContentError {
-        DeleteCommentContentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCommentContentError {
-    fn from(err: io::Error) -> DeleteCommentContentError {
-        DeleteCommentContentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCommentContentError {
@@ -3120,13 +3012,6 @@ impl Error for DeleteCommentContentError {
             DeleteCommentContentError::CommentDoesNotExist(ref cause) => cause,
             DeleteCommentContentError::CommentIdRequired(ref cause) => cause,
             DeleteCommentContentError::InvalidCommentId(ref cause) => cause,
-            DeleteCommentContentError::Validation(ref cause) => cause,
-            DeleteCommentContentError::Credentials(ref err) => err.description(),
-            DeleteCommentContentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCommentContentError::ParseError(ref cause) => cause,
-            DeleteCommentContentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3177,20 +3062,10 @@ pub enum DeleteFileError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFileError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3203,101 +3078,120 @@ impl DeleteFileError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return DeleteFileError::BranchDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::BranchDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameIsTagNameException" => {
-                    return DeleteFileError::BranchNameIsTagName(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::BranchNameIsTagName(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameRequiredException" => {
-                    return DeleteFileError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::BranchNameRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "CommitMessageLengthExceededException" => {
-                    return DeleteFileError::CommitMessageLengthExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::CommitMessageLengthExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return DeleteFileError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteFileError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return DeleteFileError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DeleteFileError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DeleteFileError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return DeleteFileError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "FileDoesNotExistException" => {
-                    return DeleteFileError::FileDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::FileDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidBranchNameException" => {
-                    return DeleteFileError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidEmailException" => {
-                    return DeleteFileError::InvalidEmail(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::InvalidEmail(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParentCommitIdException" => {
-                    return DeleteFileError::InvalidParentCommitId(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::InvalidParentCommitId(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPathException" => {
-                    return DeleteFileError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return DeleteFileError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "NameLengthExceededException" => {
-                    return DeleteFileError::NameLengthExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::NameLengthExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ParentCommitDoesNotExistException" => {
-                    return DeleteFileError::ParentCommitDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::ParentCommitDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "ParentCommitIdOutdatedException" => {
-                    return DeleteFileError::ParentCommitIdOutdated(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::ParentCommitIdOutdated(
+                        String::from(error_message),
+                    ));
                 }
                 "ParentCommitIdRequiredException" => {
-                    return DeleteFileError::ParentCommitIdRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::ParentCommitIdRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "PathRequiredException" => {
-                    return DeleteFileError::PathRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::PathRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return DeleteFileError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return DeleteFileError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(DeleteFileError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteFileError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFileError {
-    fn from(err: serde_json::error::Error) -> DeleteFileError {
-        DeleteFileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFileError {
-    fn from(err: CredentialsError) -> DeleteFileError {
-        DeleteFileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFileError {
-    fn from(err: HttpDispatchError) -> DeleteFileError {
-        DeleteFileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFileError {
-    fn from(err: io::Error) -> DeleteFileError {
-        DeleteFileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFileError {
@@ -3330,11 +3224,6 @@ impl Error for DeleteFileError {
             DeleteFileError::PathRequired(ref cause) => cause,
             DeleteFileError::RepositoryDoesNotExist(ref cause) => cause,
             DeleteFileError::RepositoryNameRequired(ref cause) => cause,
-            DeleteFileError::Validation(ref cause) => cause,
-            DeleteFileError::Credentials(ref err) => err.description(),
-            DeleteFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFileError::ParseError(ref cause) => cause,
-            DeleteFileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3355,20 +3244,10 @@ pub enum DeleteRepositoryError {
     InvalidRepositoryName(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRepositoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRepositoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRepositoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3381,62 +3260,47 @@ impl DeleteRepositoryError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteRepositoryError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return DeleteRepositoryError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRepositoryError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DeleteRepositoryError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DeleteRepositoryError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteRepositoryError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return DeleteRepositoryError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRepositoryError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return DeleteRepositoryError::InvalidRepositoryName(String::from(error_message));
-                }
-                "RepositoryNameRequiredException" => {
-                    return DeleteRepositoryError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRepositoryError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteRepositoryError::Validation(error_message.to_string());
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(DeleteRepositoryError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRepositoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRepositoryError {
-    fn from(err: serde_json::error::Error) -> DeleteRepositoryError {
-        DeleteRepositoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRepositoryError {
-    fn from(err: CredentialsError) -> DeleteRepositoryError {
-        DeleteRepositoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRepositoryError {
-    fn from(err: HttpDispatchError) -> DeleteRepositoryError {
-        DeleteRepositoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRepositoryError {
-    fn from(err: io::Error) -> DeleteRepositoryError {
-        DeleteRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRepositoryError {
@@ -3454,11 +3318,6 @@ impl Error for DeleteRepositoryError {
             DeleteRepositoryError::EncryptionKeyUnavailable(ref cause) => cause,
             DeleteRepositoryError::InvalidRepositoryName(ref cause) => cause,
             DeleteRepositoryError::RepositoryNameRequired(ref cause) => cause,
-            DeleteRepositoryError::Validation(ref cause) => cause,
-            DeleteRepositoryError::Credentials(ref err) => err.description(),
-            DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteRepositoryError::ParseError(ref cause) => cause,
-            DeleteRepositoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3491,20 +3350,10 @@ pub enum DescribePullRequestEventsError {
     PullRequestDoesNotExist(String),
     /// <p>A pull request ID is required, but none was provided.</p>
     PullRequestIdRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribePullRequestEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribePullRequestEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePullRequestEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3517,98 +3366,95 @@ impl DescribePullRequestEventsError {
 
             match *error_type {
                 "ActorDoesNotExistException" => {
-                    return DescribePullRequestEventsError::ActorDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribePullRequestEventsError::ActorDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return DescribePullRequestEventsError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return DescribePullRequestEventsError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return DescribePullRequestEventsError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return DescribePullRequestEventsError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidActorArnException" => {
-                    return DescribePullRequestEventsError::InvalidActorArn(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribePullRequestEventsError::InvalidActorArn(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidContinuationTokenException" => {
-                    return DescribePullRequestEventsError::InvalidContinuationToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::InvalidContinuationToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidMaxResultsException" => {
-                    return DescribePullRequestEventsError::InvalidMaxResults(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribePullRequestEventsError::InvalidMaxResults(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPullRequestEventTypeException" => {
-                    return DescribePullRequestEventsError::InvalidPullRequestEventType(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::InvalidPullRequestEventType(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidPullRequestIdException" => {
-                    return DescribePullRequestEventsError::InvalidPullRequestId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestDoesNotExistException" => {
-                    return DescribePullRequestEventsError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestIdRequiredException" => {
-                    return DescribePullRequestEventsError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribePullRequestEventsError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribePullRequestEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribePullRequestEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribePullRequestEventsError {
-    fn from(err: serde_json::error::Error) -> DescribePullRequestEventsError {
-        DescribePullRequestEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribePullRequestEventsError {
-    fn from(err: CredentialsError) -> DescribePullRequestEventsError {
-        DescribePullRequestEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribePullRequestEventsError {
-    fn from(err: HttpDispatchError) -> DescribePullRequestEventsError {
-        DescribePullRequestEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribePullRequestEventsError {
-    fn from(err: io::Error) -> DescribePullRequestEventsError {
-        DescribePullRequestEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribePullRequestEventsError {
@@ -3632,13 +3478,6 @@ impl Error for DescribePullRequestEventsError {
             DescribePullRequestEventsError::InvalidPullRequestId(ref cause) => cause,
             DescribePullRequestEventsError::PullRequestDoesNotExist(ref cause) => cause,
             DescribePullRequestEventsError::PullRequestIdRequired(ref cause) => cause,
-            DescribePullRequestEventsError::Validation(ref cause) => cause,
-            DescribePullRequestEventsError::Credentials(ref err) => err.description(),
-            DescribePullRequestEventsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribePullRequestEventsError::ParseError(ref cause) => cause,
-            DescribePullRequestEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3669,20 +3508,10 @@ pub enum GetBlobError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBlobError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBlobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBlobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3695,69 +3524,70 @@ impl GetBlobError {
 
             match *error_type {
                 "BlobIdDoesNotExistException" => {
-                    return GetBlobError::BlobIdDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::BlobIdDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "BlobIdRequiredException" => {
-                    return GetBlobError::BlobIdRequired(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::BlobIdRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetBlobError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetBlobError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetBlobError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetBlobError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::EncryptionKeyDisabled(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetBlobError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::EncryptionKeyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetBlobError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "FileTooLargeException" => {
-                    return GetBlobError::FileTooLarge(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::FileTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidBlobIdException" => {
-                    return GetBlobError::InvalidBlobId(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::InvalidBlobId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetBlobError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::InvalidRepositoryName(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetBlobError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::RepositoryDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetBlobError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetBlobError::RepositoryNameRequired(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetBlobError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBlobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBlobError {
-    fn from(err: serde_json::error::Error) -> GetBlobError {
-        GetBlobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBlobError {
-    fn from(err: CredentialsError) -> GetBlobError {
-        GetBlobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBlobError {
-    fn from(err: HttpDispatchError) -> GetBlobError {
-        GetBlobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBlobError {
-    fn from(err: io::Error) -> GetBlobError {
-        GetBlobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBlobError {
@@ -3780,11 +3610,6 @@ impl Error for GetBlobError {
             GetBlobError::InvalidRepositoryName(ref cause) => cause,
             GetBlobError::RepositoryDoesNotExist(ref cause) => cause,
             GetBlobError::RepositoryNameRequired(ref cause) => cause,
-            GetBlobError::Validation(ref cause) => cause,
-            GetBlobError::Credentials(ref err) => err.description(),
-            GetBlobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBlobError::ParseError(ref cause) => cause,
-            GetBlobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3813,20 +3638,10 @@ pub enum GetBranchError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetBranchError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetBranchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBranchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3839,68 +3654,65 @@ impl GetBranchError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return GetBranchError::BranchDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::BranchDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameRequiredException" => {
-                    return GetBranchError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::BranchNameRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetBranchError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetBranchError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetBranchError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetBranchError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetBranchError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetBranchError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return GetBranchError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetBranchError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetBranchError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetBranchError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetBranchError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetBranchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetBranchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetBranchError {
-    fn from(err: serde_json::error::Error) -> GetBranchError {
-        GetBranchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetBranchError {
-    fn from(err: CredentialsError) -> GetBranchError {
-        GetBranchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetBranchError {
-    fn from(err: HttpDispatchError) -> GetBranchError {
-        GetBranchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetBranchError {
-    fn from(err: io::Error) -> GetBranchError {
-        GetBranchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetBranchError {
@@ -3922,11 +3734,6 @@ impl Error for GetBranchError {
             GetBranchError::InvalidRepositoryName(ref cause) => cause,
             GetBranchError::RepositoryDoesNotExist(ref cause) => cause,
             GetBranchError::RepositoryNameRequired(ref cause) => cause,
-            GetBranchError::Validation(ref cause) => cause,
-            GetBranchError::Credentials(ref err) => err.description(),
-            GetBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetBranchError::ParseError(ref cause) => cause,
-            GetBranchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3941,20 +3748,10 @@ pub enum GetCommentError {
     CommentIdRequired(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCommentError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCommentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3967,45 +3764,30 @@ impl GetCommentError {
 
             match *error_type {
                 "CommentDeletedException" => {
-                    return GetCommentError::CommentDeleted(String::from(error_message));
+                    return RusotoError::Service(GetCommentError::CommentDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "CommentDoesNotExistException" => {
-                    return GetCommentError::CommentDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetCommentError::CommentDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "CommentIdRequiredException" => {
-                    return GetCommentError::CommentIdRequired(String::from(error_message));
+                    return RusotoError::Service(GetCommentError::CommentIdRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommentIdException" => {
-                    return GetCommentError::InvalidCommentId(String::from(error_message));
+                    return RusotoError::Service(GetCommentError::InvalidCommentId(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCommentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCommentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCommentError {
-    fn from(err: serde_json::error::Error) -> GetCommentError {
-        GetCommentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCommentError {
-    fn from(err: CredentialsError) -> GetCommentError {
-        GetCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCommentError {
-    fn from(err: HttpDispatchError) -> GetCommentError {
-        GetCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCommentError {
-    fn from(err: io::Error) -> GetCommentError {
-        GetCommentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCommentError {
@@ -4020,11 +3802,6 @@ impl Error for GetCommentError {
             GetCommentError::CommentDoesNotExist(ref cause) => cause,
             GetCommentError::CommentIdRequired(ref cause) => cause,
             GetCommentError::InvalidCommentId(ref cause) => cause,
-            GetCommentError::Validation(ref cause) => cause,
-            GetCommentError::Credentials(ref err) => err.description(),
-            GetCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCommentError::ParseError(ref cause) => cause,
-            GetCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4057,20 +3834,12 @@ pub enum GetCommentsForComparedCommitError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCommentsForComparedCommitError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCommentsForComparedCommitError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCommentsForComparedCommitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4083,98 +3852,99 @@ impl GetCommentsForComparedCommitError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetCommentsForComparedCommitError::CommitDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::CommitDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommitIdRequiredException" => {
-                    return GetCommentsForComparedCommitError::CommitIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::CommitIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetCommentsForComparedCommitError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetCommentsForComparedCommitError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetCommentsForComparedCommitError::EncryptionKeyUnavailable(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidCommitIdException" => {
-                    return GetCommentsForComparedCommitError::InvalidCommitId(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommentsForComparedCommitError::InvalidCommitId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidContinuationTokenException" => {
-                    return GetCommentsForComparedCommitError::InvalidContinuationToken(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::InvalidContinuationToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidMaxResultsException" => {
-                    return GetCommentsForComparedCommitError::InvalidMaxResults(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::InvalidMaxResults(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetCommentsForComparedCommitError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetCommentsForComparedCommitError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetCommentsForComparedCommitError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForComparedCommitError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetCommentsForComparedCommitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCommentsForComparedCommitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCommentsForComparedCommitError {
-    fn from(err: serde_json::error::Error) -> GetCommentsForComparedCommitError {
-        GetCommentsForComparedCommitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCommentsForComparedCommitError {
-    fn from(err: CredentialsError) -> GetCommentsForComparedCommitError {
-        GetCommentsForComparedCommitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCommentsForComparedCommitError {
-    fn from(err: HttpDispatchError) -> GetCommentsForComparedCommitError {
-        GetCommentsForComparedCommitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCommentsForComparedCommitError {
-    fn from(err: io::Error) -> GetCommentsForComparedCommitError {
-        GetCommentsForComparedCommitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCommentsForComparedCommitError {
@@ -4198,13 +3968,6 @@ impl Error for GetCommentsForComparedCommitError {
             GetCommentsForComparedCommitError::InvalidRepositoryName(ref cause) => cause,
             GetCommentsForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
             GetCommentsForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
-            GetCommentsForComparedCommitError::Validation(ref cause) => cause,
-            GetCommentsForComparedCommitError::Credentials(ref err) => err.description(),
-            GetCommentsForComparedCommitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCommentsForComparedCommitError::ParseError(ref cause) => cause,
-            GetCommentsForComparedCommitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4245,20 +4008,10 @@ pub enum GetCommentsForPullRequestError {
     RepositoryNameRequired(String),
     /// <p>The repository does not contain any pull requests with that pull request ID. Use GetPullRequest to verify the correct repository name for the pull request ID.</p>
     RepositoryNotAssociatedWithPullRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCommentsForPullRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCommentsForPullRequestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommentsForPullRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4271,118 +4024,121 @@ impl GetCommentsForPullRequestError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetCommentsForPullRequestError::CommitDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommentsForPullRequestError::CommitDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "CommitIdRequiredException" => {
-                    return GetCommentsForPullRequestError::CommitIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommentsForPullRequestError::CommitIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetCommentsForPullRequestError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetCommentsForPullRequestError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetCommentsForPullRequestError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetCommentsForPullRequestError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidCommitIdException" => {
-                    return GetCommentsForPullRequestError::InvalidCommitId(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommentsForPullRequestError::InvalidCommitId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidContinuationTokenException" => {
-                    return GetCommentsForPullRequestError::InvalidContinuationToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::InvalidContinuationToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidMaxResultsException" => {
-                    return GetCommentsForPullRequestError::InvalidMaxResults(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommentsForPullRequestError::InvalidMaxResults(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPullRequestIdException" => {
-                    return GetCommentsForPullRequestError::InvalidPullRequestId(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRepositoryNameException" => {
-                    return GetCommentsForPullRequestError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
-                }
-                "PullRequestDoesNotExistException" => {
-                    return GetCommentsForPullRequestError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "PullRequestIdRequiredException" => {
-                    return GetCommentsForPullRequestError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryDoesNotExistException" => {
-                    return GetCommentsForPullRequestError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryNameRequiredException" => {
-                    return GetCommentsForPullRequestError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryNotAssociatedWithPullRequestException" => {
-                    return GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return GetCommentsForPullRequestError::Validation(error_message.to_string());
+                "InvalidRepositoryNameException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "PullRequestDoesNotExistException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "PullRequestIdRequiredException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryNotAssociatedWithPullRequestException" => {
+                    return RusotoError::Service(
+                        GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCommentsForPullRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCommentsForPullRequestError {
-    fn from(err: serde_json::error::Error) -> GetCommentsForPullRequestError {
-        GetCommentsForPullRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCommentsForPullRequestError {
-    fn from(err: CredentialsError) -> GetCommentsForPullRequestError {
-        GetCommentsForPullRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCommentsForPullRequestError {
-    fn from(err: HttpDispatchError) -> GetCommentsForPullRequestError {
-        GetCommentsForPullRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCommentsForPullRequestError {
-    fn from(err: io::Error) -> GetCommentsForPullRequestError {
-        GetCommentsForPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCommentsForPullRequestError {
@@ -4412,13 +4168,6 @@ impl Error for GetCommentsForPullRequestError {
             GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
                 cause
             }
-            GetCommentsForPullRequestError::Validation(ref cause) => cause,
-            GetCommentsForPullRequestError::Credentials(ref err) => err.description(),
-            GetCommentsForPullRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCommentsForPullRequestError::ParseError(ref cause) => cause,
-            GetCommentsForPullRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4447,20 +4196,10 @@ pub enum GetCommitError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCommitError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCommitError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCommitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4473,68 +4212,65 @@ impl GetCommitError {
 
             match *error_type {
                 "CommitIdDoesNotExistException" => {
-                    return GetCommitError::CommitIdDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::CommitIdDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "CommitIdRequiredException" => {
-                    return GetCommitError::CommitIdRequired(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::CommitIdRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetCommitError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCommitError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetCommitError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetCommitError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetCommitError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetCommitError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidCommitIdException" => {
-                    return GetCommitError::InvalidCommitId(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::InvalidCommitId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetCommitError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetCommitError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetCommitError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetCommitError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCommitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCommitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCommitError {
-    fn from(err: serde_json::error::Error) -> GetCommitError {
-        GetCommitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCommitError {
-    fn from(err: CredentialsError) -> GetCommitError {
-        GetCommitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCommitError {
-    fn from(err: HttpDispatchError) -> GetCommitError {
-        GetCommitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCommitError {
-    fn from(err: io::Error) -> GetCommitError {
-        GetCommitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCommitError {
@@ -4556,11 +4292,6 @@ impl Error for GetCommitError {
             GetCommitError::InvalidRepositoryName(ref cause) => cause,
             GetCommitError::RepositoryDoesNotExist(ref cause) => cause,
             GetCommitError::RepositoryNameRequired(ref cause) => cause,
-            GetCommitError::Validation(ref cause) => cause,
-            GetCommitError::Credentials(ref err) => err.description(),
-            GetCommitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCommitError::ParseError(ref cause) => cause,
-            GetCommitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4599,20 +4330,10 @@ pub enum GetDifferencesError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDifferencesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDifferencesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDifferencesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4625,89 +4346,92 @@ impl GetDifferencesError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetDifferencesError::CommitDoesNotExist(String::from(error_message));
-                }
-                "CommitRequiredException" => {
-                    return GetDifferencesError::CommitRequired(String::from(error_message));
-                }
-                "EncryptionIntegrityChecksFailedException" => {
-                    return GetDifferencesError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDifferencesError::CommitDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
-                "EncryptionKeyAccessDeniedException" => {
-                    return GetDifferencesError::EncryptionKeyAccessDenied(String::from(
+                "CommitRequiredException" => {
+                    return RusotoError::Service(GetDifferencesError::CommitRequired(String::from(
                         error_message,
+                    )));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(
+                        GetDifferencesError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return RusotoError::Service(GetDifferencesError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetDifferencesError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetDifferencesError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetDifferencesError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDifferencesError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidCommitException" => {
-                    return GetDifferencesError::InvalidCommit(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::InvalidCommit(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommitIdException" => {
-                    return GetDifferencesError::InvalidCommitId(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::InvalidCommitId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidContinuationTokenException" => {
-                    return GetDifferencesError::InvalidContinuationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(GetDifferencesError::InvalidContinuationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidMaxResultsException" => {
-                    return GetDifferencesError::InvalidMaxResults(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::InvalidMaxResults(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPathException" => {
-                    return GetDifferencesError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetDifferencesError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "PathDoesNotExistException" => {
-                    return GetDifferencesError::PathDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::PathDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetDifferencesError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetDifferencesError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetDifferencesError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDifferencesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDifferencesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDifferencesError {
-    fn from(err: serde_json::error::Error) -> GetDifferencesError {
-        GetDifferencesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDifferencesError {
-    fn from(err: CredentialsError) -> GetDifferencesError {
-        GetDifferencesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDifferencesError {
-    fn from(err: HttpDispatchError) -> GetDifferencesError {
-        GetDifferencesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDifferencesError {
-    fn from(err: io::Error) -> GetDifferencesError {
-        GetDifferencesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDifferencesError {
@@ -4734,11 +4458,6 @@ impl Error for GetDifferencesError {
             GetDifferencesError::PathDoesNotExist(ref cause) => cause,
             GetDifferencesError::RepositoryDoesNotExist(ref cause) => cause,
             GetDifferencesError::RepositoryNameRequired(ref cause) => cause,
-            GetDifferencesError::Validation(ref cause) => cause,
-            GetDifferencesError::Credentials(ref err) => err.description(),
-            GetDifferencesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDifferencesError::ParseError(ref cause) => cause,
-            GetDifferencesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4773,20 +4492,10 @@ pub enum GetFileError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFileError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4799,75 +4508,80 @@ impl GetFileError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetFileError::CommitDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFileError::CommitDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetFileError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFileError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetFileError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetFileError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetFileError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetFileError::EncryptionKeyDisabled(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetFileError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFileError::EncryptionKeyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetFileError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetFileError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "FileDoesNotExistException" => {
-                    return GetFileError::FileDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFileError::FileDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "FileTooLargeException" => {
-                    return GetFileError::FileTooLarge(String::from(error_message));
+                    return RusotoError::Service(GetFileError::FileTooLarge(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommitException" => {
-                    return GetFileError::InvalidCommit(String::from(error_message));
+                    return RusotoError::Service(GetFileError::InvalidCommit(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPathException" => {
-                    return GetFileError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(GetFileError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetFileError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetFileError::InvalidRepositoryName(String::from(
+                        error_message,
+                    )));
                 }
                 "PathRequiredException" => {
-                    return GetFileError::PathRequired(String::from(error_message));
+                    return RusotoError::Service(GetFileError::PathRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetFileError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFileError::RepositoryDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetFileError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetFileError::RepositoryNameRequired(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetFileError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFileError {
-    fn from(err: serde_json::error::Error) -> GetFileError {
-        GetFileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFileError {
-    fn from(err: CredentialsError) -> GetFileError {
-        GetFileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFileError {
-    fn from(err: HttpDispatchError) -> GetFileError {
-        GetFileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFileError {
-    fn from(err: io::Error) -> GetFileError {
-        GetFileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFileError {
@@ -4892,11 +4606,6 @@ impl Error for GetFileError {
             GetFileError::PathRequired(ref cause) => cause,
             GetFileError::RepositoryDoesNotExist(ref cause) => cause,
             GetFileError::RepositoryNameRequired(ref cause) => cause,
-            GetFileError::Validation(ref cause) => cause,
-            GetFileError::Credentials(ref err) => err.description(),
-            GetFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFileError::ParseError(ref cause) => cause,
-            GetFileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4929,20 +4638,10 @@ pub enum GetFolderError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFolderError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFolderError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4955,74 +4654,75 @@ impl GetFolderError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetFolderError::CommitDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::CommitDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetFolderError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetFolderError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetFolderError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetFolderError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetFolderError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetFolderError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "FolderDoesNotExistException" => {
-                    return GetFolderError::FolderDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::FolderDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidCommitException" => {
-                    return GetFolderError::InvalidCommit(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::InvalidCommit(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPathException" => {
-                    return GetFolderError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetFolderError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "PathRequiredException" => {
-                    return GetFolderError::PathRequired(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::PathRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetFolderError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetFolderError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetFolderError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetFolderError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFolderError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFolderError {
-    fn from(err: serde_json::error::Error) -> GetFolderError {
-        GetFolderError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFolderError {
-    fn from(err: CredentialsError) -> GetFolderError {
-        GetFolderError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFolderError {
-    fn from(err: HttpDispatchError) -> GetFolderError {
-        GetFolderError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFolderError {
-    fn from(err: io::Error) -> GetFolderError {
-        GetFolderError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFolderError {
@@ -5046,11 +4746,6 @@ impl Error for GetFolderError {
             GetFolderError::PathRequired(ref cause) => cause,
             GetFolderError::RepositoryDoesNotExist(ref cause) => cause,
             GetFolderError::RepositoryNameRequired(ref cause) => cause,
-            GetFolderError::Validation(ref cause) => cause,
-            GetFolderError::Credentials(ref err) => err.description(),
-            GetFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFolderError::ParseError(ref cause) => cause,
-            GetFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5089,20 +4784,10 @@ pub enum GetMergeConflictsError {
     RepositoryNameRequired(String),
     /// <p>The divergence between the tips of the provided commit specifiers is too great to determine whether there might be any merge conflicts. Locally compare the specifiers using <code>git diff</code> or a diff tool.</p>
     TipsDivergenceExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMergeConflictsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetMergeConflictsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMergeConflictsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5115,103 +4800,96 @@ impl GetMergeConflictsError {
 
             match *error_type {
                 "CommitDoesNotExistException" => {
-                    return GetMergeConflictsError::CommitDoesNotExist(String::from(error_message));
-                }
-                "CommitRequiredException" => {
-                    return GetMergeConflictsError::CommitRequired(String::from(error_message));
-                }
-                "EncryptionIntegrityChecksFailedException" => {
-                    return GetMergeConflictsError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::CommitDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
+                "CommitRequiredException" => {
+                    return RusotoError::Service(GetMergeConflictsError::CommitRequired(
+                        String::from(error_message),
+                    ));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(
+                        GetMergeConflictsError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetMergeConflictsError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetMergeConflictsError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetMergeConflictsError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetMergeConflictsError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidCommitException" => {
-                    return GetMergeConflictsError::InvalidCommit(String::from(error_message));
-                }
-                "InvalidDestinationCommitSpecifierException" => {
-                    return GetMergeConflictsError::InvalidDestinationCommitSpecifier(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::InvalidCommit(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidDestinationCommitSpecifierException" => {
+                    return RusotoError::Service(
+                        GetMergeConflictsError::InvalidDestinationCommitSpecifier(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidMergeOptionException" => {
-                    return GetMergeConflictsError::InvalidMergeOption(String::from(error_message));
+                    return RusotoError::Service(GetMergeConflictsError::InvalidMergeOption(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetMergeConflictsError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidSourceCommitSpecifierException" => {
-                    return GetMergeConflictsError::InvalidSourceCommitSpecifier(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetMergeConflictsError::InvalidSourceCommitSpecifier(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MergeOptionRequiredException" => {
-                    return GetMergeConflictsError::MergeOptionRequired(String::from(error_message));
+                    return RusotoError::Service(GetMergeConflictsError::MergeOptionRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetMergeConflictsError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetMergeConflictsError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "TipsDivergenceExceededException" => {
-                    return GetMergeConflictsError::TipsDivergenceExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetMergeConflictsError::TipsDivergenceExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetMergeConflictsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMergeConflictsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMergeConflictsError {
-    fn from(err: serde_json::error::Error) -> GetMergeConflictsError {
-        GetMergeConflictsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMergeConflictsError {
-    fn from(err: CredentialsError) -> GetMergeConflictsError {
-        GetMergeConflictsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMergeConflictsError {
-    fn from(err: HttpDispatchError) -> GetMergeConflictsError {
-        GetMergeConflictsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMergeConflictsError {
-    fn from(err: io::Error) -> GetMergeConflictsError {
-        GetMergeConflictsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMergeConflictsError {
@@ -5238,13 +4916,6 @@ impl Error for GetMergeConflictsError {
             GetMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
             GetMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
             GetMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
-            GetMergeConflictsError::Validation(ref cause) => cause,
-            GetMergeConflictsError::Credentials(ref err) => err.description(),
-            GetMergeConflictsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetMergeConflictsError::ParseError(ref cause) => cause,
-            GetMergeConflictsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5267,20 +4938,10 @@ pub enum GetPullRequestError {
     PullRequestDoesNotExist(String),
     /// <p>A pull request ID is required, but none was provided.</p>
     PullRequestIdRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPullRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPullRequestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPullRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5293,63 +4954,52 @@ impl GetPullRequestError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetPullRequestError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetPullRequestError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetPullRequestError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPullRequestError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetPullRequestError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetPullRequestError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetPullRequestError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPullRequestError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetPullRequestError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(GetPullRequestError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPullRequestIdException" => {
-                    return GetPullRequestError::InvalidPullRequestId(String::from(error_message));
+                    return RusotoError::Service(GetPullRequestError::InvalidPullRequestId(
+                        String::from(error_message),
+                    ));
                 }
                 "PullRequestDoesNotExistException" => {
-                    return GetPullRequestError::PullRequestDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetPullRequestError::PullRequestDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "PullRequestIdRequiredException" => {
-                    return GetPullRequestError::PullRequestIdRequired(String::from(error_message));
+                    return RusotoError::Service(GetPullRequestError::PullRequestIdRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetPullRequestError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPullRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPullRequestError {
-    fn from(err: serde_json::error::Error) -> GetPullRequestError {
-        GetPullRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPullRequestError {
-    fn from(err: CredentialsError) -> GetPullRequestError {
-        GetPullRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPullRequestError {
-    fn from(err: HttpDispatchError) -> GetPullRequestError {
-        GetPullRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPullRequestError {
-    fn from(err: io::Error) -> GetPullRequestError {
-        GetPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPullRequestError {
@@ -5368,11 +5018,6 @@ impl Error for GetPullRequestError {
             GetPullRequestError::InvalidPullRequestId(ref cause) => cause,
             GetPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
             GetPullRequestError::PullRequestIdRequired(ref cause) => cause,
-            GetPullRequestError::Validation(ref cause) => cause,
-            GetPullRequestError::Credentials(ref err) => err.description(),
-            GetPullRequestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPullRequestError::ParseError(ref cause) => cause,
-            GetPullRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5395,20 +5040,10 @@ pub enum GetRepositoryError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRepositoryError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRepositoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5421,61 +5056,52 @@ impl GetRepositoryError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetRepositoryError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetRepositoryError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetRepositoryError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetRepositoryError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetRepositoryError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetRepositoryError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetRepositoryError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(GetRepositoryError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetRepositoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRepositoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRepositoryError {
-    fn from(err: serde_json::error::Error) -> GetRepositoryError {
-        GetRepositoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRepositoryError {
-    fn from(err: CredentialsError) -> GetRepositoryError {
-        GetRepositoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRepositoryError {
-    fn from(err: HttpDispatchError) -> GetRepositoryError {
-        GetRepositoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRepositoryError {
-    fn from(err: io::Error) -> GetRepositoryError {
-        GetRepositoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRepositoryError {
@@ -5494,11 +5120,6 @@ impl Error for GetRepositoryError {
             GetRepositoryError::InvalidRepositoryName(ref cause) => cause,
             GetRepositoryError::RepositoryDoesNotExist(ref cause) => cause,
             GetRepositoryError::RepositoryNameRequired(ref cause) => cause,
-            GetRepositoryError::Validation(ref cause) => cause,
-            GetRepositoryError::Credentials(ref err) => err.description(),
-            GetRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetRepositoryError::ParseError(ref cause) => cause,
-            GetRepositoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5521,20 +5142,10 @@ pub enum GetRepositoryTriggersError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetRepositoryTriggersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetRepositoryTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetRepositoryTriggersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5547,73 +5158,56 @@ impl GetRepositoryTriggersError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        GetRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return GetRepositoryTriggersError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryTriggersError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return GetRepositoryTriggersError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryTriggersError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return GetRepositoryTriggersError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryTriggersError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return GetRepositoryTriggersError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryTriggersError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return GetRepositoryTriggersError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(GetRepositoryTriggersError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetRepositoryTriggersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetRepositoryTriggersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetRepositoryTriggersError {
-    fn from(err: serde_json::error::Error) -> GetRepositoryTriggersError {
-        GetRepositoryTriggersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetRepositoryTriggersError {
-    fn from(err: CredentialsError) -> GetRepositoryTriggersError {
-        GetRepositoryTriggersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetRepositoryTriggersError {
-    fn from(err: HttpDispatchError) -> GetRepositoryTriggersError {
-        GetRepositoryTriggersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetRepositoryTriggersError {
-    fn from(err: io::Error) -> GetRepositoryTriggersError {
-        GetRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetRepositoryTriggersError {
@@ -5632,13 +5226,6 @@ impl Error for GetRepositoryTriggersError {
             GetRepositoryTriggersError::InvalidRepositoryName(ref cause) => cause,
             GetRepositoryTriggersError::RepositoryDoesNotExist(ref cause) => cause,
             GetRepositoryTriggersError::RepositoryNameRequired(ref cause) => cause,
-            GetRepositoryTriggersError::Validation(ref cause) => cause,
-            GetRepositoryTriggersError::Credentials(ref err) => err.description(),
-            GetRepositoryTriggersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetRepositoryTriggersError::ParseError(ref cause) => cause,
-            GetRepositoryTriggersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5663,20 +5250,10 @@ pub enum ListBranchesError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBranchesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBranchesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBranchesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5689,62 +5266,55 @@ impl ListBranchesError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return ListBranchesError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(ListBranchesError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return ListBranchesError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return ListBranchesError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return ListBranchesError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return ListBranchesError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidContinuationTokenException" => {
-                    return ListBranchesError::InvalidContinuationToken(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::InvalidContinuationToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return ListBranchesError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return ListBranchesError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::RepositoryDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return ListBranchesError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(ListBranchesError::RepositoryNameRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListBranchesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBranchesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBranchesError {
-    fn from(err: serde_json::error::Error) -> ListBranchesError {
-        ListBranchesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBranchesError {
-    fn from(err: CredentialsError) -> ListBranchesError {
-        ListBranchesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBranchesError {
-    fn from(err: HttpDispatchError) -> ListBranchesError {
-        ListBranchesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBranchesError {
-    fn from(err: io::Error) -> ListBranchesError {
-        ListBranchesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBranchesError {
@@ -5764,11 +5334,6 @@ impl Error for ListBranchesError {
             ListBranchesError::InvalidRepositoryName(ref cause) => cause,
             ListBranchesError::RepositoryDoesNotExist(ref cause) => cause,
             ListBranchesError::RepositoryNameRequired(ref cause) => cause,
-            ListBranchesError::Validation(ref cause) => cause,
-            ListBranchesError::Credentials(ref err) => err.description(),
-            ListBranchesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBranchesError::ParseError(ref cause) => cause,
-            ListBranchesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5801,20 +5366,10 @@ pub enum ListPullRequestsError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPullRequestsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListPullRequestsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPullRequestsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5827,86 +5382,77 @@ impl ListPullRequestsError {
 
             match *error_type {
                 "AuthorDoesNotExistException" => {
-                    return ListPullRequestsError::AuthorDoesNotExist(String::from(error_message));
-                }
-                "EncryptionIntegrityChecksFailedException" => {
-                    return ListPullRequestsError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::AuthorDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return RusotoError::Service(
+                        ListPullRequestsError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "EncryptionKeyAccessDeniedException" => {
-                    return ListPullRequestsError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return ListPullRequestsError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(ListPullRequestsError::EncryptionKeyDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return ListPullRequestsError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(ListPullRequestsError::EncryptionKeyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return ListPullRequestsError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidAuthorArnException" => {
-                    return ListPullRequestsError::InvalidAuthorArn(String::from(error_message));
+                    return RusotoError::Service(ListPullRequestsError::InvalidAuthorArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidContinuationTokenException" => {
-                    return ListPullRequestsError::InvalidContinuationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::InvalidContinuationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidMaxResultsException" => {
-                    return ListPullRequestsError::InvalidMaxResults(String::from(error_message));
+                    return RusotoError::Service(ListPullRequestsError::InvalidMaxResults(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidPullRequestStatusException" => {
-                    return ListPullRequestsError::InvalidPullRequestStatus(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::InvalidPullRequestStatus(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return ListPullRequestsError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(ListPullRequestsError::InvalidRepositoryName(
+                        String::from(error_message),
+                    ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return ListPullRequestsError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return ListPullRequestsError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPullRequestsError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListPullRequestsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPullRequestsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPullRequestsError {
-    fn from(err: serde_json::error::Error) -> ListPullRequestsError {
-        ListPullRequestsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPullRequestsError {
-    fn from(err: CredentialsError) -> ListPullRequestsError {
-        ListPullRequestsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPullRequestsError {
-    fn from(err: HttpDispatchError) -> ListPullRequestsError {
-        ListPullRequestsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPullRequestsError {
-    fn from(err: io::Error) -> ListPullRequestsError {
-        ListPullRequestsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPullRequestsError {
@@ -5930,11 +5476,6 @@ impl Error for ListPullRequestsError {
             ListPullRequestsError::InvalidRepositoryName(ref cause) => cause,
             ListPullRequestsError::RepositoryDoesNotExist(ref cause) => cause,
             ListPullRequestsError::RepositoryNameRequired(ref cause) => cause,
-            ListPullRequestsError::Validation(ref cause) => cause,
-            ListPullRequestsError::Credentials(ref err) => err.description(),
-            ListPullRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListPullRequestsError::ParseError(ref cause) => cause,
-            ListPullRequestsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5947,20 +5488,10 @@ pub enum ListRepositoriesError {
     InvalidOrder(String),
     /// <p>The specified sort by value is not valid.</p>
     InvalidSortBy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListRepositoriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListRepositoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListRepositoriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5973,44 +5504,25 @@ impl ListRepositoriesError {
 
             match *error_type {
                 "InvalidContinuationTokenException" => {
-                    return ListRepositoriesError::InvalidContinuationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListRepositoriesError::InvalidContinuationToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidOrderException" => {
-                    return ListRepositoriesError::InvalidOrder(String::from(error_message));
+                    return RusotoError::Service(ListRepositoriesError::InvalidOrder(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSortByException" => {
-                    return ListRepositoriesError::InvalidSortBy(String::from(error_message));
+                    return RusotoError::Service(ListRepositoriesError::InvalidSortBy(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListRepositoriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListRepositoriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListRepositoriesError {
-    fn from(err: serde_json::error::Error) -> ListRepositoriesError {
-        ListRepositoriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListRepositoriesError {
-    fn from(err: CredentialsError) -> ListRepositoriesError {
-        ListRepositoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListRepositoriesError {
-    fn from(err: HttpDispatchError) -> ListRepositoriesError {
-        ListRepositoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListRepositoriesError {
-    fn from(err: io::Error) -> ListRepositoriesError {
-        ListRepositoriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListRepositoriesError {
@@ -6024,11 +5536,6 @@ impl Error for ListRepositoriesError {
             ListRepositoriesError::InvalidContinuationToken(ref cause) => cause,
             ListRepositoriesError::InvalidOrder(ref cause) => cause,
             ListRepositoriesError::InvalidSortBy(ref cause) => cause,
-            ListRepositoriesError::Validation(ref cause) => cause,
-            ListRepositoriesError::Credentials(ref err) => err.description(),
-            ListRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListRepositoriesError::ParseError(ref cause) => cause,
-            ListRepositoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6067,20 +5574,12 @@ pub enum MergePullRequestByFastForwardError {
     RepositoryNameRequired(String),
     /// <p>The tip of the source branch in the destination repository does not match the tip of the source branch specified in your request. The pull request might have been updated. Make sure that you have the latest changes.</p>
     TipOfSourceReferenceIsDifferent(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl MergePullRequestByFastForwardError {
-    pub fn from_response(res: BufferedHttpResponse) -> MergePullRequestByFastForwardError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<MergePullRequestByFastForwardError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6093,113 +5592,122 @@ impl MergePullRequestByFastForwardError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return MergePullRequestByFastForwardError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return MergePullRequestByFastForwardError::EncryptionKeyUnavailable(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidCommitIdException" => {
-                    return MergePullRequestByFastForwardError::InvalidCommitId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::InvalidCommitId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPullRequestIdException" => {
-                    return MergePullRequestByFastForwardError::InvalidPullRequestId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return MergePullRequestByFastForwardError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ManualMergeRequiredException" => {
-                    return MergePullRequestByFastForwardError::ManualMergeRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::ManualMergeRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestAlreadyClosedException" => {
-                    return MergePullRequestByFastForwardError::PullRequestAlreadyClosed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "PullRequestDoesNotExistException" => {
-                    return MergePullRequestByFastForwardError::PullRequestDoesNotExist(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "PullRequestIdRequiredException" => {
-                    return MergePullRequestByFastForwardError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "ReferenceDoesNotExistException" => {
-                    return MergePullRequestByFastForwardError::ReferenceDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryDoesNotExistException" => {
-                    return MergePullRequestByFastForwardError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryNameRequiredException" => {
-                    return MergePullRequestByFastForwardError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "TipOfSourceReferenceIsDifferentException" => {
-                    return MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return MergePullRequestByFastForwardError::Validation(error_message.to_string());
+                "ReferenceDoesNotExistException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::ReferenceDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TipOfSourceReferenceIsDifferentException" => {
+                    return RusotoError::Service(
+                        MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return MergePullRequestByFastForwardError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for MergePullRequestByFastForwardError {
-    fn from(err: serde_json::error::Error) -> MergePullRequestByFastForwardError {
-        MergePullRequestByFastForwardError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for MergePullRequestByFastForwardError {
-    fn from(err: CredentialsError) -> MergePullRequestByFastForwardError {
-        MergePullRequestByFastForwardError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for MergePullRequestByFastForwardError {
-    fn from(err: HttpDispatchError) -> MergePullRequestByFastForwardError {
-        MergePullRequestByFastForwardError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for MergePullRequestByFastForwardError {
-    fn from(err: io::Error) -> MergePullRequestByFastForwardError {
-        MergePullRequestByFastForwardError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for MergePullRequestByFastForwardError {
@@ -6226,13 +5734,6 @@ impl Error for MergePullRequestByFastForwardError {
             MergePullRequestByFastForwardError::RepositoryDoesNotExist(ref cause) => cause,
             MergePullRequestByFastForwardError::RepositoryNameRequired(ref cause) => cause,
             MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(ref cause) => cause,
-            MergePullRequestByFastForwardError::Validation(ref cause) => cause,
-            MergePullRequestByFastForwardError::Credentials(ref err) => err.description(),
-            MergePullRequestByFastForwardError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            MergePullRequestByFastForwardError::ParseError(ref cause) => cause,
-            MergePullRequestByFastForwardError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6285,20 +5786,12 @@ pub enum PostCommentForComparedCommitError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostCommentForComparedCommitError {
-    pub fn from_response(res: BufferedHttpResponse) -> PostCommentForComparedCommitError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PostCommentForComparedCommitError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6311,148 +5804,165 @@ impl PostCommentForComparedCommitError {
 
             match *error_type {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
-                    return PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ClientRequestTokenRequiredException" => {
-                    return PostCommentForComparedCommitError::ClientRequestTokenRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::ClientRequestTokenRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CommentContentRequiredException" => {
-                    return PostCommentForComparedCommitError::CommentContentRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::CommentContentRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommentContentSizeLimitExceededException" => {
-                    return PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CommitDoesNotExistException" => {
-                    return PostCommentForComparedCommitError::CommitDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::CommitDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommitIdRequiredException" => {
-                    return PostCommentForComparedCommitError::CommitIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::CommitIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return PostCommentForComparedCommitError::EncryptionKeyAccessDenied(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return PostCommentForComparedCommitError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return PostCommentForComparedCommitError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return PostCommentForComparedCommitError::EncryptionKeyUnavailable(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "IdempotencyParameterMismatchException" => {
-                    return PostCommentForComparedCommitError::IdempotencyParameterMismatch(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::IdempotencyParameterMismatch(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidClientRequestTokenException" => {
-                    return PostCommentForComparedCommitError::InvalidClientRequestToken(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidCommitIdException" => {
-                    return PostCommentForComparedCommitError::InvalidCommitId(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForComparedCommitError::InvalidCommitId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFileLocationException" => {
-                    return PostCommentForComparedCommitError::InvalidFileLocation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidFileLocation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidFilePositionException" => {
-                    return PostCommentForComparedCommitError::InvalidFilePosition(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidFilePosition(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPathException" => {
-                    return PostCommentForComparedCommitError::InvalidPath(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForComparedCommitError::InvalidPath(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRelativeFileVersionEnumException" => {
-                    return PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryNameException" => {
-                    return PostCommentForComparedCommitError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PathDoesNotExistException" => {
-                    return PostCommentForComparedCommitError::PathDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::PathDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PathRequiredException" => {
-                    return PostCommentForComparedCommitError::PathRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForComparedCommitError::PathRequired(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return PostCommentForComparedCommitError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryNameRequiredException" => {
-                    return PostCommentForComparedCommitError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForComparedCommitError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PostCommentForComparedCommitError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostCommentForComparedCommitError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostCommentForComparedCommitError {
-    fn from(err: serde_json::error::Error) -> PostCommentForComparedCommitError {
-        PostCommentForComparedCommitError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostCommentForComparedCommitError {
-    fn from(err: CredentialsError) -> PostCommentForComparedCommitError {
-        PostCommentForComparedCommitError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostCommentForComparedCommitError {
-    fn from(err: HttpDispatchError) -> PostCommentForComparedCommitError {
-        PostCommentForComparedCommitError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostCommentForComparedCommitError {
-    fn from(err: io::Error) -> PostCommentForComparedCommitError {
-        PostCommentForComparedCommitError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostCommentForComparedCommitError {
@@ -6488,13 +5998,6 @@ impl Error for PostCommentForComparedCommitError {
             PostCommentForComparedCommitError::PathRequired(ref cause) => cause,
             PostCommentForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
             PostCommentForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
-            PostCommentForComparedCommitError::Validation(ref cause) => cause,
-            PostCommentForComparedCommitError::Credentials(ref err) => err.description(),
-            PostCommentForComparedCommitError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PostCommentForComparedCommitError::ParseError(ref cause) => cause,
-            PostCommentForComparedCommitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6555,20 +6058,10 @@ pub enum PostCommentForPullRequestError {
     RepositoryNameRequired(String),
     /// <p>The repository does not contain any pull requests with that pull request ID. Use GetPullRequest to verify the correct repository name for the pull request ID.</p>
     RepositoryNotAssociatedWithPullRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostCommentForPullRequestError {
-    pub fn from_response(res: BufferedHttpResponse) -> PostCommentForPullRequestError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostCommentForPullRequestError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6581,164 +6074,187 @@ impl PostCommentForPullRequestError {
 
             match *error_type {
                 "BeforeCommitIdAndAfterCommitIdAreSameException" => {
-                    return PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "ClientRequestTokenRequiredException" => {
-                    return PostCommentForPullRequestError::ClientRequestTokenRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommentContentRequiredException" => {
-                    return PostCommentForPullRequestError::CommentContentRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::CommentContentRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommentContentSizeLimitExceededException" => {
-                    return PostCommentForPullRequestError::CommentContentSizeLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::CommentContentSizeLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "CommitDoesNotExistException" => {
-                    return PostCommentForPullRequestError::CommitDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForPullRequestError::CommitDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "CommitIdRequiredException" => {
-                    return PostCommentForPullRequestError::CommitIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForPullRequestError::CommitIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return PostCommentForPullRequestError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return PostCommentForPullRequestError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return PostCommentForPullRequestError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return PostCommentForPullRequestError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "IdempotencyParameterMismatchException" => {
-                    return PostCommentForPullRequestError::IdempotencyParameterMismatch(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidClientRequestTokenException" => {
-                    return PostCommentForPullRequestError::InvalidClientRequestToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidCommitIdException" => {
-                    return PostCommentForPullRequestError::InvalidCommitId(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForPullRequestError::InvalidCommitId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFileLocationException" => {
-                    return PostCommentForPullRequestError::InvalidFileLocation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidFileLocation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidFilePositionException" => {
-                    return PostCommentForPullRequestError::InvalidFilePosition(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidFilePosition(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPathException" => {
-                    return PostCommentForPullRequestError::InvalidPath(String::from(error_message));
-                }
-                "InvalidPullRequestIdException" => {
-                    return PostCommentForPullRequestError::InvalidPullRequestId(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForPullRequestError::InvalidPath(
+                        String::from(error_message),
                     ));
                 }
+                "InvalidPullRequestIdException" => {
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidRelativeFileVersionEnumException" => {
-                    return PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryNameException" => {
-                    return PostCommentForPullRequestError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PathDoesNotExistException" => {
-                    return PostCommentForPullRequestError::PathDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentForPullRequestError::PathDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "PathRequiredException" => {
-                    return PostCommentForPullRequestError::PathRequired(String::from(error_message));
+                    return RusotoError::Service(PostCommentForPullRequestError::PathRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "PullRequestDoesNotExistException" => {
-                    return PostCommentForPullRequestError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "PullRequestIdRequiredException" => {
-                    return PostCommentForPullRequestError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryDoesNotExistException" => {
-                    return PostCommentForPullRequestError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryNameRequiredException" => {
-                    return PostCommentForPullRequestError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryNotAssociatedWithPullRequestException" => {
-                    return PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return PostCommentForPullRequestError::Validation(error_message.to_string());
+                "PullRequestIdRequiredException" => {
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "RepositoryDoesNotExistException" => {
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryNameRequiredException" => {
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "RepositoryNotAssociatedWithPullRequestException" => {
+                    return RusotoError::Service(
+                        PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(
+                            String::from(error_message),
+                        ),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostCommentForPullRequestError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostCommentForPullRequestError {
-    fn from(err: serde_json::error::Error) -> PostCommentForPullRequestError {
-        PostCommentForPullRequestError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostCommentForPullRequestError {
-    fn from(err: CredentialsError) -> PostCommentForPullRequestError {
-        PostCommentForPullRequestError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostCommentForPullRequestError {
-    fn from(err: HttpDispatchError) -> PostCommentForPullRequestError {
-        PostCommentForPullRequestError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostCommentForPullRequestError {
-    fn from(err: io::Error) -> PostCommentForPullRequestError {
-        PostCommentForPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostCommentForPullRequestError {
@@ -6780,13 +6296,6 @@ impl Error for PostCommentForPullRequestError {
             PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
                 cause
             }
-            PostCommentForPullRequestError::Validation(ref cause) => cause,
-            PostCommentForPullRequestError::Credentials(ref err) => err.description(),
-            PostCommentForPullRequestError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PostCommentForPullRequestError::ParseError(ref cause) => cause,
-            PostCommentForPullRequestError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6809,20 +6318,10 @@ pub enum PostCommentReplyError {
     InvalidClientRequestToken(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PostCommentReplyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PostCommentReplyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PostCommentReplyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6835,67 +6334,54 @@ impl PostCommentReplyError {
 
             match *error_type {
                 "ClientRequestTokenRequiredException" => {
-                    return PostCommentReplyError::ClientRequestTokenRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentReplyError::ClientRequestTokenRequired(
+                        String::from(error_message),
                     ));
                 }
                 "CommentContentRequiredException" => {
-                    return PostCommentReplyError::CommentContentRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentReplyError::CommentContentRequired(
+                        String::from(error_message),
                     ));
                 }
                 "CommentContentSizeLimitExceededException" => {
-                    return PostCommentReplyError::CommentContentSizeLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PostCommentReplyError::CommentContentSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CommentDoesNotExistException" => {
-                    return PostCommentReplyError::CommentDoesNotExist(String::from(error_message));
-                }
-                "CommentIdRequiredException" => {
-                    return PostCommentReplyError::CommentIdRequired(String::from(error_message));
-                }
-                "IdempotencyParameterMismatchException" => {
-                    return PostCommentReplyError::IdempotencyParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentReplyError::CommentDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
+                "CommentIdRequiredException" => {
+                    return RusotoError::Service(PostCommentReplyError::CommentIdRequired(
+                        String::from(error_message),
+                    ));
+                }
+                "IdempotencyParameterMismatchException" => {
+                    return RusotoError::Service(
+                        PostCommentReplyError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "InvalidClientRequestTokenException" => {
-                    return PostCommentReplyError::InvalidClientRequestToken(String::from(
-                        error_message,
+                    return RusotoError::Service(PostCommentReplyError::InvalidClientRequestToken(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidCommentIdException" => {
-                    return PostCommentReplyError::InvalidCommentId(String::from(error_message));
+                    return RusotoError::Service(PostCommentReplyError::InvalidCommentId(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PostCommentReplyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PostCommentReplyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PostCommentReplyError {
-    fn from(err: serde_json::error::Error) -> PostCommentReplyError {
-        PostCommentReplyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PostCommentReplyError {
-    fn from(err: CredentialsError) -> PostCommentReplyError {
-        PostCommentReplyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PostCommentReplyError {
-    fn from(err: HttpDispatchError) -> PostCommentReplyError {
-        PostCommentReplyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PostCommentReplyError {
-    fn from(err: io::Error) -> PostCommentReplyError {
-        PostCommentReplyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PostCommentReplyError {
@@ -6914,11 +6400,6 @@ impl Error for PostCommentReplyError {
             PostCommentReplyError::IdempotencyParameterMismatch(ref cause) => cause,
             PostCommentReplyError::InvalidClientRequestToken(ref cause) => cause,
             PostCommentReplyError::InvalidCommentId(ref cause) => cause,
-            PostCommentReplyError::Validation(ref cause) => cause,
-            PostCommentReplyError::Credentials(ref err) => err.description(),
-            PostCommentReplyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PostCommentReplyError::ParseError(ref cause) => cause,
-            PostCommentReplyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6985,20 +6466,10 @@ pub enum PutFileError {
     RepositoryNameRequired(String),
     /// <p>The file was not added or updated because the content of the file is exactly the same as the content of that file in the repository and branch that you specified.</p>
     SameFileContent(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutFileError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutFileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutFileError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7011,129 +6482,160 @@ impl PutFileError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return PutFileError::BranchDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(PutFileError::BranchDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameIsTagNameException" => {
-                    return PutFileError::BranchNameIsTagName(String::from(error_message));
+                    return RusotoError::Service(PutFileError::BranchNameIsTagName(String::from(
+                        error_message,
+                    )));
                 }
                 "BranchNameRequiredException" => {
-                    return PutFileError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(PutFileError::BranchNameRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "CommitMessageLengthExceededException" => {
-                    return PutFileError::CommitMessageLengthExceeded(String::from(error_message));
+                    return RusotoError::Service(PutFileError::CommitMessageLengthExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNameConflictsWithFileNameException" => {
-                    return PutFileError::DirectoryNameConflictsWithFileName(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFileError::DirectoryNameConflictsWithFileName(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return PutFileError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFileError::EncryptionIntegrityChecksFailed(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return PutFileError::EncryptionKeyAccessDenied(String::from(error_message));
+                    return RusotoError::Service(PutFileError::EncryptionKeyAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionKeyDisabledException" => {
-                    return PutFileError::EncryptionKeyDisabled(String::from(error_message));
+                    return RusotoError::Service(PutFileError::EncryptionKeyDisabled(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return PutFileError::EncryptionKeyNotFound(String::from(error_message));
+                    return RusotoError::Service(PutFileError::EncryptionKeyNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return PutFileError::EncryptionKeyUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutFileError::EncryptionKeyUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "FileContentRequiredException" => {
-                    return PutFileError::FileContentRequired(String::from(error_message));
+                    return RusotoError::Service(PutFileError::FileContentRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "FileContentSizeLimitExceededException" => {
-                    return PutFileError::FileContentSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutFileError::FileContentSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "FileNameConflictsWithDirectoryNameException" => {
-                    return PutFileError::FileNameConflictsWithDirectoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFileError::FileNameConflictsWithDirectoryName(
+                        String::from(error_message),
                     ));
                 }
                 "FilePathConflictsWithSubmodulePathException" => {
-                    return PutFileError::FilePathConflictsWithSubmodulePath(String::from(
-                        error_message,
+                    return RusotoError::Service(PutFileError::FilePathConflictsWithSubmodulePath(
+                        String::from(error_message),
                     ));
                 }
                 "FolderContentSizeLimitExceededException" => {
-                    return PutFileError::FolderContentSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutFileError::FolderContentSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidBranchNameException" => {
-                    return PutFileError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidBranchName(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidDeletionParameterException" => {
-                    return PutFileError::InvalidDeletionParameter(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidDeletionParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidEmailException" => {
-                    return PutFileError::InvalidEmail(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidEmail(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidFileModeException" => {
-                    return PutFileError::InvalidFileMode(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidFileMode(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParentCommitIdException" => {
-                    return PutFileError::InvalidParentCommitId(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidParentCommitId(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPathException" => {
-                    return PutFileError::InvalidPath(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidPath(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRepositoryNameException" => {
-                    return PutFileError::InvalidRepositoryName(String::from(error_message));
+                    return RusotoError::Service(PutFileError::InvalidRepositoryName(String::from(
+                        error_message,
+                    )));
                 }
                 "NameLengthExceededException" => {
-                    return PutFileError::NameLengthExceeded(String::from(error_message));
+                    return RusotoError::Service(PutFileError::NameLengthExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ParentCommitDoesNotExistException" => {
-                    return PutFileError::ParentCommitDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(PutFileError::ParentCommitDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "ParentCommitIdOutdatedException" => {
-                    return PutFileError::ParentCommitIdOutdated(String::from(error_message));
+                    return RusotoError::Service(PutFileError::ParentCommitIdOutdated(String::from(
+                        error_message,
+                    )));
                 }
                 "ParentCommitIdRequiredException" => {
-                    return PutFileError::ParentCommitIdRequired(String::from(error_message));
+                    return RusotoError::Service(PutFileError::ParentCommitIdRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "PathRequiredException" => {
-                    return PutFileError::PathRequired(String::from(error_message));
+                    return RusotoError::Service(PutFileError::PathRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return PutFileError::RepositoryDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(PutFileError::RepositoryDoesNotExist(String::from(
+                        error_message,
+                    )));
                 }
                 "RepositoryNameRequiredException" => {
-                    return PutFileError::RepositoryNameRequired(String::from(error_message));
+                    return RusotoError::Service(PutFileError::RepositoryNameRequired(String::from(
+                        error_message,
+                    )));
                 }
                 "SameFileContentException" => {
-                    return PutFileError::SameFileContent(String::from(error_message));
+                    return RusotoError::Service(PutFileError::SameFileContent(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return PutFileError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutFileError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutFileError {
-    fn from(err: serde_json::error::Error) -> PutFileError {
-        PutFileError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutFileError {
-    fn from(err: CredentialsError) -> PutFileError {
-        PutFileError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutFileError {
-    fn from(err: HttpDispatchError) -> PutFileError {
-        PutFileError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutFileError {
-    fn from(err: io::Error) -> PutFileError {
-        PutFileError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutFileError {
@@ -7174,11 +6676,6 @@ impl Error for PutFileError {
             PutFileError::RepositoryDoesNotExist(ref cause) => cause,
             PutFileError::RepositoryNameRequired(ref cause) => cause,
             PutFileError::SameFileContent(ref cause) => cause,
-            PutFileError::Validation(ref cause) => cause,
-            PutFileError::Credentials(ref err) => err.description(),
-            PutFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutFileError::ParseError(ref cause) => cause,
-            PutFileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7227,20 +6724,10 @@ pub enum PutRepositoryTriggersError {
     RepositoryTriggerNameRequired(String),
     /// <p>The list of triggers for the repository is required but was not specified.</p>
     RepositoryTriggersListRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutRepositoryTriggersError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutRepositoryTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRepositoryTriggersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7253,138 +6740,147 @@ impl PutRepositoryTriggersError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return PutRepositoryTriggersError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(PutRepositoryTriggersError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return PutRepositoryTriggersError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutRepositoryTriggersError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(PutRepositoryTriggersError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerEventsException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryTriggerNameException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryTriggerRegionException" => {
-                    return PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MaximumBranchesExceededException" => {
-                    return PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::MaximumBranchesExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MaximumRepositoryTriggersExceededException" => {
-                    return PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryDoesNotExistException" => {
-                    return PutRepositoryTriggersError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(PutRepositoryTriggersError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(PutRepositoryTriggersError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerNameRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryTriggersListRequiredException" => {
-                    return PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        PutRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return PutRepositoryTriggersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutRepositoryTriggersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutRepositoryTriggersError {
-    fn from(err: serde_json::error::Error) -> PutRepositoryTriggersError {
-        PutRepositoryTriggersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutRepositoryTriggersError {
-    fn from(err: CredentialsError) -> PutRepositoryTriggersError {
-        PutRepositoryTriggersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutRepositoryTriggersError {
-    fn from(err: HttpDispatchError) -> PutRepositoryTriggersError {
-        PutRepositoryTriggersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutRepositoryTriggersError {
-    fn from(err: io::Error) -> PutRepositoryTriggersError {
-        PutRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutRepositoryTriggersError {
@@ -7416,13 +6912,6 @@ impl Error for PutRepositoryTriggersError {
             PutRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
             PutRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
             PutRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
-            PutRepositoryTriggersError::Validation(ref cause) => cause,
-            PutRepositoryTriggersError::Credentials(ref err) => err.description(),
-            PutRepositoryTriggersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutRepositoryTriggersError::ParseError(ref cause) => cause,
-            PutRepositoryTriggersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7471,20 +6960,10 @@ pub enum TestRepositoryTriggersError {
     RepositoryTriggerNameRequired(String),
     /// <p>The list of triggers for the repository is required but was not specified.</p>
     RepositoryTriggersListRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TestRepositoryTriggersError {
-    pub fn from_response(res: BufferedHttpResponse) -> TestRepositoryTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRepositoryTriggersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7497,138 +6976,151 @@ impl TestRepositoryTriggersError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return TestRepositoryTriggersError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(TestRepositoryTriggersError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return TestRepositoryTriggersError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(TestRepositoryTriggersError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryNameException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(TestRepositoryTriggersError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRepositoryTriggerBranchNameException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerBranchName(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerCustomDataException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerCustomData(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerDestinationArnException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerDestinationArn(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryTriggerEventsException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerEvents(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "InvalidRepositoryTriggerNameException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryTriggerRegionException" => {
-                    return TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::InvalidRepositoryTriggerRegion(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "MaximumBranchesExceededException" => {
-                    return TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::MaximumBranchesExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "MaximumRepositoryTriggersExceededException" => {
-                    return TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::MaximumRepositoryTriggersExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryDoesNotExistException" => {
-                    return TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryNameRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryTriggerBranchNameListRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryTriggerBranchNameListRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerDestinationArnRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryTriggerDestinationArnRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerEventsListRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "RepositoryTriggerNameRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
-                        error_message,
-                    ));
-                }
-                "RepositoryTriggersListRequiredException" => {
-                    return TestRepositoryTriggersError::RepositoryTriggersListRequired(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryTriggerNameRequired(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return TestRepositoryTriggersError::Validation(error_message.to_string());
+                "RepositoryTriggersListRequiredException" => {
+                    return RusotoError::Service(
+                        TestRepositoryTriggersError::RepositoryTriggersListRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TestRepositoryTriggersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TestRepositoryTriggersError {
-    fn from(err: serde_json::error::Error) -> TestRepositoryTriggersError {
-        TestRepositoryTriggersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TestRepositoryTriggersError {
-    fn from(err: CredentialsError) -> TestRepositoryTriggersError {
-        TestRepositoryTriggersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TestRepositoryTriggersError {
-    fn from(err: HttpDispatchError) -> TestRepositoryTriggersError {
-        TestRepositoryTriggersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TestRepositoryTriggersError {
-    fn from(err: io::Error) -> TestRepositoryTriggersError {
-        TestRepositoryTriggersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TestRepositoryTriggersError {
@@ -7664,13 +7156,6 @@ impl Error for TestRepositoryTriggersError {
             TestRepositoryTriggersError::RepositoryTriggerEventsListRequired(ref cause) => cause,
             TestRepositoryTriggersError::RepositoryTriggerNameRequired(ref cause) => cause,
             TestRepositoryTriggersError::RepositoryTriggersListRequired(ref cause) => cause,
-            TestRepositoryTriggersError::Validation(ref cause) => cause,
-            TestRepositoryTriggersError::Credentials(ref err) => err.description(),
-            TestRepositoryTriggersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TestRepositoryTriggersError::ParseError(ref cause) => cause,
-            TestRepositoryTriggersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7691,20 +7176,10 @@ pub enum UpdateCommentError {
     CommentNotCreatedByCaller(String),
     /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
     InvalidCommentId(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCommentError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCommentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCommentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7717,58 +7192,47 @@ impl UpdateCommentError {
 
             match *error_type {
                 "CommentContentRequiredException" => {
-                    return UpdateCommentError::CommentContentRequired(String::from(error_message));
-                }
-                "CommentContentSizeLimitExceededException" => {
-                    return UpdateCommentError::CommentContentSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCommentError::CommentContentRequired(
+                        String::from(error_message),
                     ));
                 }
+                "CommentContentSizeLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateCommentError::CommentContentSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "CommentDeletedException" => {
-                    return UpdateCommentError::CommentDeleted(String::from(error_message));
+                    return RusotoError::Service(UpdateCommentError::CommentDeleted(String::from(
+                        error_message,
+                    )));
                 }
                 "CommentDoesNotExistException" => {
-                    return UpdateCommentError::CommentDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(UpdateCommentError::CommentDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "CommentIdRequiredException" => {
-                    return UpdateCommentError::CommentIdRequired(String::from(error_message));
+                    return RusotoError::Service(UpdateCommentError::CommentIdRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "CommentNotCreatedByCallerException" => {
-                    return UpdateCommentError::CommentNotCreatedByCaller(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCommentError::CommentNotCreatedByCaller(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidCommentIdException" => {
-                    return UpdateCommentError::InvalidCommentId(String::from(error_message));
+                    return RusotoError::Service(UpdateCommentError::InvalidCommentId(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateCommentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCommentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCommentError {
-    fn from(err: serde_json::error::Error) -> UpdateCommentError {
-        UpdateCommentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCommentError {
-    fn from(err: CredentialsError) -> UpdateCommentError {
-        UpdateCommentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCommentError {
-    fn from(err: HttpDispatchError) -> UpdateCommentError {
-        UpdateCommentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCommentError {
-    fn from(err: io::Error) -> UpdateCommentError {
-        UpdateCommentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCommentError {
@@ -7786,11 +7250,6 @@ impl Error for UpdateCommentError {
             UpdateCommentError::CommentIdRequired(ref cause) => cause,
             UpdateCommentError::CommentNotCreatedByCaller(ref cause) => cause,
             UpdateCommentError::InvalidCommentId(ref cause) => cause,
-            UpdateCommentError::Validation(ref cause) => cause,
-            UpdateCommentError::Credentials(ref err) => err.description(),
-            UpdateCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateCommentError::ParseError(ref cause) => cause,
-            UpdateCommentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7819,20 +7278,10 @@ pub enum UpdateDefaultBranchError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDefaultBranchError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDefaultBranchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDefaultBranchError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7845,82 +7294,69 @@ impl UpdateDefaultBranchError {
 
             match *error_type {
                 "BranchDoesNotExistException" => {
-                    return UpdateDefaultBranchError::BranchDoesNotExist(String::from(error_message));
+                    return RusotoError::Service(UpdateDefaultBranchError::BranchDoesNotExist(
+                        String::from(error_message),
+                    ));
                 }
                 "BranchNameRequiredException" => {
-                    return UpdateDefaultBranchError::BranchNameRequired(String::from(error_message));
+                    return RusotoError::Service(UpdateDefaultBranchError::BranchNameRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "EncryptionIntegrityChecksFailedException" => {
-                    return UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDefaultBranchError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateDefaultBranchError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return UpdateDefaultBranchError::EncryptionKeyDisabled(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyDisabled(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return UpdateDefaultBranchError::EncryptionKeyNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return UpdateDefaultBranchError::EncryptionKeyUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::EncryptionKeyUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidBranchNameException" => {
-                    return UpdateDefaultBranchError::InvalidBranchName(String::from(error_message));
+                    return RusotoError::Service(UpdateDefaultBranchError::InvalidBranchName(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRepositoryNameException" => {
-                    return UpdateDefaultBranchError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return UpdateDefaultBranchError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return UpdateDefaultBranchError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateDefaultBranchError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateDefaultBranchError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDefaultBranchError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDefaultBranchError {
-    fn from(err: serde_json::error::Error) -> UpdateDefaultBranchError {
-        UpdateDefaultBranchError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDefaultBranchError {
-    fn from(err: CredentialsError) -> UpdateDefaultBranchError {
-        UpdateDefaultBranchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDefaultBranchError {
-    fn from(err: HttpDispatchError) -> UpdateDefaultBranchError {
-        UpdateDefaultBranchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDefaultBranchError {
-    fn from(err: io::Error) -> UpdateDefaultBranchError {
-        UpdateDefaultBranchError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDefaultBranchError {
@@ -7942,13 +7378,6 @@ impl Error for UpdateDefaultBranchError {
             UpdateDefaultBranchError::InvalidRepositoryName(ref cause) => cause,
             UpdateDefaultBranchError::RepositoryDoesNotExist(ref cause) => cause,
             UpdateDefaultBranchError::RepositoryNameRequired(ref cause) => cause,
-            UpdateDefaultBranchError::Validation(ref cause) => cause,
-            UpdateDefaultBranchError::Credentials(ref err) => err.description(),
-            UpdateDefaultBranchError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDefaultBranchError::ParseError(ref cause) => cause,
-            UpdateDefaultBranchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7965,20 +7394,12 @@ pub enum UpdatePullRequestDescriptionError {
     PullRequestDoesNotExist(String),
     /// <p>A pull request ID is required, but none was provided.</p>
     PullRequestIdRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePullRequestDescriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePullRequestDescriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdatePullRequestDescriptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7991,58 +7412,45 @@ impl UpdatePullRequestDescriptionError {
 
             match *error_type {
                 "InvalidDescriptionException" => {
-                    return UpdatePullRequestDescriptionError::InvalidDescription(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestDescriptionError::InvalidDescription(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPullRequestIdException" => {
-                    return UpdatePullRequestDescriptionError::InvalidPullRequestId(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestDescriptionError::InvalidPullRequestId(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestAlreadyClosedException" => {
-                    return UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "PullRequestDoesNotExistException" => {
-                    return UpdatePullRequestDescriptionError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestDescriptionError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestIdRequiredException" => {
-                    return UpdatePullRequestDescriptionError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestDescriptionError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdatePullRequestDescriptionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePullRequestDescriptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePullRequestDescriptionError {
-    fn from(err: serde_json::error::Error) -> UpdatePullRequestDescriptionError {
-        UpdatePullRequestDescriptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePullRequestDescriptionError {
-    fn from(err: CredentialsError) -> UpdatePullRequestDescriptionError {
-        UpdatePullRequestDescriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePullRequestDescriptionError {
-    fn from(err: HttpDispatchError) -> UpdatePullRequestDescriptionError {
-        UpdatePullRequestDescriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePullRequestDescriptionError {
-    fn from(err: io::Error) -> UpdatePullRequestDescriptionError {
-        UpdatePullRequestDescriptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePullRequestDescriptionError {
@@ -8058,13 +7466,6 @@ impl Error for UpdatePullRequestDescriptionError {
             UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(ref cause) => cause,
             UpdatePullRequestDescriptionError::PullRequestDoesNotExist(ref cause) => cause,
             UpdatePullRequestDescriptionError::PullRequestIdRequired(ref cause) => cause,
-            UpdatePullRequestDescriptionError::Validation(ref cause) => cause,
-            UpdatePullRequestDescriptionError::Credentials(ref err) => err.description(),
-            UpdatePullRequestDescriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePullRequestDescriptionError::ParseError(ref cause) => cause,
-            UpdatePullRequestDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8093,20 +7494,10 @@ pub enum UpdatePullRequestStatusError {
     PullRequestIdRequired(String),
     /// <p>A pull request status is required, but none was provided.</p>
     PullRequestStatusRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePullRequestStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePullRequestStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePullRequestStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8119,88 +7510,85 @@ impl UpdatePullRequestStatusError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return UpdatePullRequestStatusError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return UpdatePullRequestStatusError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return UpdatePullRequestStatusError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPullRequestIdException" => {
-                    return UpdatePullRequestStatusError::InvalidPullRequestId(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePullRequestStatusError::InvalidPullRequestId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidPullRequestStatusException" => {
-                    return UpdatePullRequestStatusError::InvalidPullRequestStatus(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::InvalidPullRequestStatus(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidPullRequestStatusUpdateException" => {
-                    return UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "PullRequestDoesNotExistException" => {
-                    return UpdatePullRequestStatusError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestIdRequiredException" => {
-                    return UpdatePullRequestStatusError::PullRequestIdRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::PullRequestIdRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestStatusRequiredException" => {
-                    return UpdatePullRequestStatusError::PullRequestStatusRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestStatusError::PullRequestStatusRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdatePullRequestStatusError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePullRequestStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePullRequestStatusError {
-    fn from(err: serde_json::error::Error) -> UpdatePullRequestStatusError {
-        UpdatePullRequestStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePullRequestStatusError {
-    fn from(err: CredentialsError) -> UpdatePullRequestStatusError {
-        UpdatePullRequestStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePullRequestStatusError {
-    fn from(err: HttpDispatchError) -> UpdatePullRequestStatusError {
-        UpdatePullRequestStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePullRequestStatusError {
-    fn from(err: io::Error) -> UpdatePullRequestStatusError {
-        UpdatePullRequestStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePullRequestStatusError {
@@ -8222,13 +7610,6 @@ impl Error for UpdatePullRequestStatusError {
             UpdatePullRequestStatusError::PullRequestDoesNotExist(ref cause) => cause,
             UpdatePullRequestStatusError::PullRequestIdRequired(ref cause) => cause,
             UpdatePullRequestStatusError::PullRequestStatusRequired(ref cause) => cause,
-            UpdatePullRequestStatusError::Validation(ref cause) => cause,
-            UpdatePullRequestStatusError::Credentials(ref err) => err.description(),
-            UpdatePullRequestStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePullRequestStatusError::ParseError(ref cause) => cause,
-            UpdatePullRequestStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8247,20 +7628,10 @@ pub enum UpdatePullRequestTitleError {
     PullRequestIdRequired(String),
     /// <p>A pull request title is required. It cannot be empty or null.</p>
     TitleRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePullRequestTitleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePullRequestTitleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePullRequestTitleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8273,59 +7644,44 @@ impl UpdatePullRequestTitleError {
 
             match *error_type {
                 "InvalidPullRequestIdException" => {
-                    return UpdatePullRequestTitleError::InvalidPullRequestId(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePullRequestTitleError::InvalidPullRequestId(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidTitleException" => {
-                    return UpdatePullRequestTitleError::InvalidTitle(String::from(error_message));
+                    return RusotoError::Service(UpdatePullRequestTitleError::InvalidTitle(
+                        String::from(error_message),
+                    ));
                 }
                 "PullRequestAlreadyClosedException" => {
-                    return UpdatePullRequestTitleError::PullRequestAlreadyClosed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestTitleError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestDoesNotExistException" => {
-                    return UpdatePullRequestTitleError::PullRequestDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePullRequestTitleError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "PullRequestIdRequiredException" => {
-                    return UpdatePullRequestTitleError::PullRequestIdRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePullRequestTitleError::PullRequestIdRequired(
+                        String::from(error_message),
                     ));
                 }
                 "TitleRequiredException" => {
-                    return UpdatePullRequestTitleError::TitleRequired(String::from(error_message));
+                    return RusotoError::Service(UpdatePullRequestTitleError::TitleRequired(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdatePullRequestTitleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePullRequestTitleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePullRequestTitleError {
-    fn from(err: serde_json::error::Error) -> UpdatePullRequestTitleError {
-        UpdatePullRequestTitleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePullRequestTitleError {
-    fn from(err: CredentialsError) -> UpdatePullRequestTitleError {
-        UpdatePullRequestTitleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePullRequestTitleError {
-    fn from(err: HttpDispatchError) -> UpdatePullRequestTitleError {
-        UpdatePullRequestTitleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePullRequestTitleError {
-    fn from(err: io::Error) -> UpdatePullRequestTitleError {
-        UpdatePullRequestTitleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePullRequestTitleError {
@@ -8342,13 +7698,6 @@ impl Error for UpdatePullRequestTitleError {
             UpdatePullRequestTitleError::PullRequestDoesNotExist(ref cause) => cause,
             UpdatePullRequestTitleError::PullRequestIdRequired(ref cause) => cause,
             UpdatePullRequestTitleError::TitleRequired(ref cause) => cause,
-            UpdatePullRequestTitleError::Validation(ref cause) => cause,
-            UpdatePullRequestTitleError::Credentials(ref err) => err.description(),
-            UpdatePullRequestTitleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePullRequestTitleError::ParseError(ref cause) => cause,
-            UpdatePullRequestTitleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8373,20 +7722,12 @@ pub enum UpdateRepositoryDescriptionError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRepositoryDescriptionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRepositoryDescriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateRepositoryDescriptionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8399,78 +7740,73 @@ impl UpdateRepositoryDescriptionError {
 
             match *error_type {
                 "EncryptionIntegrityChecksFailedException" => {
-                    return UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "EncryptionKeyAccessDeniedException" => {
-                    return UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "EncryptionKeyDisabledException" => {
-                    return UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyNotFoundException" => {
-                    return UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EncryptionKeyUnavailableException" => {
-                    return UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRepositoryDescriptionException" => {
-                    return UpdateRepositoryDescriptionError::InvalidRepositoryDescription(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::InvalidRepositoryDescription(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "InvalidRepositoryNameException" => {
-                    return UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::InvalidRepositoryName(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryDoesNotExistException" => {
-                    return UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RepositoryNameRequiredException" => {
-                    return UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateRepositoryDescriptionError::RepositoryNameRequired(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdateRepositoryDescriptionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRepositoryDescriptionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRepositoryDescriptionError {
-    fn from(err: serde_json::error::Error) -> UpdateRepositoryDescriptionError {
-        UpdateRepositoryDescriptionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRepositoryDescriptionError {
-    fn from(err: CredentialsError) -> UpdateRepositoryDescriptionError {
-        UpdateRepositoryDescriptionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRepositoryDescriptionError {
-    fn from(err: HttpDispatchError) -> UpdateRepositoryDescriptionError {
-        UpdateRepositoryDescriptionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRepositoryDescriptionError {
-    fn from(err: io::Error) -> UpdateRepositoryDescriptionError {
-        UpdateRepositoryDescriptionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRepositoryDescriptionError {
@@ -8490,13 +7826,6 @@ impl Error for UpdateRepositoryDescriptionError {
             UpdateRepositoryDescriptionError::InvalidRepositoryName(ref cause) => cause,
             UpdateRepositoryDescriptionError::RepositoryDoesNotExist(ref cause) => cause,
             UpdateRepositoryDescriptionError::RepositoryNameRequired(ref cause) => cause,
-            UpdateRepositoryDescriptionError::Validation(ref cause) => cause,
-            UpdateRepositoryDescriptionError::Credentials(ref err) => err.description(),
-            UpdateRepositoryDescriptionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRepositoryDescriptionError::ParseError(ref cause) => cause,
-            UpdateRepositoryDescriptionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8511,20 +7840,10 @@ pub enum UpdateRepositoryNameError {
     RepositoryNameExists(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateRepositoryNameError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateRepositoryNameError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateRepositoryNameError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8537,53 +7856,30 @@ impl UpdateRepositoryNameError {
 
             match *error_type {
                 "InvalidRepositoryNameException" => {
-                    return UpdateRepositoryNameError::InvalidRepositoryName(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRepositoryNameError::InvalidRepositoryName(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryDoesNotExistException" => {
-                    return UpdateRepositoryNameError::RepositoryDoesNotExist(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRepositoryNameError::RepositoryDoesNotExist(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameExistsException" => {
-                    return UpdateRepositoryNameError::RepositoryNameExists(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRepositoryNameError::RepositoryNameExists(
+                        String::from(error_message),
                     ));
                 }
                 "RepositoryNameRequiredException" => {
-                    return UpdateRepositoryNameError::RepositoryNameRequired(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateRepositoryNameError::RepositoryNameRequired(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateRepositoryNameError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateRepositoryNameError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateRepositoryNameError {
-    fn from(err: serde_json::error::Error) -> UpdateRepositoryNameError {
-        UpdateRepositoryNameError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateRepositoryNameError {
-    fn from(err: CredentialsError) -> UpdateRepositoryNameError {
-        UpdateRepositoryNameError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateRepositoryNameError {
-    fn from(err: HttpDispatchError) -> UpdateRepositoryNameError {
-        UpdateRepositoryNameError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateRepositoryNameError {
-    fn from(err: io::Error) -> UpdateRepositoryNameError {
-        UpdateRepositoryNameError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateRepositoryNameError {
@@ -8598,13 +7894,6 @@ impl Error for UpdateRepositoryNameError {
             UpdateRepositoryNameError::RepositoryDoesNotExist(ref cause) => cause,
             UpdateRepositoryNameError::RepositoryNameExists(ref cause) => cause,
             UpdateRepositoryNameError::RepositoryNameRequired(ref cause) => cause,
-            UpdateRepositoryNameError::Validation(ref cause) => cause,
-            UpdateRepositoryNameError::Credentials(ref err) => err.description(),
-            UpdateRepositoryNameError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateRepositoryNameError::ParseError(ref cause) => cause,
-            UpdateRepositoryNameError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -3882,20 +3879,10 @@ pub enum BatchCreatePartitionError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchCreatePartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchCreatePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchCreatePartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3908,56 +3895,47 @@ impl BatchCreatePartitionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return BatchCreatePartitionError::AlreadyExists(String::from(error_message));
-                }
-                "EntityNotFoundException" => {
-                    return BatchCreatePartitionError::EntityNotFound(String::from(error_message));
-                }
-                "GlueEncryptionException" => {
-                    return BatchCreatePartitionError::GlueEncryption(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return BatchCreatePartitionError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return BatchCreatePartitionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return BatchCreatePartitionError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchCreatePartitionError::AlreadyExists(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchCreatePartitionError::Validation(error_message.to_string());
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(BatchCreatePartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(BatchCreatePartitionError::GlueEncryption(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchCreatePartitionError::InternalService(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchCreatePartitionError::InvalidInput(
+                        String::from(error_message),
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchCreatePartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        BatchCreatePartitionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchCreatePartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchCreatePartitionError {
-    fn from(err: serde_json::error::Error) -> BatchCreatePartitionError {
-        BatchCreatePartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchCreatePartitionError {
-    fn from(err: CredentialsError) -> BatchCreatePartitionError {
-        BatchCreatePartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchCreatePartitionError {
-    fn from(err: HttpDispatchError) -> BatchCreatePartitionError {
-        BatchCreatePartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchCreatePartitionError {
-    fn from(err: io::Error) -> BatchCreatePartitionError {
-        BatchCreatePartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchCreatePartitionError {
@@ -3975,13 +3953,6 @@ impl Error for BatchCreatePartitionError {
             BatchCreatePartitionError::InvalidInput(ref cause) => cause,
             BatchCreatePartitionError::OperationTimeout(ref cause) => cause,
             BatchCreatePartitionError::ResourceNumberLimitExceeded(ref cause) => cause,
-            BatchCreatePartitionError::Validation(ref cause) => cause,
-            BatchCreatePartitionError::Credentials(ref err) => err.description(),
-            BatchCreatePartitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchCreatePartitionError::ParseError(ref cause) => cause,
-            BatchCreatePartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3992,20 +3963,10 @@ pub enum BatchDeleteConnectionError {
     InternalService(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4018,39 +3979,20 @@ impl BatchDeleteConnectionError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return BatchDeleteConnectionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteConnectionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeleteConnectionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteConnectionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchDeleteConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteConnectionError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteConnectionError {
-        BatchDeleteConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteConnectionError {
-    fn from(err: CredentialsError) -> BatchDeleteConnectionError {
-        BatchDeleteConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteConnectionError {
-    fn from(err: HttpDispatchError) -> BatchDeleteConnectionError {
-        BatchDeleteConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteConnectionError {
-    fn from(err: io::Error) -> BatchDeleteConnectionError {
-        BatchDeleteConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteConnectionError {
@@ -4063,13 +4005,6 @@ impl Error for BatchDeleteConnectionError {
         match *self {
             BatchDeleteConnectionError::InternalService(ref cause) => cause,
             BatchDeleteConnectionError::OperationTimeout(ref cause) => cause,
-            BatchDeleteConnectionError::Validation(ref cause) => cause,
-            BatchDeleteConnectionError::Credentials(ref err) => err.description(),
-            BatchDeleteConnectionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteConnectionError::ParseError(ref cause) => cause,
-            BatchDeleteConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4084,20 +4019,10 @@ pub enum BatchDeletePartitionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeletePartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeletePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeletePartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4110,45 +4035,30 @@ impl BatchDeletePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeletePartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchDeletePartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return BatchDeletePartitionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchDeletePartitionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return BatchDeletePartitionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchDeletePartitionError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeletePartitionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(BatchDeletePartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchDeletePartitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeletePartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeletePartitionError {
-    fn from(err: serde_json::error::Error) -> BatchDeletePartitionError {
-        BatchDeletePartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeletePartitionError {
-    fn from(err: CredentialsError) -> BatchDeletePartitionError {
-        BatchDeletePartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeletePartitionError {
-    fn from(err: HttpDispatchError) -> BatchDeletePartitionError {
-        BatchDeletePartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeletePartitionError {
-    fn from(err: io::Error) -> BatchDeletePartitionError {
-        BatchDeletePartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeletePartitionError {
@@ -4163,13 +4073,6 @@ impl Error for BatchDeletePartitionError {
             BatchDeletePartitionError::InternalService(ref cause) => cause,
             BatchDeletePartitionError::InvalidInput(ref cause) => cause,
             BatchDeletePartitionError::OperationTimeout(ref cause) => cause,
-            BatchDeletePartitionError::Validation(ref cause) => cause,
-            BatchDeletePartitionError::Credentials(ref err) => err.description(),
-            BatchDeletePartitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeletePartitionError::ParseError(ref cause) => cause,
-            BatchDeletePartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4184,20 +4087,10 @@ pub enum BatchDeleteTableError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4210,45 +4103,30 @@ impl BatchDeleteTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeleteTableError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteTableError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return BatchDeleteTableError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteTableError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return BatchDeleteTableError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteTableError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return BatchDeleteTableError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteTableError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchDeleteTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteTableError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteTableError {
-        BatchDeleteTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteTableError {
-    fn from(err: CredentialsError) -> BatchDeleteTableError {
-        BatchDeleteTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteTableError {
-    fn from(err: HttpDispatchError) -> BatchDeleteTableError {
-        BatchDeleteTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteTableError {
-    fn from(err: io::Error) -> BatchDeleteTableError {
-        BatchDeleteTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteTableError {
@@ -4263,11 +4141,6 @@ impl Error for BatchDeleteTableError {
             BatchDeleteTableError::InternalService(ref cause) => cause,
             BatchDeleteTableError::InvalidInput(ref cause) => cause,
             BatchDeleteTableError::OperationTimeout(ref cause) => cause,
-            BatchDeleteTableError::Validation(ref cause) => cause,
-            BatchDeleteTableError::Credentials(ref err) => err.description(),
-            BatchDeleteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchDeleteTableError::ParseError(ref cause) => cause,
-            BatchDeleteTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4282,20 +4155,10 @@ pub enum BatchDeleteTableVersionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDeleteTableVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteTableVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDeleteTableVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4308,49 +4171,30 @@ impl BatchDeleteTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchDeleteTableVersionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchDeleteTableVersionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return BatchDeleteTableVersionError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDeleteTableVersionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return BatchDeleteTableVersionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return BatchDeleteTableVersionError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDeleteTableVersionError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchDeleteTableVersionError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchDeleteTableVersionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDeleteTableVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDeleteTableVersionError {
-    fn from(err: serde_json::error::Error) -> BatchDeleteTableVersionError {
-        BatchDeleteTableVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDeleteTableVersionError {
-    fn from(err: CredentialsError) -> BatchDeleteTableVersionError {
-        BatchDeleteTableVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDeleteTableVersionError {
-    fn from(err: HttpDispatchError) -> BatchDeleteTableVersionError {
-        BatchDeleteTableVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDeleteTableVersionError {
-    fn from(err: io::Error) -> BatchDeleteTableVersionError {
-        BatchDeleteTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDeleteTableVersionError {
@@ -4365,13 +4209,6 @@ impl Error for BatchDeleteTableVersionError {
             BatchDeleteTableVersionError::InternalService(ref cause) => cause,
             BatchDeleteTableVersionError::InvalidInput(ref cause) => cause,
             BatchDeleteTableVersionError::OperationTimeout(ref cause) => cause,
-            BatchDeleteTableVersionError::Validation(ref cause) => cause,
-            BatchDeleteTableVersionError::Credentials(ref err) => err.description(),
-            BatchDeleteTableVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDeleteTableVersionError::ParseError(ref cause) => cause,
-            BatchDeleteTableVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4388,20 +4225,10 @@ pub enum BatchGetPartitionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetPartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetPartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetPartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4414,48 +4241,35 @@ impl BatchGetPartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return BatchGetPartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchGetPartitionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "GlueEncryptionException" => {
-                    return BatchGetPartitionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(BatchGetPartitionError::GlueEncryption(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return BatchGetPartitionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchGetPartitionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return BatchGetPartitionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(BatchGetPartitionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return BatchGetPartitionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(BatchGetPartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchGetPartitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetPartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetPartitionError {
-    fn from(err: serde_json::error::Error) -> BatchGetPartitionError {
-        BatchGetPartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetPartitionError {
-    fn from(err: CredentialsError) -> BatchGetPartitionError {
-        BatchGetPartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetPartitionError {
-    fn from(err: HttpDispatchError) -> BatchGetPartitionError {
-        BatchGetPartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetPartitionError {
-    fn from(err: io::Error) -> BatchGetPartitionError {
-        BatchGetPartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetPartitionError {
@@ -4471,13 +4285,6 @@ impl Error for BatchGetPartitionError {
             BatchGetPartitionError::InternalService(ref cause) => cause,
             BatchGetPartitionError::InvalidInput(ref cause) => cause,
             BatchGetPartitionError::OperationTimeout(ref cause) => cause,
-            BatchGetPartitionError::Validation(ref cause) => cause,
-            BatchGetPartitionError::Credentials(ref err) => err.description(),
-            BatchGetPartitionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchGetPartitionError::ParseError(ref cause) => cause,
-            BatchGetPartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4490,20 +4297,10 @@ pub enum GlueBatchStopJobRunError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GlueBatchStopJobRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> GlueBatchStopJobRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GlueBatchStopJobRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4516,42 +4313,25 @@ impl GlueBatchStopJobRunError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GlueBatchStopJobRunError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GlueBatchStopJobRunError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GlueBatchStopJobRunError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GlueBatchStopJobRunError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return GlueBatchStopJobRunError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GlueBatchStopJobRunError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GlueBatchStopJobRunError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GlueBatchStopJobRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GlueBatchStopJobRunError {
-    fn from(err: serde_json::error::Error) -> GlueBatchStopJobRunError {
-        GlueBatchStopJobRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GlueBatchStopJobRunError {
-    fn from(err: CredentialsError) -> GlueBatchStopJobRunError {
-        GlueBatchStopJobRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GlueBatchStopJobRunError {
-    fn from(err: HttpDispatchError) -> GlueBatchStopJobRunError {
-        GlueBatchStopJobRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GlueBatchStopJobRunError {
-    fn from(err: io::Error) -> GlueBatchStopJobRunError {
-        GlueBatchStopJobRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GlueBatchStopJobRunError {
@@ -4565,13 +4345,6 @@ impl Error for GlueBatchStopJobRunError {
             GlueBatchStopJobRunError::InternalService(ref cause) => cause,
             GlueBatchStopJobRunError::InvalidInput(ref cause) => cause,
             GlueBatchStopJobRunError::OperationTimeout(ref cause) => cause,
-            GlueBatchStopJobRunError::Validation(ref cause) => cause,
-            GlueBatchStopJobRunError::Credentials(ref err) => err.description(),
-            GlueBatchStopJobRunError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GlueBatchStopJobRunError::ParseError(ref cause) => cause,
-            GlueBatchStopJobRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4584,20 +4357,10 @@ pub enum CreateClassifierError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4610,42 +4373,25 @@ impl CreateClassifierError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateClassifierError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateClassifierError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateClassifierError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateClassifierError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateClassifierError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateClassifierError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateClassifierError {
-    fn from(err: serde_json::error::Error) -> CreateClassifierError {
-        CreateClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateClassifierError {
-    fn from(err: CredentialsError) -> CreateClassifierError {
-        CreateClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClassifierError {
-    fn from(err: HttpDispatchError) -> CreateClassifierError {
-        CreateClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClassifierError {
-    fn from(err: io::Error) -> CreateClassifierError {
-        CreateClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateClassifierError {
@@ -4659,11 +4405,6 @@ impl Error for CreateClassifierError {
             CreateClassifierError::AlreadyExists(ref cause) => cause,
             CreateClassifierError::InvalidInput(ref cause) => cause,
             CreateClassifierError::OperationTimeout(ref cause) => cause,
-            CreateClassifierError::Validation(ref cause) => cause,
-            CreateClassifierError::Credentials(ref err) => err.description(),
-            CreateClassifierError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClassifierError::ParseError(ref cause) => cause,
-            CreateClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4680,20 +4421,10 @@ pub enum CreateConnectionError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4706,50 +4437,35 @@ impl CreateConnectionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateConnectionError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateConnectionError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return CreateConnectionError::GlueEncryption(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return CreateConnectionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return CreateConnectionError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return CreateConnectionError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateConnectionError::GlueEncryption(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateConnectionError::Validation(error_message.to_string());
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateConnectionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreateConnectionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreateConnectionError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateConnectionError {
-    fn from(err: serde_json::error::Error) -> CreateConnectionError {
-        CreateConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateConnectionError {
-    fn from(err: CredentialsError) -> CreateConnectionError {
-        CreateConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConnectionError {
-    fn from(err: HttpDispatchError) -> CreateConnectionError {
-        CreateConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConnectionError {
-    fn from(err: io::Error) -> CreateConnectionError {
-        CreateConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateConnectionError {
@@ -4765,11 +4481,6 @@ impl Error for CreateConnectionError {
             CreateConnectionError::InvalidInput(ref cause) => cause,
             CreateConnectionError::OperationTimeout(ref cause) => cause,
             CreateConnectionError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateConnectionError::Validation(ref cause) => cause,
-            CreateConnectionError::Credentials(ref err) => err.description(),
-            CreateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateConnectionError::ParseError(ref cause) => cause,
-            CreateConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4784,20 +4495,10 @@ pub enum CreateCrawlerError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4810,47 +4511,30 @@ impl CreateCrawlerError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateCrawlerError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateCrawlerError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateCrawlerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateCrawlerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateCrawlerError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateCrawlerError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCrawlerError {
-    fn from(err: serde_json::error::Error) -> CreateCrawlerError {
-        CreateCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCrawlerError {
-    fn from(err: CredentialsError) -> CreateCrawlerError {
-        CreateCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCrawlerError {
-    fn from(err: HttpDispatchError) -> CreateCrawlerError {
-        CreateCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCrawlerError {
-    fn from(err: io::Error) -> CreateCrawlerError {
-        CreateCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCrawlerError {
@@ -4865,11 +4549,6 @@ impl Error for CreateCrawlerError {
             CreateCrawlerError::InvalidInput(ref cause) => cause,
             CreateCrawlerError::OperationTimeout(ref cause) => cause,
             CreateCrawlerError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateCrawlerError::Validation(ref cause) => cause,
-            CreateCrawlerError::Credentials(ref err) => err.description(),
-            CreateCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCrawlerError::ParseError(ref cause) => cause,
-            CreateCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4888,20 +4567,10 @@ pub enum CreateDatabaseError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4914,53 +4583,40 @@ impl CreateDatabaseError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateDatabaseError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateDatabaseError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return CreateDatabaseError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(CreateDatabaseError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateDatabaseError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateDatabaseError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateDatabaseError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateDatabaseError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return CreateDatabaseError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDatabaseError::OperationTimeout(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateDatabaseError::Validation(error_message.to_string());
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreateDatabaseError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDatabaseError {
-    fn from(err: serde_json::error::Error) -> CreateDatabaseError {
-        CreateDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDatabaseError {
-    fn from(err: CredentialsError) -> CreateDatabaseError {
-        CreateDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDatabaseError {
-    fn from(err: HttpDispatchError) -> CreateDatabaseError {
-        CreateDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDatabaseError {
-    fn from(err: io::Error) -> CreateDatabaseError {
-        CreateDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDatabaseError {
@@ -4977,11 +4633,6 @@ impl Error for CreateDatabaseError {
             CreateDatabaseError::InvalidInput(ref cause) => cause,
             CreateDatabaseError::OperationTimeout(ref cause) => cause,
             CreateDatabaseError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateDatabaseError::Validation(ref cause) => cause,
-            CreateDatabaseError::Credentials(ref err) => err.description(),
-            CreateDatabaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDatabaseError::ParseError(ref cause) => cause,
-            CreateDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5002,20 +4653,10 @@ pub enum CreateDevEndpointError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDevEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDevEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDevEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5028,58 +4669,49 @@ impl CreateDevEndpointError {
 
             match *error_type {
                 "AccessDeniedException" => {
-                    return CreateDevEndpointError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDevEndpointError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "AlreadyExistsException" => {
-                    return CreateDevEndpointError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateDevEndpointError::AlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return CreateDevEndpointError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateDevEndpointError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServiceException" => {
-                    return CreateDevEndpointError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return CreateDevEndpointError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return CreateDevEndpointError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDevEndpointError::InternalService(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateDevEndpointError::Validation(error_message.to_string());
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateDevEndpointError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreateDevEndpointError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateDevEndpointError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDevEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDevEndpointError {
-    fn from(err: serde_json::error::Error) -> CreateDevEndpointError {
-        CreateDevEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDevEndpointError {
-    fn from(err: CredentialsError) -> CreateDevEndpointError {
-        CreateDevEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDevEndpointError {
-    fn from(err: HttpDispatchError) -> CreateDevEndpointError {
-        CreateDevEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDevEndpointError {
-    fn from(err: io::Error) -> CreateDevEndpointError {
-        CreateDevEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDevEndpointError {
@@ -5097,13 +4729,6 @@ impl Error for CreateDevEndpointError {
             CreateDevEndpointError::InvalidInput(ref cause) => cause,
             CreateDevEndpointError::OperationTimeout(ref cause) => cause,
             CreateDevEndpointError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateDevEndpointError::Validation(ref cause) => cause,
-            CreateDevEndpointError::Credentials(ref err) => err.description(),
-            CreateDevEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDevEndpointError::ParseError(ref cause) => cause,
-            CreateDevEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5124,20 +4749,10 @@ pub enum CreateJobError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5150,54 +4765,45 @@ impl CreateJobError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateJobError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateJobError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return CreateJobError::IdempotentParameterMismatch(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::IdempotentParameterMismatch(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateJobError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateJobError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateJobError::ResourceNumberLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateJobError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateJobError {
-    fn from(err: serde_json::error::Error) -> CreateJobError {
-        CreateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateJobError {
-    fn from(err: CredentialsError) -> CreateJobError {
-        CreateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateJobError {
-    fn from(err: HttpDispatchError) -> CreateJobError {
-        CreateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateJobError {
-    fn from(err: io::Error) -> CreateJobError {
-        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateJobError {
@@ -5215,11 +4821,6 @@ impl Error for CreateJobError {
             CreateJobError::InvalidInput(ref cause) => cause,
             CreateJobError::OperationTimeout(ref cause) => cause,
             CreateJobError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateJobError::Validation(ref cause) => cause,
-            CreateJobError::Credentials(ref err) => err.description(),
-            CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateJobError::ParseError(ref cause) => cause,
-            CreateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5240,20 +4841,10 @@ pub enum CreatePartitionError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreatePartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreatePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5266,56 +4857,45 @@ impl CreatePartitionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreatePartitionError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreatePartitionError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return CreatePartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(CreatePartitionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return CreatePartitionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(CreatePartitionError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreatePartitionError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return CreatePartitionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return CreatePartitionError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return CreatePartitionError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreatePartitionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreatePartitionError::Validation(error_message.to_string());
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreatePartitionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(CreatePartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(CreatePartitionError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreatePartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreatePartitionError {
-    fn from(err: serde_json::error::Error) -> CreatePartitionError {
-        CreatePartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreatePartitionError {
-    fn from(err: CredentialsError) -> CreatePartitionError {
-        CreatePartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreatePartitionError {
-    fn from(err: HttpDispatchError) -> CreatePartitionError {
-        CreatePartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreatePartitionError {
-    fn from(err: io::Error) -> CreatePartitionError {
-        CreatePartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreatePartitionError {
@@ -5333,11 +4913,6 @@ impl Error for CreatePartitionError {
             CreatePartitionError::InvalidInput(ref cause) => cause,
             CreatePartitionError::OperationTimeout(ref cause) => cause,
             CreatePartitionError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreatePartitionError::Validation(ref cause) => cause,
-            CreatePartitionError::Credentials(ref err) => err.description(),
-            CreatePartitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreatePartitionError::ParseError(ref cause) => cause,
-            CreatePartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5350,20 +4925,10 @@ pub enum CreateScriptError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateScriptError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateScriptError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateScriptError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5376,42 +4941,25 @@ impl CreateScriptError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return CreateScriptError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateScriptError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateScriptError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateScriptError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateScriptError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateScriptError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateScriptError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateScriptError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateScriptError {
-    fn from(err: serde_json::error::Error) -> CreateScriptError {
-        CreateScriptError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateScriptError {
-    fn from(err: CredentialsError) -> CreateScriptError {
-        CreateScriptError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateScriptError {
-    fn from(err: HttpDispatchError) -> CreateScriptError {
-        CreateScriptError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateScriptError {
-    fn from(err: io::Error) -> CreateScriptError {
-        CreateScriptError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateScriptError {
@@ -5425,11 +4973,6 @@ impl Error for CreateScriptError {
             CreateScriptError::InternalService(ref cause) => cause,
             CreateScriptError::InvalidInput(ref cause) => cause,
             CreateScriptError::OperationTimeout(ref cause) => cause,
-            CreateScriptError::Validation(ref cause) => cause,
-            CreateScriptError::Credentials(ref err) => err.description(),
-            CreateScriptError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateScriptError::ParseError(ref cause) => cause,
-            CreateScriptError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5446,20 +4989,12 @@ pub enum CreateSecurityConfigurationError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSecurityConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSecurityConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateSecurityConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5472,58 +5007,37 @@ impl CreateSecurityConfigurationError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateSecurityConfigurationError::AlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSecurityConfigurationError::AlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return CreateSecurityConfigurationError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSecurityConfigurationError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateSecurityConfigurationError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSecurityConfigurationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OperationTimeoutException" => {
-                    return CreateSecurityConfigurationError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateSecurityConfigurationError::OperationTimeout(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateSecurityConfigurationError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateSecurityConfigurationError::ResourceNumberLimitExceeded(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return CreateSecurityConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSecurityConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSecurityConfigurationError {
-    fn from(err: serde_json::error::Error) -> CreateSecurityConfigurationError {
-        CreateSecurityConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSecurityConfigurationError {
-    fn from(err: CredentialsError) -> CreateSecurityConfigurationError {
-        CreateSecurityConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSecurityConfigurationError {
-    fn from(err: HttpDispatchError) -> CreateSecurityConfigurationError {
-        CreateSecurityConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSecurityConfigurationError {
-    fn from(err: io::Error) -> CreateSecurityConfigurationError {
-        CreateSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSecurityConfigurationError {
@@ -5539,13 +5053,6 @@ impl Error for CreateSecurityConfigurationError {
             CreateSecurityConfigurationError::InvalidInput(ref cause) => cause,
             CreateSecurityConfigurationError::OperationTimeout(ref cause) => cause,
             CreateSecurityConfigurationError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateSecurityConfigurationError::Validation(ref cause) => cause,
-            CreateSecurityConfigurationError::Credentials(ref err) => err.description(),
-            CreateSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateSecurityConfigurationError::ParseError(ref cause) => cause,
-            CreateSecurityConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5566,20 +5073,10 @@ pub enum CreateTableError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5592,56 +5089,45 @@ impl CreateTableError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateTableError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return CreateTableError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return CreateTableError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateTableError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateTableError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateTableError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateTableError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTableError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTableError {
-    fn from(err: serde_json::error::Error) -> CreateTableError {
-        CreateTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTableError {
-    fn from(err: CredentialsError) -> CreateTableError {
-        CreateTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTableError {
-    fn from(err: HttpDispatchError) -> CreateTableError {
-        CreateTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTableError {
-    fn from(err: io::Error) -> CreateTableError {
-        CreateTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTableError {
@@ -5659,11 +5145,6 @@ impl Error for CreateTableError {
             CreateTableError::InvalidInput(ref cause) => cause,
             CreateTableError::OperationTimeout(ref cause) => cause,
             CreateTableError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateTableError::Validation(ref cause) => cause,
-            CreateTableError::Credentials(ref err) => err.description(),
-            CreateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTableError::ParseError(ref cause) => cause,
-            CreateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5684,20 +5165,10 @@ pub enum CreateTriggerError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5710,58 +5181,45 @@ impl CreateTriggerError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateTriggerError::AlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateTriggerError::AlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "ConcurrentModificationException" => {
-                    return CreateTriggerError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(CreateTriggerError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "IdempotentParameterMismatchException" => {
-                    return CreateTriggerError::IdempotentParameterMismatch(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTriggerError::IdempotentParameterMismatch(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return CreateTriggerError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return CreateTriggerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return CreateTriggerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(CreateTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateTriggerError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTriggerError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateTriggerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTriggerError {
-    fn from(err: serde_json::error::Error) -> CreateTriggerError {
-        CreateTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTriggerError {
-    fn from(err: CredentialsError) -> CreateTriggerError {
-        CreateTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTriggerError {
-    fn from(err: HttpDispatchError) -> CreateTriggerError {
-        CreateTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTriggerError {
-    fn from(err: io::Error) -> CreateTriggerError {
-        CreateTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTriggerError {
@@ -5779,11 +5237,6 @@ impl Error for CreateTriggerError {
             CreateTriggerError::InvalidInput(ref cause) => cause,
             CreateTriggerError::OperationTimeout(ref cause) => cause,
             CreateTriggerError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateTriggerError::Validation(ref cause) => cause,
-            CreateTriggerError::Credentials(ref err) => err.description(),
-            CreateTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTriggerError::ParseError(ref cause) => cause,
-            CreateTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5804,20 +5257,10 @@ pub enum CreateUserDefinedFunctionError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserDefinedFunctionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserDefinedFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserDefinedFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5830,66 +5273,47 @@ impl CreateUserDefinedFunctionError {
 
             match *error_type {
                 "AlreadyExistsException" => {
-                    return CreateUserDefinedFunctionError::AlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserDefinedFunctionError::AlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return CreateUserDefinedFunctionError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserDefinedFunctionError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "GlueEncryptionException" => {
-                    return CreateUserDefinedFunctionError::GlueEncryption(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserDefinedFunctionError::GlueEncryption(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return CreateUserDefinedFunctionError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserDefinedFunctionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return CreateUserDefinedFunctionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(CreateUserDefinedFunctionError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return CreateUserDefinedFunctionError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateUserDefinedFunctionError::OperationTimeout(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNumberLimitExceededException" => {
-                    return CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return CreateUserDefinedFunctionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserDefinedFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserDefinedFunctionError {
-    fn from(err: serde_json::error::Error) -> CreateUserDefinedFunctionError {
-        CreateUserDefinedFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserDefinedFunctionError {
-    fn from(err: CredentialsError) -> CreateUserDefinedFunctionError {
-        CreateUserDefinedFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserDefinedFunctionError {
-    fn from(err: HttpDispatchError) -> CreateUserDefinedFunctionError {
-        CreateUserDefinedFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserDefinedFunctionError {
-    fn from(err: io::Error) -> CreateUserDefinedFunctionError {
-        CreateUserDefinedFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserDefinedFunctionError {
@@ -5907,13 +5331,6 @@ impl Error for CreateUserDefinedFunctionError {
             CreateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             CreateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
             CreateUserDefinedFunctionError::ResourceNumberLimitExceeded(ref cause) => cause,
-            CreateUserDefinedFunctionError::Validation(ref cause) => cause,
-            CreateUserDefinedFunctionError::Credentials(ref err) => err.description(),
-            CreateUserDefinedFunctionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateUserDefinedFunctionError::ParseError(ref cause) => cause,
-            CreateUserDefinedFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5924,20 +5341,10 @@ pub enum DeleteClassifierError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5950,39 +5357,20 @@ impl DeleteClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteClassifierError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteClassifierError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteClassifierError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteClassifierError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteClassifierError {
-    fn from(err: serde_json::error::Error) -> DeleteClassifierError {
-        DeleteClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClassifierError {
-    fn from(err: CredentialsError) -> DeleteClassifierError {
-        DeleteClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClassifierError {
-    fn from(err: HttpDispatchError) -> DeleteClassifierError {
-        DeleteClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClassifierError {
-    fn from(err: io::Error) -> DeleteClassifierError {
-        DeleteClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteClassifierError {
@@ -5995,11 +5383,6 @@ impl Error for DeleteClassifierError {
         match *self {
             DeleteClassifierError::EntityNotFound(ref cause) => cause,
             DeleteClassifierError::OperationTimeout(ref cause) => cause,
-            DeleteClassifierError::Validation(ref cause) => cause,
-            DeleteClassifierError::Credentials(ref err) => err.description(),
-            DeleteClassifierError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClassifierError::ParseError(ref cause) => cause,
-            DeleteClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6010,20 +5393,10 @@ pub enum DeleteConnectionError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6036,39 +5409,20 @@ impl DeleteConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteConnectionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteConnectionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteConnectionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteConnectionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteConnectionError {
-    fn from(err: serde_json::error::Error) -> DeleteConnectionError {
-        DeleteConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConnectionError {
-    fn from(err: CredentialsError) -> DeleteConnectionError {
-        DeleteConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConnectionError {
-    fn from(err: HttpDispatchError) -> DeleteConnectionError {
-        DeleteConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConnectionError {
-    fn from(err: io::Error) -> DeleteConnectionError {
-        DeleteConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteConnectionError {
@@ -6081,11 +5435,6 @@ impl Error for DeleteConnectionError {
         match *self {
             DeleteConnectionError::EntityNotFound(ref cause) => cause,
             DeleteConnectionError::OperationTimeout(ref cause) => cause,
-            DeleteConnectionError::Validation(ref cause) => cause,
-            DeleteConnectionError::Credentials(ref err) => err.description(),
-            DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteConnectionError::ParseError(ref cause) => cause,
-            DeleteConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6100,20 +5449,10 @@ pub enum DeleteCrawlerError {
     OperationTimeout(String),
     /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6126,45 +5465,30 @@ impl DeleteCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return DeleteCrawlerError::CrawlerRunning(String::from(error_message));
+                    return RusotoError::Service(DeleteCrawlerError::CrawlerRunning(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return DeleteCrawlerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteCrawlerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "SchedulerTransitioningException" => {
-                    return DeleteCrawlerError::SchedulerTransitioning(String::from(error_message));
+                    return RusotoError::Service(DeleteCrawlerError::SchedulerTransitioning(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCrawlerError {
-    fn from(err: serde_json::error::Error) -> DeleteCrawlerError {
-        DeleteCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCrawlerError {
-    fn from(err: CredentialsError) -> DeleteCrawlerError {
-        DeleteCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCrawlerError {
-    fn from(err: HttpDispatchError) -> DeleteCrawlerError {
-        DeleteCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCrawlerError {
-    fn from(err: io::Error) -> DeleteCrawlerError {
-        DeleteCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCrawlerError {
@@ -6179,11 +5503,6 @@ impl Error for DeleteCrawlerError {
             DeleteCrawlerError::EntityNotFound(ref cause) => cause,
             DeleteCrawlerError::OperationTimeout(ref cause) => cause,
             DeleteCrawlerError::SchedulerTransitioning(ref cause) => cause,
-            DeleteCrawlerError::Validation(ref cause) => cause,
-            DeleteCrawlerError::Credentials(ref err) => err.description(),
-            DeleteCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCrawlerError::ParseError(ref cause) => cause,
-            DeleteCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6198,20 +5517,10 @@ pub enum DeleteDatabaseError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6224,45 +5533,30 @@ impl DeleteDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteDatabaseError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDatabaseError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return DeleteDatabaseError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteDatabaseError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return DeleteDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDatabaseError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteDatabaseError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteDatabaseError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDatabaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDatabaseError {
-    fn from(err: serde_json::error::Error) -> DeleteDatabaseError {
-        DeleteDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDatabaseError {
-    fn from(err: CredentialsError) -> DeleteDatabaseError {
-        DeleteDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDatabaseError {
-    fn from(err: HttpDispatchError) -> DeleteDatabaseError {
-        DeleteDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDatabaseError {
-    fn from(err: io::Error) -> DeleteDatabaseError {
-        DeleteDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDatabaseError {
@@ -6277,11 +5571,6 @@ impl Error for DeleteDatabaseError {
             DeleteDatabaseError::InternalService(ref cause) => cause,
             DeleteDatabaseError::InvalidInput(ref cause) => cause,
             DeleteDatabaseError::OperationTimeout(ref cause) => cause,
-            DeleteDatabaseError::Validation(ref cause) => cause,
-            DeleteDatabaseError::Credentials(ref err) => err.description(),
-            DeleteDatabaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDatabaseError::ParseError(ref cause) => cause,
-            DeleteDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6296,20 +5585,10 @@ pub enum DeleteDevEndpointError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDevEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDevEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDevEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6322,45 +5601,30 @@ impl DeleteDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteDevEndpointError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDevEndpointError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteDevEndpointError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteDevEndpointError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteDevEndpointError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteDevEndpointError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteDevEndpointError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteDevEndpointError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDevEndpointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDevEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDevEndpointError {
-    fn from(err: serde_json::error::Error) -> DeleteDevEndpointError {
-        DeleteDevEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDevEndpointError {
-    fn from(err: CredentialsError) -> DeleteDevEndpointError {
-        DeleteDevEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDevEndpointError {
-    fn from(err: HttpDispatchError) -> DeleteDevEndpointError {
-        DeleteDevEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDevEndpointError {
-    fn from(err: io::Error) -> DeleteDevEndpointError {
-        DeleteDevEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDevEndpointError {
@@ -6375,13 +5639,6 @@ impl Error for DeleteDevEndpointError {
             DeleteDevEndpointError::InternalService(ref cause) => cause,
             DeleteDevEndpointError::InvalidInput(ref cause) => cause,
             DeleteDevEndpointError::OperationTimeout(ref cause) => cause,
-            DeleteDevEndpointError::Validation(ref cause) => cause,
-            DeleteDevEndpointError::Credentials(ref err) => err.description(),
-            DeleteDevEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDevEndpointError::ParseError(ref cause) => cause,
-            DeleteDevEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6394,20 +5651,10 @@ pub enum DeleteJobError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6420,42 +5667,25 @@ impl DeleteJobError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return DeleteJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return DeleteJobError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteJobError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteJobError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteJobError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteJobError {
-    fn from(err: serde_json::error::Error) -> DeleteJobError {
-        DeleteJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteJobError {
-    fn from(err: CredentialsError) -> DeleteJobError {
-        DeleteJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteJobError {
-    fn from(err: HttpDispatchError) -> DeleteJobError {
-        DeleteJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteJobError {
-    fn from(err: io::Error) -> DeleteJobError {
-        DeleteJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteJobError {
@@ -6469,11 +5699,6 @@ impl Error for DeleteJobError {
             DeleteJobError::InternalService(ref cause) => cause,
             DeleteJobError::InvalidInput(ref cause) => cause,
             DeleteJobError::OperationTimeout(ref cause) => cause,
-            DeleteJobError::Validation(ref cause) => cause,
-            DeleteJobError::Credentials(ref err) => err.description(),
-            DeleteJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteJobError::ParseError(ref cause) => cause,
-            DeleteJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6488,20 +5713,10 @@ pub enum DeletePartitionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeletePartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeletePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6514,45 +5729,30 @@ impl DeletePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeletePartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeletePartitionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return DeletePartitionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeletePartitionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeletePartitionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeletePartitionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeletePartitionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeletePartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeletePartitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeletePartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeletePartitionError {
-    fn from(err: serde_json::error::Error) -> DeletePartitionError {
-        DeletePartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeletePartitionError {
-    fn from(err: CredentialsError) -> DeletePartitionError {
-        DeletePartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeletePartitionError {
-    fn from(err: HttpDispatchError) -> DeletePartitionError {
-        DeletePartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeletePartitionError {
-    fn from(err: io::Error) -> DeletePartitionError {
-        DeletePartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeletePartitionError {
@@ -6567,11 +5767,6 @@ impl Error for DeletePartitionError {
             DeletePartitionError::InternalService(ref cause) => cause,
             DeletePartitionError::InvalidInput(ref cause) => cause,
             DeletePartitionError::OperationTimeout(ref cause) => cause,
-            DeletePartitionError::Validation(ref cause) => cause,
-            DeletePartitionError::Credentials(ref err) => err.description(),
-            DeletePartitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeletePartitionError::ParseError(ref cause) => cause,
-            DeletePartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6588,20 +5783,10 @@ pub enum DeleteResourcePolicyError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourcePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6614,50 +5799,35 @@ impl DeleteResourcePolicyError {
 
             match *error_type {
                 "ConditionCheckFailureException" => {
-                    return DeleteResourcePolicyError::ConditionCheckFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteResourcePolicyError::ConditionCheckFailure(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return DeleteResourcePolicyError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteResourcePolicyError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteResourcePolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteResourcePolicyError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteResourcePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteResourcePolicyError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteResourcePolicyError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteResourcePolicyError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteResourcePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteResourcePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteResourcePolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteResourcePolicyError {
-    fn from(err: CredentialsError) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteResourcePolicyError {
-    fn from(err: HttpDispatchError) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteResourcePolicyError {
-    fn from(err: io::Error) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -6673,13 +5843,6 @@ impl Error for DeleteResourcePolicyError {
             DeleteResourcePolicyError::InternalService(ref cause) => cause,
             DeleteResourcePolicyError::InvalidInput(ref cause) => cause,
             DeleteResourcePolicyError::OperationTimeout(ref cause) => cause,
-            DeleteResourcePolicyError::Validation(ref cause) => cause,
-            DeleteResourcePolicyError::Credentials(ref err) => err.description(),
-            DeleteResourcePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteResourcePolicyError::ParseError(ref cause) => cause,
-            DeleteResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6694,20 +5857,12 @@ pub enum DeleteSecurityConfigurationError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSecurityConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSecurityConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteSecurityConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6720,53 +5875,30 @@ impl DeleteSecurityConfigurationError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteSecurityConfigurationError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSecurityConfigurationError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DeleteSecurityConfigurationError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSecurityConfigurationError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteSecurityConfigurationError::InvalidInput(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSecurityConfigurationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteSecurityConfigurationError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSecurityConfigurationError::OperationTimeout(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSecurityConfigurationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSecurityConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSecurityConfigurationError {
-    fn from(err: serde_json::error::Error) -> DeleteSecurityConfigurationError {
-        DeleteSecurityConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSecurityConfigurationError {
-    fn from(err: CredentialsError) -> DeleteSecurityConfigurationError {
-        DeleteSecurityConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSecurityConfigurationError {
-    fn from(err: HttpDispatchError) -> DeleteSecurityConfigurationError {
-        DeleteSecurityConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSecurityConfigurationError {
-    fn from(err: io::Error) -> DeleteSecurityConfigurationError {
-        DeleteSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSecurityConfigurationError {
@@ -6781,13 +5913,6 @@ impl Error for DeleteSecurityConfigurationError {
             DeleteSecurityConfigurationError::InternalService(ref cause) => cause,
             DeleteSecurityConfigurationError::InvalidInput(ref cause) => cause,
             DeleteSecurityConfigurationError::OperationTimeout(ref cause) => cause,
-            DeleteSecurityConfigurationError::Validation(ref cause) => cause,
-            DeleteSecurityConfigurationError::Credentials(ref err) => err.description(),
-            DeleteSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSecurityConfigurationError::ParseError(ref cause) => cause,
-            DeleteSecurityConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6802,20 +5927,10 @@ pub enum DeleteTableError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6828,45 +5943,30 @@ impl DeleteTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteTableError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return DeleteTableError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return DeleteTableError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTableError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTableError {
-    fn from(err: serde_json::error::Error) -> DeleteTableError {
-        DeleteTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTableError {
-    fn from(err: CredentialsError) -> DeleteTableError {
-        DeleteTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTableError {
-    fn from(err: HttpDispatchError) -> DeleteTableError {
-        DeleteTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTableError {
-    fn from(err: io::Error) -> DeleteTableError {
-        DeleteTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTableError {
@@ -6881,11 +5981,6 @@ impl Error for DeleteTableError {
             DeleteTableError::InternalService(ref cause) => cause,
             DeleteTableError::InvalidInput(ref cause) => cause,
             DeleteTableError::OperationTimeout(ref cause) => cause,
-            DeleteTableError::Validation(ref cause) => cause,
-            DeleteTableError::Credentials(ref err) => err.description(),
-            DeleteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTableError::ParseError(ref cause) => cause,
-            DeleteTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6900,20 +5995,10 @@ pub enum DeleteTableVersionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTableVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTableVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6926,45 +6011,30 @@ impl DeleteTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteTableVersionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTableVersionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteTableVersionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteTableVersionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return DeleteTableVersionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteTableVersionError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTableVersionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteTableVersionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTableVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTableVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTableVersionError {
-    fn from(err: serde_json::error::Error) -> DeleteTableVersionError {
-        DeleteTableVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTableVersionError {
-    fn from(err: CredentialsError) -> DeleteTableVersionError {
-        DeleteTableVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTableVersionError {
-    fn from(err: HttpDispatchError) -> DeleteTableVersionError {
-        DeleteTableVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTableVersionError {
-    fn from(err: io::Error) -> DeleteTableVersionError {
-        DeleteTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTableVersionError {
@@ -6979,13 +6049,6 @@ impl Error for DeleteTableVersionError {
             DeleteTableVersionError::InternalService(ref cause) => cause,
             DeleteTableVersionError::InvalidInput(ref cause) => cause,
             DeleteTableVersionError::OperationTimeout(ref cause) => cause,
-            DeleteTableVersionError::Validation(ref cause) => cause,
-            DeleteTableVersionError::Credentials(ref err) => err.description(),
-            DeleteTableVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTableVersionError::ParseError(ref cause) => cause,
-            DeleteTableVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7000,20 +6063,10 @@ pub enum DeleteTriggerError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7026,45 +6079,30 @@ impl DeleteTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return DeleteTriggerError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(DeleteTriggerError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteTriggerError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return DeleteTriggerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(DeleteTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return DeleteTriggerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(DeleteTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteTriggerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTriggerError {
-    fn from(err: serde_json::error::Error) -> DeleteTriggerError {
-        DeleteTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTriggerError {
-    fn from(err: CredentialsError) -> DeleteTriggerError {
-        DeleteTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTriggerError {
-    fn from(err: HttpDispatchError) -> DeleteTriggerError {
-        DeleteTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTriggerError {
-    fn from(err: io::Error) -> DeleteTriggerError {
-        DeleteTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTriggerError {
@@ -7079,11 +6117,6 @@ impl Error for DeleteTriggerError {
             DeleteTriggerError::InternalService(ref cause) => cause,
             DeleteTriggerError::InvalidInput(ref cause) => cause,
             DeleteTriggerError::OperationTimeout(ref cause) => cause,
-            DeleteTriggerError::Validation(ref cause) => cause,
-            DeleteTriggerError::Credentials(ref err) => err.description(),
-            DeleteTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTriggerError::ParseError(ref cause) => cause,
-            DeleteTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7098,20 +6131,10 @@ pub enum DeleteUserDefinedFunctionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserDefinedFunctionError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserDefinedFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserDefinedFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7124,51 +6147,30 @@ impl DeleteUserDefinedFunctionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteUserDefinedFunctionError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteUserDefinedFunctionError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return DeleteUserDefinedFunctionError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteUserDefinedFunctionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return DeleteUserDefinedFunctionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return DeleteUserDefinedFunctionError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteUserDefinedFunctionError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteUserDefinedFunctionError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(DeleteUserDefinedFunctionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserDefinedFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserDefinedFunctionError {
-    fn from(err: serde_json::error::Error) -> DeleteUserDefinedFunctionError {
-        DeleteUserDefinedFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserDefinedFunctionError {
-    fn from(err: CredentialsError) -> DeleteUserDefinedFunctionError {
-        DeleteUserDefinedFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserDefinedFunctionError {
-    fn from(err: HttpDispatchError) -> DeleteUserDefinedFunctionError {
-        DeleteUserDefinedFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserDefinedFunctionError {
-    fn from(err: io::Error) -> DeleteUserDefinedFunctionError {
-        DeleteUserDefinedFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserDefinedFunctionError {
@@ -7183,13 +6185,6 @@ impl Error for DeleteUserDefinedFunctionError {
             DeleteUserDefinedFunctionError::InternalService(ref cause) => cause,
             DeleteUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             DeleteUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
-            DeleteUserDefinedFunctionError::Validation(ref cause) => cause,
-            DeleteUserDefinedFunctionError::Credentials(ref err) => err.description(),
-            DeleteUserDefinedFunctionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteUserDefinedFunctionError::ParseError(ref cause) => cause,
-            DeleteUserDefinedFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7200,20 +6195,10 @@ pub enum GetCatalogImportStatusError {
     InternalService(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCatalogImportStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCatalogImportStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCatalogImportStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7226,41 +6211,20 @@ impl GetCatalogImportStatusError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetCatalogImportStatusError::InternalService(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return GetCatalogImportStatusError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetCatalogImportStatusError::InternalService(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetCatalogImportStatusError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetCatalogImportStatusError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCatalogImportStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCatalogImportStatusError {
-    fn from(err: serde_json::error::Error) -> GetCatalogImportStatusError {
-        GetCatalogImportStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCatalogImportStatusError {
-    fn from(err: CredentialsError) -> GetCatalogImportStatusError {
-        GetCatalogImportStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCatalogImportStatusError {
-    fn from(err: HttpDispatchError) -> GetCatalogImportStatusError {
-        GetCatalogImportStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCatalogImportStatusError {
-    fn from(err: io::Error) -> GetCatalogImportStatusError {
-        GetCatalogImportStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCatalogImportStatusError {
@@ -7273,13 +6237,6 @@ impl Error for GetCatalogImportStatusError {
         match *self {
             GetCatalogImportStatusError::InternalService(ref cause) => cause,
             GetCatalogImportStatusError::OperationTimeout(ref cause) => cause,
-            GetCatalogImportStatusError::Validation(ref cause) => cause,
-            GetCatalogImportStatusError::Credentials(ref err) => err.description(),
-            GetCatalogImportStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCatalogImportStatusError::ParseError(ref cause) => cause,
-            GetCatalogImportStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7290,20 +6247,10 @@ pub enum GetClassifierError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7316,39 +6263,20 @@ impl GetClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetClassifierError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetClassifierError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetClassifierError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetClassifierError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetClassifierError {
-    fn from(err: serde_json::error::Error) -> GetClassifierError {
-        GetClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetClassifierError {
-    fn from(err: CredentialsError) -> GetClassifierError {
-        GetClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetClassifierError {
-    fn from(err: HttpDispatchError) -> GetClassifierError {
-        GetClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetClassifierError {
-    fn from(err: io::Error) -> GetClassifierError {
-        GetClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetClassifierError {
@@ -7361,11 +6289,6 @@ impl Error for GetClassifierError {
         match *self {
             GetClassifierError::EntityNotFound(ref cause) => cause,
             GetClassifierError::OperationTimeout(ref cause) => cause,
-            GetClassifierError::Validation(ref cause) => cause,
-            GetClassifierError::Credentials(ref err) => err.description(),
-            GetClassifierError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetClassifierError::ParseError(ref cause) => cause,
-            GetClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7374,20 +6297,10 @@ impl Error for GetClassifierError {
 pub enum GetClassifiersError {
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetClassifiersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetClassifiersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetClassifiersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7400,36 +6313,15 @@ impl GetClassifiersError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetClassifiersError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetClassifiersError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetClassifiersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetClassifiersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetClassifiersError {
-    fn from(err: serde_json::error::Error) -> GetClassifiersError {
-        GetClassifiersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetClassifiersError {
-    fn from(err: CredentialsError) -> GetClassifiersError {
-        GetClassifiersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetClassifiersError {
-    fn from(err: HttpDispatchError) -> GetClassifiersError {
-        GetClassifiersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetClassifiersError {
-    fn from(err: io::Error) -> GetClassifiersError {
-        GetClassifiersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetClassifiersError {
@@ -7441,11 +6333,6 @@ impl Error for GetClassifiersError {
     fn description(&self) -> &str {
         match *self {
             GetClassifiersError::OperationTimeout(ref cause) => cause,
-            GetClassifiersError::Validation(ref cause) => cause,
-            GetClassifiersError::Credentials(ref err) => err.description(),
-            GetClassifiersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetClassifiersError::ParseError(ref cause) => cause,
-            GetClassifiersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7460,20 +6347,10 @@ pub enum GetConnectionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7486,45 +6363,30 @@ impl GetConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetConnectionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetConnectionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetConnectionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetConnectionError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetConnectionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetConnectionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetConnectionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetConnectionError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetConnectionError {
-    fn from(err: serde_json::error::Error) -> GetConnectionError {
-        GetConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetConnectionError {
-    fn from(err: CredentialsError) -> GetConnectionError {
-        GetConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetConnectionError {
-    fn from(err: HttpDispatchError) -> GetConnectionError {
-        GetConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetConnectionError {
-    fn from(err: io::Error) -> GetConnectionError {
-        GetConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetConnectionError {
@@ -7539,11 +6401,6 @@ impl Error for GetConnectionError {
             GetConnectionError::GlueEncryption(ref cause) => cause,
             GetConnectionError::InvalidInput(ref cause) => cause,
             GetConnectionError::OperationTimeout(ref cause) => cause,
-            GetConnectionError::Validation(ref cause) => cause,
-            GetConnectionError::Credentials(ref err) => err.description(),
-            GetConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConnectionError::ParseError(ref cause) => cause,
-            GetConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7558,20 +6415,10 @@ pub enum GetConnectionsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetConnectionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetConnectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetConnectionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7584,45 +6431,30 @@ impl GetConnectionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetConnectionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetConnectionsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetConnectionsError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetConnectionsError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetConnectionsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetConnectionsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetConnectionsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetConnectionsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetConnectionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetConnectionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetConnectionsError {
-    fn from(err: serde_json::error::Error) -> GetConnectionsError {
-        GetConnectionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetConnectionsError {
-    fn from(err: CredentialsError) -> GetConnectionsError {
-        GetConnectionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetConnectionsError {
-    fn from(err: HttpDispatchError) -> GetConnectionsError {
-        GetConnectionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetConnectionsError {
-    fn from(err: io::Error) -> GetConnectionsError {
-        GetConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetConnectionsError {
@@ -7637,11 +6469,6 @@ impl Error for GetConnectionsError {
             GetConnectionsError::GlueEncryption(ref cause) => cause,
             GetConnectionsError::InvalidInput(ref cause) => cause,
             GetConnectionsError::OperationTimeout(ref cause) => cause,
-            GetConnectionsError::Validation(ref cause) => cause,
-            GetConnectionsError::Credentials(ref err) => err.description(),
-            GetConnectionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetConnectionsError::ParseError(ref cause) => cause,
-            GetConnectionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7652,20 +6479,10 @@ pub enum GetCrawlerError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7678,39 +6495,20 @@ impl GetCrawlerError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetCrawlerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCrawlerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCrawlerError {
-    fn from(err: serde_json::error::Error) -> GetCrawlerError {
-        GetCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCrawlerError {
-    fn from(err: CredentialsError) -> GetCrawlerError {
-        GetCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCrawlerError {
-    fn from(err: HttpDispatchError) -> GetCrawlerError {
-        GetCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCrawlerError {
-    fn from(err: io::Error) -> GetCrawlerError {
-        GetCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCrawlerError {
@@ -7723,11 +6521,6 @@ impl Error for GetCrawlerError {
         match *self {
             GetCrawlerError::EntityNotFound(ref cause) => cause,
             GetCrawlerError::OperationTimeout(ref cause) => cause,
-            GetCrawlerError::Validation(ref cause) => cause,
-            GetCrawlerError::Credentials(ref err) => err.description(),
-            GetCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCrawlerError::ParseError(ref cause) => cause,
-            GetCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7736,20 +6529,10 @@ impl Error for GetCrawlerError {
 pub enum GetCrawlerMetricsError {
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCrawlerMetricsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCrawlerMetricsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlerMetricsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7762,36 +6545,15 @@ impl GetCrawlerMetricsError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetCrawlerMetricsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetCrawlerMetricsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCrawlerMetricsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCrawlerMetricsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCrawlerMetricsError {
-    fn from(err: serde_json::error::Error) -> GetCrawlerMetricsError {
-        GetCrawlerMetricsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCrawlerMetricsError {
-    fn from(err: CredentialsError) -> GetCrawlerMetricsError {
-        GetCrawlerMetricsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCrawlerMetricsError {
-    fn from(err: HttpDispatchError) -> GetCrawlerMetricsError {
-        GetCrawlerMetricsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCrawlerMetricsError {
-    fn from(err: io::Error) -> GetCrawlerMetricsError {
-        GetCrawlerMetricsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCrawlerMetricsError {
@@ -7803,13 +6565,6 @@ impl Error for GetCrawlerMetricsError {
     fn description(&self) -> &str {
         match *self {
             GetCrawlerMetricsError::OperationTimeout(ref cause) => cause,
-            GetCrawlerMetricsError::Validation(ref cause) => cause,
-            GetCrawlerMetricsError::Credentials(ref err) => err.description(),
-            GetCrawlerMetricsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCrawlerMetricsError::ParseError(ref cause) => cause,
-            GetCrawlerMetricsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7818,20 +6573,10 @@ impl Error for GetCrawlerMetricsError {
 pub enum GetCrawlersError {
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCrawlersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCrawlersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCrawlersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7844,36 +6589,15 @@ impl GetCrawlersError {
 
             match *error_type {
                 "OperationTimeoutException" => {
-                    return GetCrawlersError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetCrawlersError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetCrawlersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCrawlersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCrawlersError {
-    fn from(err: serde_json::error::Error) -> GetCrawlersError {
-        GetCrawlersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCrawlersError {
-    fn from(err: CredentialsError) -> GetCrawlersError {
-        GetCrawlersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCrawlersError {
-    fn from(err: HttpDispatchError) -> GetCrawlersError {
-        GetCrawlersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCrawlersError {
-    fn from(err: io::Error) -> GetCrawlersError {
-        GetCrawlersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCrawlersError {
@@ -7885,11 +6609,6 @@ impl Error for GetCrawlersError {
     fn description(&self) -> &str {
         match *self {
             GetCrawlersError::OperationTimeout(ref cause) => cause,
-            GetCrawlersError::Validation(ref cause) => cause,
-            GetCrawlersError::Credentials(ref err) => err.description(),
-            GetCrawlersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCrawlersError::ParseError(ref cause) => cause,
-            GetCrawlersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7902,20 +6621,12 @@ pub enum GetDataCatalogEncryptionSettingsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataCatalogEncryptionSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDataCatalogEncryptionSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetDataCatalogEncryptionSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -7928,50 +6639,31 @@ impl GetDataCatalogEncryptionSettingsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetDataCatalogEncryptionSettingsError::InternalService(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidInputException" => {
-                    return GetDataCatalogEncryptionSettingsError::InvalidInput(String::from(
-                        error_message,
-                    ));
-                }
-                "OperationTimeoutException" => {
-                    return GetDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return GetDataCatalogEncryptionSettingsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        GetDataCatalogEncryptionSettingsError::InternalService(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        GetDataCatalogEncryptionSettingsError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        GetDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDataCatalogEncryptionSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDataCatalogEncryptionSettingsError {
-    fn from(err: serde_json::error::Error) -> GetDataCatalogEncryptionSettingsError {
-        GetDataCatalogEncryptionSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDataCatalogEncryptionSettingsError {
-    fn from(err: CredentialsError) -> GetDataCatalogEncryptionSettingsError {
-        GetDataCatalogEncryptionSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDataCatalogEncryptionSettingsError {
-    fn from(err: HttpDispatchError) -> GetDataCatalogEncryptionSettingsError {
-        GetDataCatalogEncryptionSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDataCatalogEncryptionSettingsError {
-    fn from(err: io::Error) -> GetDataCatalogEncryptionSettingsError {
-        GetDataCatalogEncryptionSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDataCatalogEncryptionSettingsError {
@@ -7985,13 +6677,6 @@ impl Error for GetDataCatalogEncryptionSettingsError {
             GetDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
             GetDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
             GetDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
-            GetDataCatalogEncryptionSettingsError::Validation(ref cause) => cause,
-            GetDataCatalogEncryptionSettingsError::Credentials(ref err) => err.description(),
-            GetDataCatalogEncryptionSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetDataCatalogEncryptionSettingsError::ParseError(ref cause) => cause,
-            GetDataCatalogEncryptionSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8008,20 +6693,10 @@ pub enum GetDatabaseError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8034,48 +6709,35 @@ impl GetDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDatabaseError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDatabaseError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetDatabaseError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetDatabaseError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetDatabaseError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDatabaseError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDatabaseError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetDatabaseError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetDatabaseError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDatabaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDatabaseError {
-    fn from(err: serde_json::error::Error) -> GetDatabaseError {
-        GetDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDatabaseError {
-    fn from(err: CredentialsError) -> GetDatabaseError {
-        GetDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDatabaseError {
-    fn from(err: HttpDispatchError) -> GetDatabaseError {
-        GetDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDatabaseError {
-    fn from(err: io::Error) -> GetDatabaseError {
-        GetDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDatabaseError {
@@ -8091,11 +6753,6 @@ impl Error for GetDatabaseError {
             GetDatabaseError::InternalService(ref cause) => cause,
             GetDatabaseError::InvalidInput(ref cause) => cause,
             GetDatabaseError::OperationTimeout(ref cause) => cause,
-            GetDatabaseError::Validation(ref cause) => cause,
-            GetDatabaseError::Credentials(ref err) => err.description(),
-            GetDatabaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDatabaseError::ParseError(ref cause) => cause,
-            GetDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8110,20 +6767,10 @@ pub enum GetDatabasesError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDatabasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDatabasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDatabasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8136,45 +6783,30 @@ impl GetDatabasesError {
 
             match *error_type {
                 "GlueEncryptionException" => {
-                    return GetDatabasesError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetDatabasesError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetDatabasesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDatabasesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetDatabasesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDatabasesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetDatabasesError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetDatabasesError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDatabasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDatabasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDatabasesError {
-    fn from(err: serde_json::error::Error) -> GetDatabasesError {
-        GetDatabasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDatabasesError {
-    fn from(err: CredentialsError) -> GetDatabasesError {
-        GetDatabasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDatabasesError {
-    fn from(err: HttpDispatchError) -> GetDatabasesError {
-        GetDatabasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDatabasesError {
-    fn from(err: io::Error) -> GetDatabasesError {
-        GetDatabasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDatabasesError {
@@ -8189,11 +6821,6 @@ impl Error for GetDatabasesError {
             GetDatabasesError::InternalService(ref cause) => cause,
             GetDatabasesError::InvalidInput(ref cause) => cause,
             GetDatabasesError::OperationTimeout(ref cause) => cause,
-            GetDatabasesError::Validation(ref cause) => cause,
-            GetDatabasesError::Credentials(ref err) => err.description(),
-            GetDatabasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDatabasesError::ParseError(ref cause) => cause,
-            GetDatabasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8206,20 +6833,10 @@ pub enum GetDataflowGraphError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDataflowGraphError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDataflowGraphError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDataflowGraphError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8232,42 +6849,25 @@ impl GetDataflowGraphError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetDataflowGraphError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDataflowGraphError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDataflowGraphError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDataflowGraphError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetDataflowGraphError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetDataflowGraphError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDataflowGraphError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDataflowGraphError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDataflowGraphError {
-    fn from(err: serde_json::error::Error) -> GetDataflowGraphError {
-        GetDataflowGraphError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDataflowGraphError {
-    fn from(err: CredentialsError) -> GetDataflowGraphError {
-        GetDataflowGraphError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDataflowGraphError {
-    fn from(err: HttpDispatchError) -> GetDataflowGraphError {
-        GetDataflowGraphError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDataflowGraphError {
-    fn from(err: io::Error) -> GetDataflowGraphError {
-        GetDataflowGraphError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDataflowGraphError {
@@ -8281,11 +6881,6 @@ impl Error for GetDataflowGraphError {
             GetDataflowGraphError::InternalService(ref cause) => cause,
             GetDataflowGraphError::InvalidInput(ref cause) => cause,
             GetDataflowGraphError::OperationTimeout(ref cause) => cause,
-            GetDataflowGraphError::Validation(ref cause) => cause,
-            GetDataflowGraphError::Credentials(ref err) => err.description(),
-            GetDataflowGraphError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDataflowGraphError::ParseError(ref cause) => cause,
-            GetDataflowGraphError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8300,20 +6895,10 @@ pub enum GetDevEndpointError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDevEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDevEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8326,45 +6911,30 @@ impl GetDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDevEndpointError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetDevEndpointError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetDevEndpointError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetDevEndpointError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDevEndpointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDevEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDevEndpointError {
-    fn from(err: serde_json::error::Error) -> GetDevEndpointError {
-        GetDevEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDevEndpointError {
-    fn from(err: CredentialsError) -> GetDevEndpointError {
-        GetDevEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDevEndpointError {
-    fn from(err: HttpDispatchError) -> GetDevEndpointError {
-        GetDevEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDevEndpointError {
-    fn from(err: io::Error) -> GetDevEndpointError {
-        GetDevEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDevEndpointError {
@@ -8379,11 +6949,6 @@ impl Error for GetDevEndpointError {
             GetDevEndpointError::InternalService(ref cause) => cause,
             GetDevEndpointError::InvalidInput(ref cause) => cause,
             GetDevEndpointError::OperationTimeout(ref cause) => cause,
-            GetDevEndpointError::Validation(ref cause) => cause,
-            GetDevEndpointError::Credentials(ref err) => err.description(),
-            GetDevEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDevEndpointError::ParseError(ref cause) => cause,
-            GetDevEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8398,20 +6963,10 @@ pub enum GetDevEndpointsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDevEndpointsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetDevEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDevEndpointsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8424,45 +6979,30 @@ impl GetDevEndpointsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetDevEndpointsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetDevEndpointsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointsError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetDevEndpointsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetDevEndpointsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetDevEndpointsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetDevEndpointsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDevEndpointsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDevEndpointsError {
-    fn from(err: serde_json::error::Error) -> GetDevEndpointsError {
-        GetDevEndpointsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDevEndpointsError {
-    fn from(err: CredentialsError) -> GetDevEndpointsError {
-        GetDevEndpointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDevEndpointsError {
-    fn from(err: HttpDispatchError) -> GetDevEndpointsError {
-        GetDevEndpointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDevEndpointsError {
-    fn from(err: io::Error) -> GetDevEndpointsError {
-        GetDevEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDevEndpointsError {
@@ -8477,11 +7017,6 @@ impl Error for GetDevEndpointsError {
             GetDevEndpointsError::InternalService(ref cause) => cause,
             GetDevEndpointsError::InvalidInput(ref cause) => cause,
             GetDevEndpointsError::OperationTimeout(ref cause) => cause,
-            GetDevEndpointsError::Validation(ref cause) => cause,
-            GetDevEndpointsError::Credentials(ref err) => err.description(),
-            GetDevEndpointsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDevEndpointsError::ParseError(ref cause) => cause,
-            GetDevEndpointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8496,20 +7031,10 @@ pub enum GetJobError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8522,43 +7047,30 @@ impl GetJobError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetJobError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetJobError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetJobError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetJobError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobError {
-    fn from(err: serde_json::error::Error) -> GetJobError {
-        GetJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobError {
-    fn from(err: CredentialsError) -> GetJobError {
-        GetJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobError {
-    fn from(err: HttpDispatchError) -> GetJobError {
-        GetJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobError {
-    fn from(err: io::Error) -> GetJobError {
-        GetJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobError {
@@ -8573,11 +7085,6 @@ impl Error for GetJobError {
             GetJobError::InternalService(ref cause) => cause,
             GetJobError::InvalidInput(ref cause) => cause,
             GetJobError::OperationTimeout(ref cause) => cause,
-            GetJobError::Validation(ref cause) => cause,
-            GetJobError::Credentials(ref err) => err.description(),
-            GetJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobError::ParseError(ref cause) => cause,
-            GetJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8592,20 +7099,10 @@ pub enum GetJobRunError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8618,45 +7115,30 @@ impl GetJobRunError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobRunError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobRunError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetJobRunError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetJobRunError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetJobRunError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetJobRunError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobRunError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetJobRunError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetJobRunError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobRunError {
-    fn from(err: serde_json::error::Error) -> GetJobRunError {
-        GetJobRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobRunError {
-    fn from(err: CredentialsError) -> GetJobRunError {
-        GetJobRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobRunError {
-    fn from(err: HttpDispatchError) -> GetJobRunError {
-        GetJobRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobRunError {
-    fn from(err: io::Error) -> GetJobRunError {
-        GetJobRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobRunError {
@@ -8671,11 +7153,6 @@ impl Error for GetJobRunError {
             GetJobRunError::InternalService(ref cause) => cause,
             GetJobRunError::InvalidInput(ref cause) => cause,
             GetJobRunError::OperationTimeout(ref cause) => cause,
-            GetJobRunError::Validation(ref cause) => cause,
-            GetJobRunError::Credentials(ref err) => err.description(),
-            GetJobRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobRunError::ParseError(ref cause) => cause,
-            GetJobRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8690,20 +7167,10 @@ pub enum GetJobRunsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobRunsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobRunsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobRunsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8716,45 +7183,30 @@ impl GetJobRunsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobRunsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobRunsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetJobRunsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetJobRunsError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetJobRunsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetJobRunsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobRunsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetJobRunsError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetJobRunsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobRunsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobRunsError {
-    fn from(err: serde_json::error::Error) -> GetJobRunsError {
-        GetJobRunsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobRunsError {
-    fn from(err: CredentialsError) -> GetJobRunsError {
-        GetJobRunsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobRunsError {
-    fn from(err: HttpDispatchError) -> GetJobRunsError {
-        GetJobRunsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobRunsError {
-    fn from(err: io::Error) -> GetJobRunsError {
-        GetJobRunsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobRunsError {
@@ -8769,11 +7221,6 @@ impl Error for GetJobRunsError {
             GetJobRunsError::InternalService(ref cause) => cause,
             GetJobRunsError::InvalidInput(ref cause) => cause,
             GetJobRunsError::OperationTimeout(ref cause) => cause,
-            GetJobRunsError::Validation(ref cause) => cause,
-            GetJobRunsError::Credentials(ref err) => err.description(),
-            GetJobRunsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobRunsError::ParseError(ref cause) => cause,
-            GetJobRunsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8788,20 +7235,10 @@ pub enum GetJobsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8814,43 +7251,30 @@ impl GetJobsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetJobsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetJobsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetJobsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetJobsError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetJobsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetJobsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetJobsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetJobsError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetJobsError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetJobsError {
-    fn from(err: serde_json::error::Error) -> GetJobsError {
-        GetJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetJobsError {
-    fn from(err: CredentialsError) -> GetJobsError {
-        GetJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetJobsError {
-    fn from(err: HttpDispatchError) -> GetJobsError {
-        GetJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetJobsError {
-    fn from(err: io::Error) -> GetJobsError {
-        GetJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetJobsError {
@@ -8865,11 +7289,6 @@ impl Error for GetJobsError {
             GetJobsError::InternalService(ref cause) => cause,
             GetJobsError::InvalidInput(ref cause) => cause,
             GetJobsError::OperationTimeout(ref cause) => cause,
-            GetJobsError::Validation(ref cause) => cause,
-            GetJobsError::Credentials(ref err) => err.description(),
-            GetJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetJobsError::ParseError(ref cause) => cause,
-            GetJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8884,20 +7303,10 @@ pub enum GetMappingError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetMappingError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetMappingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMappingError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -8910,45 +7319,30 @@ impl GetMappingError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetMappingError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetMappingError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetMappingError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetMappingError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetMappingError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetMappingError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetMappingError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetMappingError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetMappingError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetMappingError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetMappingError {
-    fn from(err: serde_json::error::Error) -> GetMappingError {
-        GetMappingError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetMappingError {
-    fn from(err: CredentialsError) -> GetMappingError {
-        GetMappingError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetMappingError {
-    fn from(err: HttpDispatchError) -> GetMappingError {
-        GetMappingError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetMappingError {
-    fn from(err: io::Error) -> GetMappingError {
-        GetMappingError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetMappingError {
@@ -8963,11 +7357,6 @@ impl Error for GetMappingError {
             GetMappingError::InternalService(ref cause) => cause,
             GetMappingError::InvalidInput(ref cause) => cause,
             GetMappingError::OperationTimeout(ref cause) => cause,
-            GetMappingError::Validation(ref cause) => cause,
-            GetMappingError::Credentials(ref err) => err.description(),
-            GetMappingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetMappingError::ParseError(ref cause) => cause,
-            GetMappingError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8984,20 +7373,10 @@ pub enum GetPartitionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9010,48 +7389,35 @@ impl GetPartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetPartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPartitionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetPartitionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetPartitionError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetPartitionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetPartitionError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetPartitionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetPartitionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetPartitionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetPartitionError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetPartitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPartitionError {
-    fn from(err: serde_json::error::Error) -> GetPartitionError {
-        GetPartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPartitionError {
-    fn from(err: CredentialsError) -> GetPartitionError {
-        GetPartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPartitionError {
-    fn from(err: HttpDispatchError) -> GetPartitionError {
-        GetPartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPartitionError {
-    fn from(err: io::Error) -> GetPartitionError {
-        GetPartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPartitionError {
@@ -9067,11 +7433,6 @@ impl Error for GetPartitionError {
             GetPartitionError::InternalService(ref cause) => cause,
             GetPartitionError::InvalidInput(ref cause) => cause,
             GetPartitionError::OperationTimeout(ref cause) => cause,
-            GetPartitionError::Validation(ref cause) => cause,
-            GetPartitionError::Credentials(ref err) => err.description(),
-            GetPartitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPartitionError::ParseError(ref cause) => cause,
-            GetPartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9088,20 +7449,10 @@ pub enum GetPartitionsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPartitionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPartitionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPartitionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9114,48 +7465,35 @@ impl GetPartitionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetPartitionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetPartitionsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetPartitionsError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetPartitionsError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetPartitionsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetPartitionsError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetPartitionsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetPartitionsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetPartitionsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetPartitionsError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetPartitionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPartitionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPartitionsError {
-    fn from(err: serde_json::error::Error) -> GetPartitionsError {
-        GetPartitionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPartitionsError {
-    fn from(err: CredentialsError) -> GetPartitionsError {
-        GetPartitionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPartitionsError {
-    fn from(err: HttpDispatchError) -> GetPartitionsError {
-        GetPartitionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPartitionsError {
-    fn from(err: io::Error) -> GetPartitionsError {
-        GetPartitionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPartitionsError {
@@ -9171,11 +7509,6 @@ impl Error for GetPartitionsError {
             GetPartitionsError::InternalService(ref cause) => cause,
             GetPartitionsError::InvalidInput(ref cause) => cause,
             GetPartitionsError::OperationTimeout(ref cause) => cause,
-            GetPartitionsError::Validation(ref cause) => cause,
-            GetPartitionsError::Credentials(ref err) => err.description(),
-            GetPartitionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPartitionsError::ParseError(ref cause) => cause,
-            GetPartitionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9188,20 +7521,10 @@ pub enum GetPlanError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetPlanError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetPlanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPlanError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9214,40 +7537,25 @@ impl GetPlanError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return GetPlanError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetPlanError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetPlanError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetPlanError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetPlanError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetPlanError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetPlanError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetPlanError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetPlanError {
-    fn from(err: serde_json::error::Error) -> GetPlanError {
-        GetPlanError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetPlanError {
-    fn from(err: CredentialsError) -> GetPlanError {
-        GetPlanError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetPlanError {
-    fn from(err: HttpDispatchError) -> GetPlanError {
-        GetPlanError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetPlanError {
-    fn from(err: io::Error) -> GetPlanError {
-        GetPlanError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetPlanError {
@@ -9261,11 +7569,6 @@ impl Error for GetPlanError {
             GetPlanError::InternalService(ref cause) => cause,
             GetPlanError::InvalidInput(ref cause) => cause,
             GetPlanError::OperationTimeout(ref cause) => cause,
-            GetPlanError::Validation(ref cause) => cause,
-            GetPlanError::Credentials(ref err) => err.description(),
-            GetPlanError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetPlanError::ParseError(ref cause) => cause,
-            GetPlanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9280,20 +7583,10 @@ pub enum GetResourcePolicyError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetResourcePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetResourcePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9306,45 +7599,30 @@ impl GetResourcePolicyError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetResourcePolicyError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetResourcePolicyError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetResourcePolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetResourcePolicyError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetResourcePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetResourcePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetResourcePolicyError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetResourcePolicyError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetResourcePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetResourcePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetResourcePolicyError {
-    fn from(err: serde_json::error::Error) -> GetResourcePolicyError {
-        GetResourcePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetResourcePolicyError {
-    fn from(err: CredentialsError) -> GetResourcePolicyError {
-        GetResourcePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetResourcePolicyError {
-    fn from(err: HttpDispatchError) -> GetResourcePolicyError {
-        GetResourcePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetResourcePolicyError {
-    fn from(err: io::Error) -> GetResourcePolicyError {
-        GetResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetResourcePolicyError {
@@ -9359,13 +7637,6 @@ impl Error for GetResourcePolicyError {
             GetResourcePolicyError::InternalService(ref cause) => cause,
             GetResourcePolicyError::InvalidInput(ref cause) => cause,
             GetResourcePolicyError::OperationTimeout(ref cause) => cause,
-            GetResourcePolicyError::Validation(ref cause) => cause,
-            GetResourcePolicyError::Credentials(ref err) => err.description(),
-            GetResourcePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetResourcePolicyError::ParseError(ref cause) => cause,
-            GetResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9380,20 +7651,10 @@ pub enum GetSecurityConfigurationError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSecurityConfigurationError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSecurityConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9406,51 +7667,30 @@ impl GetSecurityConfigurationError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetSecurityConfigurationError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return GetSecurityConfigurationError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetSecurityConfigurationError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return GetSecurityConfigurationError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetSecurityConfigurationError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetSecurityConfigurationError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSecurityConfigurationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSecurityConfigurationError {
-    fn from(err: serde_json::error::Error) -> GetSecurityConfigurationError {
-        GetSecurityConfigurationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSecurityConfigurationError {
-    fn from(err: CredentialsError) -> GetSecurityConfigurationError {
-        GetSecurityConfigurationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSecurityConfigurationError {
-    fn from(err: HttpDispatchError) -> GetSecurityConfigurationError {
-        GetSecurityConfigurationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSecurityConfigurationError {
-    fn from(err: io::Error) -> GetSecurityConfigurationError {
-        GetSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSecurityConfigurationError {
@@ -9465,13 +7705,6 @@ impl Error for GetSecurityConfigurationError {
             GetSecurityConfigurationError::InternalService(ref cause) => cause,
             GetSecurityConfigurationError::InvalidInput(ref cause) => cause,
             GetSecurityConfigurationError::OperationTimeout(ref cause) => cause,
-            GetSecurityConfigurationError::Validation(ref cause) => cause,
-            GetSecurityConfigurationError::Credentials(ref err) => err.description(),
-            GetSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSecurityConfigurationError::ParseError(ref cause) => cause,
-            GetSecurityConfigurationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9486,20 +7719,10 @@ pub enum GetSecurityConfigurationsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSecurityConfigurationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSecurityConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSecurityConfigurationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9512,51 +7735,30 @@ impl GetSecurityConfigurationsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetSecurityConfigurationsError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationsError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return GetSecurityConfigurationsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetSecurityConfigurationsError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return GetSecurityConfigurationsError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetSecurityConfigurationsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetSecurityConfigurationsError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetSecurityConfigurationsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSecurityConfigurationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSecurityConfigurationsError {
-    fn from(err: serde_json::error::Error) -> GetSecurityConfigurationsError {
-        GetSecurityConfigurationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSecurityConfigurationsError {
-    fn from(err: CredentialsError) -> GetSecurityConfigurationsError {
-        GetSecurityConfigurationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSecurityConfigurationsError {
-    fn from(err: HttpDispatchError) -> GetSecurityConfigurationsError {
-        GetSecurityConfigurationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSecurityConfigurationsError {
-    fn from(err: io::Error) -> GetSecurityConfigurationsError {
-        GetSecurityConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSecurityConfigurationsError {
@@ -9571,13 +7773,6 @@ impl Error for GetSecurityConfigurationsError {
             GetSecurityConfigurationsError::InternalService(ref cause) => cause,
             GetSecurityConfigurationsError::InvalidInput(ref cause) => cause,
             GetSecurityConfigurationsError::OperationTimeout(ref cause) => cause,
-            GetSecurityConfigurationsError::Validation(ref cause) => cause,
-            GetSecurityConfigurationsError::Credentials(ref err) => err.description(),
-            GetSecurityConfigurationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSecurityConfigurationsError::ParseError(ref cause) => cause,
-            GetSecurityConfigurationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9594,20 +7789,10 @@ pub enum GetTableError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9620,48 +7805,35 @@ impl GetTableError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTableError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetTableError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetTableError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetTableError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTableError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetTableError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTableError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTableError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTableError {
-    fn from(err: serde_json::error::Error) -> GetTableError {
-        GetTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTableError {
-    fn from(err: CredentialsError) -> GetTableError {
-        GetTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTableError {
-    fn from(err: HttpDispatchError) -> GetTableError {
-        GetTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTableError {
-    fn from(err: io::Error) -> GetTableError {
-        GetTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTableError {
@@ -9677,11 +7849,6 @@ impl Error for GetTableError {
             GetTableError::InternalService(ref cause) => cause,
             GetTableError::InvalidInput(ref cause) => cause,
             GetTableError::OperationTimeout(ref cause) => cause,
-            GetTableError::Validation(ref cause) => cause,
-            GetTableError::Credentials(ref err) => err.description(),
-            GetTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTableError::ParseError(ref cause) => cause,
-            GetTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9698,20 +7865,10 @@ pub enum GetTableVersionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTableVersionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTableVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9724,48 +7881,35 @@ impl GetTableVersionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableVersionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetTableVersionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetTableVersionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetTableVersionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableVersionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetTableVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTableVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTableVersionError {
-    fn from(err: serde_json::error::Error) -> GetTableVersionError {
-        GetTableVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTableVersionError {
-    fn from(err: CredentialsError) -> GetTableVersionError {
-        GetTableVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTableVersionError {
-    fn from(err: HttpDispatchError) -> GetTableVersionError {
-        GetTableVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTableVersionError {
-    fn from(err: io::Error) -> GetTableVersionError {
-        GetTableVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTableVersionError {
@@ -9781,11 +7925,6 @@ impl Error for GetTableVersionError {
             GetTableVersionError::InternalService(ref cause) => cause,
             GetTableVersionError::InvalidInput(ref cause) => cause,
             GetTableVersionError::OperationTimeout(ref cause) => cause,
-            GetTableVersionError::Validation(ref cause) => cause,
-            GetTableVersionError::Credentials(ref err) => err.description(),
-            GetTableVersionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTableVersionError::ParseError(ref cause) => cause,
-            GetTableVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9802,20 +7941,10 @@ pub enum GetTableVersionsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTableVersionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTableVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTableVersionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9828,48 +7957,35 @@ impl GetTableVersionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTableVersionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionsError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "GlueEncryptionException" => {
-                    return GetTableVersionsError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionsError::GlueEncryption(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetTableVersionsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionsError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return GetTableVersionsError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionsError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTableVersionsError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTableVersionsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetTableVersionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTableVersionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTableVersionsError {
-    fn from(err: serde_json::error::Error) -> GetTableVersionsError {
-        GetTableVersionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTableVersionsError {
-    fn from(err: CredentialsError) -> GetTableVersionsError {
-        GetTableVersionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTableVersionsError {
-    fn from(err: HttpDispatchError) -> GetTableVersionsError {
-        GetTableVersionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTableVersionsError {
-    fn from(err: io::Error) -> GetTableVersionsError {
-        GetTableVersionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTableVersionsError {
@@ -9885,11 +8001,6 @@ impl Error for GetTableVersionsError {
             GetTableVersionsError::InternalService(ref cause) => cause,
             GetTableVersionsError::InvalidInput(ref cause) => cause,
             GetTableVersionsError::OperationTimeout(ref cause) => cause,
-            GetTableVersionsError::Validation(ref cause) => cause,
-            GetTableVersionsError::Credentials(ref err) => err.description(),
-            GetTableVersionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTableVersionsError::ParseError(ref cause) => cause,
-            GetTableVersionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9906,20 +8017,10 @@ pub enum GetTablesError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTablesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTablesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTablesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -9932,48 +8033,35 @@ impl GetTablesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTablesError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTablesError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return GetTablesError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetTablesError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetTablesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTablesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetTablesError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTablesError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTablesError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTablesError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTablesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTablesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTablesError {
-    fn from(err: serde_json::error::Error) -> GetTablesError {
-        GetTablesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTablesError {
-    fn from(err: CredentialsError) -> GetTablesError {
-        GetTablesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTablesError {
-    fn from(err: HttpDispatchError) -> GetTablesError {
-        GetTablesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTablesError {
-    fn from(err: io::Error) -> GetTablesError {
-        GetTablesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTablesError {
@@ -9989,11 +8077,6 @@ impl Error for GetTablesError {
             GetTablesError::InternalService(ref cause) => cause,
             GetTablesError::InvalidInput(ref cause) => cause,
             GetTablesError::OperationTimeout(ref cause) => cause,
-            GetTablesError::Validation(ref cause) => cause,
-            GetTablesError::Credentials(ref err) => err.description(),
-            GetTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTablesError::ParseError(ref cause) => cause,
-            GetTablesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10008,20 +8091,10 @@ pub enum GetTriggerError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10034,45 +8107,30 @@ impl GetTriggerError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTriggerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTriggerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetTriggerError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetTriggerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTriggerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTriggerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTriggerError {
-    fn from(err: serde_json::error::Error) -> GetTriggerError {
-        GetTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTriggerError {
-    fn from(err: CredentialsError) -> GetTriggerError {
-        GetTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTriggerError {
-    fn from(err: HttpDispatchError) -> GetTriggerError {
-        GetTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTriggerError {
-    fn from(err: io::Error) -> GetTriggerError {
-        GetTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTriggerError {
@@ -10087,11 +8145,6 @@ impl Error for GetTriggerError {
             GetTriggerError::InternalService(ref cause) => cause,
             GetTriggerError::InvalidInput(ref cause) => cause,
             GetTriggerError::OperationTimeout(ref cause) => cause,
-            GetTriggerError::Validation(ref cause) => cause,
-            GetTriggerError::Credentials(ref err) => err.description(),
-            GetTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTriggerError::ParseError(ref cause) => cause,
-            GetTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10106,20 +8159,10 @@ pub enum GetTriggersError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTriggersError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTriggersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10132,45 +8175,30 @@ impl GetTriggersError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetTriggersError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetTriggersError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetTriggersError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetTriggersError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return GetTriggersError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(GetTriggersError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return GetTriggersError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(GetTriggersError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetTriggersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTriggersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTriggersError {
-    fn from(err: serde_json::error::Error) -> GetTriggersError {
-        GetTriggersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTriggersError {
-    fn from(err: CredentialsError) -> GetTriggersError {
-        GetTriggersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTriggersError {
-    fn from(err: HttpDispatchError) -> GetTriggersError {
-        GetTriggersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTriggersError {
-    fn from(err: io::Error) -> GetTriggersError {
-        GetTriggersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTriggersError {
@@ -10185,11 +8213,6 @@ impl Error for GetTriggersError {
             GetTriggersError::InternalService(ref cause) => cause,
             GetTriggersError::InvalidInput(ref cause) => cause,
             GetTriggersError::OperationTimeout(ref cause) => cause,
-            GetTriggersError::Validation(ref cause) => cause,
-            GetTriggersError::Credentials(ref err) => err.description(),
-            GetTriggersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTriggersError::ParseError(ref cause) => cause,
-            GetTriggersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10206,20 +8229,10 @@ pub enum GetUserDefinedFunctionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserDefinedFunctionError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserDefinedFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10232,50 +8245,35 @@ impl GetUserDefinedFunctionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetUserDefinedFunctionError::EntityNotFound(String::from(error_message));
-                }
-                "GlueEncryptionException" => {
-                    return GetUserDefinedFunctionError::GlueEncryption(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return GetUserDefinedFunctionError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return GetUserDefinedFunctionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return GetUserDefinedFunctionError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetUserDefinedFunctionError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetUserDefinedFunctionError::Validation(error_message.to_string());
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(GetUserDefinedFunctionError::GlueEncryption(
+                        String::from(error_message),
+                    ));
                 }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetUserDefinedFunctionError::InternalService(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetUserDefinedFunctionError::InvalidInput(
+                        String::from(error_message),
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetUserDefinedFunctionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUserDefinedFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUserDefinedFunctionError {
-    fn from(err: serde_json::error::Error) -> GetUserDefinedFunctionError {
-        GetUserDefinedFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUserDefinedFunctionError {
-    fn from(err: CredentialsError) -> GetUserDefinedFunctionError {
-        GetUserDefinedFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserDefinedFunctionError {
-    fn from(err: HttpDispatchError) -> GetUserDefinedFunctionError {
-        GetUserDefinedFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserDefinedFunctionError {
-    fn from(err: io::Error) -> GetUserDefinedFunctionError {
-        GetUserDefinedFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUserDefinedFunctionError {
@@ -10291,13 +8289,6 @@ impl Error for GetUserDefinedFunctionError {
             GetUserDefinedFunctionError::InternalService(ref cause) => cause,
             GetUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             GetUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
-            GetUserDefinedFunctionError::Validation(ref cause) => cause,
-            GetUserDefinedFunctionError::Credentials(ref err) => err.description(),
-            GetUserDefinedFunctionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUserDefinedFunctionError::ParseError(ref cause) => cause,
-            GetUserDefinedFunctionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10314,20 +8305,10 @@ pub enum GetUserDefinedFunctionsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetUserDefinedFunctionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetUserDefinedFunctionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetUserDefinedFunctionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10340,52 +8321,35 @@ impl GetUserDefinedFunctionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return GetUserDefinedFunctionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(GetUserDefinedFunctionsError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "GlueEncryptionException" => {
-                    return GetUserDefinedFunctionsError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(GetUserDefinedFunctionsError::GlueEncryption(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetUserDefinedFunctionsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetUserDefinedFunctionsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return GetUserDefinedFunctionsError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return GetUserDefinedFunctionsError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(GetUserDefinedFunctionsError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetUserDefinedFunctionsError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetUserDefinedFunctionsError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetUserDefinedFunctionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetUserDefinedFunctionsError {
-    fn from(err: serde_json::error::Error) -> GetUserDefinedFunctionsError {
-        GetUserDefinedFunctionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetUserDefinedFunctionsError {
-    fn from(err: CredentialsError) -> GetUserDefinedFunctionsError {
-        GetUserDefinedFunctionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetUserDefinedFunctionsError {
-    fn from(err: HttpDispatchError) -> GetUserDefinedFunctionsError {
-        GetUserDefinedFunctionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetUserDefinedFunctionsError {
-    fn from(err: io::Error) -> GetUserDefinedFunctionsError {
-        GetUserDefinedFunctionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetUserDefinedFunctionsError {
@@ -10401,13 +8365,6 @@ impl Error for GetUserDefinedFunctionsError {
             GetUserDefinedFunctionsError::InternalService(ref cause) => cause,
             GetUserDefinedFunctionsError::InvalidInput(ref cause) => cause,
             GetUserDefinedFunctionsError::OperationTimeout(ref cause) => cause,
-            GetUserDefinedFunctionsError::Validation(ref cause) => cause,
-            GetUserDefinedFunctionsError::Credentials(ref err) => err.description(),
-            GetUserDefinedFunctionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetUserDefinedFunctionsError::ParseError(ref cause) => cause,
-            GetUserDefinedFunctionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10418,20 +8375,10 @@ pub enum ImportCatalogToGlueError {
     InternalService(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ImportCatalogToGlueError {
-    pub fn from_response(res: BufferedHttpResponse) -> ImportCatalogToGlueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCatalogToGlueError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10444,39 +8391,20 @@ impl ImportCatalogToGlueError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return ImportCatalogToGlueError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ImportCatalogToGlueError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return ImportCatalogToGlueError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(ImportCatalogToGlueError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ImportCatalogToGlueError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ImportCatalogToGlueError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ImportCatalogToGlueError {
-    fn from(err: serde_json::error::Error) -> ImportCatalogToGlueError {
-        ImportCatalogToGlueError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ImportCatalogToGlueError {
-    fn from(err: CredentialsError) -> ImportCatalogToGlueError {
-        ImportCatalogToGlueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ImportCatalogToGlueError {
-    fn from(err: HttpDispatchError) -> ImportCatalogToGlueError {
-        ImportCatalogToGlueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ImportCatalogToGlueError {
-    fn from(err: io::Error) -> ImportCatalogToGlueError {
-        ImportCatalogToGlueError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ImportCatalogToGlueError {
@@ -10489,13 +8417,6 @@ impl Error for ImportCatalogToGlueError {
         match *self {
             ImportCatalogToGlueError::InternalService(ref cause) => cause,
             ImportCatalogToGlueError::OperationTimeout(ref cause) => cause,
-            ImportCatalogToGlueError::Validation(ref cause) => cause,
-            ImportCatalogToGlueError::Credentials(ref err) => err.description(),
-            ImportCatalogToGlueError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ImportCatalogToGlueError::ParseError(ref cause) => cause,
-            ImportCatalogToGlueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10508,20 +8429,12 @@ pub enum PutDataCatalogEncryptionSettingsError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutDataCatalogEncryptionSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutDataCatalogEncryptionSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutDataCatalogEncryptionSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10534,50 +8447,31 @@ impl PutDataCatalogEncryptionSettingsError {
 
             match *error_type {
                 "InternalServiceException" => {
-                    return PutDataCatalogEncryptionSettingsError::InternalService(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidInputException" => {
-                    return PutDataCatalogEncryptionSettingsError::InvalidInput(String::from(
-                        error_message,
-                    ));
-                }
-                "OperationTimeoutException" => {
-                    return PutDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return PutDataCatalogEncryptionSettingsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        PutDataCatalogEncryptionSettingsError::InternalService(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidInputException" => {
+                    return RusotoError::Service(
+                        PutDataCatalogEncryptionSettingsError::InvalidInput(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(
+                        PutDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutDataCatalogEncryptionSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutDataCatalogEncryptionSettingsError {
-    fn from(err: serde_json::error::Error) -> PutDataCatalogEncryptionSettingsError {
-        PutDataCatalogEncryptionSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutDataCatalogEncryptionSettingsError {
-    fn from(err: CredentialsError) -> PutDataCatalogEncryptionSettingsError {
-        PutDataCatalogEncryptionSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutDataCatalogEncryptionSettingsError {
-    fn from(err: HttpDispatchError) -> PutDataCatalogEncryptionSettingsError {
-        PutDataCatalogEncryptionSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutDataCatalogEncryptionSettingsError {
-    fn from(err: io::Error) -> PutDataCatalogEncryptionSettingsError {
-        PutDataCatalogEncryptionSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutDataCatalogEncryptionSettingsError {
@@ -10591,13 +8485,6 @@ impl Error for PutDataCatalogEncryptionSettingsError {
             PutDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
             PutDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
             PutDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
-            PutDataCatalogEncryptionSettingsError::Validation(ref cause) => cause,
-            PutDataCatalogEncryptionSettingsError::Credentials(ref err) => err.description(),
-            PutDataCatalogEncryptionSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutDataCatalogEncryptionSettingsError::ParseError(ref cause) => cause,
-            PutDataCatalogEncryptionSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10614,20 +8501,10 @@ pub enum PutResourcePolicyError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutResourcePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10640,50 +8517,35 @@ impl PutResourcePolicyError {
 
             match *error_type {
                 "ConditionCheckFailureException" => {
-                    return PutResourcePolicyError::ConditionCheckFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(PutResourcePolicyError::ConditionCheckFailure(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return PutResourcePolicyError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return PutResourcePolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return PutResourcePolicyError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return PutResourcePolicyError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutResourcePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutResourcePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutResourcePolicyError {
-    fn from(err: serde_json::error::Error) -> PutResourcePolicyError {
-        PutResourcePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutResourcePolicyError {
-    fn from(err: CredentialsError) -> PutResourcePolicyError {
-        PutResourcePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutResourcePolicyError {
-    fn from(err: HttpDispatchError) -> PutResourcePolicyError {
-        PutResourcePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutResourcePolicyError {
-    fn from(err: io::Error) -> PutResourcePolicyError {
-        PutResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -10699,13 +8561,6 @@ impl Error for PutResourcePolicyError {
             PutResourcePolicyError::InternalService(ref cause) => cause,
             PutResourcePolicyError::InvalidInput(ref cause) => cause,
             PutResourcePolicyError::OperationTimeout(ref cause) => cause,
-            PutResourcePolicyError::Validation(ref cause) => cause,
-            PutResourcePolicyError::Credentials(ref err) => err.description(),
-            PutResourcePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutResourcePolicyError::ParseError(ref cause) => cause,
-            PutResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10720,20 +8575,10 @@ pub enum ResetJobBookmarkError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetJobBookmarkError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetJobBookmarkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetJobBookmarkError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10746,45 +8591,30 @@ impl ResetJobBookmarkError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ResetJobBookmarkError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ResetJobBookmarkError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ResetJobBookmarkError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ResetJobBookmarkError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return ResetJobBookmarkError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(ResetJobBookmarkError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return ResetJobBookmarkError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(ResetJobBookmarkError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResetJobBookmarkError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResetJobBookmarkError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResetJobBookmarkError {
-    fn from(err: serde_json::error::Error) -> ResetJobBookmarkError {
-        ResetJobBookmarkError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResetJobBookmarkError {
-    fn from(err: CredentialsError) -> ResetJobBookmarkError {
-        ResetJobBookmarkError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetJobBookmarkError {
-    fn from(err: HttpDispatchError) -> ResetJobBookmarkError {
-        ResetJobBookmarkError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetJobBookmarkError {
-    fn from(err: io::Error) -> ResetJobBookmarkError {
-        ResetJobBookmarkError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResetJobBookmarkError {
@@ -10799,11 +8629,6 @@ impl Error for ResetJobBookmarkError {
             ResetJobBookmarkError::InternalService(ref cause) => cause,
             ResetJobBookmarkError::InvalidInput(ref cause) => cause,
             ResetJobBookmarkError::OperationTimeout(ref cause) => cause,
-            ResetJobBookmarkError::Validation(ref cause) => cause,
-            ResetJobBookmarkError::Credentials(ref err) => err.description(),
-            ResetJobBookmarkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResetJobBookmarkError::ParseError(ref cause) => cause,
-            ResetJobBookmarkError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10816,20 +8641,10 @@ pub enum StartCrawlerError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10842,42 +8657,25 @@ impl StartCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return StartCrawlerError::CrawlerRunning(String::from(error_message));
+                    return RusotoError::Service(StartCrawlerError::CrawlerRunning(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return StartCrawlerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(StartCrawlerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return StartCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(StartCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartCrawlerError {
-    fn from(err: serde_json::error::Error) -> StartCrawlerError {
-        StartCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartCrawlerError {
-    fn from(err: CredentialsError) -> StartCrawlerError {
-        StartCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartCrawlerError {
-    fn from(err: HttpDispatchError) -> StartCrawlerError {
-        StartCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartCrawlerError {
-    fn from(err: io::Error) -> StartCrawlerError {
-        StartCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartCrawlerError {
@@ -10891,11 +8689,6 @@ impl Error for StartCrawlerError {
             StartCrawlerError::CrawlerRunning(ref cause) => cause,
             StartCrawlerError::EntityNotFound(ref cause) => cause,
             StartCrawlerError::OperationTimeout(ref cause) => cause,
-            StartCrawlerError::Validation(ref cause) => cause,
-            StartCrawlerError::Credentials(ref err) => err.description(),
-            StartCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartCrawlerError::ParseError(ref cause) => cause,
-            StartCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10912,20 +8705,10 @@ pub enum StartCrawlerScheduleError {
     SchedulerRunning(String),
     /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartCrawlerScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartCrawlerScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartCrawlerScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -10938,50 +8721,35 @@ impl StartCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return StartCrawlerScheduleError::EntityNotFound(String::from(error_message));
-                }
-                "NoScheduleException" => {
-                    return StartCrawlerScheduleError::NoSchedule(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return StartCrawlerScheduleError::OperationTimeout(String::from(error_message));
-                }
-                "SchedulerRunningException" => {
-                    return StartCrawlerScheduleError::SchedulerRunning(String::from(error_message));
-                }
-                "SchedulerTransitioningException" => {
-                    return StartCrawlerScheduleError::SchedulerTransitioning(String::from(
-                        error_message,
+                    return RusotoError::Service(StartCrawlerScheduleError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartCrawlerScheduleError::Validation(error_message.to_string());
+                "NoScheduleException" => {
+                    return RusotoError::Service(StartCrawlerScheduleError::NoSchedule(
+                        String::from(error_message),
+                    ));
                 }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartCrawlerScheduleError::OperationTimeout(
+                        String::from(error_message),
+                    ));
+                }
+                "SchedulerRunningException" => {
+                    return RusotoError::Service(StartCrawlerScheduleError::SchedulerRunning(
+                        String::from(error_message),
+                    ));
+                }
+                "SchedulerTransitioningException" => {
+                    return RusotoError::Service(StartCrawlerScheduleError::SchedulerTransitioning(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartCrawlerScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartCrawlerScheduleError {
-    fn from(err: serde_json::error::Error) -> StartCrawlerScheduleError {
-        StartCrawlerScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartCrawlerScheduleError {
-    fn from(err: CredentialsError) -> StartCrawlerScheduleError {
-        StartCrawlerScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartCrawlerScheduleError {
-    fn from(err: HttpDispatchError) -> StartCrawlerScheduleError {
-        StartCrawlerScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartCrawlerScheduleError {
-    fn from(err: io::Error) -> StartCrawlerScheduleError {
-        StartCrawlerScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartCrawlerScheduleError {
@@ -10997,13 +8765,6 @@ impl Error for StartCrawlerScheduleError {
             StartCrawlerScheduleError::OperationTimeout(ref cause) => cause,
             StartCrawlerScheduleError::SchedulerRunning(ref cause) => cause,
             StartCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
-            StartCrawlerScheduleError::Validation(ref cause) => cause,
-            StartCrawlerScheduleError::Credentials(ref err) => err.description(),
-            StartCrawlerScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartCrawlerScheduleError::ParseError(ref cause) => cause,
-            StartCrawlerScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11022,20 +8783,10 @@ pub enum StartJobRunError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartJobRunError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartJobRunError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartJobRunError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11048,53 +8799,40 @@ impl StartJobRunError {
 
             match *error_type {
                 "ConcurrentRunsExceededException" => {
-                    return StartJobRunError::ConcurrentRunsExceeded(String::from(error_message));
-                }
-                "EntityNotFoundException" => {
-                    return StartJobRunError::EntityNotFound(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return StartJobRunError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return StartJobRunError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return StartJobRunError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return StartJobRunError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartJobRunError::ConcurrentRunsExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartJobRunError::Validation(error_message.to_string());
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartJobRunError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartJobRunError::InternalService(String::from(
+                        error_message,
+                    )));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartJobRunError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartJobRunError::OperationTimeout(String::from(
+                        error_message,
+                    )));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(StartJobRunError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartJobRunError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartJobRunError {
-    fn from(err: serde_json::error::Error) -> StartJobRunError {
-        StartJobRunError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartJobRunError {
-    fn from(err: CredentialsError) -> StartJobRunError {
-        StartJobRunError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartJobRunError {
-    fn from(err: HttpDispatchError) -> StartJobRunError {
-        StartJobRunError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartJobRunError {
-    fn from(err: io::Error) -> StartJobRunError {
-        StartJobRunError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartJobRunError {
@@ -11111,11 +8849,6 @@ impl Error for StartJobRunError {
             StartJobRunError::InvalidInput(ref cause) => cause,
             StartJobRunError::OperationTimeout(ref cause) => cause,
             StartJobRunError::ResourceNumberLimitExceeded(ref cause) => cause,
-            StartJobRunError::Validation(ref cause) => cause,
-            StartJobRunError::Credentials(ref err) => err.description(),
-            StartJobRunError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartJobRunError::ParseError(ref cause) => cause,
-            StartJobRunError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11134,20 +8867,10 @@ pub enum StartTriggerError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11160,53 +8883,40 @@ impl StartTriggerError {
 
             match *error_type {
                 "ConcurrentRunsExceededException" => {
-                    return StartTriggerError::ConcurrentRunsExceeded(String::from(error_message));
-                }
-                "EntityNotFoundException" => {
-                    return StartTriggerError::EntityNotFound(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return StartTriggerError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return StartTriggerError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return StartTriggerError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return StartTriggerError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(StartTriggerError::ConcurrentRunsExceeded(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartTriggerError::Validation(error_message.to_string());
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(StartTriggerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "InternalServiceException" => {
+                    return RusotoError::Service(StartTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(StartTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(StartTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(StartTriggerError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartTriggerError {
-    fn from(err: serde_json::error::Error) -> StartTriggerError {
-        StartTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartTriggerError {
-    fn from(err: CredentialsError) -> StartTriggerError {
-        StartTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartTriggerError {
-    fn from(err: HttpDispatchError) -> StartTriggerError {
-        StartTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartTriggerError {
-    fn from(err: io::Error) -> StartTriggerError {
-        StartTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartTriggerError {
@@ -11223,11 +8933,6 @@ impl Error for StartTriggerError {
             StartTriggerError::InvalidInput(ref cause) => cause,
             StartTriggerError::OperationTimeout(ref cause) => cause,
             StartTriggerError::ResourceNumberLimitExceeded(ref cause) => cause,
-            StartTriggerError::Validation(ref cause) => cause,
-            StartTriggerError::Credentials(ref err) => err.description(),
-            StartTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartTriggerError::ParseError(ref cause) => cause,
-            StartTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11242,20 +8947,10 @@ pub enum StopCrawlerError {
     EntityNotFound(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11268,45 +8963,30 @@ impl StopCrawlerError {
 
             match *error_type {
                 "CrawlerNotRunningException" => {
-                    return StopCrawlerError::CrawlerNotRunning(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerError::CrawlerNotRunning(String::from(
+                        error_message,
+                    )));
                 }
                 "CrawlerStoppingException" => {
-                    return StopCrawlerError::CrawlerStopping(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerError::CrawlerStopping(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return StopCrawlerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return StopCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopCrawlerError {
-    fn from(err: serde_json::error::Error) -> StopCrawlerError {
-        StopCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopCrawlerError {
-    fn from(err: CredentialsError) -> StopCrawlerError {
-        StopCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopCrawlerError {
-    fn from(err: HttpDispatchError) -> StopCrawlerError {
-        StopCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopCrawlerError {
-    fn from(err: io::Error) -> StopCrawlerError {
-        StopCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopCrawlerError {
@@ -11321,11 +9001,6 @@ impl Error for StopCrawlerError {
             StopCrawlerError::CrawlerStopping(ref cause) => cause,
             StopCrawlerError::EntityNotFound(ref cause) => cause,
             StopCrawlerError::OperationTimeout(ref cause) => cause,
-            StopCrawlerError::Validation(ref cause) => cause,
-            StopCrawlerError::Credentials(ref err) => err.description(),
-            StopCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopCrawlerError::ParseError(ref cause) => cause,
-            StopCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11340,20 +9015,10 @@ pub enum StopCrawlerScheduleError {
     SchedulerNotRunning(String),
     /// <p>The specified scheduler is transitioning.</p>
     SchedulerTransitioning(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopCrawlerScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopCrawlerScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopCrawlerScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11366,49 +9031,30 @@ impl StopCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return StopCrawlerScheduleError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerScheduleError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return StopCrawlerScheduleError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(StopCrawlerScheduleError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "SchedulerNotRunningException" => {
-                    return StopCrawlerScheduleError::SchedulerNotRunning(String::from(
-                        error_message,
+                    return RusotoError::Service(StopCrawlerScheduleError::SchedulerNotRunning(
+                        String::from(error_message),
                     ));
                 }
                 "SchedulerTransitioningException" => {
-                    return StopCrawlerScheduleError::SchedulerTransitioning(String::from(
-                        error_message,
+                    return RusotoError::Service(StopCrawlerScheduleError::SchedulerTransitioning(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StopCrawlerScheduleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopCrawlerScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopCrawlerScheduleError {
-    fn from(err: serde_json::error::Error) -> StopCrawlerScheduleError {
-        StopCrawlerScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopCrawlerScheduleError {
-    fn from(err: CredentialsError) -> StopCrawlerScheduleError {
-        StopCrawlerScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopCrawlerScheduleError {
-    fn from(err: HttpDispatchError) -> StopCrawlerScheduleError {
-        StopCrawlerScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopCrawlerScheduleError {
-    fn from(err: io::Error) -> StopCrawlerScheduleError {
-        StopCrawlerScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopCrawlerScheduleError {
@@ -11423,13 +9069,6 @@ impl Error for StopCrawlerScheduleError {
             StopCrawlerScheduleError::OperationTimeout(ref cause) => cause,
             StopCrawlerScheduleError::SchedulerNotRunning(ref cause) => cause,
             StopCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
-            StopCrawlerScheduleError::Validation(ref cause) => cause,
-            StopCrawlerScheduleError::Credentials(ref err) => err.description(),
-            StopCrawlerScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopCrawlerScheduleError::ParseError(ref cause) => cause,
-            StopCrawlerScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11446,20 +9085,10 @@ pub enum StopTriggerError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11472,48 +9101,35 @@ impl StopTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return StopTriggerError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(StopTriggerError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return StopTriggerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(StopTriggerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return StopTriggerError::InternalService(String::from(error_message));
+                    return RusotoError::Service(StopTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return StopTriggerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(StopTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return StopTriggerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(StopTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopTriggerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopTriggerError {
-    fn from(err: serde_json::error::Error) -> StopTriggerError {
-        StopTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopTriggerError {
-    fn from(err: CredentialsError) -> StopTriggerError {
-        StopTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopTriggerError {
-    fn from(err: HttpDispatchError) -> StopTriggerError {
-        StopTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopTriggerError {
-    fn from(err: io::Error) -> StopTriggerError {
-        StopTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopTriggerError {
@@ -11529,11 +9145,6 @@ impl Error for StopTriggerError {
             StopTriggerError::InternalService(ref cause) => cause,
             StopTriggerError::InvalidInput(ref cause) => cause,
             StopTriggerError::OperationTimeout(ref cause) => cause,
-            StopTriggerError::Validation(ref cause) => cause,
-            StopTriggerError::Credentials(ref err) => err.description(),
-            StopTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopTriggerError::ParseError(ref cause) => cause,
-            StopTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11548,20 +9159,10 @@ pub enum UpdateClassifierError {
     OperationTimeout(String),
     /// <p>There was a version conflict.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11574,45 +9175,30 @@ impl UpdateClassifierError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateClassifierError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateClassifierError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateClassifierError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateClassifierError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateClassifierError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateClassifierError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "VersionMismatchException" => {
-                    return UpdateClassifierError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(UpdateClassifierError::VersionMismatch(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateClassifierError {
-    fn from(err: serde_json::error::Error) -> UpdateClassifierError {
-        UpdateClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateClassifierError {
-    fn from(err: CredentialsError) -> UpdateClassifierError {
-        UpdateClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateClassifierError {
-    fn from(err: HttpDispatchError) -> UpdateClassifierError {
-        UpdateClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateClassifierError {
-    fn from(err: io::Error) -> UpdateClassifierError {
-        UpdateClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateClassifierError {
@@ -11627,11 +9213,6 @@ impl Error for UpdateClassifierError {
             UpdateClassifierError::InvalidInput(ref cause) => cause,
             UpdateClassifierError::OperationTimeout(ref cause) => cause,
             UpdateClassifierError::VersionMismatch(ref cause) => cause,
-            UpdateClassifierError::Validation(ref cause) => cause,
-            UpdateClassifierError::Credentials(ref err) => err.description(),
-            UpdateClassifierError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateClassifierError::ParseError(ref cause) => cause,
-            UpdateClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11646,20 +9227,10 @@ pub enum UpdateConnectionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConnectionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11672,45 +9243,30 @@ impl UpdateConnectionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateConnectionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateConnectionError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "GlueEncryptionException" => {
-                    return UpdateConnectionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(UpdateConnectionError::GlueEncryption(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateConnectionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateConnectionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateConnectionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateConnectionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateConnectionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateConnectionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateConnectionError {
-    fn from(err: serde_json::error::Error) -> UpdateConnectionError {
-        UpdateConnectionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConnectionError {
-    fn from(err: CredentialsError) -> UpdateConnectionError {
-        UpdateConnectionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConnectionError {
-    fn from(err: HttpDispatchError) -> UpdateConnectionError {
-        UpdateConnectionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConnectionError {
-    fn from(err: io::Error) -> UpdateConnectionError {
-        UpdateConnectionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateConnectionError {
@@ -11725,11 +9281,6 @@ impl Error for UpdateConnectionError {
             UpdateConnectionError::GlueEncryption(ref cause) => cause,
             UpdateConnectionError::InvalidInput(ref cause) => cause,
             UpdateConnectionError::OperationTimeout(ref cause) => cause,
-            UpdateConnectionError::Validation(ref cause) => cause,
-            UpdateConnectionError::Credentials(ref err) => err.description(),
-            UpdateConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateConnectionError::ParseError(ref cause) => cause,
-            UpdateConnectionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11746,20 +9297,10 @@ pub enum UpdateCrawlerError {
     OperationTimeout(String),
     /// <p>There was a version conflict.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCrawlerError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCrawlerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11772,48 +9313,35 @@ impl UpdateCrawlerError {
 
             match *error_type {
                 "CrawlerRunningException" => {
-                    return UpdateCrawlerError::CrawlerRunning(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerError::CrawlerRunning(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateCrawlerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdateCrawlerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateCrawlerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
                 "VersionMismatchException" => {
-                    return UpdateCrawlerError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerError::VersionMismatch(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateCrawlerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCrawlerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCrawlerError {
-    fn from(err: serde_json::error::Error) -> UpdateCrawlerError {
-        UpdateCrawlerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCrawlerError {
-    fn from(err: CredentialsError) -> UpdateCrawlerError {
-        UpdateCrawlerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCrawlerError {
-    fn from(err: HttpDispatchError) -> UpdateCrawlerError {
-        UpdateCrawlerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCrawlerError {
-    fn from(err: io::Error) -> UpdateCrawlerError {
-        UpdateCrawlerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCrawlerError {
@@ -11829,11 +9357,6 @@ impl Error for UpdateCrawlerError {
             UpdateCrawlerError::InvalidInput(ref cause) => cause,
             UpdateCrawlerError::OperationTimeout(ref cause) => cause,
             UpdateCrawlerError::VersionMismatch(ref cause) => cause,
-            UpdateCrawlerError::Validation(ref cause) => cause,
-            UpdateCrawlerError::Credentials(ref err) => err.description(),
-            UpdateCrawlerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateCrawlerError::ParseError(ref cause) => cause,
-            UpdateCrawlerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11850,20 +9373,10 @@ pub enum UpdateCrawlerScheduleError {
     SchedulerTransitioning(String),
     /// <p>There was a version conflict.</p>
     VersionMismatch(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCrawlerScheduleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCrawlerScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateCrawlerScheduleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11876,50 +9389,35 @@ impl UpdateCrawlerScheduleError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateCrawlerScheduleError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerScheduleError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateCrawlerScheduleError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerScheduleError::InvalidInput(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateCrawlerScheduleError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerScheduleError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
                 "SchedulerTransitioningException" => {
-                    return UpdateCrawlerScheduleError::SchedulerTransitioning(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateCrawlerScheduleError::SchedulerTransitioning(
+                        String::from(error_message),
                     ));
                 }
                 "VersionMismatchException" => {
-                    return UpdateCrawlerScheduleError::VersionMismatch(String::from(error_message));
+                    return RusotoError::Service(UpdateCrawlerScheduleError::VersionMismatch(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateCrawlerScheduleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateCrawlerScheduleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateCrawlerScheduleError {
-    fn from(err: serde_json::error::Error) -> UpdateCrawlerScheduleError {
-        UpdateCrawlerScheduleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCrawlerScheduleError {
-    fn from(err: CredentialsError) -> UpdateCrawlerScheduleError {
-        UpdateCrawlerScheduleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCrawlerScheduleError {
-    fn from(err: HttpDispatchError) -> UpdateCrawlerScheduleError {
-        UpdateCrawlerScheduleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCrawlerScheduleError {
-    fn from(err: io::Error) -> UpdateCrawlerScheduleError {
-        UpdateCrawlerScheduleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateCrawlerScheduleError {
@@ -11935,13 +9433,6 @@ impl Error for UpdateCrawlerScheduleError {
             UpdateCrawlerScheduleError::OperationTimeout(ref cause) => cause,
             UpdateCrawlerScheduleError::SchedulerTransitioning(ref cause) => cause,
             UpdateCrawlerScheduleError::VersionMismatch(ref cause) => cause,
-            UpdateCrawlerScheduleError::Validation(ref cause) => cause,
-            UpdateCrawlerScheduleError::Credentials(ref err) => err.description(),
-            UpdateCrawlerScheduleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateCrawlerScheduleError::ParseError(ref cause) => cause,
-            UpdateCrawlerScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11958,20 +9449,10 @@ pub enum UpdateDatabaseError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDatabaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDatabaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -11984,48 +9465,35 @@ impl UpdateDatabaseError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateDatabaseError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDatabaseError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return UpdateDatabaseError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(UpdateDatabaseError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdateDatabaseError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateDatabaseError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdateDatabaseError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateDatabaseError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateDatabaseError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateDatabaseError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDatabaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDatabaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDatabaseError {
-    fn from(err: serde_json::error::Error) -> UpdateDatabaseError {
-        UpdateDatabaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDatabaseError {
-    fn from(err: CredentialsError) -> UpdateDatabaseError {
-        UpdateDatabaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDatabaseError {
-    fn from(err: HttpDispatchError) -> UpdateDatabaseError {
-        UpdateDatabaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDatabaseError {
-    fn from(err: io::Error) -> UpdateDatabaseError {
-        UpdateDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDatabaseError {
@@ -12041,11 +9509,6 @@ impl Error for UpdateDatabaseError {
             UpdateDatabaseError::InternalService(ref cause) => cause,
             UpdateDatabaseError::InvalidInput(ref cause) => cause,
             UpdateDatabaseError::OperationTimeout(ref cause) => cause,
-            UpdateDatabaseError::Validation(ref cause) => cause,
-            UpdateDatabaseError::Credentials(ref err) => err.description(),
-            UpdateDatabaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateDatabaseError::ParseError(ref cause) => cause,
-            UpdateDatabaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12060,20 +9523,10 @@ pub enum UpdateDevEndpointError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateDevEndpointError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateDevEndpointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDevEndpointError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12086,45 +9539,30 @@ impl UpdateDevEndpointError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateDevEndpointError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateDevEndpointError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdateDevEndpointError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateDevEndpointError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdateDevEndpointError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateDevEndpointError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateDevEndpointError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateDevEndpointError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateDevEndpointError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateDevEndpointError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateDevEndpointError {
-    fn from(err: serde_json::error::Error) -> UpdateDevEndpointError {
-        UpdateDevEndpointError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateDevEndpointError {
-    fn from(err: CredentialsError) -> UpdateDevEndpointError {
-        UpdateDevEndpointError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateDevEndpointError {
-    fn from(err: HttpDispatchError) -> UpdateDevEndpointError {
-        UpdateDevEndpointError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateDevEndpointError {
-    fn from(err: io::Error) -> UpdateDevEndpointError {
-        UpdateDevEndpointError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateDevEndpointError {
@@ -12139,13 +9577,6 @@ impl Error for UpdateDevEndpointError {
             UpdateDevEndpointError::InternalService(ref cause) => cause,
             UpdateDevEndpointError::InvalidInput(ref cause) => cause,
             UpdateDevEndpointError::OperationTimeout(ref cause) => cause,
-            UpdateDevEndpointError::Validation(ref cause) => cause,
-            UpdateDevEndpointError::Credentials(ref err) => err.description(),
-            UpdateDevEndpointError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateDevEndpointError::ParseError(ref cause) => cause,
-            UpdateDevEndpointError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12162,20 +9593,10 @@ pub enum UpdateJobError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12188,48 +9609,35 @@ impl UpdateJobError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateJobError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateJobError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdateJobError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdateJobError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateJobError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateJobError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateJobError {
-    fn from(err: serde_json::error::Error) -> UpdateJobError {
-        UpdateJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateJobError {
-    fn from(err: CredentialsError) -> UpdateJobError {
-        UpdateJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateJobError {
-    fn from(err: HttpDispatchError) -> UpdateJobError {
-        UpdateJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateJobError {
-    fn from(err: io::Error) -> UpdateJobError {
-        UpdateJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateJobError {
@@ -12245,11 +9653,6 @@ impl Error for UpdateJobError {
             UpdateJobError::InternalService(ref cause) => cause,
             UpdateJobError::InvalidInput(ref cause) => cause,
             UpdateJobError::OperationTimeout(ref cause) => cause,
-            UpdateJobError::Validation(ref cause) => cause,
-            UpdateJobError::Credentials(ref err) => err.description(),
-            UpdateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateJobError::ParseError(ref cause) => cause,
-            UpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12266,20 +9669,10 @@ pub enum UpdatePartitionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePartitionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePartitionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePartitionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12292,48 +9685,35 @@ impl UpdatePartitionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdatePartitionError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdatePartitionError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "GlueEncryptionException" => {
-                    return UpdatePartitionError::GlueEncryption(String::from(error_message));
+                    return RusotoError::Service(UpdatePartitionError::GlueEncryption(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdatePartitionError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdatePartitionError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidInputException" => {
-                    return UpdatePartitionError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdatePartitionError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdatePartitionError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdatePartitionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdatePartitionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePartitionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePartitionError {
-    fn from(err: serde_json::error::Error) -> UpdatePartitionError {
-        UpdatePartitionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePartitionError {
-    fn from(err: CredentialsError) -> UpdatePartitionError {
-        UpdatePartitionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePartitionError {
-    fn from(err: HttpDispatchError) -> UpdatePartitionError {
-        UpdatePartitionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePartitionError {
-    fn from(err: io::Error) -> UpdatePartitionError {
-        UpdatePartitionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePartitionError {
@@ -12349,11 +9729,6 @@ impl Error for UpdatePartitionError {
             UpdatePartitionError::InternalService(ref cause) => cause,
             UpdatePartitionError::InvalidInput(ref cause) => cause,
             UpdatePartitionError::OperationTimeout(ref cause) => cause,
-            UpdatePartitionError::Validation(ref cause) => cause,
-            UpdatePartitionError::Credentials(ref err) => err.description(),
-            UpdatePartitionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdatePartitionError::ParseError(ref cause) => cause,
-            UpdatePartitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12374,20 +9749,10 @@ pub enum UpdateTableError {
     OperationTimeout(String),
     /// <p>A resource numerical limit was exceeded.</p>
     ResourceNumberLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12400,56 +9765,45 @@ impl UpdateTableError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateTableError::ConcurrentModification(String::from(error_message));
-                }
-                "EntityNotFoundException" => {
-                    return UpdateTableError::EntityNotFound(String::from(error_message));
-                }
-                "GlueEncryptionException" => {
-                    return UpdateTableError::GlueEncryption(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return UpdateTableError::InternalService(String::from(error_message));
-                }
-                "InvalidInputException" => {
-                    return UpdateTableError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return UpdateTableError::OperationTimeout(String::from(error_message));
-                }
-                "ResourceNumberLimitExceededException" => {
-                    return UpdateTableError::ResourceNumberLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateTableError::ConcurrentModification(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateTableError::Validation(error_message.to_string());
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateTableError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
+                "GlueEncryptionException" => {
+                    return RusotoError::Service(UpdateTableError::GlueEncryption(String::from(
+                        error_message,
+                    )));
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateTableError::InternalService(String::from(
+                        error_message,
+                    )));
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UpdateTableError::InvalidInput(String::from(
+                        error_message,
+                    )));
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(UpdateTableError::OperationTimeout(String::from(
+                        error_message,
+                    )));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return RusotoError::Service(UpdateTableError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTableError {
-    fn from(err: serde_json::error::Error) -> UpdateTableError {
-        UpdateTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTableError {
-    fn from(err: CredentialsError) -> UpdateTableError {
-        UpdateTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTableError {
-    fn from(err: HttpDispatchError) -> UpdateTableError {
-        UpdateTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTableError {
-    fn from(err: io::Error) -> UpdateTableError {
-        UpdateTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTableError {
@@ -12467,11 +9821,6 @@ impl Error for UpdateTableError {
             UpdateTableError::InvalidInput(ref cause) => cause,
             UpdateTableError::OperationTimeout(ref cause) => cause,
             UpdateTableError::ResourceNumberLimitExceeded(ref cause) => cause,
-            UpdateTableError::Validation(ref cause) => cause,
-            UpdateTableError::Credentials(ref err) => err.description(),
-            UpdateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTableError::ParseError(ref cause) => cause,
-            UpdateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12488,20 +9837,10 @@ pub enum UpdateTriggerError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTriggerError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTriggerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTriggerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12514,48 +9853,35 @@ impl UpdateTriggerError {
 
             match *error_type {
                 "ConcurrentModificationException" => {
-                    return UpdateTriggerError::ConcurrentModification(String::from(error_message));
+                    return RusotoError::Service(UpdateTriggerError::ConcurrentModification(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateTriggerError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTriggerError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdateTriggerError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateTriggerError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidInputException" => {
-                    return UpdateTriggerError::InvalidInput(String::from(error_message));
+                    return RusotoError::Service(UpdateTriggerError::InvalidInput(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationTimeoutException" => {
-                    return UpdateTriggerError::OperationTimeout(String::from(error_message));
+                    return RusotoError::Service(UpdateTriggerError::OperationTimeout(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateTriggerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTriggerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTriggerError {
-    fn from(err: serde_json::error::Error) -> UpdateTriggerError {
-        UpdateTriggerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTriggerError {
-    fn from(err: CredentialsError) -> UpdateTriggerError {
-        UpdateTriggerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTriggerError {
-    fn from(err: HttpDispatchError) -> UpdateTriggerError {
-        UpdateTriggerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTriggerError {
-    fn from(err: io::Error) -> UpdateTriggerError {
-        UpdateTriggerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTriggerError {
@@ -12571,11 +9897,6 @@ impl Error for UpdateTriggerError {
             UpdateTriggerError::InternalService(ref cause) => cause,
             UpdateTriggerError::InvalidInput(ref cause) => cause,
             UpdateTriggerError::OperationTimeout(ref cause) => cause,
-            UpdateTriggerError::Validation(ref cause) => cause,
-            UpdateTriggerError::Credentials(ref err) => err.description(),
-            UpdateTriggerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTriggerError::ParseError(ref cause) => cause,
-            UpdateTriggerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12592,20 +9913,10 @@ pub enum UpdateUserDefinedFunctionError {
     InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateUserDefinedFunctionError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserDefinedFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateUserDefinedFunctionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -12618,56 +9929,35 @@ impl UpdateUserDefinedFunctionError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return UpdateUserDefinedFunctionError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserDefinedFunctionError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "GlueEncryptionException" => {
-                    return UpdateUserDefinedFunctionError::GlueEncryption(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserDefinedFunctionError::GlueEncryption(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return UpdateUserDefinedFunctionError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserDefinedFunctionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidInputException" => {
-                    return UpdateUserDefinedFunctionError::InvalidInput(String::from(error_message));
-                }
-                "OperationTimeoutException" => {
-                    return UpdateUserDefinedFunctionError::OperationTimeout(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateUserDefinedFunctionError::InvalidInput(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateUserDefinedFunctionError::Validation(error_message.to_string());
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(UpdateUserDefinedFunctionError::OperationTimeout(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateUserDefinedFunctionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateUserDefinedFunctionError {
-    fn from(err: serde_json::error::Error) -> UpdateUserDefinedFunctionError {
-        UpdateUserDefinedFunctionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateUserDefinedFunctionError {
-    fn from(err: CredentialsError) -> UpdateUserDefinedFunctionError {
-        UpdateUserDefinedFunctionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateUserDefinedFunctionError {
-    fn from(err: HttpDispatchError) -> UpdateUserDefinedFunctionError {
-        UpdateUserDefinedFunctionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateUserDefinedFunctionError {
-    fn from(err: io::Error) -> UpdateUserDefinedFunctionError {
-        UpdateUserDefinedFunctionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateUserDefinedFunctionError {
@@ -12683,13 +9973,6 @@ impl Error for UpdateUserDefinedFunctionError {
             UpdateUserDefinedFunctionError::InternalService(ref cause) => cause,
             UpdateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             UpdateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
-            UpdateUserDefinedFunctionError::Validation(ref cause) => cause,
-            UpdateUserDefinedFunctionError::Credentials(ref err) => err.description(),
-            UpdateUserDefinedFunctionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateUserDefinedFunctionError::ParseError(ref cause) => cause,
-            UpdateUserDefinedFunctionError::Unknown(_) => "unknown error",
         }
     }
 }

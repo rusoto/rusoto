@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -366,22 +363,12 @@ pub enum CreateProjectError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -406,54 +393,45 @@ impl CreateProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return CreateProjectError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return CreateProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return CreateProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateProjectError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return CreateProjectError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(CreateProjectError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateProjectError {
-    fn from(err: serde_json::error::Error) -> CreateProjectError {
-        CreateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateProjectError {
-    fn from(err: CredentialsError) -> CreateProjectError {
-        CreateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateProjectError {
-    fn from(err: HttpDispatchError) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateProjectError {
-    fn from(err: io::Error) -> CreateProjectError {
-        CreateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateProjectError {
@@ -471,11 +449,6 @@ impl Error for CreateProjectError {
             CreateProjectError::ServiceUnavailable(ref cause) => cause,
             CreateProjectError::TooManyRequests(ref cause) => cause,
             CreateProjectError::Unauthorized(ref cause) => cause,
-            CreateProjectError::Validation(ref cause) => cause,
-            CreateProjectError::Credentials(ref err) => err.description(),
-            CreateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateProjectError::ParseError(ref cause) => cause,
-            CreateProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -492,22 +465,12 @@ pub enum DeleteProjectError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -532,48 +495,35 @@ impl DeleteProjectError {
 
             match error_type {
                 "InternalFailureException" => {
-                    return DeleteProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DeleteProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteProjectError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return DeleteProjectError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(DeleteProjectError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteProjectError {
-    fn from(err: serde_json::error::Error) -> DeleteProjectError {
-        DeleteProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteProjectError {
-    fn from(err: CredentialsError) -> DeleteProjectError {
-        DeleteProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteProjectError {
-    fn from(err: HttpDispatchError) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteProjectError {
-    fn from(err: io::Error) -> DeleteProjectError {
-        DeleteProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteProjectError {
@@ -589,11 +539,6 @@ impl Error for DeleteProjectError {
             DeleteProjectError::ServiceUnavailable(ref cause) => cause,
             DeleteProjectError::TooManyRequests(ref cause) => cause,
             DeleteProjectError::Unauthorized(ref cause) => cause,
-            DeleteProjectError::Validation(ref cause) => cause,
-            DeleteProjectError::Credentials(ref err) => err.description(),
-            DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteProjectError::ParseError(ref cause) => cause,
-            DeleteProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -612,22 +557,12 @@ pub enum DescribeBundleError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBundleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBundleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -652,51 +587,40 @@ impl DescribeBundleError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeBundleError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DescribeBundleError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return DescribeBundleError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeBundleError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeBundleError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return DescribeBundleError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeBundleError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeBundleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBundleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBundleError {
-    fn from(err: serde_json::error::Error) -> DescribeBundleError {
-        DescribeBundleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBundleError {
-    fn from(err: CredentialsError) -> DescribeBundleError {
-        DescribeBundleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBundleError {
-    fn from(err: HttpDispatchError) -> DescribeBundleError {
-        DescribeBundleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBundleError {
-    fn from(err: io::Error) -> DescribeBundleError {
-        DescribeBundleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBundleError {
@@ -713,11 +637,6 @@ impl Error for DescribeBundleError {
             DescribeBundleError::ServiceUnavailable(ref cause) => cause,
             DescribeBundleError::TooManyRequests(ref cause) => cause,
             DescribeBundleError::Unauthorized(ref cause) => cause,
-            DescribeBundleError::Validation(ref cause) => cause,
-            DescribeBundleError::Credentials(ref err) => err.description(),
-            DescribeBundleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBundleError::ParseError(ref cause) => cause,
-            DescribeBundleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -736,22 +655,12 @@ pub enum DescribeProjectError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -776,51 +685,40 @@ impl DescribeProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return DescribeProjectError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return DescribeProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::InternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeProjectError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
                 "UnauthorizedException" => {
-                    return DescribeProjectError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(DescribeProjectError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeProjectError {
-    fn from(err: serde_json::error::Error) -> DescribeProjectError {
-        DescribeProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeProjectError {
-    fn from(err: CredentialsError) -> DescribeProjectError {
-        DescribeProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeProjectError {
-    fn from(err: HttpDispatchError) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeProjectError {
-    fn from(err: io::Error) -> DescribeProjectError {
-        DescribeProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeProjectError {
@@ -837,11 +735,6 @@ impl Error for DescribeProjectError {
             DescribeProjectError::ServiceUnavailable(ref cause) => cause,
             DescribeProjectError::TooManyRequests(ref cause) => cause,
             DescribeProjectError::Unauthorized(ref cause) => cause,
-            DescribeProjectError::Validation(ref cause) => cause,
-            DescribeProjectError::Credentials(ref err) => err.description(),
-            DescribeProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeProjectError::ParseError(ref cause) => cause,
-            DescribeProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -860,22 +753,12 @@ pub enum ExportBundleError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ExportBundleError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ExportBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportBundleError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -900,51 +783,40 @@ impl ExportBundleError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ExportBundleError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return ExportBundleError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ExportBundleError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ExportBundleError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ExportBundleError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return ExportBundleError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(ExportBundleError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ExportBundleError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExportBundleError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExportBundleError {
-    fn from(err: serde_json::error::Error) -> ExportBundleError {
-        ExportBundleError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExportBundleError {
-    fn from(err: CredentialsError) -> ExportBundleError {
-        ExportBundleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExportBundleError {
-    fn from(err: HttpDispatchError) -> ExportBundleError {
-        ExportBundleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExportBundleError {
-    fn from(err: io::Error) -> ExportBundleError {
-        ExportBundleError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExportBundleError {
@@ -961,11 +833,6 @@ impl Error for ExportBundleError {
             ExportBundleError::ServiceUnavailable(ref cause) => cause,
             ExportBundleError::TooManyRequests(ref cause) => cause,
             ExportBundleError::Unauthorized(ref cause) => cause,
-            ExportBundleError::Validation(ref cause) => cause,
-            ExportBundleError::Credentials(ref err) => err.description(),
-            ExportBundleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExportBundleError::ParseError(ref cause) => cause,
-            ExportBundleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -984,22 +851,12 @@ pub enum ExportProjectError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ExportProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ExportProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExportProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1024,51 +881,40 @@ impl ExportProjectError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ExportProjectError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return ExportProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ExportProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ExportProjectError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ExportProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return ExportProjectError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(ExportProjectError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ExportProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ExportProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ExportProjectError {
-    fn from(err: serde_json::error::Error) -> ExportProjectError {
-        ExportProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ExportProjectError {
-    fn from(err: CredentialsError) -> ExportProjectError {
-        ExportProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ExportProjectError {
-    fn from(err: HttpDispatchError) -> ExportProjectError {
-        ExportProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ExportProjectError {
-    fn from(err: io::Error) -> ExportProjectError {
-        ExportProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ExportProjectError {
@@ -1085,11 +931,6 @@ impl Error for ExportProjectError {
             ExportProjectError::ServiceUnavailable(ref cause) => cause,
             ExportProjectError::TooManyRequests(ref cause) => cause,
             ExportProjectError::Unauthorized(ref cause) => cause,
-            ExportProjectError::Validation(ref cause) => cause,
-            ExportProjectError::Credentials(ref err) => err.description(),
-            ExportProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ExportProjectError::ParseError(ref cause) => cause,
-            ExportProjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1106,22 +947,12 @@ pub enum ListBundlesError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBundlesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListBundlesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBundlesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1146,48 +977,35 @@ impl ListBundlesError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListBundlesError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListBundlesError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return ListBundlesError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListBundlesError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListBundlesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListBundlesError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListBundlesError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListBundlesError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return ListBundlesError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(ListBundlesError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListBundlesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBundlesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBundlesError {
-    fn from(err: serde_json::error::Error) -> ListBundlesError {
-        ListBundlesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBundlesError {
-    fn from(err: CredentialsError) -> ListBundlesError {
-        ListBundlesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBundlesError {
-    fn from(err: HttpDispatchError) -> ListBundlesError {
-        ListBundlesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBundlesError {
-    fn from(err: io::Error) -> ListBundlesError {
-        ListBundlesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBundlesError {
@@ -1203,11 +1021,6 @@ impl Error for ListBundlesError {
             ListBundlesError::ServiceUnavailable(ref cause) => cause,
             ListBundlesError::TooManyRequests(ref cause) => cause,
             ListBundlesError::Unauthorized(ref cause) => cause,
-            ListBundlesError::Validation(ref cause) => cause,
-            ListBundlesError::Credentials(ref err) => err.description(),
-            ListBundlesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBundlesError::ParseError(ref cause) => cause,
-            ListBundlesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1224,22 +1037,12 @@ pub enum ListProjectsError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListProjectsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListProjectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListProjectsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1264,48 +1067,35 @@ impl ListProjectsError {
 
             match error_type {
                 "BadRequestException" => {
-                    return ListProjectsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return ListProjectsError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return ListProjectsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListProjectsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return ListProjectsError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(ListProjectsError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListProjectsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListProjectsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListProjectsError {
-    fn from(err: serde_json::error::Error) -> ListProjectsError {
-        ListProjectsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListProjectsError {
-    fn from(err: CredentialsError) -> ListProjectsError {
-        ListProjectsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListProjectsError {
-    fn from(err: HttpDispatchError) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListProjectsError {
-    fn from(err: io::Error) -> ListProjectsError {
-        ListProjectsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListProjectsError {
@@ -1321,11 +1111,6 @@ impl Error for ListProjectsError {
             ListProjectsError::ServiceUnavailable(ref cause) => cause,
             ListProjectsError::TooManyRequests(ref cause) => cause,
             ListProjectsError::Unauthorized(ref cause) => cause,
-            ListProjectsError::Validation(ref cause) => cause,
-            ListProjectsError::Credentials(ref err) => err.description(),
-            ListProjectsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListProjectsError::ParseError(ref cause) => cause,
-            ListProjectsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1348,22 +1133,12 @@ pub enum UpdateProjectError {
     TooManyRequests(String),
     /// <p> Credentials of the caller are insufficient to authorize the request. </p>
     Unauthorized(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateProjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateProjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateProjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -1388,57 +1163,50 @@ impl UpdateProjectError {
 
             match error_type {
                 "AccountActionRequiredException" => {
-                    return UpdateProjectError::AccountActionRequired(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::AccountActionRequired(
+                        String::from(error_message),
+                    ));
                 }
                 "BadRequestException" => {
-                    return UpdateProjectError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalFailureException" => {
-                    return UpdateProjectError::InternalFailure(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::InternalFailure(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateProjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return UpdateProjectError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return UpdateProjectError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateProjectError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::TooManyRequests(String::from(
+                        error_message,
+                    )));
                 }
                 "UnauthorizedException" => {
-                    return UpdateProjectError::Unauthorized(String::from(error_message));
+                    return RusotoError::Service(UpdateProjectError::Unauthorized(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateProjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateProjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateProjectError {
-    fn from(err: serde_json::error::Error) -> UpdateProjectError {
-        UpdateProjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateProjectError {
-    fn from(err: CredentialsError) -> UpdateProjectError {
-        UpdateProjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateProjectError {
-    fn from(err: HttpDispatchError) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateProjectError {
-    fn from(err: io::Error) -> UpdateProjectError {
-        UpdateProjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateProjectError {
@@ -1457,11 +1225,6 @@ impl Error for UpdateProjectError {
             UpdateProjectError::ServiceUnavailable(ref cause) => cause,
             UpdateProjectError::TooManyRequests(ref cause) => cause,
             UpdateProjectError::Unauthorized(ref cause) => cause,
-            UpdateProjectError::Validation(ref cause) => cause,
-            UpdateProjectError::Credentials(ref err) => err.description(),
-            UpdateProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateProjectError::ParseError(ref cause) => cause,
-            UpdateProjectError::Unknown(_) => "unknown error",
         }
     }
 }

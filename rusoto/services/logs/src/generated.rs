@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1289,20 +1286,10 @@ pub enum AssociateKmsKeyError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateKmsKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateKmsKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateKmsKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1315,45 +1302,30 @@ impl AssociateKmsKeyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return AssociateKmsKeyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(AssociateKmsKeyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return AssociateKmsKeyError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(AssociateKmsKeyError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AssociateKmsKeyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AssociateKmsKeyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return AssociateKmsKeyError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(AssociateKmsKeyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AssociateKmsKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateKmsKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateKmsKeyError {
-    fn from(err: serde_json::error::Error) -> AssociateKmsKeyError {
-        AssociateKmsKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateKmsKeyError {
-    fn from(err: CredentialsError) -> AssociateKmsKeyError {
-        AssociateKmsKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateKmsKeyError {
-    fn from(err: HttpDispatchError) -> AssociateKmsKeyError {
-        AssociateKmsKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateKmsKeyError {
-    fn from(err: io::Error) -> AssociateKmsKeyError {
-        AssociateKmsKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateKmsKeyError {
@@ -1368,11 +1340,6 @@ impl Error for AssociateKmsKeyError {
             AssociateKmsKeyError::OperationAborted(ref cause) => cause,
             AssociateKmsKeyError::ResourceNotFound(ref cause) => cause,
             AssociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
-            AssociateKmsKeyError::Validation(ref cause) => cause,
-            AssociateKmsKeyError::Credentials(ref err) => err.description(),
-            AssociateKmsKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AssociateKmsKeyError::ParseError(ref cause) => cause,
-            AssociateKmsKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1387,20 +1354,10 @@ pub enum CancelExportTaskError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CancelExportTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> CancelExportTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelExportTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1413,45 +1370,30 @@ impl CancelExportTaskError {
 
             match *error_type {
                 "InvalidOperationException" => {
-                    return CancelExportTaskError::InvalidOperation(String::from(error_message));
+                    return RusotoError::Service(CancelExportTaskError::InvalidOperation(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CancelExportTaskError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CancelExportTaskError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CancelExportTaskError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CancelExportTaskError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CancelExportTaskError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CancelExportTaskError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CancelExportTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CancelExportTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CancelExportTaskError {
-    fn from(err: serde_json::error::Error) -> CancelExportTaskError {
-        CancelExportTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CancelExportTaskError {
-    fn from(err: CredentialsError) -> CancelExportTaskError {
-        CancelExportTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CancelExportTaskError {
-    fn from(err: HttpDispatchError) -> CancelExportTaskError {
-        CancelExportTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CancelExportTaskError {
-    fn from(err: io::Error) -> CancelExportTaskError {
-        CancelExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CancelExportTaskError {
@@ -1466,11 +1408,6 @@ impl Error for CancelExportTaskError {
             CancelExportTaskError::InvalidParameter(ref cause) => cause,
             CancelExportTaskError::ResourceNotFound(ref cause) => cause,
             CancelExportTaskError::ServiceUnavailable(ref cause) => cause,
-            CancelExportTaskError::Validation(ref cause) => cause,
-            CancelExportTaskError::Credentials(ref err) => err.description(),
-            CancelExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CancelExportTaskError::ParseError(ref cause) => cause,
-            CancelExportTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1489,20 +1426,10 @@ pub enum CreateExportTaskError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateExportTaskError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateExportTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateExportTaskError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1515,51 +1442,40 @@ impl CreateExportTaskError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateExportTaskError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateExportTaskError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationAbortedException" => {
-                    return CreateExportTaskError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateExportTaskError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateExportTaskError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateExportTaskError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateExportTaskError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateExportTaskError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateExportTaskError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateExportTaskError {
-    fn from(err: serde_json::error::Error) -> CreateExportTaskError {
-        CreateExportTaskError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateExportTaskError {
-    fn from(err: CredentialsError) -> CreateExportTaskError {
-        CreateExportTaskError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateExportTaskError {
-    fn from(err: HttpDispatchError) -> CreateExportTaskError {
-        CreateExportTaskError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateExportTaskError {
-    fn from(err: io::Error) -> CreateExportTaskError {
-        CreateExportTaskError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateExportTaskError {
@@ -1576,11 +1492,6 @@ impl Error for CreateExportTaskError {
             CreateExportTaskError::ResourceAlreadyExists(ref cause) => cause,
             CreateExportTaskError::ResourceNotFound(ref cause) => cause,
             CreateExportTaskError::ServiceUnavailable(ref cause) => cause,
-            CreateExportTaskError::Validation(ref cause) => cause,
-            CreateExportTaskError::Credentials(ref err) => err.description(),
-            CreateExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateExportTaskError::ParseError(ref cause) => cause,
-            CreateExportTaskError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1597,20 +1508,10 @@ pub enum CreateLogGroupError {
     ResourceAlreadyExists(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLogGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLogGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLogGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1623,48 +1524,35 @@ impl CreateLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateLogGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateLogGroupError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateLogGroupError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateLogGroupError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationAbortedException" => {
-                    return CreateLogGroupError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(CreateLogGroupError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateLogGroupError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateLogGroupError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLogGroupError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateLogGroupError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateLogGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLogGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLogGroupError {
-    fn from(err: serde_json::error::Error) -> CreateLogGroupError {
-        CreateLogGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLogGroupError {
-    fn from(err: CredentialsError) -> CreateLogGroupError {
-        CreateLogGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLogGroupError {
-    fn from(err: HttpDispatchError) -> CreateLogGroupError {
-        CreateLogGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLogGroupError {
-    fn from(err: io::Error) -> CreateLogGroupError {
-        CreateLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLogGroupError {
@@ -1680,11 +1568,6 @@ impl Error for CreateLogGroupError {
             CreateLogGroupError::OperationAborted(ref cause) => cause,
             CreateLogGroupError::ResourceAlreadyExists(ref cause) => cause,
             CreateLogGroupError::ServiceUnavailable(ref cause) => cause,
-            CreateLogGroupError::Validation(ref cause) => cause,
-            CreateLogGroupError::Credentials(ref err) => err.description(),
-            CreateLogGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLogGroupError::ParseError(ref cause) => cause,
-            CreateLogGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1699,20 +1582,10 @@ pub enum CreateLogStreamError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateLogStreamError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateLogStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLogStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1725,45 +1598,30 @@ impl CreateLogStreamError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return CreateLogStreamError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateLogStreamError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceAlreadyExistsException" => {
-                    return CreateLogStreamError::ResourceAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateLogStreamError::ResourceAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateLogStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateLogStreamError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return CreateLogStreamError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateLogStreamError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateLogStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateLogStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateLogStreamError {
-    fn from(err: serde_json::error::Error) -> CreateLogStreamError {
-        CreateLogStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateLogStreamError {
-    fn from(err: CredentialsError) -> CreateLogStreamError {
-        CreateLogStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateLogStreamError {
-    fn from(err: HttpDispatchError) -> CreateLogStreamError {
-        CreateLogStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateLogStreamError {
-    fn from(err: io::Error) -> CreateLogStreamError {
-        CreateLogStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateLogStreamError {
@@ -1778,11 +1636,6 @@ impl Error for CreateLogStreamError {
             CreateLogStreamError::ResourceAlreadyExists(ref cause) => cause,
             CreateLogStreamError::ResourceNotFound(ref cause) => cause,
             CreateLogStreamError::ServiceUnavailable(ref cause) => cause,
-            CreateLogStreamError::Validation(ref cause) => cause,
-            CreateLogStreamError::Credentials(ref err) => err.description(),
-            CreateLogStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateLogStreamError::ParseError(ref cause) => cause,
-            CreateLogStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1797,20 +1650,10 @@ pub enum DeleteDestinationError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDestinationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1823,45 +1666,30 @@ impl DeleteDestinationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteDestinationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteDestinationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return DeleteDestinationError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(DeleteDestinationError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDestinationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDestinationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteDestinationError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteDestinationError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDestinationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDestinationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDestinationError {
-    fn from(err: serde_json::error::Error) -> DeleteDestinationError {
-        DeleteDestinationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDestinationError {
-    fn from(err: CredentialsError) -> DeleteDestinationError {
-        DeleteDestinationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDestinationError {
-    fn from(err: HttpDispatchError) -> DeleteDestinationError {
-        DeleteDestinationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDestinationError {
-    fn from(err: io::Error) -> DeleteDestinationError {
-        DeleteDestinationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDestinationError {
@@ -1876,13 +1704,6 @@ impl Error for DeleteDestinationError {
             DeleteDestinationError::OperationAborted(ref cause) => cause,
             DeleteDestinationError::ResourceNotFound(ref cause) => cause,
             DeleteDestinationError::ServiceUnavailable(ref cause) => cause,
-            DeleteDestinationError::Validation(ref cause) => cause,
-            DeleteDestinationError::Credentials(ref err) => err.description(),
-            DeleteDestinationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDestinationError::ParseError(ref cause) => cause,
-            DeleteDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1897,20 +1718,10 @@ pub enum DeleteLogGroupError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLogGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLogGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLogGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1923,45 +1734,30 @@ impl DeleteLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLogGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteLogGroupError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return DeleteLogGroupError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(DeleteLogGroupError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteLogGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteLogGroupError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLogGroupError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteLogGroupError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLogGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLogGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLogGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteLogGroupError {
-        DeleteLogGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLogGroupError {
-    fn from(err: CredentialsError) -> DeleteLogGroupError {
-        DeleteLogGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLogGroupError {
-    fn from(err: HttpDispatchError) -> DeleteLogGroupError {
-        DeleteLogGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLogGroupError {
-    fn from(err: io::Error) -> DeleteLogGroupError {
-        DeleteLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLogGroupError {
@@ -1976,11 +1772,6 @@ impl Error for DeleteLogGroupError {
             DeleteLogGroupError::OperationAborted(ref cause) => cause,
             DeleteLogGroupError::ResourceNotFound(ref cause) => cause,
             DeleteLogGroupError::ServiceUnavailable(ref cause) => cause,
-            DeleteLogGroupError::Validation(ref cause) => cause,
-            DeleteLogGroupError::Credentials(ref err) => err.description(),
-            DeleteLogGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLogGroupError::ParseError(ref cause) => cause,
-            DeleteLogGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1995,20 +1786,10 @@ pub enum DeleteLogStreamError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLogStreamError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLogStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLogStreamError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2021,45 +1802,30 @@ impl DeleteLogStreamError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteLogStreamError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteLogStreamError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return DeleteLogStreamError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(DeleteLogStreamError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteLogStreamError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteLogStreamError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteLogStreamError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteLogStreamError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLogStreamError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLogStreamError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLogStreamError {
-    fn from(err: serde_json::error::Error) -> DeleteLogStreamError {
-        DeleteLogStreamError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLogStreamError {
-    fn from(err: CredentialsError) -> DeleteLogStreamError {
-        DeleteLogStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLogStreamError {
-    fn from(err: HttpDispatchError) -> DeleteLogStreamError {
-        DeleteLogStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLogStreamError {
-    fn from(err: io::Error) -> DeleteLogStreamError {
-        DeleteLogStreamError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLogStreamError {
@@ -2074,11 +1840,6 @@ impl Error for DeleteLogStreamError {
             DeleteLogStreamError::OperationAborted(ref cause) => cause,
             DeleteLogStreamError::ResourceNotFound(ref cause) => cause,
             DeleteLogStreamError::ServiceUnavailable(ref cause) => cause,
-            DeleteLogStreamError::Validation(ref cause) => cause,
-            DeleteLogStreamError::Credentials(ref err) => err.description(),
-            DeleteLogStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteLogStreamError::ParseError(ref cause) => cause,
-            DeleteLogStreamError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2093,20 +1854,10 @@ pub enum DeleteMetricFilterError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMetricFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMetricFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMetricFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2119,45 +1870,30 @@ impl DeleteMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteMetricFilterError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteMetricFilterError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return DeleteMetricFilterError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(DeleteMetricFilterError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteMetricFilterError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteMetricFilterError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteMetricFilterError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteMetricFilterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteMetricFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteMetricFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteMetricFilterError {
-    fn from(err: serde_json::error::Error) -> DeleteMetricFilterError {
-        DeleteMetricFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMetricFilterError {
-    fn from(err: CredentialsError) -> DeleteMetricFilterError {
-        DeleteMetricFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMetricFilterError {
-    fn from(err: HttpDispatchError) -> DeleteMetricFilterError {
-        DeleteMetricFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMetricFilterError {
-    fn from(err: io::Error) -> DeleteMetricFilterError {
-        DeleteMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteMetricFilterError {
@@ -2172,13 +1908,6 @@ impl Error for DeleteMetricFilterError {
             DeleteMetricFilterError::OperationAborted(ref cause) => cause,
             DeleteMetricFilterError::ResourceNotFound(ref cause) => cause,
             DeleteMetricFilterError::ServiceUnavailable(ref cause) => cause,
-            DeleteMetricFilterError::Validation(ref cause) => cause,
-            DeleteMetricFilterError::Credentials(ref err) => err.description(),
-            DeleteMetricFilterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteMetricFilterError::ParseError(ref cause) => cause,
-            DeleteMetricFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2191,20 +1920,10 @@ pub enum DeleteResourcePolicyError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourcePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourcePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2217,44 +1936,25 @@ impl DeleteResourcePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteResourcePolicyError::InvalidParameter(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DeleteResourcePolicyError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeleteResourcePolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteResourcePolicyError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteResourcePolicyError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteResourcePolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteResourcePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteResourcePolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteResourcePolicyError {
-    fn from(err: CredentialsError) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteResourcePolicyError {
-    fn from(err: HttpDispatchError) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteResourcePolicyError {
-    fn from(err: io::Error) -> DeleteResourcePolicyError {
-        DeleteResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteResourcePolicyError {
@@ -2268,13 +1968,6 @@ impl Error for DeleteResourcePolicyError {
             DeleteResourcePolicyError::InvalidParameter(ref cause) => cause,
             DeleteResourcePolicyError::ResourceNotFound(ref cause) => cause,
             DeleteResourcePolicyError::ServiceUnavailable(ref cause) => cause,
-            DeleteResourcePolicyError::Validation(ref cause) => cause,
-            DeleteResourcePolicyError::Credentials(ref err) => err.description(),
-            DeleteResourcePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteResourcePolicyError::ParseError(ref cause) => cause,
-            DeleteResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2289,20 +1982,10 @@ pub enum DeleteRetentionPolicyError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteRetentionPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteRetentionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteRetentionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2315,47 +1998,30 @@ impl DeleteRetentionPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteRetentionPolicyError::InvalidParameter(String::from(error_message));
-                }
-                "OperationAbortedException" => {
-                    return DeleteRetentionPolicyError::OperationAborted(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DeleteRetentionPolicyError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DeleteRetentionPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteRetentionPolicyError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteRetentionPolicyError::Validation(error_message.to_string());
+                "OperationAbortedException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteRetentionPolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteRetentionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteRetentionPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteRetentionPolicyError {
-        DeleteRetentionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteRetentionPolicyError {
-    fn from(err: CredentialsError) -> DeleteRetentionPolicyError {
-        DeleteRetentionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteRetentionPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteRetentionPolicyError {
-        DeleteRetentionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteRetentionPolicyError {
-    fn from(err: io::Error) -> DeleteRetentionPolicyError {
-        DeleteRetentionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteRetentionPolicyError {
@@ -2370,13 +2036,6 @@ impl Error for DeleteRetentionPolicyError {
             DeleteRetentionPolicyError::OperationAborted(ref cause) => cause,
             DeleteRetentionPolicyError::ResourceNotFound(ref cause) => cause,
             DeleteRetentionPolicyError::ServiceUnavailable(ref cause) => cause,
-            DeleteRetentionPolicyError::Validation(ref cause) => cause,
-            DeleteRetentionPolicyError::Credentials(ref err) => err.description(),
-            DeleteRetentionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteRetentionPolicyError::ParseError(ref cause) => cause,
-            DeleteRetentionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2391,20 +2050,10 @@ pub enum DeleteSubscriptionFilterError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSubscriptionFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSubscriptionFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSubscriptionFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2417,53 +2066,30 @@ impl DeleteSubscriptionFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DeleteSubscriptionFilterError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubscriptionFilterError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OperationAbortedException" => {
-                    return DeleteSubscriptionFilterError::OperationAborted(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubscriptionFilterError::OperationAborted(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteSubscriptionFilterError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubscriptionFilterError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DeleteSubscriptionFilterError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteSubscriptionFilterError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteSubscriptionFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSubscriptionFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSubscriptionFilterError {
-    fn from(err: serde_json::error::Error) -> DeleteSubscriptionFilterError {
-        DeleteSubscriptionFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSubscriptionFilterError {
-    fn from(err: CredentialsError) -> DeleteSubscriptionFilterError {
-        DeleteSubscriptionFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSubscriptionFilterError {
-    fn from(err: HttpDispatchError) -> DeleteSubscriptionFilterError {
-        DeleteSubscriptionFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSubscriptionFilterError {
-    fn from(err: io::Error) -> DeleteSubscriptionFilterError {
-        DeleteSubscriptionFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSubscriptionFilterError {
@@ -2478,13 +2104,6 @@ impl Error for DeleteSubscriptionFilterError {
             DeleteSubscriptionFilterError::OperationAborted(ref cause) => cause,
             DeleteSubscriptionFilterError::ResourceNotFound(ref cause) => cause,
             DeleteSubscriptionFilterError::ServiceUnavailable(ref cause) => cause,
-            DeleteSubscriptionFilterError::Validation(ref cause) => cause,
-            DeleteSubscriptionFilterError::Credentials(ref err) => err.description(),
-            DeleteSubscriptionFilterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteSubscriptionFilterError::ParseError(ref cause) => cause,
-            DeleteSubscriptionFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2495,20 +2114,10 @@ pub enum DescribeDestinationsError {
     InvalidParameter(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDestinationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDestinationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDestinationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2521,41 +2130,20 @@ impl DescribeDestinationsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeDestinationsError::InvalidParameter(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DescribeDestinationsError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDestinationsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeDestinationsError::Validation(error_message.to_string());
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeDestinationsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDestinationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDestinationsError {
-    fn from(err: serde_json::error::Error) -> DescribeDestinationsError {
-        DescribeDestinationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDestinationsError {
-    fn from(err: CredentialsError) -> DescribeDestinationsError {
-        DescribeDestinationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDestinationsError {
-    fn from(err: HttpDispatchError) -> DescribeDestinationsError {
-        DescribeDestinationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDestinationsError {
-    fn from(err: io::Error) -> DescribeDestinationsError {
-        DescribeDestinationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDestinationsError {
@@ -2568,13 +2156,6 @@ impl Error for DescribeDestinationsError {
         match *self {
             DescribeDestinationsError::InvalidParameter(ref cause) => cause,
             DescribeDestinationsError::ServiceUnavailable(ref cause) => cause,
-            DescribeDestinationsError::Validation(ref cause) => cause,
-            DescribeDestinationsError::Credentials(ref err) => err.description(),
-            DescribeDestinationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDestinationsError::ParseError(ref cause) => cause,
-            DescribeDestinationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2585,20 +2166,10 @@ pub enum DescribeExportTasksError {
     InvalidParameter(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeExportTasksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeExportTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeExportTasksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2611,39 +2182,20 @@ impl DescribeExportTasksError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeExportTasksError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeExportTasksError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeExportTasksError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeExportTasksError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeExportTasksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeExportTasksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeExportTasksError {
-    fn from(err: serde_json::error::Error) -> DescribeExportTasksError {
-        DescribeExportTasksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeExportTasksError {
-    fn from(err: CredentialsError) -> DescribeExportTasksError {
-        DescribeExportTasksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeExportTasksError {
-    fn from(err: HttpDispatchError) -> DescribeExportTasksError {
-        DescribeExportTasksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeExportTasksError {
-    fn from(err: io::Error) -> DescribeExportTasksError {
-        DescribeExportTasksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeExportTasksError {
@@ -2656,13 +2208,6 @@ impl Error for DescribeExportTasksError {
         match *self {
             DescribeExportTasksError::InvalidParameter(ref cause) => cause,
             DescribeExportTasksError::ServiceUnavailable(ref cause) => cause,
-            DescribeExportTasksError::Validation(ref cause) => cause,
-            DescribeExportTasksError::Credentials(ref err) => err.description(),
-            DescribeExportTasksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeExportTasksError::ParseError(ref cause) => cause,
-            DescribeExportTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2673,20 +2218,10 @@ pub enum DescribeLogGroupsError {
     InvalidParameter(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLogGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLogGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLogGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2699,39 +2234,20 @@ impl DescribeLogGroupsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeLogGroupsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeLogGroupsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeLogGroupsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeLogGroupsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLogGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLogGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLogGroupsError {
-    fn from(err: serde_json::error::Error) -> DescribeLogGroupsError {
-        DescribeLogGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLogGroupsError {
-    fn from(err: CredentialsError) -> DescribeLogGroupsError {
-        DescribeLogGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLogGroupsError {
-    fn from(err: HttpDispatchError) -> DescribeLogGroupsError {
-        DescribeLogGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLogGroupsError {
-    fn from(err: io::Error) -> DescribeLogGroupsError {
-        DescribeLogGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLogGroupsError {
@@ -2744,13 +2260,6 @@ impl Error for DescribeLogGroupsError {
         match *self {
             DescribeLogGroupsError::InvalidParameter(ref cause) => cause,
             DescribeLogGroupsError::ServiceUnavailable(ref cause) => cause,
-            DescribeLogGroupsError::Validation(ref cause) => cause,
-            DescribeLogGroupsError::Credentials(ref err) => err.description(),
-            DescribeLogGroupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLogGroupsError::ParseError(ref cause) => cause,
-            DescribeLogGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2763,20 +2272,10 @@ pub enum DescribeLogStreamsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLogStreamsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLogStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLogStreamsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2789,42 +2288,25 @@ impl DescribeLogStreamsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeLogStreamsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeLogStreamsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeLogStreamsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeLogStreamsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeLogStreamsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeLogStreamsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLogStreamsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLogStreamsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLogStreamsError {
-    fn from(err: serde_json::error::Error) -> DescribeLogStreamsError {
-        DescribeLogStreamsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLogStreamsError {
-    fn from(err: CredentialsError) -> DescribeLogStreamsError {
-        DescribeLogStreamsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLogStreamsError {
-    fn from(err: HttpDispatchError) -> DescribeLogStreamsError {
-        DescribeLogStreamsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLogStreamsError {
-    fn from(err: io::Error) -> DescribeLogStreamsError {
-        DescribeLogStreamsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLogStreamsError {
@@ -2838,13 +2320,6 @@ impl Error for DescribeLogStreamsError {
             DescribeLogStreamsError::InvalidParameter(ref cause) => cause,
             DescribeLogStreamsError::ResourceNotFound(ref cause) => cause,
             DescribeLogStreamsError::ServiceUnavailable(ref cause) => cause,
-            DescribeLogStreamsError::Validation(ref cause) => cause,
-            DescribeLogStreamsError::Credentials(ref err) => err.description(),
-            DescribeLogStreamsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeLogStreamsError::ParseError(ref cause) => cause,
-            DescribeLogStreamsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2857,20 +2332,10 @@ pub enum DescribeMetricFiltersError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeMetricFiltersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeMetricFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeMetricFiltersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2883,44 +2348,25 @@ impl DescribeMetricFiltersError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeMetricFiltersError::InvalidParameter(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return DescribeMetricFiltersError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return DescribeMetricFiltersError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeMetricFiltersError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeMetricFiltersError::Validation(error_message.to_string());
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeMetricFiltersError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeMetricFiltersError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeMetricFiltersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeMetricFiltersError {
-    fn from(err: serde_json::error::Error) -> DescribeMetricFiltersError {
-        DescribeMetricFiltersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeMetricFiltersError {
-    fn from(err: CredentialsError) -> DescribeMetricFiltersError {
-        DescribeMetricFiltersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeMetricFiltersError {
-    fn from(err: HttpDispatchError) -> DescribeMetricFiltersError {
-        DescribeMetricFiltersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeMetricFiltersError {
-    fn from(err: io::Error) -> DescribeMetricFiltersError {
-        DescribeMetricFiltersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeMetricFiltersError {
@@ -2934,13 +2380,6 @@ impl Error for DescribeMetricFiltersError {
             DescribeMetricFiltersError::InvalidParameter(ref cause) => cause,
             DescribeMetricFiltersError::ResourceNotFound(ref cause) => cause,
             DescribeMetricFiltersError::ServiceUnavailable(ref cause) => cause,
-            DescribeMetricFiltersError::Validation(ref cause) => cause,
-            DescribeMetricFiltersError::Credentials(ref err) => err.description(),
-            DescribeMetricFiltersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeMetricFiltersError::ParseError(ref cause) => cause,
-            DescribeMetricFiltersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2953,20 +2392,10 @@ pub enum DescribeQueriesError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeQueriesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeQueriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeQueriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2979,42 +2408,25 @@ impl DescribeQueriesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeQueriesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeQueriesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeQueriesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeQueriesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeQueriesError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DescribeQueriesError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeQueriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeQueriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeQueriesError {
-    fn from(err: serde_json::error::Error) -> DescribeQueriesError {
-        DescribeQueriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeQueriesError {
-    fn from(err: CredentialsError) -> DescribeQueriesError {
-        DescribeQueriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeQueriesError {
-    fn from(err: HttpDispatchError) -> DescribeQueriesError {
-        DescribeQueriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeQueriesError {
-    fn from(err: io::Error) -> DescribeQueriesError {
-        DescribeQueriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeQueriesError {
@@ -3028,11 +2440,6 @@ impl Error for DescribeQueriesError {
             DescribeQueriesError::InvalidParameter(ref cause) => cause,
             DescribeQueriesError::ResourceNotFound(ref cause) => cause,
             DescribeQueriesError::ServiceUnavailable(ref cause) => cause,
-            DescribeQueriesError::Validation(ref cause) => cause,
-            DescribeQueriesError::Credentials(ref err) => err.description(),
-            DescribeQueriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeQueriesError::ParseError(ref cause) => cause,
-            DescribeQueriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3043,20 +2450,10 @@ pub enum DescribeResourcePoliciesError {
     InvalidParameter(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResourcePoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeResourcePoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourcePoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3069,43 +2466,20 @@ impl DescribeResourcePoliciesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeResourcePoliciesError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeResourcePoliciesError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeResourcePoliciesError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeResourcePoliciesError::ServiceUnavailable(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeResourcePoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeResourcePoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeResourcePoliciesError {
-    fn from(err: serde_json::error::Error) -> DescribeResourcePoliciesError {
-        DescribeResourcePoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeResourcePoliciesError {
-    fn from(err: CredentialsError) -> DescribeResourcePoliciesError {
-        DescribeResourcePoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeResourcePoliciesError {
-    fn from(err: HttpDispatchError) -> DescribeResourcePoliciesError {
-        DescribeResourcePoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeResourcePoliciesError {
-    fn from(err: io::Error) -> DescribeResourcePoliciesError {
-        DescribeResourcePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeResourcePoliciesError {
@@ -3118,13 +2492,6 @@ impl Error for DescribeResourcePoliciesError {
         match *self {
             DescribeResourcePoliciesError::InvalidParameter(ref cause) => cause,
             DescribeResourcePoliciesError::ServiceUnavailable(ref cause) => cause,
-            DescribeResourcePoliciesError::Validation(ref cause) => cause,
-            DescribeResourcePoliciesError::Credentials(ref err) => err.description(),
-            DescribeResourcePoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeResourcePoliciesError::ParseError(ref cause) => cause,
-            DescribeResourcePoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3137,20 +2504,12 @@ pub enum DescribeSubscriptionFiltersError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSubscriptionFiltersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSubscriptionFiltersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeSubscriptionFiltersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3163,48 +2522,27 @@ impl DescribeSubscriptionFiltersError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeSubscriptionFiltersError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSubscriptionFiltersError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeSubscriptionFiltersError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSubscriptionFiltersError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ServiceUnavailableException" => {
-                    return DescribeSubscriptionFiltersError::ServiceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeSubscriptionFiltersError::ServiceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeSubscriptionFiltersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSubscriptionFiltersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSubscriptionFiltersError {
-    fn from(err: serde_json::error::Error) -> DescribeSubscriptionFiltersError {
-        DescribeSubscriptionFiltersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSubscriptionFiltersError {
-    fn from(err: CredentialsError) -> DescribeSubscriptionFiltersError {
-        DescribeSubscriptionFiltersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSubscriptionFiltersError {
-    fn from(err: HttpDispatchError) -> DescribeSubscriptionFiltersError {
-        DescribeSubscriptionFiltersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSubscriptionFiltersError {
-    fn from(err: io::Error) -> DescribeSubscriptionFiltersError {
-        DescribeSubscriptionFiltersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSubscriptionFiltersError {
@@ -3218,13 +2556,6 @@ impl Error for DescribeSubscriptionFiltersError {
             DescribeSubscriptionFiltersError::InvalidParameter(ref cause) => cause,
             DescribeSubscriptionFiltersError::ResourceNotFound(ref cause) => cause,
             DescribeSubscriptionFiltersError::ServiceUnavailable(ref cause) => cause,
-            DescribeSubscriptionFiltersError::Validation(ref cause) => cause,
-            DescribeSubscriptionFiltersError::Credentials(ref err) => err.description(),
-            DescribeSubscriptionFiltersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSubscriptionFiltersError::ParseError(ref cause) => cause,
-            DescribeSubscriptionFiltersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3239,20 +2570,10 @@ pub enum DisassociateKmsKeyError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateKmsKeyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateKmsKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateKmsKeyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3265,45 +2586,30 @@ impl DisassociateKmsKeyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DisassociateKmsKeyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DisassociateKmsKeyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return DisassociateKmsKeyError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(DisassociateKmsKeyError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DisassociateKmsKeyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DisassociateKmsKeyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return DisassociateKmsKeyError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(DisassociateKmsKeyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisassociateKmsKeyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateKmsKeyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateKmsKeyError {
-    fn from(err: serde_json::error::Error) -> DisassociateKmsKeyError {
-        DisassociateKmsKeyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateKmsKeyError {
-    fn from(err: CredentialsError) -> DisassociateKmsKeyError {
-        DisassociateKmsKeyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateKmsKeyError {
-    fn from(err: HttpDispatchError) -> DisassociateKmsKeyError {
-        DisassociateKmsKeyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateKmsKeyError {
-    fn from(err: io::Error) -> DisassociateKmsKeyError {
-        DisassociateKmsKeyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateKmsKeyError {
@@ -3318,13 +2624,6 @@ impl Error for DisassociateKmsKeyError {
             DisassociateKmsKeyError::OperationAborted(ref cause) => cause,
             DisassociateKmsKeyError::ResourceNotFound(ref cause) => cause,
             DisassociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
-            DisassociateKmsKeyError::Validation(ref cause) => cause,
-            DisassociateKmsKeyError::Credentials(ref err) => err.description(),
-            DisassociateKmsKeyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateKmsKeyError::ParseError(ref cause) => cause,
-            DisassociateKmsKeyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3337,20 +2636,10 @@ pub enum FilterLogEventsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl FilterLogEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> FilterLogEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<FilterLogEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3363,42 +2652,25 @@ impl FilterLogEventsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return FilterLogEventsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(FilterLogEventsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return FilterLogEventsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(FilterLogEventsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return FilterLogEventsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(FilterLogEventsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return FilterLogEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return FilterLogEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for FilterLogEventsError {
-    fn from(err: serde_json::error::Error) -> FilterLogEventsError {
-        FilterLogEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for FilterLogEventsError {
-    fn from(err: CredentialsError) -> FilterLogEventsError {
-        FilterLogEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for FilterLogEventsError {
-    fn from(err: HttpDispatchError) -> FilterLogEventsError {
-        FilterLogEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for FilterLogEventsError {
-    fn from(err: io::Error) -> FilterLogEventsError {
-        FilterLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for FilterLogEventsError {
@@ -3412,11 +2684,6 @@ impl Error for FilterLogEventsError {
             FilterLogEventsError::InvalidParameter(ref cause) => cause,
             FilterLogEventsError::ResourceNotFound(ref cause) => cause,
             FilterLogEventsError::ServiceUnavailable(ref cause) => cause,
-            FilterLogEventsError::Validation(ref cause) => cause,
-            FilterLogEventsError::Credentials(ref err) => err.description(),
-            FilterLogEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            FilterLogEventsError::ParseError(ref cause) => cause,
-            FilterLogEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3429,20 +2696,10 @@ pub enum GetLogEventsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLogEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLogEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLogEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3455,42 +2712,25 @@ impl GetLogEventsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLogEventsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetLogEventsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLogEventsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLogEventsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetLogEventsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetLogEventsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLogEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLogEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLogEventsError {
-    fn from(err: serde_json::error::Error) -> GetLogEventsError {
-        GetLogEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLogEventsError {
-    fn from(err: CredentialsError) -> GetLogEventsError {
-        GetLogEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLogEventsError {
-    fn from(err: HttpDispatchError) -> GetLogEventsError {
-        GetLogEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLogEventsError {
-    fn from(err: io::Error) -> GetLogEventsError {
-        GetLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLogEventsError {
@@ -3504,11 +2744,6 @@ impl Error for GetLogEventsError {
             GetLogEventsError::InvalidParameter(ref cause) => cause,
             GetLogEventsError::ResourceNotFound(ref cause) => cause,
             GetLogEventsError::ServiceUnavailable(ref cause) => cause,
-            GetLogEventsError::Validation(ref cause) => cause,
-            GetLogEventsError::Credentials(ref err) => err.description(),
-            GetLogEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLogEventsError::ParseError(ref cause) => cause,
-            GetLogEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3523,20 +2758,10 @@ pub enum GetLogGroupFieldsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLogGroupFieldsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLogGroupFieldsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLogGroupFieldsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3549,45 +2774,30 @@ impl GetLogGroupFieldsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLogGroupFieldsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetLogGroupFieldsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetLogGroupFieldsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetLogGroupFieldsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLogGroupFieldsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLogGroupFieldsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetLogGroupFieldsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetLogGroupFieldsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLogGroupFieldsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLogGroupFieldsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLogGroupFieldsError {
-    fn from(err: serde_json::error::Error) -> GetLogGroupFieldsError {
-        GetLogGroupFieldsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLogGroupFieldsError {
-    fn from(err: CredentialsError) -> GetLogGroupFieldsError {
-        GetLogGroupFieldsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLogGroupFieldsError {
-    fn from(err: HttpDispatchError) -> GetLogGroupFieldsError {
-        GetLogGroupFieldsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLogGroupFieldsError {
-    fn from(err: io::Error) -> GetLogGroupFieldsError {
-        GetLogGroupFieldsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLogGroupFieldsError {
@@ -3602,13 +2812,6 @@ impl Error for GetLogGroupFieldsError {
             GetLogGroupFieldsError::LimitExceeded(ref cause) => cause,
             GetLogGroupFieldsError::ResourceNotFound(ref cause) => cause,
             GetLogGroupFieldsError::ServiceUnavailable(ref cause) => cause,
-            GetLogGroupFieldsError::Validation(ref cause) => cause,
-            GetLogGroupFieldsError::Credentials(ref err) => err.description(),
-            GetLogGroupFieldsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLogGroupFieldsError::ParseError(ref cause) => cause,
-            GetLogGroupFieldsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3623,20 +2826,10 @@ pub enum GetLogRecordError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLogRecordError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLogRecordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLogRecordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3649,45 +2842,30 @@ impl GetLogRecordError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetLogRecordError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetLogRecordError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetLogRecordError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetLogRecordError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLogRecordError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLogRecordError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return GetLogRecordError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetLogRecordError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLogRecordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLogRecordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLogRecordError {
-    fn from(err: serde_json::error::Error) -> GetLogRecordError {
-        GetLogRecordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLogRecordError {
-    fn from(err: CredentialsError) -> GetLogRecordError {
-        GetLogRecordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLogRecordError {
-    fn from(err: HttpDispatchError) -> GetLogRecordError {
-        GetLogRecordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLogRecordError {
-    fn from(err: io::Error) -> GetLogRecordError {
-        GetLogRecordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLogRecordError {
@@ -3702,11 +2880,6 @@ impl Error for GetLogRecordError {
             GetLogRecordError::LimitExceeded(ref cause) => cause,
             GetLogRecordError::ResourceNotFound(ref cause) => cause,
             GetLogRecordError::ServiceUnavailable(ref cause) => cause,
-            GetLogRecordError::Validation(ref cause) => cause,
-            GetLogRecordError::Credentials(ref err) => err.description(),
-            GetLogRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetLogRecordError::ParseError(ref cause) => cause,
-            GetLogRecordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3719,20 +2892,10 @@ pub enum GetQueryResultsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueryResultsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueryResultsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueryResultsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3745,42 +2908,25 @@ impl GetQueryResultsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return GetQueryResultsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetQueryResultsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetQueryResultsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetQueryResultsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return GetQueryResultsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(GetQueryResultsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetQueryResultsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetQueryResultsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetQueryResultsError {
-    fn from(err: serde_json::error::Error) -> GetQueryResultsError {
-        GetQueryResultsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetQueryResultsError {
-    fn from(err: CredentialsError) -> GetQueryResultsError {
-        GetQueryResultsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueryResultsError {
-    fn from(err: HttpDispatchError) -> GetQueryResultsError {
-        GetQueryResultsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueryResultsError {
-    fn from(err: io::Error) -> GetQueryResultsError {
-        GetQueryResultsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetQueryResultsError {
@@ -3794,11 +2940,6 @@ impl Error for GetQueryResultsError {
             GetQueryResultsError::InvalidParameter(ref cause) => cause,
             GetQueryResultsError::ResourceNotFound(ref cause) => cause,
             GetQueryResultsError::ServiceUnavailable(ref cause) => cause,
-            GetQueryResultsError::Validation(ref cause) => cause,
-            GetQueryResultsError::Credentials(ref err) => err.description(),
-            GetQueryResultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetQueryResultsError::ParseError(ref cause) => cause,
-            GetQueryResultsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3809,20 +2950,10 @@ pub enum ListTagsLogGroupError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsLogGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsLogGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsLogGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3835,39 +2966,20 @@ impl ListTagsLogGroupError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return ListTagsLogGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsLogGroupError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return ListTagsLogGroupError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(ListTagsLogGroupError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsLogGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsLogGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsLogGroupError {
-    fn from(err: serde_json::error::Error) -> ListTagsLogGroupError {
-        ListTagsLogGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsLogGroupError {
-    fn from(err: CredentialsError) -> ListTagsLogGroupError {
-        ListTagsLogGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsLogGroupError {
-    fn from(err: HttpDispatchError) -> ListTagsLogGroupError {
-        ListTagsLogGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsLogGroupError {
-    fn from(err: io::Error) -> ListTagsLogGroupError {
-        ListTagsLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsLogGroupError {
@@ -3880,11 +2992,6 @@ impl Error for ListTagsLogGroupError {
         match *self {
             ListTagsLogGroupError::ResourceNotFound(ref cause) => cause,
             ListTagsLogGroupError::ServiceUnavailable(ref cause) => cause,
-            ListTagsLogGroupError::Validation(ref cause) => cause,
-            ListTagsLogGroupError::Credentials(ref err) => err.description(),
-            ListTagsLogGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsLogGroupError::ParseError(ref cause) => cause,
-            ListTagsLogGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3897,20 +3004,10 @@ pub enum PutDestinationError {
     OperationAborted(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDestinationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3923,42 +3020,25 @@ impl PutDestinationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutDestinationError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutDestinationError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return PutDestinationError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(PutDestinationError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return PutDestinationError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutDestinationError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutDestinationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutDestinationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutDestinationError {
-    fn from(err: serde_json::error::Error) -> PutDestinationError {
-        PutDestinationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutDestinationError {
-    fn from(err: CredentialsError) -> PutDestinationError {
-        PutDestinationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutDestinationError {
-    fn from(err: HttpDispatchError) -> PutDestinationError {
-        PutDestinationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutDestinationError {
-    fn from(err: io::Error) -> PutDestinationError {
-        PutDestinationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutDestinationError {
@@ -3972,11 +3052,6 @@ impl Error for PutDestinationError {
             PutDestinationError::InvalidParameter(ref cause) => cause,
             PutDestinationError::OperationAborted(ref cause) => cause,
             PutDestinationError::ServiceUnavailable(ref cause) => cause,
-            PutDestinationError::Validation(ref cause) => cause,
-            PutDestinationError::Credentials(ref err) => err.description(),
-            PutDestinationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutDestinationError::ParseError(ref cause) => cause,
-            PutDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3989,20 +3064,10 @@ pub enum PutDestinationPolicyError {
     OperationAborted(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutDestinationPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutDestinationPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutDestinationPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4015,44 +3080,25 @@ impl PutDestinationPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutDestinationPolicyError::InvalidParameter(String::from(error_message));
-                }
-                "OperationAbortedException" => {
-                    return PutDestinationPolicyError::OperationAborted(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return PutDestinationPolicyError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(PutDestinationPolicyError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutDestinationPolicyError::Validation(error_message.to_string());
+                "OperationAbortedException" => {
+                    return RusotoError::Service(PutDestinationPolicyError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutDestinationPolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutDestinationPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutDestinationPolicyError {
-    fn from(err: serde_json::error::Error) -> PutDestinationPolicyError {
-        PutDestinationPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutDestinationPolicyError {
-    fn from(err: CredentialsError) -> PutDestinationPolicyError {
-        PutDestinationPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutDestinationPolicyError {
-    fn from(err: HttpDispatchError) -> PutDestinationPolicyError {
-        PutDestinationPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutDestinationPolicyError {
-    fn from(err: io::Error) -> PutDestinationPolicyError {
-        PutDestinationPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutDestinationPolicyError {
@@ -4066,13 +3112,6 @@ impl Error for PutDestinationPolicyError {
             PutDestinationPolicyError::InvalidParameter(ref cause) => cause,
             PutDestinationPolicyError::OperationAborted(ref cause) => cause,
             PutDestinationPolicyError::ServiceUnavailable(ref cause) => cause,
-            PutDestinationPolicyError::Validation(ref cause) => cause,
-            PutDestinationPolicyError::Credentials(ref err) => err.description(),
-            PutDestinationPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutDestinationPolicyError::ParseError(ref cause) => cause,
-            PutDestinationPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4091,20 +3130,10 @@ pub enum PutLogEventsError {
     ServiceUnavailable(String),
     /// <p>The most likely cause is an invalid AWS access key ID or secret key.</p>
     UnrecognizedClient(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLogEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutLogEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLogEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4117,51 +3146,40 @@ impl PutLogEventsError {
 
             match *error_type {
                 "DataAlreadyAcceptedException" => {
-                    return PutLogEventsError::DataAlreadyAccepted(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::DataAlreadyAccepted(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return PutLogEventsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSequenceTokenException" => {
-                    return PutLogEventsError::InvalidSequenceToken(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::InvalidSequenceToken(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutLogEventsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return PutLogEventsError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "UnrecognizedClientException" => {
-                    return PutLogEventsError::UnrecognizedClient(String::from(error_message));
+                    return RusotoError::Service(PutLogEventsError::UnrecognizedClient(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutLogEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutLogEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLogEventsError {
-    fn from(err: serde_json::error::Error) -> PutLogEventsError {
-        PutLogEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLogEventsError {
-    fn from(err: CredentialsError) -> PutLogEventsError {
-        PutLogEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLogEventsError {
-    fn from(err: HttpDispatchError) -> PutLogEventsError {
-        PutLogEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLogEventsError {
-    fn from(err: io::Error) -> PutLogEventsError {
-        PutLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLogEventsError {
@@ -4178,11 +3196,6 @@ impl Error for PutLogEventsError {
             PutLogEventsError::ResourceNotFound(ref cause) => cause,
             PutLogEventsError::ServiceUnavailable(ref cause) => cause,
             PutLogEventsError::UnrecognizedClient(ref cause) => cause,
-            PutLogEventsError::Validation(ref cause) => cause,
-            PutLogEventsError::Credentials(ref err) => err.description(),
-            PutLogEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutLogEventsError::ParseError(ref cause) => cause,
-            PutLogEventsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4199,20 +3212,10 @@ pub enum PutMetricFilterError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutMetricFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutMetricFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4225,48 +3228,35 @@ impl PutMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutMetricFilterError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutMetricFilterError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutMetricFilterError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutMetricFilterError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "OperationAbortedException" => {
-                    return PutMetricFilterError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(PutMetricFilterError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutMetricFilterError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PutMetricFilterError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return PutMetricFilterError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutMetricFilterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutMetricFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutMetricFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutMetricFilterError {
-    fn from(err: serde_json::error::Error) -> PutMetricFilterError {
-        PutMetricFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutMetricFilterError {
-    fn from(err: CredentialsError) -> PutMetricFilterError {
-        PutMetricFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutMetricFilterError {
-    fn from(err: HttpDispatchError) -> PutMetricFilterError {
-        PutMetricFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutMetricFilterError {
-    fn from(err: io::Error) -> PutMetricFilterError {
-        PutMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutMetricFilterError {
@@ -4282,11 +3272,6 @@ impl Error for PutMetricFilterError {
             PutMetricFilterError::OperationAborted(ref cause) => cause,
             PutMetricFilterError::ResourceNotFound(ref cause) => cause,
             PutMetricFilterError::ServiceUnavailable(ref cause) => cause,
-            PutMetricFilterError::Validation(ref cause) => cause,
-            PutMetricFilterError::Credentials(ref err) => err.description(),
-            PutMetricFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutMetricFilterError::ParseError(ref cause) => cause,
-            PutMetricFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4299,20 +3284,10 @@ pub enum PutResourcePolicyError {
     LimitExceeded(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutResourcePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutResourcePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4325,42 +3300,25 @@ impl PutResourcePolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutResourcePolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutResourcePolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return PutResourcePolicyError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutResourcePolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutResourcePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutResourcePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutResourcePolicyError {
-    fn from(err: serde_json::error::Error) -> PutResourcePolicyError {
-        PutResourcePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutResourcePolicyError {
-    fn from(err: CredentialsError) -> PutResourcePolicyError {
-        PutResourcePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutResourcePolicyError {
-    fn from(err: HttpDispatchError) -> PutResourcePolicyError {
-        PutResourcePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutResourcePolicyError {
-    fn from(err: io::Error) -> PutResourcePolicyError {
-        PutResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutResourcePolicyError {
@@ -4374,13 +3332,6 @@ impl Error for PutResourcePolicyError {
             PutResourcePolicyError::InvalidParameter(ref cause) => cause,
             PutResourcePolicyError::LimitExceeded(ref cause) => cause,
             PutResourcePolicyError::ServiceUnavailable(ref cause) => cause,
-            PutResourcePolicyError::Validation(ref cause) => cause,
-            PutResourcePolicyError::Credentials(ref err) => err.description(),
-            PutResourcePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutResourcePolicyError::ParseError(ref cause) => cause,
-            PutResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4395,20 +3346,10 @@ pub enum PutRetentionPolicyError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutRetentionPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutRetentionPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutRetentionPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4421,45 +3362,30 @@ impl PutRetentionPolicyError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutRetentionPolicyError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutRetentionPolicyError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OperationAbortedException" => {
-                    return PutRetentionPolicyError::OperationAborted(String::from(error_message));
+                    return RusotoError::Service(PutRetentionPolicyError::OperationAborted(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return PutRetentionPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PutRetentionPolicyError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return PutRetentionPolicyError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(PutRetentionPolicyError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutRetentionPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutRetentionPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutRetentionPolicyError {
-    fn from(err: serde_json::error::Error) -> PutRetentionPolicyError {
-        PutRetentionPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutRetentionPolicyError {
-    fn from(err: CredentialsError) -> PutRetentionPolicyError {
-        PutRetentionPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutRetentionPolicyError {
-    fn from(err: HttpDispatchError) -> PutRetentionPolicyError {
-        PutRetentionPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutRetentionPolicyError {
-    fn from(err: io::Error) -> PutRetentionPolicyError {
-        PutRetentionPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutRetentionPolicyError {
@@ -4474,13 +3400,6 @@ impl Error for PutRetentionPolicyError {
             PutRetentionPolicyError::OperationAborted(ref cause) => cause,
             PutRetentionPolicyError::ResourceNotFound(ref cause) => cause,
             PutRetentionPolicyError::ServiceUnavailable(ref cause) => cause,
-            PutRetentionPolicyError::Validation(ref cause) => cause,
-            PutRetentionPolicyError::Credentials(ref err) => err.description(),
-            PutRetentionPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutRetentionPolicyError::ParseError(ref cause) => cause,
-            PutRetentionPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4497,20 +3416,10 @@ pub enum PutSubscriptionFilterError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutSubscriptionFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutSubscriptionFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSubscriptionFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4523,50 +3432,35 @@ impl PutSubscriptionFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return PutSubscriptionFilterError::InvalidParameter(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return PutSubscriptionFilterError::LimitExceeded(String::from(error_message));
-                }
-                "OperationAbortedException" => {
-                    return PutSubscriptionFilterError::OperationAborted(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return PutSubscriptionFilterError::ResourceNotFound(String::from(error_message));
-                }
-                "ServiceUnavailableException" => {
-                    return PutSubscriptionFilterError::ServiceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(PutSubscriptionFilterError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutSubscriptionFilterError::Validation(error_message.to_string());
+                "LimitExceededException" => {
+                    return RusotoError::Service(PutSubscriptionFilterError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
+                "OperationAbortedException" => {
+                    return RusotoError::Service(PutSubscriptionFilterError::OperationAborted(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutSubscriptionFilterError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(PutSubscriptionFilterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutSubscriptionFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutSubscriptionFilterError {
-    fn from(err: serde_json::error::Error) -> PutSubscriptionFilterError {
-        PutSubscriptionFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutSubscriptionFilterError {
-    fn from(err: CredentialsError) -> PutSubscriptionFilterError {
-        PutSubscriptionFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutSubscriptionFilterError {
-    fn from(err: HttpDispatchError) -> PutSubscriptionFilterError {
-        PutSubscriptionFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutSubscriptionFilterError {
-    fn from(err: io::Error) -> PutSubscriptionFilterError {
-        PutSubscriptionFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutSubscriptionFilterError {
@@ -4582,13 +3476,6 @@ impl Error for PutSubscriptionFilterError {
             PutSubscriptionFilterError::OperationAborted(ref cause) => cause,
             PutSubscriptionFilterError::ResourceNotFound(ref cause) => cause,
             PutSubscriptionFilterError::ServiceUnavailable(ref cause) => cause,
-            PutSubscriptionFilterError::Validation(ref cause) => cause,
-            PutSubscriptionFilterError::Credentials(ref err) => err.description(),
-            PutSubscriptionFilterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutSubscriptionFilterError::ParseError(ref cause) => cause,
-            PutSubscriptionFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4605,20 +3492,10 @@ pub enum StartQueryError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4631,48 +3508,35 @@ impl StartQueryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return StartQueryError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StartQueryError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return StartQueryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(StartQueryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "MalformedQueryException" => {
-                    return StartQueryError::MalformedQuery(String::from(error_message));
+                    return RusotoError::Service(StartQueryError::MalformedQuery(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StartQueryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StartQueryError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return StartQueryError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(StartQueryError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StartQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartQueryError {
-    fn from(err: serde_json::error::Error) -> StartQueryError {
-        StartQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartQueryError {
-    fn from(err: CredentialsError) -> StartQueryError {
-        StartQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartQueryError {
-    fn from(err: HttpDispatchError) -> StartQueryError {
-        StartQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartQueryError {
-    fn from(err: io::Error) -> StartQueryError {
-        StartQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartQueryError {
@@ -4688,11 +3552,6 @@ impl Error for StartQueryError {
             StartQueryError::MalformedQuery(ref cause) => cause,
             StartQueryError::ResourceNotFound(ref cause) => cause,
             StartQueryError::ServiceUnavailable(ref cause) => cause,
-            StartQueryError::Validation(ref cause) => cause,
-            StartQueryError::Credentials(ref err) => err.description(),
-            StartQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StartQueryError::ParseError(ref cause) => cause,
-            StartQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4705,20 +3564,10 @@ pub enum StopQueryError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopQueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopQueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4731,42 +3580,25 @@ impl StopQueryError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return StopQueryError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(StopQueryError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return StopQueryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(StopQueryError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "ServiceUnavailableException" => {
-                    return StopQueryError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(StopQueryError::ServiceUnavailable(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return StopQueryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopQueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopQueryError {
-    fn from(err: serde_json::error::Error) -> StopQueryError {
-        StopQueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopQueryError {
-    fn from(err: CredentialsError) -> StopQueryError {
-        StopQueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopQueryError {
-    fn from(err: HttpDispatchError) -> StopQueryError {
-        StopQueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopQueryError {
-    fn from(err: io::Error) -> StopQueryError {
-        StopQueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopQueryError {
@@ -4780,11 +3612,6 @@ impl Error for StopQueryError {
             StopQueryError::InvalidParameter(ref cause) => cause,
             StopQueryError::ResourceNotFound(ref cause) => cause,
             StopQueryError::ServiceUnavailable(ref cause) => cause,
-            StopQueryError::Validation(ref cause) => cause,
-            StopQueryError::Credentials(ref err) => err.description(),
-            StopQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            StopQueryError::ParseError(ref cause) => cause,
-            StopQueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4795,20 +3622,10 @@ pub enum TagLogGroupError {
     InvalidParameter(String),
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagLogGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagLogGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagLogGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4821,39 +3638,20 @@ impl TagLogGroupError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return TagLogGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TagLogGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TagLogGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagLogGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagLogGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagLogGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagLogGroupError {
-    fn from(err: serde_json::error::Error) -> TagLogGroupError {
-        TagLogGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagLogGroupError {
-    fn from(err: CredentialsError) -> TagLogGroupError {
-        TagLogGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagLogGroupError {
-    fn from(err: HttpDispatchError) -> TagLogGroupError {
-        TagLogGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagLogGroupError {
-    fn from(err: io::Error) -> TagLogGroupError {
-        TagLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagLogGroupError {
@@ -4866,11 +3664,6 @@ impl Error for TagLogGroupError {
         match *self {
             TagLogGroupError::InvalidParameter(ref cause) => cause,
             TagLogGroupError::ResourceNotFound(ref cause) => cause,
-            TagLogGroupError::Validation(ref cause) => cause,
-            TagLogGroupError::Credentials(ref err) => err.description(),
-            TagLogGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagLogGroupError::ParseError(ref cause) => cause,
-            TagLogGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4881,20 +3674,10 @@ pub enum TestMetricFilterError {
     InvalidParameter(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TestMetricFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> TestMetricFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestMetricFilterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4907,39 +3690,20 @@ impl TestMetricFilterError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return TestMetricFilterError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(TestMetricFilterError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "ServiceUnavailableException" => {
-                    return TestMetricFilterError::ServiceUnavailable(String::from(error_message));
+                    return RusotoError::Service(TestMetricFilterError::ServiceUnavailable(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TestMetricFilterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TestMetricFilterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TestMetricFilterError {
-    fn from(err: serde_json::error::Error) -> TestMetricFilterError {
-        TestMetricFilterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TestMetricFilterError {
-    fn from(err: CredentialsError) -> TestMetricFilterError {
-        TestMetricFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TestMetricFilterError {
-    fn from(err: HttpDispatchError) -> TestMetricFilterError {
-        TestMetricFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TestMetricFilterError {
-    fn from(err: io::Error) -> TestMetricFilterError {
-        TestMetricFilterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TestMetricFilterError {
@@ -4952,11 +3716,6 @@ impl Error for TestMetricFilterError {
         match *self {
             TestMetricFilterError::InvalidParameter(ref cause) => cause,
             TestMetricFilterError::ServiceUnavailable(ref cause) => cause,
-            TestMetricFilterError::Validation(ref cause) => cause,
-            TestMetricFilterError::Credentials(ref err) => err.description(),
-            TestMetricFilterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TestMetricFilterError::ParseError(ref cause) => cause,
-            TestMetricFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4965,20 +3724,10 @@ impl Error for TestMetricFilterError {
 pub enum UntagLogGroupError {
     /// <p>The specified resource does not exist.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagLogGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagLogGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagLogGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4991,36 +3740,15 @@ impl UntagLogGroupError {
 
             match *error_type {
                 "ResourceNotFoundException" => {
-                    return UntagLogGroupError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagLogGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagLogGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagLogGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagLogGroupError {
-    fn from(err: serde_json::error::Error) -> UntagLogGroupError {
-        UntagLogGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagLogGroupError {
-    fn from(err: CredentialsError) -> UntagLogGroupError {
-        UntagLogGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagLogGroupError {
-    fn from(err: HttpDispatchError) -> UntagLogGroupError {
-        UntagLogGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagLogGroupError {
-    fn from(err: io::Error) -> UntagLogGroupError {
-        UntagLogGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagLogGroupError {
@@ -5032,11 +3760,6 @@ impl Error for UntagLogGroupError {
     fn description(&self) -> &str {
         match *self {
             UntagLogGroupError::ResourceNotFound(ref cause) => cause,
-            UntagLogGroupError::Validation(ref cause) => cause,
-            UntagLogGroupError::Credentials(ref err) => err.description(),
-            UntagLogGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagLogGroupError::ParseError(ref cause) => cause,
-            UntagLogGroupError::Unknown(_) => "unknown error",
         }
     }
 }

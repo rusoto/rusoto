@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -326,20 +323,10 @@ pub enum CreateEnvironmentEC2Error {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentEC2Error {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentEC2Error {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEnvironmentEC2Error> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -352,56 +339,45 @@ impl CreateEnvironmentEC2Error {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateEnvironmentEC2Error::BadRequest(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return CreateEnvironmentEC2Error::Conflict(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return CreateEnvironmentEC2Error::Forbidden(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return CreateEnvironmentEC2Error::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEnvironmentEC2Error::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return CreateEnvironmentEC2Error::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return CreateEnvironmentEC2Error::NotFound(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return CreateEnvironmentEC2Error::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(CreateEnvironmentEC2Error::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateEnvironmentEC2Error::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateEnvironmentEC2Error::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateEnvironmentEC2Error {
-    fn from(err: serde_json::error::Error) -> CreateEnvironmentEC2Error {
-        CreateEnvironmentEC2Error::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateEnvironmentEC2Error {
-    fn from(err: CredentialsError) -> CreateEnvironmentEC2Error {
-        CreateEnvironmentEC2Error::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEnvironmentEC2Error {
-    fn from(err: HttpDispatchError) -> CreateEnvironmentEC2Error {
-        CreateEnvironmentEC2Error::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEnvironmentEC2Error {
-    fn from(err: io::Error) -> CreateEnvironmentEC2Error {
-        CreateEnvironmentEC2Error::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateEnvironmentEC2Error {
@@ -419,13 +395,6 @@ impl Error for CreateEnvironmentEC2Error {
             CreateEnvironmentEC2Error::LimitExceeded(ref cause) => cause,
             CreateEnvironmentEC2Error::NotFound(ref cause) => cause,
             CreateEnvironmentEC2Error::TooManyRequests(ref cause) => cause,
-            CreateEnvironmentEC2Error::Validation(ref cause) => cause,
-            CreateEnvironmentEC2Error::Credentials(ref err) => err.description(),
-            CreateEnvironmentEC2Error::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEnvironmentEC2Error::ParseError(ref cause) => cause,
-            CreateEnvironmentEC2Error::Unknown(_) => "unknown error",
         }
     }
 }
@@ -446,20 +415,12 @@ pub enum CreateEnvironmentMembershipError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEnvironmentMembershipError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEnvironmentMembershipError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateEnvironmentMembershipError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -472,60 +433,47 @@ impl CreateEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return CreateEnvironmentMembershipError::BadRequest(String::from(error_message));
-                }
-                "ConflictException" => {
-                    return CreateEnvironmentMembershipError::Conflict(String::from(error_message));
-                }
-                "ForbiddenException" => {
-                    return CreateEnvironmentMembershipError::Forbidden(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return CreateEnvironmentMembershipError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEnvironmentMembershipError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateEnvironmentMembershipError::Conflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateEnvironmentMembershipError::Forbidden(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        CreateEnvironmentMembershipError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "LimitExceededException" => {
-                    return CreateEnvironmentMembershipError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEnvironmentMembershipError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return CreateEnvironmentMembershipError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return CreateEnvironmentMembershipError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEnvironmentMembershipError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateEnvironmentMembershipError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateEnvironmentMembershipError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateEnvironmentMembershipError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateEnvironmentMembershipError {
-    fn from(err: serde_json::error::Error) -> CreateEnvironmentMembershipError {
-        CreateEnvironmentMembershipError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateEnvironmentMembershipError {
-    fn from(err: CredentialsError) -> CreateEnvironmentMembershipError {
-        CreateEnvironmentMembershipError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEnvironmentMembershipError {
-    fn from(err: HttpDispatchError) -> CreateEnvironmentMembershipError {
-        CreateEnvironmentMembershipError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEnvironmentMembershipError {
-    fn from(err: io::Error) -> CreateEnvironmentMembershipError {
-        CreateEnvironmentMembershipError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateEnvironmentMembershipError {
@@ -543,13 +491,6 @@ impl Error for CreateEnvironmentMembershipError {
             CreateEnvironmentMembershipError::LimitExceeded(ref cause) => cause,
             CreateEnvironmentMembershipError::NotFound(ref cause) => cause,
             CreateEnvironmentMembershipError::TooManyRequests(ref cause) => cause,
-            CreateEnvironmentMembershipError::Validation(ref cause) => cause,
-            CreateEnvironmentMembershipError::Credentials(ref err) => err.description(),
-            CreateEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEnvironmentMembershipError::ParseError(ref cause) => cause,
-            CreateEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -570,20 +511,10 @@ pub enum DeleteEnvironmentError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEnvironmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -596,54 +527,45 @@ impl DeleteEnvironmentError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteEnvironmentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return DeleteEnvironmentError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return DeleteEnvironmentError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DeleteEnvironmentError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteEnvironmentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DeleteEnvironmentError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteEnvironmentError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteEnvironmentError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteEnvironmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteEnvironmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteEnvironmentError {
-    fn from(err: serde_json::error::Error) -> DeleteEnvironmentError {
-        DeleteEnvironmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEnvironmentError {
-    fn from(err: CredentialsError) -> DeleteEnvironmentError {
-        DeleteEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEnvironmentError {
-    fn from(err: HttpDispatchError) -> DeleteEnvironmentError {
-        DeleteEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEnvironmentError {
-    fn from(err: io::Error) -> DeleteEnvironmentError {
-        DeleteEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteEnvironmentError {
@@ -661,13 +583,6 @@ impl Error for DeleteEnvironmentError {
             DeleteEnvironmentError::LimitExceeded(ref cause) => cause,
             DeleteEnvironmentError::NotFound(ref cause) => cause,
             DeleteEnvironmentError::TooManyRequests(ref cause) => cause,
-            DeleteEnvironmentError::Validation(ref cause) => cause,
-            DeleteEnvironmentError::Credentials(ref err) => err.description(),
-            DeleteEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEnvironmentError::ParseError(ref cause) => cause,
-            DeleteEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -688,20 +603,12 @@ pub enum DeleteEnvironmentMembershipError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEnvironmentMembershipError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEnvironmentMembershipError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteEnvironmentMembershipError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -714,60 +621,47 @@ impl DeleteEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DeleteEnvironmentMembershipError::BadRequest(String::from(error_message));
-                }
-                "ConflictException" => {
-                    return DeleteEnvironmentMembershipError::Conflict(String::from(error_message));
-                }
-                "ForbiddenException" => {
-                    return DeleteEnvironmentMembershipError::Forbidden(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return DeleteEnvironmentMembershipError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::Conflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::Forbidden(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DeleteEnvironmentMembershipError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "LimitExceededException" => {
-                    return DeleteEnvironmentMembershipError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DeleteEnvironmentMembershipError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DeleteEnvironmentMembershipError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteEnvironmentMembershipError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteEnvironmentMembershipError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteEnvironmentMembershipError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteEnvironmentMembershipError {
-    fn from(err: serde_json::error::Error) -> DeleteEnvironmentMembershipError {
-        DeleteEnvironmentMembershipError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEnvironmentMembershipError {
-    fn from(err: CredentialsError) -> DeleteEnvironmentMembershipError {
-        DeleteEnvironmentMembershipError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEnvironmentMembershipError {
-    fn from(err: HttpDispatchError) -> DeleteEnvironmentMembershipError {
-        DeleteEnvironmentMembershipError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEnvironmentMembershipError {
-    fn from(err: io::Error) -> DeleteEnvironmentMembershipError {
-        DeleteEnvironmentMembershipError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteEnvironmentMembershipError {
@@ -785,13 +679,6 @@ impl Error for DeleteEnvironmentMembershipError {
             DeleteEnvironmentMembershipError::LimitExceeded(ref cause) => cause,
             DeleteEnvironmentMembershipError::NotFound(ref cause) => cause,
             DeleteEnvironmentMembershipError::TooManyRequests(ref cause) => cause,
-            DeleteEnvironmentMembershipError::Validation(ref cause) => cause,
-            DeleteEnvironmentMembershipError::Credentials(ref err) => err.description(),
-            DeleteEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEnvironmentMembershipError::ParseError(ref cause) => cause,
-            DeleteEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -812,20 +699,12 @@ pub enum DescribeEnvironmentMembershipsError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentMembershipsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentMembershipsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEnvironmentMembershipsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -838,70 +717,49 @@ impl DescribeEnvironmentMembershipsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DescribeEnvironmentMembershipsError::BadRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentMembershipsError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ConflictException" => {
-                    return DescribeEnvironmentMembershipsError::Conflict(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentMembershipsError::Conflict(
+                        String::from(error_message),
                     ));
                 }
                 "ForbiddenException" => {
-                    return DescribeEnvironmentMembershipsError::Forbidden(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentMembershipsError::Forbidden(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeEnvironmentMembershipsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeEnvironmentMembershipsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return DescribeEnvironmentMembershipsError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentMembershipsError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DescribeEnvironmentMembershipsError::NotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentMembershipsError::NotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeEnvironmentMembershipsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeEnvironmentMembershipsError::TooManyRequests(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEnvironmentMembershipsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEnvironmentMembershipsError {
-    fn from(err: serde_json::error::Error) -> DescribeEnvironmentMembershipsError {
-        DescribeEnvironmentMembershipsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentMembershipsError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentMembershipsError {
-        DescribeEnvironmentMembershipsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentMembershipsError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentMembershipsError {
-        DescribeEnvironmentMembershipsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentMembershipsError {
-    fn from(err: io::Error) -> DescribeEnvironmentMembershipsError {
-        DescribeEnvironmentMembershipsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEnvironmentMembershipsError {
@@ -919,13 +777,6 @@ impl Error for DescribeEnvironmentMembershipsError {
             DescribeEnvironmentMembershipsError::LimitExceeded(ref cause) => cause,
             DescribeEnvironmentMembershipsError::NotFound(ref cause) => cause,
             DescribeEnvironmentMembershipsError::TooManyRequests(ref cause) => cause,
-            DescribeEnvironmentMembershipsError::Validation(ref cause) => cause,
-            DescribeEnvironmentMembershipsError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentMembershipsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentMembershipsError::ParseError(ref cause) => cause,
-            DescribeEnvironmentMembershipsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -946,20 +797,10 @@ pub enum DescribeEnvironmentStatusError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentStatusError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentStatusError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -972,60 +813,47 @@ impl DescribeEnvironmentStatusError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DescribeEnvironmentStatusError::BadRequest(String::from(error_message));
-                }
-                "ConflictException" => {
-                    return DescribeEnvironmentStatusError::Conflict(String::from(error_message));
-                }
-                "ForbiddenException" => {
-                    return DescribeEnvironmentStatusError::Forbidden(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return DescribeEnvironmentStatusError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentStatusError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
+                "ConflictException" => {
+                    return RusotoError::Service(DescribeEnvironmentStatusError::Conflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeEnvironmentStatusError::Forbidden(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeEnvironmentStatusError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "LimitExceededException" => {
-                    return DescribeEnvironmentStatusError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentStatusError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return DescribeEnvironmentStatusError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeEnvironmentStatusError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentStatusError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeEnvironmentStatusError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeEnvironmentStatusError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEnvironmentStatusError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEnvironmentStatusError {
-    fn from(err: serde_json::error::Error) -> DescribeEnvironmentStatusError {
-        DescribeEnvironmentStatusError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentStatusError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentStatusError {
-        DescribeEnvironmentStatusError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentStatusError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentStatusError {
-        DescribeEnvironmentStatusError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentStatusError {
-    fn from(err: io::Error) -> DescribeEnvironmentStatusError {
-        DescribeEnvironmentStatusError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEnvironmentStatusError {
@@ -1043,13 +871,6 @@ impl Error for DescribeEnvironmentStatusError {
             DescribeEnvironmentStatusError::LimitExceeded(ref cause) => cause,
             DescribeEnvironmentStatusError::NotFound(ref cause) => cause,
             DescribeEnvironmentStatusError::TooManyRequests(ref cause) => cause,
-            DescribeEnvironmentStatusError::Validation(ref cause) => cause,
-            DescribeEnvironmentStatusError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentStatusError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentStatusError::ParseError(ref cause) => cause,
-            DescribeEnvironmentStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1070,20 +891,10 @@ pub enum DescribeEnvironmentsError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEnvironmentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEnvironmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1096,56 +907,45 @@ impl DescribeEnvironmentsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return DescribeEnvironmentsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::BadRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ConflictException" => {
-                    return DescribeEnvironmentsError::Conflict(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return DescribeEnvironmentsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return DescribeEnvironmentsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEnvironmentsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return DescribeEnvironmentsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeEnvironmentsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEnvironmentsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DescribeEnvironmentsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeEnvironmentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEnvironmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEnvironmentsError {
-    fn from(err: serde_json::error::Error) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEnvironmentsError {
-    fn from(err: CredentialsError) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEnvironmentsError {
-    fn from(err: HttpDispatchError) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEnvironmentsError {
-    fn from(err: io::Error) -> DescribeEnvironmentsError {
-        DescribeEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEnvironmentsError {
@@ -1163,13 +963,6 @@ impl Error for DescribeEnvironmentsError {
             DescribeEnvironmentsError::LimitExceeded(ref cause) => cause,
             DescribeEnvironmentsError::NotFound(ref cause) => cause,
             DescribeEnvironmentsError::TooManyRequests(ref cause) => cause,
-            DescribeEnvironmentsError::Validation(ref cause) => cause,
-            DescribeEnvironmentsError::Credentials(ref err) => err.description(),
-            DescribeEnvironmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEnvironmentsError::ParseError(ref cause) => cause,
-            DescribeEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1190,20 +983,10 @@ pub enum ListEnvironmentsError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListEnvironmentsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListEnvironmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEnvironmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1216,54 +999,45 @@ impl ListEnvironmentsError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return ListEnvironmentsError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return ListEnvironmentsError::Conflict(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return ListEnvironmentsError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return ListEnvironmentsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListEnvironmentsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return ListEnvironmentsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return ListEnvironmentsError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListEnvironmentsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListEnvironmentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListEnvironmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListEnvironmentsError {
-    fn from(err: serde_json::error::Error) -> ListEnvironmentsError {
-        ListEnvironmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListEnvironmentsError {
-    fn from(err: CredentialsError) -> ListEnvironmentsError {
-        ListEnvironmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListEnvironmentsError {
-    fn from(err: HttpDispatchError) -> ListEnvironmentsError {
-        ListEnvironmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListEnvironmentsError {
-    fn from(err: io::Error) -> ListEnvironmentsError {
-        ListEnvironmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListEnvironmentsError {
@@ -1281,11 +1055,6 @@ impl Error for ListEnvironmentsError {
             ListEnvironmentsError::LimitExceeded(ref cause) => cause,
             ListEnvironmentsError::NotFound(ref cause) => cause,
             ListEnvironmentsError::TooManyRequests(ref cause) => cause,
-            ListEnvironmentsError::Validation(ref cause) => cause,
-            ListEnvironmentsError::Credentials(ref err) => err.description(),
-            ListEnvironmentsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListEnvironmentsError::ParseError(ref cause) => cause,
-            ListEnvironmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1306,20 +1075,10 @@ pub enum UpdateEnvironmentError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateEnvironmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1332,54 +1091,45 @@ impl UpdateEnvironmentError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateEnvironmentError::BadRequest(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::BadRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "ConflictException" => {
-                    return UpdateEnvironmentError::Conflict(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::Conflict(String::from(
+                        error_message,
+                    )));
                 }
                 "ForbiddenException" => {
-                    return UpdateEnvironmentError::Forbidden(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::Forbidden(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerErrorException" => {
-                    return UpdateEnvironmentError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateEnvironmentError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return UpdateEnvironmentError::NotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TooManyRequestsException" => {
-                    return UpdateEnvironmentError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(UpdateEnvironmentError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateEnvironmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateEnvironmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateEnvironmentError {
-    fn from(err: serde_json::error::Error) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateEnvironmentError {
-    fn from(err: CredentialsError) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateEnvironmentError {
-    fn from(err: HttpDispatchError) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateEnvironmentError {
-    fn from(err: io::Error) -> UpdateEnvironmentError {
-        UpdateEnvironmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateEnvironmentError {
@@ -1397,13 +1147,6 @@ impl Error for UpdateEnvironmentError {
             UpdateEnvironmentError::LimitExceeded(ref cause) => cause,
             UpdateEnvironmentError::NotFound(ref cause) => cause,
             UpdateEnvironmentError::TooManyRequests(ref cause) => cause,
-            UpdateEnvironmentError::Validation(ref cause) => cause,
-            UpdateEnvironmentError::Credentials(ref err) => err.description(),
-            UpdateEnvironmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateEnvironmentError::ParseError(ref cause) => cause,
-            UpdateEnvironmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1424,20 +1167,12 @@ pub enum UpdateEnvironmentMembershipError {
     NotFound(String),
     /// <p>Too many service requests were made over the given time period.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateEnvironmentMembershipError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateEnvironmentMembershipError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateEnvironmentMembershipError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1450,60 +1185,47 @@ impl UpdateEnvironmentMembershipError {
 
             match *error_type {
                 "BadRequestException" => {
-                    return UpdateEnvironmentMembershipError::BadRequest(String::from(error_message));
-                }
-                "ConflictException" => {
-                    return UpdateEnvironmentMembershipError::Conflict(String::from(error_message));
-                }
-                "ForbiddenException" => {
-                    return UpdateEnvironmentMembershipError::Forbidden(String::from(error_message));
-                }
-                "InternalServerErrorException" => {
-                    return UpdateEnvironmentMembershipError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::BadRequest(
+                        String::from(error_message),
                     ));
                 }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::Conflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::Forbidden(
+                        String::from(error_message),
+                    ));
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        UpdateEnvironmentMembershipError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "LimitExceededException" => {
-                    return UpdateEnvironmentMembershipError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "NotFoundException" => {
-                    return UpdateEnvironmentMembershipError::NotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return UpdateEnvironmentMembershipError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::NotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateEnvironmentMembershipError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateEnvironmentMembershipError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateEnvironmentMembershipError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateEnvironmentMembershipError {
-    fn from(err: serde_json::error::Error) -> UpdateEnvironmentMembershipError {
-        UpdateEnvironmentMembershipError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateEnvironmentMembershipError {
-    fn from(err: CredentialsError) -> UpdateEnvironmentMembershipError {
-        UpdateEnvironmentMembershipError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateEnvironmentMembershipError {
-    fn from(err: HttpDispatchError) -> UpdateEnvironmentMembershipError {
-        UpdateEnvironmentMembershipError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateEnvironmentMembershipError {
-    fn from(err: io::Error) -> UpdateEnvironmentMembershipError {
-        UpdateEnvironmentMembershipError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateEnvironmentMembershipError {
@@ -1521,13 +1243,6 @@ impl Error for UpdateEnvironmentMembershipError {
             UpdateEnvironmentMembershipError::LimitExceeded(ref cause) => cause,
             UpdateEnvironmentMembershipError::NotFound(ref cause) => cause,
             UpdateEnvironmentMembershipError::TooManyRequests(ref cause) => cause,
-            UpdateEnvironmentMembershipError::Validation(ref cause) => cause,
-            UpdateEnvironmentMembershipError::Credentials(ref err) => err.description(),
-            UpdateEnvironmentMembershipError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateEnvironmentMembershipError::ParseError(ref cause) => cause,
-            UpdateEnvironmentMembershipError::Unknown(_) => "unknown error",
         }
     }
 }

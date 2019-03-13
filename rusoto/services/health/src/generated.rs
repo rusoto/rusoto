@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -468,20 +465,10 @@ pub enum DescribeAffectedEntitiesError {
     InvalidPaginationToken(String),
     /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAffectedEntitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAffectedEntitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAffectedEntitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -494,43 +481,22 @@ impl DescribeAffectedEntitiesError {
 
             match *error_type {
                 "InvalidPaginationToken" => {
-                    return DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeAffectedEntitiesError::InvalidPaginationToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnsupportedLocale" => {
-                    return DescribeAffectedEntitiesError::UnsupportedLocale(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeAffectedEntitiesError::UnsupportedLocale(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeAffectedEntitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAffectedEntitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAffectedEntitiesError {
-    fn from(err: serde_json::error::Error) -> DescribeAffectedEntitiesError {
-        DescribeAffectedEntitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAffectedEntitiesError {
-    fn from(err: CredentialsError) -> DescribeAffectedEntitiesError {
-        DescribeAffectedEntitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAffectedEntitiesError {
-    fn from(err: HttpDispatchError) -> DescribeAffectedEntitiesError {
-        DescribeAffectedEntitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAffectedEntitiesError {
-    fn from(err: io::Error) -> DescribeAffectedEntitiesError {
-        DescribeAffectedEntitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAffectedEntitiesError {
@@ -543,33 +509,15 @@ impl Error for DescribeAffectedEntitiesError {
         match *self {
             DescribeAffectedEntitiesError::InvalidPaginationToken(ref cause) => cause,
             DescribeAffectedEntitiesError::UnsupportedLocale(ref cause) => cause,
-            DescribeAffectedEntitiesError::Validation(ref cause) => cause,
-            DescribeAffectedEntitiesError::Credentials(ref err) => err.description(),
-            DescribeAffectedEntitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAffectedEntitiesError::ParseError(ref cause) => cause,
-            DescribeAffectedEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEntityAggregates
 #[derive(Debug, PartialEq)]
-pub enum DescribeEntityAggregatesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEntityAggregatesError {}
 
 impl DescribeEntityAggregatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEntityAggregatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityAggregatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -581,34 +529,11 @@ impl DescribeEntityAggregatesError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DescribeEntityAggregatesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEntityAggregatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEntityAggregatesError {
-    fn from(err: serde_json::error::Error) -> DescribeEntityAggregatesError {
-        DescribeEntityAggregatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEntityAggregatesError {
-    fn from(err: CredentialsError) -> DescribeEntityAggregatesError {
-        DescribeEntityAggregatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEntityAggregatesError {
-    fn from(err: HttpDispatchError) -> DescribeEntityAggregatesError {
-        DescribeEntityAggregatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEntityAggregatesError {
-    fn from(err: io::Error) -> DescribeEntityAggregatesError {
-        DescribeEntityAggregatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEntityAggregatesError {
@@ -618,15 +543,7 @@ impl fmt::Display for DescribeEntityAggregatesError {
 }
 impl Error for DescribeEntityAggregatesError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEntityAggregatesError::Validation(ref cause) => cause,
-            DescribeEntityAggregatesError::Credentials(ref err) => err.description(),
-            DescribeEntityAggregatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEntityAggregatesError::ParseError(ref cause) => cause,
-            DescribeEntityAggregatesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeEventAggregates
@@ -634,20 +551,10 @@ impl Error for DescribeEntityAggregatesError {
 pub enum DescribeEventAggregatesError {
     /// <p>The specified pagination token (<code>nextToken</code>) is not valid.</p>
     InvalidPaginationToken(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventAggregatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventAggregatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventAggregatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -660,38 +567,17 @@ impl DescribeEventAggregatesError {
 
             match *error_type {
                 "InvalidPaginationToken" => {
-                    return DescribeEventAggregatesError::InvalidPaginationToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeEventAggregatesError::InvalidPaginationToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeEventAggregatesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEventAggregatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEventAggregatesError {
-    fn from(err: serde_json::error::Error) -> DescribeEventAggregatesError {
-        DescribeEventAggregatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventAggregatesError {
-    fn from(err: CredentialsError) -> DescribeEventAggregatesError {
-        DescribeEventAggregatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventAggregatesError {
-    fn from(err: HttpDispatchError) -> DescribeEventAggregatesError {
-        DescribeEventAggregatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventAggregatesError {
-    fn from(err: io::Error) -> DescribeEventAggregatesError {
-        DescribeEventAggregatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEventAggregatesError {
@@ -703,13 +589,6 @@ impl Error for DescribeEventAggregatesError {
     fn description(&self) -> &str {
         match *self {
             DescribeEventAggregatesError::InvalidPaginationToken(ref cause) => cause,
-            DescribeEventAggregatesError::Validation(ref cause) => cause,
-            DescribeEventAggregatesError::Credentials(ref err) => err.description(),
-            DescribeEventAggregatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventAggregatesError::ParseError(ref cause) => cause,
-            DescribeEventAggregatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -718,20 +597,10 @@ impl Error for DescribeEventAggregatesError {
 pub enum DescribeEventDetailsError {
     /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventDetailsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventDetailsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -744,36 +613,15 @@ impl DescribeEventDetailsError {
 
             match *error_type {
                 "UnsupportedLocale" => {
-                    return DescribeEventDetailsError::UnsupportedLocale(String::from(error_message));
+                    return RusotoError::Service(DescribeEventDetailsError::UnsupportedLocale(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeEventDetailsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEventDetailsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEventDetailsError {
-    fn from(err: serde_json::error::Error) -> DescribeEventDetailsError {
-        DescribeEventDetailsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventDetailsError {
-    fn from(err: CredentialsError) -> DescribeEventDetailsError {
-        DescribeEventDetailsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventDetailsError {
-    fn from(err: HttpDispatchError) -> DescribeEventDetailsError {
-        DescribeEventDetailsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventDetailsError {
-    fn from(err: io::Error) -> DescribeEventDetailsError {
-        DescribeEventDetailsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEventDetailsError {
@@ -785,13 +633,6 @@ impl Error for DescribeEventDetailsError {
     fn description(&self) -> &str {
         match *self {
             DescribeEventDetailsError::UnsupportedLocale(ref cause) => cause,
-            DescribeEventDetailsError::Validation(ref cause) => cause,
-            DescribeEventDetailsError::Credentials(ref err) => err.description(),
-            DescribeEventDetailsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventDetailsError::ParseError(ref cause) => cause,
-            DescribeEventDetailsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -802,20 +643,10 @@ pub enum DescribeEventTypesError {
     InvalidPaginationToken(String),
     /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventTypesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventTypesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -828,41 +659,20 @@ impl DescribeEventTypesError {
 
             match *error_type {
                 "InvalidPaginationToken" => {
-                    return DescribeEventTypesError::InvalidPaginationToken(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEventTypesError::InvalidPaginationToken(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLocale" => {
-                    return DescribeEventTypesError::UnsupportedLocale(String::from(error_message));
+                    return RusotoError::Service(DescribeEventTypesError::UnsupportedLocale(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeEventTypesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEventTypesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEventTypesError {
-    fn from(err: serde_json::error::Error) -> DescribeEventTypesError {
-        DescribeEventTypesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventTypesError {
-    fn from(err: CredentialsError) -> DescribeEventTypesError {
-        DescribeEventTypesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventTypesError {
-    fn from(err: HttpDispatchError) -> DescribeEventTypesError {
-        DescribeEventTypesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventTypesError {
-    fn from(err: io::Error) -> DescribeEventTypesError {
-        DescribeEventTypesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEventTypesError {
@@ -875,13 +685,6 @@ impl Error for DescribeEventTypesError {
         match *self {
             DescribeEventTypesError::InvalidPaginationToken(ref cause) => cause,
             DescribeEventTypesError::UnsupportedLocale(ref cause) => cause,
-            DescribeEventTypesError::Validation(ref cause) => cause,
-            DescribeEventTypesError::Credentials(ref err) => err.description(),
-            DescribeEventTypesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEventTypesError::ParseError(ref cause) => cause,
-            DescribeEventTypesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -892,20 +695,10 @@ pub enum DescribeEventsError {
     InvalidPaginationToken(String),
     /// <p>The specified locale is not supported.</p>
     UnsupportedLocale(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEventsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEventsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -918,39 +711,20 @@ impl DescribeEventsError {
 
             match *error_type {
                 "InvalidPaginationToken" => {
-                    return DescribeEventsError::InvalidPaginationToken(String::from(error_message));
+                    return RusotoError::Service(DescribeEventsError::InvalidPaginationToken(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedLocale" => {
-                    return DescribeEventsError::UnsupportedLocale(String::from(error_message));
+                    return RusotoError::Service(DescribeEventsError::UnsupportedLocale(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeEventsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEventsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEventsError {
-    fn from(err: serde_json::error::Error) -> DescribeEventsError {
-        DescribeEventsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEventsError {
-    fn from(err: CredentialsError) -> DescribeEventsError {
-        DescribeEventsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEventsError {
-    fn from(err: HttpDispatchError) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEventsError {
-    fn from(err: io::Error) -> DescribeEventsError {
-        DescribeEventsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEventsError {
@@ -963,11 +737,6 @@ impl Error for DescribeEventsError {
         match *self {
             DescribeEventsError::InvalidPaginationToken(ref cause) => cause,
             DescribeEventsError::UnsupportedLocale(ref cause) => cause,
-            DescribeEventsError::Validation(ref cause) => cause,
-            DescribeEventsError::Credentials(ref err) => err.description(),
-            DescribeEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeEventsError::ParseError(ref cause) => cause,
-            DescribeEventsError::Unknown(_) => "unknown error",
         }
     }
 }

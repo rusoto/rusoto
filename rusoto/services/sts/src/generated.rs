@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -1158,20 +1155,10 @@ pub enum AssumeRoleError {
     PackedPolicyTooLarge(String),
     /// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     RegionDisabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssumeRoleError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssumeRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1179,23 +1166,25 @@ impl AssumeRoleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MalformedPolicyDocument" => {
-                        return AssumeRoleError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleError::MalformedPolicyDocument(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "PackedPolicyTooLarge" => {
-                        return AssumeRoleError::PackedPolicyTooLarge(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleError::PackedPolicyTooLarge(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RegionDisabledException" => {
-                        return AssumeRoleError::RegionDisabled(String::from(parsed_error.message));
+                        return RusotoError::Service(AssumeRoleError::RegionDisabled(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        AssumeRoleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1204,28 +1193,6 @@ impl AssumeRoleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AssumeRoleError {
-    fn from(err: XmlParseError) -> AssumeRoleError {
-        let XmlParseError(message) = err;
-        AssumeRoleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AssumeRoleError {
-    fn from(err: CredentialsError) -> AssumeRoleError {
-        AssumeRoleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssumeRoleError {
-    fn from(err: HttpDispatchError) -> AssumeRoleError {
-        AssumeRoleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssumeRoleError {
-    fn from(err: io::Error) -> AssumeRoleError {
-        AssumeRoleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssumeRoleError {
@@ -1239,11 +1206,6 @@ impl Error for AssumeRoleError {
             AssumeRoleError::MalformedPolicyDocument(ref cause) => cause,
             AssumeRoleError::PackedPolicyTooLarge(ref cause) => cause,
             AssumeRoleError::RegionDisabled(ref cause) => cause,
-            AssumeRoleError::Validation(ref cause) => cause,
-            AssumeRoleError::Credentials(ref err) => err.description(),
-            AssumeRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AssumeRoleError::ParseError(ref cause) => cause,
-            AssumeRoleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1262,20 +1224,10 @@ pub enum AssumeRoleWithSAMLError {
     PackedPolicyTooLarge(String),
     /// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     RegionDisabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssumeRoleWithSAMLError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssumeRoleWithSAMLError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleWithSAMLError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1283,40 +1235,42 @@ impl AssumeRoleWithSAMLError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ExpiredTokenException" => {
-                        return AssumeRoleWithSAMLError::ExpiredToken(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithSAMLError::ExpiredToken(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "IDPRejectedClaim" => {
-                        return AssumeRoleWithSAMLError::IDPRejectedClaim(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithSAMLError::IDPRejectedClaim(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidIdentityToken" => {
-                        return AssumeRoleWithSAMLError::InvalidIdentityToken(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithSAMLError::InvalidIdentityToken(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MalformedPolicyDocument" => {
-                        return AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithSAMLError::MalformedPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "PackedPolicyTooLarge" => {
-                        return AssumeRoleWithSAMLError::PackedPolicyTooLarge(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithSAMLError::PackedPolicyTooLarge(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RegionDisabledException" => {
-                        return AssumeRoleWithSAMLError::RegionDisabled(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithSAMLError::RegionDisabled(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AssumeRoleWithSAMLError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1325,28 +1279,6 @@ impl AssumeRoleWithSAMLError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AssumeRoleWithSAMLError {
-    fn from(err: XmlParseError) -> AssumeRoleWithSAMLError {
-        let XmlParseError(message) = err;
-        AssumeRoleWithSAMLError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AssumeRoleWithSAMLError {
-    fn from(err: CredentialsError) -> AssumeRoleWithSAMLError {
-        AssumeRoleWithSAMLError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssumeRoleWithSAMLError {
-    fn from(err: HttpDispatchError) -> AssumeRoleWithSAMLError {
-        AssumeRoleWithSAMLError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssumeRoleWithSAMLError {
-    fn from(err: io::Error) -> AssumeRoleWithSAMLError {
-        AssumeRoleWithSAMLError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssumeRoleWithSAMLError {
@@ -1363,13 +1295,6 @@ impl Error for AssumeRoleWithSAMLError {
             AssumeRoleWithSAMLError::MalformedPolicyDocument(ref cause) => cause,
             AssumeRoleWithSAMLError::PackedPolicyTooLarge(ref cause) => cause,
             AssumeRoleWithSAMLError::RegionDisabled(ref cause) => cause,
-            AssumeRoleWithSAMLError::Validation(ref cause) => cause,
-            AssumeRoleWithSAMLError::Credentials(ref err) => err.description(),
-            AssumeRoleWithSAMLError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssumeRoleWithSAMLError::ParseError(ref cause) => cause,
-            AssumeRoleWithSAMLError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1390,20 +1315,10 @@ pub enum AssumeRoleWithWebIdentityError {
     PackedPolicyTooLarge(String),
     /// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     RegionDisabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssumeRoleWithWebIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssumeRoleWithWebIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssumeRoleWithWebIdentityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1411,45 +1326,55 @@ impl AssumeRoleWithWebIdentityError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ExpiredTokenException" => {
-                        return AssumeRoleWithWebIdentityError::ExpiredToken(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithWebIdentityError::ExpiredToken(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "IDPCommunicationError" => {
-                        return AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::IDPCommunicationError(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "IDPRejectedClaim" => {
-                        return AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::IDPRejectedClaim(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "InvalidIdentityToken" => {
-                        return AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::InvalidIdentityToken(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MalformedPolicyDocument" => {
-                        return AssumeRoleWithWebIdentityError::MalformedPolicyDocument(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::MalformedPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
                         );
                     }
                     "PackedPolicyTooLarge" => {
-                        return AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "RegionDisabledException" => {
-                        return AssumeRoleWithWebIdentityError::RegionDisabled(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(AssumeRoleWithWebIdentityError::RegionDisabled(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        AssumeRoleWithWebIdentityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1458,28 +1383,6 @@ impl AssumeRoleWithWebIdentityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AssumeRoleWithWebIdentityError {
-    fn from(err: XmlParseError) -> AssumeRoleWithWebIdentityError {
-        let XmlParseError(message) = err;
-        AssumeRoleWithWebIdentityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AssumeRoleWithWebIdentityError {
-    fn from(err: CredentialsError) -> AssumeRoleWithWebIdentityError {
-        AssumeRoleWithWebIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssumeRoleWithWebIdentityError {
-    fn from(err: HttpDispatchError) -> AssumeRoleWithWebIdentityError {
-        AssumeRoleWithWebIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssumeRoleWithWebIdentityError {
-    fn from(err: io::Error) -> AssumeRoleWithWebIdentityError {
-        AssumeRoleWithWebIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AssumeRoleWithWebIdentityError {
@@ -1497,13 +1400,6 @@ impl Error for AssumeRoleWithWebIdentityError {
             AssumeRoleWithWebIdentityError::MalformedPolicyDocument(ref cause) => cause,
             AssumeRoleWithWebIdentityError::PackedPolicyTooLarge(ref cause) => cause,
             AssumeRoleWithWebIdentityError::RegionDisabled(ref cause) => cause,
-            AssumeRoleWithWebIdentityError::Validation(ref cause) => cause,
-            AssumeRoleWithWebIdentityError::Credentials(ref err) => err.description(),
-            AssumeRoleWithWebIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssumeRoleWithWebIdentityError::ParseError(ref cause) => cause,
-            AssumeRoleWithWebIdentityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1512,20 +1408,12 @@ impl Error for AssumeRoleWithWebIdentityError {
 pub enum DecodeAuthorizationMessageError {
     /// <p>The error returned if the message passed to <code>DecodeAuthorizationMessage</code> was invalid. This can happen if the token contains invalid characters, such as linebreaks. </p>
     InvalidAuthorizationMessage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DecodeAuthorizationMessageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DecodeAuthorizationMessageError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DecodeAuthorizationMessageError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1533,15 +1421,17 @@ impl DecodeAuthorizationMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidAuthorizationMessageException" => {
-                        return DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DecodeAuthorizationMessageError::InvalidAuthorizationMessage(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DecodeAuthorizationMessageError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1550,28 +1440,6 @@ impl DecodeAuthorizationMessageError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DecodeAuthorizationMessageError {
-    fn from(err: XmlParseError) -> DecodeAuthorizationMessageError {
-        let XmlParseError(message) = err;
-        DecodeAuthorizationMessageError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DecodeAuthorizationMessageError {
-    fn from(err: CredentialsError) -> DecodeAuthorizationMessageError {
-        DecodeAuthorizationMessageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DecodeAuthorizationMessageError {
-    fn from(err: HttpDispatchError) -> DecodeAuthorizationMessageError {
-        DecodeAuthorizationMessageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DecodeAuthorizationMessageError {
-    fn from(err: io::Error) -> DecodeAuthorizationMessageError {
-        DecodeAuthorizationMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DecodeAuthorizationMessageError {
@@ -1583,33 +1451,15 @@ impl Error for DecodeAuthorizationMessageError {
     fn description(&self) -> &str {
         match *self {
             DecodeAuthorizationMessageError::InvalidAuthorizationMessage(ref cause) => cause,
-            DecodeAuthorizationMessageError::Validation(ref cause) => cause,
-            DecodeAuthorizationMessageError::Credentials(ref err) => err.description(),
-            DecodeAuthorizationMessageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DecodeAuthorizationMessageError::ParseError(ref cause) => cause,
-            DecodeAuthorizationMessageError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetCallerIdentity
 #[derive(Debug, PartialEq)]
-pub enum GetCallerIdentityError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetCallerIdentityError {}
 
 impl GetCallerIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCallerIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCallerIdentityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1620,7 +1470,7 @@ impl GetCallerIdentityError {
                 }
             }
         }
-        GetCallerIdentityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1631,28 +1481,6 @@ impl GetCallerIdentityError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for GetCallerIdentityError {
-    fn from(err: XmlParseError) -> GetCallerIdentityError {
-        let XmlParseError(message) = err;
-        GetCallerIdentityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetCallerIdentityError {
-    fn from(err: CredentialsError) -> GetCallerIdentityError {
-        GetCallerIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCallerIdentityError {
-    fn from(err: HttpDispatchError) -> GetCallerIdentityError {
-        GetCallerIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCallerIdentityError {
-    fn from(err: io::Error) -> GetCallerIdentityError {
-        GetCallerIdentityError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for GetCallerIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -1660,15 +1488,7 @@ impl fmt::Display for GetCallerIdentityError {
 }
 impl Error for GetCallerIdentityError {
     fn description(&self) -> &str {
-        match *self {
-            GetCallerIdentityError::Validation(ref cause) => cause,
-            GetCallerIdentityError::Credentials(ref err) => err.description(),
-            GetCallerIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetCallerIdentityError::ParseError(ref cause) => cause,
-            GetCallerIdentityError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetFederationToken
@@ -1680,20 +1500,10 @@ pub enum GetFederationTokenError {
     PackedPolicyTooLarge(String),
     /// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     RegionDisabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFederationTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetFederationTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFederationTokenError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1701,25 +1511,27 @@ impl GetFederationTokenError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MalformedPolicyDocument" => {
-                        return GetFederationTokenError::MalformedPolicyDocument(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            GetFederationTokenError::MalformedPolicyDocument(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "PackedPolicyTooLarge" => {
-                        return GetFederationTokenError::PackedPolicyTooLarge(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetFederationTokenError::PackedPolicyTooLarge(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RegionDisabledException" => {
-                        return GetFederationTokenError::RegionDisabled(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetFederationTokenError::RegionDisabled(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetFederationTokenError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1728,28 +1540,6 @@ impl GetFederationTokenError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetFederationTokenError {
-    fn from(err: XmlParseError) -> GetFederationTokenError {
-        let XmlParseError(message) = err;
-        GetFederationTokenError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetFederationTokenError {
-    fn from(err: CredentialsError) -> GetFederationTokenError {
-        GetFederationTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFederationTokenError {
-    fn from(err: HttpDispatchError) -> GetFederationTokenError {
-        GetFederationTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFederationTokenError {
-    fn from(err: io::Error) -> GetFederationTokenError {
-        GetFederationTokenError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetFederationTokenError {
@@ -1763,13 +1553,6 @@ impl Error for GetFederationTokenError {
             GetFederationTokenError::MalformedPolicyDocument(ref cause) => cause,
             GetFederationTokenError::PackedPolicyTooLarge(ref cause) => cause,
             GetFederationTokenError::RegionDisabled(ref cause) => cause,
-            GetFederationTokenError::Validation(ref cause) => cause,
-            GetFederationTokenError::Credentials(ref err) => err.description(),
-            GetFederationTokenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetFederationTokenError::ParseError(ref cause) => cause,
-            GetFederationTokenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1778,20 +1561,10 @@ impl Error for GetFederationTokenError {
 pub enum GetSessionTokenError {
     /// <p>STS is not activated in the requested region for the account that is being asked to generate credentials. The account administrator must use the IAM console to activate STS in that region. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html">Activating and Deactivating AWS STS in an AWS Region</a> in the <i>IAM User Guide</i>.</p>
     RegionDisabled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSessionTokenError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSessionTokenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSessionTokenError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -1799,15 +1572,15 @@ impl GetSessionTokenError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RegionDisabledException" => {
-                        return GetSessionTokenError::RegionDisabled(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetSessionTokenError::RegionDisabled(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetSessionTokenError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -1816,28 +1589,6 @@ impl GetSessionTokenError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetSessionTokenError {
-    fn from(err: XmlParseError) -> GetSessionTokenError {
-        let XmlParseError(message) = err;
-        GetSessionTokenError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetSessionTokenError {
-    fn from(err: CredentialsError) -> GetSessionTokenError {
-        GetSessionTokenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSessionTokenError {
-    fn from(err: HttpDispatchError) -> GetSessionTokenError {
-        GetSessionTokenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSessionTokenError {
-    fn from(err: io::Error) -> GetSessionTokenError {
-        GetSessionTokenError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSessionTokenError {
@@ -1849,11 +1600,6 @@ impl Error for GetSessionTokenError {
     fn description(&self) -> &str {
         match *self {
             GetSessionTokenError::RegionDisabled(ref cause) => cause,
-            GetSessionTokenError::Validation(ref cause) => cause,
-            GetSessionTokenError::Credentials(ref err) => err.description(),
-            GetSessionTokenError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSessionTokenError::ParseError(ref cause) => cause,
-            GetSessionTokenError::Unknown(_) => "unknown error",
         }
     }
 }

@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -983,20 +980,12 @@ pub enum AssociateDelegateToResourceError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateDelegateToResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateDelegateToResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateDelegateToResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1009,58 +998,39 @@ impl AssociateDelegateToResourceError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return AssociateDelegateToResourceError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateDelegateToResourceError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EntityStateException" => {
-                    return AssociateDelegateToResourceError::EntityState(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateDelegateToResourceError::EntityState(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return AssociateDelegateToResourceError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateDelegateToResourceError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return AssociateDelegateToResourceError::OrganizationNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateDelegateToResourceError::OrganizationNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationStateException" => {
-                    return AssociateDelegateToResourceError::OrganizationState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AssociateDelegateToResourceError::OrganizationState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return AssociateDelegateToResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateDelegateToResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateDelegateToResourceError {
-    fn from(err: serde_json::error::Error) -> AssociateDelegateToResourceError {
-        AssociateDelegateToResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateDelegateToResourceError {
-    fn from(err: CredentialsError) -> AssociateDelegateToResourceError {
-        AssociateDelegateToResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateDelegateToResourceError {
-    fn from(err: HttpDispatchError) -> AssociateDelegateToResourceError {
-        AssociateDelegateToResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateDelegateToResourceError {
-    fn from(err: io::Error) -> AssociateDelegateToResourceError {
-        AssociateDelegateToResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateDelegateToResourceError {
@@ -1076,13 +1046,6 @@ impl Error for AssociateDelegateToResourceError {
             AssociateDelegateToResourceError::InvalidParameter(ref cause) => cause,
             AssociateDelegateToResourceError::OrganizationNotFound(ref cause) => cause,
             AssociateDelegateToResourceError::OrganizationState(ref cause) => cause,
-            AssociateDelegateToResourceError::Validation(ref cause) => cause,
-            AssociateDelegateToResourceError::Credentials(ref err) => err.description(),
-            AssociateDelegateToResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateDelegateToResourceError::ParseError(ref cause) => cause,
-            AssociateDelegateToResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1105,20 +1068,10 @@ pub enum AssociateMemberToGroupError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AssociateMemberToGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> AssociateMemberToGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMemberToGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1131,69 +1084,52 @@ impl AssociateMemberToGroupError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        AssociateMemberToGroupError::DirectoryServiceAuthenticationFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectoryUnavailableException" => {
-                    return AssociateMemberToGroupError::DirectoryUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateMemberToGroupError::DirectoryUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return AssociateMemberToGroupError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(AssociateMemberToGroupError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return AssociateMemberToGroupError::EntityState(String::from(error_message));
+                    return RusotoError::Service(AssociateMemberToGroupError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return AssociateMemberToGroupError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateMemberToGroupError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return AssociateMemberToGroupError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateMemberToGroupError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return AssociateMemberToGroupError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateMemberToGroupError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedOperationException" => {
-                    return AssociateMemberToGroupError::UnsupportedOperation(String::from(
-                        error_message,
+                    return RusotoError::Service(AssociateMemberToGroupError::UnsupportedOperation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AssociateMemberToGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AssociateMemberToGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AssociateMemberToGroupError {
-    fn from(err: serde_json::error::Error) -> AssociateMemberToGroupError {
-        AssociateMemberToGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AssociateMemberToGroupError {
-    fn from(err: CredentialsError) -> AssociateMemberToGroupError {
-        AssociateMemberToGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AssociateMemberToGroupError {
-    fn from(err: HttpDispatchError) -> AssociateMemberToGroupError {
-        AssociateMemberToGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AssociateMemberToGroupError {
-    fn from(err: io::Error) -> AssociateMemberToGroupError {
-        AssociateMemberToGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AssociateMemberToGroupError {
@@ -1212,13 +1148,6 @@ impl Error for AssociateMemberToGroupError {
             AssociateMemberToGroupError::OrganizationNotFound(ref cause) => cause,
             AssociateMemberToGroupError::OrganizationState(ref cause) => cause,
             AssociateMemberToGroupError::UnsupportedOperation(ref cause) => cause,
-            AssociateMemberToGroupError::Validation(ref cause) => cause,
-            AssociateMemberToGroupError::Credentials(ref err) => err.description(),
-            AssociateMemberToGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AssociateMemberToGroupError::ParseError(ref cause) => cause,
-            AssociateMemberToGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1241,20 +1170,10 @@ pub enum CreateAliasError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1267,57 +1186,50 @@ impl CreateAliasError {
 
             match *error_type {
                 "EmailAddressInUseException" => {
-                    return CreateAliasError::EmailAddressInUse(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::EmailAddressInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityNotFoundException" => {
-                    return CreateAliasError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityStateException" => {
-                    return CreateAliasError::EntityState(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return CreateAliasError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "MailDomainNotFoundException" => {
-                    return CreateAliasError::MailDomainNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::MailDomainNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "MailDomainStateException" => {
-                    return CreateAliasError::MailDomainState(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::MailDomainState(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateAliasError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return CreateAliasError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(CreateAliasError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateAliasError {
-    fn from(err: serde_json::error::Error) -> CreateAliasError {
-        CreateAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateAliasError {
-    fn from(err: CredentialsError) -> CreateAliasError {
-        CreateAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateAliasError {
-    fn from(err: HttpDispatchError) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateAliasError {
-    fn from(err: io::Error) -> CreateAliasError {
-        CreateAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateAliasError {
@@ -1336,11 +1248,6 @@ impl Error for CreateAliasError {
             CreateAliasError::MailDomainState(ref cause) => cause,
             CreateAliasError::OrganizationNotFound(ref cause) => cause,
             CreateAliasError::OrganizationState(ref cause) => cause,
-            CreateAliasError::Validation(ref cause) => cause,
-            CreateAliasError::Credentials(ref err) => err.description(),
-            CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateAliasError::ParseError(ref cause) => cause,
-            CreateAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1363,20 +1270,10 @@ pub enum CreateGroupError {
     ReservedName(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1389,59 +1286,52 @@ impl CreateGroupError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return CreateGroupError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateGroupError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateGroupError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NameAvailabilityException" => {
-                    return CreateGroupError::NameAvailability(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::NameAvailability(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateGroupError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return CreateGroupError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
                 "ReservedNameException" => {
-                    return CreateGroupError::ReservedName(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::ReservedName(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateGroupError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(CreateGroupError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGroupError {
-    fn from(err: serde_json::error::Error) -> CreateGroupError {
-        CreateGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGroupError {
-    fn from(err: CredentialsError) -> CreateGroupError {
-        CreateGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGroupError {
-    fn from(err: HttpDispatchError) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGroupError {
-    fn from(err: io::Error) -> CreateGroupError {
-        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGroupError {
@@ -1460,11 +1350,6 @@ impl Error for CreateGroupError {
             CreateGroupError::OrganizationState(ref cause) => cause,
             CreateGroupError::ReservedName(ref cause) => cause,
             CreateGroupError::UnsupportedOperation(ref cause) => cause,
-            CreateGroupError::Validation(ref cause) => cause,
-            CreateGroupError::Credentials(ref err) => err.description(),
-            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateGroupError::ParseError(ref cause) => cause,
-            CreateGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1485,20 +1370,10 @@ pub enum CreateResourceError {
     OrganizationState(String),
     /// <p>This entity name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1511,56 +1386,47 @@ impl CreateResourceError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return CreateResourceError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateResourceError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateResourceError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NameAvailabilityException" => {
-                    return CreateResourceError::NameAvailability(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::NameAvailability(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateResourceError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return CreateResourceError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
                 "ReservedNameException" => {
-                    return CreateResourceError::ReservedName(String::from(error_message));
+                    return RusotoError::Service(CreateResourceError::ReservedName(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateResourceError {
-    fn from(err: serde_json::error::Error) -> CreateResourceError {
-        CreateResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateResourceError {
-    fn from(err: CredentialsError) -> CreateResourceError {
-        CreateResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateResourceError {
-    fn from(err: HttpDispatchError) -> CreateResourceError {
-        CreateResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateResourceError {
-    fn from(err: io::Error) -> CreateResourceError {
-        CreateResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateResourceError {
@@ -1578,11 +1444,6 @@ impl Error for CreateResourceError {
             CreateResourceError::OrganizationNotFound(ref cause) => cause,
             CreateResourceError::OrganizationState(ref cause) => cause,
             CreateResourceError::ReservedName(ref cause) => cause,
-            CreateResourceError::Validation(ref cause) => cause,
-            CreateResourceError::Credentials(ref err) => err.description(),
-            CreateResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateResourceError::ParseError(ref cause) => cause,
-            CreateResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1607,20 +1468,10 @@ pub enum CreateUserError {
     ReservedName(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1633,62 +1484,57 @@ impl CreateUserError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return CreateUserError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        CreateUserError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return CreateUserError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return CreateUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPasswordException" => {
-                    return CreateUserError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "NameAvailabilityException" => {
-                    return CreateUserError::NameAvailability(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::NameAvailability(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return CreateUserError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return CreateUserError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
                 "ReservedNameException" => {
-                    return CreateUserError::ReservedName(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::ReservedName(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return CreateUserError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(CreateUserError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateUserError {
-    fn from(err: serde_json::error::Error) -> CreateUserError {
-        CreateUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateUserError {
-    fn from(err: CredentialsError) -> CreateUserError {
-        CreateUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateUserError {
-    fn from(err: HttpDispatchError) -> CreateUserError {
-        CreateUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateUserError {
-    fn from(err: io::Error) -> CreateUserError {
-        CreateUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateUserError {
@@ -1708,11 +1554,6 @@ impl Error for CreateUserError {
             CreateUserError::OrganizationState(ref cause) => cause,
             CreateUserError::ReservedName(ref cause) => cause,
             CreateUserError::UnsupportedOperation(ref cause) => cause,
-            CreateUserError::Validation(ref cause) => cause,
-            CreateUserError::Credentials(ref err) => err.description(),
-            CreateUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateUserError::ParseError(ref cause) => cause,
-            CreateUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1729,20 +1570,10 @@ pub enum DeleteAliasError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteAliasError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteAliasError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAliasError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1755,48 +1586,35 @@ impl DeleteAliasError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteAliasError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityStateException" => {
-                    return DeleteAliasError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteAliasError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteAliasError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DeleteAliasError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DeleteAliasError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteAliasError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteAliasError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteAliasError {
-    fn from(err: serde_json::error::Error) -> DeleteAliasError {
-        DeleteAliasError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteAliasError {
-    fn from(err: CredentialsError) -> DeleteAliasError {
-        DeleteAliasError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteAliasError {
-    fn from(err: HttpDispatchError) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteAliasError {
-    fn from(err: io::Error) -> DeleteAliasError {
-        DeleteAliasError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteAliasError {
@@ -1812,11 +1630,6 @@ impl Error for DeleteAliasError {
             DeleteAliasError::InvalidParameter(ref cause) => cause,
             DeleteAliasError::OrganizationNotFound(ref cause) => cause,
             DeleteAliasError::OrganizationState(ref cause) => cause,
-            DeleteAliasError::Validation(ref cause) => cause,
-            DeleteAliasError::Credentials(ref err) => err.description(),
-            DeleteAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteAliasError::ParseError(ref cause) => cause,
-            DeleteAliasError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1837,20 +1650,10 @@ pub enum DeleteGroupError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1863,56 +1666,47 @@ impl DeleteGroupError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return DeleteGroupError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteGroupError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return DeleteGroupError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return DeleteGroupError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteGroupError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DeleteGroupError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteGroupError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteGroupError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteGroupError {
-    fn from(err: serde_json::error::Error) -> DeleteGroupError {
-        DeleteGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteGroupError {
-    fn from(err: CredentialsError) -> DeleteGroupError {
-        DeleteGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteGroupError {
-    fn from(err: HttpDispatchError) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteGroupError {
-    fn from(err: io::Error) -> DeleteGroupError {
-        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteGroupError {
@@ -1930,11 +1724,6 @@ impl Error for DeleteGroupError {
             DeleteGroupError::OrganizationNotFound(ref cause) => cause,
             DeleteGroupError::OrganizationState(ref cause) => cause,
             DeleteGroupError::UnsupportedOperation(ref cause) => cause,
-            DeleteGroupError::Validation(ref cause) => cause,
-            DeleteGroupError::Credentials(ref err) => err.description(),
-            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteGroupError::ParseError(ref cause) => cause,
-            DeleteGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1951,20 +1740,10 @@ pub enum DeleteMailboxPermissionsError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMailboxPermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMailboxPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMailboxPermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1977,56 +1756,37 @@ impl DeleteMailboxPermissionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeleteMailboxPermissionsError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteMailboxPermissionsError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EntityStateException" => {
-                    return DeleteMailboxPermissionsError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeleteMailboxPermissionsError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeleteMailboxPermissionsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteMailboxPermissionsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteMailboxPermissionsError::OrganizationNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteMailboxPermissionsError::OrganizationNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationStateException" => {
-                    return DeleteMailboxPermissionsError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteMailboxPermissionsError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteMailboxPermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteMailboxPermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteMailboxPermissionsError {
-    fn from(err: serde_json::error::Error) -> DeleteMailboxPermissionsError {
-        DeleteMailboxPermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMailboxPermissionsError {
-    fn from(err: CredentialsError) -> DeleteMailboxPermissionsError {
-        DeleteMailboxPermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMailboxPermissionsError {
-    fn from(err: HttpDispatchError) -> DeleteMailboxPermissionsError {
-        DeleteMailboxPermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMailboxPermissionsError {
-    fn from(err: io::Error) -> DeleteMailboxPermissionsError {
-        DeleteMailboxPermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteMailboxPermissionsError {
@@ -2042,13 +1802,6 @@ impl Error for DeleteMailboxPermissionsError {
             DeleteMailboxPermissionsError::InvalidParameter(ref cause) => cause,
             DeleteMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
             DeleteMailboxPermissionsError::OrganizationState(ref cause) => cause,
-            DeleteMailboxPermissionsError::Validation(ref cause) => cause,
-            DeleteMailboxPermissionsError::Credentials(ref err) => err.description(),
-            DeleteMailboxPermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteMailboxPermissionsError::ParseError(ref cause) => cause,
-            DeleteMailboxPermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2063,20 +1816,10 @@ pub enum DeleteResourceError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2089,45 +1832,30 @@ impl DeleteResourceError {
 
             match *error_type {
                 "EntityStateException" => {
-                    return DeleteResourceError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteResourceError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DeleteResourceError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DeleteResourceError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteResourceError {
-    fn from(err: serde_json::error::Error) -> DeleteResourceError {
-        DeleteResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteResourceError {
-    fn from(err: CredentialsError) -> DeleteResourceError {
-        DeleteResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteResourceError {
-    fn from(err: HttpDispatchError) -> DeleteResourceError {
-        DeleteResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteResourceError {
-    fn from(err: io::Error) -> DeleteResourceError {
-        DeleteResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteResourceError {
@@ -2142,11 +1870,6 @@ impl Error for DeleteResourceError {
             DeleteResourceError::InvalidParameter(ref cause) => cause,
             DeleteResourceError::OrganizationNotFound(ref cause) => cause,
             DeleteResourceError::OrganizationState(ref cause) => cause,
-            DeleteResourceError::Validation(ref cause) => cause,
-            DeleteResourceError::Credentials(ref err) => err.description(),
-            DeleteResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteResourceError::ParseError(ref cause) => cause,
-            DeleteResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2167,20 +1890,10 @@ pub enum DeleteUserError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2193,56 +1906,47 @@ impl DeleteUserError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return DeleteUserError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DeleteUserError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return DeleteUserError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return DeleteUserError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DeleteUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeleteUserError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DeleteUserError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedOperationException" => {
-                    return DeleteUserError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(DeleteUserError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteUserError {
-    fn from(err: serde_json::error::Error) -> DeleteUserError {
-        DeleteUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteUserError {
-    fn from(err: CredentialsError) -> DeleteUserError {
-        DeleteUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteUserError {
-    fn from(err: HttpDispatchError) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteUserError {
-    fn from(err: io::Error) -> DeleteUserError {
-        DeleteUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteUserError {
@@ -2260,11 +1964,6 @@ impl Error for DeleteUserError {
             DeleteUserError::OrganizationNotFound(ref cause) => cause,
             DeleteUserError::OrganizationState(ref cause) => cause,
             DeleteUserError::UnsupportedOperation(ref cause) => cause,
-            DeleteUserError::Validation(ref cause) => cause,
-            DeleteUserError::Credentials(ref err) => err.description(),
-            DeleteUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteUserError::ParseError(ref cause) => cause,
-            DeleteUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2281,20 +1980,10 @@ pub enum DeregisterFromWorkMailError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeregisterFromWorkMailError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeregisterFromWorkMailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeregisterFromWorkMailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2307,54 +1996,35 @@ impl DeregisterFromWorkMailError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DeregisterFromWorkMailError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DeregisterFromWorkMailError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return DeregisterFromWorkMailError::EntityState(String::from(error_message));
+                    return RusotoError::Service(DeregisterFromWorkMailError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DeregisterFromWorkMailError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterFromWorkMailError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return DeregisterFromWorkMailError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterFromWorkMailError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return DeregisterFromWorkMailError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(DeregisterFromWorkMailError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeregisterFromWorkMailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeregisterFromWorkMailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeregisterFromWorkMailError {
-    fn from(err: serde_json::error::Error) -> DeregisterFromWorkMailError {
-        DeregisterFromWorkMailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeregisterFromWorkMailError {
-    fn from(err: CredentialsError) -> DeregisterFromWorkMailError {
-        DeregisterFromWorkMailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeregisterFromWorkMailError {
-    fn from(err: HttpDispatchError) -> DeregisterFromWorkMailError {
-        DeregisterFromWorkMailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeregisterFromWorkMailError {
-    fn from(err: io::Error) -> DeregisterFromWorkMailError {
-        DeregisterFromWorkMailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeregisterFromWorkMailError {
@@ -2370,13 +2040,6 @@ impl Error for DeregisterFromWorkMailError {
             DeregisterFromWorkMailError::InvalidParameter(ref cause) => cause,
             DeregisterFromWorkMailError::OrganizationNotFound(ref cause) => cause,
             DeregisterFromWorkMailError::OrganizationState(ref cause) => cause,
-            DeregisterFromWorkMailError::Validation(ref cause) => cause,
-            DeregisterFromWorkMailError::Credentials(ref err) => err.description(),
-            DeregisterFromWorkMailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeregisterFromWorkMailError::ParseError(ref cause) => cause,
-            DeregisterFromWorkMailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2391,20 +2054,10 @@ pub enum DescribeGroupError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2417,45 +2070,30 @@ impl DescribeGroupError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeGroupError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeGroupError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeGroupError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeGroupError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeGroupError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeGroupError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DescribeGroupError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DescribeGroupError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeGroupError {
-    fn from(err: serde_json::error::Error) -> DescribeGroupError {
-        DescribeGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGroupError {
-    fn from(err: CredentialsError) -> DescribeGroupError {
-        DescribeGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGroupError {
-    fn from(err: HttpDispatchError) -> DescribeGroupError {
-        DescribeGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGroupError {
-    fn from(err: io::Error) -> DescribeGroupError {
-        DescribeGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeGroupError {
@@ -2470,11 +2108,6 @@ impl Error for DescribeGroupError {
             DescribeGroupError::InvalidParameter(ref cause) => cause,
             DescribeGroupError::OrganizationNotFound(ref cause) => cause,
             DescribeGroupError::OrganizationState(ref cause) => cause,
-            DescribeGroupError::Validation(ref cause) => cause,
-            DescribeGroupError::Credentials(ref err) => err.description(),
-            DescribeGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeGroupError::ParseError(ref cause) => cause,
-            DescribeGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2485,20 +2118,10 @@ pub enum DescribeOrganizationError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeOrganizationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeOrganizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeOrganizationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2511,41 +2134,20 @@ impl DescribeOrganizationError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return DescribeOrganizationError::InvalidParameter(String::from(error_message));
-                }
-                "OrganizationNotFoundException" => {
-                    return DescribeOrganizationError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeOrganizationError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeOrganizationError::Validation(error_message.to_string());
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(DescribeOrganizationError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeOrganizationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeOrganizationError {
-    fn from(err: serde_json::error::Error) -> DescribeOrganizationError {
-        DescribeOrganizationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeOrganizationError {
-    fn from(err: CredentialsError) -> DescribeOrganizationError {
-        DescribeOrganizationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeOrganizationError {
-    fn from(err: HttpDispatchError) -> DescribeOrganizationError {
-        DescribeOrganizationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeOrganizationError {
-    fn from(err: io::Error) -> DescribeOrganizationError {
-        DescribeOrganizationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeOrganizationError {
@@ -2558,13 +2160,6 @@ impl Error for DescribeOrganizationError {
         match *self {
             DescribeOrganizationError::InvalidParameter(ref cause) => cause,
             DescribeOrganizationError::OrganizationNotFound(ref cause) => cause,
-            DescribeOrganizationError::Validation(ref cause) => cause,
-            DescribeOrganizationError::Credentials(ref err) => err.description(),
-            DescribeOrganizationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeOrganizationError::ParseError(ref cause) => cause,
-            DescribeOrganizationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2579,20 +2174,10 @@ pub enum DescribeResourceError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2605,45 +2190,30 @@ impl DescribeResourceError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeResourceError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeResourceError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeResourceError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DescribeResourceError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DescribeResourceError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeResourceError {
-    fn from(err: serde_json::error::Error) -> DescribeResourceError {
-        DescribeResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeResourceError {
-    fn from(err: CredentialsError) -> DescribeResourceError {
-        DescribeResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeResourceError {
-    fn from(err: HttpDispatchError) -> DescribeResourceError {
-        DescribeResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeResourceError {
-    fn from(err: io::Error) -> DescribeResourceError {
-        DescribeResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeResourceError {
@@ -2658,11 +2228,6 @@ impl Error for DescribeResourceError {
             DescribeResourceError::InvalidParameter(ref cause) => cause,
             DescribeResourceError::OrganizationNotFound(ref cause) => cause,
             DescribeResourceError::OrganizationState(ref cause) => cause,
-            DescribeResourceError::Validation(ref cause) => cause,
-            DescribeResourceError::Credentials(ref err) => err.description(),
-            DescribeResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeResourceError::ParseError(ref cause) => cause,
-            DescribeResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2677,20 +2242,10 @@ pub enum DescribeUserError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeUserError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeUserError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2703,45 +2258,30 @@ impl DescribeUserError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DescribeUserError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUserError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return DescribeUserError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeUserError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return DescribeUserError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeUserError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return DescribeUserError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(DescribeUserError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeUserError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeUserError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeUserError {
-    fn from(err: serde_json::error::Error) -> DescribeUserError {
-        DescribeUserError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeUserError {
-    fn from(err: CredentialsError) -> DescribeUserError {
-        DescribeUserError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeUserError {
-    fn from(err: HttpDispatchError) -> DescribeUserError {
-        DescribeUserError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeUserError {
-    fn from(err: io::Error) -> DescribeUserError {
-        DescribeUserError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeUserError {
@@ -2756,11 +2296,6 @@ impl Error for DescribeUserError {
             DescribeUserError::InvalidParameter(ref cause) => cause,
             DescribeUserError::OrganizationNotFound(ref cause) => cause,
             DescribeUserError::OrganizationState(ref cause) => cause,
-            DescribeUserError::Validation(ref cause) => cause,
-            DescribeUserError::Credentials(ref err) => err.description(),
-            DescribeUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeUserError::ParseError(ref cause) => cause,
-            DescribeUserError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2777,20 +2312,12 @@ pub enum DisassociateDelegateFromResourceError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateDelegateFromResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateDelegateFromResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateDelegateFromResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2803,60 +2330,43 @@ impl DisassociateDelegateFromResourceError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return DisassociateDelegateFromResourceError::EntityNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateDelegateFromResourceError::EntityNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EntityStateException" => {
-                    return DisassociateDelegateFromResourceError::EntityState(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateDelegateFromResourceError::EntityState(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DisassociateDelegateFromResourceError::InvalidParameter(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateDelegateFromResourceError::InvalidParameter(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationNotFoundException" => {
-                    return DisassociateDelegateFromResourceError::OrganizationNotFound(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateDelegateFromResourceError::OrganizationNotFound(String::from(
+                            error_message,
+                        )),
                     );
                 }
                 "OrganizationStateException" => {
-                    return DisassociateDelegateFromResourceError::OrganizationState(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DisassociateDelegateFromResourceError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DisassociateDelegateFromResourceError::OrganizationState(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateDelegateFromResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateDelegateFromResourceError {
-    fn from(err: serde_json::error::Error) -> DisassociateDelegateFromResourceError {
-        DisassociateDelegateFromResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateDelegateFromResourceError {
-    fn from(err: CredentialsError) -> DisassociateDelegateFromResourceError {
-        DisassociateDelegateFromResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateDelegateFromResourceError {
-    fn from(err: HttpDispatchError) -> DisassociateDelegateFromResourceError {
-        DisassociateDelegateFromResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateDelegateFromResourceError {
-    fn from(err: io::Error) -> DisassociateDelegateFromResourceError {
-        DisassociateDelegateFromResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateDelegateFromResourceError {
@@ -2872,13 +2382,6 @@ impl Error for DisassociateDelegateFromResourceError {
             DisassociateDelegateFromResourceError::InvalidParameter(ref cause) => cause,
             DisassociateDelegateFromResourceError::OrganizationNotFound(ref cause) => cause,
             DisassociateDelegateFromResourceError::OrganizationState(ref cause) => cause,
-            DisassociateDelegateFromResourceError::Validation(ref cause) => cause,
-            DisassociateDelegateFromResourceError::Credentials(ref err) => err.description(),
-            DisassociateDelegateFromResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateDelegateFromResourceError::ParseError(ref cause) => cause,
-            DisassociateDelegateFromResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2901,20 +2404,12 @@ pub enum DisassociateMemberFromGroupError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisassociateMemberFromGroupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DisassociateMemberFromGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateMemberFromGroupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2927,73 +2422,60 @@ impl DisassociateMemberFromGroupError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return DisassociateMemberFromGroupError::DirectoryServiceAuthenticationFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::DirectoryServiceAuthenticationFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectoryUnavailableException" => {
-                    return DisassociateMemberFromGroupError::DirectoryUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::DirectoryUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EntityNotFoundException" => {
-                    return DisassociateMemberFromGroupError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateMemberFromGroupError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EntityStateException" => {
-                    return DisassociateMemberFromGroupError::EntityState(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateMemberFromGroupError::EntityState(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidParameterException" => {
-                    return DisassociateMemberFromGroupError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(DisassociateMemberFromGroupError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return DisassociateMemberFromGroupError::OrganizationNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::OrganizationNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationStateException" => {
-                    return DisassociateMemberFromGroupError::OrganizationState(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::OrganizationState(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "UnsupportedOperationException" => {
-                    return DisassociateMemberFromGroupError::UnsupportedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DisassociateMemberFromGroupError::UnsupportedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DisassociateMemberFromGroupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisassociateMemberFromGroupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisassociateMemberFromGroupError {
-    fn from(err: serde_json::error::Error) -> DisassociateMemberFromGroupError {
-        DisassociateMemberFromGroupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisassociateMemberFromGroupError {
-    fn from(err: CredentialsError) -> DisassociateMemberFromGroupError {
-        DisassociateMemberFromGroupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisassociateMemberFromGroupError {
-    fn from(err: HttpDispatchError) -> DisassociateMemberFromGroupError {
-        DisassociateMemberFromGroupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisassociateMemberFromGroupError {
-    fn from(err: io::Error) -> DisassociateMemberFromGroupError {
-        DisassociateMemberFromGroupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisassociateMemberFromGroupError {
@@ -3014,13 +2496,6 @@ impl Error for DisassociateMemberFromGroupError {
             DisassociateMemberFromGroupError::OrganizationNotFound(ref cause) => cause,
             DisassociateMemberFromGroupError::OrganizationState(ref cause) => cause,
             DisassociateMemberFromGroupError::UnsupportedOperation(ref cause) => cause,
-            DisassociateMemberFromGroupError::Validation(ref cause) => cause,
-            DisassociateMemberFromGroupError::Credentials(ref err) => err.description(),
-            DisassociateMemberFromGroupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DisassociateMemberFromGroupError::ParseError(ref cause) => cause,
-            DisassociateMemberFromGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3037,20 +2512,10 @@ pub enum ListAliasesError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAliasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListAliasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAliasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3063,48 +2528,35 @@ impl ListAliasesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListAliasesError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityStateException" => {
-                    return ListAliasesError::EntityState(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListAliasesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListAliasesError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return ListAliasesError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ListAliasesError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListAliasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAliasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAliasesError {
-    fn from(err: serde_json::error::Error) -> ListAliasesError {
-        ListAliasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAliasesError {
-    fn from(err: CredentialsError) -> ListAliasesError {
-        ListAliasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAliasesError {
-    fn from(err: HttpDispatchError) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAliasesError {
-    fn from(err: io::Error) -> ListAliasesError {
-        ListAliasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAliasesError {
@@ -3120,11 +2572,6 @@ impl Error for ListAliasesError {
             ListAliasesError::InvalidParameter(ref cause) => cause,
             ListAliasesError::OrganizationNotFound(ref cause) => cause,
             ListAliasesError::OrganizationState(ref cause) => cause,
-            ListAliasesError::Validation(ref cause) => cause,
-            ListAliasesError::Credentials(ref err) => err.description(),
-            ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListAliasesError::ParseError(ref cause) => cause,
-            ListAliasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3141,20 +2588,10 @@ pub enum ListGroupMembersError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupMembersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupMembersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3167,48 +2604,35 @@ impl ListGroupMembersError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListGroupMembersError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupMembersError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return ListGroupMembersError::EntityState(String::from(error_message));
+                    return RusotoError::Service(ListGroupMembersError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupMembersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListGroupMembersError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListGroupMembersError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupMembersError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return ListGroupMembersError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ListGroupMembersError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListGroupMembersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGroupMembersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGroupMembersError {
-    fn from(err: serde_json::error::Error) -> ListGroupMembersError {
-        ListGroupMembersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupMembersError {
-    fn from(err: CredentialsError) -> ListGroupMembersError {
-        ListGroupMembersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupMembersError {
-    fn from(err: HttpDispatchError) -> ListGroupMembersError {
-        ListGroupMembersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupMembersError {
-    fn from(err: io::Error) -> ListGroupMembersError {
-        ListGroupMembersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGroupMembersError {
@@ -3224,11 +2648,6 @@ impl Error for ListGroupMembersError {
             ListGroupMembersError::InvalidParameter(ref cause) => cause,
             ListGroupMembersError::OrganizationNotFound(ref cause) => cause,
             ListGroupMembersError::OrganizationState(ref cause) => cause,
-            ListGroupMembersError::Validation(ref cause) => cause,
-            ListGroupMembersError::Credentials(ref err) => err.description(),
-            ListGroupMembersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupMembersError::ParseError(ref cause) => cause,
-            ListGroupMembersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3243,20 +2662,10 @@ pub enum ListGroupsError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGroupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGroupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3269,45 +2678,30 @@ impl ListGroupsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListGroupsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ListGroupsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListGroupsError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return ListGroupsError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ListGroupsError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListGroupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGroupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGroupsError {
-    fn from(err: serde_json::error::Error) -> ListGroupsError {
-        ListGroupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGroupsError {
-    fn from(err: CredentialsError) -> ListGroupsError {
-        ListGroupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGroupsError {
-    fn from(err: HttpDispatchError) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGroupsError {
-    fn from(err: io::Error) -> ListGroupsError {
-        ListGroupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGroupsError {
@@ -3322,11 +2716,6 @@ impl Error for ListGroupsError {
             ListGroupsError::InvalidParameter(ref cause) => cause,
             ListGroupsError::OrganizationNotFound(ref cause) => cause,
             ListGroupsError::OrganizationState(ref cause) => cause,
-            ListGroupsError::Validation(ref cause) => cause,
-            ListGroupsError::Credentials(ref err) => err.description(),
-            ListGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGroupsError::ParseError(ref cause) => cause,
-            ListGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3341,20 +2730,10 @@ pub enum ListMailboxPermissionsError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListMailboxPermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListMailboxPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMailboxPermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3367,51 +2746,30 @@ impl ListMailboxPermissionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListMailboxPermissionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ListMailboxPermissionsError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListMailboxPermissionsError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMailboxPermissionsError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListMailboxPermissionsError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMailboxPermissionsError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return ListMailboxPermissionsError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(ListMailboxPermissionsError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListMailboxPermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListMailboxPermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListMailboxPermissionsError {
-    fn from(err: serde_json::error::Error) -> ListMailboxPermissionsError {
-        ListMailboxPermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListMailboxPermissionsError {
-    fn from(err: CredentialsError) -> ListMailboxPermissionsError {
-        ListMailboxPermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListMailboxPermissionsError {
-    fn from(err: HttpDispatchError) -> ListMailboxPermissionsError {
-        ListMailboxPermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListMailboxPermissionsError {
-    fn from(err: io::Error) -> ListMailboxPermissionsError {
-        ListMailboxPermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListMailboxPermissionsError {
@@ -3426,13 +2784,6 @@ impl Error for ListMailboxPermissionsError {
             ListMailboxPermissionsError::InvalidParameter(ref cause) => cause,
             ListMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
             ListMailboxPermissionsError::OrganizationState(ref cause) => cause,
-            ListMailboxPermissionsError::Validation(ref cause) => cause,
-            ListMailboxPermissionsError::Credentials(ref err) => err.description(),
-            ListMailboxPermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListMailboxPermissionsError::ParseError(ref cause) => cause,
-            ListMailboxPermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3441,20 +2792,10 @@ impl Error for ListMailboxPermissionsError {
 pub enum ListOrganizationsError {
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOrganizationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListOrganizationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOrganizationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3467,36 +2808,15 @@ impl ListOrganizationsError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListOrganizationsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListOrganizationsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListOrganizationsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOrganizationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOrganizationsError {
-    fn from(err: serde_json::error::Error) -> ListOrganizationsError {
-        ListOrganizationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOrganizationsError {
-    fn from(err: CredentialsError) -> ListOrganizationsError {
-        ListOrganizationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOrganizationsError {
-    fn from(err: HttpDispatchError) -> ListOrganizationsError {
-        ListOrganizationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOrganizationsError {
-    fn from(err: io::Error) -> ListOrganizationsError {
-        ListOrganizationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOrganizationsError {
@@ -3508,13 +2828,6 @@ impl Error for ListOrganizationsError {
     fn description(&self) -> &str {
         match *self {
             ListOrganizationsError::InvalidParameter(ref cause) => cause,
-            ListOrganizationsError::Validation(ref cause) => cause,
-            ListOrganizationsError::Credentials(ref err) => err.description(),
-            ListOrganizationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOrganizationsError::ParseError(ref cause) => cause,
-            ListOrganizationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3531,20 +2844,10 @@ pub enum ListResourceDelegatesError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourceDelegatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourceDelegatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourceDelegatesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3557,52 +2860,35 @@ impl ListResourceDelegatesError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return ListResourceDelegatesError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ListResourceDelegatesError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return ListResourceDelegatesError::EntityState(String::from(error_message));
+                    return RusotoError::Service(ListResourceDelegatesError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return ListResourceDelegatesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListResourceDelegatesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListResourceDelegatesError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourceDelegatesError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return ListResourceDelegatesError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(ListResourceDelegatesError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListResourceDelegatesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourceDelegatesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourceDelegatesError {
-    fn from(err: serde_json::error::Error) -> ListResourceDelegatesError {
-        ListResourceDelegatesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourceDelegatesError {
-    fn from(err: CredentialsError) -> ListResourceDelegatesError {
-        ListResourceDelegatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourceDelegatesError {
-    fn from(err: HttpDispatchError) -> ListResourceDelegatesError {
-        ListResourceDelegatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourceDelegatesError {
-    fn from(err: io::Error) -> ListResourceDelegatesError {
-        ListResourceDelegatesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourceDelegatesError {
@@ -3618,13 +2904,6 @@ impl Error for ListResourceDelegatesError {
             ListResourceDelegatesError::InvalidParameter(ref cause) => cause,
             ListResourceDelegatesError::OrganizationNotFound(ref cause) => cause,
             ListResourceDelegatesError::OrganizationState(ref cause) => cause,
-            ListResourceDelegatesError::Validation(ref cause) => cause,
-            ListResourceDelegatesError::Credentials(ref err) => err.description(),
-            ListResourceDelegatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListResourceDelegatesError::ParseError(ref cause) => cause,
-            ListResourceDelegatesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3637,20 +2916,10 @@ pub enum ListResourcesError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListResourcesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListResourcesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3663,42 +2932,25 @@ impl ListResourcesError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListResourcesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListResourcesError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return ListResourcesError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ListResourcesError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListResourcesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListResourcesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListResourcesError {
-    fn from(err: serde_json::error::Error) -> ListResourcesError {
-        ListResourcesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListResourcesError {
-    fn from(err: CredentialsError) -> ListResourcesError {
-        ListResourcesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListResourcesError {
-    fn from(err: HttpDispatchError) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListResourcesError {
-    fn from(err: io::Error) -> ListResourcesError {
-        ListResourcesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListResourcesError {
@@ -3712,11 +2964,6 @@ impl Error for ListResourcesError {
             ListResourcesError::InvalidParameter(ref cause) => cause,
             ListResourcesError::OrganizationNotFound(ref cause) => cause,
             ListResourcesError::OrganizationState(ref cause) => cause,
-            ListResourcesError::Validation(ref cause) => cause,
-            ListResourcesError::Credentials(ref err) => err.description(),
-            ListResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListResourcesError::ParseError(ref cause) => cause,
-            ListResourcesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3729,20 +2976,10 @@ pub enum ListUsersError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListUsersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListUsersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3755,42 +2992,25 @@ impl ListUsersError {
 
             match *error_type {
                 "InvalidParameterException" => {
-                    return ListUsersError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return ListUsersError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::OrganizationNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationStateException" => {
-                    return ListUsersError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ListUsersError::OrganizationState(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListUsersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListUsersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListUsersError {
-    fn from(err: serde_json::error::Error) -> ListUsersError {
-        ListUsersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListUsersError {
-    fn from(err: CredentialsError) -> ListUsersError {
-        ListUsersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListUsersError {
-    fn from(err: HttpDispatchError) -> ListUsersError {
-        ListUsersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListUsersError {
-    fn from(err: io::Error) -> ListUsersError {
-        ListUsersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListUsersError {
@@ -3804,11 +3024,6 @@ impl Error for ListUsersError {
             ListUsersError::InvalidParameter(ref cause) => cause,
             ListUsersError::OrganizationNotFound(ref cause) => cause,
             ListUsersError::OrganizationState(ref cause) => cause,
-            ListUsersError::Validation(ref cause) => cause,
-            ListUsersError::Credentials(ref err) => err.description(),
-            ListUsersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListUsersError::ParseError(ref cause) => cause,
-            ListUsersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3825,20 +3040,10 @@ pub enum PutMailboxPermissionsError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutMailboxPermissionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutMailboxPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMailboxPermissionsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3851,52 +3056,35 @@ impl PutMailboxPermissionsError {
 
             match *error_type {
                 "EntityNotFoundException" => {
-                    return PutMailboxPermissionsError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(PutMailboxPermissionsError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return PutMailboxPermissionsError::EntityState(String::from(error_message));
+                    return RusotoError::Service(PutMailboxPermissionsError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return PutMailboxPermissionsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(PutMailboxPermissionsError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return PutMailboxPermissionsError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(PutMailboxPermissionsError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return PutMailboxPermissionsError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(PutMailboxPermissionsError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return PutMailboxPermissionsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutMailboxPermissionsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutMailboxPermissionsError {
-    fn from(err: serde_json::error::Error) -> PutMailboxPermissionsError {
-        PutMailboxPermissionsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutMailboxPermissionsError {
-    fn from(err: CredentialsError) -> PutMailboxPermissionsError {
-        PutMailboxPermissionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutMailboxPermissionsError {
-    fn from(err: HttpDispatchError) -> PutMailboxPermissionsError {
-        PutMailboxPermissionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutMailboxPermissionsError {
-    fn from(err: io::Error) -> PutMailboxPermissionsError {
-        PutMailboxPermissionsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutMailboxPermissionsError {
@@ -3912,13 +3100,6 @@ impl Error for PutMailboxPermissionsError {
             PutMailboxPermissionsError::InvalidParameter(ref cause) => cause,
             PutMailboxPermissionsError::OrganizationNotFound(ref cause) => cause,
             PutMailboxPermissionsError::OrganizationState(ref cause) => cause,
-            PutMailboxPermissionsError::Validation(ref cause) => cause,
-            PutMailboxPermissionsError::Credentials(ref err) => err.description(),
-            PutMailboxPermissionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutMailboxPermissionsError::ParseError(ref cause) => cause,
-            PutMailboxPermissionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3947,20 +3128,10 @@ pub enum RegisterToWorkMailError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RegisterToWorkMailError {
-    pub fn from_response(res: BufferedHttpResponse) -> RegisterToWorkMailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RegisterToWorkMailError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3973,74 +3144,67 @@ impl RegisterToWorkMailError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RegisterToWorkMailError::DirectoryServiceAuthenticationFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectoryUnavailableException" => {
-                    return RegisterToWorkMailError::DirectoryUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterToWorkMailError::DirectoryUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "EmailAddressInUseException" => {
-                    return RegisterToWorkMailError::EmailAddressInUse(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::EmailAddressInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityAlreadyRegisteredException" => {
-                    return RegisterToWorkMailError::EntityAlreadyRegistered(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterToWorkMailError::EntityAlreadyRegistered(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return RegisterToWorkMailError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::EntityNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityStateException" => {
-                    return RegisterToWorkMailError::EntityState(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return RegisterToWorkMailError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "MailDomainNotFoundException" => {
-                    return RegisterToWorkMailError::MailDomainNotFound(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::MailDomainNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "MailDomainStateException" => {
-                    return RegisterToWorkMailError::MailDomainState(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::MailDomainState(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return RegisterToWorkMailError::OrganizationNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RegisterToWorkMailError::OrganizationNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationStateException" => {
-                    return RegisterToWorkMailError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(RegisterToWorkMailError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RegisterToWorkMailError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RegisterToWorkMailError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RegisterToWorkMailError {
-    fn from(err: serde_json::error::Error) -> RegisterToWorkMailError {
-        RegisterToWorkMailError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RegisterToWorkMailError {
-    fn from(err: CredentialsError) -> RegisterToWorkMailError {
-        RegisterToWorkMailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RegisterToWorkMailError {
-    fn from(err: HttpDispatchError) -> RegisterToWorkMailError {
-        RegisterToWorkMailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RegisterToWorkMailError {
-    fn from(err: io::Error) -> RegisterToWorkMailError {
-        RegisterToWorkMailError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RegisterToWorkMailError {
@@ -4062,13 +3226,6 @@ impl Error for RegisterToWorkMailError {
             RegisterToWorkMailError::MailDomainState(ref cause) => cause,
             RegisterToWorkMailError::OrganizationNotFound(ref cause) => cause,
             RegisterToWorkMailError::OrganizationState(ref cause) => cause,
-            RegisterToWorkMailError::Validation(ref cause) => cause,
-            RegisterToWorkMailError::Credentials(ref err) => err.description(),
-            RegisterToWorkMailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RegisterToWorkMailError::ParseError(ref cause) => cause,
-            RegisterToWorkMailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4093,20 +3250,10 @@ pub enum ResetPasswordError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResetPasswordError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResetPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetPasswordError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4119,62 +3266,57 @@ impl ResetPasswordError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return ResetPasswordError::DirectoryServiceAuthenticationFailed(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ResetPasswordError::DirectoryServiceAuthenticationFailed(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "DirectoryUnavailableException" => {
-                    return ResetPasswordError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return ResetPasswordError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityStateException" => {
-                    return ResetPasswordError::EntityState(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return ResetPasswordError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidPasswordException" => {
-                    return ResetPasswordError::InvalidPassword(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::InvalidPassword(String::from(
+                        error_message,
+                    )));
                 }
                 "OrganizationNotFoundException" => {
-                    return ResetPasswordError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return ResetPasswordError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedOperationException" => {
-                    return ResetPasswordError::UnsupportedOperation(String::from(error_message));
+                    return RusotoError::Service(ResetPasswordError::UnsupportedOperation(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResetPasswordError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResetPasswordError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResetPasswordError {
-    fn from(err: serde_json::error::Error) -> ResetPasswordError {
-        ResetPasswordError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResetPasswordError {
-    fn from(err: CredentialsError) -> ResetPasswordError {
-        ResetPasswordError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResetPasswordError {
-    fn from(err: HttpDispatchError) -> ResetPasswordError {
-        ResetPasswordError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResetPasswordError {
-    fn from(err: io::Error) -> ResetPasswordError {
-        ResetPasswordError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResetPasswordError {
@@ -4194,11 +3336,6 @@ impl Error for ResetPasswordError {
             ResetPasswordError::OrganizationNotFound(ref cause) => cause,
             ResetPasswordError::OrganizationState(ref cause) => cause,
             ResetPasswordError::UnsupportedOperation(ref cause) => cause,
-            ResetPasswordError::Validation(ref cause) => cause,
-            ResetPasswordError::Credentials(ref err) => err.description(),
-            ResetPasswordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResetPasswordError::ParseError(ref cause) => cause,
-            ResetPasswordError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4227,20 +3364,10 @@ pub enum UpdatePrimaryEmailAddressError {
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdatePrimaryEmailAddressError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdatePrimaryEmailAddressError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePrimaryEmailAddressError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4253,86 +3380,73 @@ impl UpdatePrimaryEmailAddressError {
 
             match *error_type {
                 "DirectoryServiceAuthenticationFailedException" => {
-                    return UpdatePrimaryEmailAddressError::DirectoryServiceAuthenticationFailed(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        UpdatePrimaryEmailAddressError::DirectoryServiceAuthenticationFailed(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "DirectoryUnavailableException" => {
-                    return UpdatePrimaryEmailAddressError::DirectoryUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePrimaryEmailAddressError::DirectoryUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "EmailAddressInUseException" => {
-                    return UpdatePrimaryEmailAddressError::EmailAddressInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::EmailAddressInUse(
+                        String::from(error_message),
                     ));
                 }
                 "EntityNotFoundException" => {
-                    return UpdatePrimaryEmailAddressError::EntityNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::EntityNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "EntityStateException" => {
-                    return UpdatePrimaryEmailAddressError::EntityState(String::from(error_message));
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::EntityState(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return UpdatePrimaryEmailAddressError::InvalidParameter(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::InvalidParameter(
+                        String::from(error_message),
                     ));
                 }
                 "MailDomainNotFoundException" => {
-                    return UpdatePrimaryEmailAddressError::MailDomainNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::MailDomainNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "MailDomainStateException" => {
-                    return UpdatePrimaryEmailAddressError::MailDomainState(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::MailDomainState(
+                        String::from(error_message),
                     ));
                 }
                 "OrganizationNotFoundException" => {
-                    return UpdatePrimaryEmailAddressError::OrganizationNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePrimaryEmailAddressError::OrganizationNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "OrganizationStateException" => {
-                    return UpdatePrimaryEmailAddressError::OrganizationState(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdatePrimaryEmailAddressError::OrganizationState(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedOperationException" => {
-                    return UpdatePrimaryEmailAddressError::UnsupportedOperation(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdatePrimaryEmailAddressError::UnsupportedOperation(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return UpdatePrimaryEmailAddressError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdatePrimaryEmailAddressError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdatePrimaryEmailAddressError {
-    fn from(err: serde_json::error::Error) -> UpdatePrimaryEmailAddressError {
-        UpdatePrimaryEmailAddressError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdatePrimaryEmailAddressError {
-    fn from(err: CredentialsError) -> UpdatePrimaryEmailAddressError {
-        UpdatePrimaryEmailAddressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdatePrimaryEmailAddressError {
-    fn from(err: HttpDispatchError) -> UpdatePrimaryEmailAddressError {
-        UpdatePrimaryEmailAddressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdatePrimaryEmailAddressError {
-    fn from(err: io::Error) -> UpdatePrimaryEmailAddressError {
-        UpdatePrimaryEmailAddressError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdatePrimaryEmailAddressError {
@@ -4356,13 +3470,6 @@ impl Error for UpdatePrimaryEmailAddressError {
             UpdatePrimaryEmailAddressError::OrganizationNotFound(ref cause) => cause,
             UpdatePrimaryEmailAddressError::OrganizationState(ref cause) => cause,
             UpdatePrimaryEmailAddressError::UnsupportedOperation(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::Validation(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::Credentials(ref err) => err.description(),
-            UpdatePrimaryEmailAddressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdatePrimaryEmailAddressError::ParseError(ref cause) => cause,
-            UpdatePrimaryEmailAddressError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4389,20 +3496,10 @@ pub enum UpdateResourceError {
     OrganizationNotFound(String),
     /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
     OrganizationState(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4415,63 +3512,60 @@ impl UpdateResourceError {
 
             match *error_type {
                 "DirectoryUnavailableException" => {
-                    return UpdateResourceError::DirectoryUnavailable(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::DirectoryUnavailable(
+                        String::from(error_message),
+                    ));
                 }
                 "EmailAddressInUseException" => {
-                    return UpdateResourceError::EmailAddressInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::EmailAddressInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "EntityNotFoundException" => {
-                    return UpdateResourceError::EntityNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::EntityNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "EntityStateException" => {
-                    return UpdateResourceError::EntityState(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::EntityState(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidConfigurationException" => {
-                    return UpdateResourceError::InvalidConfiguration(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::InvalidConfiguration(
+                        String::from(error_message),
+                    ));
                 }
                 "MailDomainNotFoundException" => {
-                    return UpdateResourceError::MailDomainNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::MailDomainNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "MailDomainStateException" => {
-                    return UpdateResourceError::MailDomainState(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::MailDomainState(String::from(
+                        error_message,
+                    )));
                 }
                 "NameAvailabilityException" => {
-                    return UpdateResourceError::NameAvailability(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::NameAvailability(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationNotFoundException" => {
-                    return UpdateResourceError::OrganizationNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::OrganizationNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "OrganizationStateException" => {
-                    return UpdateResourceError::OrganizationState(String::from(error_message));
+                    return RusotoError::Service(UpdateResourceError::OrganizationState(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateResourceError {
-    fn from(err: serde_json::error::Error) -> UpdateResourceError {
-        UpdateResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateResourceError {
-    fn from(err: CredentialsError) -> UpdateResourceError {
-        UpdateResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateResourceError {
-    fn from(err: HttpDispatchError) -> UpdateResourceError {
-        UpdateResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateResourceError {
-    fn from(err: io::Error) -> UpdateResourceError {
-        UpdateResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateResourceError {
@@ -4492,11 +3586,6 @@ impl Error for UpdateResourceError {
             UpdateResourceError::NameAvailability(ref cause) => cause,
             UpdateResourceError::OrganizationNotFound(ref cause) => cause,
             UpdateResourceError::OrganizationState(ref cause) => cause,
-            UpdateResourceError::Validation(ref cause) => cause,
-            UpdateResourceError::Credentials(ref err) => err.description(),
-            UpdateResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateResourceError::ParseError(ref cause) => cause,
-            UpdateResourceError::Unknown(_) => "unknown error",
         }
     }
 }

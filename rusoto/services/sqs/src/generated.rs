@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -2356,20 +2353,10 @@ impl UntagQueueRequestSerializer {
 pub enum AddPermissionError {
     /// <p>The specified action violates a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached and <code>AddPermission</code> returns this error if the maximum number of permissions for the queue is reached.</p>
     OverLimit(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddPermissionError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddPermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPermissionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2377,13 +2364,15 @@ impl AddPermissionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return AddPermissionError::OverLimit(String::from(parsed_error.message));
+                        return RusotoError::Service(AddPermissionError::OverLimit(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        AddPermissionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2392,28 +2381,6 @@ impl AddPermissionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for AddPermissionError {
-    fn from(err: XmlParseError) -> AddPermissionError {
-        let XmlParseError(message) = err;
-        AddPermissionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for AddPermissionError {
-    fn from(err: CredentialsError) -> AddPermissionError {
-        AddPermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddPermissionError {
-    fn from(err: HttpDispatchError) -> AddPermissionError {
-        AddPermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddPermissionError {
-    fn from(err: io::Error) -> AddPermissionError {
-        AddPermissionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for AddPermissionError {
@@ -2425,11 +2392,6 @@ impl Error for AddPermissionError {
     fn description(&self) -> &str {
         match *self {
             AddPermissionError::OverLimit(ref cause) => cause,
-            AddPermissionError::Validation(ref cause) => cause,
-            AddPermissionError::Credentials(ref err) => err.description(),
-            AddPermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddPermissionError::ParseError(ref cause) => cause,
-            AddPermissionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2440,20 +2402,10 @@ pub enum ChangeMessageVisibilityError {
     MessageNotInflight(String),
     /// <p>The specified receipt handle isn't valid.</p>
     ReceiptHandleIsInvalid(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeMessageVisibilityError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangeMessageVisibilityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ChangeMessageVisibilityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2461,20 +2413,24 @@ impl ChangeMessageVisibilityError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.MessageNotInflight" => {
-                        return ChangeMessageVisibilityError::MessageNotInflight(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityError::MessageNotInflight(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ReceiptHandleIsInvalid" => {
-                        return ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ChangeMessageVisibilityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2483,28 +2439,6 @@ impl ChangeMessageVisibilityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ChangeMessageVisibilityError {
-    fn from(err: XmlParseError) -> ChangeMessageVisibilityError {
-        let XmlParseError(message) = err;
-        ChangeMessageVisibilityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ChangeMessageVisibilityError {
-    fn from(err: CredentialsError) -> ChangeMessageVisibilityError {
-        ChangeMessageVisibilityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangeMessageVisibilityError {
-    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityError {
-        ChangeMessageVisibilityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangeMessageVisibilityError {
-    fn from(err: io::Error) -> ChangeMessageVisibilityError {
-        ChangeMessageVisibilityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeMessageVisibilityError {
@@ -2517,13 +2451,6 @@ impl Error for ChangeMessageVisibilityError {
         match *self {
             ChangeMessageVisibilityError::MessageNotInflight(ref cause) => cause,
             ChangeMessageVisibilityError::ReceiptHandleIsInvalid(ref cause) => cause,
-            ChangeMessageVisibilityError::Validation(ref cause) => cause,
-            ChangeMessageVisibilityError::Credentials(ref err) => err.description(),
-            ChangeMessageVisibilityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ChangeMessageVisibilityError::ParseError(ref cause) => cause,
-            ChangeMessageVisibilityError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2538,20 +2465,12 @@ pub enum ChangeMessageVisibilityBatchError {
     InvalidBatchEntryId(String),
     /// <p>The batch request contains more entries than permissible.</p>
     TooManyEntriesInBatchRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ChangeMessageVisibilityBatchError {
-    pub fn from_response(res: BufferedHttpResponse) -> ChangeMessageVisibilityBatchError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ChangeMessageVisibilityBatchError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2559,30 +2478,38 @@ impl ChangeMessageVisibilityBatchError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        ChangeMessageVisibilityBatchError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2591,28 +2518,6 @@ impl ChangeMessageVisibilityBatchError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ChangeMessageVisibilityBatchError {
-    fn from(err: XmlParseError) -> ChangeMessageVisibilityBatchError {
-        let XmlParseError(message) = err;
-        ChangeMessageVisibilityBatchError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ChangeMessageVisibilityBatchError {
-    fn from(err: CredentialsError) -> ChangeMessageVisibilityBatchError {
-        ChangeMessageVisibilityBatchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ChangeMessageVisibilityBatchError {
-    fn from(err: HttpDispatchError) -> ChangeMessageVisibilityBatchError {
-        ChangeMessageVisibilityBatchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ChangeMessageVisibilityBatchError {
-    fn from(err: io::Error) -> ChangeMessageVisibilityBatchError {
-        ChangeMessageVisibilityBatchError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ChangeMessageVisibilityBatchError {
@@ -2627,13 +2532,6 @@ impl Error for ChangeMessageVisibilityBatchError {
             ChangeMessageVisibilityBatchError::EmptyBatchRequest(ref cause) => cause,
             ChangeMessageVisibilityBatchError::InvalidBatchEntryId(ref cause) => cause,
             ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::Validation(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::Credentials(ref err) => err.description(),
-            ChangeMessageVisibilityBatchError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ChangeMessageVisibilityBatchError::ParseError(ref cause) => cause,
-            ChangeMessageVisibilityBatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2644,20 +2542,10 @@ pub enum CreateQueueError {
     QueueDeletedRecently(String),
     /// <p>A queue with this name already exists. Amazon SQS returns this error only if the request includes attributes whose values differ from those of the existing queue.</p>
     QueueNameExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateQueueError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueueError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2665,18 +2553,20 @@ impl CreateQueueError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.QueueDeletedRecently" => {
-                        return CreateQueueError::QueueDeletedRecently(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateQueueError::QueueDeletedRecently(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "QueueAlreadyExists" => {
-                        return CreateQueueError::QueueNameExists(String::from(parsed_error.message));
+                        return RusotoError::Service(CreateQueueError::QueueNameExists(
+                            String::from(parsed_error.message),
+                        ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateQueueError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2685,28 +2575,6 @@ impl CreateQueueError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateQueueError {
-    fn from(err: XmlParseError) -> CreateQueueError {
-        let XmlParseError(message) = err;
-        CreateQueueError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateQueueError {
-    fn from(err: CredentialsError) -> CreateQueueError {
-        CreateQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateQueueError {
-    fn from(err: HttpDispatchError) -> CreateQueueError {
-        CreateQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateQueueError {
-    fn from(err: io::Error) -> CreateQueueError {
-        CreateQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateQueueError {
@@ -2719,11 +2587,6 @@ impl Error for CreateQueueError {
         match *self {
             CreateQueueError::QueueDeletedRecently(ref cause) => cause,
             CreateQueueError::QueueNameExists(ref cause) => cause,
-            CreateQueueError::Validation(ref cause) => cause,
-            CreateQueueError::Credentials(ref err) => err.description(),
-            CreateQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateQueueError::ParseError(ref cause) => cause,
-            CreateQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2734,20 +2597,10 @@ pub enum DeleteMessageError {
     InvalidIdFormat(String),
     /// <p>The specified receipt handle isn't valid.</p>
     ReceiptHandleIsInvalid(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMessageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMessageError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2755,20 +2608,20 @@ impl DeleteMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidIdFormat" => {
-                        return DeleteMessageError::InvalidIdFormat(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteMessageError::InvalidIdFormat(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ReceiptHandleIsInvalid" => {
-                        return DeleteMessageError::ReceiptHandleIsInvalid(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteMessageError::ReceiptHandleIsInvalid(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteMessageError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2777,28 +2630,6 @@ impl DeleteMessageError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteMessageError {
-    fn from(err: XmlParseError) -> DeleteMessageError {
-        let XmlParseError(message) = err;
-        DeleteMessageError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMessageError {
-    fn from(err: CredentialsError) -> DeleteMessageError {
-        DeleteMessageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMessageError {
-    fn from(err: HttpDispatchError) -> DeleteMessageError {
-        DeleteMessageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMessageError {
-    fn from(err: io::Error) -> DeleteMessageError {
-        DeleteMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMessageError {
@@ -2811,11 +2642,6 @@ impl Error for DeleteMessageError {
         match *self {
             DeleteMessageError::InvalidIdFormat(ref cause) => cause,
             DeleteMessageError::ReceiptHandleIsInvalid(ref cause) => cause,
-            DeleteMessageError::Validation(ref cause) => cause,
-            DeleteMessageError::Credentials(ref err) => err.description(),
-            DeleteMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteMessageError::ParseError(ref cause) => cause,
-            DeleteMessageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2830,20 +2656,10 @@ pub enum DeleteMessageBatchError {
     InvalidBatchEntryId(String),
     /// <p>The batch request contains more entries than permissible.</p>
     TooManyEntriesInBatchRequest(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteMessageBatchError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteMessageBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMessageBatchError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2851,30 +2667,34 @@ impl DeleteMessageBatchError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return DeleteMessageBatchError::EmptyBatchRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteMessageBatchError::EmptyBatchRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return DeleteMessageBatchError::InvalidBatchEntryId(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteMessageBatchError::InvalidBatchEntryId(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteMessageBatchError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2883,28 +2703,6 @@ impl DeleteMessageBatchError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteMessageBatchError {
-    fn from(err: XmlParseError) -> DeleteMessageBatchError {
-        let XmlParseError(message) = err;
-        DeleteMessageBatchError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteMessageBatchError {
-    fn from(err: CredentialsError) -> DeleteMessageBatchError {
-        DeleteMessageBatchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteMessageBatchError {
-    fn from(err: HttpDispatchError) -> DeleteMessageBatchError {
-        DeleteMessageBatchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteMessageBatchError {
-    fn from(err: io::Error) -> DeleteMessageBatchError {
-        DeleteMessageBatchError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteMessageBatchError {
@@ -2919,33 +2717,15 @@ impl Error for DeleteMessageBatchError {
             DeleteMessageBatchError::EmptyBatchRequest(ref cause) => cause,
             DeleteMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
             DeleteMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
-            DeleteMessageBatchError::Validation(ref cause) => cause,
-            DeleteMessageBatchError::Credentials(ref err) => err.description(),
-            DeleteMessageBatchError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteMessageBatchError::ParseError(ref cause) => cause,
-            DeleteMessageBatchError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteQueue
 #[derive(Debug, PartialEq)]
-pub enum DeleteQueueError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteQueueError {}
 
 impl DeleteQueueError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteQueueError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -2956,7 +2736,7 @@ impl DeleteQueueError {
                 }
             }
         }
-        DeleteQueueError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -2965,28 +2745,6 @@ impl DeleteQueueError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteQueueError {
-    fn from(err: XmlParseError) -> DeleteQueueError {
-        let XmlParseError(message) = err;
-        DeleteQueueError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteQueueError {
-    fn from(err: CredentialsError) -> DeleteQueueError {
-        DeleteQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteQueueError {
-    fn from(err: HttpDispatchError) -> DeleteQueueError {
-        DeleteQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteQueueError {
-    fn from(err: io::Error) -> DeleteQueueError {
-        DeleteQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteQueueError {
@@ -2996,13 +2754,7 @@ impl fmt::Display for DeleteQueueError {
 }
 impl Error for DeleteQueueError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteQueueError::Validation(ref cause) => cause,
-            DeleteQueueError::Credentials(ref err) => err.description(),
-            DeleteQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteQueueError::ParseError(ref cause) => cause,
-            DeleteQueueError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetQueueAttributes
@@ -3010,20 +2762,10 @@ impl Error for DeleteQueueError {
 pub enum GetQueueAttributesError {
     /// <p>The specified attribute doesn't exist.</p>
     InvalidAttributeName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueueAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueueAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueueAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3031,15 +2773,15 @@ impl GetQueueAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidAttributeName" => {
-                        return GetQueueAttributesError::InvalidAttributeName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetQueueAttributesError::InvalidAttributeName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetQueueAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3048,28 +2790,6 @@ impl GetQueueAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetQueueAttributesError {
-    fn from(err: XmlParseError) -> GetQueueAttributesError {
-        let XmlParseError(message) = err;
-        GetQueueAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetQueueAttributesError {
-    fn from(err: CredentialsError) -> GetQueueAttributesError {
-        GetQueueAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueueAttributesError {
-    fn from(err: HttpDispatchError) -> GetQueueAttributesError {
-        GetQueueAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueueAttributesError {
-    fn from(err: io::Error) -> GetQueueAttributesError {
-        GetQueueAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetQueueAttributesError {
@@ -3081,13 +2801,6 @@ impl Error for GetQueueAttributesError {
     fn description(&self) -> &str {
         match *self {
             GetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
-            GetQueueAttributesError::Validation(ref cause) => cause,
-            GetQueueAttributesError::Credentials(ref err) => err.description(),
-            GetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetQueueAttributesError::ParseError(ref cause) => cause,
-            GetQueueAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3096,20 +2809,10 @@ impl Error for GetQueueAttributesError {
 pub enum GetQueueUrlError {
     /// <p>The specified queue doesn't exist.</p>
     QueueDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetQueueUrlError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetQueueUrlError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQueueUrlError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3117,15 +2820,15 @@ impl GetQueueUrlError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return GetQueueUrlError::QueueDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetQueueUrlError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3134,28 +2837,6 @@ impl GetQueueUrlError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetQueueUrlError {
-    fn from(err: XmlParseError) -> GetQueueUrlError {
-        let XmlParseError(message) = err;
-        GetQueueUrlError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetQueueUrlError {
-    fn from(err: CredentialsError) -> GetQueueUrlError {
-        GetQueueUrlError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetQueueUrlError {
-    fn from(err: HttpDispatchError) -> GetQueueUrlError {
-        GetQueueUrlError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetQueueUrlError {
-    fn from(err: io::Error) -> GetQueueUrlError {
-        GetQueueUrlError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetQueueUrlError {
@@ -3167,11 +2848,6 @@ impl Error for GetQueueUrlError {
     fn description(&self) -> &str {
         match *self {
             GetQueueUrlError::QueueDoesNotExist(ref cause) => cause,
-            GetQueueUrlError::Validation(ref cause) => cause,
-            GetQueueUrlError::Credentials(ref err) => err.description(),
-            GetQueueUrlError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetQueueUrlError::ParseError(ref cause) => cause,
-            GetQueueUrlError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3180,20 +2856,12 @@ impl Error for GetQueueUrlError {
 pub enum ListDeadLetterSourceQueuesError {
     /// <p>The specified queue doesn't exist.</p>
     QueueDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDeadLetterSourceQueuesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDeadLetterSourceQueuesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDeadLetterSourceQueuesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3201,15 +2869,17 @@ impl ListDeadLetterSourceQueuesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ListDeadLetterSourceQueuesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3218,28 +2888,6 @@ impl ListDeadLetterSourceQueuesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListDeadLetterSourceQueuesError {
-    fn from(err: XmlParseError) -> ListDeadLetterSourceQueuesError {
-        let XmlParseError(message) = err;
-        ListDeadLetterSourceQueuesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListDeadLetterSourceQueuesError {
-    fn from(err: CredentialsError) -> ListDeadLetterSourceQueuesError {
-        ListDeadLetterSourceQueuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDeadLetterSourceQueuesError {
-    fn from(err: HttpDispatchError) -> ListDeadLetterSourceQueuesError {
-        ListDeadLetterSourceQueuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDeadLetterSourceQueuesError {
-    fn from(err: io::Error) -> ListDeadLetterSourceQueuesError {
-        ListDeadLetterSourceQueuesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListDeadLetterSourceQueuesError {
@@ -3251,33 +2899,15 @@ impl Error for ListDeadLetterSourceQueuesError {
     fn description(&self) -> &str {
         match *self {
             ListDeadLetterSourceQueuesError::QueueDoesNotExist(ref cause) => cause,
-            ListDeadLetterSourceQueuesError::Validation(ref cause) => cause,
-            ListDeadLetterSourceQueuesError::Credentials(ref err) => err.description(),
-            ListDeadLetterSourceQueuesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDeadLetterSourceQueuesError::ParseError(ref cause) => cause,
-            ListDeadLetterSourceQueuesError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListQueueTags
 #[derive(Debug, PartialEq)]
-pub enum ListQueueTagsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListQueueTagsError {}
 
 impl ListQueueTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQueueTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueueTagsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3288,7 +2918,7 @@ impl ListQueueTagsError {
                 }
             }
         }
-        ListQueueTagsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3297,28 +2927,6 @@ impl ListQueueTagsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListQueueTagsError {
-    fn from(err: XmlParseError) -> ListQueueTagsError {
-        let XmlParseError(message) = err;
-        ListQueueTagsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListQueueTagsError {
-    fn from(err: CredentialsError) -> ListQueueTagsError {
-        ListQueueTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQueueTagsError {
-    fn from(err: HttpDispatchError) -> ListQueueTagsError {
-        ListQueueTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQueueTagsError {
-    fn from(err: io::Error) -> ListQueueTagsError {
-        ListQueueTagsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListQueueTagsError {
@@ -3328,32 +2936,15 @@ impl fmt::Display for ListQueueTagsError {
 }
 impl Error for ListQueueTagsError {
     fn description(&self) -> &str {
-        match *self {
-            ListQueueTagsError::Validation(ref cause) => cause,
-            ListQueueTagsError::Credentials(ref err) => err.description(),
-            ListQueueTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListQueueTagsError::ParseError(ref cause) => cause,
-            ListQueueTagsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
-pub enum ListQueuesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListQueuesError {}
 
 impl ListQueuesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListQueuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueuesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3364,7 +2955,7 @@ impl ListQueuesError {
                 }
             }
         }
-        ListQueuesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3373,28 +2964,6 @@ impl ListQueuesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListQueuesError {
-    fn from(err: XmlParseError) -> ListQueuesError {
-        let XmlParseError(message) = err;
-        ListQueuesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListQueuesError {
-    fn from(err: CredentialsError) -> ListQueuesError {
-        ListQueuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListQueuesError {
-    fn from(err: HttpDispatchError) -> ListQueuesError {
-        ListQueuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListQueuesError {
-    fn from(err: io::Error) -> ListQueuesError {
-        ListQueuesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListQueuesError {
@@ -3404,13 +2973,7 @@ impl fmt::Display for ListQueuesError {
 }
 impl Error for ListQueuesError {
     fn description(&self) -> &str {
-        match *self {
-            ListQueuesError::Validation(ref cause) => cause,
-            ListQueuesError::Credentials(ref err) => err.description(),
-            ListQueuesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListQueuesError::ParseError(ref cause) => cause,
-            ListQueuesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PurgeQueue
@@ -3420,20 +2983,10 @@ pub enum PurgeQueueError {
     PurgeQueueInProgress(String),
     /// <p>The specified queue doesn't exist.</p>
     QueueDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PurgeQueueError {
-    pub fn from_response(res: BufferedHttpResponse) -> PurgeQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PurgeQueueError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3441,20 +2994,20 @@ impl PurgeQueueError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.PurgeQueueInProgress" => {
-                        return PurgeQueueError::PurgeQueueInProgress(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PurgeQueueError::PurgeQueueInProgress(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.NonExistentQueue" => {
-                        return PurgeQueueError::QueueDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PurgeQueueError::QueueDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        PurgeQueueError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3463,28 +3016,6 @@ impl PurgeQueueError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PurgeQueueError {
-    fn from(err: XmlParseError) -> PurgeQueueError {
-        let XmlParseError(message) = err;
-        PurgeQueueError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PurgeQueueError {
-    fn from(err: CredentialsError) -> PurgeQueueError {
-        PurgeQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PurgeQueueError {
-    fn from(err: HttpDispatchError) -> PurgeQueueError {
-        PurgeQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PurgeQueueError {
-    fn from(err: io::Error) -> PurgeQueueError {
-        PurgeQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PurgeQueueError {
@@ -3497,11 +3028,6 @@ impl Error for PurgeQueueError {
         match *self {
             PurgeQueueError::PurgeQueueInProgress(ref cause) => cause,
             PurgeQueueError::QueueDoesNotExist(ref cause) => cause,
-            PurgeQueueError::Validation(ref cause) => cause,
-            PurgeQueueError::Credentials(ref err) => err.description(),
-            PurgeQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PurgeQueueError::ParseError(ref cause) => cause,
-            PurgeQueueError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3510,20 +3036,10 @@ impl Error for PurgeQueueError {
 pub enum ReceiveMessageError {
     /// <p>The specified action violates a limit. For example, <code>ReceiveMessage</code> returns this error if the maximum number of inflight messages is reached and <code>AddPermission</code> returns this error if the maximum number of permissions for the queue is reached.</p>
     OverLimit(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReceiveMessageError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReceiveMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReceiveMessageError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3531,13 +3047,15 @@ impl ReceiveMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return ReceiveMessageError::OverLimit(String::from(parsed_error.message));
+                        return RusotoError::Service(ReceiveMessageError::OverLimit(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        ReceiveMessageError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3546,28 +3064,6 @@ impl ReceiveMessageError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ReceiveMessageError {
-    fn from(err: XmlParseError) -> ReceiveMessageError {
-        let XmlParseError(message) = err;
-        ReceiveMessageError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ReceiveMessageError {
-    fn from(err: CredentialsError) -> ReceiveMessageError {
-        ReceiveMessageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReceiveMessageError {
-    fn from(err: HttpDispatchError) -> ReceiveMessageError {
-        ReceiveMessageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReceiveMessageError {
-    fn from(err: io::Error) -> ReceiveMessageError {
-        ReceiveMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReceiveMessageError {
@@ -3579,31 +3075,15 @@ impl Error for ReceiveMessageError {
     fn description(&self) -> &str {
         match *self {
             ReceiveMessageError::OverLimit(ref cause) => cause,
-            ReceiveMessageError::Validation(ref cause) => cause,
-            ReceiveMessageError::Credentials(ref err) => err.description(),
-            ReceiveMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ReceiveMessageError::ParseError(ref cause) => cause,
-            ReceiveMessageError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by RemovePermission
 #[derive(Debug, PartialEq)]
-pub enum RemovePermissionError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum RemovePermissionError {}
 
 impl RemovePermissionError {
-    pub fn from_response(res: BufferedHttpResponse) -> RemovePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemovePermissionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3614,7 +3094,7 @@ impl RemovePermissionError {
                 }
             }
         }
-        RemovePermissionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3623,28 +3103,6 @@ impl RemovePermissionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for RemovePermissionError {
-    fn from(err: XmlParseError) -> RemovePermissionError {
-        let XmlParseError(message) = err;
-        RemovePermissionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for RemovePermissionError {
-    fn from(err: CredentialsError) -> RemovePermissionError {
-        RemovePermissionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemovePermissionError {
-    fn from(err: HttpDispatchError) -> RemovePermissionError {
-        RemovePermissionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemovePermissionError {
-    fn from(err: io::Error) -> RemovePermissionError {
-        RemovePermissionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for RemovePermissionError {
@@ -3654,13 +3112,7 @@ impl fmt::Display for RemovePermissionError {
 }
 impl Error for RemovePermissionError {
     fn description(&self) -> &str {
-        match *self {
-            RemovePermissionError::Validation(ref cause) => cause,
-            RemovePermissionError::Credentials(ref err) => err.description(),
-            RemovePermissionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RemovePermissionError::ParseError(ref cause) => cause,
-            RemovePermissionError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SendMessage
@@ -3670,20 +3122,10 @@ pub enum SendMessageError {
     InvalidMessageContents(String),
     /// <p>Error code 400. Unsupported operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendMessageError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendMessageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendMessageError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3691,20 +3133,20 @@ impl SendMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidMessageContents" => {
-                        return SendMessageError::InvalidMessageContents(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageError::InvalidMessageContents(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
-                        return SendMessageError::UnsupportedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageError::UnsupportedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SendMessageError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3713,28 +3155,6 @@ impl SendMessageError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendMessageError {
-    fn from(err: XmlParseError) -> SendMessageError {
-        let XmlParseError(message) = err;
-        SendMessageError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendMessageError {
-    fn from(err: CredentialsError) -> SendMessageError {
-        SendMessageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendMessageError {
-    fn from(err: HttpDispatchError) -> SendMessageError {
-        SendMessageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendMessageError {
-    fn from(err: io::Error) -> SendMessageError {
-        SendMessageError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendMessageError {
@@ -3747,11 +3167,6 @@ impl Error for SendMessageError {
         match *self {
             SendMessageError::InvalidMessageContents(ref cause) => cause,
             SendMessageError::UnsupportedOperation(ref cause) => cause,
-            SendMessageError::Validation(ref cause) => cause,
-            SendMessageError::Credentials(ref err) => err.description(),
-            SendMessageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendMessageError::ParseError(ref cause) => cause,
-            SendMessageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3770,20 +3185,10 @@ pub enum SendMessageBatchError {
     TooManyEntriesInBatchRequest(String),
     /// <p>Error code 400. Unsupported operation.</p>
     UnsupportedOperation(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendMessageBatchError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendMessageBatchError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendMessageBatchError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3791,40 +3196,44 @@ impl SendMessageBatchError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
-                        return SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AWS.SimpleQueueService.BatchRequestTooLong" => {
-                        return SendMessageBatchError::BatchRequestTooLong(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageBatchError::BatchRequestTooLong(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
-                        return SendMessageBatchError::EmptyBatchRequest(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageBatchError::EmptyBatchRequest(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
-                        return SendMessageBatchError::InvalidBatchEntryId(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageBatchError::InvalidBatchEntryId(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
-                        return SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
-                        return SendMessageBatchError::UnsupportedOperation(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendMessageBatchError::UnsupportedOperation(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SendMessageBatchError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3833,28 +3242,6 @@ impl SendMessageBatchError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendMessageBatchError {
-    fn from(err: XmlParseError) -> SendMessageBatchError {
-        let XmlParseError(message) = err;
-        SendMessageBatchError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendMessageBatchError {
-    fn from(err: CredentialsError) -> SendMessageBatchError {
-        SendMessageBatchError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendMessageBatchError {
-    fn from(err: HttpDispatchError) -> SendMessageBatchError {
-        SendMessageBatchError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendMessageBatchError {
-    fn from(err: io::Error) -> SendMessageBatchError {
-        SendMessageBatchError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendMessageBatchError {
@@ -3871,11 +3258,6 @@ impl Error for SendMessageBatchError {
             SendMessageBatchError::InvalidBatchEntryId(ref cause) => cause,
             SendMessageBatchError::TooManyEntriesInBatchRequest(ref cause) => cause,
             SendMessageBatchError::UnsupportedOperation(ref cause) => cause,
-            SendMessageBatchError::Validation(ref cause) => cause,
-            SendMessageBatchError::Credentials(ref err) => err.description(),
-            SendMessageBatchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendMessageBatchError::ParseError(ref cause) => cause,
-            SendMessageBatchError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3884,20 +3266,10 @@ impl Error for SendMessageBatchError {
 pub enum SetQueueAttributesError {
     /// <p>The specified attribute doesn't exist.</p>
     InvalidAttributeName(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetQueueAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetQueueAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetQueueAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3905,15 +3277,15 @@ impl SetQueueAttributesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidAttributeName" => {
-                        return SetQueueAttributesError::InvalidAttributeName(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetQueueAttributesError::InvalidAttributeName(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SetQueueAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -3922,28 +3294,6 @@ impl SetQueueAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetQueueAttributesError {
-    fn from(err: XmlParseError) -> SetQueueAttributesError {
-        let XmlParseError(message) = err;
-        SetQueueAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetQueueAttributesError {
-    fn from(err: CredentialsError) -> SetQueueAttributesError {
-        SetQueueAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetQueueAttributesError {
-    fn from(err: HttpDispatchError) -> SetQueueAttributesError {
-        SetQueueAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetQueueAttributesError {
-    fn from(err: io::Error) -> SetQueueAttributesError {
-        SetQueueAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetQueueAttributesError {
@@ -3955,33 +3305,15 @@ impl Error for SetQueueAttributesError {
     fn description(&self) -> &str {
         match *self {
             SetQueueAttributesError::InvalidAttributeName(ref cause) => cause,
-            SetQueueAttributesError::Validation(ref cause) => cause,
-            SetQueueAttributesError::Credentials(ref err) => err.description(),
-            SetQueueAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetQueueAttributesError::ParseError(ref cause) => cause,
-            SetQueueAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by TagQueue
 #[derive(Debug, PartialEq)]
-pub enum TagQueueError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum TagQueueError {}
 
 impl TagQueueError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagQueueError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -3992,7 +3324,7 @@ impl TagQueueError {
                 }
             }
         }
-        TagQueueError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4001,28 +3333,6 @@ impl TagQueueError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TagQueueError {
-    fn from(err: XmlParseError) -> TagQueueError {
-        let XmlParseError(message) = err;
-        TagQueueError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TagQueueError {
-    fn from(err: CredentialsError) -> TagQueueError {
-        TagQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagQueueError {
-    fn from(err: HttpDispatchError) -> TagQueueError {
-        TagQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagQueueError {
-    fn from(err: io::Error) -> TagQueueError {
-        TagQueueError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TagQueueError {
@@ -4032,32 +3342,15 @@ impl fmt::Display for TagQueueError {
 }
 impl Error for TagQueueError {
     fn description(&self) -> &str {
-        match *self {
-            TagQueueError::Validation(ref cause) => cause,
-            TagQueueError::Credentials(ref err) => err.description(),
-            TagQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagQueueError::ParseError(ref cause) => cause,
-            TagQueueError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UntagQueue
 #[derive(Debug, PartialEq)]
-pub enum UntagQueueError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UntagQueueError {}
 
 impl UntagQueueError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagQueueError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -4068,7 +3361,7 @@ impl UntagQueueError {
                 }
             }
         }
-        UntagQueueError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -4079,28 +3372,6 @@ impl UntagQueueError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for UntagQueueError {
-    fn from(err: XmlParseError) -> UntagQueueError {
-        let XmlParseError(message) = err;
-        UntagQueueError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UntagQueueError {
-    fn from(err: CredentialsError) -> UntagQueueError {
-        UntagQueueError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagQueueError {
-    fn from(err: HttpDispatchError) -> UntagQueueError {
-        UntagQueueError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagQueueError {
-    fn from(err: io::Error) -> UntagQueueError {
-        UntagQueueError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for UntagQueueError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -4108,13 +3379,7 @@ impl fmt::Display for UntagQueueError {
 }
 impl Error for UntagQueueError {
     fn description(&self) -> &str {
-        match *self {
-            UntagQueueError::Validation(ref cause) => cause,
-            UntagQueueError::Credentials(ref err) => err.description(),
-            UntagQueueError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagQueueError::ParseError(ref cause) => cause,
-            UntagQueueError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Trait representing the capabilities of the Amazon SQS API. Amazon SQS clients implement this trait.

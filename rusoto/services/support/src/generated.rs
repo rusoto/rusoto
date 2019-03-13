@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -729,20 +726,10 @@ pub enum AddAttachmentsToSetError {
     AttachmentSetSizeLimitExceeded(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddAttachmentsToSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddAttachmentsToSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddAttachmentsToSetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -755,58 +742,37 @@ impl AddAttachmentsToSetError {
 
             match *error_type {
                 "AttachmentLimitExceeded" => {
-                    return AddAttachmentsToSetError::AttachmentLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(AddAttachmentsToSetError::AttachmentLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "AttachmentSetExpired" => {
-                    return AddAttachmentsToSetError::AttachmentSetExpired(String::from(
-                        error_message,
+                    return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetExpired(
+                        String::from(error_message),
                     ));
                 }
                 "AttachmentSetIdNotFound" => {
-                    return AddAttachmentsToSetError::AttachmentSetIdNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(AddAttachmentsToSetError::AttachmentSetIdNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "AttachmentSetSizeLimitExceeded" => {
-                    return AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return AddAttachmentsToSetError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(AddAttachmentsToSetError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddAttachmentsToSetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddAttachmentsToSetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddAttachmentsToSetError {
-    fn from(err: serde_json::error::Error) -> AddAttachmentsToSetError {
-        AddAttachmentsToSetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddAttachmentsToSetError {
-    fn from(err: CredentialsError) -> AddAttachmentsToSetError {
-        AddAttachmentsToSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddAttachmentsToSetError {
-    fn from(err: HttpDispatchError) -> AddAttachmentsToSetError {
-        AddAttachmentsToSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddAttachmentsToSetError {
-    fn from(err: io::Error) -> AddAttachmentsToSetError {
-        AddAttachmentsToSetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddAttachmentsToSetError {
@@ -822,13 +788,6 @@ impl Error for AddAttachmentsToSetError {
             AddAttachmentsToSetError::AttachmentSetIdNotFound(ref cause) => cause,
             AddAttachmentsToSetError::AttachmentSetSizeLimitExceeded(ref cause) => cause,
             AddAttachmentsToSetError::InternalServerError(ref cause) => cause,
-            AddAttachmentsToSetError::Validation(ref cause) => cause,
-            AddAttachmentsToSetError::Credentials(ref err) => err.description(),
-            AddAttachmentsToSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddAttachmentsToSetError::ParseError(ref cause) => cause,
-            AddAttachmentsToSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -843,20 +802,10 @@ pub enum AddCommunicationToCaseError {
     CaseIdNotFound(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddCommunicationToCaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> AddCommunicationToCaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddCommunicationToCaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -869,51 +818,32 @@ impl AddCommunicationToCaseError {
 
             match *error_type {
                 "AttachmentSetExpired" => {
-                    return AddCommunicationToCaseError::AttachmentSetExpired(String::from(
-                        error_message,
+                    return RusotoError::Service(AddCommunicationToCaseError::AttachmentSetExpired(
+                        String::from(error_message),
                     ));
                 }
                 "AttachmentSetIdNotFound" => {
-                    return AddCommunicationToCaseError::AttachmentSetIdNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        AddCommunicationToCaseError::AttachmentSetIdNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "CaseIdNotFound" => {
-                    return AddCommunicationToCaseError::CaseIdNotFound(String::from(error_message));
-                }
-                "InternalServerError" => {
-                    return AddCommunicationToCaseError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(AddCommunicationToCaseError::CaseIdNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return AddCommunicationToCaseError::Validation(error_message.to_string());
+                "InternalServerError" => {
+                    return RusotoError::Service(AddCommunicationToCaseError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddCommunicationToCaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddCommunicationToCaseError {
-    fn from(err: serde_json::error::Error) -> AddCommunicationToCaseError {
-        AddCommunicationToCaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddCommunicationToCaseError {
-    fn from(err: CredentialsError) -> AddCommunicationToCaseError {
-        AddCommunicationToCaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddCommunicationToCaseError {
-    fn from(err: HttpDispatchError) -> AddCommunicationToCaseError {
-        AddCommunicationToCaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddCommunicationToCaseError {
-    fn from(err: io::Error) -> AddCommunicationToCaseError {
-        AddCommunicationToCaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddCommunicationToCaseError {
@@ -928,13 +858,6 @@ impl Error for AddCommunicationToCaseError {
             AddCommunicationToCaseError::AttachmentSetIdNotFound(ref cause) => cause,
             AddCommunicationToCaseError::CaseIdNotFound(ref cause) => cause,
             AddCommunicationToCaseError::InternalServerError(ref cause) => cause,
-            AddCommunicationToCaseError::Validation(ref cause) => cause,
-            AddCommunicationToCaseError::Credentials(ref err) => err.description(),
-            AddCommunicationToCaseError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            AddCommunicationToCaseError::ParseError(ref cause) => cause,
-            AddCommunicationToCaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -949,20 +872,10 @@ pub enum CreateCaseError {
     CaseCreationLimitExceeded(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -975,45 +888,30 @@ impl CreateCaseError {
 
             match *error_type {
                 "AttachmentSetExpired" => {
-                    return CreateCaseError::AttachmentSetExpired(String::from(error_message));
+                    return RusotoError::Service(CreateCaseError::AttachmentSetExpired(
+                        String::from(error_message),
+                    ));
                 }
                 "AttachmentSetIdNotFound" => {
-                    return CreateCaseError::AttachmentSetIdNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateCaseError::AttachmentSetIdNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CaseCreationLimitExceeded" => {
-                    return CreateCaseError::CaseCreationLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateCaseError::CaseCreationLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return CreateCaseError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateCaseError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateCaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateCaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateCaseError {
-    fn from(err: serde_json::error::Error) -> CreateCaseError {
-        CreateCaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateCaseError {
-    fn from(err: CredentialsError) -> CreateCaseError {
-        CreateCaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCaseError {
-    fn from(err: HttpDispatchError) -> CreateCaseError {
-        CreateCaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCaseError {
-    fn from(err: io::Error) -> CreateCaseError {
-        CreateCaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateCaseError {
@@ -1028,11 +926,6 @@ impl Error for CreateCaseError {
             CreateCaseError::AttachmentSetIdNotFound(ref cause) => cause,
             CreateCaseError::CaseCreationLimitExceeded(ref cause) => cause,
             CreateCaseError::InternalServerError(ref cause) => cause,
-            CreateCaseError::Validation(ref cause) => cause,
-            CreateCaseError::Credentials(ref err) => err.description(),
-            CreateCaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateCaseError::ParseError(ref cause) => cause,
-            CreateCaseError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1045,20 +938,10 @@ pub enum DescribeAttachmentError {
     DescribeAttachmentLimitExceeded(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeAttachmentError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeAttachmentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAttachmentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1071,46 +954,27 @@ impl DescribeAttachmentError {
 
             match *error_type {
                 "AttachmentIdNotFound" => {
-                    return DescribeAttachmentError::AttachmentIdNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeAttachmentError::AttachmentIdNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "DescribeAttachmentLimitExceeded" => {
-                    return DescribeAttachmentError::DescribeAttachmentLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeAttachmentError::DescribeAttachmentLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return DescribeAttachmentError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeAttachmentError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeAttachmentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeAttachmentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeAttachmentError {
-    fn from(err: serde_json::error::Error) -> DescribeAttachmentError {
-        DescribeAttachmentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeAttachmentError {
-    fn from(err: CredentialsError) -> DescribeAttachmentError {
-        DescribeAttachmentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeAttachmentError {
-    fn from(err: HttpDispatchError) -> DescribeAttachmentError {
-        DescribeAttachmentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeAttachmentError {
-    fn from(err: io::Error) -> DescribeAttachmentError {
-        DescribeAttachmentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeAttachmentError {
@@ -1124,13 +988,6 @@ impl Error for DescribeAttachmentError {
             DescribeAttachmentError::AttachmentIdNotFound(ref cause) => cause,
             DescribeAttachmentError::DescribeAttachmentLimitExceeded(ref cause) => cause,
             DescribeAttachmentError::InternalServerError(ref cause) => cause,
-            DescribeAttachmentError::Validation(ref cause) => cause,
-            DescribeAttachmentError::Credentials(ref err) => err.description(),
-            DescribeAttachmentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeAttachmentError::ParseError(ref cause) => cause,
-            DescribeAttachmentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1141,20 +998,10 @@ pub enum DescribeCasesError {
     CaseIdNotFound(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1167,39 +1014,20 @@ impl DescribeCasesError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return DescribeCasesError::CaseIdNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeCasesError::CaseIdNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DescribeCasesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeCasesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeCasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCasesError {
-    fn from(err: serde_json::error::Error) -> DescribeCasesError {
-        DescribeCasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCasesError {
-    fn from(err: CredentialsError) -> DescribeCasesError {
-        DescribeCasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCasesError {
-    fn from(err: HttpDispatchError) -> DescribeCasesError {
-        DescribeCasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCasesError {
-    fn from(err: io::Error) -> DescribeCasesError {
-        DescribeCasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCasesError {
@@ -1212,11 +1040,6 @@ impl Error for DescribeCasesError {
         match *self {
             DescribeCasesError::CaseIdNotFound(ref cause) => cause,
             DescribeCasesError::InternalServerError(ref cause) => cause,
-            DescribeCasesError::Validation(ref cause) => cause,
-            DescribeCasesError::Credentials(ref err) => err.description(),
-            DescribeCasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeCasesError::ParseError(ref cause) => cause,
-            DescribeCasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1227,20 +1050,10 @@ pub enum DescribeCommunicationsError {
     CaseIdNotFound(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeCommunicationsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeCommunicationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeCommunicationsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1253,41 +1066,20 @@ impl DescribeCommunicationsError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return DescribeCommunicationsError::CaseIdNotFound(String::from(error_message));
-                }
-                "InternalServerError" => {
-                    return DescribeCommunicationsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeCommunicationsError::CaseIdNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeCommunicationsError::Validation(error_message.to_string());
+                "InternalServerError" => {
+                    return RusotoError::Service(DescribeCommunicationsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeCommunicationsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeCommunicationsError {
-    fn from(err: serde_json::error::Error) -> DescribeCommunicationsError {
-        DescribeCommunicationsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeCommunicationsError {
-    fn from(err: CredentialsError) -> DescribeCommunicationsError {
-        DescribeCommunicationsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeCommunicationsError {
-    fn from(err: HttpDispatchError) -> DescribeCommunicationsError {
-        DescribeCommunicationsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeCommunicationsError {
-    fn from(err: io::Error) -> DescribeCommunicationsError {
-        DescribeCommunicationsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeCommunicationsError {
@@ -1300,13 +1092,6 @@ impl Error for DescribeCommunicationsError {
         match *self {
             DescribeCommunicationsError::CaseIdNotFound(ref cause) => cause,
             DescribeCommunicationsError::InternalServerError(ref cause) => cause,
-            DescribeCommunicationsError::Validation(ref cause) => cause,
-            DescribeCommunicationsError::Credentials(ref err) => err.description(),
-            DescribeCommunicationsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeCommunicationsError::ParseError(ref cause) => cause,
-            DescribeCommunicationsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1315,20 +1100,10 @@ impl Error for DescribeCommunicationsError {
 pub enum DescribeServicesError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeServicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeServicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1341,36 +1116,15 @@ impl DescribeServicesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeServicesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeServicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeServicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeServicesError {
-    fn from(err: serde_json::error::Error) -> DescribeServicesError {
-        DescribeServicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeServicesError {
-    fn from(err: CredentialsError) -> DescribeServicesError {
-        DescribeServicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeServicesError {
-    fn from(err: HttpDispatchError) -> DescribeServicesError {
-        DescribeServicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeServicesError {
-    fn from(err: io::Error) -> DescribeServicesError {
-        DescribeServicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeServicesError {
@@ -1382,11 +1136,6 @@ impl Error for DescribeServicesError {
     fn description(&self) -> &str {
         match *self {
             DescribeServicesError::InternalServerError(ref cause) => cause,
-            DescribeServicesError::Validation(ref cause) => cause,
-            DescribeServicesError::Credentials(ref err) => err.description(),
-            DescribeServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeServicesError::ParseError(ref cause) => cause,
-            DescribeServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1395,20 +1144,10 @@ impl Error for DescribeServicesError {
 pub enum DescribeSeverityLevelsError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSeverityLevelsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSeverityLevelsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeSeverityLevelsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1421,38 +1160,15 @@ impl DescribeSeverityLevelsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeSeverityLevelsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSeverityLevelsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeSeverityLevelsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSeverityLevelsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSeverityLevelsError {
-    fn from(err: serde_json::error::Error) -> DescribeSeverityLevelsError {
-        DescribeSeverityLevelsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSeverityLevelsError {
-    fn from(err: CredentialsError) -> DescribeSeverityLevelsError {
-        DescribeSeverityLevelsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSeverityLevelsError {
-    fn from(err: HttpDispatchError) -> DescribeSeverityLevelsError {
-        DescribeSeverityLevelsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSeverityLevelsError {
-    fn from(err: io::Error) -> DescribeSeverityLevelsError {
-        DescribeSeverityLevelsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSeverityLevelsError {
@@ -1464,13 +1180,6 @@ impl Error for DescribeSeverityLevelsError {
     fn description(&self) -> &str {
         match *self {
             DescribeSeverityLevelsError::InternalServerError(ref cause) => cause,
-            DescribeSeverityLevelsError::Validation(ref cause) => cause,
-            DescribeSeverityLevelsError::Credentials(ref err) => err.description(),
-            DescribeSeverityLevelsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSeverityLevelsError::ParseError(ref cause) => cause,
-            DescribeSeverityLevelsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1479,22 +1188,12 @@ impl Error for DescribeSeverityLevelsError {
 pub enum DescribeTrustedAdvisorCheckRefreshStatusesError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTrustedAdvisorCheckRefreshStatusesError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
+    ) -> RusotoError<DescribeTrustedAdvisorCheckRefreshStatusesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1507,40 +1206,17 @@ impl DescribeTrustedAdvisorCheckRefreshStatusesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeTrustedAdvisorCheckRefreshStatusesError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTrustedAdvisorCheckRefreshStatusesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTrustedAdvisorCheckRefreshStatusesError {
-    fn from(err: serde_json::error::Error) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
-        DescribeTrustedAdvisorCheckRefreshStatusesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTrustedAdvisorCheckRefreshStatusesError {
-    fn from(err: CredentialsError) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
-        DescribeTrustedAdvisorCheckRefreshStatusesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckRefreshStatusesError {
-    fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
-        DescribeTrustedAdvisorCheckRefreshStatusesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTrustedAdvisorCheckRefreshStatusesError {
-    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckRefreshStatusesError {
-        DescribeTrustedAdvisorCheckRefreshStatusesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckRefreshStatusesError {
@@ -1554,15 +1230,6 @@ impl Error for DescribeTrustedAdvisorCheckRefreshStatusesError {
             DescribeTrustedAdvisorCheckRefreshStatusesError::InternalServerError(ref cause) => {
                 cause
             }
-            DescribeTrustedAdvisorCheckRefreshStatusesError::Validation(ref cause) => cause,
-            DescribeTrustedAdvisorCheckRefreshStatusesError::Credentials(ref err) => {
-                err.description()
-            }
-            DescribeTrustedAdvisorCheckRefreshStatusesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTrustedAdvisorCheckRefreshStatusesError::ParseError(ref cause) => cause,
-            DescribeTrustedAdvisorCheckRefreshStatusesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1571,20 +1238,12 @@ impl Error for DescribeTrustedAdvisorCheckRefreshStatusesError {
 pub enum DescribeTrustedAdvisorCheckResultError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTrustedAdvisorCheckResultError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTrustedAdvisorCheckResultError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrustedAdvisorCheckResultError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1597,40 +1256,17 @@ impl DescribeTrustedAdvisorCheckResultError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTrustedAdvisorCheckResultError::InternalServerError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeTrustedAdvisorCheckResultError::InternalServerError(String::from(
+                            error_message,
+                        )),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeTrustedAdvisorCheckResultError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTrustedAdvisorCheckResultError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTrustedAdvisorCheckResultError {
-    fn from(err: serde_json::error::Error) -> DescribeTrustedAdvisorCheckResultError {
-        DescribeTrustedAdvisorCheckResultError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTrustedAdvisorCheckResultError {
-    fn from(err: CredentialsError) -> DescribeTrustedAdvisorCheckResultError {
-        DescribeTrustedAdvisorCheckResultError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckResultError {
-    fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorCheckResultError {
-        DescribeTrustedAdvisorCheckResultError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTrustedAdvisorCheckResultError {
-    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckResultError {
-        DescribeTrustedAdvisorCheckResultError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckResultError {
@@ -1642,13 +1278,6 @@ impl Error for DescribeTrustedAdvisorCheckResultError {
     fn description(&self) -> &str {
         match *self {
             DescribeTrustedAdvisorCheckResultError::InternalServerError(ref cause) => cause,
-            DescribeTrustedAdvisorCheckResultError::Validation(ref cause) => cause,
-            DescribeTrustedAdvisorCheckResultError::Credentials(ref err) => err.description(),
-            DescribeTrustedAdvisorCheckResultError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTrustedAdvisorCheckResultError::ParseError(ref cause) => cause,
-            DescribeTrustedAdvisorCheckResultError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1657,20 +1286,12 @@ impl Error for DescribeTrustedAdvisorCheckResultError {
 pub enum DescribeTrustedAdvisorCheckSummariesError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTrustedAdvisorCheckSummariesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTrustedAdvisorCheckSummariesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrustedAdvisorCheckSummariesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1683,40 +1304,17 @@ impl DescribeTrustedAdvisorCheckSummariesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTrustedAdvisorCheckSummariesError::InternalServerError(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        DescribeTrustedAdvisorCheckSummariesError::InternalServerError(
+                            String::from(error_message),
+                        ),
                     );
                 }
-                "ValidationException" => {
-                    return DescribeTrustedAdvisorCheckSummariesError::Validation(
-                        error_message.to_string(),
-                    );
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTrustedAdvisorCheckSummariesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTrustedAdvisorCheckSummariesError {
-    fn from(err: serde_json::error::Error) -> DescribeTrustedAdvisorCheckSummariesError {
-        DescribeTrustedAdvisorCheckSummariesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTrustedAdvisorCheckSummariesError {
-    fn from(err: CredentialsError) -> DescribeTrustedAdvisorCheckSummariesError {
-        DescribeTrustedAdvisorCheckSummariesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTrustedAdvisorCheckSummariesError {
-    fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorCheckSummariesError {
-        DescribeTrustedAdvisorCheckSummariesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTrustedAdvisorCheckSummariesError {
-    fn from(err: io::Error) -> DescribeTrustedAdvisorCheckSummariesError {
-        DescribeTrustedAdvisorCheckSummariesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorCheckSummariesError {
@@ -1728,13 +1326,6 @@ impl Error for DescribeTrustedAdvisorCheckSummariesError {
     fn description(&self) -> &str {
         match *self {
             DescribeTrustedAdvisorCheckSummariesError::InternalServerError(ref cause) => cause,
-            DescribeTrustedAdvisorCheckSummariesError::Validation(ref cause) => cause,
-            DescribeTrustedAdvisorCheckSummariesError::Credentials(ref err) => err.description(),
-            DescribeTrustedAdvisorCheckSummariesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTrustedAdvisorCheckSummariesError::ParseError(ref cause) => cause,
-            DescribeTrustedAdvisorCheckSummariesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1743,20 +1334,12 @@ impl Error for DescribeTrustedAdvisorCheckSummariesError {
 pub enum DescribeTrustedAdvisorChecksError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTrustedAdvisorChecksError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTrustedAdvisorChecksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTrustedAdvisorChecksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1769,38 +1352,17 @@ impl DescribeTrustedAdvisorChecksError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTrustedAdvisorChecksError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeTrustedAdvisorChecksError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeTrustedAdvisorChecksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTrustedAdvisorChecksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTrustedAdvisorChecksError {
-    fn from(err: serde_json::error::Error) -> DescribeTrustedAdvisorChecksError {
-        DescribeTrustedAdvisorChecksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTrustedAdvisorChecksError {
-    fn from(err: CredentialsError) -> DescribeTrustedAdvisorChecksError {
-        DescribeTrustedAdvisorChecksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTrustedAdvisorChecksError {
-    fn from(err: HttpDispatchError) -> DescribeTrustedAdvisorChecksError {
-        DescribeTrustedAdvisorChecksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTrustedAdvisorChecksError {
-    fn from(err: io::Error) -> DescribeTrustedAdvisorChecksError {
-        DescribeTrustedAdvisorChecksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTrustedAdvisorChecksError {
@@ -1812,13 +1374,6 @@ impl Error for DescribeTrustedAdvisorChecksError {
     fn description(&self) -> &str {
         match *self {
             DescribeTrustedAdvisorChecksError::InternalServerError(ref cause) => cause,
-            DescribeTrustedAdvisorChecksError::Validation(ref cause) => cause,
-            DescribeTrustedAdvisorChecksError::Credentials(ref err) => err.description(),
-            DescribeTrustedAdvisorChecksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTrustedAdvisorChecksError::ParseError(ref cause) => cause,
-            DescribeTrustedAdvisorChecksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1827,20 +1382,12 @@ impl Error for DescribeTrustedAdvisorChecksError {
 pub enum RefreshTrustedAdvisorCheckError {
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RefreshTrustedAdvisorCheckError {
-    pub fn from_response(res: BufferedHttpResponse) -> RefreshTrustedAdvisorCheckError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RefreshTrustedAdvisorCheckError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1853,38 +1400,17 @@ impl RefreshTrustedAdvisorCheckError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RefreshTrustedAdvisorCheckError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RefreshTrustedAdvisorCheckError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return RefreshTrustedAdvisorCheckError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RefreshTrustedAdvisorCheckError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RefreshTrustedAdvisorCheckError {
-    fn from(err: serde_json::error::Error) -> RefreshTrustedAdvisorCheckError {
-        RefreshTrustedAdvisorCheckError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RefreshTrustedAdvisorCheckError {
-    fn from(err: CredentialsError) -> RefreshTrustedAdvisorCheckError {
-        RefreshTrustedAdvisorCheckError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RefreshTrustedAdvisorCheckError {
-    fn from(err: HttpDispatchError) -> RefreshTrustedAdvisorCheckError {
-        RefreshTrustedAdvisorCheckError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RefreshTrustedAdvisorCheckError {
-    fn from(err: io::Error) -> RefreshTrustedAdvisorCheckError {
-        RefreshTrustedAdvisorCheckError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RefreshTrustedAdvisorCheckError {
@@ -1896,13 +1422,6 @@ impl Error for RefreshTrustedAdvisorCheckError {
     fn description(&self) -> &str {
         match *self {
             RefreshTrustedAdvisorCheckError::InternalServerError(ref cause) => cause,
-            RefreshTrustedAdvisorCheckError::Validation(ref cause) => cause,
-            RefreshTrustedAdvisorCheckError::Credentials(ref err) => err.description(),
-            RefreshTrustedAdvisorCheckError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RefreshTrustedAdvisorCheckError::ParseError(ref cause) => cause,
-            RefreshTrustedAdvisorCheckError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1913,20 +1432,10 @@ pub enum ResolveCaseError {
     CaseIdNotFound(String),
     /// <p>An internal server error occurred.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ResolveCaseError {
-    pub fn from_response(res: BufferedHttpResponse) -> ResolveCaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResolveCaseError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1939,39 +1448,20 @@ impl ResolveCaseError {
 
             match *error_type {
                 "CaseIdNotFound" => {
-                    return ResolveCaseError::CaseIdNotFound(String::from(error_message));
+                    return RusotoError::Service(ResolveCaseError::CaseIdNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return ResolveCaseError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ResolveCaseError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ResolveCaseError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ResolveCaseError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ResolveCaseError {
-    fn from(err: serde_json::error::Error) -> ResolveCaseError {
-        ResolveCaseError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ResolveCaseError {
-    fn from(err: CredentialsError) -> ResolveCaseError {
-        ResolveCaseError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ResolveCaseError {
-    fn from(err: HttpDispatchError) -> ResolveCaseError {
-        ResolveCaseError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ResolveCaseError {
-    fn from(err: io::Error) -> ResolveCaseError {
-        ResolveCaseError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ResolveCaseError {
@@ -1984,11 +1474,6 @@ impl Error for ResolveCaseError {
         match *self {
             ResolveCaseError::CaseIdNotFound(ref cause) => cause,
             ResolveCaseError::InternalServerError(ref cause) => cause,
-            ResolveCaseError::Validation(ref cause) => cause,
-            ResolveCaseError::Credentials(ref err) => err.description(),
-            ResolveCaseError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ResolveCaseError::ParseError(ref cause) => cause,
-            ResolveCaseError::Unknown(_) => "unknown error",
         }
     }
 }

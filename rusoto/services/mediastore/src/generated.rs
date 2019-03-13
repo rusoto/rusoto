@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -273,20 +270,10 @@ pub enum CreateContainerError {
     InternalServerError(String),
     /// <p>A service limit has been exceeded.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateContainerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateContainerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateContainerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -299,42 +286,25 @@ impl CreateContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return CreateContainerError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(CreateContainerError::ContainerInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return CreateContainerError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateContainerError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateContainerError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateContainerError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateContainerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateContainerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateContainerError {
-    fn from(err: serde_json::error::Error) -> CreateContainerError {
-        CreateContainerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateContainerError {
-    fn from(err: CredentialsError) -> CreateContainerError {
-        CreateContainerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateContainerError {
-    fn from(err: HttpDispatchError) -> CreateContainerError {
-        CreateContainerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateContainerError {
-    fn from(err: io::Error) -> CreateContainerError {
-        CreateContainerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateContainerError {
@@ -348,11 +318,6 @@ impl Error for CreateContainerError {
             CreateContainerError::ContainerInUse(ref cause) => cause,
             CreateContainerError::InternalServerError(ref cause) => cause,
             CreateContainerError::LimitExceeded(ref cause) => cause,
-            CreateContainerError::Validation(ref cause) => cause,
-            CreateContainerError::Credentials(ref err) => err.description(),
-            CreateContainerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateContainerError::ParseError(ref cause) => cause,
-            CreateContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -365,20 +330,10 @@ pub enum DeleteContainerError {
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteContainerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteContainerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -391,42 +346,25 @@ impl DeleteContainerError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteContainerError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteContainerError::ContainerInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteContainerError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteContainerError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteContainerError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteContainerError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteContainerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteContainerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteContainerError {
-    fn from(err: serde_json::error::Error) -> DeleteContainerError {
-        DeleteContainerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteContainerError {
-    fn from(err: CredentialsError) -> DeleteContainerError {
-        DeleteContainerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteContainerError {
-    fn from(err: HttpDispatchError) -> DeleteContainerError {
-        DeleteContainerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteContainerError {
-    fn from(err: io::Error) -> DeleteContainerError {
-        DeleteContainerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteContainerError {
@@ -440,11 +378,6 @@ impl Error for DeleteContainerError {
             DeleteContainerError::ContainerInUse(ref cause) => cause,
             DeleteContainerError::ContainerNotFound(ref cause) => cause,
             DeleteContainerError::InternalServerError(ref cause) => cause,
-            DeleteContainerError::Validation(ref cause) => cause,
-            DeleteContainerError::Credentials(ref err) => err.description(),
-            DeleteContainerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteContainerError::ParseError(ref cause) => cause,
-            DeleteContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -459,20 +392,10 @@ pub enum DeleteContainerPolicyError {
     InternalServerError(String),
     /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteContainerPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteContainerPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteContainerPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -485,49 +408,30 @@ impl DeleteContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteContainerPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteContainerPolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteContainerPolicyError::ContainerNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteContainerPolicyError::ContainerNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return DeleteContainerPolicyError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteContainerPolicyError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "PolicyNotFoundException" => {
-                    return DeleteContainerPolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteContainerPolicyError::PolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteContainerPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteContainerPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteContainerPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteContainerPolicyError {
-        DeleteContainerPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteContainerPolicyError {
-    fn from(err: CredentialsError) -> DeleteContainerPolicyError {
-        DeleteContainerPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteContainerPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteContainerPolicyError {
-        DeleteContainerPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteContainerPolicyError {
-    fn from(err: io::Error) -> DeleteContainerPolicyError {
-        DeleteContainerPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteContainerPolicyError {
@@ -542,13 +446,6 @@ impl Error for DeleteContainerPolicyError {
             DeleteContainerPolicyError::ContainerNotFound(ref cause) => cause,
             DeleteContainerPolicyError::InternalServerError(ref cause) => cause,
             DeleteContainerPolicyError::PolicyNotFound(ref cause) => cause,
-            DeleteContainerPolicyError::Validation(ref cause) => cause,
-            DeleteContainerPolicyError::Credentials(ref err) => err.description(),
-            DeleteContainerPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteContainerPolicyError::ParseError(ref cause) => cause,
-            DeleteContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -563,20 +460,10 @@ pub enum DeleteCorsPolicyError {
     CorsPolicyNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteCorsPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCorsPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCorsPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -589,45 +476,30 @@ impl DeleteCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteCorsPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteCorsPolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteCorsPolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteCorsPolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CorsPolicyNotFoundException" => {
-                    return DeleteCorsPolicyError::CorsPolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteCorsPolicyError::CorsPolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteCorsPolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteCorsPolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteCorsPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteCorsPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteCorsPolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteCorsPolicyError {
-        DeleteCorsPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCorsPolicyError {
-    fn from(err: CredentialsError) -> DeleteCorsPolicyError {
-        DeleteCorsPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCorsPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteCorsPolicyError {
-        DeleteCorsPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCorsPolicyError {
-    fn from(err: io::Error) -> DeleteCorsPolicyError {
-        DeleteCorsPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteCorsPolicyError {
@@ -642,11 +514,6 @@ impl Error for DeleteCorsPolicyError {
             DeleteCorsPolicyError::ContainerNotFound(ref cause) => cause,
             DeleteCorsPolicyError::CorsPolicyNotFound(ref cause) => cause,
             DeleteCorsPolicyError::InternalServerError(ref cause) => cause,
-            DeleteCorsPolicyError::Validation(ref cause) => cause,
-            DeleteCorsPolicyError::Credentials(ref err) => err.description(),
-            DeleteCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteCorsPolicyError::ParseError(ref cause) => cause,
-            DeleteCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -661,20 +528,10 @@ pub enum DeleteLifecyclePolicyError {
     InternalServerError(String),
     /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -687,49 +544,30 @@ impl DeleteLifecyclePolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return DeleteLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteLifecyclePolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return DeleteLifecyclePolicyError::ContainerNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLifecyclePolicyError::ContainerNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return DeleteLifecyclePolicyError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteLifecyclePolicyError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "PolicyNotFoundException" => {
-                    return DeleteLifecyclePolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteLifecyclePolicyError::PolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteLifecyclePolicyError {
-    fn from(err: CredentialsError) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteLifecyclePolicyError {
-    fn from(err: io::Error) -> DeleteLifecyclePolicyError {
-        DeleteLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteLifecyclePolicyError {
@@ -744,13 +582,6 @@ impl Error for DeleteLifecyclePolicyError {
             DeleteLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
             DeleteLifecyclePolicyError::InternalServerError(ref cause) => cause,
             DeleteLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
-            DeleteLifecyclePolicyError::Validation(ref cause) => cause,
-            DeleteLifecyclePolicyError::Credentials(ref err) => err.description(),
-            DeleteLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteLifecyclePolicyError::ParseError(ref cause) => cause,
-            DeleteLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -761,20 +592,10 @@ pub enum DescribeContainerError {
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContainerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeContainerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContainerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -787,39 +608,20 @@ impl DescribeContainerError {
 
             match *error_type {
                 "ContainerNotFoundException" => {
-                    return DescribeContainerError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeContainerError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DescribeContainerError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeContainerError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeContainerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeContainerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeContainerError {
-    fn from(err: serde_json::error::Error) -> DescribeContainerError {
-        DescribeContainerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeContainerError {
-    fn from(err: CredentialsError) -> DescribeContainerError {
-        DescribeContainerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeContainerError {
-    fn from(err: HttpDispatchError) -> DescribeContainerError {
-        DescribeContainerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeContainerError {
-    fn from(err: io::Error) -> DescribeContainerError {
-        DescribeContainerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeContainerError {
@@ -832,13 +634,6 @@ impl Error for DescribeContainerError {
         match *self {
             DescribeContainerError::ContainerNotFound(ref cause) => cause,
             DescribeContainerError::InternalServerError(ref cause) => cause,
-            DescribeContainerError::Validation(ref cause) => cause,
-            DescribeContainerError::Credentials(ref err) => err.description(),
-            DescribeContainerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeContainerError::ParseError(ref cause) => cause,
-            DescribeContainerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -853,20 +648,10 @@ pub enum GetContainerPolicyError {
     InternalServerError(String),
     /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetContainerPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetContainerPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetContainerPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -879,45 +664,30 @@ impl GetContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return GetContainerPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(GetContainerPolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return GetContainerPolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(GetContainerPolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return GetContainerPolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetContainerPolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyNotFoundException" => {
-                    return GetContainerPolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetContainerPolicyError::PolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetContainerPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetContainerPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetContainerPolicyError {
-    fn from(err: serde_json::error::Error) -> GetContainerPolicyError {
-        GetContainerPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetContainerPolicyError {
-    fn from(err: CredentialsError) -> GetContainerPolicyError {
-        GetContainerPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetContainerPolicyError {
-    fn from(err: HttpDispatchError) -> GetContainerPolicyError {
-        GetContainerPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetContainerPolicyError {
-    fn from(err: io::Error) -> GetContainerPolicyError {
-        GetContainerPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetContainerPolicyError {
@@ -932,13 +702,6 @@ impl Error for GetContainerPolicyError {
             GetContainerPolicyError::ContainerNotFound(ref cause) => cause,
             GetContainerPolicyError::InternalServerError(ref cause) => cause,
             GetContainerPolicyError::PolicyNotFound(ref cause) => cause,
-            GetContainerPolicyError::Validation(ref cause) => cause,
-            GetContainerPolicyError::Credentials(ref err) => err.description(),
-            GetContainerPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetContainerPolicyError::ParseError(ref cause) => cause,
-            GetContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -953,20 +716,10 @@ pub enum GetCorsPolicyError {
     CorsPolicyNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCorsPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCorsPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCorsPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -979,45 +732,30 @@ impl GetCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return GetCorsPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(GetCorsPolicyError::ContainerInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ContainerNotFoundException" => {
-                    return GetCorsPolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCorsPolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CorsPolicyNotFoundException" => {
-                    return GetCorsPolicyError::CorsPolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetCorsPolicyError::CorsPolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return GetCorsPolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetCorsPolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetCorsPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetCorsPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetCorsPolicyError {
-    fn from(err: serde_json::error::Error) -> GetCorsPolicyError {
-        GetCorsPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetCorsPolicyError {
-    fn from(err: CredentialsError) -> GetCorsPolicyError {
-        GetCorsPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCorsPolicyError {
-    fn from(err: HttpDispatchError) -> GetCorsPolicyError {
-        GetCorsPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCorsPolicyError {
-    fn from(err: io::Error) -> GetCorsPolicyError {
-        GetCorsPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetCorsPolicyError {
@@ -1032,11 +770,6 @@ impl Error for GetCorsPolicyError {
             GetCorsPolicyError::ContainerNotFound(ref cause) => cause,
             GetCorsPolicyError::CorsPolicyNotFound(ref cause) => cause,
             GetCorsPolicyError::InternalServerError(ref cause) => cause,
-            GetCorsPolicyError::Validation(ref cause) => cause,
-            GetCorsPolicyError::Credentials(ref err) => err.description(),
-            GetCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetCorsPolicyError::ParseError(ref cause) => cause,
-            GetCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1051,20 +784,10 @@ pub enum GetLifecyclePolicyError {
     InternalServerError(String),
     /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1077,45 +800,30 @@ impl GetLifecyclePolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return GetLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return GetLifecyclePolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return GetLifecyclePolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "PolicyNotFoundException" => {
-                    return GetLifecyclePolicyError::PolicyNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLifecyclePolicyError::PolicyNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLifecyclePolicyError {
-    fn from(err: CredentialsError) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLifecyclePolicyError {
-    fn from(err: io::Error) -> GetLifecyclePolicyError {
-        GetLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLifecyclePolicyError {
@@ -1130,13 +838,6 @@ impl Error for GetLifecyclePolicyError {
             GetLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
             GetLifecyclePolicyError::InternalServerError(ref cause) => cause,
             GetLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
-            GetLifecyclePolicyError::Validation(ref cause) => cause,
-            GetLifecyclePolicyError::Credentials(ref err) => err.description(),
-            GetLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLifecyclePolicyError::ParseError(ref cause) => cause,
-            GetLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1145,20 +846,10 @@ impl Error for GetLifecyclePolicyError {
 pub enum ListContainersError {
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListContainersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListContainersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListContainersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1171,36 +862,15 @@ impl ListContainersError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListContainersError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListContainersError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListContainersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListContainersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListContainersError {
-    fn from(err: serde_json::error::Error) -> ListContainersError {
-        ListContainersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListContainersError {
-    fn from(err: CredentialsError) -> ListContainersError {
-        ListContainersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListContainersError {
-    fn from(err: HttpDispatchError) -> ListContainersError {
-        ListContainersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListContainersError {
-    fn from(err: io::Error) -> ListContainersError {
-        ListContainersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListContainersError {
@@ -1212,11 +882,6 @@ impl Error for ListContainersError {
     fn description(&self) -> &str {
         match *self {
             ListContainersError::InternalServerError(ref cause) => cause,
-            ListContainersError::Validation(ref cause) => cause,
-            ListContainersError::Credentials(ref err) => err.description(),
-            ListContainersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListContainersError::ParseError(ref cause) => cause,
-            ListContainersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1229,20 +894,10 @@ pub enum PutContainerPolicyError {
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutContainerPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutContainerPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutContainerPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1255,42 +910,25 @@ impl PutContainerPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return PutContainerPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(PutContainerPolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return PutContainerPolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(PutContainerPolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return PutContainerPolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(PutContainerPolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutContainerPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutContainerPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutContainerPolicyError {
-    fn from(err: serde_json::error::Error) -> PutContainerPolicyError {
-        PutContainerPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutContainerPolicyError {
-    fn from(err: CredentialsError) -> PutContainerPolicyError {
-        PutContainerPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutContainerPolicyError {
-    fn from(err: HttpDispatchError) -> PutContainerPolicyError {
-        PutContainerPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutContainerPolicyError {
-    fn from(err: io::Error) -> PutContainerPolicyError {
-        PutContainerPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutContainerPolicyError {
@@ -1304,13 +942,6 @@ impl Error for PutContainerPolicyError {
             PutContainerPolicyError::ContainerInUse(ref cause) => cause,
             PutContainerPolicyError::ContainerNotFound(ref cause) => cause,
             PutContainerPolicyError::InternalServerError(ref cause) => cause,
-            PutContainerPolicyError::Validation(ref cause) => cause,
-            PutContainerPolicyError::Credentials(ref err) => err.description(),
-            PutContainerPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutContainerPolicyError::ParseError(ref cause) => cause,
-            PutContainerPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1323,20 +954,10 @@ pub enum PutCorsPolicyError {
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutCorsPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutCorsPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutCorsPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1349,42 +970,25 @@ impl PutCorsPolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return PutCorsPolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(PutCorsPolicyError::ContainerInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ContainerNotFoundException" => {
-                    return PutCorsPolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(PutCorsPolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return PutCorsPolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(PutCorsPolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutCorsPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutCorsPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutCorsPolicyError {
-    fn from(err: serde_json::error::Error) -> PutCorsPolicyError {
-        PutCorsPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutCorsPolicyError {
-    fn from(err: CredentialsError) -> PutCorsPolicyError {
-        PutCorsPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutCorsPolicyError {
-    fn from(err: HttpDispatchError) -> PutCorsPolicyError {
-        PutCorsPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutCorsPolicyError {
-    fn from(err: io::Error) -> PutCorsPolicyError {
-        PutCorsPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutCorsPolicyError {
@@ -1398,11 +1002,6 @@ impl Error for PutCorsPolicyError {
             PutCorsPolicyError::ContainerInUse(ref cause) => cause,
             PutCorsPolicyError::ContainerNotFound(ref cause) => cause,
             PutCorsPolicyError::InternalServerError(ref cause) => cause,
-            PutCorsPolicyError::Validation(ref cause) => cause,
-            PutCorsPolicyError::Credentials(ref err) => err.description(),
-            PutCorsPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutCorsPolicyError::ParseError(ref cause) => cause,
-            PutCorsPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1415,20 +1014,10 @@ pub enum PutLifecyclePolicyError {
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutLifecyclePolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutLifecyclePolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1441,42 +1030,25 @@ impl PutLifecyclePolicyError {
 
             match *error_type {
                 "ContainerInUseException" => {
-                    return PutLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::ContainerInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ContainerNotFoundException" => {
-                    return PutLifecyclePolicyError::ContainerNotFound(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::ContainerNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return PutLifecyclePolicyError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(PutLifecyclePolicyError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutLifecyclePolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutLifecyclePolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutLifecyclePolicyError {
-    fn from(err: serde_json::error::Error) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutLifecyclePolicyError {
-    fn from(err: CredentialsError) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutLifecyclePolicyError {
-    fn from(err: HttpDispatchError) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutLifecyclePolicyError {
-    fn from(err: io::Error) -> PutLifecyclePolicyError {
-        PutLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutLifecyclePolicyError {
@@ -1490,13 +1062,6 @@ impl Error for PutLifecyclePolicyError {
             PutLifecyclePolicyError::ContainerInUse(ref cause) => cause,
             PutLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
             PutLifecyclePolicyError::InternalServerError(ref cause) => cause,
-            PutLifecyclePolicyError::Validation(ref cause) => cause,
-            PutLifecyclePolicyError::Credentials(ref err) => err.description(),
-            PutLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutLifecyclePolicyError::ParseError(ref cause) => cause,
-            PutLifecyclePolicyError::Unknown(_) => "unknown error",
         }
     }
 }

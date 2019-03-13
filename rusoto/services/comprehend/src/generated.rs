@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -1926,20 +1923,12 @@ pub enum BatchDetectDominantLanguageError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectDominantLanguageError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectDominantLanguageError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchDetectDominantLanguageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1952,53 +1941,34 @@ impl BatchDetectDominantLanguageError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchDetectDominantLanguageError::BatchSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerException" => {
-                    return BatchDetectDominantLanguageError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectDominantLanguageError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectDominantLanguageError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectDominantLanguageError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        BatchDetectDominantLanguageError::TextSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return BatchDetectDominantLanguageError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDetectDominantLanguageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDetectDominantLanguageError {
-    fn from(err: serde_json::error::Error) -> BatchDetectDominantLanguageError {
-        BatchDetectDominantLanguageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDetectDominantLanguageError {
-    fn from(err: CredentialsError) -> BatchDetectDominantLanguageError {
-        BatchDetectDominantLanguageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDetectDominantLanguageError {
-    fn from(err: HttpDispatchError) -> BatchDetectDominantLanguageError {
-        BatchDetectDominantLanguageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDetectDominantLanguageError {
-    fn from(err: io::Error) -> BatchDetectDominantLanguageError {
-        BatchDetectDominantLanguageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDetectDominantLanguageError {
@@ -2013,13 +1983,6 @@ impl Error for BatchDetectDominantLanguageError {
             BatchDetectDominantLanguageError::InternalServer(ref cause) => cause,
             BatchDetectDominantLanguageError::InvalidRequest(ref cause) => cause,
             BatchDetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
-            BatchDetectDominantLanguageError::Validation(ref cause) => cause,
-            BatchDetectDominantLanguageError::Credentials(ref err) => err.description(),
-            BatchDetectDominantLanguageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDetectDominantLanguageError::ParseError(ref cause) => cause,
-            BatchDetectDominantLanguageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2036,20 +1999,10 @@ pub enum BatchDetectEntitiesError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectEntitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectEntitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectEntitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2062,54 +2015,35 @@ impl BatchDetectEntitiesError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return BatchDetectEntitiesError::BatchSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectEntitiesError::BatchSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectEntitiesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchDetectEntitiesError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectEntitiesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchDetectEntitiesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return BatchDetectEntitiesError::TextSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectEntitiesError::TextSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLanguageException" => {
-                    return BatchDetectEntitiesError::UnsupportedLanguage(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectEntitiesError::UnsupportedLanguage(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchDetectEntitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDetectEntitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDetectEntitiesError {
-    fn from(err: serde_json::error::Error) -> BatchDetectEntitiesError {
-        BatchDetectEntitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDetectEntitiesError {
-    fn from(err: CredentialsError) -> BatchDetectEntitiesError {
-        BatchDetectEntitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDetectEntitiesError {
-    fn from(err: HttpDispatchError) -> BatchDetectEntitiesError {
-        BatchDetectEntitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDetectEntitiesError {
-    fn from(err: io::Error) -> BatchDetectEntitiesError {
-        BatchDetectEntitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDetectEntitiesError {
@@ -2125,13 +2059,6 @@ impl Error for BatchDetectEntitiesError {
             BatchDetectEntitiesError::InvalidRequest(ref cause) => cause,
             BatchDetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
             BatchDetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
-            BatchDetectEntitiesError::Validation(ref cause) => cause,
-            BatchDetectEntitiesError::Credentials(ref err) => err.description(),
-            BatchDetectEntitiesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDetectEntitiesError::ParseError(ref cause) => cause,
-            BatchDetectEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2148,20 +2075,10 @@ pub enum BatchDetectKeyPhrasesError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectKeyPhrasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectKeyPhrasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectKeyPhrasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2174,54 +2091,35 @@ impl BatchDetectKeyPhrasesError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectKeyPhrasesError::BatchSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectKeyPhrasesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchDetectKeyPhrasesError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectKeyPhrasesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchDetectKeyPhrasesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return BatchDetectKeyPhrasesError::TextSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectKeyPhrasesError::TextSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLanguageException" => {
-                    return BatchDetectKeyPhrasesError::UnsupportedLanguage(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectKeyPhrasesError::UnsupportedLanguage(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchDetectKeyPhrasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDetectKeyPhrasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDetectKeyPhrasesError {
-    fn from(err: serde_json::error::Error) -> BatchDetectKeyPhrasesError {
-        BatchDetectKeyPhrasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDetectKeyPhrasesError {
-    fn from(err: CredentialsError) -> BatchDetectKeyPhrasesError {
-        BatchDetectKeyPhrasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDetectKeyPhrasesError {
-    fn from(err: HttpDispatchError) -> BatchDetectKeyPhrasesError {
-        BatchDetectKeyPhrasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDetectKeyPhrasesError {
-    fn from(err: io::Error) -> BatchDetectKeyPhrasesError {
-        BatchDetectKeyPhrasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDetectKeyPhrasesError {
@@ -2237,13 +2135,6 @@ impl Error for BatchDetectKeyPhrasesError {
             BatchDetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
             BatchDetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
             BatchDetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
-            BatchDetectKeyPhrasesError::Validation(ref cause) => cause,
-            BatchDetectKeyPhrasesError::Credentials(ref err) => err.description(),
-            BatchDetectKeyPhrasesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDetectKeyPhrasesError::ParseError(ref cause) => cause,
-            BatchDetectKeyPhrasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2260,20 +2151,10 @@ pub enum BatchDetectSentimentError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectSentimentError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectSentimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSentimentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2286,54 +2167,35 @@ impl BatchDetectSentimentError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return BatchDetectSentimentError::BatchSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectSentimentError::BatchSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectSentimentError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchDetectSentimentError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectSentimentError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchDetectSentimentError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return BatchDetectSentimentError::TextSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectSentimentError::TextSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLanguageException" => {
-                    return BatchDetectSentimentError::UnsupportedLanguage(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectSentimentError::UnsupportedLanguage(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return BatchDetectSentimentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDetectSentimentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDetectSentimentError {
-    fn from(err: serde_json::error::Error) -> BatchDetectSentimentError {
-        BatchDetectSentimentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDetectSentimentError {
-    fn from(err: CredentialsError) -> BatchDetectSentimentError {
-        BatchDetectSentimentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDetectSentimentError {
-    fn from(err: HttpDispatchError) -> BatchDetectSentimentError {
-        BatchDetectSentimentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDetectSentimentError {
-    fn from(err: io::Error) -> BatchDetectSentimentError {
-        BatchDetectSentimentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDetectSentimentError {
@@ -2349,13 +2211,6 @@ impl Error for BatchDetectSentimentError {
             BatchDetectSentimentError::InvalidRequest(ref cause) => cause,
             BatchDetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
             BatchDetectSentimentError::UnsupportedLanguage(ref cause) => cause,
-            BatchDetectSentimentError::Validation(ref cause) => cause,
-            BatchDetectSentimentError::Credentials(ref err) => err.description(),
-            BatchDetectSentimentError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDetectSentimentError::ParseError(ref cause) => cause,
-            BatchDetectSentimentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2372,20 +2227,10 @@ pub enum BatchDetectSyntaxError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchDetectSyntaxError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchDetectSyntaxError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchDetectSyntaxError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2398,52 +2243,35 @@ impl BatchDetectSyntaxError {
 
             match *error_type {
                 "BatchSizeLimitExceededException" => {
-                    return BatchDetectSyntaxError::BatchSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectSyntaxError::BatchSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerException" => {
-                    return BatchDetectSyntaxError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(BatchDetectSyntaxError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return BatchDetectSyntaxError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(BatchDetectSyntaxError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return BatchDetectSyntaxError::TextSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchDetectSyntaxError::TextSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLanguageException" => {
-                    return BatchDetectSyntaxError::UnsupportedLanguage(String::from(error_message));
+                    return RusotoError::Service(BatchDetectSyntaxError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchDetectSyntaxError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchDetectSyntaxError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchDetectSyntaxError {
-    fn from(err: serde_json::error::Error) -> BatchDetectSyntaxError {
-        BatchDetectSyntaxError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchDetectSyntaxError {
-    fn from(err: CredentialsError) -> BatchDetectSyntaxError {
-        BatchDetectSyntaxError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchDetectSyntaxError {
-    fn from(err: HttpDispatchError) -> BatchDetectSyntaxError {
-        BatchDetectSyntaxError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchDetectSyntaxError {
-    fn from(err: io::Error) -> BatchDetectSyntaxError {
-        BatchDetectSyntaxError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchDetectSyntaxError {
@@ -2459,13 +2287,6 @@ impl Error for BatchDetectSyntaxError {
             BatchDetectSyntaxError::InvalidRequest(ref cause) => cause,
             BatchDetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
             BatchDetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
-            BatchDetectSyntaxError::Validation(ref cause) => cause,
-            BatchDetectSyntaxError::Credentials(ref err) => err.description(),
-            BatchDetectSyntaxError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            BatchDetectSyntaxError::ParseError(ref cause) => cause,
-            BatchDetectSyntaxError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2484,20 +2305,10 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDocumentClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDocumentClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2510,61 +2321,42 @@ impl CreateDocumentClassifierError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateDocumentClassifierError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDocumentClassifierError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return CreateDocumentClassifierError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDocumentClassifierError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return CreateDocumentClassifierError::ResourceInUse(String::from(error_message));
-                }
-                "ResourceLimitExceededException" => {
-                    return CreateDocumentClassifierError::ResourceLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDocumentClassifierError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateDocumentClassifierError::ResourceLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "TooManyRequestsException" => {
-                    return CreateDocumentClassifierError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDocumentClassifierError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
                 "UnsupportedLanguageException" => {
-                    return CreateDocumentClassifierError::UnsupportedLanguage(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateDocumentClassifierError::UnsupportedLanguage(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateDocumentClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDocumentClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDocumentClassifierError {
-    fn from(err: serde_json::error::Error) -> CreateDocumentClassifierError {
-        CreateDocumentClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDocumentClassifierError {
-    fn from(err: CredentialsError) -> CreateDocumentClassifierError {
-        CreateDocumentClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDocumentClassifierError {
-    fn from(err: HttpDispatchError) -> CreateDocumentClassifierError {
-        CreateDocumentClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDocumentClassifierError {
-    fn from(err: io::Error) -> CreateDocumentClassifierError {
-        CreateDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDocumentClassifierError {
@@ -2581,13 +2373,6 @@ impl Error for CreateDocumentClassifierError {
             CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => cause,
             CreateDocumentClassifierError::TooManyRequests(ref cause) => cause,
             CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => cause,
-            CreateDocumentClassifierError::Validation(ref cause) => cause,
-            CreateDocumentClassifierError::Credentials(ref err) => err.description(),
-            CreateDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateDocumentClassifierError::ParseError(ref cause) => cause,
-            CreateDocumentClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2606,20 +2391,10 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateEntityRecognizerError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEntityRecognizerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2632,55 +2407,40 @@ impl CreateEntityRecognizerError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return CreateEntityRecognizerError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(CreateEntityRecognizerError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return CreateEntityRecognizerError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateEntityRecognizerError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return CreateEntityRecognizerError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CreateEntityRecognizerError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceLimitExceededException" => {
-                    return CreateEntityRecognizerError::ResourceLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEntityRecognizerError::ResourceLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return CreateEntityRecognizerError::TooManyRequests(String::from(error_message));
-                }
-                "UnsupportedLanguageException" => {
-                    return CreateEntityRecognizerError::UnsupportedLanguage(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateEntityRecognizerError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return CreateEntityRecognizerError::Validation(error_message.to_string());
+                "UnsupportedLanguageException" => {
+                    return RusotoError::Service(CreateEntityRecognizerError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateEntityRecognizerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateEntityRecognizerError {
-    fn from(err: serde_json::error::Error) -> CreateEntityRecognizerError {
-        CreateEntityRecognizerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateEntityRecognizerError {
-    fn from(err: CredentialsError) -> CreateEntityRecognizerError {
-        CreateEntityRecognizerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateEntityRecognizerError {
-    fn from(err: HttpDispatchError) -> CreateEntityRecognizerError {
-        CreateEntityRecognizerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateEntityRecognizerError {
-    fn from(err: io::Error) -> CreateEntityRecognizerError {
-        CreateEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateEntityRecognizerError {
@@ -2697,13 +2457,6 @@ impl Error for CreateEntityRecognizerError {
             CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => cause,
             CreateEntityRecognizerError::TooManyRequests(ref cause) => cause,
             CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => cause,
-            CreateEntityRecognizerError::Validation(ref cause) => cause,
-            CreateEntityRecognizerError::Credentials(ref err) => err.description(),
-            CreateEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateEntityRecognizerError::ParseError(ref cause) => cause,
-            CreateEntityRecognizerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2722,20 +2475,10 @@ pub enum DeleteDocumentClassifierError {
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDocumentClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDocumentClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2748,61 +2491,40 @@ impl DeleteDocumentClassifierError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteDocumentClassifierError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentClassifierError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DeleteDocumentClassifierError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentClassifierError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteDocumentClassifierError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteDocumentClassifierError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDocumentClassifierError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentClassifierError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceUnavailableException" => {
-                    return DeleteDocumentClassifierError::ResourceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentClassifierError::ResourceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteDocumentClassifierError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteDocumentClassifierError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DeleteDocumentClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDocumentClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDocumentClassifierError {
-    fn from(err: serde_json::error::Error) -> DeleteDocumentClassifierError {
-        DeleteDocumentClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDocumentClassifierError {
-    fn from(err: CredentialsError) -> DeleteDocumentClassifierError {
-        DeleteDocumentClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDocumentClassifierError {
-    fn from(err: HttpDispatchError) -> DeleteDocumentClassifierError {
-        DeleteDocumentClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDocumentClassifierError {
-    fn from(err: io::Error) -> DeleteDocumentClassifierError {
-        DeleteDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDocumentClassifierError {
@@ -2819,13 +2541,6 @@ impl Error for DeleteDocumentClassifierError {
             DeleteDocumentClassifierError::ResourceNotFound(ref cause) => cause,
             DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => cause,
             DeleteDocumentClassifierError::TooManyRequests(ref cause) => cause,
-            DeleteDocumentClassifierError::Validation(ref cause) => cause,
-            DeleteDocumentClassifierError::Credentials(ref err) => err.description(),
-            DeleteDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteDocumentClassifierError::ParseError(ref cause) => cause,
-            DeleteDocumentClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2844,20 +2559,10 @@ pub enum DeleteEntityRecognizerError {
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteEntityRecognizerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEntityRecognizerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2870,55 +2575,40 @@ impl DeleteEntityRecognizerError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DeleteEntityRecognizerError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DeleteEntityRecognizerError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DeleteEntityRecognizerError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteEntityRecognizerError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceInUseException" => {
-                    return DeleteEntityRecognizerError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteEntityRecognizerError::ResourceInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteEntityRecognizerError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEntityRecognizerError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceUnavailableException" => {
-                    return DeleteEntityRecognizerError::ResourceUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteEntityRecognizerError::ResourceUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DeleteEntityRecognizerError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(DeleteEntityRecognizerError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteEntityRecognizerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteEntityRecognizerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteEntityRecognizerError {
-    fn from(err: serde_json::error::Error) -> DeleteEntityRecognizerError {
-        DeleteEntityRecognizerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteEntityRecognizerError {
-    fn from(err: CredentialsError) -> DeleteEntityRecognizerError {
-        DeleteEntityRecognizerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteEntityRecognizerError {
-    fn from(err: HttpDispatchError) -> DeleteEntityRecognizerError {
-        DeleteEntityRecognizerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteEntityRecognizerError {
-    fn from(err: io::Error) -> DeleteEntityRecognizerError {
-        DeleteEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteEntityRecognizerError {
@@ -2935,13 +2625,6 @@ impl Error for DeleteEntityRecognizerError {
             DeleteEntityRecognizerError::ResourceNotFound(ref cause) => cause,
             DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => cause,
             DeleteEntityRecognizerError::TooManyRequests(ref cause) => cause,
-            DeleteEntityRecognizerError::Validation(ref cause) => cause,
-            DeleteEntityRecognizerError::Credentials(ref err) => err.description(),
-            DeleteEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteEntityRecognizerError::ParseError(ref cause) => cause,
-            DeleteEntityRecognizerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2956,20 +2639,12 @@ pub enum DescribeDocumentClassificationJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDocumentClassificationJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDocumentClassificationJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDocumentClassificationJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2982,55 +2657,38 @@ impl DescribeDocumentClassificationJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeDocumentClassificationJobError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return DescribeDocumentClassificationJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "JobNotFoundException" => {
-                    return DescribeDocumentClassificationJobError::JobNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeDocumentClassificationJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeDocumentClassificationJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeDocumentClassificationJobError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeDocumentClassificationJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeDocumentClassificationJobError::JobNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DescribeDocumentClassificationJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDocumentClassificationJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDocumentClassificationJobError {
-    fn from(err: serde_json::error::Error) -> DescribeDocumentClassificationJobError {
-        DescribeDocumentClassificationJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDocumentClassificationJobError {
-    fn from(err: CredentialsError) -> DescribeDocumentClassificationJobError {
-        DescribeDocumentClassificationJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDocumentClassificationJobError {
-    fn from(err: HttpDispatchError) -> DescribeDocumentClassificationJobError {
-        DescribeDocumentClassificationJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDocumentClassificationJobError {
-    fn from(err: io::Error) -> DescribeDocumentClassificationJobError {
-        DescribeDocumentClassificationJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDocumentClassificationJobError {
@@ -3045,13 +2703,6 @@ impl Error for DescribeDocumentClassificationJobError {
             DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
             DescribeDocumentClassificationJobError::JobNotFound(ref cause) => cause,
             DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
-            DescribeDocumentClassificationJobError::Validation(ref cause) => cause,
-            DescribeDocumentClassificationJobError::Credentials(ref err) => err.description(),
-            DescribeDocumentClassificationJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDocumentClassificationJobError::ParseError(ref cause) => cause,
-            DescribeDocumentClassificationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3066,20 +2717,12 @@ pub enum DescribeDocumentClassifierError {
     ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDocumentClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDocumentClassifierError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDocumentClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3092,53 +2735,30 @@ impl DescribeDocumentClassifierError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeDocumentClassifierError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentClassifierError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeDocumentClassifierError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentClassifierError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeDocumentClassifierError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentClassifierError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeDocumentClassifierError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeDocumentClassifierError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeDocumentClassifierError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDocumentClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDocumentClassifierError {
-    fn from(err: serde_json::error::Error) -> DescribeDocumentClassifierError {
-        DescribeDocumentClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDocumentClassifierError {
-    fn from(err: CredentialsError) -> DescribeDocumentClassifierError {
-        DescribeDocumentClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDocumentClassifierError {
-    fn from(err: HttpDispatchError) -> DescribeDocumentClassifierError {
-        DescribeDocumentClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDocumentClassifierError {
-    fn from(err: io::Error) -> DescribeDocumentClassifierError {
-        DescribeDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDocumentClassifierError {
@@ -3153,13 +2773,6 @@ impl Error for DescribeDocumentClassifierError {
             DescribeDocumentClassifierError::InvalidRequest(ref cause) => cause,
             DescribeDocumentClassifierError::ResourceNotFound(ref cause) => cause,
             DescribeDocumentClassifierError::TooManyRequests(ref cause) => cause,
-            DescribeDocumentClassifierError::Validation(ref cause) => cause,
-            DescribeDocumentClassifierError::Credentials(ref err) => err.description(),
-            DescribeDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDocumentClassifierError::ParseError(ref cause) => cause,
-            DescribeDocumentClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3174,20 +2787,12 @@ pub enum DescribeDominantLanguageDetectionJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeDominantLanguageDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeDominantLanguageDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeDominantLanguageDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3200,55 +2805,38 @@ impl DescribeDominantLanguageDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "JobNotFoundException" => {
-                    return DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeDominantLanguageDetectionJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeDominantLanguageDetectionJobError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DescribeDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeDominantLanguageDetectionJobError::JobNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DescribeDominantLanguageDetectionJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeDominantLanguageDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeDominantLanguageDetectionJobError {
-    fn from(err: serde_json::error::Error) -> DescribeDominantLanguageDetectionJobError {
-        DescribeDominantLanguageDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeDominantLanguageDetectionJobError {
-    fn from(err: CredentialsError) -> DescribeDominantLanguageDetectionJobError {
-        DescribeDominantLanguageDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeDominantLanguageDetectionJobError {
-    fn from(err: HttpDispatchError) -> DescribeDominantLanguageDetectionJobError {
-        DescribeDominantLanguageDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeDominantLanguageDetectionJobError {
-    fn from(err: io::Error) -> DescribeDominantLanguageDetectionJobError {
-        DescribeDominantLanguageDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeDominantLanguageDetectionJobError {
@@ -3263,13 +2851,6 @@ impl Error for DescribeDominantLanguageDetectionJobError {
             DescribeDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::Validation(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::Credentials(ref err) => err.description(),
-            DescribeDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
-            DescribeDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3284,20 +2865,12 @@ pub enum DescribeEntitiesDetectionJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEntitiesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEntitiesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEntitiesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3310,53 +2883,30 @@ impl DescribeEntitiesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeEntitiesDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntitiesDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeEntitiesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntitiesDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return DescribeEntitiesDetectionJobError::JobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntitiesDetectionJobError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEntitiesDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntitiesDetectionJobError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeEntitiesDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEntitiesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEntitiesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> DescribeEntitiesDetectionJobError {
-        DescribeEntitiesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEntitiesDetectionJobError {
-    fn from(err: CredentialsError) -> DescribeEntitiesDetectionJobError {
-        DescribeEntitiesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEntitiesDetectionJobError {
-    fn from(err: HttpDispatchError) -> DescribeEntitiesDetectionJobError {
-        DescribeEntitiesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEntitiesDetectionJobError {
-    fn from(err: io::Error) -> DescribeEntitiesDetectionJobError {
-        DescribeEntitiesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEntitiesDetectionJobError {
@@ -3371,13 +2921,6 @@ impl Error for DescribeEntitiesDetectionJobError {
             DescribeEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::Validation(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::Credentials(ref err) => err.description(),
-            DescribeEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEntitiesDetectionJobError::ParseError(ref cause) => cause,
-            DescribeEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3392,20 +2935,10 @@ pub enum DescribeEntityRecognizerError {
     ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeEntityRecognizerError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEntityRecognizerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3418,53 +2951,30 @@ impl DescribeEntityRecognizerError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeEntityRecognizerError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntityRecognizerError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeEntityRecognizerError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntityRecognizerError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeEntityRecognizerError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntityRecognizerError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeEntityRecognizerError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeEntityRecognizerError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeEntityRecognizerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEntityRecognizerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEntityRecognizerError {
-    fn from(err: serde_json::error::Error) -> DescribeEntityRecognizerError {
-        DescribeEntityRecognizerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEntityRecognizerError {
-    fn from(err: CredentialsError) -> DescribeEntityRecognizerError {
-        DescribeEntityRecognizerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEntityRecognizerError {
-    fn from(err: HttpDispatchError) -> DescribeEntityRecognizerError {
-        DescribeEntityRecognizerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEntityRecognizerError {
-    fn from(err: io::Error) -> DescribeEntityRecognizerError {
-        DescribeEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEntityRecognizerError {
@@ -3479,13 +2989,6 @@ impl Error for DescribeEntityRecognizerError {
             DescribeEntityRecognizerError::InvalidRequest(ref cause) => cause,
             DescribeEntityRecognizerError::ResourceNotFound(ref cause) => cause,
             DescribeEntityRecognizerError::TooManyRequests(ref cause) => cause,
-            DescribeEntityRecognizerError::Validation(ref cause) => cause,
-            DescribeEntityRecognizerError::Credentials(ref err) => err.description(),
-            DescribeEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEntityRecognizerError::ParseError(ref cause) => cause,
-            DescribeEntityRecognizerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3500,20 +3003,12 @@ pub enum DescribeKeyPhrasesDetectionJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeKeyPhrasesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeKeyPhrasesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeKeyPhrasesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3526,55 +3021,36 @@ impl DescribeKeyPhrasesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeKeyPhrasesDetectionJobError::InternalServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRequestException" => {
-                    return DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeKeyPhrasesDetectionJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "JobNotFoundException" => {
-                    return DescribeKeyPhrasesDetectionJobError::JobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeKeyPhrasesDetectionJobError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return DescribeKeyPhrasesDetectionJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        DescribeKeyPhrasesDetectionJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeKeyPhrasesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeKeyPhrasesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> DescribeKeyPhrasesDetectionJobError {
-        DescribeKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeKeyPhrasesDetectionJobError {
-    fn from(err: CredentialsError) -> DescribeKeyPhrasesDetectionJobError {
-        DescribeKeyPhrasesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeKeyPhrasesDetectionJobError {
-    fn from(err: HttpDispatchError) -> DescribeKeyPhrasesDetectionJobError {
-        DescribeKeyPhrasesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeKeyPhrasesDetectionJobError {
-    fn from(err: io::Error) -> DescribeKeyPhrasesDetectionJobError {
-        DescribeKeyPhrasesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeKeyPhrasesDetectionJobError {
@@ -3589,13 +3065,6 @@ impl Error for DescribeKeyPhrasesDetectionJobError {
             DescribeKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::Validation(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::Credentials(ref err) => err.description(),
-            DescribeKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
-            DescribeKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3610,20 +3079,12 @@ pub enum DescribeSentimentDetectionJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeSentimentDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeSentimentDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeSentimentDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3636,53 +3097,32 @@ impl DescribeSentimentDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeSentimentDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSentimentDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeSentimentDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSentimentDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return DescribeSentimentDetectionJobError::JobNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeSentimentDetectionJobError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return DescribeSentimentDetectionJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeSentimentDetectionJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeSentimentDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeSentimentDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeSentimentDetectionJobError {
-    fn from(err: serde_json::error::Error) -> DescribeSentimentDetectionJobError {
-        DescribeSentimentDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeSentimentDetectionJobError {
-    fn from(err: CredentialsError) -> DescribeSentimentDetectionJobError {
-        DescribeSentimentDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeSentimentDetectionJobError {
-    fn from(err: HttpDispatchError) -> DescribeSentimentDetectionJobError {
-        DescribeSentimentDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeSentimentDetectionJobError {
-    fn from(err: io::Error) -> DescribeSentimentDetectionJobError {
-        DescribeSentimentDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeSentimentDetectionJobError {
@@ -3697,13 +3137,6 @@ impl Error for DescribeSentimentDetectionJobError {
             DescribeSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeSentimentDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
-            DescribeSentimentDetectionJobError::Validation(ref cause) => cause,
-            DescribeSentimentDetectionJobError::Credentials(ref err) => err.description(),
-            DescribeSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeSentimentDetectionJobError::ParseError(ref cause) => cause,
-            DescribeSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3718,20 +3151,12 @@ pub enum DescribeTopicsDetectionJobError {
     JobNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTopicsDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTopicsDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeTopicsDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3744,51 +3169,30 @@ impl DescribeTopicsDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DescribeTopicsDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeTopicsDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return DescribeTopicsDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeTopicsDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return DescribeTopicsDetectionJobError::JobNotFound(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return DescribeTopicsDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeTopicsDetectionJobError::JobNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeTopicsDetectionJobError::Validation(error_message.to_string());
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeTopicsDetectionJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTopicsDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTopicsDetectionJobError {
-    fn from(err: serde_json::error::Error) -> DescribeTopicsDetectionJobError {
-        DescribeTopicsDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTopicsDetectionJobError {
-    fn from(err: CredentialsError) -> DescribeTopicsDetectionJobError {
-        DescribeTopicsDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTopicsDetectionJobError {
-    fn from(err: HttpDispatchError) -> DescribeTopicsDetectionJobError {
-        DescribeTopicsDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTopicsDetectionJobError {
-    fn from(err: io::Error) -> DescribeTopicsDetectionJobError {
-        DescribeTopicsDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTopicsDetectionJobError {
@@ -3803,13 +3207,6 @@ impl Error for DescribeTopicsDetectionJobError {
             DescribeTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
             DescribeTopicsDetectionJobError::JobNotFound(ref cause) => cause,
             DescribeTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
-            DescribeTopicsDetectionJobError::Validation(ref cause) => cause,
-            DescribeTopicsDetectionJobError::Credentials(ref err) => err.description(),
-            DescribeTopicsDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTopicsDetectionJobError::ParseError(ref cause) => cause,
-            DescribeTopicsDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3822,20 +3219,10 @@ pub enum DetectDominantLanguageError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectDominantLanguageError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectDominantLanguageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectDominantLanguageError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3848,44 +3235,25 @@ impl DetectDominantLanguageError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectDominantLanguageError::InternalServer(String::from(error_message));
-                }
-                "InvalidRequestException" => {
-                    return DetectDominantLanguageError::InvalidRequest(String::from(error_message));
-                }
-                "TextSizeLimitExceededException" => {
-                    return DetectDominantLanguageError::TextSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DetectDominantLanguageError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DetectDominantLanguageError::Validation(error_message.to_string());
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DetectDominantLanguageError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(DetectDominantLanguageError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectDominantLanguageError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectDominantLanguageError {
-    fn from(err: serde_json::error::Error) -> DetectDominantLanguageError {
-        DetectDominantLanguageError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectDominantLanguageError {
-    fn from(err: CredentialsError) -> DetectDominantLanguageError {
-        DetectDominantLanguageError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectDominantLanguageError {
-    fn from(err: HttpDispatchError) -> DetectDominantLanguageError {
-        DetectDominantLanguageError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectDominantLanguageError {
-    fn from(err: io::Error) -> DetectDominantLanguageError {
-        DetectDominantLanguageError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectDominantLanguageError {
@@ -3899,13 +3267,6 @@ impl Error for DetectDominantLanguageError {
             DetectDominantLanguageError::InternalServer(ref cause) => cause,
             DetectDominantLanguageError::InvalidRequest(ref cause) => cause,
             DetectDominantLanguageError::TextSizeLimitExceeded(ref cause) => cause,
-            DetectDominantLanguageError::Validation(ref cause) => cause,
-            DetectDominantLanguageError::Credentials(ref err) => err.description(),
-            DetectDominantLanguageError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DetectDominantLanguageError::ParseError(ref cause) => cause,
-            DetectDominantLanguageError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3920,20 +3281,10 @@ pub enum DetectEntitiesError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectEntitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectEntitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectEntitiesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3946,45 +3297,30 @@ impl DetectEntitiesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectEntitiesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DetectEntitiesError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DetectEntitiesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DetectEntitiesError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectEntitiesError::TextSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetectEntitiesError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectEntitiesError::UnsupportedLanguage(String::from(error_message));
+                    return RusotoError::Service(DetectEntitiesError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetectEntitiesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectEntitiesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectEntitiesError {
-    fn from(err: serde_json::error::Error) -> DetectEntitiesError {
-        DetectEntitiesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectEntitiesError {
-    fn from(err: CredentialsError) -> DetectEntitiesError {
-        DetectEntitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectEntitiesError {
-    fn from(err: HttpDispatchError) -> DetectEntitiesError {
-        DetectEntitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectEntitiesError {
-    fn from(err: io::Error) -> DetectEntitiesError {
-        DetectEntitiesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectEntitiesError {
@@ -3999,11 +3335,6 @@ impl Error for DetectEntitiesError {
             DetectEntitiesError::InvalidRequest(ref cause) => cause,
             DetectEntitiesError::TextSizeLimitExceeded(ref cause) => cause,
             DetectEntitiesError::UnsupportedLanguage(ref cause) => cause,
-            DetectEntitiesError::Validation(ref cause) => cause,
-            DetectEntitiesError::Credentials(ref err) => err.description(),
-            DetectEntitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectEntitiesError::ParseError(ref cause) => cause,
-            DetectEntitiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4018,20 +3349,10 @@ pub enum DetectKeyPhrasesError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectKeyPhrasesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectKeyPhrasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectKeyPhrasesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4044,45 +3365,30 @@ impl DetectKeyPhrasesError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectKeyPhrasesError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DetectKeyPhrasesError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return DetectKeyPhrasesError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DetectKeyPhrasesError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectKeyPhrasesError::TextSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetectKeyPhrasesError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectKeyPhrasesError::UnsupportedLanguage(String::from(error_message));
+                    return RusotoError::Service(DetectKeyPhrasesError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetectKeyPhrasesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectKeyPhrasesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectKeyPhrasesError {
-    fn from(err: serde_json::error::Error) -> DetectKeyPhrasesError {
-        DetectKeyPhrasesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectKeyPhrasesError {
-    fn from(err: CredentialsError) -> DetectKeyPhrasesError {
-        DetectKeyPhrasesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectKeyPhrasesError {
-    fn from(err: HttpDispatchError) -> DetectKeyPhrasesError {
-        DetectKeyPhrasesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectKeyPhrasesError {
-    fn from(err: io::Error) -> DetectKeyPhrasesError {
-        DetectKeyPhrasesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectKeyPhrasesError {
@@ -4097,11 +3403,6 @@ impl Error for DetectKeyPhrasesError {
             DetectKeyPhrasesError::InvalidRequest(ref cause) => cause,
             DetectKeyPhrasesError::TextSizeLimitExceeded(ref cause) => cause,
             DetectKeyPhrasesError::UnsupportedLanguage(ref cause) => cause,
-            DetectKeyPhrasesError::Validation(ref cause) => cause,
-            DetectKeyPhrasesError::Credentials(ref err) => err.description(),
-            DetectKeyPhrasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectKeyPhrasesError::ParseError(ref cause) => cause,
-            DetectKeyPhrasesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4116,20 +3417,10 @@ pub enum DetectSentimentError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectSentimentError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectSentimentError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSentimentError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4142,45 +3433,30 @@ impl DetectSentimentError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectSentimentError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DetectSentimentError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DetectSentimentError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DetectSentimentError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectSentimentError::TextSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetectSentimentError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectSentimentError::UnsupportedLanguage(String::from(error_message));
+                    return RusotoError::Service(DetectSentimentError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetectSentimentError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectSentimentError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectSentimentError {
-    fn from(err: serde_json::error::Error) -> DetectSentimentError {
-        DetectSentimentError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectSentimentError {
-    fn from(err: CredentialsError) -> DetectSentimentError {
-        DetectSentimentError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectSentimentError {
-    fn from(err: HttpDispatchError) -> DetectSentimentError {
-        DetectSentimentError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectSentimentError {
-    fn from(err: io::Error) -> DetectSentimentError {
-        DetectSentimentError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectSentimentError {
@@ -4195,11 +3471,6 @@ impl Error for DetectSentimentError {
             DetectSentimentError::InvalidRequest(ref cause) => cause,
             DetectSentimentError::TextSizeLimitExceeded(ref cause) => cause,
             DetectSentimentError::UnsupportedLanguage(ref cause) => cause,
-            DetectSentimentError::Validation(ref cause) => cause,
-            DetectSentimentError::Credentials(ref err) => err.description(),
-            DetectSentimentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectSentimentError::ParseError(ref cause) => cause,
-            DetectSentimentError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4214,20 +3485,10 @@ pub enum DetectSyntaxError {
     TextSizeLimitExceeded(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetectSyntaxError {
-    pub fn from_response(res: BufferedHttpResponse) -> DetectSyntaxError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetectSyntaxError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4240,45 +3501,30 @@ impl DetectSyntaxError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return DetectSyntaxError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(DetectSyntaxError::InternalServer(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRequestException" => {
-                    return DetectSyntaxError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DetectSyntaxError::InvalidRequest(String::from(
+                        error_message,
+                    )));
                 }
                 "TextSizeLimitExceededException" => {
-                    return DetectSyntaxError::TextSizeLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetectSyntaxError::TextSizeLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "UnsupportedLanguageException" => {
-                    return DetectSyntaxError::UnsupportedLanguage(String::from(error_message));
+                    return RusotoError::Service(DetectSyntaxError::UnsupportedLanguage(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetectSyntaxError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetectSyntaxError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetectSyntaxError {
-    fn from(err: serde_json::error::Error) -> DetectSyntaxError {
-        DetectSyntaxError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetectSyntaxError {
-    fn from(err: CredentialsError) -> DetectSyntaxError {
-        DetectSyntaxError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetectSyntaxError {
-    fn from(err: HttpDispatchError) -> DetectSyntaxError {
-        DetectSyntaxError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetectSyntaxError {
-    fn from(err: io::Error) -> DetectSyntaxError {
-        DetectSyntaxError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetectSyntaxError {
@@ -4293,11 +3539,6 @@ impl Error for DetectSyntaxError {
             DetectSyntaxError::InvalidRequest(ref cause) => cause,
             DetectSyntaxError::TextSizeLimitExceeded(ref cause) => cause,
             DetectSyntaxError::UnsupportedLanguage(ref cause) => cause,
-            DetectSyntaxError::Validation(ref cause) => cause,
-            DetectSyntaxError::Credentials(ref err) => err.description(),
-            DetectSyntaxError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetectSyntaxError::ParseError(ref cause) => cause,
-            DetectSyntaxError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4312,20 +3553,12 @@ pub enum ListDocumentClassificationJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDocumentClassificationJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDocumentClassificationJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDocumentClassificationJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4338,55 +3571,36 @@ impl ListDocumentClassificationJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListDocumentClassificationJobsError::InternalServer(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListDocumentClassificationJobsError::InternalServer(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidFilterException" => {
-                    return ListDocumentClassificationJobsError::InvalidFilter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDocumentClassificationJobsError::InvalidFilter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ListDocumentClassificationJobsError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return ListDocumentClassificationJobsError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ListDocumentClassificationJobsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ListDocumentClassificationJobsError::InvalidRequest(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListDocumentClassificationJobsError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDocumentClassificationJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDocumentClassificationJobsError {
-    fn from(err: serde_json::error::Error) -> ListDocumentClassificationJobsError {
-        ListDocumentClassificationJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDocumentClassificationJobsError {
-    fn from(err: CredentialsError) -> ListDocumentClassificationJobsError {
-        ListDocumentClassificationJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDocumentClassificationJobsError {
-    fn from(err: HttpDispatchError) -> ListDocumentClassificationJobsError {
-        ListDocumentClassificationJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDocumentClassificationJobsError {
-    fn from(err: io::Error) -> ListDocumentClassificationJobsError {
-        ListDocumentClassificationJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDocumentClassificationJobsError {
@@ -4401,13 +3615,6 @@ impl Error for ListDocumentClassificationJobsError {
             ListDocumentClassificationJobsError::InvalidFilter(ref cause) => cause,
             ListDocumentClassificationJobsError::InvalidRequest(ref cause) => cause,
             ListDocumentClassificationJobsError::TooManyRequests(ref cause) => cause,
-            ListDocumentClassificationJobsError::Validation(ref cause) => cause,
-            ListDocumentClassificationJobsError::Credentials(ref err) => err.description(),
-            ListDocumentClassificationJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDocumentClassificationJobsError::ParseError(ref cause) => cause,
-            ListDocumentClassificationJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4422,20 +3629,10 @@ pub enum ListDocumentClassifiersError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDocumentClassifiersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDocumentClassifiersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDocumentClassifiersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4448,47 +3645,30 @@ impl ListDocumentClassifiersError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListDocumentClassifiersError::InternalServer(String::from(error_message));
-                }
-                "InvalidFilterException" => {
-                    return ListDocumentClassifiersError::InvalidFilter(String::from(error_message));
-                }
-                "InvalidRequestException" => {
-                    return ListDocumentClassifiersError::InvalidRequest(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListDocumentClassifiersError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDocumentClassifiersError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListDocumentClassifiersError::Validation(error_message.to_string());
+                "InvalidFilterException" => {
+                    return RusotoError::Service(ListDocumentClassifiersError::InvalidFilter(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDocumentClassifiersError::InvalidRequest(
+                        String::from(error_message),
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListDocumentClassifiersError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDocumentClassifiersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDocumentClassifiersError {
-    fn from(err: serde_json::error::Error) -> ListDocumentClassifiersError {
-        ListDocumentClassifiersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDocumentClassifiersError {
-    fn from(err: CredentialsError) -> ListDocumentClassifiersError {
-        ListDocumentClassifiersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDocumentClassifiersError {
-    fn from(err: HttpDispatchError) -> ListDocumentClassifiersError {
-        ListDocumentClassifiersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDocumentClassifiersError {
-    fn from(err: io::Error) -> ListDocumentClassifiersError {
-        ListDocumentClassifiersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDocumentClassifiersError {
@@ -4503,13 +3683,6 @@ impl Error for ListDocumentClassifiersError {
             ListDocumentClassifiersError::InvalidFilter(ref cause) => cause,
             ListDocumentClassifiersError::InvalidRequest(ref cause) => cause,
             ListDocumentClassifiersError::TooManyRequests(ref cause) => cause,
-            ListDocumentClassifiersError::Validation(ref cause) => cause,
-            ListDocumentClassifiersError::Credentials(ref err) => err.description(),
-            ListDocumentClassifiersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDocumentClassifiersError::ParseError(ref cause) => cause,
-            ListDocumentClassifiersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4524,20 +3697,12 @@ pub enum ListDominantLanguageDetectionJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDominantLanguageDetectionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListDominantLanguageDetectionJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListDominantLanguageDetectionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4550,55 +3715,38 @@ impl ListDominantLanguageDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListDominantLanguageDetectionJobsError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidFilterException" => {
-                    return ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return ListDominantLanguageDetectionJobsError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        ListDominantLanguageDetectionJobsError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidFilterException" => {
+                    return RusotoError::Service(
+                        ListDominantLanguageDetectionJobsError::InvalidFilter(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListDominantLanguageDetectionJobsError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListDominantLanguageDetectionJobsError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDominantLanguageDetectionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDominantLanguageDetectionJobsError {
-    fn from(err: serde_json::error::Error) -> ListDominantLanguageDetectionJobsError {
-        ListDominantLanguageDetectionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDominantLanguageDetectionJobsError {
-    fn from(err: CredentialsError) -> ListDominantLanguageDetectionJobsError {
-        ListDominantLanguageDetectionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDominantLanguageDetectionJobsError {
-    fn from(err: HttpDispatchError) -> ListDominantLanguageDetectionJobsError {
-        ListDominantLanguageDetectionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDominantLanguageDetectionJobsError {
-    fn from(err: io::Error) -> ListDominantLanguageDetectionJobsError {
-        ListDominantLanguageDetectionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDominantLanguageDetectionJobsError {
@@ -4613,13 +3761,6 @@ impl Error for ListDominantLanguageDetectionJobsError {
             ListDominantLanguageDetectionJobsError::InvalidFilter(ref cause) => cause,
             ListDominantLanguageDetectionJobsError::InvalidRequest(ref cause) => cause,
             ListDominantLanguageDetectionJobsError::TooManyRequests(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::Validation(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::Credentials(ref err) => err.description(),
-            ListDominantLanguageDetectionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDominantLanguageDetectionJobsError::ParseError(ref cause) => cause,
-            ListDominantLanguageDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4634,20 +3775,10 @@ pub enum ListEntitiesDetectionJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListEntitiesDetectionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListEntitiesDetectionJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntitiesDetectionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4660,53 +3791,30 @@ impl ListEntitiesDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListEntitiesDetectionJobsError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEntitiesDetectionJobsError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFilterException" => {
-                    return ListEntitiesDetectionJobsError::InvalidFilter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidFilter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ListEntitiesDetectionJobsError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEntitiesDetectionJobsError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListEntitiesDetectionJobsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListEntitiesDetectionJobsError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListEntitiesDetectionJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListEntitiesDetectionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListEntitiesDetectionJobsError {
-    fn from(err: serde_json::error::Error) -> ListEntitiesDetectionJobsError {
-        ListEntitiesDetectionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListEntitiesDetectionJobsError {
-    fn from(err: CredentialsError) -> ListEntitiesDetectionJobsError {
-        ListEntitiesDetectionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListEntitiesDetectionJobsError {
-    fn from(err: HttpDispatchError) -> ListEntitiesDetectionJobsError {
-        ListEntitiesDetectionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListEntitiesDetectionJobsError {
-    fn from(err: io::Error) -> ListEntitiesDetectionJobsError {
-        ListEntitiesDetectionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListEntitiesDetectionJobsError {
@@ -4721,13 +3829,6 @@ impl Error for ListEntitiesDetectionJobsError {
             ListEntitiesDetectionJobsError::InvalidFilter(ref cause) => cause,
             ListEntitiesDetectionJobsError::InvalidRequest(ref cause) => cause,
             ListEntitiesDetectionJobsError::TooManyRequests(ref cause) => cause,
-            ListEntitiesDetectionJobsError::Validation(ref cause) => cause,
-            ListEntitiesDetectionJobsError::Credentials(ref err) => err.description(),
-            ListEntitiesDetectionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListEntitiesDetectionJobsError::ParseError(ref cause) => cause,
-            ListEntitiesDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4742,20 +3843,10 @@ pub enum ListEntityRecognizersError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListEntityRecognizersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListEntityRecognizersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEntityRecognizersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4768,45 +3859,30 @@ impl ListEntityRecognizersError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListEntityRecognizersError::InternalServer(String::from(error_message));
+                    return RusotoError::Service(ListEntityRecognizersError::InternalServer(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidFilterException" => {
-                    return ListEntityRecognizersError::InvalidFilter(String::from(error_message));
+                    return RusotoError::Service(ListEntityRecognizersError::InvalidFilter(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRequestException" => {
-                    return ListEntityRecognizersError::InvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListEntityRecognizersError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "TooManyRequestsException" => {
-                    return ListEntityRecognizersError::TooManyRequests(String::from(error_message));
+                    return RusotoError::Service(ListEntityRecognizersError::TooManyRequests(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListEntityRecognizersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListEntityRecognizersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListEntityRecognizersError {
-    fn from(err: serde_json::error::Error) -> ListEntityRecognizersError {
-        ListEntityRecognizersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListEntityRecognizersError {
-    fn from(err: CredentialsError) -> ListEntityRecognizersError {
-        ListEntityRecognizersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListEntityRecognizersError {
-    fn from(err: HttpDispatchError) -> ListEntityRecognizersError {
-        ListEntityRecognizersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListEntityRecognizersError {
-    fn from(err: io::Error) -> ListEntityRecognizersError {
-        ListEntityRecognizersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListEntityRecognizersError {
@@ -4821,13 +3897,6 @@ impl Error for ListEntityRecognizersError {
             ListEntityRecognizersError::InvalidFilter(ref cause) => cause,
             ListEntityRecognizersError::InvalidRequest(ref cause) => cause,
             ListEntityRecognizersError::TooManyRequests(ref cause) => cause,
-            ListEntityRecognizersError::Validation(ref cause) => cause,
-            ListEntityRecognizersError::Credentials(ref err) => err.description(),
-            ListEntityRecognizersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListEntityRecognizersError::ParseError(ref cause) => cause,
-            ListEntityRecognizersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4842,20 +3911,12 @@ pub enum ListKeyPhrasesDetectionJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListKeyPhrasesDetectionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListKeyPhrasesDetectionJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListKeyPhrasesDetectionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4868,53 +3929,30 @@ impl ListKeyPhrasesDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListKeyPhrasesDetectionJobsError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFilterException" => {
-                    return ListKeyPhrasesDetectionJobsError::InvalidFilter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidFilter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ListKeyPhrasesDetectionJobsError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListKeyPhrasesDetectionJobsError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListKeyPhrasesDetectionJobsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListKeyPhrasesDetectionJobsError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListKeyPhrasesDetectionJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListKeyPhrasesDetectionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListKeyPhrasesDetectionJobsError {
-    fn from(err: serde_json::error::Error) -> ListKeyPhrasesDetectionJobsError {
-        ListKeyPhrasesDetectionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListKeyPhrasesDetectionJobsError {
-    fn from(err: CredentialsError) -> ListKeyPhrasesDetectionJobsError {
-        ListKeyPhrasesDetectionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListKeyPhrasesDetectionJobsError {
-    fn from(err: HttpDispatchError) -> ListKeyPhrasesDetectionJobsError {
-        ListKeyPhrasesDetectionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListKeyPhrasesDetectionJobsError {
-    fn from(err: io::Error) -> ListKeyPhrasesDetectionJobsError {
-        ListKeyPhrasesDetectionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListKeyPhrasesDetectionJobsError {
@@ -4929,13 +3967,6 @@ impl Error for ListKeyPhrasesDetectionJobsError {
             ListKeyPhrasesDetectionJobsError::InvalidFilter(ref cause) => cause,
             ListKeyPhrasesDetectionJobsError::InvalidRequest(ref cause) => cause,
             ListKeyPhrasesDetectionJobsError::TooManyRequests(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::Validation(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::Credentials(ref err) => err.description(),
-            ListKeyPhrasesDetectionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListKeyPhrasesDetectionJobsError::ParseError(ref cause) => cause,
-            ListKeyPhrasesDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4950,20 +3981,12 @@ pub enum ListSentimentDetectionJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListSentimentDetectionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListSentimentDetectionJobsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListSentimentDetectionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4976,53 +3999,30 @@ impl ListSentimentDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListSentimentDetectionJobsError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSentimentDetectionJobsError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidFilterException" => {
-                    return ListSentimentDetectionJobsError::InvalidFilter(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSentimentDetectionJobsError::InvalidFilter(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return ListSentimentDetectionJobsError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSentimentDetectionJobsError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return ListSentimentDetectionJobsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListSentimentDetectionJobsError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListSentimentDetectionJobsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListSentimentDetectionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListSentimentDetectionJobsError {
-    fn from(err: serde_json::error::Error) -> ListSentimentDetectionJobsError {
-        ListSentimentDetectionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListSentimentDetectionJobsError {
-    fn from(err: CredentialsError) -> ListSentimentDetectionJobsError {
-        ListSentimentDetectionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListSentimentDetectionJobsError {
-    fn from(err: HttpDispatchError) -> ListSentimentDetectionJobsError {
-        ListSentimentDetectionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListSentimentDetectionJobsError {
-    fn from(err: io::Error) -> ListSentimentDetectionJobsError {
-        ListSentimentDetectionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListSentimentDetectionJobsError {
@@ -5037,13 +4037,6 @@ impl Error for ListSentimentDetectionJobsError {
             ListSentimentDetectionJobsError::InvalidFilter(ref cause) => cause,
             ListSentimentDetectionJobsError::InvalidRequest(ref cause) => cause,
             ListSentimentDetectionJobsError::TooManyRequests(ref cause) => cause,
-            ListSentimentDetectionJobsError::Validation(ref cause) => cause,
-            ListSentimentDetectionJobsError::Credentials(ref err) => err.description(),
-            ListSentimentDetectionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListSentimentDetectionJobsError::ParseError(ref cause) => cause,
-            ListSentimentDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5058,20 +4051,10 @@ pub enum ListTopicsDetectionJobsError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTopicsDetectionJobsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTopicsDetectionJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTopicsDetectionJobsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5084,47 +4067,30 @@ impl ListTopicsDetectionJobsError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return ListTopicsDetectionJobsError::InternalServer(String::from(error_message));
-                }
-                "InvalidFilterException" => {
-                    return ListTopicsDetectionJobsError::InvalidFilter(String::from(error_message));
-                }
-                "InvalidRequestException" => {
-                    return ListTopicsDetectionJobsError::InvalidRequest(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return ListTopicsDetectionJobsError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTopicsDetectionJobsError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListTopicsDetectionJobsError::Validation(error_message.to_string());
+                "InvalidFilterException" => {
+                    return RusotoError::Service(ListTopicsDetectionJobsError::InvalidFilter(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTopicsDetectionJobsError::InvalidRequest(
+                        String::from(error_message),
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListTopicsDetectionJobsError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTopicsDetectionJobsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTopicsDetectionJobsError {
-    fn from(err: serde_json::error::Error) -> ListTopicsDetectionJobsError {
-        ListTopicsDetectionJobsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTopicsDetectionJobsError {
-    fn from(err: CredentialsError) -> ListTopicsDetectionJobsError {
-        ListTopicsDetectionJobsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTopicsDetectionJobsError {
-    fn from(err: HttpDispatchError) -> ListTopicsDetectionJobsError {
-        ListTopicsDetectionJobsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTopicsDetectionJobsError {
-    fn from(err: io::Error) -> ListTopicsDetectionJobsError {
-        ListTopicsDetectionJobsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTopicsDetectionJobsError {
@@ -5139,13 +4105,6 @@ impl Error for ListTopicsDetectionJobsError {
             ListTopicsDetectionJobsError::InvalidFilter(ref cause) => cause,
             ListTopicsDetectionJobsError::InvalidRequest(ref cause) => cause,
             ListTopicsDetectionJobsError::TooManyRequests(ref cause) => cause,
-            ListTopicsDetectionJobsError::Validation(ref cause) => cause,
-            ListTopicsDetectionJobsError::Credentials(ref err) => err.description(),
-            ListTopicsDetectionJobsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTopicsDetectionJobsError::ParseError(ref cause) => cause,
-            ListTopicsDetectionJobsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5162,20 +4121,12 @@ pub enum StartDocumentClassificationJobError {
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartDocumentClassificationJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartDocumentClassificationJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartDocumentClassificationJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5188,60 +4139,45 @@ impl StartDocumentClassificationJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartDocumentClassificationJobError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return StartDocumentClassificationJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return StartDocumentClassificationJobError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceUnavailableException" => {
-                    return StartDocumentClassificationJobError::ResourceUnavailable(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return StartDocumentClassificationJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return StartDocumentClassificationJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::ResourceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartDocumentClassificationJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartDocumentClassificationJobError {
-    fn from(err: serde_json::error::Error) -> StartDocumentClassificationJobError {
-        StartDocumentClassificationJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartDocumentClassificationJobError {
-    fn from(err: CredentialsError) -> StartDocumentClassificationJobError {
-        StartDocumentClassificationJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartDocumentClassificationJobError {
-    fn from(err: HttpDispatchError) -> StartDocumentClassificationJobError {
-        StartDocumentClassificationJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartDocumentClassificationJobError {
-    fn from(err: io::Error) -> StartDocumentClassificationJobError {
-        StartDocumentClassificationJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartDocumentClassificationJobError {
@@ -5257,13 +4193,6 @@ impl Error for StartDocumentClassificationJobError {
             StartDocumentClassificationJobError::ResourceNotFound(ref cause) => cause,
             StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => cause,
             StartDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
-            StartDocumentClassificationJobError::Validation(ref cause) => cause,
-            StartDocumentClassificationJobError::Credentials(ref err) => err.description(),
-            StartDocumentClassificationJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartDocumentClassificationJobError::ParseError(ref cause) => cause,
-            StartDocumentClassificationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5276,20 +4205,12 @@ pub enum StartDominantLanguageDetectionJobError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartDominantLanguageDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartDominantLanguageDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartDominantLanguageDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5302,50 +4223,31 @@ impl StartDominantLanguageDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartDominantLanguageDetectionJobError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return StartDominantLanguageDetectionJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        StartDominantLanguageDetectionJobError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StartDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        StartDominantLanguageDetectionJobError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartDominantLanguageDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartDominantLanguageDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StartDominantLanguageDetectionJobError {
-        StartDominantLanguageDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartDominantLanguageDetectionJobError {
-    fn from(err: CredentialsError) -> StartDominantLanguageDetectionJobError {
-        StartDominantLanguageDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartDominantLanguageDetectionJobError {
-    fn from(err: HttpDispatchError) -> StartDominantLanguageDetectionJobError {
-        StartDominantLanguageDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartDominantLanguageDetectionJobError {
-    fn from(err: io::Error) -> StartDominantLanguageDetectionJobError {
-        StartDominantLanguageDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartDominantLanguageDetectionJobError {
@@ -5359,13 +4261,6 @@ impl Error for StartDominantLanguageDetectionJobError {
             StartDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
             StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
             StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::Validation(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::Credentials(ref err) => err.description(),
-            StartDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
-            StartDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5382,20 +4277,10 @@ pub enum StartEntitiesDetectionJobError {
     ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartEntitiesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartEntitiesDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartEntitiesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5408,58 +4293,37 @@ impl StartEntitiesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartEntitiesDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StartEntitiesDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StartEntitiesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StartEntitiesDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return StartEntitiesDetectionJobError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(StartEntitiesDetectionJobError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceUnavailableException" => {
-                    return StartEntitiesDetectionJobError::ResourceUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StartEntitiesDetectionJobError::ResourceUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return StartEntitiesDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(StartEntitiesDetectionJobError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartEntitiesDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartEntitiesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartEntitiesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StartEntitiesDetectionJobError {
-        StartEntitiesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartEntitiesDetectionJobError {
-    fn from(err: CredentialsError) -> StartEntitiesDetectionJobError {
-        StartEntitiesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartEntitiesDetectionJobError {
-    fn from(err: HttpDispatchError) -> StartEntitiesDetectionJobError {
-        StartEntitiesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartEntitiesDetectionJobError {
-    fn from(err: io::Error) -> StartEntitiesDetectionJobError {
-        StartEntitiesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartEntitiesDetectionJobError {
@@ -5475,13 +4339,6 @@ impl Error for StartEntitiesDetectionJobError {
             StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => cause,
             StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => cause,
             StartEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
-            StartEntitiesDetectionJobError::Validation(ref cause) => cause,
-            StartEntitiesDetectionJobError::Credentials(ref err) => err.description(),
-            StartEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartEntitiesDetectionJobError::ParseError(ref cause) => cause,
-            StartEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5494,20 +4351,12 @@ pub enum StartKeyPhrasesDetectionJobError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartKeyPhrasesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartKeyPhrasesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartKeyPhrasesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5520,48 +4369,25 @@ impl StartKeyPhrasesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartKeyPhrasesDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StartKeyPhrasesDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StartKeyPhrasesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StartKeyPhrasesDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return StartKeyPhrasesDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(StartKeyPhrasesDetectionJobError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartKeyPhrasesDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartKeyPhrasesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartKeyPhrasesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StartKeyPhrasesDetectionJobError {
-        StartKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartKeyPhrasesDetectionJobError {
-    fn from(err: CredentialsError) -> StartKeyPhrasesDetectionJobError {
-        StartKeyPhrasesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartKeyPhrasesDetectionJobError {
-    fn from(err: HttpDispatchError) -> StartKeyPhrasesDetectionJobError {
-        StartKeyPhrasesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartKeyPhrasesDetectionJobError {
-    fn from(err: io::Error) -> StartKeyPhrasesDetectionJobError {
-        StartKeyPhrasesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartKeyPhrasesDetectionJobError {
@@ -5575,13 +4401,6 @@ impl Error for StartKeyPhrasesDetectionJobError {
             StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
             StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
             StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::Validation(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::Credentials(ref err) => err.description(),
-            StartKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
-            StartKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5594,20 +4413,12 @@ pub enum StartSentimentDetectionJobError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartSentimentDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartSentimentDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StartSentimentDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5620,48 +4431,25 @@ impl StartSentimentDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartSentimentDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StartSentimentDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StartSentimentDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StartSentimentDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "TooManyRequestsException" => {
-                    return StartSentimentDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(StartSentimentDetectionJobError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartSentimentDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartSentimentDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartSentimentDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StartSentimentDetectionJobError {
-        StartSentimentDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartSentimentDetectionJobError {
-    fn from(err: CredentialsError) -> StartSentimentDetectionJobError {
-        StartSentimentDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartSentimentDetectionJobError {
-    fn from(err: HttpDispatchError) -> StartSentimentDetectionJobError {
-        StartSentimentDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartSentimentDetectionJobError {
-    fn from(err: io::Error) -> StartSentimentDetectionJobError {
-        StartSentimentDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartSentimentDetectionJobError {
@@ -5675,13 +4463,6 @@ impl Error for StartSentimentDetectionJobError {
             StartSentimentDetectionJobError::InternalServer(ref cause) => cause,
             StartSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
             StartSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
-            StartSentimentDetectionJobError::Validation(ref cause) => cause,
-            StartSentimentDetectionJobError::Credentials(ref err) => err.description(),
-            StartSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartSentimentDetectionJobError::ParseError(ref cause) => cause,
-            StartSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5694,20 +4475,10 @@ pub enum StartTopicsDetectionJobError {
     InvalidRequest(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StartTopicsDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StartTopicsDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartTopicsDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5720,44 +4491,25 @@ impl StartTopicsDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StartTopicsDetectionJobError::InternalServer(String::from(error_message));
-                }
-                "InvalidRequestException" => {
-                    return StartTopicsDetectionJobError::InvalidRequest(String::from(error_message));
-                }
-                "TooManyRequestsException" => {
-                    return StartTopicsDetectionJobError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(StartTopicsDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StartTopicsDetectionJobError::Validation(error_message.to_string());
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartTopicsDetectionJobError::InvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(StartTopicsDetectionJobError::TooManyRequests(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StartTopicsDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StartTopicsDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StartTopicsDetectionJobError {
-        StartTopicsDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StartTopicsDetectionJobError {
-    fn from(err: CredentialsError) -> StartTopicsDetectionJobError {
-        StartTopicsDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StartTopicsDetectionJobError {
-    fn from(err: HttpDispatchError) -> StartTopicsDetectionJobError {
-        StartTopicsDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StartTopicsDetectionJobError {
-    fn from(err: io::Error) -> StartTopicsDetectionJobError {
-        StartTopicsDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StartTopicsDetectionJobError {
@@ -5771,13 +4523,6 @@ impl Error for StartTopicsDetectionJobError {
             StartTopicsDetectionJobError::InternalServer(ref cause) => cause,
             StartTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
             StartTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
-            StartTopicsDetectionJobError::Validation(ref cause) => cause,
-            StartTopicsDetectionJobError::Credentials(ref err) => err.description(),
-            StartTopicsDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StartTopicsDetectionJobError::ParseError(ref cause) => cause,
-            StartTopicsDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5790,20 +4535,12 @@ pub enum StopDominantLanguageDetectionJobError {
     InvalidRequest(String),
     /// <p>The specified job was not found. Check the job ID and try again.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopDominantLanguageDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopDominantLanguageDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopDominantLanguageDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5816,50 +4553,29 @@ impl StopDominantLanguageDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopDominantLanguageDetectionJobError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "JobNotFoundException" => {
-                    return StopDominantLanguageDetectionJobError::JobNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return StopDominantLanguageDetectionJobError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        StopDominantLanguageDetectionJobError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StopDominantLanguageDetectionJobError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "JobNotFoundException" => {
+                    return RusotoError::Service(StopDominantLanguageDetectionJobError::JobNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopDominantLanguageDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopDominantLanguageDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StopDominantLanguageDetectionJobError {
-        StopDominantLanguageDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopDominantLanguageDetectionJobError {
-    fn from(err: CredentialsError) -> StopDominantLanguageDetectionJobError {
-        StopDominantLanguageDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopDominantLanguageDetectionJobError {
-    fn from(err: HttpDispatchError) -> StopDominantLanguageDetectionJobError {
-        StopDominantLanguageDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopDominantLanguageDetectionJobError {
-    fn from(err: io::Error) -> StopDominantLanguageDetectionJobError {
-        StopDominantLanguageDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopDominantLanguageDetectionJobError {
@@ -5873,13 +4589,6 @@ impl Error for StopDominantLanguageDetectionJobError {
             StopDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
             StopDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
             StopDominantLanguageDetectionJobError::JobNotFound(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::Validation(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::Credentials(ref err) => err.description(),
-            StopDominantLanguageDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopDominantLanguageDetectionJobError::ParseError(ref cause) => cause,
-            StopDominantLanguageDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5892,20 +4601,10 @@ pub enum StopEntitiesDetectionJobError {
     InvalidRequest(String),
     /// <p>The specified job was not found. Check the job ID and try again.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopEntitiesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopEntitiesDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopEntitiesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5918,46 +4617,25 @@ impl StopEntitiesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopEntitiesDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StopEntitiesDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StopEntitiesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StopEntitiesDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return StopEntitiesDetectionJobError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(StopEntitiesDetectionJobError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopEntitiesDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopEntitiesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopEntitiesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StopEntitiesDetectionJobError {
-        StopEntitiesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopEntitiesDetectionJobError {
-    fn from(err: CredentialsError) -> StopEntitiesDetectionJobError {
-        StopEntitiesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopEntitiesDetectionJobError {
-    fn from(err: HttpDispatchError) -> StopEntitiesDetectionJobError {
-        StopEntitiesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopEntitiesDetectionJobError {
-    fn from(err: io::Error) -> StopEntitiesDetectionJobError {
-        StopEntitiesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopEntitiesDetectionJobError {
@@ -5971,13 +4649,6 @@ impl Error for StopEntitiesDetectionJobError {
             StopEntitiesDetectionJobError::InternalServer(ref cause) => cause,
             StopEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
             StopEntitiesDetectionJobError::JobNotFound(ref cause) => cause,
-            StopEntitiesDetectionJobError::Validation(ref cause) => cause,
-            StopEntitiesDetectionJobError::Credentials(ref err) => err.description(),
-            StopEntitiesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopEntitiesDetectionJobError::ParseError(ref cause) => cause,
-            StopEntitiesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5990,20 +4661,12 @@ pub enum StopKeyPhrasesDetectionJobError {
     InvalidRequest(String),
     /// <p>The specified job was not found. Check the job ID and try again.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopKeyPhrasesDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopKeyPhrasesDetectionJobError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopKeyPhrasesDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6016,46 +4679,25 @@ impl StopKeyPhrasesDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopKeyPhrasesDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StopKeyPhrasesDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StopKeyPhrasesDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StopKeyPhrasesDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return StopKeyPhrasesDetectionJobError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(StopKeyPhrasesDetectionJobError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopKeyPhrasesDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopKeyPhrasesDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopKeyPhrasesDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StopKeyPhrasesDetectionJobError {
-        StopKeyPhrasesDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopKeyPhrasesDetectionJobError {
-    fn from(err: CredentialsError) -> StopKeyPhrasesDetectionJobError {
-        StopKeyPhrasesDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopKeyPhrasesDetectionJobError {
-    fn from(err: HttpDispatchError) -> StopKeyPhrasesDetectionJobError {
-        StopKeyPhrasesDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopKeyPhrasesDetectionJobError {
-    fn from(err: io::Error) -> StopKeyPhrasesDetectionJobError {
-        StopKeyPhrasesDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopKeyPhrasesDetectionJobError {
@@ -6069,13 +4711,6 @@ impl Error for StopKeyPhrasesDetectionJobError {
             StopKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
             StopKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
             StopKeyPhrasesDetectionJobError::JobNotFound(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::Validation(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::Credentials(ref err) => err.description(),
-            StopKeyPhrasesDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopKeyPhrasesDetectionJobError::ParseError(ref cause) => cause,
-            StopKeyPhrasesDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6088,20 +4723,10 @@ pub enum StopSentimentDetectionJobError {
     InvalidRequest(String),
     /// <p>The specified job was not found. Check the job ID and try again.</p>
     JobNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopSentimentDetectionJobError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopSentimentDetectionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopSentimentDetectionJobError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6114,46 +4739,25 @@ impl StopSentimentDetectionJobError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopSentimentDetectionJobError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StopSentimentDetectionJobError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StopSentimentDetectionJobError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StopSentimentDetectionJobError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "JobNotFoundException" => {
-                    return StopSentimentDetectionJobError::JobNotFound(String::from(error_message));
+                    return RusotoError::Service(StopSentimentDetectionJobError::JobNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return StopSentimentDetectionJobError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopSentimentDetectionJobError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopSentimentDetectionJobError {
-    fn from(err: serde_json::error::Error) -> StopSentimentDetectionJobError {
-        StopSentimentDetectionJobError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopSentimentDetectionJobError {
-    fn from(err: CredentialsError) -> StopSentimentDetectionJobError {
-        StopSentimentDetectionJobError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopSentimentDetectionJobError {
-    fn from(err: HttpDispatchError) -> StopSentimentDetectionJobError {
-        StopSentimentDetectionJobError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopSentimentDetectionJobError {
-    fn from(err: io::Error) -> StopSentimentDetectionJobError {
-        StopSentimentDetectionJobError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopSentimentDetectionJobError {
@@ -6167,13 +4771,6 @@ impl Error for StopSentimentDetectionJobError {
             StopSentimentDetectionJobError::InternalServer(ref cause) => cause,
             StopSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
             StopSentimentDetectionJobError::JobNotFound(ref cause) => cause,
-            StopSentimentDetectionJobError::Validation(ref cause) => cause,
-            StopSentimentDetectionJobError::Credentials(ref err) => err.description(),
-            StopSentimentDetectionJobError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopSentimentDetectionJobError::ParseError(ref cause) => cause,
-            StopSentimentDetectionJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6188,20 +4785,12 @@ pub enum StopTrainingDocumentClassifierError {
     ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopTrainingDocumentClassifierError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopTrainingDocumentClassifierError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopTrainingDocumentClassifierError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6214,55 +4803,38 @@ impl StopTrainingDocumentClassifierError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopTrainingDocumentClassifierError::InternalServer(String::from(
-                        error_message,
-                    ));
-                }
-                "InvalidRequestException" => {
-                    return StopTrainingDocumentClassifierError::InvalidRequest(String::from(
-                        error_message,
-                    ));
-                }
-                "ResourceNotFoundException" => {
-                    return StopTrainingDocumentClassifierError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
-                }
-                "TooManyRequestsException" => {
-                    return StopTrainingDocumentClassifierError::TooManyRequests(String::from(
-                        error_message,
-                    ));
-                }
-                "ValidationException" => {
-                    return StopTrainingDocumentClassifierError::Validation(
-                        error_message.to_string(),
+                    return RusotoError::Service(
+                        StopTrainingDocumentClassifierError::InternalServer(String::from(
+                            error_message,
+                        )),
                     );
                 }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        StopTrainingDocumentClassifierError::InvalidRequest(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        StopTrainingDocumentClassifierError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        StopTrainingDocumentClassifierError::TooManyRequests(String::from(
+                            error_message,
+                        )),
+                    );
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopTrainingDocumentClassifierError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopTrainingDocumentClassifierError {
-    fn from(err: serde_json::error::Error) -> StopTrainingDocumentClassifierError {
-        StopTrainingDocumentClassifierError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopTrainingDocumentClassifierError {
-    fn from(err: CredentialsError) -> StopTrainingDocumentClassifierError {
-        StopTrainingDocumentClassifierError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopTrainingDocumentClassifierError {
-    fn from(err: HttpDispatchError) -> StopTrainingDocumentClassifierError {
-        StopTrainingDocumentClassifierError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopTrainingDocumentClassifierError {
-    fn from(err: io::Error) -> StopTrainingDocumentClassifierError {
-        StopTrainingDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopTrainingDocumentClassifierError {
@@ -6277,13 +4849,6 @@ impl Error for StopTrainingDocumentClassifierError {
             StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => cause,
             StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => cause,
             StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => cause,
-            StopTrainingDocumentClassifierError::Validation(ref cause) => cause,
-            StopTrainingDocumentClassifierError::Credentials(ref err) => err.description(),
-            StopTrainingDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopTrainingDocumentClassifierError::ParseError(ref cause) => cause,
-            StopTrainingDocumentClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6298,20 +4863,12 @@ pub enum StopTrainingEntityRecognizerError {
     ResourceNotFound(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl StopTrainingEntityRecognizerError {
-    pub fn from_response(res: BufferedHttpResponse) -> StopTrainingEntityRecognizerError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopTrainingEntityRecognizerError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6324,53 +4881,32 @@ impl StopTrainingEntityRecognizerError {
 
             match *error_type {
                 "InternalServerException" => {
-                    return StopTrainingEntityRecognizerError::InternalServer(String::from(
-                        error_message,
+                    return RusotoError::Service(StopTrainingEntityRecognizerError::InternalServer(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRequestException" => {
-                    return StopTrainingEntityRecognizerError::InvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(StopTrainingEntityRecognizerError::InvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return StopTrainingEntityRecognizerError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        StopTrainingEntityRecognizerError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TooManyRequestsException" => {
-                    return StopTrainingEntityRecognizerError::TooManyRequests(String::from(
-                        error_message,
+                    return RusotoError::Service(StopTrainingEntityRecognizerError::TooManyRequests(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return StopTrainingEntityRecognizerError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return StopTrainingEntityRecognizerError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for StopTrainingEntityRecognizerError {
-    fn from(err: serde_json::error::Error) -> StopTrainingEntityRecognizerError {
-        StopTrainingEntityRecognizerError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for StopTrainingEntityRecognizerError {
-    fn from(err: CredentialsError) -> StopTrainingEntityRecognizerError {
-        StopTrainingEntityRecognizerError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for StopTrainingEntityRecognizerError {
-    fn from(err: HttpDispatchError) -> StopTrainingEntityRecognizerError {
-        StopTrainingEntityRecognizerError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for StopTrainingEntityRecognizerError {
-    fn from(err: io::Error) -> StopTrainingEntityRecognizerError {
-        StopTrainingEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for StopTrainingEntityRecognizerError {
@@ -6385,13 +4921,6 @@ impl Error for StopTrainingEntityRecognizerError {
             StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => cause,
             StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => cause,
             StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => cause,
-            StopTrainingEntityRecognizerError::Validation(ref cause) => cause,
-            StopTrainingEntityRecognizerError::Credentials(ref err) => err.description(),
-            StopTrainingEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            StopTrainingEntityRecognizerError::ParseError(ref cause) => cause,
-            StopTrainingEntityRecognizerError::Unknown(_) => "unknown error",
         }
     }
 }

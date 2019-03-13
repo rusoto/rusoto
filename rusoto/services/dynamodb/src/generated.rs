@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -2571,20 +2568,10 @@ pub enum BatchGetItemError {
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchGetItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchGetItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2597,47 +2584,30 @@ impl BatchGetItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return BatchGetItemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(BatchGetItemError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return BatchGetItemError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchGetItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "RequestLimitExceeded" => {
-                    return BatchGetItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(BatchGetItemError::RequestLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return BatchGetItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchGetItemError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchGetItemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchGetItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchGetItemError {
-    fn from(err: serde_json::error::Error) -> BatchGetItemError {
-        BatchGetItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchGetItemError {
-    fn from(err: CredentialsError) -> BatchGetItemError {
-        BatchGetItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchGetItemError {
-    fn from(err: HttpDispatchError) -> BatchGetItemError {
-        BatchGetItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchGetItemError {
-    fn from(err: io::Error) -> BatchGetItemError {
-        BatchGetItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchGetItemError {
@@ -2652,11 +2622,6 @@ impl Error for BatchGetItemError {
             BatchGetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
             BatchGetItemError::RequestLimitExceeded(ref cause) => cause,
             BatchGetItemError::ResourceNotFound(ref cause) => cause,
-            BatchGetItemError::Validation(ref cause) => cause,
-            BatchGetItemError::Credentials(ref err) => err.description(),
-            BatchGetItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchGetItemError::ParseError(ref cause) => cause,
-            BatchGetItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2673,20 +2638,10 @@ pub enum BatchWriteItemError {
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchWriteItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> BatchWriteItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchWriteItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2699,52 +2654,37 @@ impl BatchWriteItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return BatchWriteItemError::InternalServerError(String::from(error_message));
-                }
-                "ItemCollectionSizeLimitExceededException" => {
-                    return BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchWriteItemError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "ItemCollectionSizeLimitExceededException" => {
+                    return RusotoError::Service(
+                        BatchWriteItemError::ItemCollectionSizeLimitExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ProvisionedThroughputExceededException" => {
-                    return BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(BatchWriteItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "RequestLimitExceeded" => {
-                    return BatchWriteItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(BatchWriteItemError::RequestLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return BatchWriteItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(BatchWriteItemError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return BatchWriteItemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchWriteItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchWriteItemError {
-    fn from(err: serde_json::error::Error) -> BatchWriteItemError {
-        BatchWriteItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchWriteItemError {
-    fn from(err: CredentialsError) -> BatchWriteItemError {
-        BatchWriteItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchWriteItemError {
-    fn from(err: HttpDispatchError) -> BatchWriteItemError {
-        BatchWriteItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchWriteItemError {
-    fn from(err: io::Error) -> BatchWriteItemError {
-        BatchWriteItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchWriteItemError {
@@ -2760,11 +2700,6 @@ impl Error for BatchWriteItemError {
             BatchWriteItemError::ProvisionedThroughputExceeded(ref cause) => cause,
             BatchWriteItemError::RequestLimitExceeded(ref cause) => cause,
             BatchWriteItemError::ResourceNotFound(ref cause) => cause,
-            BatchWriteItemError::Validation(ref cause) => cause,
-            BatchWriteItemError::Credentials(ref err) => err.description(),
-            BatchWriteItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchWriteItemError::ParseError(ref cause) => cause,
-            BatchWriteItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2783,20 +2718,10 @@ pub enum CreateBackupError {
     TableInUse(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2809,53 +2734,40 @@ impl CreateBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return CreateBackupError::BackupInUse(String::from(error_message));
+                    return RusotoError::Service(CreateBackupError::BackupInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ContinuousBackupsUnavailableException" => {
-                    return CreateBackupError::ContinuousBackupsUnavailable(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateBackupError::ContinuousBackupsUnavailable(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return CreateBackupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateBackupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateBackupError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateBackupError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "TableInUseException" => {
-                    return CreateBackupError::TableInUse(String::from(error_message));
+                    return RusotoError::Service(CreateBackupError::TableInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "TableNotFoundException" => {
-                    return CreateBackupError::TableNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateBackupError::TableNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateBackupError {
-    fn from(err: serde_json::error::Error) -> CreateBackupError {
-        CreateBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateBackupError {
-    fn from(err: CredentialsError) -> CreateBackupError {
-        CreateBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateBackupError {
-    fn from(err: HttpDispatchError) -> CreateBackupError {
-        CreateBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateBackupError {
-    fn from(err: io::Error) -> CreateBackupError {
-        CreateBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateBackupError {
@@ -2872,11 +2784,6 @@ impl Error for CreateBackupError {
             CreateBackupError::LimitExceeded(ref cause) => cause,
             CreateBackupError::TableInUse(ref cause) => cause,
             CreateBackupError::TableNotFound(ref cause) => cause,
-            CreateBackupError::Validation(ref cause) => cause,
-            CreateBackupError::Credentials(ref err) => err.description(),
-            CreateBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateBackupError::ParseError(ref cause) => cause,
-            CreateBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2891,20 +2798,10 @@ pub enum CreateGlobalTableError {
     LimitExceeded(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateGlobalTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateGlobalTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -2917,47 +2814,30 @@ impl CreateGlobalTableError {
 
             match *error_type {
                 "GlobalTableAlreadyExistsException" => {
-                    return CreateGlobalTableError::GlobalTableAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateGlobalTableError::GlobalTableAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return CreateGlobalTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateGlobalTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateGlobalTableError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateGlobalTableError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TableNotFoundException" => {
-                    return CreateGlobalTableError::TableNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateGlobalTableError::TableNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateGlobalTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateGlobalTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateGlobalTableError {
-    fn from(err: serde_json::error::Error) -> CreateGlobalTableError {
-        CreateGlobalTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateGlobalTableError {
-    fn from(err: CredentialsError) -> CreateGlobalTableError {
-        CreateGlobalTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateGlobalTableError {
-    fn from(err: HttpDispatchError) -> CreateGlobalTableError {
-        CreateGlobalTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateGlobalTableError {
-    fn from(err: io::Error) -> CreateGlobalTableError {
-        CreateGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateGlobalTableError {
@@ -2972,13 +2852,6 @@ impl Error for CreateGlobalTableError {
             CreateGlobalTableError::InternalServerError(ref cause) => cause,
             CreateGlobalTableError::LimitExceeded(ref cause) => cause,
             CreateGlobalTableError::TableNotFound(ref cause) => cause,
-            CreateGlobalTableError::Validation(ref cause) => cause,
-            CreateGlobalTableError::Credentials(ref err) => err.description(),
-            CreateGlobalTableError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateGlobalTableError::ParseError(ref cause) => cause,
-            CreateGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2991,20 +2864,10 @@ pub enum CreateTableError {
     LimitExceeded(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3017,42 +2880,25 @@ impl CreateTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return CreateTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateTableError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return CreateTableError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(CreateTableError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTableError {
-    fn from(err: serde_json::error::Error) -> CreateTableError {
-        CreateTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTableError {
-    fn from(err: CredentialsError) -> CreateTableError {
-        CreateTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTableError {
-    fn from(err: HttpDispatchError) -> CreateTableError {
-        CreateTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTableError {
-    fn from(err: io::Error) -> CreateTableError {
-        CreateTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTableError {
@@ -3066,11 +2912,6 @@ impl Error for CreateTableError {
             CreateTableError::InternalServerError(ref cause) => cause,
             CreateTableError::LimitExceeded(ref cause) => cause,
             CreateTableError::ResourceInUse(ref cause) => cause,
-            CreateTableError::Validation(ref cause) => cause,
-            CreateTableError::Credentials(ref err) => err.description(),
-            CreateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTableError::ParseError(ref cause) => cause,
-            CreateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3085,20 +2926,10 @@ pub enum DeleteBackupError {
     InternalServerError(String),
     /// <p>There is no limit to the number of daily on-demand backups that can be taken. </p> <p>Up to 10 simultaneous table operations are allowed per account. These operations include <code>CreateTable</code>, <code>UpdateTable</code>, <code>DeleteTable</code>,<code>UpdateTimeToLive</code>, <code>RestoreTableFromBackup</code>, and <code>RestoreTableToPointInTime</code>. </p> <p>For tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3111,45 +2942,30 @@ impl DeleteBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return DeleteBackupError::BackupInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::BackupInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "BackupNotFoundException" => {
-                    return DeleteBackupError::BackupNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::BackupNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DeleteBackupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteBackupError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBackupError {
-    fn from(err: serde_json::error::Error) -> DeleteBackupError {
-        DeleteBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBackupError {
-    fn from(err: CredentialsError) -> DeleteBackupError {
-        DeleteBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBackupError {
-    fn from(err: HttpDispatchError) -> DeleteBackupError {
-        DeleteBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBackupError {
-    fn from(err: io::Error) -> DeleteBackupError {
-        DeleteBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBackupError {
@@ -3164,11 +2980,6 @@ impl Error for DeleteBackupError {
             DeleteBackupError::BackupNotFound(ref cause) => cause,
             DeleteBackupError::InternalServerError(ref cause) => cause,
             DeleteBackupError::LimitExceeded(ref cause) => cause,
-            DeleteBackupError::Validation(ref cause) => cause,
-            DeleteBackupError::Credentials(ref err) => err.description(),
-            DeleteBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBackupError::ParseError(ref cause) => cause,
-            DeleteBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3189,20 +3000,10 @@ pub enum DeleteItemError {
     ResourceNotFound(String),
     /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
     TransactionConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3215,58 +3016,45 @@ impl DeleteItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return DeleteItemError::ConditionalCheckFailed(String::from(error_message));
+                    return RusotoError::Service(DeleteItemError::ConditionalCheckFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return DeleteItemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteItemError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
-                    return DeleteItemError::ItemCollectionSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteItemError::ItemCollectionSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return DeleteItemError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(DeleteItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "RequestLimitExceeded" => {
-                    return DeleteItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteItemError::RequestLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteItemError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TransactionConflictException" => {
-                    return DeleteItemError::TransactionConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteItemError::TransactionConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteItemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteItemError {
-    fn from(err: serde_json::error::Error) -> DeleteItemError {
-        DeleteItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteItemError {
-    fn from(err: CredentialsError) -> DeleteItemError {
-        DeleteItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteItemError {
-    fn from(err: HttpDispatchError) -> DeleteItemError {
-        DeleteItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteItemError {
-    fn from(err: io::Error) -> DeleteItemError {
-        DeleteItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteItemError {
@@ -3284,11 +3072,6 @@ impl Error for DeleteItemError {
             DeleteItemError::RequestLimitExceeded(ref cause) => cause,
             DeleteItemError::ResourceNotFound(ref cause) => cause,
             DeleteItemError::TransactionConflict(ref cause) => cause,
-            DeleteItemError::Validation(ref cause) => cause,
-            DeleteItemError::Credentials(ref err) => err.description(),
-            DeleteItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteItemError::ParseError(ref cause) => cause,
-            DeleteItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3303,20 +3086,10 @@ pub enum DeleteTableError {
     ResourceInUse(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3329,45 +3102,30 @@ impl DeleteTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DeleteTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteTableError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return DeleteTableError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTableError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTableError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTableError {
-    fn from(err: serde_json::error::Error) -> DeleteTableError {
-        DeleteTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTableError {
-    fn from(err: CredentialsError) -> DeleteTableError {
-        DeleteTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTableError {
-    fn from(err: HttpDispatchError) -> DeleteTableError {
-        DeleteTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTableError {
-    fn from(err: io::Error) -> DeleteTableError {
-        DeleteTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTableError {
@@ -3382,11 +3140,6 @@ impl Error for DeleteTableError {
             DeleteTableError::LimitExceeded(ref cause) => cause,
             DeleteTableError::ResourceInUse(ref cause) => cause,
             DeleteTableError::ResourceNotFound(ref cause) => cause,
-            DeleteTableError::Validation(ref cause) => cause,
-            DeleteTableError::Credentials(ref err) => err.description(),
-            DeleteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTableError::ParseError(ref cause) => cause,
-            DeleteTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3397,20 +3150,10 @@ pub enum DescribeBackupError {
     BackupNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3423,39 +3166,20 @@ impl DescribeBackupError {
 
             match *error_type {
                 "BackupNotFoundException" => {
-                    return DescribeBackupError::BackupNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeBackupError::BackupNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return DescribeBackupError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeBackupError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBackupError {
-    fn from(err: serde_json::error::Error) -> DescribeBackupError {
-        DescribeBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBackupError {
-    fn from(err: CredentialsError) -> DescribeBackupError {
-        DescribeBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBackupError {
-    fn from(err: HttpDispatchError) -> DescribeBackupError {
-        DescribeBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBackupError {
-    fn from(err: io::Error) -> DescribeBackupError {
-        DescribeBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBackupError {
@@ -3468,11 +3192,6 @@ impl Error for DescribeBackupError {
         match *self {
             DescribeBackupError::BackupNotFound(ref cause) => cause,
             DescribeBackupError::InternalServerError(ref cause) => cause,
-            DescribeBackupError::Validation(ref cause) => cause,
-            DescribeBackupError::Credentials(ref err) => err.description(),
-            DescribeBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBackupError::ParseError(ref cause) => cause,
-            DescribeBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3483,20 +3202,10 @@ pub enum DescribeContinuousBackupsError {
     InternalServerError(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeContinuousBackupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeContinuousBackupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeContinuousBackupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3509,43 +3218,22 @@ impl DescribeContinuousBackupsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeContinuousBackupsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeContinuousBackupsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "TableNotFoundException" => {
-                    return DescribeContinuousBackupsError::TableNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeContinuousBackupsError::TableNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeContinuousBackupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeContinuousBackupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeContinuousBackupsError {
-    fn from(err: serde_json::error::Error) -> DescribeContinuousBackupsError {
-        DescribeContinuousBackupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeContinuousBackupsError {
-    fn from(err: CredentialsError) -> DescribeContinuousBackupsError {
-        DescribeContinuousBackupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeContinuousBackupsError {
-    fn from(err: HttpDispatchError) -> DescribeContinuousBackupsError {
-        DescribeContinuousBackupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeContinuousBackupsError {
-    fn from(err: io::Error) -> DescribeContinuousBackupsError {
-        DescribeContinuousBackupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeContinuousBackupsError {
@@ -3558,33 +3246,15 @@ impl Error for DescribeContinuousBackupsError {
         match *self {
             DescribeContinuousBackupsError::InternalServerError(ref cause) => cause,
             DescribeContinuousBackupsError::TableNotFound(ref cause) => cause,
-            DescribeContinuousBackupsError::Validation(ref cause) => cause,
-            DescribeContinuousBackupsError::Credentials(ref err) => err.description(),
-            DescribeContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeContinuousBackupsError::ParseError(ref cause) => cause,
-            DescribeContinuousBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
-pub enum DescribeEndpointsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeEndpointsError {}
 
 impl DescribeEndpointsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3596,34 +3266,11 @@ impl DescribeEndpointsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
-                "ValidationException" => {
-                    return DescribeEndpointsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeEndpointsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeEndpointsError {
-    fn from(err: serde_json::error::Error) -> DescribeEndpointsError {
-        DescribeEndpointsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeEndpointsError {
-    fn from(err: CredentialsError) -> DescribeEndpointsError {
-        DescribeEndpointsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeEndpointsError {
-    fn from(err: HttpDispatchError) -> DescribeEndpointsError {
-        DescribeEndpointsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeEndpointsError {
-    fn from(err: io::Error) -> DescribeEndpointsError {
-        DescribeEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeEndpointsError {
@@ -3633,15 +3280,7 @@ impl fmt::Display for DescribeEndpointsError {
 }
 impl Error for DescribeEndpointsError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeEndpointsError::Validation(ref cause) => cause,
-            DescribeEndpointsError::Credentials(ref err) => err.description(),
-            DescribeEndpointsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeEndpointsError::ParseError(ref cause) => cause,
-            DescribeEndpointsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeGlobalTable
@@ -3651,20 +3290,10 @@ pub enum DescribeGlobalTableError {
     GlobalTableNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGlobalTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGlobalTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3677,43 +3306,20 @@ impl DescribeGlobalTableError {
 
             match *error_type {
                 "GlobalTableNotFoundException" => {
-                    return DescribeGlobalTableError::GlobalTableNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeGlobalTableError::GlobalTableNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return DescribeGlobalTableError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeGlobalTableError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return DescribeGlobalTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeGlobalTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeGlobalTableError {
-    fn from(err: serde_json::error::Error) -> DescribeGlobalTableError {
-        DescribeGlobalTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGlobalTableError {
-    fn from(err: CredentialsError) -> DescribeGlobalTableError {
-        DescribeGlobalTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGlobalTableError {
-    fn from(err: HttpDispatchError) -> DescribeGlobalTableError {
-        DescribeGlobalTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGlobalTableError {
-    fn from(err: io::Error) -> DescribeGlobalTableError {
-        DescribeGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeGlobalTableError {
@@ -3726,13 +3332,6 @@ impl Error for DescribeGlobalTableError {
         match *self {
             DescribeGlobalTableError::GlobalTableNotFound(ref cause) => cause,
             DescribeGlobalTableError::InternalServerError(ref cause) => cause,
-            DescribeGlobalTableError::Validation(ref cause) => cause,
-            DescribeGlobalTableError::Credentials(ref err) => err.description(),
-            DescribeGlobalTableError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeGlobalTableError::ParseError(ref cause) => cause,
-            DescribeGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3743,20 +3342,12 @@ pub enum DescribeGlobalTableSettingsError {
     GlobalTableNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeGlobalTableSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeGlobalTableSettingsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeGlobalTableSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3769,43 +3360,24 @@ impl DescribeGlobalTableSettingsError {
 
             match *error_type {
                 "GlobalTableNotFoundException" => {
-                    return DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return DescribeGlobalTableSettingsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        DescribeGlobalTableSettingsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return DescribeGlobalTableSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeGlobalTableSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeGlobalTableSettingsError {
-    fn from(err: serde_json::error::Error) -> DescribeGlobalTableSettingsError {
-        DescribeGlobalTableSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeGlobalTableSettingsError {
-    fn from(err: CredentialsError) -> DescribeGlobalTableSettingsError {
-        DescribeGlobalTableSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeGlobalTableSettingsError {
-    fn from(err: HttpDispatchError) -> DescribeGlobalTableSettingsError {
-        DescribeGlobalTableSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeGlobalTableSettingsError {
-    fn from(err: io::Error) -> DescribeGlobalTableSettingsError {
-        DescribeGlobalTableSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeGlobalTableSettingsError {
@@ -3818,13 +3390,6 @@ impl Error for DescribeGlobalTableSettingsError {
         match *self {
             DescribeGlobalTableSettingsError::GlobalTableNotFound(ref cause) => cause,
             DescribeGlobalTableSettingsError::InternalServerError(ref cause) => cause,
-            DescribeGlobalTableSettingsError::Validation(ref cause) => cause,
-            DescribeGlobalTableSettingsError::Credentials(ref err) => err.description(),
-            DescribeGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeGlobalTableSettingsError::ParseError(ref cause) => cause,
-            DescribeGlobalTableSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3833,20 +3398,10 @@ impl Error for DescribeGlobalTableSettingsError {
 pub enum DescribeLimitsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeLimitsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeLimitsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeLimitsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3859,36 +3414,15 @@ impl DescribeLimitsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeLimitsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeLimitsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeLimitsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeLimitsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeLimitsError {
-    fn from(err: serde_json::error::Error) -> DescribeLimitsError {
-        DescribeLimitsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeLimitsError {
-    fn from(err: CredentialsError) -> DescribeLimitsError {
-        DescribeLimitsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeLimitsError {
-    fn from(err: HttpDispatchError) -> DescribeLimitsError {
-        DescribeLimitsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeLimitsError {
-    fn from(err: io::Error) -> DescribeLimitsError {
-        DescribeLimitsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeLimitsError {
@@ -3900,11 +3434,6 @@ impl Error for DescribeLimitsError {
     fn description(&self) -> &str {
         match *self {
             DescribeLimitsError::InternalServerError(ref cause) => cause,
-            DescribeLimitsError::Validation(ref cause) => cause,
-            DescribeLimitsError::Credentials(ref err) => err.description(),
-            DescribeLimitsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeLimitsError::ParseError(ref cause) => cause,
-            DescribeLimitsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3915,20 +3444,10 @@ pub enum DescribeTableError {
     InternalServerError(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -3941,39 +3460,20 @@ impl DescribeTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTableError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeTableError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTableError {
-    fn from(err: serde_json::error::Error) -> DescribeTableError {
-        DescribeTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTableError {
-    fn from(err: CredentialsError) -> DescribeTableError {
-        DescribeTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTableError {
-    fn from(err: HttpDispatchError) -> DescribeTableError {
-        DescribeTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTableError {
-    fn from(err: io::Error) -> DescribeTableError {
-        DescribeTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTableError {
@@ -3986,11 +3486,6 @@ impl Error for DescribeTableError {
         match *self {
             DescribeTableError::InternalServerError(ref cause) => cause,
             DescribeTableError::ResourceNotFound(ref cause) => cause,
-            DescribeTableError::Validation(ref cause) => cause,
-            DescribeTableError::Credentials(ref err) => err.description(),
-            DescribeTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeTableError::ParseError(ref cause) => cause,
-            DescribeTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4001,20 +3496,10 @@ pub enum DescribeTimeToLiveError {
     InternalServerError(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeTimeToLiveError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeTimeToLiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeTimeToLiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4027,39 +3512,20 @@ impl DescribeTimeToLiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return DescribeTimeToLiveError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(DescribeTimeToLiveError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DescribeTimeToLiveError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeTimeToLiveError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeTimeToLiveError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeTimeToLiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeTimeToLiveError {
-    fn from(err: serde_json::error::Error) -> DescribeTimeToLiveError {
-        DescribeTimeToLiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeTimeToLiveError {
-    fn from(err: CredentialsError) -> DescribeTimeToLiveError {
-        DescribeTimeToLiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeTimeToLiveError {
-    fn from(err: HttpDispatchError) -> DescribeTimeToLiveError {
-        DescribeTimeToLiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeTimeToLiveError {
-    fn from(err: io::Error) -> DescribeTimeToLiveError {
-        DescribeTimeToLiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeTimeToLiveError {
@@ -4072,13 +3538,6 @@ impl Error for DescribeTimeToLiveError {
         match *self {
             DescribeTimeToLiveError::InternalServerError(ref cause) => cause,
             DescribeTimeToLiveError::ResourceNotFound(ref cause) => cause,
-            DescribeTimeToLiveError::Validation(ref cause) => cause,
-            DescribeTimeToLiveError::Credentials(ref err) => err.description(),
-            DescribeTimeToLiveError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeTimeToLiveError::ParseError(ref cause) => cause,
-            DescribeTimeToLiveError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4093,20 +3552,10 @@ pub enum GetItemError {
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4119,43 +3568,30 @@ impl GetItemError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return GetItemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(GetItemError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return GetItemError::ProvisionedThroughputExceeded(String::from(error_message));
+                    return RusotoError::Service(GetItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestLimitExceeded" => {
-                    return GetItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetItemError::RequestLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetItemError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return GetItemError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetItemError {
-    fn from(err: serde_json::error::Error) -> GetItemError {
-        GetItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetItemError {
-    fn from(err: CredentialsError) -> GetItemError {
-        GetItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetItemError {
-    fn from(err: HttpDispatchError) -> GetItemError {
-        GetItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetItemError {
-    fn from(err: io::Error) -> GetItemError {
-        GetItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetItemError {
@@ -4170,11 +3606,6 @@ impl Error for GetItemError {
             GetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
             GetItemError::RequestLimitExceeded(ref cause) => cause,
             GetItemError::ResourceNotFound(ref cause) => cause,
-            GetItemError::Validation(ref cause) => cause,
-            GetItemError::Credentials(ref err) => err.description(),
-            GetItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetItemError::ParseError(ref cause) => cause,
-            GetItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4183,20 +3614,10 @@ impl Error for GetItemError {
 pub enum ListBackupsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListBackupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListBackupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBackupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4209,36 +3630,15 @@ impl ListBackupsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListBackupsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListBackupsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListBackupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListBackupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListBackupsError {
-    fn from(err: serde_json::error::Error) -> ListBackupsError {
-        ListBackupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListBackupsError {
-    fn from(err: CredentialsError) -> ListBackupsError {
-        ListBackupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListBackupsError {
-    fn from(err: HttpDispatchError) -> ListBackupsError {
-        ListBackupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListBackupsError {
-    fn from(err: io::Error) -> ListBackupsError {
-        ListBackupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListBackupsError {
@@ -4250,11 +3650,6 @@ impl Error for ListBackupsError {
     fn description(&self) -> &str {
         match *self {
             ListBackupsError::InternalServerError(ref cause) => cause,
-            ListBackupsError::Validation(ref cause) => cause,
-            ListBackupsError::Credentials(ref err) => err.description(),
-            ListBackupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListBackupsError::ParseError(ref cause) => cause,
-            ListBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4263,20 +3658,10 @@ impl Error for ListBackupsError {
 pub enum ListGlobalTablesError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListGlobalTablesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListGlobalTablesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGlobalTablesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4289,36 +3674,15 @@ impl ListGlobalTablesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListGlobalTablesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListGlobalTablesError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListGlobalTablesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListGlobalTablesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListGlobalTablesError {
-    fn from(err: serde_json::error::Error) -> ListGlobalTablesError {
-        ListGlobalTablesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListGlobalTablesError {
-    fn from(err: CredentialsError) -> ListGlobalTablesError {
-        ListGlobalTablesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListGlobalTablesError {
-    fn from(err: HttpDispatchError) -> ListGlobalTablesError {
-        ListGlobalTablesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListGlobalTablesError {
-    fn from(err: io::Error) -> ListGlobalTablesError {
-        ListGlobalTablesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListGlobalTablesError {
@@ -4330,11 +3694,6 @@ impl Error for ListGlobalTablesError {
     fn description(&self) -> &str {
         match *self {
             ListGlobalTablesError::InternalServerError(ref cause) => cause,
-            ListGlobalTablesError::Validation(ref cause) => cause,
-            ListGlobalTablesError::Credentials(ref err) => err.description(),
-            ListGlobalTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListGlobalTablesError::ParseError(ref cause) => cause,
-            ListGlobalTablesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4343,20 +3702,10 @@ impl Error for ListGlobalTablesError {
 pub enum ListTablesError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTablesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTablesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTablesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4369,36 +3718,15 @@ impl ListTablesError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTablesError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListTablesError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTablesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTablesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTablesError {
-    fn from(err: serde_json::error::Error) -> ListTablesError {
-        ListTablesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTablesError {
-    fn from(err: CredentialsError) -> ListTablesError {
-        ListTablesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTablesError {
-    fn from(err: HttpDispatchError) -> ListTablesError {
-        ListTablesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTablesError {
-    fn from(err: io::Error) -> ListTablesError {
-        ListTablesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTablesError {
@@ -4410,11 +3738,6 @@ impl Error for ListTablesError {
     fn description(&self) -> &str {
         match *self {
             ListTablesError::InternalServerError(ref cause) => cause,
-            ListTablesError::Validation(ref cause) => cause,
-            ListTablesError::Credentials(ref err) => err.description(),
-            ListTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTablesError::ParseError(ref cause) => cause,
-            ListTablesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4425,20 +3748,10 @@ pub enum ListTagsOfResourceError {
     InternalServerError(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsOfResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsOfResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsOfResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4451,39 +3764,20 @@ impl ListTagsOfResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ListTagsOfResourceError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ListTagsOfResourceError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsOfResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsOfResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsOfResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsOfResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsOfResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsOfResourceError {
-        ListTagsOfResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsOfResourceError {
-    fn from(err: CredentialsError) -> ListTagsOfResourceError {
-        ListTagsOfResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsOfResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsOfResourceError {
-        ListTagsOfResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsOfResourceError {
-    fn from(err: io::Error) -> ListTagsOfResourceError {
-        ListTagsOfResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsOfResourceError {
@@ -4496,13 +3790,6 @@ impl Error for ListTagsOfResourceError {
         match *self {
             ListTagsOfResourceError::InternalServerError(ref cause) => cause,
             ListTagsOfResourceError::ResourceNotFound(ref cause) => cause,
-            ListTagsOfResourceError::Validation(ref cause) => cause,
-            ListTagsOfResourceError::Credentials(ref err) => err.description(),
-            ListTagsOfResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsOfResourceError::ParseError(ref cause) => cause,
-            ListTagsOfResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4523,20 +3810,10 @@ pub enum PutItemError {
     ResourceNotFound(String),
     /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
     TransactionConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4549,54 +3826,45 @@ impl PutItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return PutItemError::ConditionalCheckFailed(String::from(error_message));
+                    return RusotoError::Service(PutItemError::ConditionalCheckFailed(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServerError" => {
-                    return PutItemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(PutItemError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
-                    return PutItemError::ItemCollectionSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(PutItemError::ItemCollectionSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return PutItemError::ProvisionedThroughputExceeded(String::from(error_message));
+                    return RusotoError::Service(PutItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestLimitExceeded" => {
-                    return PutItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutItemError::RequestLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return PutItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PutItemError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TransactionConflictException" => {
-                    return PutItemError::TransactionConflict(String::from(error_message));
+                    return RusotoError::Service(PutItemError::TransactionConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return PutItemError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutItemError {
-    fn from(err: serde_json::error::Error) -> PutItemError {
-        PutItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutItemError {
-    fn from(err: CredentialsError) -> PutItemError {
-        PutItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutItemError {
-    fn from(err: HttpDispatchError) -> PutItemError {
-        PutItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutItemError {
-    fn from(err: io::Error) -> PutItemError {
-        PutItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutItemError {
@@ -4614,11 +3882,6 @@ impl Error for PutItemError {
             PutItemError::RequestLimitExceeded(ref cause) => cause,
             PutItemError::ResourceNotFound(ref cause) => cause,
             PutItemError::TransactionConflict(ref cause) => cause,
-            PutItemError::Validation(ref cause) => cause,
-            PutItemError::Credentials(ref err) => err.description(),
-            PutItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PutItemError::ParseError(ref cause) => cause,
-            PutItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4633,20 +3896,10 @@ pub enum QueryError {
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl QueryError {
-    pub fn from_response(res: BufferedHttpResponse) -> QueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<QueryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4659,43 +3912,30 @@ impl QueryError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return QueryError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(QueryError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return QueryError::ProvisionedThroughputExceeded(String::from(error_message));
+                    return RusotoError::Service(QueryError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestLimitExceeded" => {
-                    return QueryError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(QueryError::RequestLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return QueryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(QueryError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return QueryError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return QueryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for QueryError {
-    fn from(err: serde_json::error::Error) -> QueryError {
-        QueryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for QueryError {
-    fn from(err: CredentialsError) -> QueryError {
-        QueryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for QueryError {
-    fn from(err: HttpDispatchError) -> QueryError {
-        QueryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for QueryError {
-    fn from(err: io::Error) -> QueryError {
-        QueryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for QueryError {
@@ -4710,11 +3950,6 @@ impl Error for QueryError {
             QueryError::ProvisionedThroughputExceeded(ref cause) => cause,
             QueryError::RequestLimitExceeded(ref cause) => cause,
             QueryError::ResourceNotFound(ref cause) => cause,
-            QueryError::Validation(ref cause) => cause,
-            QueryError::Credentials(ref err) => err.description(),
-            QueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            QueryError::ParseError(ref cause) => cause,
-            QueryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4733,20 +3968,10 @@ pub enum RestoreTableFromBackupError {
     TableAlreadyExists(String),
     /// <p>A target table with the specified name is either being created or deleted. </p>
     TableInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableFromBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableFromBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreTableFromBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4759,55 +3984,40 @@ impl RestoreTableFromBackupError {
 
             match *error_type {
                 "BackupInUseException" => {
-                    return RestoreTableFromBackupError::BackupInUse(String::from(error_message));
+                    return RusotoError::Service(RestoreTableFromBackupError::BackupInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "BackupNotFoundException" => {
-                    return RestoreTableFromBackupError::BackupNotFound(String::from(error_message));
+                    return RusotoError::Service(RestoreTableFromBackupError::BackupNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return RestoreTableFromBackupError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableFromBackupError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return RestoreTableFromBackupError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(RestoreTableFromBackupError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "TableAlreadyExistsException" => {
-                    return RestoreTableFromBackupError::TableAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableFromBackupError::TableAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "TableInUseException" => {
-                    return RestoreTableFromBackupError::TableInUse(String::from(error_message));
+                    return RusotoError::Service(RestoreTableFromBackupError::TableInUse(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return RestoreTableFromBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RestoreTableFromBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RestoreTableFromBackupError {
-    fn from(err: serde_json::error::Error) -> RestoreTableFromBackupError {
-        RestoreTableFromBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RestoreTableFromBackupError {
-    fn from(err: CredentialsError) -> RestoreTableFromBackupError {
-        RestoreTableFromBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreTableFromBackupError {
-    fn from(err: HttpDispatchError) -> RestoreTableFromBackupError {
-        RestoreTableFromBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreTableFromBackupError {
-    fn from(err: io::Error) -> RestoreTableFromBackupError {
-        RestoreTableFromBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RestoreTableFromBackupError {
@@ -4824,13 +4034,6 @@ impl Error for RestoreTableFromBackupError {
             RestoreTableFromBackupError::LimitExceeded(ref cause) => cause,
             RestoreTableFromBackupError::TableAlreadyExists(ref cause) => cause,
             RestoreTableFromBackupError::TableInUse(ref cause) => cause,
-            RestoreTableFromBackupError::Validation(ref cause) => cause,
-            RestoreTableFromBackupError::Credentials(ref err) => err.description(),
-            RestoreTableFromBackupError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreTableFromBackupError::ParseError(ref cause) => cause,
-            RestoreTableFromBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4851,20 +4054,10 @@ pub enum RestoreTableToPointInTimeError {
     TableInUse(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreTableToPointInTimeError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreTableToPointInTimeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreTableToPointInTimeError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -4877,66 +4070,49 @@ impl RestoreTableToPointInTimeError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return RestoreTableToPointInTimeError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        RestoreTableToPointInTimeError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InvalidRestoreTimeException" => {
-                    return RestoreTableToPointInTimeError::InvalidRestoreTime(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableToPointInTimeError::InvalidRestoreTime(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return RestoreTableToPointInTimeError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableToPointInTimeError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "PointInTimeRecoveryUnavailableException" => {
-                    return RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
-                        String::from(error_message),
+                    return RusotoError::Service(
+                        RestoreTableToPointInTimeError::PointInTimeRecoveryUnavailable(
+                            String::from(error_message),
+                        ),
                     );
                 }
                 "TableAlreadyExistsException" => {
-                    return RestoreTableToPointInTimeError::TableAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableToPointInTimeError::TableAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "TableInUseException" => {
-                    return RestoreTableToPointInTimeError::TableInUse(String::from(error_message));
-                }
-                "TableNotFoundException" => {
-                    return RestoreTableToPointInTimeError::TableNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(RestoreTableToPointInTimeError::TableInUse(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RestoreTableToPointInTimeError::Validation(error_message.to_string());
+                "TableNotFoundException" => {
+                    return RusotoError::Service(RestoreTableToPointInTimeError::TableNotFound(
+                        String::from(error_message),
+                    ));
                 }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RestoreTableToPointInTimeError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RestoreTableToPointInTimeError {
-    fn from(err: serde_json::error::Error) -> RestoreTableToPointInTimeError {
-        RestoreTableToPointInTimeError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RestoreTableToPointInTimeError {
-    fn from(err: CredentialsError) -> RestoreTableToPointInTimeError {
-        RestoreTableToPointInTimeError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreTableToPointInTimeError {
-    fn from(err: HttpDispatchError) -> RestoreTableToPointInTimeError {
-        RestoreTableToPointInTimeError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreTableToPointInTimeError {
-    fn from(err: io::Error) -> RestoreTableToPointInTimeError {
-        RestoreTableToPointInTimeError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RestoreTableToPointInTimeError {
@@ -4954,13 +4130,6 @@ impl Error for RestoreTableToPointInTimeError {
             RestoreTableToPointInTimeError::TableAlreadyExists(ref cause) => cause,
             RestoreTableToPointInTimeError::TableInUse(ref cause) => cause,
             RestoreTableToPointInTimeError::TableNotFound(ref cause) => cause,
-            RestoreTableToPointInTimeError::Validation(ref cause) => cause,
-            RestoreTableToPointInTimeError::Credentials(ref err) => err.description(),
-            RestoreTableToPointInTimeError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RestoreTableToPointInTimeError::ParseError(ref cause) => cause,
-            RestoreTableToPointInTimeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4975,20 +4144,10 @@ pub enum ScanError {
     RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ScanError {
-    pub fn from_response(res: BufferedHttpResponse) -> ScanError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ScanError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5001,43 +4160,30 @@ impl ScanError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return ScanError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(ScanError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return ScanError::ProvisionedThroughputExceeded(String::from(error_message));
+                    return RusotoError::Service(ScanError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RequestLimitExceeded" => {
-                    return ScanError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ScanError::RequestLimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ScanError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ScanError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => return ScanError::Validation(error_message.to_string()),
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ScanError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ScanError {
-    fn from(err: serde_json::error::Error) -> ScanError {
-        ScanError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ScanError {
-    fn from(err: CredentialsError) -> ScanError {
-        ScanError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ScanError {
-    fn from(err: HttpDispatchError) -> ScanError {
-        ScanError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ScanError {
-    fn from(err: io::Error) -> ScanError {
-        ScanError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ScanError {
@@ -5052,11 +4198,6 @@ impl Error for ScanError {
             ScanError::ProvisionedThroughputExceeded(ref cause) => cause,
             ScanError::RequestLimitExceeded(ref cause) => cause,
             ScanError::ResourceNotFound(ref cause) => cause,
-            ScanError::Validation(ref cause) => cause,
-            ScanError::Credentials(ref err) => err.description(),
-            ScanError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ScanError::ParseError(ref cause) => cause,
-            ScanError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5071,20 +4212,10 @@ pub enum TagResourceError {
     ResourceInUse(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5097,45 +4228,30 @@ impl TagResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return TagResourceError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return TagResourceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -5150,11 +4266,6 @@ impl Error for TagResourceError {
             TagResourceError::LimitExceeded(ref cause) => cause,
             TagResourceError::ResourceInUse(ref cause) => cause,
             TagResourceError::ResourceNotFound(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5169,20 +4280,10 @@ pub enum TransactGetItemsError {
     ResourceNotFound(String),
     /// <p><p>The entire transaction request was rejected.</p> <p>DynamoDB rejects a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB rejects a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
     TransactionCanceled(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TransactGetItemsError {
-    pub fn from_response(res: BufferedHttpResponse) -> TransactGetItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransactGetItemsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5195,47 +4296,32 @@ impl TransactGetItemsError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return TransactGetItemsError::InternalServerError(String::from(error_message));
-                }
-                "ProvisionedThroughputExceededException" => {
-                    return TransactGetItemsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(TransactGetItemsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        TransactGetItemsError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
+                }
                 "ResourceNotFoundException" => {
-                    return TransactGetItemsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TransactGetItemsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TransactionCanceledException" => {
-                    return TransactGetItemsError::TransactionCanceled(String::from(error_message));
+                    return RusotoError::Service(TransactGetItemsError::TransactionCanceled(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return TransactGetItemsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TransactGetItemsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TransactGetItemsError {
-    fn from(err: serde_json::error::Error) -> TransactGetItemsError {
-        TransactGetItemsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TransactGetItemsError {
-    fn from(err: CredentialsError) -> TransactGetItemsError {
-        TransactGetItemsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TransactGetItemsError {
-    fn from(err: HttpDispatchError) -> TransactGetItemsError {
-        TransactGetItemsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TransactGetItemsError {
-    fn from(err: io::Error) -> TransactGetItemsError {
-        TransactGetItemsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TransactGetItemsError {
@@ -5250,11 +4336,6 @@ impl Error for TransactGetItemsError {
             TransactGetItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
             TransactGetItemsError::ResourceNotFound(ref cause) => cause,
             TransactGetItemsError::TransactionCanceled(ref cause) => cause,
-            TransactGetItemsError::Validation(ref cause) => cause,
-            TransactGetItemsError::Credentials(ref err) => err.description(),
-            TransactGetItemsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TransactGetItemsError::ParseError(ref cause) => cause,
-            TransactGetItemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5273,20 +4354,10 @@ pub enum TransactWriteItemsError {
     TransactionCanceled(String),
     /// <p>The transaction with the given request token is already in progress.</p>
     TransactionInProgress(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TransactWriteItemsError {
-    pub fn from_response(res: BufferedHttpResponse) -> TransactWriteItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TransactWriteItemsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5299,57 +4370,44 @@ impl TransactWriteItemsError {
 
             match *error_type {
                 "IdempotentParameterMismatchException" => {
-                    return TransactWriteItemsError::IdempotentParameterMismatch(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TransactWriteItemsError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return TransactWriteItemsError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(TransactWriteItemsError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return TransactWriteItemsError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        TransactWriteItemsError::ProvisionedThroughputExceeded(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "ResourceNotFoundException" => {
-                    return TransactWriteItemsError::ResourceNotFound(String::from(error_message));
-                }
-                "TransactionCanceledException" => {
-                    return TransactWriteItemsError::TransactionCanceled(String::from(error_message));
-                }
-                "TransactionInProgressException" => {
-                    return TransactWriteItemsError::TransactionInProgress(String::from(
-                        error_message,
+                    return RusotoError::Service(TransactWriteItemsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return TransactWriteItemsError::Validation(error_message.to_string());
+                "TransactionCanceledException" => {
+                    return RusotoError::Service(TransactWriteItemsError::TransactionCanceled(
+                        String::from(error_message),
+                    ));
                 }
+                "TransactionInProgressException" => {
+                    return RusotoError::Service(TransactWriteItemsError::TransactionInProgress(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TransactWriteItemsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TransactWriteItemsError {
-    fn from(err: serde_json::error::Error) -> TransactWriteItemsError {
-        TransactWriteItemsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TransactWriteItemsError {
-    fn from(err: CredentialsError) -> TransactWriteItemsError {
-        TransactWriteItemsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TransactWriteItemsError {
-    fn from(err: HttpDispatchError) -> TransactWriteItemsError {
-        TransactWriteItemsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TransactWriteItemsError {
-    fn from(err: io::Error) -> TransactWriteItemsError {
-        TransactWriteItemsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TransactWriteItemsError {
@@ -5366,13 +4424,6 @@ impl Error for TransactWriteItemsError {
             TransactWriteItemsError::ResourceNotFound(ref cause) => cause,
             TransactWriteItemsError::TransactionCanceled(ref cause) => cause,
             TransactWriteItemsError::TransactionInProgress(ref cause) => cause,
-            TransactWriteItemsError::Validation(ref cause) => cause,
-            TransactWriteItemsError::Credentials(ref err) => err.description(),
-            TransactWriteItemsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TransactWriteItemsError::ParseError(ref cause) => cause,
-            TransactWriteItemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5387,20 +4438,10 @@ pub enum UntagResourceError {
     ResourceInUse(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5413,45 +4454,30 @@ impl UntagResourceError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UntagResourceError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UntagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return UntagResourceError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -5466,11 +4492,6 @@ impl Error for UntagResourceError {
             UntagResourceError::LimitExceeded(ref cause) => cause,
             UntagResourceError::ResourceInUse(ref cause) => cause,
             UntagResourceError::ResourceNotFound(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5483,20 +4504,10 @@ pub enum UpdateContinuousBackupsError {
     InternalServerError(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateContinuousBackupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateContinuousBackupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateContinuousBackupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5509,46 +4520,27 @@ impl UpdateContinuousBackupsError {
 
             match *error_type {
                 "ContinuousBackupsUnavailableException" => {
-                    return UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateContinuousBackupsError::ContinuousBackupsUnavailable(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "InternalServerError" => {
-                    return UpdateContinuousBackupsError::InternalServerError(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateContinuousBackupsError::InternalServerError(
+                        String::from(error_message),
                     ));
                 }
                 "TableNotFoundException" => {
-                    return UpdateContinuousBackupsError::TableNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateContinuousBackupsError::TableNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateContinuousBackupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateContinuousBackupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateContinuousBackupsError {
-    fn from(err: serde_json::error::Error) -> UpdateContinuousBackupsError {
-        UpdateContinuousBackupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateContinuousBackupsError {
-    fn from(err: CredentialsError) -> UpdateContinuousBackupsError {
-        UpdateContinuousBackupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateContinuousBackupsError {
-    fn from(err: HttpDispatchError) -> UpdateContinuousBackupsError {
-        UpdateContinuousBackupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateContinuousBackupsError {
-    fn from(err: io::Error) -> UpdateContinuousBackupsError {
-        UpdateContinuousBackupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateContinuousBackupsError {
@@ -5562,13 +4554,6 @@ impl Error for UpdateContinuousBackupsError {
             UpdateContinuousBackupsError::ContinuousBackupsUnavailable(ref cause) => cause,
             UpdateContinuousBackupsError::InternalServerError(ref cause) => cause,
             UpdateContinuousBackupsError::TableNotFound(ref cause) => cause,
-            UpdateContinuousBackupsError::Validation(ref cause) => cause,
-            UpdateContinuousBackupsError::Credentials(ref err) => err.description(),
-            UpdateContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateContinuousBackupsError::ParseError(ref cause) => cause,
-            UpdateContinuousBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5585,20 +4570,10 @@ pub enum UpdateGlobalTableError {
     ReplicaNotFound(String),
     /// <p>A source table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
     TableNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGlobalTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGlobalTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5611,48 +4586,35 @@ impl UpdateGlobalTableError {
 
             match *error_type {
                 "GlobalTableNotFoundException" => {
-                    return UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGlobalTableError::GlobalTableNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return UpdateGlobalTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateGlobalTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "ReplicaAlreadyExistsException" => {
-                    return UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(UpdateGlobalTableError::ReplicaAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "ReplicaNotFoundException" => {
-                    return UpdateGlobalTableError::ReplicaNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGlobalTableError::ReplicaNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "TableNotFoundException" => {
-                    return UpdateGlobalTableError::TableNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateGlobalTableError::TableNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateGlobalTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGlobalTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGlobalTableError {
-    fn from(err: serde_json::error::Error) -> UpdateGlobalTableError {
-        UpdateGlobalTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGlobalTableError {
-    fn from(err: CredentialsError) -> UpdateGlobalTableError {
-        UpdateGlobalTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGlobalTableError {
-    fn from(err: HttpDispatchError) -> UpdateGlobalTableError {
-        UpdateGlobalTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGlobalTableError {
-    fn from(err: io::Error) -> UpdateGlobalTableError {
-        UpdateGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGlobalTableError {
@@ -5668,13 +4630,6 @@ impl Error for UpdateGlobalTableError {
             UpdateGlobalTableError::ReplicaAlreadyExists(ref cause) => cause,
             UpdateGlobalTableError::ReplicaNotFound(ref cause) => cause,
             UpdateGlobalTableError::TableNotFound(ref cause) => cause,
-            UpdateGlobalTableError::Validation(ref cause) => cause,
-            UpdateGlobalTableError::Credentials(ref err) => err.description(),
-            UpdateGlobalTableError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateGlobalTableError::ParseError(ref cause) => cause,
-            UpdateGlobalTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5693,20 +4648,10 @@ pub enum UpdateGlobalTableSettingsError {
     ReplicaNotFound(String),
     /// <p>The operation conflicts with the resource's availability. For example, you attempted to recreate an existing table, or tried to delete a table currently in the <code>CREATING</code> state.</p>
     ResourceInUse(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateGlobalTableSettingsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateGlobalTableSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGlobalTableSettingsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5719,63 +4664,44 @@ impl UpdateGlobalTableSettingsError {
 
             match *error_type {
                 "GlobalTableNotFoundException" => {
-                    return UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateGlobalTableSettingsError::GlobalTableNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "IndexNotFoundException" => {
-                    return UpdateGlobalTableSettingsError::IndexNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGlobalTableSettingsError::IndexNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServerError" => {
-                    return UpdateGlobalTableSettingsError::InternalServerError(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        UpdateGlobalTableSettingsError::InternalServerError(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return UpdateGlobalTableSettingsError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGlobalTableSettingsError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ReplicaNotFoundException" => {
-                    return UpdateGlobalTableSettingsError::ReplicaNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGlobalTableSettingsError::ReplicaNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceInUseException" => {
-                    return UpdateGlobalTableSettingsError::ResourceInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateGlobalTableSettingsError::ResourceInUse(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateGlobalTableSettingsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateGlobalTableSettingsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateGlobalTableSettingsError {
-    fn from(err: serde_json::error::Error) -> UpdateGlobalTableSettingsError {
-        UpdateGlobalTableSettingsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateGlobalTableSettingsError {
-    fn from(err: CredentialsError) -> UpdateGlobalTableSettingsError {
-        UpdateGlobalTableSettingsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateGlobalTableSettingsError {
-    fn from(err: HttpDispatchError) -> UpdateGlobalTableSettingsError {
-        UpdateGlobalTableSettingsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateGlobalTableSettingsError {
-    fn from(err: io::Error) -> UpdateGlobalTableSettingsError {
-        UpdateGlobalTableSettingsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateGlobalTableSettingsError {
@@ -5792,13 +4718,6 @@ impl Error for UpdateGlobalTableSettingsError {
             UpdateGlobalTableSettingsError::LimitExceeded(ref cause) => cause,
             UpdateGlobalTableSettingsError::ReplicaNotFound(ref cause) => cause,
             UpdateGlobalTableSettingsError::ResourceInUse(ref cause) => cause,
-            UpdateGlobalTableSettingsError::Validation(ref cause) => cause,
-            UpdateGlobalTableSettingsError::Credentials(ref err) => err.description(),
-            UpdateGlobalTableSettingsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateGlobalTableSettingsError::ParseError(ref cause) => cause,
-            UpdateGlobalTableSettingsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5819,20 +4738,10 @@ pub enum UpdateItemError {
     ResourceNotFound(String),
     /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
     TransactionConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateItemError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateItemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateItemError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5845,58 +4754,45 @@ impl UpdateItemError {
 
             match *error_type {
                 "ConditionalCheckFailedException" => {
-                    return UpdateItemError::ConditionalCheckFailed(String::from(error_message));
+                    return RusotoError::Service(UpdateItemError::ConditionalCheckFailed(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServerError" => {
-                    return UpdateItemError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateItemError::InternalServerError(String::from(
+                        error_message,
+                    )));
                 }
                 "ItemCollectionSizeLimitExceededException" => {
-                    return UpdateItemError::ItemCollectionSizeLimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateItemError::ItemCollectionSizeLimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ProvisionedThroughputExceededException" => {
-                    return UpdateItemError::ProvisionedThroughputExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateItemError::ProvisionedThroughputExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "RequestLimitExceeded" => {
-                    return UpdateItemError::RequestLimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateItemError::RequestLimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateItemError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateItemError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "TransactionConflictException" => {
-                    return UpdateItemError::TransactionConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateItemError::TransactionConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateItemError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateItemError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateItemError {
-    fn from(err: serde_json::error::Error) -> UpdateItemError {
-        UpdateItemError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateItemError {
-    fn from(err: CredentialsError) -> UpdateItemError {
-        UpdateItemError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateItemError {
-    fn from(err: HttpDispatchError) -> UpdateItemError {
-        UpdateItemError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateItemError {
-    fn from(err: io::Error) -> UpdateItemError {
-        UpdateItemError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateItemError {
@@ -5914,11 +4810,6 @@ impl Error for UpdateItemError {
             UpdateItemError::RequestLimitExceeded(ref cause) => cause,
             UpdateItemError::ResourceNotFound(ref cause) => cause,
             UpdateItemError::TransactionConflict(ref cause) => cause,
-            UpdateItemError::Validation(ref cause) => cause,
-            UpdateItemError::Credentials(ref err) => err.description(),
-            UpdateItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateItemError::ParseError(ref cause) => cause,
-            UpdateItemError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5933,20 +4824,10 @@ pub enum UpdateTableError {
     ResourceInUse(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTableError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTableError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTableError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -5959,45 +4840,30 @@ impl UpdateTableError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateTableError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateTableError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateTableError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateTableError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return UpdateTableError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateTableError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTableError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTableError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateTableError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTableError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTableError {
-    fn from(err: serde_json::error::Error) -> UpdateTableError {
-        UpdateTableError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTableError {
-    fn from(err: CredentialsError) -> UpdateTableError {
-        UpdateTableError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTableError {
-    fn from(err: HttpDispatchError) -> UpdateTableError {
-        UpdateTableError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTableError {
-    fn from(err: io::Error) -> UpdateTableError {
-        UpdateTableError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTableError {
@@ -6012,11 +4878,6 @@ impl Error for UpdateTableError {
             UpdateTableError::LimitExceeded(ref cause) => cause,
             UpdateTableError::ResourceInUse(ref cause) => cause,
             UpdateTableError::ResourceNotFound(ref cause) => cause,
-            UpdateTableError::Validation(ref cause) => cause,
-            UpdateTableError::Credentials(ref err) => err.description(),
-            UpdateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTableError::ParseError(ref cause) => cause,
-            UpdateTableError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6031,20 +4892,10 @@ pub enum UpdateTimeToLiveError {
     ResourceInUse(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTimeToLiveError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTimeToLiveError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTimeToLiveError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -6057,45 +4908,30 @@ impl UpdateTimeToLiveError {
 
             match *error_type {
                 "InternalServerError" => {
-                    return UpdateTimeToLiveError::InternalServerError(String::from(error_message));
+                    return RusotoError::Service(UpdateTimeToLiveError::InternalServerError(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateTimeToLiveError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateTimeToLiveError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceInUseException" => {
-                    return UpdateTimeToLiveError::ResourceInUse(String::from(error_message));
+                    return RusotoError::Service(UpdateTimeToLiveError::ResourceInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTimeToLiveError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTimeToLiveError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateTimeToLiveError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTimeToLiveError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTimeToLiveError {
-    fn from(err: serde_json::error::Error) -> UpdateTimeToLiveError {
-        UpdateTimeToLiveError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTimeToLiveError {
-    fn from(err: CredentialsError) -> UpdateTimeToLiveError {
-        UpdateTimeToLiveError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTimeToLiveError {
-    fn from(err: HttpDispatchError) -> UpdateTimeToLiveError {
-        UpdateTimeToLiveError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTimeToLiveError {
-    fn from(err: io::Error) -> UpdateTimeToLiveError {
-        UpdateTimeToLiveError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTimeToLiveError {
@@ -6110,11 +4946,6 @@ impl Error for UpdateTimeToLiveError {
             UpdateTimeToLiveError::LimitExceeded(ref cause) => cause,
             UpdateTimeToLiveError::ResourceInUse(ref cause) => cause,
             UpdateTimeToLiveError::ResourceNotFound(ref cause) => cause,
-            UpdateTimeToLiveError::Validation(ref cause) => cause,
-            UpdateTimeToLiveError::Credentials(ref err) => err.description(),
-            UpdateTimeToLiveError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTimeToLiveError::ParseError(ref cause) => cause,
-            UpdateTimeToLiveError::Unknown(_) => "unknown error",
         }
     }
 }

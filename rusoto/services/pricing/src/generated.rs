@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -188,20 +185,10 @@ pub enum DescribeServicesError {
     InvalidParameter(String),
     /// <p>The requested resource can't be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeServicesError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeServicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeServicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -214,48 +201,35 @@ impl DescribeServicesError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return DescribeServicesError::ExpiredNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::ExpiredNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return DescribeServicesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return DescribeServicesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return DescribeServicesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return DescribeServicesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(DescribeServicesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DescribeServicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeServicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeServicesError {
-    fn from(err: serde_json::error::Error) -> DescribeServicesError {
-        DescribeServicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeServicesError {
-    fn from(err: CredentialsError) -> DescribeServicesError {
-        DescribeServicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeServicesError {
-    fn from(err: HttpDispatchError) -> DescribeServicesError {
-        DescribeServicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeServicesError {
-    fn from(err: io::Error) -> DescribeServicesError {
-        DescribeServicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeServicesError {
@@ -271,11 +245,6 @@ impl Error for DescribeServicesError {
             DescribeServicesError::InvalidNextToken(ref cause) => cause,
             DescribeServicesError::InvalidParameter(ref cause) => cause,
             DescribeServicesError::NotFound(ref cause) => cause,
-            DescribeServicesError::Validation(ref cause) => cause,
-            DescribeServicesError::Credentials(ref err) => err.description(),
-            DescribeServicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeServicesError::ParseError(ref cause) => cause,
-            DescribeServicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -292,20 +261,10 @@ pub enum GetAttributeValuesError {
     InvalidParameter(String),
     /// <p>The requested resource can't be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAttributeValuesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAttributeValuesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAttributeValuesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -318,48 +277,35 @@ impl GetAttributeValuesError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return GetAttributeValuesError::ExpiredNextToken(String::from(error_message));
+                    return RusotoError::Service(GetAttributeValuesError::ExpiredNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalErrorException" => {
-                    return GetAttributeValuesError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetAttributeValuesError::InternalError(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetAttributeValuesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetAttributeValuesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidParameterException" => {
-                    return GetAttributeValuesError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetAttributeValuesError::InvalidParameter(
+                        String::from(error_message),
+                    ));
                 }
                 "NotFoundException" => {
-                    return GetAttributeValuesError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetAttributeValuesError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetAttributeValuesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAttributeValuesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAttributeValuesError {
-    fn from(err: serde_json::error::Error) -> GetAttributeValuesError {
-        GetAttributeValuesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAttributeValuesError {
-    fn from(err: CredentialsError) -> GetAttributeValuesError {
-        GetAttributeValuesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAttributeValuesError {
-    fn from(err: HttpDispatchError) -> GetAttributeValuesError {
-        GetAttributeValuesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAttributeValuesError {
-    fn from(err: io::Error) -> GetAttributeValuesError {
-        GetAttributeValuesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAttributeValuesError {
@@ -375,13 +321,6 @@ impl Error for GetAttributeValuesError {
             GetAttributeValuesError::InvalidNextToken(ref cause) => cause,
             GetAttributeValuesError::InvalidParameter(ref cause) => cause,
             GetAttributeValuesError::NotFound(ref cause) => cause,
-            GetAttributeValuesError::Validation(ref cause) => cause,
-            GetAttributeValuesError::Credentials(ref err) => err.description(),
-            GetAttributeValuesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAttributeValuesError::ParseError(ref cause) => cause,
-            GetAttributeValuesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -398,20 +337,10 @@ pub enum GetProductsError {
     InvalidParameter(String),
     /// <p>The requested resource can't be found.</p>
     NotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetProductsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetProductsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProductsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -424,48 +353,35 @@ impl GetProductsError {
 
             match *error_type {
                 "ExpiredNextTokenException" => {
-                    return GetProductsError::ExpiredNextToken(String::from(error_message));
+                    return RusotoError::Service(GetProductsError::ExpiredNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalErrorException" => {
-                    return GetProductsError::InternalError(String::from(error_message));
+                    return RusotoError::Service(GetProductsError::InternalError(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return GetProductsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(GetProductsError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidParameterException" => {
-                    return GetProductsError::InvalidParameter(String::from(error_message));
+                    return RusotoError::Service(GetProductsError::InvalidParameter(String::from(
+                        error_message,
+                    )));
                 }
                 "NotFoundException" => {
-                    return GetProductsError::NotFound(String::from(error_message));
+                    return RusotoError::Service(GetProductsError::NotFound(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetProductsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetProductsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetProductsError {
-    fn from(err: serde_json::error::Error) -> GetProductsError {
-        GetProductsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetProductsError {
-    fn from(err: CredentialsError) -> GetProductsError {
-        GetProductsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetProductsError {
-    fn from(err: HttpDispatchError) -> GetProductsError {
-        GetProductsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetProductsError {
-    fn from(err: io::Error) -> GetProductsError {
-        GetProductsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetProductsError {
@@ -481,11 +397,6 @@ impl Error for GetProductsError {
             GetProductsError::InvalidNextToken(ref cause) => cause,
             GetProductsError::InvalidParameter(ref cause) => cause,
             GetProductsError::NotFound(ref cause) => cause,
-            GetProductsError::Validation(ref cause) => cause,
-            GetProductsError::Credentials(ref err) => err.description(),
-            GetProductsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetProductsError::ParseError(ref cause) => cause,
-            GetProductsError::Unknown(_) => "unknown error",
         }
     }
 }

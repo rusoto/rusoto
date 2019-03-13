@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -510,20 +507,10 @@ pub enum CopyBackupToRegionError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CopyBackupToRegionError {
-    pub fn from_response(res: BufferedHttpResponse) -> CopyBackupToRegionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyBackupToRegionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -536,56 +523,35 @@ impl CopyBackupToRegionError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return CopyBackupToRegionError::CloudHsmAccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmAccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return CopyBackupToRegionError::CloudHsmInternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmInternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return CopyBackupToRegionError::CloudHsmInvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmInvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return CopyBackupToRegionError::CloudHsmResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmServiceException" => {
-                    return CopyBackupToRegionError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CopyBackupToRegionError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CopyBackupToRegionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CopyBackupToRegionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CopyBackupToRegionError {
-    fn from(err: serde_json::error::Error) -> CopyBackupToRegionError {
-        CopyBackupToRegionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CopyBackupToRegionError {
-    fn from(err: CredentialsError) -> CopyBackupToRegionError {
-        CopyBackupToRegionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CopyBackupToRegionError {
-    fn from(err: HttpDispatchError) -> CopyBackupToRegionError {
-        CopyBackupToRegionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CopyBackupToRegionError {
-    fn from(err: io::Error) -> CopyBackupToRegionError {
-        CopyBackupToRegionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CopyBackupToRegionError {
@@ -601,13 +567,6 @@ impl Error for CopyBackupToRegionError {
             CopyBackupToRegionError::CloudHsmInvalidRequest(ref cause) => cause,
             CopyBackupToRegionError::CloudHsmResourceNotFound(ref cause) => cause,
             CopyBackupToRegionError::CloudHsmService(ref cause) => cause,
-            CopyBackupToRegionError::Validation(ref cause) => cause,
-            CopyBackupToRegionError::Credentials(ref err) => err.description(),
-            CopyBackupToRegionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CopyBackupToRegionError::ParseError(ref cause) => cause,
-            CopyBackupToRegionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -624,20 +583,10 @@ pub enum CreateClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -650,48 +599,35 @@ impl CreateClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return CreateClusterError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return CreateClusterError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return CreateClusterError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return CreateClusterError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateClusterError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CreateClusterError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateClusterError {
-    fn from(err: serde_json::error::Error) -> CreateClusterError {
-        CreateClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateClusterError {
-    fn from(err: CredentialsError) -> CreateClusterError {
-        CreateClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateClusterError {
-    fn from(err: HttpDispatchError) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateClusterError {
-    fn from(err: io::Error) -> CreateClusterError {
-        CreateClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateClusterError {
@@ -707,11 +643,6 @@ impl Error for CreateClusterError {
             CreateClusterError::CloudHsmInvalidRequest(ref cause) => cause,
             CreateClusterError::CloudHsmResourceNotFound(ref cause) => cause,
             CreateClusterError::CloudHsmService(ref cause) => cause,
-            CreateClusterError::Validation(ref cause) => cause,
-            CreateClusterError::Credentials(ref err) => err.description(),
-            CreateClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateClusterError::ParseError(ref cause) => cause,
-            CreateClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -728,20 +659,10 @@ pub enum CreateHsmError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -754,48 +675,35 @@ impl CreateHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return CreateHsmError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmAccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return CreateHsmError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return CreateHsmError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return CreateHsmError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return CreateHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(CreateHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateHsmError {
-    fn from(err: serde_json::error::Error) -> CreateHsmError {
-        CreateHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateHsmError {
-    fn from(err: CredentialsError) -> CreateHsmError {
-        CreateHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateHsmError {
-    fn from(err: HttpDispatchError) -> CreateHsmError {
-        CreateHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateHsmError {
-    fn from(err: io::Error) -> CreateHsmError {
-        CreateHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateHsmError {
@@ -811,11 +719,6 @@ impl Error for CreateHsmError {
             CreateHsmError::CloudHsmInvalidRequest(ref cause) => cause,
             CreateHsmError::CloudHsmResourceNotFound(ref cause) => cause,
             CreateHsmError::CloudHsmService(ref cause) => cause,
-            CreateHsmError::Validation(ref cause) => cause,
-            CreateHsmError::Credentials(ref err) => err.description(),
-            CreateHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateHsmError::ParseError(ref cause) => cause,
-            CreateHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -832,20 +735,10 @@ pub enum DeleteBackupError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -858,48 +751,35 @@ impl DeleteBackupError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DeleteBackupError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DeleteBackupError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DeleteBackupError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DeleteBackupError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteBackupError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteBackupError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteBackupError {
-    fn from(err: serde_json::error::Error) -> DeleteBackupError {
-        DeleteBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteBackupError {
-    fn from(err: CredentialsError) -> DeleteBackupError {
-        DeleteBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteBackupError {
-    fn from(err: HttpDispatchError) -> DeleteBackupError {
-        DeleteBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteBackupError {
-    fn from(err: io::Error) -> DeleteBackupError {
-        DeleteBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteBackupError {
@@ -915,11 +795,6 @@ impl Error for DeleteBackupError {
             DeleteBackupError::CloudHsmInvalidRequest(ref cause) => cause,
             DeleteBackupError::CloudHsmResourceNotFound(ref cause) => cause,
             DeleteBackupError::CloudHsmService(ref cause) => cause,
-            DeleteBackupError::Validation(ref cause) => cause,
-            DeleteBackupError::Credentials(ref err) => err.description(),
-            DeleteBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteBackupError::ParseError(ref cause) => cause,
-            DeleteBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -936,20 +811,10 @@ pub enum DeleteClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -962,48 +827,35 @@ impl DeleteClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DeleteClusterError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DeleteClusterError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DeleteClusterError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DeleteClusterError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteClusterError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteClusterError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteClusterError {
-    fn from(err: serde_json::error::Error) -> DeleteClusterError {
-        DeleteClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteClusterError {
-    fn from(err: CredentialsError) -> DeleteClusterError {
-        DeleteClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteClusterError {
-    fn from(err: HttpDispatchError) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteClusterError {
-    fn from(err: io::Error) -> DeleteClusterError {
-        DeleteClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteClusterError {
@@ -1019,11 +871,6 @@ impl Error for DeleteClusterError {
             DeleteClusterError::CloudHsmInvalidRequest(ref cause) => cause,
             DeleteClusterError::CloudHsmResourceNotFound(ref cause) => cause,
             DeleteClusterError::CloudHsmService(ref cause) => cause,
-            DeleteClusterError::Validation(ref cause) => cause,
-            DeleteClusterError::Credentials(ref err) => err.description(),
-            DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteClusterError::ParseError(ref cause) => cause,
-            DeleteClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1040,20 +887,10 @@ pub enum DeleteHsmError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteHsmError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteHsmError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteHsmError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1066,48 +903,35 @@ impl DeleteHsmError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DeleteHsmError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmAccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DeleteHsmError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DeleteHsmError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DeleteHsmError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return DeleteHsmError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DeleteHsmError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteHsmError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteHsmError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteHsmError {
-    fn from(err: serde_json::error::Error) -> DeleteHsmError {
-        DeleteHsmError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteHsmError {
-    fn from(err: CredentialsError) -> DeleteHsmError {
-        DeleteHsmError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteHsmError {
-    fn from(err: HttpDispatchError) -> DeleteHsmError {
-        DeleteHsmError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteHsmError {
-    fn from(err: io::Error) -> DeleteHsmError {
-        DeleteHsmError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteHsmError {
@@ -1123,11 +947,6 @@ impl Error for DeleteHsmError {
             DeleteHsmError::CloudHsmInvalidRequest(ref cause) => cause,
             DeleteHsmError::CloudHsmResourceNotFound(ref cause) => cause,
             DeleteHsmError::CloudHsmService(ref cause) => cause,
-            DeleteHsmError::Validation(ref cause) => cause,
-            DeleteHsmError::Credentials(ref err) => err.description(),
-            DeleteHsmError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteHsmError::ParseError(ref cause) => cause,
-            DeleteHsmError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1144,20 +963,10 @@ pub enum DescribeBackupsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeBackupsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeBackupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBackupsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1170,52 +979,35 @@ impl DescribeBackupsError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DescribeBackupsError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DescribeBackupsError::CloudHsmInternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmInternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DescribeBackupsError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return DescribeBackupsError::CloudHsmResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeBackupsError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DescribeBackupsError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeBackupsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeBackupsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeBackupsError {
-    fn from(err: serde_json::error::Error) -> DescribeBackupsError {
-        DescribeBackupsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeBackupsError {
-    fn from(err: CredentialsError) -> DescribeBackupsError {
-        DescribeBackupsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeBackupsError {
-    fn from(err: HttpDispatchError) -> DescribeBackupsError {
-        DescribeBackupsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeBackupsError {
-    fn from(err: io::Error) -> DescribeBackupsError {
-        DescribeBackupsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeBackupsError {
@@ -1231,11 +1023,6 @@ impl Error for DescribeBackupsError {
             DescribeBackupsError::CloudHsmInvalidRequest(ref cause) => cause,
             DescribeBackupsError::CloudHsmResourceNotFound(ref cause) => cause,
             DescribeBackupsError::CloudHsmService(ref cause) => cause,
-            DescribeBackupsError::Validation(ref cause) => cause,
-            DescribeBackupsError::Credentials(ref err) => err.description(),
-            DescribeBackupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeBackupsError::ParseError(ref cause) => cause,
-            DescribeBackupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1250,20 +1037,10 @@ pub enum DescribeClustersError {
     CloudHsmInvalidRequest(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeClustersError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeClustersError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1276,49 +1053,30 @@ impl DescribeClustersError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return DescribeClustersError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(DescribeClustersError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return DescribeClustersError::CloudHsmInternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeClustersError::CloudHsmInternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return DescribeClustersError::CloudHsmInvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(DescribeClustersError::CloudHsmInvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmServiceException" => {
-                    return DescribeClustersError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(DescribeClustersError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DescribeClustersError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DescribeClustersError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DescribeClustersError {
-    fn from(err: serde_json::error::Error) -> DescribeClustersError {
-        DescribeClustersError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DescribeClustersError {
-    fn from(err: CredentialsError) -> DescribeClustersError {
-        DescribeClustersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeClustersError {
-    fn from(err: HttpDispatchError) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeClustersError {
-    fn from(err: io::Error) -> DescribeClustersError {
-        DescribeClustersError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DescribeClustersError {
@@ -1333,11 +1091,6 @@ impl Error for DescribeClustersError {
             DescribeClustersError::CloudHsmInternalFailure(ref cause) => cause,
             DescribeClustersError::CloudHsmInvalidRequest(ref cause) => cause,
             DescribeClustersError::CloudHsmService(ref cause) => cause,
-            DescribeClustersError::Validation(ref cause) => cause,
-            DescribeClustersError::Credentials(ref err) => err.description(),
-            DescribeClustersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DescribeClustersError::ParseError(ref cause) => cause,
-            DescribeClustersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1354,20 +1107,10 @@ pub enum InitializeClusterError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl InitializeClusterError {
-    pub fn from_response(res: BufferedHttpResponse) -> InitializeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<InitializeClusterError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1380,54 +1123,35 @@ impl InitializeClusterError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return InitializeClusterError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(InitializeClusterError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return InitializeClusterError::CloudHsmInternalFailure(String::from(
-                        error_message,
+                    return RusotoError::Service(InitializeClusterError::CloudHsmInternalFailure(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return InitializeClusterError::CloudHsmInvalidRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(InitializeClusterError::CloudHsmInvalidRequest(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return InitializeClusterError::CloudHsmResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(InitializeClusterError::CloudHsmResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "CloudHsmServiceException" => {
-                    return InitializeClusterError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(InitializeClusterError::CloudHsmService(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return InitializeClusterError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return InitializeClusterError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for InitializeClusterError {
-    fn from(err: serde_json::error::Error) -> InitializeClusterError {
-        InitializeClusterError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for InitializeClusterError {
-    fn from(err: CredentialsError) -> InitializeClusterError {
-        InitializeClusterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for InitializeClusterError {
-    fn from(err: HttpDispatchError) -> InitializeClusterError {
-        InitializeClusterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for InitializeClusterError {
-    fn from(err: io::Error) -> InitializeClusterError {
-        InitializeClusterError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for InitializeClusterError {
@@ -1443,13 +1167,6 @@ impl Error for InitializeClusterError {
             InitializeClusterError::CloudHsmInvalidRequest(ref cause) => cause,
             InitializeClusterError::CloudHsmResourceNotFound(ref cause) => cause,
             InitializeClusterError::CloudHsmService(ref cause) => cause,
-            InitializeClusterError::Validation(ref cause) => cause,
-            InitializeClusterError::Credentials(ref err) => err.description(),
-            InitializeClusterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            InitializeClusterError::ParseError(ref cause) => cause,
-            InitializeClusterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1466,20 +1183,10 @@ pub enum ListTagsError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1492,48 +1199,35 @@ impl ListTagsError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return ListTagsError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::CloudHsmAccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return ListTagsError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return ListTagsError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return ListTagsError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return ListTagsError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(ListTagsError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListTagsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsError {
-    fn from(err: serde_json::error::Error) -> ListTagsError {
-        ListTagsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsError {
-    fn from(err: CredentialsError) -> ListTagsError {
-        ListTagsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsError {
-    fn from(err: HttpDispatchError) -> ListTagsError {
-        ListTagsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsError {
-    fn from(err: io::Error) -> ListTagsError {
-        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsError {
@@ -1549,11 +1243,6 @@ impl Error for ListTagsError {
             ListTagsError::CloudHsmInvalidRequest(ref cause) => cause,
             ListTagsError::CloudHsmResourceNotFound(ref cause) => cause,
             ListTagsError::CloudHsmService(ref cause) => cause,
-            ListTagsError::Validation(ref cause) => cause,
-            ListTagsError::Credentials(ref err) => err.description(),
-            ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTagsError::ParseError(ref cause) => cause,
-            ListTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1570,20 +1259,10 @@ pub enum RestoreBackupError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RestoreBackupError {
-    pub fn from_response(res: BufferedHttpResponse) -> RestoreBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreBackupError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1596,48 +1275,35 @@ impl RestoreBackupError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return RestoreBackupError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(RestoreBackupError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return RestoreBackupError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(RestoreBackupError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return RestoreBackupError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(RestoreBackupError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return RestoreBackupError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(RestoreBackupError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return RestoreBackupError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(RestoreBackupError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return RestoreBackupError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RestoreBackupError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RestoreBackupError {
-    fn from(err: serde_json::error::Error) -> RestoreBackupError {
-        RestoreBackupError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RestoreBackupError {
-    fn from(err: CredentialsError) -> RestoreBackupError {
-        RestoreBackupError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RestoreBackupError {
-    fn from(err: HttpDispatchError) -> RestoreBackupError {
-        RestoreBackupError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RestoreBackupError {
-    fn from(err: io::Error) -> RestoreBackupError {
-        RestoreBackupError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RestoreBackupError {
@@ -1653,11 +1319,6 @@ impl Error for RestoreBackupError {
             RestoreBackupError::CloudHsmInvalidRequest(ref cause) => cause,
             RestoreBackupError::CloudHsmResourceNotFound(ref cause) => cause,
             RestoreBackupError::CloudHsmService(ref cause) => cause,
-            RestoreBackupError::Validation(ref cause) => cause,
-            RestoreBackupError::Credentials(ref err) => err.description(),
-            RestoreBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            RestoreBackupError::ParseError(ref cause) => cause,
-            RestoreBackupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1674,20 +1335,10 @@ pub enum TagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1700,48 +1351,35 @@ impl TagResourceError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return TagResourceError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return TagResourceError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return TagResourceError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return TagResourceError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return TagResourceError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -1757,11 +1395,6 @@ impl Error for TagResourceError {
             TagResourceError::CloudHsmInvalidRequest(ref cause) => cause,
             TagResourceError::CloudHsmResourceNotFound(ref cause) => cause,
             TagResourceError::CloudHsmService(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1778,20 +1411,10 @@ pub enum UntagResourceError {
     CloudHsmResourceNotFound(String),
     /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let raw_error_type = json
                 .get("__type")
@@ -1804,48 +1427,35 @@ impl UntagResourceError {
 
             match *error_type {
                 "CloudHsmAccessDeniedException" => {
-                    return UntagResourceError::CloudHsmAccessDenied(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::CloudHsmAccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInternalFailureException" => {
-                    return UntagResourceError::CloudHsmInternalFailure(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::CloudHsmInternalFailure(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmInvalidRequestException" => {
-                    return UntagResourceError::CloudHsmInvalidRequest(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::CloudHsmInvalidRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmResourceNotFoundException" => {
-                    return UntagResourceError::CloudHsmResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::CloudHsmResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "CloudHsmServiceException" => {
-                    return UntagResourceError::CloudHsmService(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::CloudHsmService(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -1861,11 +1471,6 @@ impl Error for UntagResourceError {
             UntagResourceError::CloudHsmInvalidRequest(ref cause) => cause,
             UntagResourceError::CloudHsmResourceNotFound(ref cause) => cause,
             UntagResourceError::CloudHsmService(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }

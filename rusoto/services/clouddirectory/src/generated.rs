@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::signature::SignedRequest;
 use serde_json;
@@ -3042,22 +3039,12 @@ pub enum AddFacetToObjectError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AddFacetToObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AddFacetToObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFacetToObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3082,57 +3069,50 @@ impl AddFacetToObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AddFacetToObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AddFacetToObjectError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return AddFacetToObjectError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return AddFacetToObjectError::InternalService(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return AddFacetToObjectError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return AddFacetToObjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AddFacetToObjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return AddFacetToObjectError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(AddFacetToObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AddFacetToObjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AddFacetToObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AddFacetToObjectError {
-    fn from(err: serde_json::error::Error) -> AddFacetToObjectError {
-        AddFacetToObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AddFacetToObjectError {
-    fn from(err: CredentialsError) -> AddFacetToObjectError {
-        AddFacetToObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AddFacetToObjectError {
-    fn from(err: HttpDispatchError) -> AddFacetToObjectError {
-        AddFacetToObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AddFacetToObjectError {
-    fn from(err: io::Error) -> AddFacetToObjectError {
-        AddFacetToObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AddFacetToObjectError {
@@ -3151,11 +3131,6 @@ impl Error for AddFacetToObjectError {
             AddFacetToObjectError::LimitExceeded(ref cause) => cause,
             AddFacetToObjectError::ResourceNotFound(ref cause) => cause,
             AddFacetToObjectError::RetryableConflict(ref cause) => cause,
-            AddFacetToObjectError::Validation(ref cause) => cause,
-            AddFacetToObjectError::Credentials(ref err) => err.description(),
-            AddFacetToObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AddFacetToObjectError::ParseError(ref cause) => cause,
-            AddFacetToObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3176,22 +3151,12 @@ pub enum ApplySchemaError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ApplySchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ApplySchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ApplySchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3216,54 +3181,45 @@ impl ApplySchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ApplySchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ApplySchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return ApplySchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAttachmentException" => {
-                    return ApplySchemaError::InvalidAttachment(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::InvalidAttachment(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ApplySchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ApplySchemaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return ApplySchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ApplySchemaError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ApplySchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ApplySchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ApplySchemaError {
-    fn from(err: serde_json::error::Error) -> ApplySchemaError {
-        ApplySchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ApplySchemaError {
-    fn from(err: CredentialsError) -> ApplySchemaError {
-        ApplySchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ApplySchemaError {
-    fn from(err: HttpDispatchError) -> ApplySchemaError {
-        ApplySchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ApplySchemaError {
-    fn from(err: io::Error) -> ApplySchemaError {
-        ApplySchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ApplySchemaError {
@@ -3281,11 +3237,6 @@ impl Error for ApplySchemaError {
             ApplySchemaError::LimitExceeded(ref cause) => cause,
             ApplySchemaError::ResourceNotFound(ref cause) => cause,
             ApplySchemaError::RetryableConflict(ref cause) => cause,
-            ApplySchemaError::Validation(ref cause) => cause,
-            ApplySchemaError::Credentials(ref err) => err.description(),
-            ApplySchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ApplySchemaError::ParseError(ref cause) => cause,
-            ApplySchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3312,22 +3263,12 @@ pub enum AttachObjectError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AttachObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3352,63 +3293,60 @@ impl AttachObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachObjectError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return AttachObjectError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::FacetValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return AttachObjectError::InternalService(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return AttachObjectError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachObjectError::InvalidAttachment(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::InvalidAttachment(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return AttachObjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return AttachObjectError::LinkNameAlreadyInUse(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::LinkNameAlreadyInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachObjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return AttachObjectError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(AttachObjectError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AttachObjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachObjectError {
-    fn from(err: serde_json::error::Error) -> AttachObjectError {
-        AttachObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachObjectError {
-    fn from(err: CredentialsError) -> AttachObjectError {
-        AttachObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachObjectError {
-    fn from(err: HttpDispatchError) -> AttachObjectError {
-        AttachObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachObjectError {
-    fn from(err: io::Error) -> AttachObjectError {
-        AttachObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachObjectError {
@@ -3429,11 +3367,6 @@ impl Error for AttachObjectError {
             AttachObjectError::LinkNameAlreadyInUse(ref cause) => cause,
             AttachObjectError::ResourceNotFound(ref cause) => cause,
             AttachObjectError::RetryableConflict(ref cause) => cause,
-            AttachObjectError::Validation(ref cause) => cause,
-            AttachObjectError::Credentials(ref err) => err.description(),
-            AttachObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachObjectError::ParseError(ref cause) => cause,
-            AttachObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3456,22 +3389,12 @@ pub enum AttachPolicyError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AttachPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3496,57 +3419,50 @@ impl AttachPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachPolicyError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return AttachPolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return AttachPolicyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return AttachPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotPolicyException" => {
-                    return AttachPolicyError::NotPolicy(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::NotPolicy(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return AttachPolicyError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(AttachPolicyError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return AttachPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachPolicyError {
-    fn from(err: serde_json::error::Error) -> AttachPolicyError {
-        AttachPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachPolicyError {
-    fn from(err: CredentialsError) -> AttachPolicyError {
-        AttachPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachPolicyError {
-    fn from(err: HttpDispatchError) -> AttachPolicyError {
-        AttachPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachPolicyError {
-    fn from(err: io::Error) -> AttachPolicyError {
-        AttachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachPolicyError {
@@ -3565,11 +3481,6 @@ impl Error for AttachPolicyError {
             AttachPolicyError::NotPolicy(ref cause) => cause,
             AttachPolicyError::ResourceNotFound(ref cause) => cause,
             AttachPolicyError::RetryableConflict(ref cause) => cause,
-            AttachPolicyError::Validation(ref cause) => cause,
-            AttachPolicyError::Credentials(ref err) => err.description(),
-            AttachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachPolicyError::ParseError(ref cause) => cause,
-            AttachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3598,22 +3509,12 @@ pub enum AttachToIndexError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachToIndexError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AttachToIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachToIndexError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3638,66 +3539,65 @@ impl AttachToIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachToIndexError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachToIndexError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "IndexedAttributeMissingException" => {
-                    return AttachToIndexError::IndexedAttributeMissing(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::IndexedAttributeMissing(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return AttachToIndexError::InternalService(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return AttachToIndexError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachToIndexError::InvalidAttachment(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::InvalidAttachment(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AttachToIndexError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return AttachToIndexError::LinkNameAlreadyInUse(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::LinkNameAlreadyInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "NotIndexException" => {
-                    return AttachToIndexError::NotIndex(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::NotIndex(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachToIndexError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return AttachToIndexError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(AttachToIndexError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AttachToIndexError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachToIndexError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachToIndexError {
-    fn from(err: serde_json::error::Error) -> AttachToIndexError {
-        AttachToIndexError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachToIndexError {
-    fn from(err: CredentialsError) -> AttachToIndexError {
-        AttachToIndexError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachToIndexError {
-    fn from(err: HttpDispatchError) -> AttachToIndexError {
-        AttachToIndexError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachToIndexError {
-    fn from(err: io::Error) -> AttachToIndexError {
-        AttachToIndexError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachToIndexError {
@@ -3719,11 +3619,6 @@ impl Error for AttachToIndexError {
             AttachToIndexError::NotIndex(ref cause) => cause,
             AttachToIndexError::ResourceNotFound(ref cause) => cause,
             AttachToIndexError::RetryableConflict(ref cause) => cause,
-            AttachToIndexError::Validation(ref cause) => cause,
-            AttachToIndexError::Credentials(ref err) => err.description(),
-            AttachToIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachToIndexError::ParseError(ref cause) => cause,
-            AttachToIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3748,22 +3643,12 @@ pub enum AttachTypedLinkError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl AttachTypedLinkError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> AttachTypedLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AttachTypedLinkError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3788,60 +3673,55 @@ impl AttachTypedLinkError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return AttachTypedLinkError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return AttachTypedLinkError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return AttachTypedLinkError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return AttachTypedLinkError::InternalService(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return AttachTypedLinkError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidAttachmentException" => {
-                    return AttachTypedLinkError::InvalidAttachment(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::InvalidAttachment(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return AttachTypedLinkError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return AttachTypedLinkError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return AttachTypedLinkError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(AttachTypedLinkError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return AttachTypedLinkError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return AttachTypedLinkError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for AttachTypedLinkError {
-    fn from(err: serde_json::error::Error) -> AttachTypedLinkError {
-        AttachTypedLinkError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for AttachTypedLinkError {
-    fn from(err: CredentialsError) -> AttachTypedLinkError {
-        AttachTypedLinkError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for AttachTypedLinkError {
-    fn from(err: HttpDispatchError) -> AttachTypedLinkError {
-        AttachTypedLinkError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for AttachTypedLinkError {
-    fn from(err: io::Error) -> AttachTypedLinkError {
-        AttachTypedLinkError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for AttachTypedLinkError {
@@ -3861,11 +3741,6 @@ impl Error for AttachTypedLinkError {
             AttachTypedLinkError::LimitExceeded(ref cause) => cause,
             AttachTypedLinkError::ResourceNotFound(ref cause) => cause,
             AttachTypedLinkError::RetryableConflict(ref cause) => cause,
-            AttachTypedLinkError::Validation(ref cause) => cause,
-            AttachTypedLinkError::Credentials(ref err) => err.description(),
-            AttachTypedLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            AttachTypedLinkError::ParseError(ref cause) => cause,
-            AttachTypedLinkError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3884,22 +3759,12 @@ pub enum BatchReadError {
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchReadError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> BatchReadError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchReadError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -3924,51 +3789,40 @@ impl BatchReadError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return BatchReadError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return BatchReadError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return BatchReadError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return BatchReadError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return BatchReadError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return BatchReadError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(BatchReadError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchReadError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchReadError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchReadError {
-    fn from(err: serde_json::error::Error) -> BatchReadError {
-        BatchReadError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchReadError {
-    fn from(err: CredentialsError) -> BatchReadError {
-        BatchReadError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchReadError {
-    fn from(err: HttpDispatchError) -> BatchReadError {
-        BatchReadError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchReadError {
-    fn from(err: io::Error) -> BatchReadError {
-        BatchReadError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchReadError {
@@ -3985,11 +3839,6 @@ impl Error for BatchReadError {
             BatchReadError::InvalidArn(ref cause) => cause,
             BatchReadError::LimitExceeded(ref cause) => cause,
             BatchReadError::RetryableConflict(ref cause) => cause,
-            BatchReadError::Validation(ref cause) => cause,
-            BatchReadError::Credentials(ref err) => err.description(),
-            BatchReadError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchReadError::ParseError(ref cause) => cause,
-            BatchReadError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4010,22 +3859,12 @@ pub enum BatchWriteError {
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl BatchWriteError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> BatchWriteError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchWriteError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4050,54 +3889,45 @@ impl BatchWriteError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return BatchWriteError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "BatchWriteException" => {
-                    return BatchWriteError::BatchWrite(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::BatchWrite(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return BatchWriteError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return BatchWriteError::InternalService(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return BatchWriteError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return BatchWriteError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return BatchWriteError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(BatchWriteError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return BatchWriteError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return BatchWriteError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for BatchWriteError {
-    fn from(err: serde_json::error::Error) -> BatchWriteError {
-        BatchWriteError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for BatchWriteError {
-    fn from(err: CredentialsError) -> BatchWriteError {
-        BatchWriteError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for BatchWriteError {
-    fn from(err: HttpDispatchError) -> BatchWriteError {
-        BatchWriteError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for BatchWriteError {
-    fn from(err: io::Error) -> BatchWriteError {
-        BatchWriteError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for BatchWriteError {
@@ -4115,11 +3945,6 @@ impl Error for BatchWriteError {
             BatchWriteError::InvalidArn(ref cause) => cause,
             BatchWriteError::LimitExceeded(ref cause) => cause,
             BatchWriteError::RetryableConflict(ref cause) => cause,
-            BatchWriteError::Validation(ref cause) => cause,
-            BatchWriteError::Credentials(ref err) => err.description(),
-            BatchWriteError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            BatchWriteError::ParseError(ref cause) => cause,
-            BatchWriteError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4140,22 +3965,12 @@ pub enum CreateDirectoryError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateDirectoryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDirectoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4180,54 +3995,45 @@ impl CreateDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateDirectoryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryAlreadyExistsException" => {
-                    return CreateDirectoryError::DirectoryAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::DirectoryAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateDirectoryError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return CreateDirectoryError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateDirectoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateDirectoryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return CreateDirectoryError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateDirectoryError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateDirectoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateDirectoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateDirectoryError {
-    fn from(err: serde_json::error::Error) -> CreateDirectoryError {
-        CreateDirectoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateDirectoryError {
-    fn from(err: CredentialsError) -> CreateDirectoryError {
-        CreateDirectoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateDirectoryError {
-    fn from(err: HttpDispatchError) -> CreateDirectoryError {
-        CreateDirectoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateDirectoryError {
-    fn from(err: io::Error) -> CreateDirectoryError {
-        CreateDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateDirectoryError {
@@ -4245,11 +4051,6 @@ impl Error for CreateDirectoryError {
             CreateDirectoryError::LimitExceeded(ref cause) => cause,
             CreateDirectoryError::ResourceNotFound(ref cause) => cause,
             CreateDirectoryError::RetryableConflict(ref cause) => cause,
-            CreateDirectoryError::Validation(ref cause) => cause,
-            CreateDirectoryError::Credentials(ref err) => err.description(),
-            CreateDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateDirectoryError::ParseError(ref cause) => cause,
-            CreateDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4274,22 +4075,12 @@ pub enum CreateFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4314,60 +4105,55 @@ impl CreateFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetAlreadyExistsException" => {
-                    return CreateFacetError::FacetAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::FacetAlreadyExists(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetValidationException" => {
-                    return CreateFacetError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::FacetValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRuleException" => {
-                    return CreateFacetError::InvalidRule(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::InvalidRule(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return CreateFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateFacetError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return CreateFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateFacetError {
-    fn from(err: serde_json::error::Error) -> CreateFacetError {
-        CreateFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateFacetError {
-    fn from(err: CredentialsError) -> CreateFacetError {
-        CreateFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateFacetError {
-    fn from(err: HttpDispatchError) -> CreateFacetError {
-        CreateFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateFacetError {
-    fn from(err: io::Error) -> CreateFacetError {
-        CreateFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateFacetError {
@@ -4387,11 +4173,6 @@ impl Error for CreateFacetError {
             CreateFacetError::LimitExceeded(ref cause) => cause,
             CreateFacetError::ResourceNotFound(ref cause) => cause,
             CreateFacetError::RetryableConflict(ref cause) => cause,
-            CreateFacetError::Validation(ref cause) => cause,
-            CreateFacetError::Credentials(ref err) => err.description(),
-            CreateFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateFacetError::ParseError(ref cause) => cause,
-            CreateFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4418,22 +4199,12 @@ pub enum CreateIndexError {
     RetryableConflict(String),
     /// <p>Indicates that the requested index type is not supported.</p>
     UnsupportedIndexType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateIndexError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateIndexError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4458,63 +4229,60 @@ impl CreateIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateIndexError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return CreateIndexError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return CreateIndexError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::FacetValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateIndexError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateIndexError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateIndexError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return CreateIndexError::LinkNameAlreadyInUse(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::LinkNameAlreadyInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateIndexError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return CreateIndexError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedIndexTypeException" => {
-                    return CreateIndexError::UnsupportedIndexType(String::from(error_message));
+                    return RusotoError::Service(CreateIndexError::UnsupportedIndexType(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateIndexError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateIndexError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateIndexError {
-    fn from(err: serde_json::error::Error) -> CreateIndexError {
-        CreateIndexError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateIndexError {
-    fn from(err: CredentialsError) -> CreateIndexError {
-        CreateIndexError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateIndexError {
-    fn from(err: HttpDispatchError) -> CreateIndexError {
-        CreateIndexError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateIndexError {
-    fn from(err: io::Error) -> CreateIndexError {
-        CreateIndexError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateIndexError {
@@ -4535,11 +4303,6 @@ impl Error for CreateIndexError {
             CreateIndexError::ResourceNotFound(ref cause) => cause,
             CreateIndexError::RetryableConflict(ref cause) => cause,
             CreateIndexError::UnsupportedIndexType(ref cause) => cause,
-            CreateIndexError::Validation(ref cause) => cause,
-            CreateIndexError::Credentials(ref err) => err.description(),
-            CreateIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateIndexError::ParseError(ref cause) => cause,
-            CreateIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4566,22 +4329,12 @@ pub enum CreateObjectError {
     RetryableConflict(String),
     /// <p>Indicates that the requested index type is not supported.</p>
     UnsupportedIndexType(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4606,63 +4359,60 @@ impl CreateObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return CreateObjectError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return CreateObjectError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::FacetValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateObjectError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateObjectError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateObjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return CreateObjectError::LinkNameAlreadyInUse(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::LinkNameAlreadyInUse(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateObjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return CreateObjectError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "UnsupportedIndexTypeException" => {
-                    return CreateObjectError::UnsupportedIndexType(String::from(error_message));
+                    return RusotoError::Service(CreateObjectError::UnsupportedIndexType(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateObjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateObjectError {
-    fn from(err: serde_json::error::Error) -> CreateObjectError {
-        CreateObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateObjectError {
-    fn from(err: CredentialsError) -> CreateObjectError {
-        CreateObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateObjectError {
-    fn from(err: HttpDispatchError) -> CreateObjectError {
-        CreateObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateObjectError {
-    fn from(err: io::Error) -> CreateObjectError {
-        CreateObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateObjectError {
@@ -4683,11 +4433,6 @@ impl Error for CreateObjectError {
             CreateObjectError::ResourceNotFound(ref cause) => cause,
             CreateObjectError::RetryableConflict(ref cause) => cause,
             CreateObjectError::UnsupportedIndexType(ref cause) => cause,
-            CreateObjectError::Validation(ref cause) => cause,
-            CreateObjectError::Credentials(ref err) => err.description(),
-            CreateObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateObjectError::ParseError(ref cause) => cause,
-            CreateObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4706,22 +4451,12 @@ pub enum CreateSchemaError {
     RetryableConflict(String),
     /// <p>Indicates that a schema could not be created due to a naming conflict. Please select a different name and then try again.</p>
     SchemaAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4746,51 +4481,40 @@ impl CreateSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return CreateSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return CreateSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return CreateSchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return CreateSchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "SchemaAlreadyExistsException" => {
-                    return CreateSchemaError::SchemaAlreadyExists(String::from(error_message));
+                    return RusotoError::Service(CreateSchemaError::SchemaAlreadyExists(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateSchemaError {
-    fn from(err: serde_json::error::Error) -> CreateSchemaError {
-        CreateSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateSchemaError {
-    fn from(err: CredentialsError) -> CreateSchemaError {
-        CreateSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateSchemaError {
-    fn from(err: HttpDispatchError) -> CreateSchemaError {
-        CreateSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateSchemaError {
-    fn from(err: io::Error) -> CreateSchemaError {
-        CreateSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateSchemaError {
@@ -4807,11 +4531,6 @@ impl Error for CreateSchemaError {
             CreateSchemaError::LimitExceeded(ref cause) => cause,
             CreateSchemaError::RetryableConflict(ref cause) => cause,
             CreateSchemaError::SchemaAlreadyExists(ref cause) => cause,
-            CreateSchemaError::Validation(ref cause) => cause,
-            CreateSchemaError::Credentials(ref err) => err.description(),
-            CreateSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateSchemaError::ParseError(ref cause) => cause,
-            CreateSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4836,22 +4555,12 @@ pub enum CreateTypedLinkFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTypedLinkFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTypedLinkFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTypedLinkFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -4876,62 +4585,55 @@ impl CreateTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return CreateTypedLinkFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetAlreadyExistsException" => {
-                    return CreateTypedLinkFacetError::FacetAlreadyExists(String::from(
-                        error_message,
+                    return RusotoError::Service(CreateTypedLinkFacetError::FacetAlreadyExists(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return CreateTypedLinkFacetError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return CreateTypedLinkFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return CreateTypedLinkFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidRuleException" => {
-                    return CreateTypedLinkFacetError::InvalidRule(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::InvalidRule(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return CreateTypedLinkFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return CreateTypedLinkFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return CreateTypedLinkFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(CreateTypedLinkFacetError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return CreateTypedLinkFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return CreateTypedLinkFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for CreateTypedLinkFacetError {
-    fn from(err: serde_json::error::Error) -> CreateTypedLinkFacetError {
-        CreateTypedLinkFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for CreateTypedLinkFacetError {
-    fn from(err: CredentialsError) -> CreateTypedLinkFacetError {
-        CreateTypedLinkFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTypedLinkFacetError {
-    fn from(err: HttpDispatchError) -> CreateTypedLinkFacetError {
-        CreateTypedLinkFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTypedLinkFacetError {
-    fn from(err: io::Error) -> CreateTypedLinkFacetError {
-        CreateTypedLinkFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for CreateTypedLinkFacetError {
@@ -4951,13 +4653,6 @@ impl Error for CreateTypedLinkFacetError {
             CreateTypedLinkFacetError::LimitExceeded(ref cause) => cause,
             CreateTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
             CreateTypedLinkFacetError::RetryableConflict(ref cause) => cause,
-            CreateTypedLinkFacetError::Validation(ref cause) => cause,
-            CreateTypedLinkFacetError::Credentials(ref err) => err.description(),
-            CreateTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateTypedLinkFacetError::ParseError(ref cause) => cause,
-            CreateTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4980,22 +4675,12 @@ pub enum DeleteDirectoryError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteDirectoryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDirectoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5020,57 +4705,50 @@ impl DeleteDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteDirectoryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryDeletedException" => {
-                    return DeleteDirectoryError::DirectoryDeleted(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::DirectoryDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotDisabledException" => {
-                    return DeleteDirectoryError::DirectoryNotDisabled(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::DirectoryNotDisabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteDirectoryError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DeleteDirectoryError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteDirectoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteDirectoryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return DeleteDirectoryError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteDirectoryError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteDirectoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteDirectoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteDirectoryError {
-    fn from(err: serde_json::error::Error) -> DeleteDirectoryError {
-        DeleteDirectoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteDirectoryError {
-    fn from(err: CredentialsError) -> DeleteDirectoryError {
-        DeleteDirectoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteDirectoryError {
-    fn from(err: HttpDispatchError) -> DeleteDirectoryError {
-        DeleteDirectoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteDirectoryError {
-    fn from(err: io::Error) -> DeleteDirectoryError {
-        DeleteDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteDirectoryError {
@@ -5089,11 +4767,6 @@ impl Error for DeleteDirectoryError {
             DeleteDirectoryError::LimitExceeded(ref cause) => cause,
             DeleteDirectoryError::ResourceNotFound(ref cause) => cause,
             DeleteDirectoryError::RetryableConflict(ref cause) => cause,
-            DeleteDirectoryError::Validation(ref cause) => cause,
-            DeleteDirectoryError::Credentials(ref err) => err.description(),
-            DeleteDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteDirectoryError::ParseError(ref cause) => cause,
-            DeleteDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5116,22 +4789,12 @@ pub enum DeleteFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5156,57 +4819,50 @@ impl DeleteFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetInUseException" => {
-                    return DeleteFacetError::FacetInUse(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::FacetInUse(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetNotFoundException" => {
-                    return DeleteFacetError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::FacetNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return DeleteFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DeleteFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return DeleteFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteFacetError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteFacetError {
-    fn from(err: serde_json::error::Error) -> DeleteFacetError {
-        DeleteFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteFacetError {
-    fn from(err: CredentialsError) -> DeleteFacetError {
-        DeleteFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteFacetError {
-    fn from(err: HttpDispatchError) -> DeleteFacetError {
-        DeleteFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteFacetError {
-    fn from(err: io::Error) -> DeleteFacetError {
-        DeleteFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteFacetError {
@@ -5225,11 +4881,6 @@ impl Error for DeleteFacetError {
             DeleteFacetError::LimitExceeded(ref cause) => cause,
             DeleteFacetError::ResourceNotFound(ref cause) => cause,
             DeleteFacetError::RetryableConflict(ref cause) => cause,
-            DeleteFacetError::Validation(ref cause) => cause,
-            DeleteFacetError::Credentials(ref err) => err.description(),
-            DeleteFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteFacetError::ParseError(ref cause) => cause,
-            DeleteFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5252,22 +4903,12 @@ pub enum DeleteObjectError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5292,57 +4933,50 @@ impl DeleteObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DeleteObjectError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteObjectError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DeleteObjectError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteObjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ObjectNotDetachedException" => {
-                    return DeleteObjectError::ObjectNotDetached(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::ObjectNotDetached(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteObjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return DeleteObjectError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteObjectError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DeleteObjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteObjectError {
-    fn from(err: serde_json::error::Error) -> DeleteObjectError {
-        DeleteObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteObjectError {
-    fn from(err: CredentialsError) -> DeleteObjectError {
-        DeleteObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteObjectError {
-    fn from(err: HttpDispatchError) -> DeleteObjectError {
-        DeleteObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteObjectError {
-    fn from(err: io::Error) -> DeleteObjectError {
-        DeleteObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteObjectError {
@@ -5361,11 +4995,6 @@ impl Error for DeleteObjectError {
             DeleteObjectError::ObjectNotDetached(ref cause) => cause,
             DeleteObjectError::ResourceNotFound(ref cause) => cause,
             DeleteObjectError::RetryableConflict(ref cause) => cause,
-            DeleteObjectError::Validation(ref cause) => cause,
-            DeleteObjectError::Credentials(ref err) => err.description(),
-            DeleteObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteObjectError::ParseError(ref cause) => cause,
-            DeleteObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5386,22 +5015,12 @@ pub enum DeleteSchemaError {
     RetryableConflict(String),
     /// <p>The object could not be deleted because links still exist. Remove the links and then try the operation again.</p>
     StillContainsLinks(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5426,54 +5045,45 @@ impl DeleteSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return DeleteSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DeleteSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DeleteSchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteSchemaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return DeleteSchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
                 "StillContainsLinksException" => {
-                    return DeleteSchemaError::StillContainsLinks(String::from(error_message));
+                    return RusotoError::Service(DeleteSchemaError::StillContainsLinks(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteSchemaError {
-    fn from(err: serde_json::error::Error) -> DeleteSchemaError {
-        DeleteSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteSchemaError {
-    fn from(err: CredentialsError) -> DeleteSchemaError {
-        DeleteSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteSchemaError {
-    fn from(err: HttpDispatchError) -> DeleteSchemaError {
-        DeleteSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteSchemaError {
-    fn from(err: io::Error) -> DeleteSchemaError {
-        DeleteSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteSchemaError {
@@ -5491,11 +5101,6 @@ impl Error for DeleteSchemaError {
             DeleteSchemaError::ResourceNotFound(ref cause) => cause,
             DeleteSchemaError::RetryableConflict(ref cause) => cause,
             DeleteSchemaError::StillContainsLinks(ref cause) => cause,
-            DeleteSchemaError::Validation(ref cause) => cause,
-            DeleteSchemaError::Credentials(ref err) => err.description(),
-            DeleteSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteSchemaError::ParseError(ref cause) => cause,
-            DeleteSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5516,22 +5121,12 @@ pub enum DeleteTypedLinkFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteTypedLinkFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTypedLinkFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTypedLinkFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5556,54 +5151,45 @@ impl DeleteTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DeleteTypedLinkFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetNotFoundException" => {
-                    return DeleteTypedLinkFacetError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::FacetNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DeleteTypedLinkFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DeleteTypedLinkFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return DeleteTypedLinkFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DeleteTypedLinkFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return DeleteTypedLinkFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DeleteTypedLinkFacetError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DeleteTypedLinkFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DeleteTypedLinkFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DeleteTypedLinkFacetError {
-    fn from(err: serde_json::error::Error) -> DeleteTypedLinkFacetError {
-        DeleteTypedLinkFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTypedLinkFacetError {
-    fn from(err: CredentialsError) -> DeleteTypedLinkFacetError {
-        DeleteTypedLinkFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTypedLinkFacetError {
-    fn from(err: HttpDispatchError) -> DeleteTypedLinkFacetError {
-        DeleteTypedLinkFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTypedLinkFacetError {
-    fn from(err: io::Error) -> DeleteTypedLinkFacetError {
-        DeleteTypedLinkFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DeleteTypedLinkFacetError {
@@ -5621,13 +5207,6 @@ impl Error for DeleteTypedLinkFacetError {
             DeleteTypedLinkFacetError::LimitExceeded(ref cause) => cause,
             DeleteTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
             DeleteTypedLinkFacetError::RetryableConflict(ref cause) => cause,
-            DeleteTypedLinkFacetError::Validation(ref cause) => cause,
-            DeleteTypedLinkFacetError::Credentials(ref err) => err.description(),
-            DeleteTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteTypedLinkFacetError::ParseError(ref cause) => cause,
-            DeleteTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5652,22 +5231,12 @@ pub enum DetachFromIndexError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachFromIndexError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DetachFromIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachFromIndexError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5692,60 +5261,55 @@ impl DetachFromIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachFromIndexError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachFromIndexError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DetachFromIndexError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DetachFromIndexError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DetachFromIndexError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotIndexException" => {
-                    return DetachFromIndexError::NotIndex(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::NotIndex(String::from(
+                        error_message,
+                    )));
                 }
                 "ObjectAlreadyDetachedException" => {
-                    return DetachFromIndexError::ObjectAlreadyDetached(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::ObjectAlreadyDetached(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachFromIndexError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return DetachFromIndexError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DetachFromIndexError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetachFromIndexError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachFromIndexError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachFromIndexError {
-    fn from(err: serde_json::error::Error) -> DetachFromIndexError {
-        DetachFromIndexError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachFromIndexError {
-    fn from(err: CredentialsError) -> DetachFromIndexError {
-        DetachFromIndexError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachFromIndexError {
-    fn from(err: HttpDispatchError) -> DetachFromIndexError {
-        DetachFromIndexError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachFromIndexError {
-    fn from(err: io::Error) -> DetachFromIndexError {
-        DetachFromIndexError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachFromIndexError {
@@ -5765,11 +5329,6 @@ impl Error for DetachFromIndexError {
             DetachFromIndexError::ObjectAlreadyDetached(ref cause) => cause,
             DetachFromIndexError::ResourceNotFound(ref cause) => cause,
             DetachFromIndexError::RetryableConflict(ref cause) => cause,
-            DetachFromIndexError::Validation(ref cause) => cause,
-            DetachFromIndexError::Credentials(ref err) => err.description(),
-            DetachFromIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachFromIndexError::ParseError(ref cause) => cause,
-            DetachFromIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5792,22 +5351,12 @@ pub enum DetachObjectError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DetachObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5832,57 +5381,50 @@ impl DetachObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachObjectError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DetachObjectError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DetachObjectError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DetachObjectError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotNodeException" => {
-                    return DetachObjectError::NotNode(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::NotNode(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachObjectError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return DetachObjectError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DetachObjectError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetachObjectError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachObjectError {
-    fn from(err: serde_json::error::Error) -> DetachObjectError {
-        DetachObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachObjectError {
-    fn from(err: CredentialsError) -> DetachObjectError {
-        DetachObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachObjectError {
-    fn from(err: HttpDispatchError) -> DetachObjectError {
-        DetachObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachObjectError {
-    fn from(err: io::Error) -> DetachObjectError {
-        DetachObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachObjectError {
@@ -5901,11 +5443,6 @@ impl Error for DetachObjectError {
             DetachObjectError::NotNode(ref cause) => cause,
             DetachObjectError::ResourceNotFound(ref cause) => cause,
             DetachObjectError::RetryableConflict(ref cause) => cause,
-            DetachObjectError::Validation(ref cause) => cause,
-            DetachObjectError::Credentials(ref err) => err.description(),
-            DetachObjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachObjectError::ParseError(ref cause) => cause,
-            DetachObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5928,22 +5465,12 @@ pub enum DetachPolicyError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DetachPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -5968,57 +5495,50 @@ impl DetachPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachPolicyError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DetachPolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return DetachPolicyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DetachPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "NotPolicyException" => {
-                    return DetachPolicyError::NotPolicy(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::NotPolicy(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return DetachPolicyError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DetachPolicyError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return DetachPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachPolicyError {
-    fn from(err: serde_json::error::Error) -> DetachPolicyError {
-        DetachPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachPolicyError {
-    fn from(err: CredentialsError) -> DetachPolicyError {
-        DetachPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachPolicyError {
-    fn from(err: HttpDispatchError) -> DetachPolicyError {
-        DetachPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachPolicyError {
-    fn from(err: io::Error) -> DetachPolicyError {
-        DetachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachPolicyError {
@@ -6037,11 +5557,6 @@ impl Error for DetachPolicyError {
             DetachPolicyError::NotPolicy(ref cause) => cause,
             DetachPolicyError::ResourceNotFound(ref cause) => cause,
             DetachPolicyError::RetryableConflict(ref cause) => cause,
-            DetachPolicyError::Validation(ref cause) => cause,
-            DetachPolicyError::Credentials(ref err) => err.description(),
-            DetachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachPolicyError::ParseError(ref cause) => cause,
-            DetachPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6064,22 +5579,12 @@ pub enum DetachTypedLinkError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DetachTypedLinkError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DetachTypedLinkError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DetachTypedLinkError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6104,57 +5609,50 @@ impl DetachTypedLinkError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DetachTypedLinkError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return DetachTypedLinkError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return DetachTypedLinkError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DetachTypedLinkError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DetachTypedLinkError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DetachTypedLinkError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DetachTypedLinkError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return DetachTypedLinkError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DetachTypedLinkError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DetachTypedLinkError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DetachTypedLinkError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DetachTypedLinkError {
-    fn from(err: serde_json::error::Error) -> DetachTypedLinkError {
-        DetachTypedLinkError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DetachTypedLinkError {
-    fn from(err: CredentialsError) -> DetachTypedLinkError {
-        DetachTypedLinkError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DetachTypedLinkError {
-    fn from(err: HttpDispatchError) -> DetachTypedLinkError {
-        DetachTypedLinkError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DetachTypedLinkError {
-    fn from(err: io::Error) -> DetachTypedLinkError {
-        DetachTypedLinkError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DetachTypedLinkError {
@@ -6173,11 +5671,6 @@ impl Error for DetachTypedLinkError {
             DetachTypedLinkError::LimitExceeded(ref cause) => cause,
             DetachTypedLinkError::ResourceNotFound(ref cause) => cause,
             DetachTypedLinkError::RetryableConflict(ref cause) => cause,
-            DetachTypedLinkError::Validation(ref cause) => cause,
-            DetachTypedLinkError::Credentials(ref err) => err.description(),
-            DetachTypedLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DetachTypedLinkError::ParseError(ref cause) => cause,
-            DetachTypedLinkError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6198,22 +5691,12 @@ pub enum DisableDirectoryError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DisableDirectoryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> DisableDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisableDirectoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6238,54 +5721,45 @@ impl DisableDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return DisableDirectoryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryDeletedException" => {
-                    return DisableDirectoryError::DirectoryDeleted(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::DirectoryDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return DisableDirectoryError::InternalService(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return DisableDirectoryError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return DisableDirectoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return DisableDirectoryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return DisableDirectoryError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(DisableDirectoryError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return DisableDirectoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return DisableDirectoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for DisableDirectoryError {
-    fn from(err: serde_json::error::Error) -> DisableDirectoryError {
-        DisableDirectoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for DisableDirectoryError {
-    fn from(err: CredentialsError) -> DisableDirectoryError {
-        DisableDirectoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DisableDirectoryError {
-    fn from(err: HttpDispatchError) -> DisableDirectoryError {
-        DisableDirectoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DisableDirectoryError {
-    fn from(err: io::Error) -> DisableDirectoryError {
-        DisableDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for DisableDirectoryError {
@@ -6303,11 +5777,6 @@ impl Error for DisableDirectoryError {
             DisableDirectoryError::LimitExceeded(ref cause) => cause,
             DisableDirectoryError::ResourceNotFound(ref cause) => cause,
             DisableDirectoryError::RetryableConflict(ref cause) => cause,
-            DisableDirectoryError::Validation(ref cause) => cause,
-            DisableDirectoryError::Credentials(ref err) => err.description(),
-            DisableDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DisableDirectoryError::ParseError(ref cause) => cause,
-            DisableDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6328,22 +5797,12 @@ pub enum EnableDirectoryError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl EnableDirectoryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> EnableDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<EnableDirectoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6368,54 +5827,45 @@ impl EnableDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return EnableDirectoryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryDeletedException" => {
-                    return EnableDirectoryError::DirectoryDeleted(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::DirectoryDeleted(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return EnableDirectoryError::InternalService(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return EnableDirectoryError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return EnableDirectoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return EnableDirectoryError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return EnableDirectoryError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(EnableDirectoryError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return EnableDirectoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return EnableDirectoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for EnableDirectoryError {
-    fn from(err: serde_json::error::Error) -> EnableDirectoryError {
-        EnableDirectoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for EnableDirectoryError {
-    fn from(err: CredentialsError) -> EnableDirectoryError {
-        EnableDirectoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for EnableDirectoryError {
-    fn from(err: HttpDispatchError) -> EnableDirectoryError {
-        EnableDirectoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for EnableDirectoryError {
-    fn from(err: io::Error) -> EnableDirectoryError {
-        EnableDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for EnableDirectoryError {
@@ -6433,11 +5883,6 @@ impl Error for EnableDirectoryError {
             EnableDirectoryError::LimitExceeded(ref cause) => cause,
             EnableDirectoryError::ResourceNotFound(ref cause) => cause,
             EnableDirectoryError::RetryableConflict(ref cause) => cause,
-            EnableDirectoryError::Validation(ref cause) => cause,
-            EnableDirectoryError::Credentials(ref err) => err.description(),
-            EnableDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            EnableDirectoryError::ParseError(ref cause) => cause,
-            EnableDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6456,22 +5901,12 @@ pub enum GetAppliedSchemaVersionError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetAppliedSchemaVersionError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetAppliedSchemaVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAppliedSchemaVersionError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6496,57 +5931,40 @@ impl GetAppliedSchemaVersionError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetAppliedSchemaVersionError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetAppliedSchemaVersionError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetAppliedSchemaVersionError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppliedSchemaVersionError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return GetAppliedSchemaVersionError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetAppliedSchemaVersionError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetAppliedSchemaVersionError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetAppliedSchemaVersionError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppliedSchemaVersionError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return GetAppliedSchemaVersionError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(GetAppliedSchemaVersionError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return GetAppliedSchemaVersionError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetAppliedSchemaVersionError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetAppliedSchemaVersionError {
-    fn from(err: serde_json::error::Error) -> GetAppliedSchemaVersionError {
-        GetAppliedSchemaVersionError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetAppliedSchemaVersionError {
-    fn from(err: CredentialsError) -> GetAppliedSchemaVersionError {
-        GetAppliedSchemaVersionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAppliedSchemaVersionError {
-    fn from(err: HttpDispatchError) -> GetAppliedSchemaVersionError {
-        GetAppliedSchemaVersionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAppliedSchemaVersionError {
-    fn from(err: io::Error) -> GetAppliedSchemaVersionError {
-        GetAppliedSchemaVersionError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetAppliedSchemaVersionError {
@@ -6563,13 +5981,6 @@ impl Error for GetAppliedSchemaVersionError {
             GetAppliedSchemaVersionError::LimitExceeded(ref cause) => cause,
             GetAppliedSchemaVersionError::ResourceNotFound(ref cause) => cause,
             GetAppliedSchemaVersionError::RetryableConflict(ref cause) => cause,
-            GetAppliedSchemaVersionError::Validation(ref cause) => cause,
-            GetAppliedSchemaVersionError::Credentials(ref err) => err.description(),
-            GetAppliedSchemaVersionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAppliedSchemaVersionError::ParseError(ref cause) => cause,
-            GetAppliedSchemaVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6586,22 +5997,12 @@ pub enum GetDirectoryError {
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetDirectoryError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDirectoryError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6626,48 +6027,35 @@ impl GetDirectoryError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetDirectoryError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetDirectoryError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetDirectoryError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetDirectoryError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return GetDirectoryError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetDirectoryError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetDirectoryError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetDirectoryError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return GetDirectoryError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetDirectoryError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetDirectoryError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetDirectoryError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetDirectoryError {
-    fn from(err: serde_json::error::Error) -> GetDirectoryError {
-        GetDirectoryError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetDirectoryError {
-    fn from(err: CredentialsError) -> GetDirectoryError {
-        GetDirectoryError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetDirectoryError {
-    fn from(err: HttpDispatchError) -> GetDirectoryError {
-        GetDirectoryError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetDirectoryError {
-    fn from(err: io::Error) -> GetDirectoryError {
-        GetDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetDirectoryError {
@@ -6683,11 +6071,6 @@ impl Error for GetDirectoryError {
             GetDirectoryError::InvalidArn(ref cause) => cause,
             GetDirectoryError::LimitExceeded(ref cause) => cause,
             GetDirectoryError::RetryableConflict(ref cause) => cause,
-            GetDirectoryError::Validation(ref cause) => cause,
-            GetDirectoryError::Credentials(ref err) => err.description(),
-            GetDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetDirectoryError::ParseError(ref cause) => cause,
-            GetDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6708,22 +6091,12 @@ pub enum GetFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6748,54 +6121,45 @@ impl GetFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetNotFoundException" => {
-                    return GetFacetError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::FacetNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return GetFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return GetFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetFacetError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return GetFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetFacetError {
-    fn from(err: serde_json::error::Error) -> GetFacetError {
-        GetFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetFacetError {
-    fn from(err: CredentialsError) -> GetFacetError {
-        GetFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetFacetError {
-    fn from(err: HttpDispatchError) -> GetFacetError {
-        GetFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetFacetError {
-    fn from(err: io::Error) -> GetFacetError {
-        GetFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetFacetError {
@@ -6813,11 +6177,6 @@ impl Error for GetFacetError {
             GetFacetError::LimitExceeded(ref cause) => cause,
             GetFacetError::ResourceNotFound(ref cause) => cause,
             GetFacetError::RetryableConflict(ref cause) => cause,
-            GetFacetError::Validation(ref cause) => cause,
-            GetFacetError::Credentials(ref err) => err.description(),
-            GetFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetFacetError::ParseError(ref cause) => cause,
-            GetFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6840,22 +6199,12 @@ pub enum GetLinkAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetLinkAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetLinkAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLinkAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -6880,57 +6229,50 @@ impl GetLinkAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetLinkAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return GetLinkAttributesError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return GetLinkAttributesError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetLinkAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetLinkAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetLinkAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetLinkAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return GetLinkAttributesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetLinkAttributesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetLinkAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetLinkAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetLinkAttributesError {
-    fn from(err: serde_json::error::Error) -> GetLinkAttributesError {
-        GetLinkAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetLinkAttributesError {
-    fn from(err: CredentialsError) -> GetLinkAttributesError {
-        GetLinkAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetLinkAttributesError {
-    fn from(err: HttpDispatchError) -> GetLinkAttributesError {
-        GetLinkAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetLinkAttributesError {
-    fn from(err: io::Error) -> GetLinkAttributesError {
-        GetLinkAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetLinkAttributesError {
@@ -6949,13 +6291,6 @@ impl Error for GetLinkAttributesError {
             GetLinkAttributesError::LimitExceeded(ref cause) => cause,
             GetLinkAttributesError::ResourceNotFound(ref cause) => cause,
             GetLinkAttributesError::RetryableConflict(ref cause) => cause,
-            GetLinkAttributesError::Validation(ref cause) => cause,
-            GetLinkAttributesError::Credentials(ref err) => err.description(),
-            GetLinkAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetLinkAttributesError::ParseError(ref cause) => cause,
-            GetLinkAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6978,22 +6313,12 @@ pub enum GetObjectAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7018,59 +6343,50 @@ impl GetObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetObjectAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return GetObjectAttributesError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(GetObjectAttributesError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return GetObjectAttributesError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return GetObjectAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetObjectAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetObjectAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetObjectAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return GetObjectAttributesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetObjectAttributesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetObjectAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetObjectAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetObjectAttributesError {
-    fn from(err: serde_json::error::Error) -> GetObjectAttributesError {
-        GetObjectAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectAttributesError {
-    fn from(err: CredentialsError) -> GetObjectAttributesError {
-        GetObjectAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectAttributesError {
-    fn from(err: HttpDispatchError) -> GetObjectAttributesError {
-        GetObjectAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectAttributesError {
-    fn from(err: io::Error) -> GetObjectAttributesError {
-        GetObjectAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetObjectAttributesError {
@@ -7089,13 +6405,6 @@ impl Error for GetObjectAttributesError {
             GetObjectAttributesError::LimitExceeded(ref cause) => cause,
             GetObjectAttributesError::ResourceNotFound(ref cause) => cause,
             GetObjectAttributesError::RetryableConflict(ref cause) => cause,
-            GetObjectAttributesError::Validation(ref cause) => cause,
-            GetObjectAttributesError::Credentials(ref err) => err.description(),
-            GetObjectAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetObjectAttributesError::ParseError(ref cause) => cause,
-            GetObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7116,22 +6425,12 @@ pub enum GetObjectInformationError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetObjectInformationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetObjectInformationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetObjectInformationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7156,56 +6455,45 @@ impl GetObjectInformationError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetObjectInformationError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return GetObjectInformationError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(GetObjectInformationError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return GetObjectInformationError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetObjectInformationError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return GetObjectInformationError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetObjectInformationError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return GetObjectInformationError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetObjectInformationError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetObjectInformationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetObjectInformationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetObjectInformationError {
-    fn from(err: serde_json::error::Error) -> GetObjectInformationError {
-        GetObjectInformationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetObjectInformationError {
-    fn from(err: CredentialsError) -> GetObjectInformationError {
-        GetObjectInformationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetObjectInformationError {
-    fn from(err: HttpDispatchError) -> GetObjectInformationError {
-        GetObjectInformationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetObjectInformationError {
-    fn from(err: io::Error) -> GetObjectInformationError {
-        GetObjectInformationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetObjectInformationError {
@@ -7223,13 +6511,6 @@ impl Error for GetObjectInformationError {
             GetObjectInformationError::LimitExceeded(ref cause) => cause,
             GetObjectInformationError::ResourceNotFound(ref cause) => cause,
             GetObjectInformationError::RetryableConflict(ref cause) => cause,
-            GetObjectInformationError::Validation(ref cause) => cause,
-            GetObjectInformationError::Credentials(ref err) => err.description(),
-            GetObjectInformationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetObjectInformationError::ParseError(ref cause) => cause,
-            GetObjectInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7248,22 +6529,12 @@ pub enum GetSchemaAsJsonError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetSchemaAsJsonError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetSchemaAsJsonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSchemaAsJsonError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7288,51 +6559,40 @@ impl GetSchemaAsJsonError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetSchemaAsJsonError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return GetSchemaAsJsonError::InternalService(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return GetSchemaAsJsonError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return GetSchemaAsJsonError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return GetSchemaAsJsonError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return GetSchemaAsJsonError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(GetSchemaAsJsonError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return GetSchemaAsJsonError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetSchemaAsJsonError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetSchemaAsJsonError {
-    fn from(err: serde_json::error::Error) -> GetSchemaAsJsonError {
-        GetSchemaAsJsonError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetSchemaAsJsonError {
-    fn from(err: CredentialsError) -> GetSchemaAsJsonError {
-        GetSchemaAsJsonError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSchemaAsJsonError {
-    fn from(err: HttpDispatchError) -> GetSchemaAsJsonError {
-        GetSchemaAsJsonError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSchemaAsJsonError {
-    fn from(err: io::Error) -> GetSchemaAsJsonError {
-        GetSchemaAsJsonError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetSchemaAsJsonError {
@@ -7349,11 +6609,6 @@ impl Error for GetSchemaAsJsonError {
             GetSchemaAsJsonError::LimitExceeded(ref cause) => cause,
             GetSchemaAsJsonError::ResourceNotFound(ref cause) => cause,
             GetSchemaAsJsonError::RetryableConflict(ref cause) => cause,
-            GetSchemaAsJsonError::Validation(ref cause) => cause,
-            GetSchemaAsJsonError::Credentials(ref err) => err.description(),
-            GetSchemaAsJsonError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSchemaAsJsonError::ParseError(ref cause) => cause,
-            GetSchemaAsJsonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7376,22 +6631,14 @@ pub enum GetTypedLinkFacetInformationError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTypedLinkFacetInformationError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> GetTypedLinkFacetInformationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetTypedLinkFacetInformationError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7416,73 +6663,56 @@ impl GetTypedLinkFacetInformationError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return GetTypedLinkFacetInformationError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(GetTypedLinkFacetInformationError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "FacetNotFoundException" => {
-                    return GetTypedLinkFacetInformationError::FacetNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(GetTypedLinkFacetInformationError::FacetNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return GetTypedLinkFacetInformationError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(GetTypedLinkFacetInformationError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return GetTypedLinkFacetInformationError::InvalidArn(String::from(
-                        error_message,
+                    return RusotoError::Service(GetTypedLinkFacetInformationError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetTypedLinkFacetInformationError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return GetTypedLinkFacetInformationError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(GetTypedLinkFacetInformationError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetTypedLinkFacetInformationError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RetryableConflictException" => {
-                    return GetTypedLinkFacetInformationError::RetryableConflict(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        GetTypedLinkFacetInformationError::RetryableConflict(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return GetTypedLinkFacetInformationError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return GetTypedLinkFacetInformationError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for GetTypedLinkFacetInformationError {
-    fn from(err: serde_json::error::Error) -> GetTypedLinkFacetInformationError {
-        GetTypedLinkFacetInformationError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetTypedLinkFacetInformationError {
-    fn from(err: CredentialsError) -> GetTypedLinkFacetInformationError {
-        GetTypedLinkFacetInformationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTypedLinkFacetInformationError {
-    fn from(err: HttpDispatchError) -> GetTypedLinkFacetInformationError {
-        GetTypedLinkFacetInformationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTypedLinkFacetInformationError {
-    fn from(err: io::Error) -> GetTypedLinkFacetInformationError {
-        GetTypedLinkFacetInformationError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for GetTypedLinkFacetInformationError {
@@ -7501,13 +6731,6 @@ impl Error for GetTypedLinkFacetInformationError {
             GetTypedLinkFacetInformationError::LimitExceeded(ref cause) => cause,
             GetTypedLinkFacetInformationError::ResourceNotFound(ref cause) => cause,
             GetTypedLinkFacetInformationError::RetryableConflict(ref cause) => cause,
-            GetTypedLinkFacetInformationError::Validation(ref cause) => cause,
-            GetTypedLinkFacetInformationError::Credentials(ref err) => err.description(),
-            GetTypedLinkFacetInformationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetTypedLinkFacetInformationError::ParseError(ref cause) => cause,
-            GetTypedLinkFacetInformationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7528,22 +6751,12 @@ pub enum ListAppliedSchemaArnsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAppliedSchemaArnsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListAppliedSchemaArnsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAppliedSchemaArnsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7568,56 +6781,45 @@ impl ListAppliedSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListAppliedSchemaArnsError::AccessDenied(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return ListAppliedSchemaArnsError::InternalService(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return ListAppliedSchemaArnsError::InvalidArn(String::from(error_message));
-                }
-                "InvalidNextTokenException" => {
-                    return ListAppliedSchemaArnsError::InvalidNextToken(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return ListAppliedSchemaArnsError::LimitExceeded(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return ListAppliedSchemaArnsError::ResourceNotFound(String::from(error_message));
-                }
-                "RetryableConflictException" => {
-                    return ListAppliedSchemaArnsError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListAppliedSchemaArnsError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListAppliedSchemaArnsError::Validation(error_message.to_string());
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::InvalidArn(
+                        String::from(error_message),
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "RetryableConflictException" => {
+                    return RusotoError::Service(ListAppliedSchemaArnsError::RetryableConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAppliedSchemaArnsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAppliedSchemaArnsError {
-    fn from(err: serde_json::error::Error) -> ListAppliedSchemaArnsError {
-        ListAppliedSchemaArnsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAppliedSchemaArnsError {
-    fn from(err: CredentialsError) -> ListAppliedSchemaArnsError {
-        ListAppliedSchemaArnsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAppliedSchemaArnsError {
-    fn from(err: HttpDispatchError) -> ListAppliedSchemaArnsError {
-        ListAppliedSchemaArnsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAppliedSchemaArnsError {
-    fn from(err: io::Error) -> ListAppliedSchemaArnsError {
-        ListAppliedSchemaArnsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAppliedSchemaArnsError {
@@ -7635,13 +6837,6 @@ impl Error for ListAppliedSchemaArnsError {
             ListAppliedSchemaArnsError::LimitExceeded(ref cause) => cause,
             ListAppliedSchemaArnsError::ResourceNotFound(ref cause) => cause,
             ListAppliedSchemaArnsError::RetryableConflict(ref cause) => cause,
-            ListAppliedSchemaArnsError::Validation(ref cause) => cause,
-            ListAppliedSchemaArnsError::Credentials(ref err) => err.description(),
-            ListAppliedSchemaArnsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAppliedSchemaArnsError::ParseError(ref cause) => cause,
-            ListAppliedSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7662,22 +6857,12 @@ pub enum ListAttachedIndicesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListAttachedIndicesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListAttachedIndicesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAttachedIndicesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7702,56 +6887,45 @@ impl ListAttachedIndicesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListAttachedIndicesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListAttachedIndicesError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListAttachedIndicesError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return ListAttachedIndicesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListAttachedIndicesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListAttachedIndicesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListAttachedIndicesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListAttachedIndicesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListAttachedIndicesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListAttachedIndicesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListAttachedIndicesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListAttachedIndicesError {
-    fn from(err: serde_json::error::Error) -> ListAttachedIndicesError {
-        ListAttachedIndicesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListAttachedIndicesError {
-    fn from(err: CredentialsError) -> ListAttachedIndicesError {
-        ListAttachedIndicesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListAttachedIndicesError {
-    fn from(err: HttpDispatchError) -> ListAttachedIndicesError {
-        ListAttachedIndicesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListAttachedIndicesError {
-    fn from(err: io::Error) -> ListAttachedIndicesError {
-        ListAttachedIndicesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListAttachedIndicesError {
@@ -7769,13 +6943,6 @@ impl Error for ListAttachedIndicesError {
             ListAttachedIndicesError::LimitExceeded(ref cause) => cause,
             ListAttachedIndicesError::ResourceNotFound(ref cause) => cause,
             ListAttachedIndicesError::RetryableConflict(ref cause) => cause,
-            ListAttachedIndicesError::Validation(ref cause) => cause,
-            ListAttachedIndicesError::Credentials(ref err) => err.description(),
-            ListAttachedIndicesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListAttachedIndicesError::ParseError(ref cause) => cause,
-            ListAttachedIndicesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7796,22 +6963,12 @@ pub enum ListDevelopmentSchemaArnsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDevelopmentSchemaArnsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListDevelopmentSchemaArnsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevelopmentSchemaArnsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7836,64 +6993,45 @@ impl ListDevelopmentSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListDevelopmentSchemaArnsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListDevelopmentSchemaArnsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return ListDevelopmentSchemaArnsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDevelopmentSchemaArnsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListDevelopmentSchemaArnsError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListDevelopmentSchemaArnsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return ListDevelopmentSchemaArnsError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListDevelopmentSchemaArnsError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListDevelopmentSchemaArnsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDevelopmentSchemaArnsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDevelopmentSchemaArnsError {
-    fn from(err: serde_json::error::Error) -> ListDevelopmentSchemaArnsError {
-        ListDevelopmentSchemaArnsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDevelopmentSchemaArnsError {
-    fn from(err: CredentialsError) -> ListDevelopmentSchemaArnsError {
-        ListDevelopmentSchemaArnsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDevelopmentSchemaArnsError {
-    fn from(err: HttpDispatchError) -> ListDevelopmentSchemaArnsError {
-        ListDevelopmentSchemaArnsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDevelopmentSchemaArnsError {
-    fn from(err: io::Error) -> ListDevelopmentSchemaArnsError {
-        ListDevelopmentSchemaArnsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDevelopmentSchemaArnsError {
@@ -7911,13 +7049,6 @@ impl Error for ListDevelopmentSchemaArnsError {
             ListDevelopmentSchemaArnsError::LimitExceeded(ref cause) => cause,
             ListDevelopmentSchemaArnsError::ResourceNotFound(ref cause) => cause,
             ListDevelopmentSchemaArnsError::RetryableConflict(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::Validation(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::Credentials(ref err) => err.description(),
-            ListDevelopmentSchemaArnsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListDevelopmentSchemaArnsError::ParseError(ref cause) => cause,
-            ListDevelopmentSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7936,22 +7067,12 @@ pub enum ListDirectoriesError {
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListDirectoriesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListDirectoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDirectoriesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -7976,51 +7097,40 @@ impl ListDirectoriesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListDirectoriesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ListDirectoriesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListDirectoriesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListDirectoriesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListDirectoriesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return ListDirectoriesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListDirectoriesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListDirectoriesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListDirectoriesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListDirectoriesError {
-    fn from(err: serde_json::error::Error) -> ListDirectoriesError {
-        ListDirectoriesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListDirectoriesError {
-    fn from(err: CredentialsError) -> ListDirectoriesError {
-        ListDirectoriesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListDirectoriesError {
-    fn from(err: HttpDispatchError) -> ListDirectoriesError {
-        ListDirectoriesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListDirectoriesError {
-    fn from(err: io::Error) -> ListDirectoriesError {
-        ListDirectoriesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListDirectoriesError {
@@ -8037,11 +7147,6 @@ impl Error for ListDirectoriesError {
             ListDirectoriesError::InvalidNextToken(ref cause) => cause,
             ListDirectoriesError::LimitExceeded(ref cause) => cause,
             ListDirectoriesError::RetryableConflict(ref cause) => cause,
-            ListDirectoriesError::Validation(ref cause) => cause,
-            ListDirectoriesError::Credentials(ref err) => err.description(),
-            ListDirectoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListDirectoriesError::ParseError(ref cause) => cause,
-            ListDirectoriesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8064,22 +7169,12 @@ pub enum ListFacetAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacetAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFacetAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacetAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8104,57 +7199,50 @@ impl ListFacetAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListFacetAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetNotFoundException" => {
-                    return ListFacetAttributesError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::FacetNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListFacetAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListFacetAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListFacetAttributesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListFacetAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacetAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListFacetAttributesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListFacetAttributesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListFacetAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFacetAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFacetAttributesError {
-    fn from(err: serde_json::error::Error) -> ListFacetAttributesError {
-        ListFacetAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFacetAttributesError {
-    fn from(err: CredentialsError) -> ListFacetAttributesError {
-        ListFacetAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFacetAttributesError {
-    fn from(err: HttpDispatchError) -> ListFacetAttributesError {
-        ListFacetAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFacetAttributesError {
-    fn from(err: io::Error) -> ListFacetAttributesError {
-        ListFacetAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFacetAttributesError {
@@ -8173,13 +7261,6 @@ impl Error for ListFacetAttributesError {
             ListFacetAttributesError::LimitExceeded(ref cause) => cause,
             ListFacetAttributesError::ResourceNotFound(ref cause) => cause,
             ListFacetAttributesError::RetryableConflict(ref cause) => cause,
-            ListFacetAttributesError::Validation(ref cause) => cause,
-            ListFacetAttributesError::Credentials(ref err) => err.description(),
-            ListFacetAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListFacetAttributesError::ParseError(ref cause) => cause,
-            ListFacetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8200,22 +7281,12 @@ pub enum ListFacetNamesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListFacetNamesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListFacetNamesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFacetNamesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8240,54 +7311,45 @@ impl ListFacetNamesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListFacetNamesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ListFacetNamesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return ListFacetNamesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListFacetNamesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListFacetNamesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListFacetNamesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListFacetNamesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListFacetNamesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListFacetNamesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListFacetNamesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListFacetNamesError {
-    fn from(err: serde_json::error::Error) -> ListFacetNamesError {
-        ListFacetNamesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListFacetNamesError {
-    fn from(err: CredentialsError) -> ListFacetNamesError {
-        ListFacetNamesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListFacetNamesError {
-    fn from(err: HttpDispatchError) -> ListFacetNamesError {
-        ListFacetNamesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListFacetNamesError {
-    fn from(err: io::Error) -> ListFacetNamesError {
-        ListFacetNamesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListFacetNamesError {
@@ -8305,11 +7367,6 @@ impl Error for ListFacetNamesError {
             ListFacetNamesError::LimitExceeded(ref cause) => cause,
             ListFacetNamesError::ResourceNotFound(ref cause) => cause,
             ListFacetNamesError::RetryableConflict(ref cause) => cause,
-            ListFacetNamesError::Validation(ref cause) => cause,
-            ListFacetNamesError::Credentials(ref err) => err.description(),
-            ListFacetNamesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListFacetNamesError::ParseError(ref cause) => cause,
-            ListFacetNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8334,22 +7391,12 @@ pub enum ListIncomingTypedLinksError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIncomingTypedLinksError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListIncomingTypedLinksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIncomingTypedLinksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8374,68 +7421,55 @@ impl ListIncomingTypedLinksError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListIncomingTypedLinksError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListIncomingTypedLinksError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListIncomingTypedLinksError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListIncomingTypedLinksError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return ListIncomingTypedLinksError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(ListIncomingTypedLinksError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListIncomingTypedLinksError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListIncomingTypedLinksError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListIncomingTypedLinksError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListIncomingTypedLinksError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListIncomingTypedLinksError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListIncomingTypedLinksError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListIncomingTypedLinksError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListIncomingTypedLinksError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListIncomingTypedLinksError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListIncomingTypedLinksError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return ListIncomingTypedLinksError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListIncomingTypedLinksError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListIncomingTypedLinksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIncomingTypedLinksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIncomingTypedLinksError {
-    fn from(err: serde_json::error::Error) -> ListIncomingTypedLinksError {
-        ListIncomingTypedLinksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIncomingTypedLinksError {
-    fn from(err: CredentialsError) -> ListIncomingTypedLinksError {
-        ListIncomingTypedLinksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIncomingTypedLinksError {
-    fn from(err: HttpDispatchError) -> ListIncomingTypedLinksError {
-        ListIncomingTypedLinksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIncomingTypedLinksError {
-    fn from(err: io::Error) -> ListIncomingTypedLinksError {
-        ListIncomingTypedLinksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIncomingTypedLinksError {
@@ -8455,13 +7489,6 @@ impl Error for ListIncomingTypedLinksError {
             ListIncomingTypedLinksError::LimitExceeded(ref cause) => cause,
             ListIncomingTypedLinksError::ResourceNotFound(ref cause) => cause,
             ListIncomingTypedLinksError::RetryableConflict(ref cause) => cause,
-            ListIncomingTypedLinksError::Validation(ref cause) => cause,
-            ListIncomingTypedLinksError::Credentials(ref err) => err.description(),
-            ListIncomingTypedLinksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListIncomingTypedLinksError::ParseError(ref cause) => cause,
-            ListIncomingTypedLinksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8488,22 +7515,12 @@ pub enum ListIndexError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListIndexError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListIndexError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIndexError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8528,61 +7545,60 @@ impl ListIndexError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListIndexError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListIndexError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::DirectoryNotEnabled(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetValidationException" => {
-                    return ListIndexError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::FacetValidation(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return ListIndexError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return ListIndexError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListIndexError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return ListIndexError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
-                "NotIndexException" => return ListIndexError::NotIndex(String::from(error_message)),
+                "NotIndexException" => {
+                    return RusotoError::Service(ListIndexError::NotIndex(String::from(
+                        error_message,
+                    )));
+                }
                 "ResourceNotFoundException" => {
-                    return ListIndexError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return ListIndexError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListIndexError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return ListIndexError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListIndexError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListIndexError {
-    fn from(err: serde_json::error::Error) -> ListIndexError {
-        ListIndexError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListIndexError {
-    fn from(err: CredentialsError) -> ListIndexError {
-        ListIndexError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIndexError {
-    fn from(err: HttpDispatchError) -> ListIndexError {
-        ListIndexError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIndexError {
-    fn from(err: io::Error) -> ListIndexError {
-        ListIndexError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListIndexError {
@@ -8603,11 +7619,6 @@ impl Error for ListIndexError {
             ListIndexError::NotIndex(ref cause) => cause,
             ListIndexError::ResourceNotFound(ref cause) => cause,
             ListIndexError::RetryableConflict(ref cause) => cause,
-            ListIndexError::Validation(ref cause) => cause,
-            ListIndexError::Credentials(ref err) => err.description(),
-            ListIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIndexError::ParseError(ref cause) => cause,
-            ListIndexError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8632,22 +7643,12 @@ pub enum ListObjectAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8672,62 +7673,55 @@ impl ListObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectAttributesError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListObjectAttributesError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return ListObjectAttributesError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListObjectAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectAttributesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListObjectAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectAttributesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListObjectAttributesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListObjectAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListObjectAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListObjectAttributesError {
-    fn from(err: serde_json::error::Error) -> ListObjectAttributesError {
-        ListObjectAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectAttributesError {
-    fn from(err: CredentialsError) -> ListObjectAttributesError {
-        ListObjectAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectAttributesError {
-    fn from(err: HttpDispatchError) -> ListObjectAttributesError {
-        ListObjectAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectAttributesError {
-    fn from(err: io::Error) -> ListObjectAttributesError {
-        ListObjectAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListObjectAttributesError {
@@ -8747,13 +7741,6 @@ impl Error for ListObjectAttributesError {
             ListObjectAttributesError::LimitExceeded(ref cause) => cause,
             ListObjectAttributesError::ResourceNotFound(ref cause) => cause,
             ListObjectAttributesError::RetryableConflict(ref cause) => cause,
-            ListObjectAttributesError::Validation(ref cause) => cause,
-            ListObjectAttributesError::Credentials(ref err) => err.description(),
-            ListObjectAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectAttributesError::ParseError(ref cause) => cause,
-            ListObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8778,22 +7765,12 @@ pub enum ListObjectChildrenError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectChildrenError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectChildrenError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectChildrenError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8818,60 +7795,55 @@ impl ListObjectChildrenError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectChildrenError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectChildrenError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectChildrenError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListObjectChildrenError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectChildrenError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListObjectChildrenError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "NotNodeException" => {
-                    return ListObjectChildrenError::NotNode(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::NotNode(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectChildrenError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectChildrenError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListObjectChildrenError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListObjectChildrenError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListObjectChildrenError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListObjectChildrenError {
-    fn from(err: serde_json::error::Error) -> ListObjectChildrenError {
-        ListObjectChildrenError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectChildrenError {
-    fn from(err: CredentialsError) -> ListObjectChildrenError {
-        ListObjectChildrenError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectChildrenError {
-    fn from(err: HttpDispatchError) -> ListObjectChildrenError {
-        ListObjectChildrenError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectChildrenError {
-    fn from(err: io::Error) -> ListObjectChildrenError {
-        ListObjectChildrenError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListObjectChildrenError {
@@ -8891,13 +7863,6 @@ impl Error for ListObjectChildrenError {
             ListObjectChildrenError::NotNode(ref cause) => cause,
             ListObjectChildrenError::ResourceNotFound(ref cause) => cause,
             ListObjectChildrenError::RetryableConflict(ref cause) => cause,
-            ListObjectChildrenError::Validation(ref cause) => cause,
-            ListObjectChildrenError::Credentials(ref err) => err.description(),
-            ListObjectChildrenError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectChildrenError::ParseError(ref cause) => cause,
-            ListObjectChildrenError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8920,22 +7885,12 @@ pub enum ListObjectParentPathsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectParentPathsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectParentPathsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectParentPathsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -8960,61 +7915,50 @@ impl ListObjectParentPathsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectParentPathsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentPathsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectParentPathsError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListObjectParentPathsError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectParentPathsError::InternalService(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return ListObjectParentPathsError::InvalidArn(String::from(error_message));
-                }
-                "InvalidNextTokenException" => {
-                    return ListObjectParentPathsError::InvalidNextToken(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return ListObjectParentPathsError::LimitExceeded(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return ListObjectParentPathsError::ResourceNotFound(String::from(error_message));
-                }
-                "RetryableConflictException" => {
-                    return ListObjectParentPathsError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListObjectParentPathsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListObjectParentPathsError::Validation(error_message.to_string());
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListObjectParentPathsError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListObjectParentPathsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListObjectParentPathsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListObjectParentPathsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "RetryableConflictException" => {
+                    return RusotoError::Service(ListObjectParentPathsError::RetryableConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListObjectParentPathsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListObjectParentPathsError {
-    fn from(err: serde_json::error::Error) -> ListObjectParentPathsError {
-        ListObjectParentPathsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectParentPathsError {
-    fn from(err: CredentialsError) -> ListObjectParentPathsError {
-        ListObjectParentPathsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectParentPathsError {
-    fn from(err: HttpDispatchError) -> ListObjectParentPathsError {
-        ListObjectParentPathsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectParentPathsError {
-    fn from(err: io::Error) -> ListObjectParentPathsError {
-        ListObjectParentPathsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListObjectParentPathsError {
@@ -9033,13 +7977,6 @@ impl Error for ListObjectParentPathsError {
             ListObjectParentPathsError::LimitExceeded(ref cause) => cause,
             ListObjectParentPathsError::ResourceNotFound(ref cause) => cause,
             ListObjectParentPathsError::RetryableConflict(ref cause) => cause,
-            ListObjectParentPathsError::Validation(ref cause) => cause,
-            ListObjectParentPathsError::Credentials(ref err) => err.description(),
-            ListObjectParentPathsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectParentPathsError::ParseError(ref cause) => cause,
-            ListObjectParentPathsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9064,22 +8001,12 @@ pub enum ListObjectParentsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectParentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectParentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectParentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9104,62 +8031,55 @@ impl ListObjectParentsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectParentsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "CannotListParentOfRootException" => {
-                    return ListObjectParentsError::CannotListParentOfRoot(String::from(
-                        error_message,
+                    return RusotoError::Service(ListObjectParentsError::CannotListParentOfRoot(
+                        String::from(error_message),
                     ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectParentsError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectParentsError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListObjectParentsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectParentsError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListObjectParentsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectParentsError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectParentsError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListObjectParentsError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListObjectParentsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListObjectParentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListObjectParentsError {
-    fn from(err: serde_json::error::Error) -> ListObjectParentsError {
-        ListObjectParentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectParentsError {
-    fn from(err: CredentialsError) -> ListObjectParentsError {
-        ListObjectParentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectParentsError {
-    fn from(err: HttpDispatchError) -> ListObjectParentsError {
-        ListObjectParentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectParentsError {
-    fn from(err: io::Error) -> ListObjectParentsError {
-        ListObjectParentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListObjectParentsError {
@@ -9179,13 +8099,6 @@ impl Error for ListObjectParentsError {
             ListObjectParentsError::LimitExceeded(ref cause) => cause,
             ListObjectParentsError::ResourceNotFound(ref cause) => cause,
             ListObjectParentsError::RetryableConflict(ref cause) => cause,
-            ListObjectParentsError::Validation(ref cause) => cause,
-            ListObjectParentsError::Credentials(ref err) => err.description(),
-            ListObjectParentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectParentsError::ParseError(ref cause) => cause,
-            ListObjectParentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9208,22 +8121,12 @@ pub enum ListObjectPoliciesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListObjectPoliciesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListObjectPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListObjectPoliciesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9248,57 +8151,50 @@ impl ListObjectPoliciesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListObjectPoliciesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListObjectPoliciesError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListObjectPoliciesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListObjectPoliciesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return ListObjectPoliciesError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return ListObjectPoliciesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListObjectPoliciesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListObjectPoliciesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListObjectPoliciesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListObjectPoliciesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListObjectPoliciesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListObjectPoliciesError {
-    fn from(err: serde_json::error::Error) -> ListObjectPoliciesError {
-        ListObjectPoliciesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListObjectPoliciesError {
-    fn from(err: CredentialsError) -> ListObjectPoliciesError {
-        ListObjectPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListObjectPoliciesError {
-    fn from(err: HttpDispatchError) -> ListObjectPoliciesError {
-        ListObjectPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListObjectPoliciesError {
-    fn from(err: io::Error) -> ListObjectPoliciesError {
-        ListObjectPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListObjectPoliciesError {
@@ -9317,13 +8213,6 @@ impl Error for ListObjectPoliciesError {
             ListObjectPoliciesError::LimitExceeded(ref cause) => cause,
             ListObjectPoliciesError::ResourceNotFound(ref cause) => cause,
             ListObjectPoliciesError::RetryableConflict(ref cause) => cause,
-            ListObjectPoliciesError::Validation(ref cause) => cause,
-            ListObjectPoliciesError::Credentials(ref err) => err.description(),
-            ListObjectPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListObjectPoliciesError::ParseError(ref cause) => cause,
-            ListObjectPoliciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9348,22 +8237,12 @@ pub enum ListOutgoingTypedLinksError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListOutgoingTypedLinksError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListOutgoingTypedLinksError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOutgoingTypedLinksError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9388,68 +8267,55 @@ impl ListOutgoingTypedLinksError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListOutgoingTypedLinksError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListOutgoingTypedLinksError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListOutgoingTypedLinksError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOutgoingTypedLinksError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return ListOutgoingTypedLinksError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(ListOutgoingTypedLinksError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListOutgoingTypedLinksError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListOutgoingTypedLinksError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListOutgoingTypedLinksError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListOutgoingTypedLinksError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListOutgoingTypedLinksError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOutgoingTypedLinksError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListOutgoingTypedLinksError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListOutgoingTypedLinksError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListOutgoingTypedLinksError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOutgoingTypedLinksError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return ListOutgoingTypedLinksError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListOutgoingTypedLinksError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListOutgoingTypedLinksError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListOutgoingTypedLinksError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListOutgoingTypedLinksError {
-    fn from(err: serde_json::error::Error) -> ListOutgoingTypedLinksError {
-        ListOutgoingTypedLinksError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListOutgoingTypedLinksError {
-    fn from(err: CredentialsError) -> ListOutgoingTypedLinksError {
-        ListOutgoingTypedLinksError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListOutgoingTypedLinksError {
-    fn from(err: HttpDispatchError) -> ListOutgoingTypedLinksError {
-        ListOutgoingTypedLinksError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListOutgoingTypedLinksError {
-    fn from(err: io::Error) -> ListOutgoingTypedLinksError {
-        ListOutgoingTypedLinksError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListOutgoingTypedLinksError {
@@ -9469,13 +8335,6 @@ impl Error for ListOutgoingTypedLinksError {
             ListOutgoingTypedLinksError::LimitExceeded(ref cause) => cause,
             ListOutgoingTypedLinksError::ResourceNotFound(ref cause) => cause,
             ListOutgoingTypedLinksError::RetryableConflict(ref cause) => cause,
-            ListOutgoingTypedLinksError::Validation(ref cause) => cause,
-            ListOutgoingTypedLinksError::Credentials(ref err) => err.description(),
-            ListOutgoingTypedLinksError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListOutgoingTypedLinksError::ParseError(ref cause) => cause,
-            ListOutgoingTypedLinksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9500,22 +8359,12 @@ pub enum ListPolicyAttachmentsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPolicyAttachmentsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPolicyAttachmentsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPolicyAttachmentsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9540,64 +8389,55 @@ impl ListPolicyAttachmentsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPolicyAttachmentsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPolicyAttachmentsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return ListPolicyAttachmentsError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPolicyAttachmentsError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return ListPolicyAttachmentsError::InternalService(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return ListPolicyAttachmentsError::InvalidArn(String::from(error_message));
-                }
-                "InvalidNextTokenException" => {
-                    return ListPolicyAttachmentsError::InvalidNextToken(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return ListPolicyAttachmentsError::LimitExceeded(String::from(error_message));
-                }
-                "NotPolicyException" => {
-                    return ListPolicyAttachmentsError::NotPolicy(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return ListPolicyAttachmentsError::ResourceNotFound(String::from(error_message));
-                }
-                "RetryableConflictException" => {
-                    return ListPolicyAttachmentsError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPolicyAttachmentsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListPolicyAttachmentsError::Validation(error_message.to_string());
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::InvalidNextToken(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "NotPolicyException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::NotPolicy(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "RetryableConflictException" => {
+                    return RusotoError::Service(ListPolicyAttachmentsError::RetryableConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPolicyAttachmentsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPolicyAttachmentsError {
-    fn from(err: serde_json::error::Error) -> ListPolicyAttachmentsError {
-        ListPolicyAttachmentsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPolicyAttachmentsError {
-    fn from(err: CredentialsError) -> ListPolicyAttachmentsError {
-        ListPolicyAttachmentsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPolicyAttachmentsError {
-    fn from(err: HttpDispatchError) -> ListPolicyAttachmentsError {
-        ListPolicyAttachmentsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPolicyAttachmentsError {
-    fn from(err: io::Error) -> ListPolicyAttachmentsError {
-        ListPolicyAttachmentsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPolicyAttachmentsError {
@@ -9617,13 +8457,6 @@ impl Error for ListPolicyAttachmentsError {
             ListPolicyAttachmentsError::NotPolicy(ref cause) => cause,
             ListPolicyAttachmentsError::ResourceNotFound(ref cause) => cause,
             ListPolicyAttachmentsError::RetryableConflict(ref cause) => cause,
-            ListPolicyAttachmentsError::Validation(ref cause) => cause,
-            ListPolicyAttachmentsError::Credentials(ref err) => err.description(),
-            ListPolicyAttachmentsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPolicyAttachmentsError::ParseError(ref cause) => cause,
-            ListPolicyAttachmentsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9644,22 +8477,12 @@ pub enum ListPublishedSchemaArnsError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListPublishedSchemaArnsError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListPublishedSchemaArnsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPublishedSchemaArnsError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9684,62 +8507,45 @@ impl ListPublishedSchemaArnsError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListPublishedSchemaArnsError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListPublishedSchemaArnsError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListPublishedSchemaArnsError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPublishedSchemaArnsError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return ListPublishedSchemaArnsError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListPublishedSchemaArnsError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListPublishedSchemaArnsError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPublishedSchemaArnsError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListPublishedSchemaArnsError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListPublishedSchemaArnsError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListPublishedSchemaArnsError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPublishedSchemaArnsError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return ListPublishedSchemaArnsError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListPublishedSchemaArnsError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListPublishedSchemaArnsError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListPublishedSchemaArnsError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListPublishedSchemaArnsError {
-    fn from(err: serde_json::error::Error) -> ListPublishedSchemaArnsError {
-        ListPublishedSchemaArnsError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListPublishedSchemaArnsError {
-    fn from(err: CredentialsError) -> ListPublishedSchemaArnsError {
-        ListPublishedSchemaArnsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListPublishedSchemaArnsError {
-    fn from(err: HttpDispatchError) -> ListPublishedSchemaArnsError {
-        ListPublishedSchemaArnsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListPublishedSchemaArnsError {
-    fn from(err: io::Error) -> ListPublishedSchemaArnsError {
-        ListPublishedSchemaArnsError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListPublishedSchemaArnsError {
@@ -9757,13 +8563,6 @@ impl Error for ListPublishedSchemaArnsError {
             ListPublishedSchemaArnsError::LimitExceeded(ref cause) => cause,
             ListPublishedSchemaArnsError::ResourceNotFound(ref cause) => cause,
             ListPublishedSchemaArnsError::RetryableConflict(ref cause) => cause,
-            ListPublishedSchemaArnsError::Validation(ref cause) => cause,
-            ListPublishedSchemaArnsError::Credentials(ref err) => err.description(),
-            ListPublishedSchemaArnsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListPublishedSchemaArnsError::ParseError(ref cause) => cause,
-            ListPublishedSchemaArnsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9784,22 +8583,12 @@ pub enum ListTagsForResourceError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTagsForResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9824,56 +8613,45 @@ impl ListTagsForResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListTagsForResourceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListTagsForResourceError::InternalService(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return ListTagsForResourceError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTaggingRequestException" => {
-                    return ListTagsForResourceError::InvalidTaggingRequest(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTagsForResourceError::InvalidTaggingRequest(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListTagsForResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return ListTagsForResourceError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(ListTagsForResourceError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return ListTagsForResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTagsForResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTagsForResourceError {
-    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTagsForResourceError {
-    fn from(err: CredentialsError) -> ListTagsForResourceError {
-        ListTagsForResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTagsForResourceError {
-    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTagsForResourceError {
-    fn from(err: io::Error) -> ListTagsForResourceError {
-        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTagsForResourceError {
@@ -9891,13 +8669,6 @@ impl Error for ListTagsForResourceError {
             ListTagsForResourceError::LimitExceeded(ref cause) => cause,
             ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
             ListTagsForResourceError::RetryableConflict(ref cause) => cause,
-            ListTagsForResourceError::Validation(ref cause) => cause,
-            ListTagsForResourceError::Credentials(ref err) => err.description(),
-            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTagsForResourceError::ParseError(ref cause) => cause,
-            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9920,22 +8691,14 @@ pub enum ListTypedLinkFacetAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTypedLinkFacetAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTypedLinkFacetAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListTypedLinkFacetAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -9960,73 +8723,56 @@ impl ListTypedLinkFacetAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListTypedLinkFacetAttributesError::AccessDenied(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetAttributesError::AccessDenied(
+                        String::from(error_message),
                     ));
                 }
                 "FacetNotFoundException" => {
-                    return ListTypedLinkFacetAttributesError::FacetNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetAttributesError::FacetNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return ListTypedLinkFacetAttributesError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetAttributesError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return ListTypedLinkFacetAttributesError::InvalidArn(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetAttributesError::InvalidArn(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListTypedLinkFacetAttributesError::InvalidNextToken(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "LimitExceededException" => {
-                    return ListTypedLinkFacetAttributesError::LimitExceeded(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetAttributesError::LimitExceeded(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListTypedLinkFacetAttributesError::ResourceNotFound(String::from(
+                            error_message,
+                        )),
+                    );
                 }
                 "RetryableConflictException" => {
-                    return ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
-                        error_message,
-                    ));
+                    return RusotoError::Service(
+                        ListTypedLinkFacetAttributesError::RetryableConflict(String::from(
+                            error_message,
+                        )),
+                    );
                 }
-                "ValidationException" => {
-                    return ListTypedLinkFacetAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTypedLinkFacetAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTypedLinkFacetAttributesError {
-    fn from(err: serde_json::error::Error) -> ListTypedLinkFacetAttributesError {
-        ListTypedLinkFacetAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTypedLinkFacetAttributesError {
-    fn from(err: CredentialsError) -> ListTypedLinkFacetAttributesError {
-        ListTypedLinkFacetAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTypedLinkFacetAttributesError {
-    fn from(err: HttpDispatchError) -> ListTypedLinkFacetAttributesError {
-        ListTypedLinkFacetAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTypedLinkFacetAttributesError {
-    fn from(err: io::Error) -> ListTypedLinkFacetAttributesError {
-        ListTypedLinkFacetAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTypedLinkFacetAttributesError {
@@ -10045,13 +8791,6 @@ impl Error for ListTypedLinkFacetAttributesError {
             ListTypedLinkFacetAttributesError::LimitExceeded(ref cause) => cause,
             ListTypedLinkFacetAttributesError::ResourceNotFound(ref cause) => cause,
             ListTypedLinkFacetAttributesError::RetryableConflict(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::Validation(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::Credentials(ref err) => err.description(),
-            ListTypedLinkFacetAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTypedLinkFacetAttributesError::ParseError(ref cause) => cause,
-            ListTypedLinkFacetAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10072,22 +8811,12 @@ pub enum ListTypedLinkFacetNamesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ListTypedLinkFacetNamesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> ListTypedLinkFacetNamesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTypedLinkFacetNamesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10112,62 +8841,45 @@ impl ListTypedLinkFacetNamesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return ListTypedLinkFacetNamesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return ListTypedLinkFacetNamesError::InternalService(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::InternalService(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidArnException" => {
-                    return ListTypedLinkFacetNamesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidNextTokenException" => {
-                    return ListTypedLinkFacetNamesError::InvalidNextToken(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::InvalidNextToken(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return ListTypedLinkFacetNamesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return ListTypedLinkFacetNamesError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return ListTypedLinkFacetNamesError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(ListTypedLinkFacetNamesError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return ListTypedLinkFacetNamesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return ListTypedLinkFacetNamesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for ListTypedLinkFacetNamesError {
-    fn from(err: serde_json::error::Error) -> ListTypedLinkFacetNamesError {
-        ListTypedLinkFacetNamesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for ListTypedLinkFacetNamesError {
-    fn from(err: CredentialsError) -> ListTypedLinkFacetNamesError {
-        ListTypedLinkFacetNamesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTypedLinkFacetNamesError {
-    fn from(err: HttpDispatchError) -> ListTypedLinkFacetNamesError {
-        ListTypedLinkFacetNamesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTypedLinkFacetNamesError {
-    fn from(err: io::Error) -> ListTypedLinkFacetNamesError {
-        ListTypedLinkFacetNamesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for ListTypedLinkFacetNamesError {
@@ -10185,13 +8897,6 @@ impl Error for ListTypedLinkFacetNamesError {
             ListTypedLinkFacetNamesError::LimitExceeded(ref cause) => cause,
             ListTypedLinkFacetNamesError::ResourceNotFound(ref cause) => cause,
             ListTypedLinkFacetNamesError::RetryableConflict(ref cause) => cause,
-            ListTypedLinkFacetNamesError::Validation(ref cause) => cause,
-            ListTypedLinkFacetNamesError::Credentials(ref err) => err.description(),
-            ListTypedLinkFacetNamesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListTypedLinkFacetNamesError::ParseError(ref cause) => cause,
-            ListTypedLinkFacetNamesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10214,22 +8919,12 @@ pub enum LookupPolicyError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl LookupPolicyError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> LookupPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<LookupPolicyError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10254,57 +8949,50 @@ impl LookupPolicyError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return LookupPolicyError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "DirectoryNotEnabledException" => {
-                    return LookupPolicyError::DirectoryNotEnabled(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::DirectoryNotEnabled(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return LookupPolicyError::InternalService(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return LookupPolicyError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidNextTokenException" => {
-                    return LookupPolicyError::InvalidNextToken(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::InvalidNextToken(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return LookupPolicyError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return LookupPolicyError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return LookupPolicyError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(LookupPolicyError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return LookupPolicyError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return LookupPolicyError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for LookupPolicyError {
-    fn from(err: serde_json::error::Error) -> LookupPolicyError {
-        LookupPolicyError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for LookupPolicyError {
-    fn from(err: CredentialsError) -> LookupPolicyError {
-        LookupPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for LookupPolicyError {
-    fn from(err: HttpDispatchError) -> LookupPolicyError {
-        LookupPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for LookupPolicyError {
-    fn from(err: io::Error) -> LookupPolicyError {
-        LookupPolicyError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for LookupPolicyError {
@@ -10323,11 +9011,6 @@ impl Error for LookupPolicyError {
             LookupPolicyError::LimitExceeded(ref cause) => cause,
             LookupPolicyError::ResourceNotFound(ref cause) => cause,
             LookupPolicyError::RetryableConflict(ref cause) => cause,
-            LookupPolicyError::Validation(ref cause) => cause,
-            LookupPolicyError::Credentials(ref err) => err.description(),
-            LookupPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            LookupPolicyError::ParseError(ref cause) => cause,
-            LookupPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10348,22 +9031,12 @@ pub enum PublishSchemaError {
     RetryableConflict(String),
     /// <p>Indicates that a schema is already published.</p>
     SchemaAlreadyPublished(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PublishSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PublishSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10388,54 +9061,45 @@ impl PublishSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return PublishSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return PublishSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return PublishSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return PublishSchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return PublishSchemaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return PublishSchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
                 "SchemaAlreadyPublishedException" => {
-                    return PublishSchemaError::SchemaAlreadyPublished(String::from(error_message));
+                    return RusotoError::Service(PublishSchemaError::SchemaAlreadyPublished(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PublishSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PublishSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PublishSchemaError {
-    fn from(err: serde_json::error::Error) -> PublishSchemaError {
-        PublishSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PublishSchemaError {
-    fn from(err: CredentialsError) -> PublishSchemaError {
-        PublishSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PublishSchemaError {
-    fn from(err: HttpDispatchError) -> PublishSchemaError {
-        PublishSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PublishSchemaError {
-    fn from(err: io::Error) -> PublishSchemaError {
-        PublishSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PublishSchemaError {
@@ -10453,11 +9117,6 @@ impl Error for PublishSchemaError {
             PublishSchemaError::ResourceNotFound(ref cause) => cause,
             PublishSchemaError::RetryableConflict(ref cause) => cause,
             PublishSchemaError::SchemaAlreadyPublished(ref cause) => cause,
-            PublishSchemaError::Validation(ref cause) => cause,
-            PublishSchemaError::Credentials(ref err) => err.description(),
-            PublishSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            PublishSchemaError::ParseError(ref cause) => cause,
-            PublishSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10478,22 +9137,12 @@ pub enum PutSchemaFromJsonError {
     LimitExceeded(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutSchemaFromJsonError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> PutSchemaFromJsonError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutSchemaFromJsonError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10518,54 +9167,45 @@ impl PutSchemaFromJsonError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return PutSchemaFromJsonError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return PutSchemaFromJsonError::InternalService(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return PutSchemaFromJsonError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRuleException" => {
-                    return PutSchemaFromJsonError::InvalidRule(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::InvalidRule(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidSchemaDocException" => {
-                    return PutSchemaFromJsonError::InvalidSchemaDoc(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::InvalidSchemaDoc(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return PutSchemaFromJsonError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return PutSchemaFromJsonError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(PutSchemaFromJsonError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return PutSchemaFromJsonError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return PutSchemaFromJsonError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for PutSchemaFromJsonError {
-    fn from(err: serde_json::error::Error) -> PutSchemaFromJsonError {
-        PutSchemaFromJsonError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for PutSchemaFromJsonError {
-    fn from(err: CredentialsError) -> PutSchemaFromJsonError {
-        PutSchemaFromJsonError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutSchemaFromJsonError {
-    fn from(err: HttpDispatchError) -> PutSchemaFromJsonError {
-        PutSchemaFromJsonError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutSchemaFromJsonError {
-    fn from(err: io::Error) -> PutSchemaFromJsonError {
-        PutSchemaFromJsonError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for PutSchemaFromJsonError {
@@ -10583,13 +9223,6 @@ impl Error for PutSchemaFromJsonError {
             PutSchemaFromJsonError::InvalidSchemaDoc(ref cause) => cause,
             PutSchemaFromJsonError::LimitExceeded(ref cause) => cause,
             PutSchemaFromJsonError::RetryableConflict(ref cause) => cause,
-            PutSchemaFromJsonError::Validation(ref cause) => cause,
-            PutSchemaFromJsonError::Credentials(ref err) => err.description(),
-            PutSchemaFromJsonError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutSchemaFromJsonError::ParseError(ref cause) => cause,
-            PutSchemaFromJsonError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10612,22 +9245,12 @@ pub enum RemoveFacetFromObjectError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl RemoveFacetFromObjectError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> RemoveFacetFromObjectError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFacetFromObjectError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10652,61 +9275,50 @@ impl RemoveFacetFromObjectError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return RemoveFacetFromObjectError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(RemoveFacetFromObjectError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return RemoveFacetFromObjectError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveFacetFromObjectError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return RemoveFacetFromObjectError::FacetValidation(String::from(error_message));
-                }
-                "InternalServiceException" => {
-                    return RemoveFacetFromObjectError::InternalService(String::from(error_message));
-                }
-                "InvalidArnException" => {
-                    return RemoveFacetFromObjectError::InvalidArn(String::from(error_message));
-                }
-                "LimitExceededException" => {
-                    return RemoveFacetFromObjectError::LimitExceeded(String::from(error_message));
-                }
-                "ResourceNotFoundException" => {
-                    return RemoveFacetFromObjectError::ResourceNotFound(String::from(error_message));
-                }
-                "RetryableConflictException" => {
-                    return RemoveFacetFromObjectError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(RemoveFacetFromObjectError::FacetValidation(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return RemoveFacetFromObjectError::Validation(error_message.to_string());
+                "InternalServiceException" => {
+                    return RusotoError::Service(RemoveFacetFromObjectError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
+                "InvalidArnException" => {
+                    return RusotoError::Service(RemoveFacetFromObjectError::InvalidArn(
+                        String::from(error_message),
+                    ));
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(RemoveFacetFromObjectError::LimitExceeded(
+                        String::from(error_message),
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RemoveFacetFromObjectError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
+                }
+                "RetryableConflictException" => {
+                    return RusotoError::Service(RemoveFacetFromObjectError::RetryableConflict(
+                        String::from(error_message),
+                    ));
+                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return RemoveFacetFromObjectError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for RemoveFacetFromObjectError {
-    fn from(err: serde_json::error::Error) -> RemoveFacetFromObjectError {
-        RemoveFacetFromObjectError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for RemoveFacetFromObjectError {
-    fn from(err: CredentialsError) -> RemoveFacetFromObjectError {
-        RemoveFacetFromObjectError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for RemoveFacetFromObjectError {
-    fn from(err: HttpDispatchError) -> RemoveFacetFromObjectError {
-        RemoveFacetFromObjectError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for RemoveFacetFromObjectError {
-    fn from(err: io::Error) -> RemoveFacetFromObjectError {
-        RemoveFacetFromObjectError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for RemoveFacetFromObjectError {
@@ -10725,13 +9337,6 @@ impl Error for RemoveFacetFromObjectError {
             RemoveFacetFromObjectError::LimitExceeded(ref cause) => cause,
             RemoveFacetFromObjectError::ResourceNotFound(ref cause) => cause,
             RemoveFacetFromObjectError::RetryableConflict(ref cause) => cause,
-            RemoveFacetFromObjectError::Validation(ref cause) => cause,
-            RemoveFacetFromObjectError::Credentials(ref err) => err.description(),
-            RemoveFacetFromObjectError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            RemoveFacetFromObjectError::ParseError(ref cause) => cause,
-            RemoveFacetFromObjectError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10752,22 +9357,12 @@ pub enum TagResourceError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10792,54 +9387,45 @@ impl TagResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return TagResourceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return TagResourceError::InternalService(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return TagResourceError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTaggingRequestException" => {
-                    return TagResourceError::InvalidTaggingRequest(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::InvalidTaggingRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return TagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return TagResourceError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(TagResourceError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return TagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return TagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for TagResourceError {
-    fn from(err: serde_json::error::Error) -> TagResourceError {
-        TagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for TagResourceError {
-    fn from(err: CredentialsError) -> TagResourceError {
-        TagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TagResourceError {
-    fn from(err: HttpDispatchError) -> TagResourceError {
-        TagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TagResourceError {
-    fn from(err: io::Error) -> TagResourceError {
-        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for TagResourceError {
@@ -10857,11 +9443,6 @@ impl Error for TagResourceError {
             TagResourceError::LimitExceeded(ref cause) => cause,
             TagResourceError::ResourceNotFound(ref cause) => cause,
             TagResourceError::RetryableConflict(ref cause) => cause,
-            TagResourceError::Validation(ref cause) => cause,
-            TagResourceError::Credentials(ref err) => err.description(),
-            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            TagResourceError::ParseError(ref cause) => cause,
-            TagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10882,22 +9463,12 @@ pub enum UntagResourceError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UntagResourceError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -10922,54 +9493,45 @@ impl UntagResourceError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UntagResourceError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UntagResourceError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return UntagResourceError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidTaggingRequestException" => {
-                    return UntagResourceError::InvalidTaggingRequest(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::InvalidTaggingRequest(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UntagResourceError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return UntagResourceError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UntagResourceError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UntagResourceError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UntagResourceError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UntagResourceError {
-    fn from(err: serde_json::error::Error) -> UntagResourceError {
-        UntagResourceError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UntagResourceError {
-    fn from(err: CredentialsError) -> UntagResourceError {
-        UntagResourceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UntagResourceError {
-    fn from(err: HttpDispatchError) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UntagResourceError {
-    fn from(err: io::Error) -> UntagResourceError {
-        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UntagResourceError {
@@ -10987,11 +9549,6 @@ impl Error for UntagResourceError {
             UntagResourceError::LimitExceeded(ref cause) => cause,
             UntagResourceError::ResourceNotFound(ref cause) => cause,
             UntagResourceError::RetryableConflict(ref cause) => cause,
-            UntagResourceError::Validation(ref cause) => cause,
-            UntagResourceError::Credentials(ref err) => err.description(),
-            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UntagResourceError::ParseError(ref cause) => cause,
-            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11016,22 +9573,12 @@ pub enum UpdateFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11056,60 +9603,55 @@ impl UpdateFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "FacetNotFoundException" => {
-                    return UpdateFacetError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::FacetNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdateFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return UpdateFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidFacetUpdateException" => {
-                    return UpdateFacetError::InvalidFacetUpdate(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::InvalidFacetUpdate(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidRuleException" => {
-                    return UpdateFacetError::InvalidRule(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::InvalidRule(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return UpdateFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateFacetError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateFacetError {
-    fn from(err: serde_json::error::Error) -> UpdateFacetError {
-        UpdateFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateFacetError {
-    fn from(err: CredentialsError) -> UpdateFacetError {
-        UpdateFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateFacetError {
-    fn from(err: HttpDispatchError) -> UpdateFacetError {
-        UpdateFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateFacetError {
-    fn from(err: io::Error) -> UpdateFacetError {
-        UpdateFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateFacetError {
@@ -11129,11 +9671,6 @@ impl Error for UpdateFacetError {
             UpdateFacetError::LimitExceeded(ref cause) => cause,
             UpdateFacetError::ResourceNotFound(ref cause) => cause,
             UpdateFacetError::RetryableConflict(ref cause) => cause,
-            UpdateFacetError::Validation(ref cause) => cause,
-            UpdateFacetError::Credentials(ref err) => err.description(),
-            UpdateFacetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateFacetError::ParseError(ref cause) => cause,
-            UpdateFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11156,22 +9693,12 @@ pub enum UpdateLinkAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateLinkAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateLinkAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLinkAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11196,59 +9723,50 @@ impl UpdateLinkAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateLinkAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return UpdateLinkAttributesError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateLinkAttributesError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return UpdateLinkAttributesError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdateLinkAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpdateLinkAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateLinkAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateLinkAttributesError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return UpdateLinkAttributesError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateLinkAttributesError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateLinkAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateLinkAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateLinkAttributesError {
-    fn from(err: serde_json::error::Error) -> UpdateLinkAttributesError {
-        UpdateLinkAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateLinkAttributesError {
-    fn from(err: CredentialsError) -> UpdateLinkAttributesError {
-        UpdateLinkAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateLinkAttributesError {
-    fn from(err: HttpDispatchError) -> UpdateLinkAttributesError {
-        UpdateLinkAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateLinkAttributesError {
-    fn from(err: io::Error) -> UpdateLinkAttributesError {
-        UpdateLinkAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateLinkAttributesError {
@@ -11267,13 +9785,6 @@ impl Error for UpdateLinkAttributesError {
             UpdateLinkAttributesError::LimitExceeded(ref cause) => cause,
             UpdateLinkAttributesError::ResourceNotFound(ref cause) => cause,
             UpdateLinkAttributesError::RetryableConflict(ref cause) => cause,
-            UpdateLinkAttributesError::Validation(ref cause) => cause,
-            UpdateLinkAttributesError::Credentials(ref err) => err.description(),
-            UpdateLinkAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateLinkAttributesError::ParseError(ref cause) => cause,
-            UpdateLinkAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11298,22 +9809,12 @@ pub enum UpdateObjectAttributesError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateObjectAttributesError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateObjectAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateObjectAttributesError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11338,68 +9839,55 @@ impl UpdateObjectAttributesError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateObjectAttributesError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateObjectAttributesError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "DirectoryNotEnabledException" => {
-                    return UpdateObjectAttributesError::DirectoryNotEnabled(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateObjectAttributesError::DirectoryNotEnabled(
+                        String::from(error_message),
                     ));
                 }
                 "FacetValidationException" => {
-                    return UpdateObjectAttributesError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(UpdateObjectAttributesError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdateObjectAttributesError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateObjectAttributesError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpdateObjectAttributesError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateObjectAttributesError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateObjectAttributesError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateObjectAttributesError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "LinkNameAlreadyInUseException" => {
-                    return UpdateObjectAttributesError::LinkNameAlreadyInUse(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateObjectAttributesError::LinkNameAlreadyInUse(
+                        String::from(error_message),
                     ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateObjectAttributesError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateObjectAttributesError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return UpdateObjectAttributesError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateObjectAttributesError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpdateObjectAttributesError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateObjectAttributesError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateObjectAttributesError {
-    fn from(err: serde_json::error::Error) -> UpdateObjectAttributesError {
-        UpdateObjectAttributesError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateObjectAttributesError {
-    fn from(err: CredentialsError) -> UpdateObjectAttributesError {
-        UpdateObjectAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateObjectAttributesError {
-    fn from(err: HttpDispatchError) -> UpdateObjectAttributesError {
-        UpdateObjectAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateObjectAttributesError {
-    fn from(err: io::Error) -> UpdateObjectAttributesError {
-        UpdateObjectAttributesError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateObjectAttributesError {
@@ -11419,13 +9907,6 @@ impl Error for UpdateObjectAttributesError {
             UpdateObjectAttributesError::LinkNameAlreadyInUse(ref cause) => cause,
             UpdateObjectAttributesError::ResourceNotFound(ref cause) => cause,
             UpdateObjectAttributesError::RetryableConflict(ref cause) => cause,
-            UpdateObjectAttributesError::Validation(ref cause) => cause,
-            UpdateObjectAttributesError::Credentials(ref err) => err.description(),
-            UpdateObjectAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateObjectAttributesError::ParseError(ref cause) => cause,
-            UpdateObjectAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11444,22 +9925,12 @@ pub enum UpdateSchemaError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11484,51 +9955,40 @@ impl UpdateSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::AccessDenied(String::from(
+                        error_message,
+                    )));
                 }
                 "InternalServiceException" => {
-                    return UpdateSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::InternalService(String::from(
+                        error_message,
+                    )));
                 }
                 "InvalidArnException" => {
-                    return UpdateSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::InvalidArn(String::from(
+                        error_message,
+                    )));
                 }
                 "LimitExceededException" => {
-                    return UpdateSchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::LimitExceeded(String::from(
+                        error_message,
+                    )));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateSchemaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::ResourceNotFound(String::from(
+                        error_message,
+                    )));
                 }
                 "RetryableConflictException" => {
-                    return UpdateSchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateSchemaError::RetryableConflict(String::from(
+                        error_message,
+                    )));
                 }
-                "ValidationException" => {
-                    return UpdateSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateSchemaError {
-    fn from(err: serde_json::error::Error) -> UpdateSchemaError {
-        UpdateSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateSchemaError {
-    fn from(err: CredentialsError) -> UpdateSchemaError {
-        UpdateSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateSchemaError {
-    fn from(err: HttpDispatchError) -> UpdateSchemaError {
-        UpdateSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateSchemaError {
-    fn from(err: io::Error) -> UpdateSchemaError {
-        UpdateSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateSchemaError {
@@ -11545,11 +10005,6 @@ impl Error for UpdateSchemaError {
             UpdateSchemaError::LimitExceeded(ref cause) => cause,
             UpdateSchemaError::ResourceNotFound(ref cause) => cause,
             UpdateSchemaError::RetryableConflict(ref cause) => cause,
-            UpdateSchemaError::Validation(ref cause) => cause,
-            UpdateSchemaError::Credentials(ref err) => err.description(),
-            UpdateSchemaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateSchemaError::ParseError(ref cause) => cause,
-            UpdateSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11576,22 +10031,12 @@ pub enum UpdateTypedLinkFacetError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTypedLinkFacetError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTypedLinkFacetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTypedLinkFacetError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11616,65 +10061,60 @@ impl UpdateTypedLinkFacetError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpdateTypedLinkFacetError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetNotFoundException" => {
-                    return UpdateTypedLinkFacetError::FacetNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::FacetNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "FacetValidationException" => {
-                    return UpdateTypedLinkFacetError::FacetValidation(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::FacetValidation(
+                        String::from(error_message),
+                    ));
                 }
                 "InternalServiceException" => {
-                    return UpdateTypedLinkFacetError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpdateTypedLinkFacetError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidFacetUpdateException" => {
-                    return UpdateTypedLinkFacetError::InvalidFacetUpdate(String::from(
-                        error_message,
+                    return RusotoError::Service(UpdateTypedLinkFacetError::InvalidFacetUpdate(
+                        String::from(error_message),
                     ));
                 }
                 "InvalidRuleException" => {
-                    return UpdateTypedLinkFacetError::InvalidRule(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::InvalidRule(
+                        String::from(error_message),
+                    ));
                 }
                 "LimitExceededException" => {
-                    return UpdateTypedLinkFacetError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpdateTypedLinkFacetError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return UpdateTypedLinkFacetError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UpdateTypedLinkFacetError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpdateTypedLinkFacetError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpdateTypedLinkFacetError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpdateTypedLinkFacetError {
-    fn from(err: serde_json::error::Error) -> UpdateTypedLinkFacetError {
-        UpdateTypedLinkFacetError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTypedLinkFacetError {
-    fn from(err: CredentialsError) -> UpdateTypedLinkFacetError {
-        UpdateTypedLinkFacetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTypedLinkFacetError {
-    fn from(err: HttpDispatchError) -> UpdateTypedLinkFacetError {
-        UpdateTypedLinkFacetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTypedLinkFacetError {
-    fn from(err: io::Error) -> UpdateTypedLinkFacetError {
-        UpdateTypedLinkFacetError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpdateTypedLinkFacetError {
@@ -11695,13 +10135,6 @@ impl Error for UpdateTypedLinkFacetError {
             UpdateTypedLinkFacetError::LimitExceeded(ref cause) => cause,
             UpdateTypedLinkFacetError::ResourceNotFound(ref cause) => cause,
             UpdateTypedLinkFacetError::RetryableConflict(ref cause) => cause,
-            UpdateTypedLinkFacetError::Validation(ref cause) => cause,
-            UpdateTypedLinkFacetError::Credentials(ref err) => err.description(),
-            UpdateTypedLinkFacetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateTypedLinkFacetError::ParseError(ref cause) => cause,
-            UpdateTypedLinkFacetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11722,22 +10155,12 @@ pub enum UpgradeAppliedSchemaError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpgradeAppliedSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpgradeAppliedSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpgradeAppliedSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11762,56 +10185,45 @@ impl UpgradeAppliedSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpgradeAppliedSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleSchemaException" => {
-                    return UpgradeAppliedSchemaError::IncompatibleSchema(String::from(
-                        error_message,
+                    return RusotoError::Service(UpgradeAppliedSchemaError::IncompatibleSchema(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return UpgradeAppliedSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpgradeAppliedSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAttachmentException" => {
-                    return UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::InvalidAttachment(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::ResourceNotFound(
+                        String::from(error_message),
+                    ));
                 }
                 "RetryableConflictException" => {
-                    return UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message));
+                    return RusotoError::Service(UpgradeAppliedSchemaError::RetryableConflict(
+                        String::from(error_message),
+                    ));
                 }
-                "ValidationException" => {
-                    return UpgradeAppliedSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpgradeAppliedSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpgradeAppliedSchemaError {
-    fn from(err: serde_json::error::Error) -> UpgradeAppliedSchemaError {
-        UpgradeAppliedSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpgradeAppliedSchemaError {
-    fn from(err: CredentialsError) -> UpgradeAppliedSchemaError {
-        UpgradeAppliedSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpgradeAppliedSchemaError {
-    fn from(err: HttpDispatchError) -> UpgradeAppliedSchemaError {
-        UpgradeAppliedSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpgradeAppliedSchemaError {
-    fn from(err: io::Error) -> UpgradeAppliedSchemaError {
-        UpgradeAppliedSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpgradeAppliedSchemaError {
@@ -11829,13 +10241,6 @@ impl Error for UpgradeAppliedSchemaError {
             UpgradeAppliedSchemaError::InvalidAttachment(ref cause) => cause,
             UpgradeAppliedSchemaError::ResourceNotFound(ref cause) => cause,
             UpgradeAppliedSchemaError::RetryableConflict(ref cause) => cause,
-            UpgradeAppliedSchemaError::Validation(ref cause) => cause,
-            UpgradeAppliedSchemaError::Credentials(ref err) => err.description(),
-            UpgradeAppliedSchemaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpgradeAppliedSchemaError::ParseError(ref cause) => cause,
-            UpgradeAppliedSchemaError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11858,22 +10263,12 @@ pub enum UpgradePublishedSchemaError {
     ResourceNotFound(String),
     /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpgradePublishedSchemaError {
     // see boto RestJSONParser impl for parsing errors
     // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
-    pub fn from_response(res: BufferedHttpResponse) -> UpgradePublishedSchemaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpgradePublishedSchemaError> {
         if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
             let error_type = match res.headers.get("x-amzn-errortype") {
                 Some(raw_error_type) => raw_error_type
@@ -11898,65 +10293,50 @@ impl UpgradePublishedSchemaError {
 
             match error_type {
                 "AccessDeniedException" => {
-                    return UpgradePublishedSchemaError::AccessDenied(String::from(error_message));
+                    return RusotoError::Service(UpgradePublishedSchemaError::AccessDenied(
+                        String::from(error_message),
+                    ));
                 }
                 "IncompatibleSchemaException" => {
-                    return UpgradePublishedSchemaError::IncompatibleSchema(String::from(
-                        error_message,
+                    return RusotoError::Service(UpgradePublishedSchemaError::IncompatibleSchema(
+                        String::from(error_message),
                     ));
                 }
                 "InternalServiceException" => {
-                    return UpgradePublishedSchemaError::InternalService(String::from(error_message));
+                    return RusotoError::Service(UpgradePublishedSchemaError::InternalService(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidArnException" => {
-                    return UpgradePublishedSchemaError::InvalidArn(String::from(error_message));
+                    return RusotoError::Service(UpgradePublishedSchemaError::InvalidArn(
+                        String::from(error_message),
+                    ));
                 }
                 "InvalidAttachmentException" => {
-                    return UpgradePublishedSchemaError::InvalidAttachment(String::from(
-                        error_message,
+                    return RusotoError::Service(UpgradePublishedSchemaError::InvalidAttachment(
+                        String::from(error_message),
                     ));
                 }
                 "LimitExceededException" => {
-                    return UpgradePublishedSchemaError::LimitExceeded(String::from(error_message));
+                    return RusotoError::Service(UpgradePublishedSchemaError::LimitExceeded(
+                        String::from(error_message),
+                    ));
                 }
                 "ResourceNotFoundException" => {
-                    return UpgradePublishedSchemaError::ResourceNotFound(String::from(
-                        error_message,
+                    return RusotoError::Service(UpgradePublishedSchemaError::ResourceNotFound(
+                        String::from(error_message),
                     ));
                 }
                 "RetryableConflictException" => {
-                    return UpgradePublishedSchemaError::RetryableConflict(String::from(
-                        error_message,
+                    return RusotoError::Service(UpgradePublishedSchemaError::RetryableConflict(
+                        String::from(error_message),
                     ));
                 }
-                "ValidationException" => {
-                    return UpgradePublishedSchemaError::Validation(error_message.to_string());
-                }
+                "ValidationException" => return RusotoError::Validation(error_message.to_string()),
                 _ => {}
             }
         }
-        return UpgradePublishedSchemaError::Unknown(res);
-    }
-}
-
-impl From<serde_json::error::Error> for UpgradePublishedSchemaError {
-    fn from(err: serde_json::error::Error) -> UpgradePublishedSchemaError {
-        UpgradePublishedSchemaError::ParseError(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for UpgradePublishedSchemaError {
-    fn from(err: CredentialsError) -> UpgradePublishedSchemaError {
-        UpgradePublishedSchemaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpgradePublishedSchemaError {
-    fn from(err: HttpDispatchError) -> UpgradePublishedSchemaError {
-        UpgradePublishedSchemaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpgradePublishedSchemaError {
-    fn from(err: io::Error) -> UpgradePublishedSchemaError {
-        UpgradePublishedSchemaError::HttpDispatch(HttpDispatchError::from(err))
+        return RusotoError::Unknown(res);
     }
 }
 impl fmt::Display for UpgradePublishedSchemaError {
@@ -11975,13 +10355,6 @@ impl Error for UpgradePublishedSchemaError {
             UpgradePublishedSchemaError::LimitExceeded(ref cause) => cause,
             UpgradePublishedSchemaError::ResourceNotFound(ref cause) => cause,
             UpgradePublishedSchemaError::RetryableConflict(ref cause) => cause,
-            UpgradePublishedSchemaError::Validation(ref cause) => cause,
-            UpgradePublishedSchemaError::Credentials(ref err) => err.description(),
-            UpgradePublishedSchemaError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpgradePublishedSchemaError::ParseError(ref cause) => cause,
-            UpgradePublishedSchemaError::Unknown(_) => "unknown error",
         }
     }
 }

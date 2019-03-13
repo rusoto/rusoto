@@ -12,17 +12,14 @@
 
 use std::error::Error;
 use std::fmt;
-use std::io;
 
 #[allow(warnings)]
 use futures::future;
 use futures::Future;
+use rusoto_core::credential::ProvideAwsCredentials;
 use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
-use rusoto_core::{Client, RusotoFuture};
-
-use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
-use rusoto_core::request::HttpDispatchError;
+use rusoto_core::{Client, RusotoError, RusotoFuture};
 
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
@@ -8700,20 +8697,10 @@ pub enum CloneReceiptRuleSetError {
     LimitExceeded(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CloneReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CloneReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CloneReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8721,25 +8708,25 @@ impl CloneReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
-                        return CloneReceiptRuleSetError::AlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CloneReceiptRuleSetError::AlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CloneReceiptRuleSetError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CloneReceiptRuleSetError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return CloneReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CloneReceiptRuleSetError::RuleSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CloneReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8748,28 +8735,6 @@ impl CloneReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CloneReceiptRuleSetError {
-    fn from(err: XmlParseError) -> CloneReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        CloneReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CloneReceiptRuleSetError {
-    fn from(err: CredentialsError) -> CloneReceiptRuleSetError {
-        CloneReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CloneReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> CloneReceiptRuleSetError {
-        CloneReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CloneReceiptRuleSetError {
-    fn from(err: io::Error) -> CloneReceiptRuleSetError {
-        CloneReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CloneReceiptRuleSetError {
@@ -8783,13 +8748,6 @@ impl Error for CloneReceiptRuleSetError {
             CloneReceiptRuleSetError::AlreadyExists(ref cause) => cause,
             CloneReceiptRuleSetError::LimitExceeded(ref cause) => cause,
             CloneReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
-            CloneReceiptRuleSetError::Validation(ref cause) => cause,
-            CloneReceiptRuleSetError::Credentials(ref err) => err.description(),
-            CloneReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CloneReceiptRuleSetError::ParseError(ref cause) => cause,
-            CloneReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8802,20 +8760,10 @@ pub enum CreateConfigurationSetError {
     InvalidConfigurationSet(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -8823,25 +8771,29 @@ impl CreateConfigurationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConfigurationSetAlreadyExists" => {
-                        return CreateConfigurationSetError::ConfigurationSetAlreadyExists(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            CreateConfigurationSetError::ConfigurationSetAlreadyExists(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "InvalidConfigurationSet" => {
-                        return CreateConfigurationSetError::InvalidConfigurationSet(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            CreateConfigurationSetError::InvalidConfigurationSet(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "LimitExceeded" => {
-                        return CreateConfigurationSetError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateConfigurationSetError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateConfigurationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8850,28 +8802,6 @@ impl CreateConfigurationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateConfigurationSetError {
-    fn from(err: XmlParseError) -> CreateConfigurationSetError {
-        let XmlParseError(message) = err;
-        CreateConfigurationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateConfigurationSetError {
-    fn from(err: CredentialsError) -> CreateConfigurationSetError {
-        CreateConfigurationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConfigurationSetError {
-    fn from(err: HttpDispatchError) -> CreateConfigurationSetError {
-        CreateConfigurationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConfigurationSetError {
-    fn from(err: io::Error) -> CreateConfigurationSetError {
-        CreateConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConfigurationSetError {
@@ -8885,13 +8815,6 @@ impl Error for CreateConfigurationSetError {
             CreateConfigurationSetError::ConfigurationSetAlreadyExists(ref cause) => cause,
             CreateConfigurationSetError::InvalidConfigurationSet(ref cause) => cause,
             CreateConfigurationSetError::LimitExceeded(ref cause) => cause,
-            CreateConfigurationSetError::Validation(ref cause) => cause,
-            CreateConfigurationSetError::Credentials(ref err) => err.description(),
-            CreateConfigurationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateConfigurationSetError::ParseError(ref cause) => cause,
-            CreateConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8910,31 +8833,59 @@ pub enum CreateConfigurationSetEventDestinationError {
     InvalidSNSDestination(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetEventDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetEventDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateConfigurationSetEventDestinationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationAlreadyExists" => return CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(String::from(parsed_error.message)),"InvalidCloudWatchDestination" => return CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestination" => return CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"InvalidSNSDestination" => return CreateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),"LimitExceeded" => return CreateConfigurationSetEventDestinationError::LimitExceeded(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "EventDestinationAlreadyExists" => return RusotoError::Service(
+                        CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidCloudWatchDestination" => return RusotoError::Service(
+                        CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidFirehoseDestination" => {
+                        return RusotoError::Service(
+                            CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidSNSDestination" => {
+                        return RusotoError::Service(
+                            CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "LimitExceeded" => {
+                        return RusotoError::Service(
+                            CreateConfigurationSetEventDestinationError::LimitExceeded(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        CreateConfigurationSetEventDestinationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -8943,28 +8894,6 @@ impl CreateConfigurationSetEventDestinationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateConfigurationSetEventDestinationError {
-    fn from(err: XmlParseError) -> CreateConfigurationSetEventDestinationError {
-        let XmlParseError(message) = err;
-        CreateConfigurationSetEventDestinationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateConfigurationSetEventDestinationError {
-    fn from(err: CredentialsError) -> CreateConfigurationSetEventDestinationError {
-        CreateConfigurationSetEventDestinationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConfigurationSetEventDestinationError {
-    fn from(err: HttpDispatchError) -> CreateConfigurationSetEventDestinationError {
-        CreateConfigurationSetEventDestinationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConfigurationSetEventDestinationError {
-    fn from(err: io::Error) -> CreateConfigurationSetEventDestinationError {
-        CreateConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConfigurationSetEventDestinationError {
@@ -8989,13 +8918,6 @@ impl Error for CreateConfigurationSetEventDestinationError {
             }
             CreateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
             CreateConfigurationSetEventDestinationError::LimitExceeded(ref cause) => cause,
-            CreateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
-            CreateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
-            CreateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
-            CreateConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9008,31 +8930,40 @@ pub enum CreateConfigurationSetTrackingOptionsError {
     InvalidTrackingOptions(String),
     /// <p>Indicates that the configuration set you specified already contains a TrackingOptions object.</p>
     TrackingOptionsAlreadyExists(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateConfigurationSetTrackingOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateConfigurationSetTrackingOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateConfigurationSetTrackingOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"InvalidTrackingOptions" => return CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(String::from(parsed_error.message)),"TrackingOptionsAlreadyExistsException" => return CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidTrackingOptions" => {
+                        return RusotoError::Service(
+                            CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "TrackingOptionsAlreadyExistsException" => return RusotoError::Service(
+                        CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        CreateConfigurationSetTrackingOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9041,28 +8972,6 @@ impl CreateConfigurationSetTrackingOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateConfigurationSetTrackingOptionsError {
-    fn from(err: XmlParseError) -> CreateConfigurationSetTrackingOptionsError {
-        let XmlParseError(message) = err;
-        CreateConfigurationSetTrackingOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateConfigurationSetTrackingOptionsError {
-    fn from(err: CredentialsError) -> CreateConfigurationSetTrackingOptionsError {
-        CreateConfigurationSetTrackingOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateConfigurationSetTrackingOptionsError {
-    fn from(err: HttpDispatchError) -> CreateConfigurationSetTrackingOptionsError {
-        CreateConfigurationSetTrackingOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateConfigurationSetTrackingOptionsError {
-    fn from(err: io::Error) -> CreateConfigurationSetTrackingOptionsError {
-        CreateConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateConfigurationSetTrackingOptionsError {
@@ -9080,13 +8989,6 @@ impl Error for CreateConfigurationSetTrackingOptionsError {
             CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(ref cause) => {
                 cause
             }
-            CreateConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
-            CreateConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
-            CreateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
-            CreateConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9101,31 +9003,23 @@ pub enum CreateCustomVerificationEmailTemplateError {
     FromEmailAddressNotVerified(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateCustomVerificationEmailTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateCustomVerificationEmailTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceeded" => return CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message))),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message))),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        CreateCustomVerificationEmailTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9134,28 +9028,6 @@ impl CreateCustomVerificationEmailTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateCustomVerificationEmailTemplateError {
-    fn from(err: XmlParseError) -> CreateCustomVerificationEmailTemplateError {
-        let XmlParseError(message) = err;
-        CreateCustomVerificationEmailTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateCustomVerificationEmailTemplateError {
-    fn from(err: CredentialsError) -> CreateCustomVerificationEmailTemplateError {
-        CreateCustomVerificationEmailTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateCustomVerificationEmailTemplateError {
-    fn from(err: HttpDispatchError) -> CreateCustomVerificationEmailTemplateError {
-        CreateCustomVerificationEmailTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateCustomVerificationEmailTemplateError {
-    fn from(err: io::Error) -> CreateCustomVerificationEmailTemplateError {
-        CreateCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateCustomVerificationEmailTemplateError {
@@ -9169,12 +9041,7 @@ impl Error for CreateCustomVerificationEmailTemplateError {
                             CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
 CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(ref cause) => cause,
 CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
-CreateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-CreateCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
-CreateCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
+CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => cause
                         }
     }
 }
@@ -9185,20 +9052,10 @@ pub enum CreateReceiptFilterError {
     AlreadyExists(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptFilterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9206,20 +9063,20 @@ impl CreateReceiptFilterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
-                        return CreateReceiptFilterError::AlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptFilterError::AlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateReceiptFilterError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptFilterError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateReceiptFilterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9228,28 +9085,6 @@ impl CreateReceiptFilterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateReceiptFilterError {
-    fn from(err: XmlParseError) -> CreateReceiptFilterError {
-        let XmlParseError(message) = err;
-        CreateReceiptFilterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateReceiptFilterError {
-    fn from(err: CredentialsError) -> CreateReceiptFilterError {
-        CreateReceiptFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateReceiptFilterError {
-    fn from(err: HttpDispatchError) -> CreateReceiptFilterError {
-        CreateReceiptFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateReceiptFilterError {
-    fn from(err: io::Error) -> CreateReceiptFilterError {
-        CreateReceiptFilterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateReceiptFilterError {
@@ -9262,13 +9097,6 @@ impl Error for CreateReceiptFilterError {
         match *self {
             CreateReceiptFilterError::AlreadyExists(ref cause) => cause,
             CreateReceiptFilterError::LimitExceeded(ref cause) => cause,
-            CreateReceiptFilterError::Validation(ref cause) => cause,
-            CreateReceiptFilterError::Credentials(ref err) => err.description(),
-            CreateReceiptFilterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateReceiptFilterError::ParseError(ref cause) => cause,
-            CreateReceiptFilterError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9289,20 +9117,10 @@ pub enum CreateReceiptRuleError {
     RuleDoesNotExist(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9310,45 +9128,45 @@ impl CreateReceiptRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
-                        return CreateReceiptRuleError::AlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::AlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidLambdaFunction" => {
-                        return CreateReceiptRuleError::InvalidLambdaFunction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::InvalidLambdaFunction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidS3Configuration" => {
-                        return CreateReceiptRuleError::InvalidS3Configuration(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::InvalidS3Configuration(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSnsTopic" => {
-                        return CreateReceiptRuleError::InvalidSnsTopic(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::InvalidSnsTopic(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateReceiptRuleError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleDoesNotExist" => {
-                        return CreateReceiptRuleError::RuleDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::RuleDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return CreateReceiptRuleError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleError::RuleSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateReceiptRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9357,28 +9175,6 @@ impl CreateReceiptRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateReceiptRuleError {
-    fn from(err: XmlParseError) -> CreateReceiptRuleError {
-        let XmlParseError(message) = err;
-        CreateReceiptRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateReceiptRuleError {
-    fn from(err: CredentialsError) -> CreateReceiptRuleError {
-        CreateReceiptRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateReceiptRuleError {
-    fn from(err: HttpDispatchError) -> CreateReceiptRuleError {
-        CreateReceiptRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateReceiptRuleError {
-    fn from(err: io::Error) -> CreateReceiptRuleError {
-        CreateReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateReceiptRuleError {
@@ -9396,13 +9192,6 @@ impl Error for CreateReceiptRuleError {
             CreateReceiptRuleError::LimitExceeded(ref cause) => cause,
             CreateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
             CreateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
-            CreateReceiptRuleError::Validation(ref cause) => cause,
-            CreateReceiptRuleError::Credentials(ref err) => err.description(),
-            CreateReceiptRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateReceiptRuleError::ParseError(ref cause) => cause,
-            CreateReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9413,20 +9202,10 @@ pub enum CreateReceiptRuleSetError {
     AlreadyExists(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9434,20 +9213,20 @@ impl CreateReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
-                        return CreateReceiptRuleSetError::AlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleSetError::AlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateReceiptRuleSetError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateReceiptRuleSetError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9456,28 +9235,6 @@ impl CreateReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateReceiptRuleSetError {
-    fn from(err: XmlParseError) -> CreateReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        CreateReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateReceiptRuleSetError {
-    fn from(err: CredentialsError) -> CreateReceiptRuleSetError {
-        CreateReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> CreateReceiptRuleSetError {
-        CreateReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateReceiptRuleSetError {
-    fn from(err: io::Error) -> CreateReceiptRuleSetError {
-        CreateReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateReceiptRuleSetError {
@@ -9490,13 +9247,6 @@ impl Error for CreateReceiptRuleSetError {
         match *self {
             CreateReceiptRuleSetError::AlreadyExists(ref cause) => cause,
             CreateReceiptRuleSetError::LimitExceeded(ref cause) => cause,
-            CreateReceiptRuleSetError::Validation(ref cause) => cause,
-            CreateReceiptRuleSetError::Credentials(ref err) => err.description(),
-            CreateReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            CreateReceiptRuleSetError::ParseError(ref cause) => cause,
-            CreateReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9509,20 +9259,10 @@ pub enum CreateTemplateError {
     InvalidTemplate(String),
     /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl CreateTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> CreateTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9530,25 +9270,25 @@ impl CreateTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
-                        return CreateTemplateError::AlreadyExists(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTemplateError::AlreadyExists(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidTemplate" => {
-                        return CreateTemplateError::InvalidTemplate(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTemplateError::InvalidTemplate(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return CreateTemplateError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(CreateTemplateError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        CreateTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9557,28 +9297,6 @@ impl CreateTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for CreateTemplateError {
-    fn from(err: XmlParseError) -> CreateTemplateError {
-        let XmlParseError(message) = err;
-        CreateTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for CreateTemplateError {
-    fn from(err: CredentialsError) -> CreateTemplateError {
-        CreateTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for CreateTemplateError {
-    fn from(err: HttpDispatchError) -> CreateTemplateError {
-        CreateTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for CreateTemplateError {
-    fn from(err: io::Error) -> CreateTemplateError {
-        CreateTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for CreateTemplateError {
@@ -9592,11 +9310,6 @@ impl Error for CreateTemplateError {
             CreateTemplateError::AlreadyExists(ref cause) => cause,
             CreateTemplateError::InvalidTemplate(ref cause) => cause,
             CreateTemplateError::LimitExceeded(ref cause) => cause,
-            CreateTemplateError::Validation(ref cause) => cause,
-            CreateTemplateError::Credentials(ref err) => err.description(),
-            CreateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            CreateTemplateError::ParseError(ref cause) => cause,
-            CreateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9605,20 +9318,10 @@ impl Error for CreateTemplateError {
 pub enum DeleteConfigurationSetError {
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConfigurationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9626,15 +9329,17 @@ impl DeleteConfigurationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => {
-                        return DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DeleteConfigurationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9643,28 +9348,6 @@ impl DeleteConfigurationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteConfigurationSetError {
-    fn from(err: XmlParseError) -> DeleteConfigurationSetError {
-        let XmlParseError(message) = err;
-        DeleteConfigurationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationSetError {
-    fn from(err: CredentialsError) -> DeleteConfigurationSetError {
-        DeleteConfigurationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationSetError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationSetError {
-        DeleteConfigurationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationSetError {
-    fn from(err: io::Error) -> DeleteConfigurationSetError {
-        DeleteConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationSetError {
@@ -9676,13 +9359,6 @@ impl Error for DeleteConfigurationSetError {
     fn description(&self) -> &str {
         match *self {
             DeleteConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            DeleteConfigurationSetError::Validation(ref cause) => cause,
-            DeleteConfigurationSetError::Credentials(ref err) => err.description(),
-            DeleteConfigurationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationSetError::ParseError(ref cause) => cause,
-            DeleteConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9693,31 +9369,33 @@ pub enum DeleteConfigurationSetEventDestinationError {
     ConfigurationSetDoesNotExist(String),
     /// <p>Indicates that the event destination does not exist.</p>
     EventDestinationDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetEventDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetEventDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteConfigurationSetEventDestinationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationDoesNotExist" => return DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "EventDestinationDoesNotExist" => return RusotoError::Service(
+                        DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    _ => {}
+                }
             }
         }
-        DeleteConfigurationSetEventDestinationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9726,28 +9404,6 @@ impl DeleteConfigurationSetEventDestinationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteConfigurationSetEventDestinationError {
-    fn from(err: XmlParseError) -> DeleteConfigurationSetEventDestinationError {
-        let XmlParseError(message) = err;
-        DeleteConfigurationSetEventDestinationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationSetEventDestinationError {
-    fn from(err: CredentialsError) -> DeleteConfigurationSetEventDestinationError {
-        DeleteConfigurationSetEventDestinationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationSetEventDestinationError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationSetEventDestinationError {
-        DeleteConfigurationSetEventDestinationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationSetEventDestinationError {
-    fn from(err: io::Error) -> DeleteConfigurationSetEventDestinationError {
-        DeleteConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationSetEventDestinationError {
@@ -9764,13 +9420,6 @@ impl Error for DeleteConfigurationSetEventDestinationError {
             DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
                 ref cause,
             ) => cause,
-            DeleteConfigurationSetEventDestinationError::Validation(ref cause) => cause,
-            DeleteConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
-            DeleteConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
-            DeleteConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9781,31 +9430,35 @@ pub enum DeleteConfigurationSetTrackingOptionsError {
     ConfigurationSetDoesNotExist(String),
     /// <p>Indicates that the TrackingOptions object you specified does not exist.</p>
     TrackingOptionsDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteConfigurationSetTrackingOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteConfigurationSetTrackingOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteConfigurationSetTrackingOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "TrackingOptionsDoesNotExistException" => {
+                        return RusotoError::Service(
+                            DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        DeleteConfigurationSetTrackingOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9814,28 +9467,6 @@ impl DeleteConfigurationSetTrackingOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteConfigurationSetTrackingOptionsError {
-    fn from(err: XmlParseError) -> DeleteConfigurationSetTrackingOptionsError {
-        let XmlParseError(message) = err;
-        DeleteConfigurationSetTrackingOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteConfigurationSetTrackingOptionsError {
-    fn from(err: CredentialsError) -> DeleteConfigurationSetTrackingOptionsError {
-        DeleteConfigurationSetTrackingOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteConfigurationSetTrackingOptionsError {
-    fn from(err: HttpDispatchError) -> DeleteConfigurationSetTrackingOptionsError {
-        DeleteConfigurationSetTrackingOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteConfigurationSetTrackingOptionsError {
-    fn from(err: io::Error) -> DeleteConfigurationSetTrackingOptionsError {
-        DeleteConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteConfigurationSetTrackingOptionsError {
@@ -9852,33 +9483,17 @@ impl Error for DeleteConfigurationSetTrackingOptionsError {
             DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
                 cause
             }
-            DeleteConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
-            DeleteConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
-            DeleteConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
-            DeleteConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteCustomVerificationEmailTemplate
 #[derive(Debug, PartialEq)]
-pub enum DeleteCustomVerificationEmailTemplateError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteCustomVerificationEmailTemplateError {}
 
 impl DeleteCustomVerificationEmailTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteCustomVerificationEmailTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9889,7 +9504,7 @@ impl DeleteCustomVerificationEmailTemplateError {
                 }
             }
         }
-        DeleteCustomVerificationEmailTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9898,28 +9513,6 @@ impl DeleteCustomVerificationEmailTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteCustomVerificationEmailTemplateError {
-    fn from(err: XmlParseError) -> DeleteCustomVerificationEmailTemplateError {
-        let XmlParseError(message) = err;
-        DeleteCustomVerificationEmailTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteCustomVerificationEmailTemplateError {
-    fn from(err: CredentialsError) -> DeleteCustomVerificationEmailTemplateError {
-        DeleteCustomVerificationEmailTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteCustomVerificationEmailTemplateError {
-    fn from(err: HttpDispatchError) -> DeleteCustomVerificationEmailTemplateError {
-        DeleteCustomVerificationEmailTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteCustomVerificationEmailTemplateError {
-    fn from(err: io::Error) -> DeleteCustomVerificationEmailTemplateError {
-        DeleteCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
@@ -9929,34 +9522,15 @@ impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
 }
 impl Error for DeleteCustomVerificationEmailTemplateError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
-            DeleteCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
-            DeleteCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
-            DeleteCustomVerificationEmailTemplateError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteIdentity
 #[derive(Debug, PartialEq)]
-pub enum DeleteIdentityError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteIdentityError {}
 
 impl DeleteIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -9967,7 +9541,7 @@ impl DeleteIdentityError {
                 }
             }
         }
-        DeleteIdentityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -9976,28 +9550,6 @@ impl DeleteIdentityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteIdentityError {
-    fn from(err: XmlParseError) -> DeleteIdentityError {
-        let XmlParseError(message) = err;
-        DeleteIdentityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIdentityError {
-    fn from(err: CredentialsError) -> DeleteIdentityError {
-        DeleteIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIdentityError {
-    fn from(err: HttpDispatchError) -> DeleteIdentityError {
-        DeleteIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIdentityError {
-    fn from(err: io::Error) -> DeleteIdentityError {
-        DeleteIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIdentityError {
@@ -10007,32 +9559,15 @@ impl fmt::Display for DeleteIdentityError {
 }
 impl Error for DeleteIdentityError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteIdentityError::Validation(ref cause) => cause,
-            DeleteIdentityError::Credentials(ref err) => err.description(),
-            DeleteIdentityError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteIdentityError::ParseError(ref cause) => cause,
-            DeleteIdentityError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteIdentityPolicy
 #[derive(Debug, PartialEq)]
-pub enum DeleteIdentityPolicyError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteIdentityPolicyError {}
 
 impl DeleteIdentityPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteIdentityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteIdentityPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10043,7 +9578,7 @@ impl DeleteIdentityPolicyError {
                 }
             }
         }
-        DeleteIdentityPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10052,28 +9587,6 @@ impl DeleteIdentityPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteIdentityPolicyError {
-    fn from(err: XmlParseError) -> DeleteIdentityPolicyError {
-        let XmlParseError(message) = err;
-        DeleteIdentityPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteIdentityPolicyError {
-    fn from(err: CredentialsError) -> DeleteIdentityPolicyError {
-        DeleteIdentityPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteIdentityPolicyError {
-    fn from(err: HttpDispatchError) -> DeleteIdentityPolicyError {
-        DeleteIdentityPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteIdentityPolicyError {
-    fn from(err: io::Error) -> DeleteIdentityPolicyError {
-        DeleteIdentityPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteIdentityPolicyError {
@@ -10083,34 +9596,15 @@ impl fmt::Display for DeleteIdentityPolicyError {
 }
 impl Error for DeleteIdentityPolicyError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteIdentityPolicyError::Validation(ref cause) => cause,
-            DeleteIdentityPolicyError::Credentials(ref err) => err.description(),
-            DeleteIdentityPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteIdentityPolicyError::ParseError(ref cause) => cause,
-            DeleteIdentityPolicyError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteReceiptFilter
 #[derive(Debug, PartialEq)]
-pub enum DeleteReceiptFilterError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteReceiptFilterError {}
 
 impl DeleteReceiptFilterError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptFilterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptFilterError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10121,7 +9615,7 @@ impl DeleteReceiptFilterError {
                 }
             }
         }
-        DeleteReceiptFilterError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10130,28 +9624,6 @@ impl DeleteReceiptFilterError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteReceiptFilterError {
-    fn from(err: XmlParseError) -> DeleteReceiptFilterError {
-        let XmlParseError(message) = err;
-        DeleteReceiptFilterError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReceiptFilterError {
-    fn from(err: CredentialsError) -> DeleteReceiptFilterError {
-        DeleteReceiptFilterError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReceiptFilterError {
-    fn from(err: HttpDispatchError) -> DeleteReceiptFilterError {
-        DeleteReceiptFilterError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReceiptFilterError {
-    fn from(err: io::Error) -> DeleteReceiptFilterError {
-        DeleteReceiptFilterError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReceiptFilterError {
@@ -10161,15 +9633,7 @@ impl fmt::Display for DeleteReceiptFilterError {
 }
 impl Error for DeleteReceiptFilterError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteReceiptFilterError::Validation(ref cause) => cause,
-            DeleteReceiptFilterError::Credentials(ref err) => err.description(),
-            DeleteReceiptFilterError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReceiptFilterError::ParseError(ref cause) => cause,
-            DeleteReceiptFilterError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteReceiptRule
@@ -10177,20 +9641,10 @@ impl Error for DeleteReceiptFilterError {
 pub enum DeleteReceiptRuleError {
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReceiptRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10198,15 +9652,15 @@ impl DeleteReceiptRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
-                        return DeleteReceiptRuleError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteReceiptRuleError::RuleSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteReceiptRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10215,28 +9669,6 @@ impl DeleteReceiptRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteReceiptRuleError {
-    fn from(err: XmlParseError) -> DeleteReceiptRuleError {
-        let XmlParseError(message) = err;
-        DeleteReceiptRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReceiptRuleError {
-    fn from(err: CredentialsError) -> DeleteReceiptRuleError {
-        DeleteReceiptRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReceiptRuleError {
-    fn from(err: HttpDispatchError) -> DeleteReceiptRuleError {
-        DeleteReceiptRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReceiptRuleError {
-    fn from(err: io::Error) -> DeleteReceiptRuleError {
-        DeleteReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReceiptRuleError {
@@ -10248,13 +9680,6 @@ impl Error for DeleteReceiptRuleError {
     fn description(&self) -> &str {
         match *self {
             DeleteReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
-            DeleteReceiptRuleError::Validation(ref cause) => cause,
-            DeleteReceiptRuleError::Credentials(ref err) => err.description(),
-            DeleteReceiptRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReceiptRuleError::ParseError(ref cause) => cause,
-            DeleteReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10263,20 +9688,10 @@ impl Error for DeleteReceiptRuleError {
 pub enum DeleteReceiptRuleSetError {
     /// <p>Indicates that the delete operation could not be completed.</p>
     CannotDelete(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DeleteReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10284,15 +9699,15 @@ impl DeleteReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CannotDelete" => {
-                        return DeleteReceiptRuleSetError::CannotDelete(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DeleteReceiptRuleSetError::CannotDelete(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DeleteReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10301,28 +9716,6 @@ impl DeleteReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteReceiptRuleSetError {
-    fn from(err: XmlParseError) -> DeleteReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        DeleteReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteReceiptRuleSetError {
-    fn from(err: CredentialsError) -> DeleteReceiptRuleSetError {
-        DeleteReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> DeleteReceiptRuleSetError {
-        DeleteReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteReceiptRuleSetError {
-    fn from(err: io::Error) -> DeleteReceiptRuleSetError {
-        DeleteReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteReceiptRuleSetError {
@@ -10334,33 +9727,15 @@ impl Error for DeleteReceiptRuleSetError {
     fn description(&self) -> &str {
         match *self {
             DeleteReceiptRuleSetError::CannotDelete(ref cause) => cause,
-            DeleteReceiptRuleSetError::Validation(ref cause) => cause,
-            DeleteReceiptRuleSetError::Credentials(ref err) => err.description(),
-            DeleteReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteReceiptRuleSetError::ParseError(ref cause) => cause,
-            DeleteReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by DeleteTemplate
 #[derive(Debug, PartialEq)]
-pub enum DeleteTemplateError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteTemplateError {}
 
 impl DeleteTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10371,7 +9746,7 @@ impl DeleteTemplateError {
                 }
             }
         }
-        DeleteTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10380,28 +9755,6 @@ impl DeleteTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteTemplateError {
-    fn from(err: XmlParseError) -> DeleteTemplateError {
-        let XmlParseError(message) = err;
-        DeleteTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteTemplateError {
-    fn from(err: CredentialsError) -> DeleteTemplateError {
-        DeleteTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteTemplateError {
-    fn from(err: HttpDispatchError) -> DeleteTemplateError {
-        DeleteTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteTemplateError {
-    fn from(err: io::Error) -> DeleteTemplateError {
-        DeleteTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteTemplateError {
@@ -10411,32 +9764,17 @@ impl fmt::Display for DeleteTemplateError {
 }
 impl Error for DeleteTemplateError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteTemplateError::Validation(ref cause) => cause,
-            DeleteTemplateError::Credentials(ref err) => err.description(),
-            DeleteTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            DeleteTemplateError::ParseError(ref cause) => cause,
-            DeleteTemplateError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DeleteVerifiedEmailAddress
 #[derive(Debug, PartialEq)]
-pub enum DeleteVerifiedEmailAddressError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DeleteVerifiedEmailAddressError {}
 
 impl DeleteVerifiedEmailAddressError {
-    pub fn from_response(res: BufferedHttpResponse) -> DeleteVerifiedEmailAddressError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteVerifiedEmailAddressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10447,7 +9785,7 @@ impl DeleteVerifiedEmailAddressError {
                 }
             }
         }
-        DeleteVerifiedEmailAddressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10456,28 +9794,6 @@ impl DeleteVerifiedEmailAddressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DeleteVerifiedEmailAddressError {
-    fn from(err: XmlParseError) -> DeleteVerifiedEmailAddressError {
-        let XmlParseError(message) = err;
-        DeleteVerifiedEmailAddressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DeleteVerifiedEmailAddressError {
-    fn from(err: CredentialsError) -> DeleteVerifiedEmailAddressError {
-        DeleteVerifiedEmailAddressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DeleteVerifiedEmailAddressError {
-    fn from(err: HttpDispatchError) -> DeleteVerifiedEmailAddressError {
-        DeleteVerifiedEmailAddressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DeleteVerifiedEmailAddressError {
-    fn from(err: io::Error) -> DeleteVerifiedEmailAddressError {
-        DeleteVerifiedEmailAddressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DeleteVerifiedEmailAddressError {
@@ -10487,34 +9803,17 @@ impl fmt::Display for DeleteVerifiedEmailAddressError {
 }
 impl Error for DeleteVerifiedEmailAddressError {
     fn description(&self) -> &str {
-        match *self {
-            DeleteVerifiedEmailAddressError::Validation(ref cause) => cause,
-            DeleteVerifiedEmailAddressError::Credentials(ref err) => err.description(),
-            DeleteVerifiedEmailAddressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DeleteVerifiedEmailAddressError::ParseError(ref cause) => cause,
-            DeleteVerifiedEmailAddressError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeActiveReceiptRuleSet
 #[derive(Debug, PartialEq)]
-pub enum DescribeActiveReceiptRuleSetError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum DescribeActiveReceiptRuleSetError {}
 
 impl DescribeActiveReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeActiveReceiptRuleSetError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeActiveReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10525,7 +9824,7 @@ impl DescribeActiveReceiptRuleSetError {
                 }
             }
         }
-        DescribeActiveReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10534,28 +9833,6 @@ impl DescribeActiveReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeActiveReceiptRuleSetError {
-    fn from(err: XmlParseError) -> DescribeActiveReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        DescribeActiveReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeActiveReceiptRuleSetError {
-    fn from(err: CredentialsError) -> DescribeActiveReceiptRuleSetError {
-        DescribeActiveReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeActiveReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> DescribeActiveReceiptRuleSetError {
-        DescribeActiveReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeActiveReceiptRuleSetError {
-    fn from(err: io::Error) -> DescribeActiveReceiptRuleSetError {
-        DescribeActiveReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeActiveReceiptRuleSetError {
@@ -10565,15 +9842,7 @@ impl fmt::Display for DescribeActiveReceiptRuleSetError {
 }
 impl Error for DescribeActiveReceiptRuleSetError {
     fn description(&self) -> &str {
-        match *self {
-            DescribeActiveReceiptRuleSetError::Validation(ref cause) => cause,
-            DescribeActiveReceiptRuleSetError::Credentials(ref err) => err.description(),
-            DescribeActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeActiveReceiptRuleSetError::ParseError(ref cause) => cause,
-            DescribeActiveReceiptRuleSetError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by DescribeConfigurationSet
@@ -10581,20 +9850,10 @@ impl Error for DescribeActiveReceiptRuleSetError {
 pub enum DescribeConfigurationSetError {
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeConfigurationSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeConfigurationSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10602,15 +9861,17 @@ impl DescribeConfigurationSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => {
-                        return DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeConfigurationSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10619,28 +9880,6 @@ impl DescribeConfigurationSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeConfigurationSetError {
-    fn from(err: XmlParseError) -> DescribeConfigurationSetError {
-        let XmlParseError(message) = err;
-        DescribeConfigurationSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeConfigurationSetError {
-    fn from(err: CredentialsError) -> DescribeConfigurationSetError {
-        DescribeConfigurationSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeConfigurationSetError {
-    fn from(err: HttpDispatchError) -> DescribeConfigurationSetError {
-        DescribeConfigurationSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeConfigurationSetError {
-    fn from(err: io::Error) -> DescribeConfigurationSetError {
-        DescribeConfigurationSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeConfigurationSetError {
@@ -10652,13 +9891,6 @@ impl Error for DescribeConfigurationSetError {
     fn description(&self) -> &str {
         match *self {
             DescribeConfigurationSetError::ConfigurationSetDoesNotExist(ref cause) => cause,
-            DescribeConfigurationSetError::Validation(ref cause) => cause,
-            DescribeConfigurationSetError::Credentials(ref err) => err.description(),
-            DescribeConfigurationSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeConfigurationSetError::ParseError(ref cause) => cause,
-            DescribeConfigurationSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10669,20 +9901,10 @@ pub enum DescribeReceiptRuleError {
     RuleDoesNotExist(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReceiptRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReceiptRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReceiptRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10690,20 +9912,20 @@ impl DescribeReceiptRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
-                        return DescribeReceiptRuleError::RuleDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeReceiptRuleError::RuleDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return DescribeReceiptRuleError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(DescribeReceiptRuleError::RuleSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        DescribeReceiptRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10712,28 +9934,6 @@ impl DescribeReceiptRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReceiptRuleError {
-    fn from(err: XmlParseError) -> DescribeReceiptRuleError {
-        let XmlParseError(message) = err;
-        DescribeReceiptRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReceiptRuleError {
-    fn from(err: CredentialsError) -> DescribeReceiptRuleError {
-        DescribeReceiptRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReceiptRuleError {
-    fn from(err: HttpDispatchError) -> DescribeReceiptRuleError {
-        DescribeReceiptRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReceiptRuleError {
-    fn from(err: io::Error) -> DescribeReceiptRuleError {
-        DescribeReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReceiptRuleError {
@@ -10746,13 +9946,6 @@ impl Error for DescribeReceiptRuleError {
         match *self {
             DescribeReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
             DescribeReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
-            DescribeReceiptRuleError::Validation(ref cause) => cause,
-            DescribeReceiptRuleError::Credentials(ref err) => err.description(),
-            DescribeReceiptRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReceiptRuleError::ParseError(ref cause) => cause,
-            DescribeReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10761,20 +9954,10 @@ impl Error for DescribeReceiptRuleError {
 pub enum DescribeReceiptRuleSetError {
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl DescribeReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> DescribeReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10782,15 +9965,17 @@ impl DescribeReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
-                        return DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        DescribeReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10799,28 +9984,6 @@ impl DescribeReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for DescribeReceiptRuleSetError {
-    fn from(err: XmlParseError) -> DescribeReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        DescribeReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for DescribeReceiptRuleSetError {
-    fn from(err: CredentialsError) -> DescribeReceiptRuleSetError {
-        DescribeReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for DescribeReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> DescribeReceiptRuleSetError {
-        DescribeReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for DescribeReceiptRuleSetError {
-    fn from(err: io::Error) -> DescribeReceiptRuleSetError {
-        DescribeReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for DescribeReceiptRuleSetError {
@@ -10832,33 +9995,15 @@ impl Error for DescribeReceiptRuleSetError {
     fn description(&self) -> &str {
         match *self {
             DescribeReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
-            DescribeReceiptRuleSetError::Validation(ref cause) => cause,
-            DescribeReceiptRuleSetError::Credentials(ref err) => err.description(),
-            DescribeReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            DescribeReceiptRuleSetError::ParseError(ref cause) => cause,
-            DescribeReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by GetAccountSendingEnabled
 #[derive(Debug, PartialEq)]
-pub enum GetAccountSendingEnabledError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetAccountSendingEnabledError {}
 
 impl GetAccountSendingEnabledError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetAccountSendingEnabledError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountSendingEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -10869,7 +10014,7 @@ impl GetAccountSendingEnabledError {
                 }
             }
         }
-        GetAccountSendingEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10878,28 +10023,6 @@ impl GetAccountSendingEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetAccountSendingEnabledError {
-    fn from(err: XmlParseError) -> GetAccountSendingEnabledError {
-        let XmlParseError(message) = err;
-        GetAccountSendingEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetAccountSendingEnabledError {
-    fn from(err: CredentialsError) -> GetAccountSendingEnabledError {
-        GetAccountSendingEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetAccountSendingEnabledError {
-    fn from(err: HttpDispatchError) -> GetAccountSendingEnabledError {
-        GetAccountSendingEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetAccountSendingEnabledError {
-    fn from(err: io::Error) -> GetAccountSendingEnabledError {
-        GetAccountSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetAccountSendingEnabledError {
@@ -10909,15 +10032,7 @@ impl fmt::Display for GetAccountSendingEnabledError {
 }
 impl Error for GetAccountSendingEnabledError {
     fn description(&self) -> &str {
-        match *self {
-            GetAccountSendingEnabledError::Validation(ref cause) => cause,
-            GetAccountSendingEnabledError::Credentials(ref err) => err.description(),
-            GetAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetAccountSendingEnabledError::ParseError(ref cause) => cause,
-            GetAccountSendingEnabledError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetCustomVerificationEmailTemplate
@@ -10925,31 +10040,23 @@ impl Error for GetAccountSendingEnabledError {
 pub enum GetCustomVerificationEmailTemplateError {
     /// <p>Indicates that a custom verification email template with the name you specified does not exist.</p>
     CustomVerificationEmailTemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetCustomVerificationEmailTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetCustomVerificationEmailTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => return GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        GetCustomVerificationEmailTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -10958,28 +10065,6 @@ impl GetCustomVerificationEmailTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetCustomVerificationEmailTemplateError {
-    fn from(err: XmlParseError) -> GetCustomVerificationEmailTemplateError {
-        let XmlParseError(message) = err;
-        GetCustomVerificationEmailTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetCustomVerificationEmailTemplateError {
-    fn from(err: CredentialsError) -> GetCustomVerificationEmailTemplateError {
-        GetCustomVerificationEmailTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetCustomVerificationEmailTemplateError {
-    fn from(err: HttpDispatchError) -> GetCustomVerificationEmailTemplateError {
-        GetCustomVerificationEmailTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetCustomVerificationEmailTemplateError {
-    fn from(err: io::Error) -> GetCustomVerificationEmailTemplateError {
-        GetCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetCustomVerificationEmailTemplateError {
@@ -10990,32 +10075,16 @@ impl fmt::Display for GetCustomVerificationEmailTemplateError {
 impl Error for GetCustomVerificationEmailTemplateError {
     fn description(&self) -> &str {
         match *self {
-                            GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause,
-GetCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
-GetCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
-GetCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-GetCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
-GetCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
+                            GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause
                         }
     }
 }
 /// Errors returned by GetIdentityDkimAttributes
 #[derive(Debug, PartialEq)]
-pub enum GetIdentityDkimAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetIdentityDkimAttributesError {}
 
 impl GetIdentityDkimAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityDkimAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityDkimAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11026,7 +10095,7 @@ impl GetIdentityDkimAttributesError {
                 }
             }
         }
-        GetIdentityDkimAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11035,28 +10104,6 @@ impl GetIdentityDkimAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetIdentityDkimAttributesError {
-    fn from(err: XmlParseError) -> GetIdentityDkimAttributesError {
-        let XmlParseError(message) = err;
-        GetIdentityDkimAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityDkimAttributesError {
-    fn from(err: CredentialsError) -> GetIdentityDkimAttributesError {
-        GetIdentityDkimAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityDkimAttributesError {
-    fn from(err: HttpDispatchError) -> GetIdentityDkimAttributesError {
-        GetIdentityDkimAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityDkimAttributesError {
-    fn from(err: io::Error) -> GetIdentityDkimAttributesError {
-        GetIdentityDkimAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityDkimAttributesError {
@@ -11066,34 +10113,17 @@ impl fmt::Display for GetIdentityDkimAttributesError {
 }
 impl Error for GetIdentityDkimAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            GetIdentityDkimAttributesError::Validation(ref cause) => cause,
-            GetIdentityDkimAttributesError::Credentials(ref err) => err.description(),
-            GetIdentityDkimAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityDkimAttributesError::ParseError(ref cause) => cause,
-            GetIdentityDkimAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetIdentityMailFromDomainAttributes
 #[derive(Debug, PartialEq)]
-pub enum GetIdentityMailFromDomainAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetIdentityMailFromDomainAttributesError {}
 
 impl GetIdentityMailFromDomainAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityMailFromDomainAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetIdentityMailFromDomainAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11104,7 +10134,7 @@ impl GetIdentityMailFromDomainAttributesError {
                 }
             }
         }
-        GetIdentityMailFromDomainAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11113,28 +10143,6 @@ impl GetIdentityMailFromDomainAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetIdentityMailFromDomainAttributesError {
-    fn from(err: XmlParseError) -> GetIdentityMailFromDomainAttributesError {
-        let XmlParseError(message) = err;
-        GetIdentityMailFromDomainAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityMailFromDomainAttributesError {
-    fn from(err: CredentialsError) -> GetIdentityMailFromDomainAttributesError {
-        GetIdentityMailFromDomainAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityMailFromDomainAttributesError {
-    fn from(err: HttpDispatchError) -> GetIdentityMailFromDomainAttributesError {
-        GetIdentityMailFromDomainAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityMailFromDomainAttributesError {
-    fn from(err: io::Error) -> GetIdentityMailFromDomainAttributesError {
-        GetIdentityMailFromDomainAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityMailFromDomainAttributesError {
@@ -11144,34 +10152,17 @@ impl fmt::Display for GetIdentityMailFromDomainAttributesError {
 }
 impl Error for GetIdentityMailFromDomainAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            GetIdentityMailFromDomainAttributesError::Validation(ref cause) => cause,
-            GetIdentityMailFromDomainAttributesError::Credentials(ref err) => err.description(),
-            GetIdentityMailFromDomainAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityMailFromDomainAttributesError::ParseError(ref cause) => cause,
-            GetIdentityMailFromDomainAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetIdentityNotificationAttributes
 #[derive(Debug, PartialEq)]
-pub enum GetIdentityNotificationAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetIdentityNotificationAttributesError {}
 
 impl GetIdentityNotificationAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityNotificationAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetIdentityNotificationAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11182,7 +10173,7 @@ impl GetIdentityNotificationAttributesError {
                 }
             }
         }
-        GetIdentityNotificationAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11191,28 +10182,6 @@ impl GetIdentityNotificationAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetIdentityNotificationAttributesError {
-    fn from(err: XmlParseError) -> GetIdentityNotificationAttributesError {
-        let XmlParseError(message) = err;
-        GetIdentityNotificationAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityNotificationAttributesError {
-    fn from(err: CredentialsError) -> GetIdentityNotificationAttributesError {
-        GetIdentityNotificationAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityNotificationAttributesError {
-    fn from(err: HttpDispatchError) -> GetIdentityNotificationAttributesError {
-        GetIdentityNotificationAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityNotificationAttributesError {
-    fn from(err: io::Error) -> GetIdentityNotificationAttributesError {
-        GetIdentityNotificationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityNotificationAttributesError {
@@ -11222,34 +10191,15 @@ impl fmt::Display for GetIdentityNotificationAttributesError {
 }
 impl Error for GetIdentityNotificationAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            GetIdentityNotificationAttributesError::Validation(ref cause) => cause,
-            GetIdentityNotificationAttributesError::Credentials(ref err) => err.description(),
-            GetIdentityNotificationAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityNotificationAttributesError::ParseError(ref cause) => cause,
-            GetIdentityNotificationAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetIdentityPolicies
 #[derive(Debug, PartialEq)]
-pub enum GetIdentityPoliciesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetIdentityPoliciesError {}
 
 impl GetIdentityPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetIdentityPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11260,7 +10210,7 @@ impl GetIdentityPoliciesError {
                 }
             }
         }
-        GetIdentityPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11269,28 +10219,6 @@ impl GetIdentityPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetIdentityPoliciesError {
-    fn from(err: XmlParseError) -> GetIdentityPoliciesError {
-        let XmlParseError(message) = err;
-        GetIdentityPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityPoliciesError {
-    fn from(err: CredentialsError) -> GetIdentityPoliciesError {
-        GetIdentityPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityPoliciesError {
-    fn from(err: HttpDispatchError) -> GetIdentityPoliciesError {
-        GetIdentityPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityPoliciesError {
-    fn from(err: io::Error) -> GetIdentityPoliciesError {
-        GetIdentityPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityPoliciesError {
@@ -11300,34 +10228,17 @@ impl fmt::Display for GetIdentityPoliciesError {
 }
 impl Error for GetIdentityPoliciesError {
     fn description(&self) -> &str {
-        match *self {
-            GetIdentityPoliciesError::Validation(ref cause) => cause,
-            GetIdentityPoliciesError::Credentials(ref err) => err.description(),
-            GetIdentityPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityPoliciesError::ParseError(ref cause) => cause,
-            GetIdentityPoliciesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetIdentityVerificationAttributes
 #[derive(Debug, PartialEq)]
-pub enum GetIdentityVerificationAttributesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetIdentityVerificationAttributesError {}
 
 impl GetIdentityVerificationAttributesError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetIdentityVerificationAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetIdentityVerificationAttributesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11338,7 +10249,7 @@ impl GetIdentityVerificationAttributesError {
                 }
             }
         }
-        GetIdentityVerificationAttributesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11347,28 +10258,6 @@ impl GetIdentityVerificationAttributesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetIdentityVerificationAttributesError {
-    fn from(err: XmlParseError) -> GetIdentityVerificationAttributesError {
-        let XmlParseError(message) = err;
-        GetIdentityVerificationAttributesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetIdentityVerificationAttributesError {
-    fn from(err: CredentialsError) -> GetIdentityVerificationAttributesError {
-        GetIdentityVerificationAttributesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetIdentityVerificationAttributesError {
-    fn from(err: HttpDispatchError) -> GetIdentityVerificationAttributesError {
-        GetIdentityVerificationAttributesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetIdentityVerificationAttributesError {
-    fn from(err: io::Error) -> GetIdentityVerificationAttributesError {
-        GetIdentityVerificationAttributesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetIdentityVerificationAttributesError {
@@ -11378,34 +10267,15 @@ impl fmt::Display for GetIdentityVerificationAttributesError {
 }
 impl Error for GetIdentityVerificationAttributesError {
     fn description(&self) -> &str {
-        match *self {
-            GetIdentityVerificationAttributesError::Validation(ref cause) => cause,
-            GetIdentityVerificationAttributesError::Credentials(ref err) => err.description(),
-            GetIdentityVerificationAttributesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetIdentityVerificationAttributesError::ParseError(ref cause) => cause,
-            GetIdentityVerificationAttributesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetSendQuota
 #[derive(Debug, PartialEq)]
-pub enum GetSendQuotaError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetSendQuotaError {}
 
 impl GetSendQuotaError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSendQuotaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSendQuotaError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11416,7 +10286,7 @@ impl GetSendQuotaError {
                 }
             }
         }
-        GetSendQuotaError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11425,28 +10295,6 @@ impl GetSendQuotaError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetSendQuotaError {
-    fn from(err: XmlParseError) -> GetSendQuotaError {
-        let XmlParseError(message) = err;
-        GetSendQuotaError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetSendQuotaError {
-    fn from(err: CredentialsError) -> GetSendQuotaError {
-        GetSendQuotaError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSendQuotaError {
-    fn from(err: HttpDispatchError) -> GetSendQuotaError {
-        GetSendQuotaError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSendQuotaError {
-    fn from(err: io::Error) -> GetSendQuotaError {
-        GetSendQuotaError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSendQuotaError {
@@ -11456,32 +10304,15 @@ impl fmt::Display for GetSendQuotaError {
 }
 impl Error for GetSendQuotaError {
     fn description(&self) -> &str {
-        match *self {
-            GetSendQuotaError::Validation(ref cause) => cause,
-            GetSendQuotaError::Credentials(ref err) => err.description(),
-            GetSendQuotaError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetSendQuotaError::ParseError(ref cause) => cause,
-            GetSendQuotaError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetSendStatistics
 #[derive(Debug, PartialEq)]
-pub enum GetSendStatisticsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum GetSendStatisticsError {}
 
 impl GetSendStatisticsError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetSendStatisticsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetSendStatisticsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11492,7 +10323,7 @@ impl GetSendStatisticsError {
                 }
             }
         }
-        GetSendStatisticsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11501,28 +10332,6 @@ impl GetSendStatisticsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetSendStatisticsError {
-    fn from(err: XmlParseError) -> GetSendStatisticsError {
-        let XmlParseError(message) = err;
-        GetSendStatisticsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetSendStatisticsError {
-    fn from(err: CredentialsError) -> GetSendStatisticsError {
-        GetSendStatisticsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetSendStatisticsError {
-    fn from(err: HttpDispatchError) -> GetSendStatisticsError {
-        GetSendStatisticsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetSendStatisticsError {
-    fn from(err: io::Error) -> GetSendStatisticsError {
-        GetSendStatisticsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetSendStatisticsError {
@@ -11532,15 +10341,7 @@ impl fmt::Display for GetSendStatisticsError {
 }
 impl Error for GetSendStatisticsError {
     fn description(&self) -> &str {
-        match *self {
-            GetSendStatisticsError::Validation(ref cause) => cause,
-            GetSendStatisticsError::Credentials(ref err) => err.description(),
-            GetSendStatisticsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            GetSendStatisticsError::ParseError(ref cause) => cause,
-            GetSendStatisticsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by GetTemplate
@@ -11548,20 +10349,10 @@ impl Error for GetSendStatisticsError {
 pub enum GetTemplateError {
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl GetTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> GetTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11569,15 +10360,15 @@ impl GetTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "TemplateDoesNotExist" => {
-                        return GetTemplateError::TemplateDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(GetTemplateError::TemplateDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        GetTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11586,28 +10377,6 @@ impl GetTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for GetTemplateError {
-    fn from(err: XmlParseError) -> GetTemplateError {
-        let XmlParseError(message) = err;
-        GetTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for GetTemplateError {
-    fn from(err: CredentialsError) -> GetTemplateError {
-        GetTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetTemplateError {
-    fn from(err: HttpDispatchError) -> GetTemplateError {
-        GetTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetTemplateError {
-    fn from(err: io::Error) -> GetTemplateError {
-        GetTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for GetTemplateError {
@@ -11619,31 +10388,15 @@ impl Error for GetTemplateError {
     fn description(&self) -> &str {
         match *self {
             GetTemplateError::TemplateDoesNotExist(ref cause) => cause,
-            GetTemplateError::Validation(ref cause) => cause,
-            GetTemplateError::Credentials(ref err) => err.description(),
-            GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetTemplateError::ParseError(ref cause) => cause,
-            GetTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by ListConfigurationSets
 #[derive(Debug, PartialEq)]
-pub enum ListConfigurationSetsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListConfigurationSetsError {}
 
 impl ListConfigurationSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListConfigurationSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationSetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11654,7 +10407,7 @@ impl ListConfigurationSetsError {
                 }
             }
         }
-        ListConfigurationSetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11663,28 +10416,6 @@ impl ListConfigurationSetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListConfigurationSetsError {
-    fn from(err: XmlParseError) -> ListConfigurationSetsError {
-        let XmlParseError(message) = err;
-        ListConfigurationSetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListConfigurationSetsError {
-    fn from(err: CredentialsError) -> ListConfigurationSetsError {
-        ListConfigurationSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListConfigurationSetsError {
-    fn from(err: HttpDispatchError) -> ListConfigurationSetsError {
-        ListConfigurationSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListConfigurationSetsError {
-    fn from(err: io::Error) -> ListConfigurationSetsError {
-        ListConfigurationSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListConfigurationSetsError {
@@ -11694,34 +10425,17 @@ impl fmt::Display for ListConfigurationSetsError {
 }
 impl Error for ListConfigurationSetsError {
     fn description(&self) -> &str {
-        match *self {
-            ListConfigurationSetsError::Validation(ref cause) => cause,
-            ListConfigurationSetsError::Credentials(ref err) => err.description(),
-            ListConfigurationSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListConfigurationSetsError::ParseError(ref cause) => cause,
-            ListConfigurationSetsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListCustomVerificationEmailTemplates
 #[derive(Debug, PartialEq)]
-pub enum ListCustomVerificationEmailTemplatesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListCustomVerificationEmailTemplatesError {}
 
 impl ListCustomVerificationEmailTemplatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListCustomVerificationEmailTemplatesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListCustomVerificationEmailTemplatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11732,7 +10446,7 @@ impl ListCustomVerificationEmailTemplatesError {
                 }
             }
         }
-        ListCustomVerificationEmailTemplatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11741,28 +10455,6 @@ impl ListCustomVerificationEmailTemplatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListCustomVerificationEmailTemplatesError {
-    fn from(err: XmlParseError) -> ListCustomVerificationEmailTemplatesError {
-        let XmlParseError(message) = err;
-        ListCustomVerificationEmailTemplatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListCustomVerificationEmailTemplatesError {
-    fn from(err: CredentialsError) -> ListCustomVerificationEmailTemplatesError {
-        ListCustomVerificationEmailTemplatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListCustomVerificationEmailTemplatesError {
-    fn from(err: HttpDispatchError) -> ListCustomVerificationEmailTemplatesError {
-        ListCustomVerificationEmailTemplatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListCustomVerificationEmailTemplatesError {
-    fn from(err: io::Error) -> ListCustomVerificationEmailTemplatesError {
-        ListCustomVerificationEmailTemplatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListCustomVerificationEmailTemplatesError {
@@ -11772,34 +10464,15 @@ impl fmt::Display for ListCustomVerificationEmailTemplatesError {
 }
 impl Error for ListCustomVerificationEmailTemplatesError {
     fn description(&self) -> &str {
-        match *self {
-            ListCustomVerificationEmailTemplatesError::Validation(ref cause) => cause,
-            ListCustomVerificationEmailTemplatesError::Credentials(ref err) => err.description(),
-            ListCustomVerificationEmailTemplatesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListCustomVerificationEmailTemplatesError::ParseError(ref cause) => cause,
-            ListCustomVerificationEmailTemplatesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListIdentities
 #[derive(Debug, PartialEq)]
-pub enum ListIdentitiesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListIdentitiesError {}
 
 impl ListIdentitiesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIdentitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentitiesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11810,7 +10483,7 @@ impl ListIdentitiesError {
                 }
             }
         }
-        ListIdentitiesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11819,28 +10492,6 @@ impl ListIdentitiesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListIdentitiesError {
-    fn from(err: XmlParseError) -> ListIdentitiesError {
-        let XmlParseError(message) = err;
-        ListIdentitiesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListIdentitiesError {
-    fn from(err: CredentialsError) -> ListIdentitiesError {
-        ListIdentitiesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIdentitiesError {
-    fn from(err: HttpDispatchError) -> ListIdentitiesError {
-        ListIdentitiesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIdentitiesError {
-    fn from(err: io::Error) -> ListIdentitiesError {
-        ListIdentitiesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListIdentitiesError {
@@ -11850,32 +10501,15 @@ impl fmt::Display for ListIdentitiesError {
 }
 impl Error for ListIdentitiesError {
     fn description(&self) -> &str {
-        match *self {
-            ListIdentitiesError::Validation(ref cause) => cause,
-            ListIdentitiesError::Credentials(ref err) => err.description(),
-            ListIdentitiesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListIdentitiesError::ParseError(ref cause) => cause,
-            ListIdentitiesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListIdentityPolicies
 #[derive(Debug, PartialEq)]
-pub enum ListIdentityPoliciesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListIdentityPoliciesError {}
 
 impl ListIdentityPoliciesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListIdentityPoliciesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListIdentityPoliciesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11886,7 +10520,7 @@ impl ListIdentityPoliciesError {
                 }
             }
         }
-        ListIdentityPoliciesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11895,28 +10529,6 @@ impl ListIdentityPoliciesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListIdentityPoliciesError {
-    fn from(err: XmlParseError) -> ListIdentityPoliciesError {
-        let XmlParseError(message) = err;
-        ListIdentityPoliciesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListIdentityPoliciesError {
-    fn from(err: CredentialsError) -> ListIdentityPoliciesError {
-        ListIdentityPoliciesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListIdentityPoliciesError {
-    fn from(err: HttpDispatchError) -> ListIdentityPoliciesError {
-        ListIdentityPoliciesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListIdentityPoliciesError {
-    fn from(err: io::Error) -> ListIdentityPoliciesError {
-        ListIdentityPoliciesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListIdentityPoliciesError {
@@ -11926,34 +10538,15 @@ impl fmt::Display for ListIdentityPoliciesError {
 }
 impl Error for ListIdentityPoliciesError {
     fn description(&self) -> &str {
-        match *self {
-            ListIdentityPoliciesError::Validation(ref cause) => cause,
-            ListIdentityPoliciesError::Credentials(ref err) => err.description(),
-            ListIdentityPoliciesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListIdentityPoliciesError::ParseError(ref cause) => cause,
-            ListIdentityPoliciesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListReceiptFilters
 #[derive(Debug, PartialEq)]
-pub enum ListReceiptFiltersError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListReceiptFiltersError {}
 
 impl ListReceiptFiltersError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListReceiptFiltersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceiptFiltersError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -11964,7 +10557,7 @@ impl ListReceiptFiltersError {
                 }
             }
         }
-        ListReceiptFiltersError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -11973,28 +10566,6 @@ impl ListReceiptFiltersError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListReceiptFiltersError {
-    fn from(err: XmlParseError) -> ListReceiptFiltersError {
-        let XmlParseError(message) = err;
-        ListReceiptFiltersError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListReceiptFiltersError {
-    fn from(err: CredentialsError) -> ListReceiptFiltersError {
-        ListReceiptFiltersError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListReceiptFiltersError {
-    fn from(err: HttpDispatchError) -> ListReceiptFiltersError {
-        ListReceiptFiltersError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListReceiptFiltersError {
-    fn from(err: io::Error) -> ListReceiptFiltersError {
-        ListReceiptFiltersError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListReceiptFiltersError {
@@ -12004,34 +10575,15 @@ impl fmt::Display for ListReceiptFiltersError {
 }
 impl Error for ListReceiptFiltersError {
     fn description(&self) -> &str {
-        match *self {
-            ListReceiptFiltersError::Validation(ref cause) => cause,
-            ListReceiptFiltersError::Credentials(ref err) => err.description(),
-            ListReceiptFiltersError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListReceiptFiltersError::ParseError(ref cause) => cause,
-            ListReceiptFiltersError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListReceiptRuleSets
 #[derive(Debug, PartialEq)]
-pub enum ListReceiptRuleSetsError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListReceiptRuleSetsError {}
 
 impl ListReceiptRuleSetsError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListReceiptRuleSetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListReceiptRuleSetsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12042,7 +10594,7 @@ impl ListReceiptRuleSetsError {
                 }
             }
         }
-        ListReceiptRuleSetsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12051,28 +10603,6 @@ impl ListReceiptRuleSetsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListReceiptRuleSetsError {
-    fn from(err: XmlParseError) -> ListReceiptRuleSetsError {
-        let XmlParseError(message) = err;
-        ListReceiptRuleSetsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListReceiptRuleSetsError {
-    fn from(err: CredentialsError) -> ListReceiptRuleSetsError {
-        ListReceiptRuleSetsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListReceiptRuleSetsError {
-    fn from(err: HttpDispatchError) -> ListReceiptRuleSetsError {
-        ListReceiptRuleSetsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListReceiptRuleSetsError {
-    fn from(err: io::Error) -> ListReceiptRuleSetsError {
-        ListReceiptRuleSetsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListReceiptRuleSetsError {
@@ -12082,34 +10612,15 @@ impl fmt::Display for ListReceiptRuleSetsError {
 }
 impl Error for ListReceiptRuleSetsError {
     fn description(&self) -> &str {
-        match *self {
-            ListReceiptRuleSetsError::Validation(ref cause) => cause,
-            ListReceiptRuleSetsError::Credentials(ref err) => err.description(),
-            ListReceiptRuleSetsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListReceiptRuleSetsError::ParseError(ref cause) => cause,
-            ListReceiptRuleSetsError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListTemplates
 #[derive(Debug, PartialEq)]
-pub enum ListTemplatesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListTemplatesError {}
 
 impl ListTemplatesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListTemplatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTemplatesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12120,7 +10631,7 @@ impl ListTemplatesError {
                 }
             }
         }
-        ListTemplatesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12129,28 +10640,6 @@ impl ListTemplatesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListTemplatesError {
-    fn from(err: XmlParseError) -> ListTemplatesError {
-        let XmlParseError(message) = err;
-        ListTemplatesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListTemplatesError {
-    fn from(err: CredentialsError) -> ListTemplatesError {
-        ListTemplatesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListTemplatesError {
-    fn from(err: HttpDispatchError) -> ListTemplatesError {
-        ListTemplatesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListTemplatesError {
-    fn from(err: io::Error) -> ListTemplatesError {
-        ListTemplatesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListTemplatesError {
@@ -12160,32 +10649,17 @@ impl fmt::Display for ListTemplatesError {
 }
 impl Error for ListTemplatesError {
     fn description(&self) -> &str {
-        match *self {
-            ListTemplatesError::Validation(ref cause) => cause,
-            ListTemplatesError::Credentials(ref err) => err.description(),
-            ListTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            ListTemplatesError::ParseError(ref cause) => cause,
-            ListTemplatesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by ListVerifiedEmailAddresses
 #[derive(Debug, PartialEq)]
-pub enum ListVerifiedEmailAddressesError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum ListVerifiedEmailAddressesError {}
 
 impl ListVerifiedEmailAddressesError {
-    pub fn from_response(res: BufferedHttpResponse) -> ListVerifiedEmailAddressesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListVerifiedEmailAddressesError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12196,7 +10670,7 @@ impl ListVerifiedEmailAddressesError {
                 }
             }
         }
-        ListVerifiedEmailAddressesError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12205,28 +10679,6 @@ impl ListVerifiedEmailAddressesError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ListVerifiedEmailAddressesError {
-    fn from(err: XmlParseError) -> ListVerifiedEmailAddressesError {
-        let XmlParseError(message) = err;
-        ListVerifiedEmailAddressesError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ListVerifiedEmailAddressesError {
-    fn from(err: CredentialsError) -> ListVerifiedEmailAddressesError {
-        ListVerifiedEmailAddressesError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ListVerifiedEmailAddressesError {
-    fn from(err: HttpDispatchError) -> ListVerifiedEmailAddressesError {
-        ListVerifiedEmailAddressesError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ListVerifiedEmailAddressesError {
-    fn from(err: io::Error) -> ListVerifiedEmailAddressesError {
-        ListVerifiedEmailAddressesError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ListVerifiedEmailAddressesError {
@@ -12236,15 +10688,7 @@ impl fmt::Display for ListVerifiedEmailAddressesError {
 }
 impl Error for ListVerifiedEmailAddressesError {
     fn description(&self) -> &str {
-        match *self {
-            ListVerifiedEmailAddressesError::Validation(ref cause) => cause,
-            ListVerifiedEmailAddressesError::Credentials(ref err) => err.description(),
-            ListVerifiedEmailAddressesError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ListVerifiedEmailAddressesError::ParseError(ref cause) => cause,
-            ListVerifiedEmailAddressesError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by PutIdentityPolicy
@@ -12252,20 +10696,10 @@ impl Error for ListVerifiedEmailAddressesError {
 pub enum PutIdentityPolicyError {
     /// <p>Indicates that the provided policy is invalid. Check the error stack for more information about what caused the error.</p>
     InvalidPolicy(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl PutIdentityPolicyError {
-    pub fn from_response(res: BufferedHttpResponse) -> PutIdentityPolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutIdentityPolicyError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12273,15 +10707,15 @@ impl PutIdentityPolicyError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidPolicy" => {
-                        return PutIdentityPolicyError::InvalidPolicy(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(PutIdentityPolicyError::InvalidPolicy(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        PutIdentityPolicyError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12290,28 +10724,6 @@ impl PutIdentityPolicyError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for PutIdentityPolicyError {
-    fn from(err: XmlParseError) -> PutIdentityPolicyError {
-        let XmlParseError(message) = err;
-        PutIdentityPolicyError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for PutIdentityPolicyError {
-    fn from(err: CredentialsError) -> PutIdentityPolicyError {
-        PutIdentityPolicyError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for PutIdentityPolicyError {
-    fn from(err: HttpDispatchError) -> PutIdentityPolicyError {
-        PutIdentityPolicyError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for PutIdentityPolicyError {
-    fn from(err: io::Error) -> PutIdentityPolicyError {
-        PutIdentityPolicyError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for PutIdentityPolicyError {
@@ -12323,13 +10735,6 @@ impl Error for PutIdentityPolicyError {
     fn description(&self) -> &str {
         match *self {
             PutIdentityPolicyError::InvalidPolicy(ref cause) => cause,
-            PutIdentityPolicyError::Validation(ref cause) => cause,
-            PutIdentityPolicyError::Credentials(ref err) => err.description(),
-            PutIdentityPolicyError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            PutIdentityPolicyError::ParseError(ref cause) => cause,
-            PutIdentityPolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12340,20 +10745,10 @@ pub enum ReorderReceiptRuleSetError {
     RuleDoesNotExist(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl ReorderReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> ReorderReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ReorderReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12361,20 +10756,22 @@ impl ReorderReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
-                        return ReorderReceiptRuleSetError::RuleDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(ReorderReceiptRuleSetError::RuleDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        ReorderReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12383,28 +10780,6 @@ impl ReorderReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for ReorderReceiptRuleSetError {
-    fn from(err: XmlParseError) -> ReorderReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        ReorderReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for ReorderReceiptRuleSetError {
-    fn from(err: CredentialsError) -> ReorderReceiptRuleSetError {
-        ReorderReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for ReorderReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> ReorderReceiptRuleSetError {
-        ReorderReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for ReorderReceiptRuleSetError {
-    fn from(err: io::Error) -> ReorderReceiptRuleSetError {
-        ReorderReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for ReorderReceiptRuleSetError {
@@ -12417,13 +10792,6 @@ impl Error for ReorderReceiptRuleSetError {
         match *self {
             ReorderReceiptRuleSetError::RuleDoesNotExist(ref cause) => cause,
             ReorderReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
-            ReorderReceiptRuleSetError::Validation(ref cause) => cause,
-            ReorderReceiptRuleSetError::Credentials(ref err) => err.description(),
-            ReorderReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            ReorderReceiptRuleSetError::ParseError(ref cause) => cause,
-            ReorderReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12432,20 +10800,10 @@ impl Error for ReorderReceiptRuleSetError {
 pub enum SendBounceError {
     /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendBounceError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendBounceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBounceError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12453,13 +10811,15 @@ impl SendBounceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "MessageRejected" => {
-                        return SendBounceError::MessageRejected(String::from(parsed_error.message));
+                        return RusotoError::Service(SendBounceError::MessageRejected(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        SendBounceError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12468,28 +10828,6 @@ impl SendBounceError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendBounceError {
-    fn from(err: XmlParseError) -> SendBounceError {
-        let XmlParseError(message) = err;
-        SendBounceError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendBounceError {
-    fn from(err: CredentialsError) -> SendBounceError {
-        SendBounceError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendBounceError {
-    fn from(err: HttpDispatchError) -> SendBounceError {
-        SendBounceError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendBounceError {
-    fn from(err: io::Error) -> SendBounceError {
-        SendBounceError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendBounceError {
@@ -12501,11 +10839,6 @@ impl Error for SendBounceError {
     fn description(&self) -> &str {
         match *self {
             SendBounceError::MessageRejected(ref cause) => cause,
-            SendBounceError::Validation(ref cause) => cause,
-            SendBounceError::Credentials(ref err) => err.description(),
-            SendBounceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendBounceError::ParseError(ref cause) => cause,
-            SendBounceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12524,20 +10857,10 @@ pub enum SendBulkTemplatedEmailError {
     MessageRejected(String),
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendBulkTemplatedEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendBulkTemplatedEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendBulkTemplatedEmailError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12545,40 +10868,50 @@ impl SendBulkTemplatedEmailError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
-                        return SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ConfigurationSetDoesNotExist" => {
-                        return SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "ConfigurationSetSendingPausedException" => {
-                        return SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
-                            String::from(parsed_error.message),
+                        return RusotoError::Service(
+                            SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
+                                String::from(parsed_error.message),
+                            ),
                         );
                     }
                     "MailFromDomainNotVerifiedException" => {
-                        return SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MessageRejected" => {
-                        return SendBulkTemplatedEmailError::MessageRejected(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendBulkTemplatedEmailError::MessageRejected(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TemplateDoesNotExist" => {
-                        return SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        SendBulkTemplatedEmailError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12587,28 +10920,6 @@ impl SendBulkTemplatedEmailError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendBulkTemplatedEmailError {
-    fn from(err: XmlParseError) -> SendBulkTemplatedEmailError {
-        let XmlParseError(message) = err;
-        SendBulkTemplatedEmailError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendBulkTemplatedEmailError {
-    fn from(err: CredentialsError) -> SendBulkTemplatedEmailError {
-        SendBulkTemplatedEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendBulkTemplatedEmailError {
-    fn from(err: HttpDispatchError) -> SendBulkTemplatedEmailError {
-        SendBulkTemplatedEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendBulkTemplatedEmailError {
-    fn from(err: io::Error) -> SendBulkTemplatedEmailError {
-        SendBulkTemplatedEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendBulkTemplatedEmailError {
@@ -12625,13 +10936,6 @@ impl Error for SendBulkTemplatedEmailError {
             SendBulkTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendBulkTemplatedEmailError::MessageRejected(ref cause) => cause,
             SendBulkTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
-            SendBulkTemplatedEmailError::Validation(ref cause) => cause,
-            SendBulkTemplatedEmailError::Credentials(ref err) => err.description(),
-            SendBulkTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SendBulkTemplatedEmailError::ParseError(ref cause) => cause,
-            SendBulkTemplatedEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12648,31 +10952,23 @@ pub enum SendCustomVerificationEmailError {
     MessageRejected(String),
     /// <p>Indicates that the account has not been granted production access.</p>
     ProductionAccessNotGranted(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendCustomVerificationEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendCustomVerificationEmailError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SendCustomVerificationEmailError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"MessageRejected" => return SendCustomVerificationEmailError::MessageRejected(String::from(parsed_error.message)),"ProductionAccessNotGranted" => return SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(parsed_error.message)),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(parsed_error.message))),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(String::from(parsed_error.message))),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        SendCustomVerificationEmailError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12681,28 +10977,6 @@ impl SendCustomVerificationEmailError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendCustomVerificationEmailError {
-    fn from(err: XmlParseError) -> SendCustomVerificationEmailError {
-        let XmlParseError(message) = err;
-        SendCustomVerificationEmailError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendCustomVerificationEmailError {
-    fn from(err: CredentialsError) -> SendCustomVerificationEmailError {
-        SendCustomVerificationEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendCustomVerificationEmailError {
-    fn from(err: HttpDispatchError) -> SendCustomVerificationEmailError {
-        SendCustomVerificationEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendCustomVerificationEmailError {
-    fn from(err: io::Error) -> SendCustomVerificationEmailError {
-        SendCustomVerificationEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendCustomVerificationEmailError {
@@ -12720,13 +10994,6 @@ impl Error for SendCustomVerificationEmailError {
             SendCustomVerificationEmailError::FromEmailAddressNotVerified(ref cause) => cause,
             SendCustomVerificationEmailError::MessageRejected(ref cause) => cause,
             SendCustomVerificationEmailError::ProductionAccessNotGranted(ref cause) => cause,
-            SendCustomVerificationEmailError::Validation(ref cause) => cause,
-            SendCustomVerificationEmailError::Credentials(ref err) => err.description(),
-            SendCustomVerificationEmailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SendCustomVerificationEmailError::ParseError(ref cause) => cause,
-            SendCustomVerificationEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12743,20 +11010,10 @@ pub enum SendEmailError {
     MailFromDomainNotVerified(String),
     /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendEmailError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12764,33 +11021,35 @@ impl SendEmailError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
-                        return SendEmailError::AccountSendingPaused(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendEmailError::AccountSendingPaused(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ConfigurationSetDoesNotExist" => {
-                        return SendEmailError::ConfigurationSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendEmailError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ConfigurationSetSendingPausedException" => {
-                        return SendEmailError::ConfigurationSetSendingPaused(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendEmailError::ConfigurationSetSendingPaused(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MailFromDomainNotVerifiedException" => {
-                        return SendEmailError::MailFromDomainNotVerified(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendEmailError::MailFromDomainNotVerified(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MessageRejected" => {
-                        return SendEmailError::MessageRejected(String::from(parsed_error.message));
+                        return RusotoError::Service(SendEmailError::MessageRejected(String::from(
+                            parsed_error.message,
+                        )));
                     }
                     _ => {}
                 }
             }
         }
-        SendEmailError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12799,28 +11058,6 @@ impl SendEmailError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendEmailError {
-    fn from(err: XmlParseError) -> SendEmailError {
-        let XmlParseError(message) = err;
-        SendEmailError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendEmailError {
-    fn from(err: CredentialsError) -> SendEmailError {
-        SendEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendEmailError {
-    fn from(err: HttpDispatchError) -> SendEmailError {
-        SendEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendEmailError {
-    fn from(err: io::Error) -> SendEmailError {
-        SendEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendEmailError {
@@ -12836,11 +11073,6 @@ impl Error for SendEmailError {
             SendEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
             SendEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendEmailError::MessageRejected(ref cause) => cause,
-            SendEmailError::Validation(ref cause) => cause,
-            SendEmailError::Credentials(ref err) => err.description(),
-            SendEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendEmailError::ParseError(ref cause) => cause,
-            SendEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12857,20 +11089,10 @@ pub enum SendRawEmailError {
     MailFromDomainNotVerified(String),
     /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendRawEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendRawEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendRawEmailError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12878,35 +11100,39 @@ impl SendRawEmailError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
-                        return SendRawEmailError::AccountSendingPaused(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendRawEmailError::AccountSendingPaused(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ConfigurationSetDoesNotExist" => {
-                        return SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ConfigurationSetSendingPausedException" => {
-                        return SendRawEmailError::ConfigurationSetSendingPaused(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendRawEmailError::ConfigurationSetSendingPaused(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MailFromDomainNotVerifiedException" => {
-                        return SendRawEmailError::MailFromDomainNotVerified(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendRawEmailError::MailFromDomainNotVerified(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "MessageRejected" => {
-                        return SendRawEmailError::MessageRejected(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendRawEmailError::MessageRejected(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SendRawEmailError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -12915,28 +11141,6 @@ impl SendRawEmailError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendRawEmailError {
-    fn from(err: XmlParseError) -> SendRawEmailError {
-        let XmlParseError(message) = err;
-        SendRawEmailError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendRawEmailError {
-    fn from(err: CredentialsError) -> SendRawEmailError {
-        SendRawEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendRawEmailError {
-    fn from(err: HttpDispatchError) -> SendRawEmailError {
-        SendRawEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendRawEmailError {
-    fn from(err: io::Error) -> SendRawEmailError {
-        SendRawEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendRawEmailError {
@@ -12952,11 +11156,6 @@ impl Error for SendRawEmailError {
             SendRawEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
             SendRawEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendRawEmailError::MessageRejected(ref cause) => cause,
-            SendRawEmailError::Validation(ref cause) => cause,
-            SendRawEmailError::Credentials(ref err) => err.description(),
-            SendRawEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            SendRawEmailError::ParseError(ref cause) => cause,
-            SendRawEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -12975,20 +11174,10 @@ pub enum SendTemplatedEmailError {
     MessageRejected(String),
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SendTemplatedEmailError {
-    pub fn from_response(res: BufferedHttpResponse) -> SendTemplatedEmailError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendTemplatedEmailError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -12996,40 +11185,46 @@ impl SendTemplatedEmailError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
-                        return SendTemplatedEmailError::AccountSendingPaused(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendTemplatedEmailError::AccountSendingPaused(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "ConfigurationSetDoesNotExist" => {
-                        return SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "ConfigurationSetSendingPausedException" => {
-                        return SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MailFromDomainNotVerifiedException" => {
-                        return SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MessageRejected" => {
-                        return SendTemplatedEmailError::MessageRejected(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendTemplatedEmailError::MessageRejected(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TemplateDoesNotExist" => {
-                        return SendTemplatedEmailError::TemplateDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SendTemplatedEmailError::TemplateDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        SendTemplatedEmailError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13038,28 +11233,6 @@ impl SendTemplatedEmailError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SendTemplatedEmailError {
-    fn from(err: XmlParseError) -> SendTemplatedEmailError {
-        let XmlParseError(message) = err;
-        SendTemplatedEmailError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SendTemplatedEmailError {
-    fn from(err: CredentialsError) -> SendTemplatedEmailError {
-        SendTemplatedEmailError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SendTemplatedEmailError {
-    fn from(err: HttpDispatchError) -> SendTemplatedEmailError {
-        SendTemplatedEmailError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SendTemplatedEmailError {
-    fn from(err: io::Error) -> SendTemplatedEmailError {
-        SendTemplatedEmailError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SendTemplatedEmailError {
@@ -13076,13 +11249,6 @@ impl Error for SendTemplatedEmailError {
             SendTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendTemplatedEmailError::MessageRejected(ref cause) => cause,
             SendTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
-            SendTemplatedEmailError::Validation(ref cause) => cause,
-            SendTemplatedEmailError::Credentials(ref err) => err.description(),
-            SendTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SendTemplatedEmailError::ParseError(ref cause) => cause,
-            SendTemplatedEmailError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13091,20 +11257,10 @@ impl Error for SendTemplatedEmailError {
 pub enum SetActiveReceiptRuleSetError {
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetActiveReceiptRuleSetError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetActiveReceiptRuleSetError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetActiveReceiptRuleSetError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13112,15 +11268,17 @@ impl SetActiveReceiptRuleSetError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
-                        return SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        SetActiveReceiptRuleSetError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13129,28 +11287,6 @@ impl SetActiveReceiptRuleSetError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetActiveReceiptRuleSetError {
-    fn from(err: XmlParseError) -> SetActiveReceiptRuleSetError {
-        let XmlParseError(message) = err;
-        SetActiveReceiptRuleSetError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetActiveReceiptRuleSetError {
-    fn from(err: CredentialsError) -> SetActiveReceiptRuleSetError {
-        SetActiveReceiptRuleSetError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetActiveReceiptRuleSetError {
-    fn from(err: HttpDispatchError) -> SetActiveReceiptRuleSetError {
-        SetActiveReceiptRuleSetError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetActiveReceiptRuleSetError {
-    fn from(err: io::Error) -> SetActiveReceiptRuleSetError {
-        SetActiveReceiptRuleSetError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetActiveReceiptRuleSetError {
@@ -13162,33 +11298,15 @@ impl Error for SetActiveReceiptRuleSetError {
     fn description(&self) -> &str {
         match *self {
             SetActiveReceiptRuleSetError::RuleSetDoesNotExist(ref cause) => cause,
-            SetActiveReceiptRuleSetError::Validation(ref cause) => cause,
-            SetActiveReceiptRuleSetError::Credentials(ref err) => err.description(),
-            SetActiveReceiptRuleSetError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetActiveReceiptRuleSetError::ParseError(ref cause) => cause,
-            SetActiveReceiptRuleSetError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by SetIdentityDkimEnabled
 #[derive(Debug, PartialEq)]
-pub enum SetIdentityDkimEnabledError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SetIdentityDkimEnabledError {}
 
 impl SetIdentityDkimEnabledError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityDkimEnabledError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityDkimEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13199,7 +11317,7 @@ impl SetIdentityDkimEnabledError {
                 }
             }
         }
-        SetIdentityDkimEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13208,28 +11326,6 @@ impl SetIdentityDkimEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIdentityDkimEnabledError {
-    fn from(err: XmlParseError) -> SetIdentityDkimEnabledError {
-        let XmlParseError(message) = err;
-        SetIdentityDkimEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityDkimEnabledError {
-    fn from(err: CredentialsError) -> SetIdentityDkimEnabledError {
-        SetIdentityDkimEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityDkimEnabledError {
-    fn from(err: HttpDispatchError) -> SetIdentityDkimEnabledError {
-        SetIdentityDkimEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityDkimEnabledError {
-    fn from(err: io::Error) -> SetIdentityDkimEnabledError {
-        SetIdentityDkimEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityDkimEnabledError {
@@ -13239,34 +11335,17 @@ impl fmt::Display for SetIdentityDkimEnabledError {
 }
 impl Error for SetIdentityDkimEnabledError {
     fn description(&self) -> &str {
-        match *self {
-            SetIdentityDkimEnabledError::Validation(ref cause) => cause,
-            SetIdentityDkimEnabledError::Credentials(ref err) => err.description(),
-            SetIdentityDkimEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityDkimEnabledError::ParseError(ref cause) => cause,
-            SetIdentityDkimEnabledError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SetIdentityFeedbackForwardingEnabled
 #[derive(Debug, PartialEq)]
-pub enum SetIdentityFeedbackForwardingEnabledError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SetIdentityFeedbackForwardingEnabledError {}
 
 impl SetIdentityFeedbackForwardingEnabledError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityFeedbackForwardingEnabledError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SetIdentityFeedbackForwardingEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13277,7 +11356,7 @@ impl SetIdentityFeedbackForwardingEnabledError {
                 }
             }
         }
-        SetIdentityFeedbackForwardingEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13286,28 +11365,6 @@ impl SetIdentityFeedbackForwardingEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIdentityFeedbackForwardingEnabledError {
-    fn from(err: XmlParseError) -> SetIdentityFeedbackForwardingEnabledError {
-        let XmlParseError(message) = err;
-        SetIdentityFeedbackForwardingEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityFeedbackForwardingEnabledError {
-    fn from(err: CredentialsError) -> SetIdentityFeedbackForwardingEnabledError {
-        SetIdentityFeedbackForwardingEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityFeedbackForwardingEnabledError {
-    fn from(err: HttpDispatchError) -> SetIdentityFeedbackForwardingEnabledError {
-        SetIdentityFeedbackForwardingEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityFeedbackForwardingEnabledError {
-    fn from(err: io::Error) -> SetIdentityFeedbackForwardingEnabledError {
-        SetIdentityFeedbackForwardingEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityFeedbackForwardingEnabledError {
@@ -13317,36 +11374,17 @@ impl fmt::Display for SetIdentityFeedbackForwardingEnabledError {
 }
 impl Error for SetIdentityFeedbackForwardingEnabledError {
     fn description(&self) -> &str {
-        match *self {
-            SetIdentityFeedbackForwardingEnabledError::Validation(ref cause) => cause,
-            SetIdentityFeedbackForwardingEnabledError::Credentials(ref err) => err.description(),
-            SetIdentityFeedbackForwardingEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityFeedbackForwardingEnabledError::ParseError(ref cause) => cause,
-            SetIdentityFeedbackForwardingEnabledError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SetIdentityHeadersInNotificationsEnabled
 #[derive(Debug, PartialEq)]
-pub enum SetIdentityHeadersInNotificationsEnabledError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SetIdentityHeadersInNotificationsEnabledError {}
 
 impl SetIdentityHeadersInNotificationsEnabledError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> SetIdentityHeadersInNotificationsEnabledError {
+    ) -> RusotoError<SetIdentityHeadersInNotificationsEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13357,7 +11395,7 @@ impl SetIdentityHeadersInNotificationsEnabledError {
                 }
             }
         }
-        SetIdentityHeadersInNotificationsEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13366,28 +11404,6 @@ impl SetIdentityHeadersInNotificationsEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIdentityHeadersInNotificationsEnabledError {
-    fn from(err: XmlParseError) -> SetIdentityHeadersInNotificationsEnabledError {
-        let XmlParseError(message) = err;
-        SetIdentityHeadersInNotificationsEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityHeadersInNotificationsEnabledError {
-    fn from(err: CredentialsError) -> SetIdentityHeadersInNotificationsEnabledError {
-        SetIdentityHeadersInNotificationsEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityHeadersInNotificationsEnabledError {
-    fn from(err: HttpDispatchError) -> SetIdentityHeadersInNotificationsEnabledError {
-        SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityHeadersInNotificationsEnabledError {
-    fn from(err: io::Error) -> SetIdentityHeadersInNotificationsEnabledError {
-        SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityHeadersInNotificationsEnabledError {
@@ -13397,36 +11413,15 @@ impl fmt::Display for SetIdentityHeadersInNotificationsEnabledError {
 }
 impl Error for SetIdentityHeadersInNotificationsEnabledError {
     fn description(&self) -> &str {
-        match *self {
-            SetIdentityHeadersInNotificationsEnabledError::Validation(ref cause) => cause,
-            SetIdentityHeadersInNotificationsEnabledError::Credentials(ref err) => {
-                err.description()
-            }
-            SetIdentityHeadersInNotificationsEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityHeadersInNotificationsEnabledError::ParseError(ref cause) => cause,
-            SetIdentityHeadersInNotificationsEnabledError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SetIdentityMailFromDomain
 #[derive(Debug, PartialEq)]
-pub enum SetIdentityMailFromDomainError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SetIdentityMailFromDomainError {}
 
 impl SetIdentityMailFromDomainError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityMailFromDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetIdentityMailFromDomainError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13437,7 +11432,7 @@ impl SetIdentityMailFromDomainError {
                 }
             }
         }
-        SetIdentityMailFromDomainError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13446,28 +11441,6 @@ impl SetIdentityMailFromDomainError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIdentityMailFromDomainError {
-    fn from(err: XmlParseError) -> SetIdentityMailFromDomainError {
-        let XmlParseError(message) = err;
-        SetIdentityMailFromDomainError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityMailFromDomainError {
-    fn from(err: CredentialsError) -> SetIdentityMailFromDomainError {
-        SetIdentityMailFromDomainError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityMailFromDomainError {
-    fn from(err: HttpDispatchError) -> SetIdentityMailFromDomainError {
-        SetIdentityMailFromDomainError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityMailFromDomainError {
-    fn from(err: io::Error) -> SetIdentityMailFromDomainError {
-        SetIdentityMailFromDomainError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityMailFromDomainError {
@@ -13477,34 +11450,17 @@ impl fmt::Display for SetIdentityMailFromDomainError {
 }
 impl Error for SetIdentityMailFromDomainError {
     fn description(&self) -> &str {
-        match *self {
-            SetIdentityMailFromDomainError::Validation(ref cause) => cause,
-            SetIdentityMailFromDomainError::Credentials(ref err) => err.description(),
-            SetIdentityMailFromDomainError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityMailFromDomainError::ParseError(ref cause) => cause,
-            SetIdentityMailFromDomainError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SetIdentityNotificationTopic
 #[derive(Debug, PartialEq)]
-pub enum SetIdentityNotificationTopicError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum SetIdentityNotificationTopicError {}
 
 impl SetIdentityNotificationTopicError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetIdentityNotificationTopicError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SetIdentityNotificationTopicError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13515,7 +11471,7 @@ impl SetIdentityNotificationTopicError {
                 }
             }
         }
-        SetIdentityNotificationTopicError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13524,28 +11480,6 @@ impl SetIdentityNotificationTopicError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetIdentityNotificationTopicError {
-    fn from(err: XmlParseError) -> SetIdentityNotificationTopicError {
-        let XmlParseError(message) = err;
-        SetIdentityNotificationTopicError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetIdentityNotificationTopicError {
-    fn from(err: CredentialsError) -> SetIdentityNotificationTopicError {
-        SetIdentityNotificationTopicError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetIdentityNotificationTopicError {
-    fn from(err: HttpDispatchError) -> SetIdentityNotificationTopicError {
-        SetIdentityNotificationTopicError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetIdentityNotificationTopicError {
-    fn from(err: io::Error) -> SetIdentityNotificationTopicError {
-        SetIdentityNotificationTopicError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetIdentityNotificationTopicError {
@@ -13555,15 +11489,7 @@ impl fmt::Display for SetIdentityNotificationTopicError {
 }
 impl Error for SetIdentityNotificationTopicError {
     fn description(&self) -> &str {
-        match *self {
-            SetIdentityNotificationTopicError::Validation(ref cause) => cause,
-            SetIdentityNotificationTopicError::Credentials(ref err) => err.description(),
-            SetIdentityNotificationTopicError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetIdentityNotificationTopicError::ParseError(ref cause) => cause,
-            SetIdentityNotificationTopicError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by SetReceiptRulePosition
@@ -13573,20 +11499,10 @@ pub enum SetReceiptRulePositionError {
     RuleDoesNotExist(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl SetReceiptRulePositionError {
-    pub fn from_response(res: BufferedHttpResponse) -> SetReceiptRulePositionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SetReceiptRulePositionError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13594,20 +11510,22 @@ impl SetReceiptRulePositionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
-                        return SetReceiptRulePositionError::RuleDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(SetReceiptRulePositionError::RuleDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     _ => {}
                 }
             }
         }
-        SetReceiptRulePositionError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13616,28 +11534,6 @@ impl SetReceiptRulePositionError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for SetReceiptRulePositionError {
-    fn from(err: XmlParseError) -> SetReceiptRulePositionError {
-        let XmlParseError(message) = err;
-        SetReceiptRulePositionError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for SetReceiptRulePositionError {
-    fn from(err: CredentialsError) -> SetReceiptRulePositionError {
-        SetReceiptRulePositionError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for SetReceiptRulePositionError {
-    fn from(err: HttpDispatchError) -> SetReceiptRulePositionError {
-        SetReceiptRulePositionError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for SetReceiptRulePositionError {
-    fn from(err: io::Error) -> SetReceiptRulePositionError {
-        SetReceiptRulePositionError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for SetReceiptRulePositionError {
@@ -13650,13 +11546,6 @@ impl Error for SetReceiptRulePositionError {
         match *self {
             SetReceiptRulePositionError::RuleDoesNotExist(ref cause) => cause,
             SetReceiptRulePositionError::RuleSetDoesNotExist(ref cause) => cause,
-            SetReceiptRulePositionError::Validation(ref cause) => cause,
-            SetReceiptRulePositionError::Credentials(ref err) => err.description(),
-            SetReceiptRulePositionError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            SetReceiptRulePositionError::ParseError(ref cause) => cause,
-            SetReceiptRulePositionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13669,20 +11558,10 @@ pub enum TestRenderTemplateError {
     MissingRenderingAttribute(String),
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl TestRenderTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> TestRenderTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestRenderTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13690,25 +11569,29 @@ impl TestRenderTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidRenderingParameter" => {
-                        return TestRenderTemplateError::InvalidRenderingParameter(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            TestRenderTemplateError::InvalidRenderingParameter(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "MissingRenderingAttribute" => {
-                        return TestRenderTemplateError::MissingRenderingAttribute(String::from(
-                            parsed_error.message,
-                        ));
+                        return RusotoError::Service(
+                            TestRenderTemplateError::MissingRenderingAttribute(String::from(
+                                parsed_error.message,
+                            )),
+                        );
                     }
                     "TemplateDoesNotExist" => {
-                        return TestRenderTemplateError::TemplateDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(TestRenderTemplateError::TemplateDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        TestRenderTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13717,28 +11600,6 @@ impl TestRenderTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for TestRenderTemplateError {
-    fn from(err: XmlParseError) -> TestRenderTemplateError {
-        let XmlParseError(message) = err;
-        TestRenderTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for TestRenderTemplateError {
-    fn from(err: CredentialsError) -> TestRenderTemplateError {
-        TestRenderTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for TestRenderTemplateError {
-    fn from(err: HttpDispatchError) -> TestRenderTemplateError {
-        TestRenderTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for TestRenderTemplateError {
-    fn from(err: io::Error) -> TestRenderTemplateError {
-        TestRenderTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for TestRenderTemplateError {
@@ -13752,33 +11613,17 @@ impl Error for TestRenderTemplateError {
             TestRenderTemplateError::InvalidRenderingParameter(ref cause) => cause,
             TestRenderTemplateError::MissingRenderingAttribute(ref cause) => cause,
             TestRenderTemplateError::TemplateDoesNotExist(ref cause) => cause,
-            TestRenderTemplateError::Validation(ref cause) => cause,
-            TestRenderTemplateError::Credentials(ref err) => err.description(),
-            TestRenderTemplateError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            TestRenderTemplateError::ParseError(ref cause) => cause,
-            TestRenderTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by UpdateAccountSendingEnabled
 #[derive(Debug, PartialEq)]
-pub enum UpdateAccountSendingEnabledError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum UpdateAccountSendingEnabledError {}
 
 impl UpdateAccountSendingEnabledError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateAccountSendingEnabledError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateAccountSendingEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13789,7 +11634,7 @@ impl UpdateAccountSendingEnabledError {
                 }
             }
         }
-        UpdateAccountSendingEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13800,28 +11645,6 @@ impl UpdateAccountSendingEnabledError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for UpdateAccountSendingEnabledError {
-    fn from(err: XmlParseError) -> UpdateAccountSendingEnabledError {
-        let XmlParseError(message) = err;
-        UpdateAccountSendingEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateAccountSendingEnabledError {
-    fn from(err: CredentialsError) -> UpdateAccountSendingEnabledError {
-        UpdateAccountSendingEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateAccountSendingEnabledError {
-    fn from(err: HttpDispatchError) -> UpdateAccountSendingEnabledError {
-        UpdateAccountSendingEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateAccountSendingEnabledError {
-    fn from(err: io::Error) -> UpdateAccountSendingEnabledError {
-        UpdateAccountSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for UpdateAccountSendingEnabledError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -13829,15 +11652,7 @@ impl fmt::Display for UpdateAccountSendingEnabledError {
 }
 impl Error for UpdateAccountSendingEnabledError {
     fn description(&self) -> &str {
-        match *self {
-            UpdateAccountSendingEnabledError::Validation(ref cause) => cause,
-            UpdateAccountSendingEnabledError::Credentials(ref err) => err.description(),
-            UpdateAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateAccountSendingEnabledError::ParseError(ref cause) => cause,
-            UpdateAccountSendingEnabledError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by UpdateConfigurationSetEventDestination
@@ -13853,31 +11668,52 @@ pub enum UpdateConfigurationSetEventDestinationError {
     InvalidFirehoseDestination(String),
     /// <p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
     InvalidSNSDestination(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetEventDestinationError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetEventDestinationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateConfigurationSetEventDestinationError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"EventDestinationDoesNotExist" => return UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(String::from(parsed_error.message)),"InvalidCloudWatchDestination" => return UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(String::from(parsed_error.message)),"InvalidFirehoseDestination" => return UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(String::from(parsed_error.message)),"InvalidSNSDestination" => return UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "EventDestinationDoesNotExist" => return RusotoError::Service(
+                        UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidCloudWatchDestination" => return RusotoError::Service(
+                        UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidFirehoseDestination" => {
+                        return RusotoError::Service(
+                            UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "InvalidSNSDestination" => {
+                        return RusotoError::Service(
+                            UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        UpdateConfigurationSetEventDestinationError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13886,28 +11722,6 @@ impl UpdateConfigurationSetEventDestinationError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateConfigurationSetEventDestinationError {
-    fn from(err: XmlParseError) -> UpdateConfigurationSetEventDestinationError {
-        let XmlParseError(message) = err;
-        UpdateConfigurationSetEventDestinationError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConfigurationSetEventDestinationError {
-    fn from(err: CredentialsError) -> UpdateConfigurationSetEventDestinationError {
-        UpdateConfigurationSetEventDestinationError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConfigurationSetEventDestinationError {
-    fn from(err: HttpDispatchError) -> UpdateConfigurationSetEventDestinationError {
-        UpdateConfigurationSetEventDestinationError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConfigurationSetEventDestinationError {
-    fn from(err: io::Error) -> UpdateConfigurationSetEventDestinationError {
-        UpdateConfigurationSetEventDestinationError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationSetEventDestinationError {
@@ -13931,13 +11745,6 @@ impl Error for UpdateConfigurationSetEventDestinationError {
                 cause
             }
             UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(ref cause) => cause,
-            UpdateConfigurationSetEventDestinationError::Validation(ref cause) => cause,
-            UpdateConfigurationSetEventDestinationError::Credentials(ref err) => err.description(),
-            UpdateConfigurationSetEventDestinationError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateConfigurationSetEventDestinationError::ParseError(ref cause) => cause,
-            UpdateConfigurationSetEventDestinationError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -13946,33 +11753,23 @@ impl Error for UpdateConfigurationSetEventDestinationError {
 pub enum UpdateConfigurationSetReputationMetricsEnabledError {
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetReputationMetricsEnabledError {
     pub fn from_response(
         res: BufferedHttpResponse,
-    ) -> UpdateConfigurationSetReputationMetricsEnabledError {
+    ) -> RusotoError<UpdateConfigurationSetReputationMetricsEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        UpdateConfigurationSetReputationMetricsEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -13981,30 +11778,6 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateConfigurationSetReputationMetricsEnabledError {
-    fn from(err: XmlParseError) -> UpdateConfigurationSetReputationMetricsEnabledError {
-        let XmlParseError(message) = err;
-        UpdateConfigurationSetReputationMetricsEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConfigurationSetReputationMetricsEnabledError {
-    fn from(err: CredentialsError) -> UpdateConfigurationSetReputationMetricsEnabledError {
-        UpdateConfigurationSetReputationMetricsEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConfigurationSetReputationMetricsEnabledError {
-    fn from(err: HttpDispatchError) -> UpdateConfigurationSetReputationMetricsEnabledError {
-        UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConfigurationSetReputationMetricsEnabledError {
-    fn from(err: io::Error) -> UpdateConfigurationSetReputationMetricsEnabledError {
-        UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(HttpDispatchError::from(
-            err,
-        ))
     }
 }
 impl fmt::Display for UpdateConfigurationSetReputationMetricsEnabledError {
@@ -14018,15 +11791,6 @@ impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
             UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(
                 ref cause,
             ) => cause,
-            UpdateConfigurationSetReputationMetricsEnabledError::Validation(ref cause) => cause,
-            UpdateConfigurationSetReputationMetricsEnabledError::Credentials(ref err) => {
-                err.description()
-            }
-            UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(
-                ref dispatch_error,
-            ) => dispatch_error.description(),
-            UpdateConfigurationSetReputationMetricsEnabledError::ParseError(ref cause) => cause,
-            UpdateConfigurationSetReputationMetricsEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14035,31 +11799,30 @@ impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
 pub enum UpdateConfigurationSetSendingEnabledError {
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetSendingEnabledError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetSendingEnabledError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateConfigurationSetSendingEnabledError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => {
+                        return RusotoError::Service(
+                            UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        UpdateConfigurationSetSendingEnabledError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14068,28 +11831,6 @@ impl UpdateConfigurationSetSendingEnabledError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateConfigurationSetSendingEnabledError {
-    fn from(err: XmlParseError) -> UpdateConfigurationSetSendingEnabledError {
-        let XmlParseError(message) = err;
-        UpdateConfigurationSetSendingEnabledError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConfigurationSetSendingEnabledError {
-    fn from(err: CredentialsError) -> UpdateConfigurationSetSendingEnabledError {
-        UpdateConfigurationSetSendingEnabledError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConfigurationSetSendingEnabledError {
-    fn from(err: HttpDispatchError) -> UpdateConfigurationSetSendingEnabledError {
-        UpdateConfigurationSetSendingEnabledError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConfigurationSetSendingEnabledError {
-    fn from(err: io::Error) -> UpdateConfigurationSetSendingEnabledError {
-        UpdateConfigurationSetSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationSetSendingEnabledError {
@@ -14103,13 +11844,6 @@ impl Error for UpdateConfigurationSetSendingEnabledError {
             UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(ref cause) => {
                 cause
             }
-            UpdateConfigurationSetSendingEnabledError::Validation(ref cause) => cause,
-            UpdateConfigurationSetSendingEnabledError::Credentials(ref err) => err.description(),
-            UpdateConfigurationSetSendingEnabledError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateConfigurationSetSendingEnabledError::ParseError(ref cause) => cause,
-            UpdateConfigurationSetSendingEnabledError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14122,31 +11856,42 @@ pub enum UpdateConfigurationSetTrackingOptionsError {
     InvalidTrackingOptions(String),
     /// <p>Indicates that the TrackingOptions object you specified does not exist.</p>
     TrackingOptionsDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateConfigurationSetTrackingOptionsError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateConfigurationSetTrackingOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateConfigurationSetTrackingOptionsError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),"InvalidTrackingOptions" => return UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(String::from(parsed_error.message)),"TrackingOptionsDoesNotExistException" => return UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(String::from(parsed_error.message)),_ => {}
-                                }
+                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(
+                        UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
+                    "InvalidTrackingOptions" => {
+                        return RusotoError::Service(
+                            UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    "TrackingOptionsDoesNotExistException" => {
+                        return RusotoError::Service(
+                            UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
+                                String::from(parsed_error.message),
+                            ),
+                        );
+                    }
+                    _ => {}
+                }
             }
         }
-        UpdateConfigurationSetTrackingOptionsError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14155,28 +11900,6 @@ impl UpdateConfigurationSetTrackingOptionsError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateConfigurationSetTrackingOptionsError {
-    fn from(err: XmlParseError) -> UpdateConfigurationSetTrackingOptionsError {
-        let XmlParseError(message) = err;
-        UpdateConfigurationSetTrackingOptionsError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateConfigurationSetTrackingOptionsError {
-    fn from(err: CredentialsError) -> UpdateConfigurationSetTrackingOptionsError {
-        UpdateConfigurationSetTrackingOptionsError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateConfigurationSetTrackingOptionsError {
-    fn from(err: HttpDispatchError) -> UpdateConfigurationSetTrackingOptionsError {
-        UpdateConfigurationSetTrackingOptionsError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateConfigurationSetTrackingOptionsError {
-    fn from(err: io::Error) -> UpdateConfigurationSetTrackingOptionsError {
-        UpdateConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateConfigurationSetTrackingOptionsError {
@@ -14194,13 +11917,6 @@ impl Error for UpdateConfigurationSetTrackingOptionsError {
             UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
                 cause
             }
-            UpdateConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
-            UpdateConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
-            UpdateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateConfigurationSetTrackingOptionsError::ParseError(ref cause) => cause,
-            UpdateConfigurationSetTrackingOptionsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14213,31 +11929,23 @@ pub enum UpdateCustomVerificationEmailTemplateError {
     CustomVerificationEmailTemplateDoesNotExist(String),
     /// <p>Indicates that the sender address specified for a custom verification email is not verified, and is therefore not eligible to send the custom verification email. </p>
     FromEmailAddressNotVerified(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateCustomVerificationEmailTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateCustomVerificationEmailTemplateError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateCustomVerificationEmailTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerified" => return UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message))),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message))),_ => {}
                                 }
             }
         }
-        UpdateCustomVerificationEmailTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14246,28 +11954,6 @@ impl UpdateCustomVerificationEmailTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateCustomVerificationEmailTemplateError {
-    fn from(err: XmlParseError) -> UpdateCustomVerificationEmailTemplateError {
-        let XmlParseError(message) = err;
-        UpdateCustomVerificationEmailTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateCustomVerificationEmailTemplateError {
-    fn from(err: CredentialsError) -> UpdateCustomVerificationEmailTemplateError {
-        UpdateCustomVerificationEmailTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateCustomVerificationEmailTemplateError {
-    fn from(err: HttpDispatchError) -> UpdateCustomVerificationEmailTemplateError {
-        UpdateCustomVerificationEmailTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateCustomVerificationEmailTemplateError {
-    fn from(err: io::Error) -> UpdateCustomVerificationEmailTemplateError {
-        UpdateCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateCustomVerificationEmailTemplateError {
@@ -14280,12 +11966,7 @@ impl Error for UpdateCustomVerificationEmailTemplateError {
         match *self {
                             UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
 UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
-UpdateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-UpdateCustomVerificationEmailTemplateError::ParseError(ref cause) => cause,
-UpdateCustomVerificationEmailTemplateError::Unknown(_) => "unknown error"
+UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause
                         }
     }
 }
@@ -14304,20 +11985,10 @@ pub enum UpdateReceiptRuleError {
     RuleDoesNotExist(String),
     /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateReceiptRuleError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateReceiptRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReceiptRuleError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14325,40 +11996,40 @@ impl UpdateReceiptRuleError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidLambdaFunction" => {
-                        return UpdateReceiptRuleError::InvalidLambdaFunction(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::InvalidLambdaFunction(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidS3Configuration" => {
-                        return UpdateReceiptRuleError::InvalidS3Configuration(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::InvalidS3Configuration(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "InvalidSnsTopic" => {
-                        return UpdateReceiptRuleError::InvalidSnsTopic(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::InvalidSnsTopic(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "LimitExceeded" => {
-                        return UpdateReceiptRuleError::LimitExceeded(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::LimitExceeded(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleDoesNotExist" => {
-                        return UpdateReceiptRuleError::RuleDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::RuleDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "RuleSetDoesNotExist" => {
-                        return UpdateReceiptRuleError::RuleSetDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateReceiptRuleError::RuleSetDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateReceiptRuleError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14367,28 +12038,6 @@ impl UpdateReceiptRuleError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateReceiptRuleError {
-    fn from(err: XmlParseError) -> UpdateReceiptRuleError {
-        let XmlParseError(message) = err;
-        UpdateReceiptRuleError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateReceiptRuleError {
-    fn from(err: CredentialsError) -> UpdateReceiptRuleError {
-        UpdateReceiptRuleError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateReceiptRuleError {
-    fn from(err: HttpDispatchError) -> UpdateReceiptRuleError {
-        UpdateReceiptRuleError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateReceiptRuleError {
-    fn from(err: io::Error) -> UpdateReceiptRuleError {
-        UpdateReceiptRuleError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateReceiptRuleError {
@@ -14405,13 +12054,6 @@ impl Error for UpdateReceiptRuleError {
             UpdateReceiptRuleError::LimitExceeded(ref cause) => cause,
             UpdateReceiptRuleError::RuleDoesNotExist(ref cause) => cause,
             UpdateReceiptRuleError::RuleSetDoesNotExist(ref cause) => cause,
-            UpdateReceiptRuleError::Validation(ref cause) => cause,
-            UpdateReceiptRuleError::Credentials(ref err) => err.description(),
-            UpdateReceiptRuleError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            UpdateReceiptRuleError::ParseError(ref cause) => cause,
-            UpdateReceiptRuleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14422,20 +12064,10 @@ pub enum UpdateTemplateError {
     InvalidTemplate(String),
     /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
     TemplateDoesNotExist(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
 }
 
 impl UpdateTemplateError {
-    pub fn from_response(res: BufferedHttpResponse) -> UpdateTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateTemplateError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14443,20 +12075,20 @@ impl UpdateTemplateError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidTemplate" => {
-                        return UpdateTemplateError::InvalidTemplate(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTemplateError::InvalidTemplate(
+                            String::from(parsed_error.message),
                         ));
                     }
                     "TemplateDoesNotExist" => {
-                        return UpdateTemplateError::TemplateDoesNotExist(String::from(
-                            parsed_error.message,
+                        return RusotoError::Service(UpdateTemplateError::TemplateDoesNotExist(
+                            String::from(parsed_error.message),
                         ));
                     }
                     _ => {}
                 }
             }
         }
-        UpdateTemplateError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14465,28 +12097,6 @@ impl UpdateTemplateError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for UpdateTemplateError {
-    fn from(err: XmlParseError) -> UpdateTemplateError {
-        let XmlParseError(message) = err;
-        UpdateTemplateError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for UpdateTemplateError {
-    fn from(err: CredentialsError) -> UpdateTemplateError {
-        UpdateTemplateError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for UpdateTemplateError {
-    fn from(err: HttpDispatchError) -> UpdateTemplateError {
-        UpdateTemplateError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for UpdateTemplateError {
-    fn from(err: io::Error) -> UpdateTemplateError {
-        UpdateTemplateError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for UpdateTemplateError {
@@ -14499,31 +12109,15 @@ impl Error for UpdateTemplateError {
         match *self {
             UpdateTemplateError::InvalidTemplate(ref cause) => cause,
             UpdateTemplateError::TemplateDoesNotExist(ref cause) => cause,
-            UpdateTemplateError::Validation(ref cause) => cause,
-            UpdateTemplateError::Credentials(ref err) => err.description(),
-            UpdateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            UpdateTemplateError::ParseError(ref cause) => cause,
-            UpdateTemplateError::Unknown(_) => "unknown error",
         }
     }
 }
 /// Errors returned by VerifyDomainDkim
 #[derive(Debug, PartialEq)]
-pub enum VerifyDomainDkimError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum VerifyDomainDkimError {}
 
 impl VerifyDomainDkimError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifyDomainDkimError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyDomainDkimError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14534,7 +12128,7 @@ impl VerifyDomainDkimError {
                 }
             }
         }
-        VerifyDomainDkimError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14543,28 +12137,6 @@ impl VerifyDomainDkimError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for VerifyDomainDkimError {
-    fn from(err: XmlParseError) -> VerifyDomainDkimError {
-        let XmlParseError(message) = err;
-        VerifyDomainDkimError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for VerifyDomainDkimError {
-    fn from(err: CredentialsError) -> VerifyDomainDkimError {
-        VerifyDomainDkimError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifyDomainDkimError {
-    fn from(err: HttpDispatchError) -> VerifyDomainDkimError {
-        VerifyDomainDkimError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifyDomainDkimError {
-    fn from(err: io::Error) -> VerifyDomainDkimError {
-        VerifyDomainDkimError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyDomainDkimError {
@@ -14574,32 +12146,15 @@ impl fmt::Display for VerifyDomainDkimError {
 }
 impl Error for VerifyDomainDkimError {
     fn description(&self) -> &str {
-        match *self {
-            VerifyDomainDkimError::Validation(ref cause) => cause,
-            VerifyDomainDkimError::Credentials(ref err) => err.description(),
-            VerifyDomainDkimError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            VerifyDomainDkimError::ParseError(ref cause) => cause,
-            VerifyDomainDkimError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by VerifyDomainIdentity
 #[derive(Debug, PartialEq)]
-pub enum VerifyDomainIdentityError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum VerifyDomainIdentityError {}
 
 impl VerifyDomainIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifyDomainIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyDomainIdentityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14610,7 +12165,7 @@ impl VerifyDomainIdentityError {
                 }
             }
         }
-        VerifyDomainIdentityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14619,28 +12174,6 @@ impl VerifyDomainIdentityError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for VerifyDomainIdentityError {
-    fn from(err: XmlParseError) -> VerifyDomainIdentityError {
-        let XmlParseError(message) = err;
-        VerifyDomainIdentityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for VerifyDomainIdentityError {
-    fn from(err: CredentialsError) -> VerifyDomainIdentityError {
-        VerifyDomainIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifyDomainIdentityError {
-    fn from(err: HttpDispatchError) -> VerifyDomainIdentityError {
-        VerifyDomainIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifyDomainIdentityError {
-    fn from(err: io::Error) -> VerifyDomainIdentityError {
-        VerifyDomainIdentityError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyDomainIdentityError {
@@ -14650,34 +12183,15 @@ impl fmt::Display for VerifyDomainIdentityError {
 }
 impl Error for VerifyDomainIdentityError {
     fn description(&self) -> &str {
-        match *self {
-            VerifyDomainIdentityError::Validation(ref cause) => cause,
-            VerifyDomainIdentityError::Credentials(ref err) => err.description(),
-            VerifyDomainIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            VerifyDomainIdentityError::ParseError(ref cause) => cause,
-            VerifyDomainIdentityError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by VerifyEmailAddress
 #[derive(Debug, PartialEq)]
-pub enum VerifyEmailAddressError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum VerifyEmailAddressError {}
 
 impl VerifyEmailAddressError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifyEmailAddressError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyEmailAddressError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14688,7 +12202,7 @@ impl VerifyEmailAddressError {
                 }
             }
         }
-        VerifyEmailAddressError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14697,28 +12211,6 @@ impl VerifyEmailAddressError {
     {
         start_element("ErrorResponse", stack)?;
         XmlErrorDeserializer::deserialize("Error", stack)
-    }
-}
-
-impl From<XmlParseError> for VerifyEmailAddressError {
-    fn from(err: XmlParseError) -> VerifyEmailAddressError {
-        let XmlParseError(message) = err;
-        VerifyEmailAddressError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for VerifyEmailAddressError {
-    fn from(err: CredentialsError) -> VerifyEmailAddressError {
-        VerifyEmailAddressError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifyEmailAddressError {
-    fn from(err: HttpDispatchError) -> VerifyEmailAddressError {
-        VerifyEmailAddressError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifyEmailAddressError {
-    fn from(err: io::Error) -> VerifyEmailAddressError {
-        VerifyEmailAddressError::HttpDispatch(HttpDispatchError::from(err))
     }
 }
 impl fmt::Display for VerifyEmailAddressError {
@@ -14728,34 +12220,15 @@ impl fmt::Display for VerifyEmailAddressError {
 }
 impl Error for VerifyEmailAddressError {
     fn description(&self) -> &str {
-        match *self {
-            VerifyEmailAddressError::Validation(ref cause) => cause,
-            VerifyEmailAddressError::Credentials(ref err) => err.description(),
-            VerifyEmailAddressError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            VerifyEmailAddressError::ParseError(ref cause) => cause,
-            VerifyEmailAddressError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Errors returned by VerifyEmailIdentity
 #[derive(Debug, PartialEq)]
-pub enum VerifyEmailIdentityError {
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An error occurred parsing the response payload.
-    ParseError(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(BufferedHttpResponse),
-}
+pub enum VerifyEmailIdentityError {}
 
 impl VerifyEmailIdentityError {
-    pub fn from_response(res: BufferedHttpResponse) -> VerifyEmailIdentityError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<VerifyEmailIdentityError> {
         {
             let reader = EventReader::new(res.body.as_slice());
             let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14766,7 +12239,7 @@ impl VerifyEmailIdentityError {
                 }
             }
         }
-        VerifyEmailIdentityError::Unknown(res)
+        RusotoError::Unknown(res)
     }
 
     fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
@@ -14777,28 +12250,6 @@ impl VerifyEmailIdentityError {
         XmlErrorDeserializer::deserialize("Error", stack)
     }
 }
-
-impl From<XmlParseError> for VerifyEmailIdentityError {
-    fn from(err: XmlParseError) -> VerifyEmailIdentityError {
-        let XmlParseError(message) = err;
-        VerifyEmailIdentityError::ParseError(message.to_string())
-    }
-}
-impl From<CredentialsError> for VerifyEmailIdentityError {
-    fn from(err: CredentialsError) -> VerifyEmailIdentityError {
-        VerifyEmailIdentityError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for VerifyEmailIdentityError {
-    fn from(err: HttpDispatchError) -> VerifyEmailIdentityError {
-        VerifyEmailIdentityError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for VerifyEmailIdentityError {
-    fn from(err: io::Error) -> VerifyEmailIdentityError {
-        VerifyEmailIdentityError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
 impl fmt::Display for VerifyEmailIdentityError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.description())
@@ -14806,15 +12257,7 @@ impl fmt::Display for VerifyEmailIdentityError {
 }
 impl Error for VerifyEmailIdentityError {
     fn description(&self) -> &str {
-        match *self {
-            VerifyEmailIdentityError::Validation(ref cause) => cause,
-            VerifyEmailIdentityError::Credentials(ref err) => err.description(),
-            VerifyEmailIdentityError::HttpDispatch(ref dispatch_error) => {
-                dispatch_error.description()
-            }
-            VerifyEmailIdentityError::ParseError(ref cause) => cause,
-            VerifyEmailIdentityError::Unknown(_) => "unknown error",
-        }
+        match *self {}
     }
 }
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
