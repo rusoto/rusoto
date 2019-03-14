@@ -261,33 +261,14 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
         .unwrap_or_else(|| "member".to_owned());
 
     format!("
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {{
-            let next_event = match stack.peek() {{
-                Some(&Ok(XmlEvent::EndElement {{ .. }})) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
-                _ => DeserializerNext::Skip,
-            }};
-
-            match next_event {{
-                DeserializerNext::Element(name) => {{
-                    if name == \"{location_name}\" {{
-                        obj.push({member_name}Deserializer::deserialize(\"{location_name}\", stack)?);
-                    }} else {{
-                        skip_tree(stack);
-                    }}
-                }},
-                DeserializerNext::Close => {{
-                    end_element(tag_name, stack)?;
-                    break;
-                }}
-                DeserializerNext::Skip => {{ stack.next(); }},
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {{
+            if name == \"{location_name}\" {{
+                obj.push({member_name}Deserializer::deserialize(\"{location_name}\", stack)?);
+            }} else {{
+                skip_tree(stack);
             }}
-        }}
-
-        Ok(obj)
+            Ok(())
+        }})
         ",
             location_name = location_name,
             member_name = mutate_type_name(service, &shape.member_type()[..]))
@@ -301,7 +282,7 @@ fn generate_flat_list_deserializer(shape: &Shape, service: &Service) -> String {
         loop {{
 
             let consume_next_tag = match stack.peek() {{
-                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => name.local_name == tag_name,
+                Some(&Ok(xml::reader::XmlEvent::StartElement {{ ref name, .. }})) => name.local_name == tag_name,
                 _ => false
             }};
 
@@ -453,32 +434,13 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
     }
 
     format!(
-        "start_element(tag_name, stack)?;
-
-        let mut obj = {name}::default();
-
-        loop {{
-            let next_event = match stack.peek() {{
-                Some(&Ok(XmlEvent::EndElement {{ ref name, .. }})) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement {{ ref name, .. }})) => DeserializerNext::Element(name.local_name.to_owned()),
-                _ => DeserializerNext::Skip,
-            }};
-
-            match next_event {{
-                DeserializerNext::Element(name) => {{
-                    match &name[..] {{
-                        {struct_field_deserializers}
-                        _ => skip_tree(stack),
-                    }}
-                }},
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {{ stack.next(); }},
+        "deserialize_elements::<_, {name}, _>(tag_name, stack, |name, stack, obj| {{
+            match name {{
+                {struct_field_deserializers}
+                _ => skip_tree(stack),
             }}
-        }}
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        }})
         ",
         name = name,
         struct_field_deserializers = generate_struct_field_deserializers(service, shape),
@@ -537,13 +499,9 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
                 } else {
                     Some(format!(
                         "\"{location_name}\" => {{
-                            obj.{field_name} = match obj.{field_name} {{
-                                Some(ref mut existing) => {{
-                                    existing.extend({parse_expression});
-                                    Some(existing.to_vec())
-                                }}
-                                None => Some({parse_expression}),
-                            }};
+                            obj.{field_name}
+                                .get_or_insert(vec![])
+                                .extend({parse_expression});
                         }}",
                         field_name = generate_field_name(member_name),
                         parse_expression = parse_expression,

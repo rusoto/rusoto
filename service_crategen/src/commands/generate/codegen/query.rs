@@ -76,17 +76,11 @@ impl GenerateProtocol for QueryGenerator {
             use xml::reader::ParserConfig;
             use rusoto_core::param::{{Params, ServiceParams}};
             use rusoto_core::signature::SignedRequest;
-            use xml::reader::XmlEvent;
             use rusoto_core::xmlutil::{{Next, Peek, XmlParseError, XmlResponse}};
-            use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name}};
+            use rusoto_core::xmlutil::{{characters, end_element, find_start_element, start_element, skip_tree, peek_at_name, deserialize_elements}};
             use rusoto_core::xmlerror::*;
             use serde_urlencoded;
-
-            enum DeserializerNext {{
-                Close,
-                Skip,
-                Element(String),
-        }}")
+            ")
     }
 
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
