@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 struct AccountDeserializer;
 impl AccountDeserializer {
     #[allow(unused_variables)]
@@ -177,37 +172,20 @@ impl CheckIfPhoneNumberIsOptedOutResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CheckIfPhoneNumberIsOptedOutResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CheckIfPhoneNumberIsOptedOutResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "isOptedOut" => {
                         obj.is_opted_out =
                             Some(BooleanDeserializer::deserialize("isOptedOut", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for ConfirmSubscription action.</p>
@@ -255,21 +233,11 @@ impl ConfirmSubscriptionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfirmSubscriptionResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ConfirmSubscriptionResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ConfirmSubscriptionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SubscriptionArn" => {
                         obj.subscription_arn = Some(SubscriptionARNDeserializer::deserialize(
                             "SubscriptionArn",
@@ -277,17 +245,10 @@ impl ConfirmSubscriptionResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Response from CreateEndpoint action.</p>
@@ -304,37 +265,15 @@ impl CreateEndpointResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEndpointResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateEndpointResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateEndpointResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndpointArn" => {
+                    obj.endpoint_arn = Some(StringDeserializer::deserialize("EndpointArn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EndpointArn" => {
-                        obj.endpoint_arn =
-                            Some(StringDeserializer::deserialize("EndpointArn", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input for CreatePlatformApplication action.</p>
@@ -381,21 +320,11 @@ impl CreatePlatformApplicationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePlatformApplicationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreatePlatformApplicationResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreatePlatformApplicationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PlatformApplicationArn" => {
                         obj.platform_application_arn = Some(StringDeserializer::deserialize(
                             "PlatformApplicationArn",
@@ -403,17 +332,10 @@ impl CreatePlatformApplicationResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for CreatePlatformEndpoint action.</p>
@@ -499,36 +421,15 @@ impl CreateTopicResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTopicResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateTopicResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateTopicResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TopicArn" => {
+                    obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "TopicArn" => {
-                        obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -653,21 +554,11 @@ impl GetEndpointAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetEndpointAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetEndpointAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetEndpointAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Attributes" => {
                         obj.attributes = Some(MapStringToStringDeserializer::deserialize(
                             "Attributes",
@@ -675,17 +566,10 @@ impl GetEndpointAttributesResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for GetPlatformApplicationAttributes action.</p>
@@ -725,21 +609,11 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPlatformApplicationAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetPlatformApplicationAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetPlatformApplicationAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Attributes" => {
                         obj.attributes = Some(MapStringToStringDeserializer::deserialize(
                             "Attributes",
@@ -747,17 +621,10 @@ impl GetPlatformApplicationAttributesResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>The input for the <code>GetSMSAttributes</code> request.</p>
@@ -800,21 +667,11 @@ impl GetSMSAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSMSAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSMSAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSMSAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "attributes" => {
                         obj.attributes = Some(MapStringToStringDeserializer::deserialize(
                             "attributes",
@@ -822,17 +679,10 @@ impl GetSMSAttributesResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for GetSubscriptionAttributes.</p>
@@ -872,21 +722,11 @@ impl GetSubscriptionAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSubscriptionAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSubscriptionAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSubscriptionAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Attributes" => {
                         obj.attributes = Some(SubscriptionAttributesMapDeserializer::deserialize(
                             "Attributes",
@@ -894,17 +734,10 @@ impl GetSubscriptionAttributesResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for GetTopicAttributes action.</p>
@@ -941,21 +774,11 @@ impl GetTopicAttributesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTopicAttributesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetTopicAttributesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetTopicAttributesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Attributes" => {
                         obj.attributes = Some(TopicAttributesMapDeserializer::deserialize(
                             "Attributes",
@@ -963,17 +786,10 @@ impl GetTopicAttributesResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for ListEndpointsByPlatformApplication action.</p>
@@ -1020,51 +836,24 @@ impl ListEndpointsByPlatformApplicationResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListEndpointsByPlatformApplicationResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListEndpointsByPlatformApplicationResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListEndpointsByPlatformApplicationResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Endpoints" => {
-                        obj.endpoints = match obj.endpoints {
-                            Some(ref mut existing) => {
-                                existing.extend(ListOfEndpointsDeserializer::deserialize(
-                                    "Endpoints",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ListOfEndpointsDeserializer::deserialize(
-                                "Endpoints",
-                                stack,
-                            )?),
-                        };
+                        obj.endpoints.get_or_insert(vec![]).extend(
+                            ListOfEndpointsDeserializer::deserialize("Endpoints", stack)?,
+                        );
                     }
                     "NextToken" => {
                         obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct ListOfEndpointsDeserializer;
@@ -1074,37 +863,14 @@ impl ListOfEndpointsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(EndpointDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EndpointDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ListOfPlatformApplicationsDeserializer;
@@ -1114,39 +880,16 @@ impl ListOfPlatformApplicationsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PlatformApplication>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PlatformApplicationDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PlatformApplicationDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>
@@ -1187,51 +930,24 @@ impl ListPhoneNumbersOptedOutResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPhoneNumbersOptedOutResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPhoneNumbersOptedOutResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListPhoneNumbersOptedOutResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "nextToken" => {
                         obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
                     }
                     "phoneNumbers" => {
-                        obj.phone_numbers = match obj.phone_numbers {
-                            Some(ref mut existing) => {
-                                existing.extend(PhoneNumberListDeserializer::deserialize(
-                                    "phoneNumbers",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PhoneNumberListDeserializer::deserialize(
-                                "phoneNumbers",
-                                stack,
-                            )?),
-                        };
+                        obj.phone_numbers.get_or_insert(vec![]).extend(
+                            PhoneNumberListDeserializer::deserialize("phoneNumbers", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for ListPlatformApplications action.</p>
@@ -1272,53 +988,27 @@ impl ListPlatformApplicationsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPlatformApplicationsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPlatformApplicationsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListPlatformApplicationsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "NextToken" => {
                         obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
                     }
                     "PlatformApplications" => {
-                        obj.platform_applications = match obj.platform_applications {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ListOfPlatformApplicationsDeserializer::deserialize(
-                                        "PlatformApplications",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ListOfPlatformApplicationsDeserializer::deserialize(
+                        obj.platform_applications.get_or_insert(vec![]).extend(
+                            ListOfPlatformApplicationsDeserializer::deserialize(
                                 "PlatformApplications",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 
@@ -1374,52 +1064,25 @@ impl ListSubscriptionsByTopicResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSubscriptionsByTopicResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListSubscriptionsByTopicResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListSubscriptionsByTopicResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = match obj.subscriptions {
-                            Some(ref mut existing) => {
-                                existing.extend(SubscriptionsListDeserializer::deserialize(
-                                    "Subscriptions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(SubscriptionsListDeserializer::deserialize(
-                                "Subscriptions",
-                                stack,
-                            )?),
-                        };
+                        obj.subscriptions.get_or_insert(vec![]).extend(
+                            SubscriptionsListDeserializer::deserialize("Subscriptions", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Input for ListSubscriptions action.</p>
@@ -1460,52 +1123,25 @@ impl ListSubscriptionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSubscriptionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListSubscriptionsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListSubscriptionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "NextToken" => {
                         obj.next_token =
                             Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                     }
                     "Subscriptions" => {
-                        obj.subscriptions = match obj.subscriptions {
-                            Some(ref mut existing) => {
-                                existing.extend(SubscriptionsListDeserializer::deserialize(
-                                    "Subscriptions",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(SubscriptionsListDeserializer::deserialize(
-                                "Subscriptions",
-                                stack,
-                            )?),
-                        };
+                        obj.subscriptions.get_or_insert(vec![]).extend(
+                            SubscriptionsListDeserializer::deserialize("Subscriptions", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1545,47 +1181,20 @@ impl ListTopicsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTopicsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListTopicsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListTopicsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "NextToken" => {
+                    obj.next_token = Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "NextToken" => {
-                        obj.next_token =
-                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
-                    }
-                    "Topics" => {
-                        obj.topics = match obj.topics {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(TopicsListDeserializer::deserialize("Topics", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TopicsListDeserializer::deserialize("Topics", stack)?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Topics" => {
+                    obj.topics
+                        .get_or_insert(vec![])
+                        .extend(TopicsListDeserializer::deserialize("Topics", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MapStringToStringDeserializer;
@@ -1770,37 +1379,14 @@ impl PhoneNumberListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PhoneNumberDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PhoneNumberDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Platform application object.</p>
@@ -1819,45 +1405,24 @@ impl PlatformApplicationDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PlatformApplication, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PlatformApplication::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PlatformApplication, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Attributes" => {
+                    obj.attributes = Some(MapStringToStringDeserializer::deserialize(
+                        "Attributes",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Attributes" => {
-                        obj.attributes = Some(MapStringToStringDeserializer::deserialize(
-                            "Attributes",
-                            stack,
-                        )?);
-                    }
-                    "PlatformApplicationArn" => {
-                        obj.platform_application_arn = Some(StringDeserializer::deserialize(
-                            "PlatformApplicationArn",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PlatformApplicationArn" => {
+                    obj.platform_application_arn = Some(StringDeserializer::deserialize(
+                        "PlatformApplicationArn",
+                        stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ProtocolDeserializer;
@@ -1942,37 +1507,15 @@ impl PublishResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublishResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PublishResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PublishResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MessageId" => {
+                    obj.message_id = Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "MessageId" => {
-                        obj.message_id =
-                            Some(MessageIdDeserializer::deserialize("MessageId", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input for RemovePermission action.</p>
@@ -2237,39 +1780,18 @@ impl SubscribeResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SubscribeResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SubscribeResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SubscribeResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "SubscriptionArn" => {
+                    obj.subscription_arn = Some(SubscriptionARNDeserializer::deserialize(
+                        "SubscriptionArn",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "SubscriptionArn" => {
-                        obj.subscription_arn = Some(SubscriptionARNDeserializer::deserialize(
-                            "SubscriptionArn",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>A wrapper type for the attributes of an Amazon SNS subscription.</p>
@@ -2294,51 +1816,30 @@ impl SubscriptionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Subscription, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Subscription::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Subscription, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Endpoint" => {
+                    obj.endpoint = Some(EndpointDeserializer::deserialize("Endpoint", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Endpoint" => {
-                        obj.endpoint = Some(EndpointDeserializer::deserialize("Endpoint", stack)?);
-                    }
-                    "Owner" => {
-                        obj.owner = Some(AccountDeserializer::deserialize("Owner", stack)?);
-                    }
-                    "Protocol" => {
-                        obj.protocol = Some(ProtocolDeserializer::deserialize("Protocol", stack)?);
-                    }
-                    "SubscriptionArn" => {
-                        obj.subscription_arn = Some(SubscriptionARNDeserializer::deserialize(
-                            "SubscriptionArn",
-                            stack,
-                        )?);
-                    }
-                    "TopicArn" => {
-                        obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Owner" => {
+                    obj.owner = Some(AccountDeserializer::deserialize("Owner", stack)?);
                 }
+                "Protocol" => {
+                    obj.protocol = Some(ProtocolDeserializer::deserialize("Protocol", stack)?);
+                }
+                "SubscriptionArn" => {
+                    obj.subscription_arn = Some(SubscriptionARNDeserializer::deserialize(
+                        "SubscriptionArn",
+                        stack,
+                    )?);
+                }
+                "TopicArn" => {
+                    obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SubscriptionARNDeserializer;
@@ -2402,37 +1903,14 @@ impl SubscriptionsListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subscription>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(SubscriptionDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SubscriptionDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>
@@ -2449,36 +1927,15 @@ impl TopicDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Topic, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Topic::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Topic, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "TopicArn" => {
+                    obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "TopicArn" => {
-                        obj.topic_arn = Some(TopicARNDeserializer::deserialize("TopicArn", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct TopicARNDeserializer;
@@ -2542,37 +1999,14 @@ impl TopicsListDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Topic>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(TopicDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TopicDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Input for Unsubscribe action.</p>

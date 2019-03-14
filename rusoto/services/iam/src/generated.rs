@@ -25,20 +25,15 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::xmlerror::*;
 use rusoto_core::xmlutil::{
-    characters, end_element, find_start_element, peek_at_name, skip_tree, start_element,
+    characters, deserialize_elements, end_element, find_start_element, peek_at_name, skip_tree,
+    start_element,
 };
 use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
 use serde_urlencoded;
 use std::str::FromStr;
 use xml::reader::ParserConfig;
-use xml::reader::XmlEvent;
 use xml::EventReader;
 
-enum DeserializerNext {
-    Close,
-    Skip,
-    Element(String),
-}
 /// <p><p>Contains information about an AWS access key.</p> <p> This data type is used as a response element in the <a>CreateAccessKey</a> and <a>ListAccessKeys</a> operations. </p> <note> <p>The <code>SecretAccessKey</code> value is returned only in response to <a>CreateAccessKey</a>. You can get a secret access key only when you first create an access key; you cannot recover the secret access key later. If you lose a secret access key, you must create a new access key.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessKey {
@@ -61,51 +56,29 @@ impl AccessKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKey, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AccessKey::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AccessKey, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AccessKeyId" => {
+                    obj.access_key_id =
+                        AccessKeyIdTypeDeserializer::deserialize("AccessKeyId", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AccessKeyId" => {
-                        obj.access_key_id =
-                            AccessKeyIdTypeDeserializer::deserialize("AccessKeyId", stack)?;
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "SecretAccessKey" => {
-                        obj.secret_access_key =
-                            AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)?;
-                    }
-                    "Status" => {
-                        obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
                 }
+                "SecretAccessKey" => {
+                    obj.secret_access_key =
+                        AccessKeySecretTypeDeserializer::deserialize("SecretAccessKey", stack)?;
+                }
+                "Status" => {
+                    obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
+                }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AccessKeyIdTypeDeserializer;
@@ -140,44 +113,21 @@ impl AccessKeyLastUsedDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKeyLastUsed, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AccessKeyLastUsed::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AccessKeyLastUsed, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LastUsedDate" => {
+                    obj.last_used_date = DateTypeDeserializer::deserialize("LastUsedDate", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "LastUsedDate" => {
-                        obj.last_used_date =
-                            DateTypeDeserializer::deserialize("LastUsedDate", stack)?;
-                    }
-                    "Region" => {
-                        obj.region = StringTypeDeserializer::deserialize("Region", stack)?;
-                    }
-                    "ServiceName" => {
-                        obj.service_name =
-                            StringTypeDeserializer::deserialize("ServiceName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Region" => {
+                    obj.region = StringTypeDeserializer::deserialize("Region", stack)?;
                 }
+                "ServiceName" => {
+                    obj.service_name = StringTypeDeserializer::deserialize("ServiceName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an AWS access key, without its secret key.</p> <p>This data type is used as a response element in the <a>ListAccessKeys</a> operation.</p>
@@ -200,50 +150,27 @@ impl AccessKeyMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessKeyMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AccessKeyMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AccessKeyMetadata, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AccessKeyId" => {
+                    obj.access_key_id = Some(AccessKeyIdTypeDeserializer::deserialize(
+                        "AccessKeyId",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AccessKeyId" => {
-                        obj.access_key_id = Some(AccessKeyIdTypeDeserializer::deserialize(
-                            "AccessKeyId",
-                            stack,
-                        )?);
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "Status" => {
-                        obj.status = Some(StatusTypeDeserializer::deserialize("Status", stack)?);
-                    }
-                    "UserName" => {
-                        obj.user_name =
-                            Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
                 }
+                "Status" => {
+                    obj.status = Some(StatusTypeDeserializer::deserialize("Status", stack)?);
+                }
+                "UserName" => {
+                    obj.user_name = Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AccessKeyMetadataListTypeDeserializer;
@@ -253,37 +180,14 @@ impl AccessKeyMetadataListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccessKeyMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(AccessKeyMetadataDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AccessKeyMetadataDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AccessKeySecretTypeDeserializer;
@@ -307,37 +211,14 @@ impl AccountAliasListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(AccountAliasTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AccountAliasTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AccountAliasTypeDeserializer;
@@ -459,37 +340,14 @@ impl ArnListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ArnTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ArnTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ArnTypeDeserializer;
@@ -588,21 +446,11 @@ impl AttachedPermissionsBoundaryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachedPermissionsBoundary, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AttachedPermissionsBoundary::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, AttachedPermissionsBoundary, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PermissionsBoundaryArn" => {
                         obj.permissions_boundary_arn = Some(ArnTypeDeserializer::deserialize(
                             "PermissionsBoundaryArn",
@@ -617,17 +465,10 @@ impl AttachedPermissionsBoundaryDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct AttachedPoliciesListTypeDeserializer;
@@ -637,37 +478,14 @@ impl AttachedPoliciesListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AttachedPolicy>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(AttachedPolicyDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(AttachedPolicyDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an attached policy.</p> <p>An attached policy is a managed policy that has been attached to a user, group, or role. This data type is used as a response element in the <a>ListAttachedGroupPolicies</a>, <a>ListAttachedRolePolicies</a>, <a>ListAttachedUserPolicies</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
@@ -685,43 +503,21 @@ impl AttachedPolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachedPolicy, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = AttachedPolicy::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, AttachedPolicy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PolicyArn" => {
+                    obj.policy_arn = Some(ArnTypeDeserializer::deserialize("PolicyArn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "PolicyArn" => {
-                        obj.policy_arn =
-                            Some(ArnTypeDeserializer::deserialize("PolicyArn", stack)?);
-                    }
-                    "PolicyName" => {
-                        obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
-                            "PolicyName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PolicyName" => {
+                    obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
+                        "PolicyName",
+                        stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct AttachmentCountTypeDeserializer;
@@ -829,39 +625,16 @@ impl CertificateListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SigningCertificate>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(SigningCertificateDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SigningCertificateDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -893,37 +666,14 @@ impl ClientIDListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ClientIDTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ClientIDTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -1034,39 +784,16 @@ impl ContextKeyNamesResultListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ContextKeyNameTypeDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ContextKeyNameTypeDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -1116,36 +843,19 @@ impl CreateAccessKeyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateAccessKeyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateAccessKeyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateAccessKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AccessKey" => {
                         obj.access_key = AccessKeyDeserializer::deserialize("AccessKey", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1205,36 +915,15 @@ impl CreateGroupResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateGroupResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateGroupResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateGroupResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Group" => {
+                    obj.group = GroupDeserializer::deserialize("Group", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Group" => {
-                        obj.group = GroupDeserializer::deserialize("Group", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1278,37 +967,20 @@ impl CreateInstanceProfileResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInstanceProfileResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateInstanceProfileResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateInstanceProfileResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "InstanceProfile" => {
                         obj.instance_profile =
                             InstanceProfileDeserializer::deserialize("InstanceProfile", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1355,37 +1027,20 @@ impl CreateLoginProfileResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLoginProfileResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateLoginProfileResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateLoginProfileResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "LoginProfile" => {
                         obj.login_profile =
                             LoginProfileDeserializer::deserialize("LoginProfile", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1437,21 +1092,11 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateOpenIDConnectProviderResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateOpenIDConnectProviderResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateOpenIDConnectProviderResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "OpenIDConnectProviderArn" => {
                         obj.open_id_connect_provider_arn = Some(ArnTypeDeserializer::deserialize(
                             "OpenIDConnectProviderArn",
@@ -1459,17 +1104,10 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1521,36 +1159,15 @@ impl CreatePolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreatePolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreatePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Policy" => {
+                    obj.policy = Some(PolicyDeserializer::deserialize("Policy", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Policy" => {
-                        obj.policy = Some(PolicyDeserializer::deserialize("Policy", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1600,21 +1217,11 @@ impl CreatePolicyVersionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreatePolicyVersionResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreatePolicyVersionResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreatePolicyVersionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PolicyVersion" => {
                         obj.policy_version = Some(PolicyVersionDeserializer::deserialize(
                             "PolicyVersion",
@@ -1622,17 +1229,10 @@ impl CreatePolicyVersionResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1705,36 +1305,15 @@ impl CreateRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateRoleResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Role" => {
+                    obj.role = RoleDeserializer::deserialize("Role", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Role" => {
-                        obj.role = RoleDeserializer::deserialize("Role", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1776,37 +1355,20 @@ impl CreateSAMLProviderResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSAMLProviderResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateSAMLProviderResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateSAMLProviderResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SAMLProviderArn" => {
                         obj.saml_provider_arn =
                             Some(ArnTypeDeserializer::deserialize("SAMLProviderArn", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1854,36 +1416,19 @@ impl CreateServiceLinkedRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateServiceLinkedRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateServiceLinkedRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateServiceLinkedRoleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Role" => {
                         obj.role = Some(RoleDeserializer::deserialize("Role", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -1921,21 +1466,11 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateServiceSpecificCredentialResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateServiceSpecificCredentialResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateServiceSpecificCredentialResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ServiceSpecificCredential" => {
                         obj.service_specific_credential =
                             Some(ServiceSpecificCredentialDeserializer::deserialize(
@@ -1944,17 +1479,10 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2008,36 +1536,15 @@ impl CreateUserResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateUserResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateUserResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, CreateUserResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "User" => {
+                    obj.user = Some(UserDeserializer::deserialize("User", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "User" => {
-                        obj.user = Some(UserDeserializer::deserialize("User", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2081,37 +1588,20 @@ impl CreateVirtualMFADeviceResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVirtualMFADeviceResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = CreateVirtualMFADeviceResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, CreateVirtualMFADeviceResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "VirtualMFADevice" => {
                         obj.virtual_mfa_device =
                             VirtualMFADeviceDeserializer::deserialize("VirtualMFADevice", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct DateTypeDeserializer;
@@ -2499,37 +1989,20 @@ impl DeleteServiceLinkedRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteServiceLinkedRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DeleteServiceLinkedRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DeleteServiceLinkedRoleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "DeletionTaskId" => {
                         obj.deletion_task_id =
                             DeletionTaskIdTypeDeserializer::deserialize("DeletionTaskId", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2681,51 +2154,24 @@ impl DeletionTaskFailureReasonTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeletionTaskFailureReasonType, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = DeletionTaskFailureReasonType::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, DeletionTaskFailureReasonType, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Reason" => {
                         obj.reason = Some(ReasonTypeDeserializer::deserialize("Reason", stack)?);
                     }
                     "RoleUsageList" => {
-                        obj.role_usage_list = match obj.role_usage_list {
-                            Some(ref mut existing) => {
-                                existing.extend(RoleUsageListTypeDeserializer::deserialize(
-                                    "RoleUsageList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(RoleUsageListTypeDeserializer::deserialize(
-                                "RoleUsageList",
-                                stack,
-                            )?),
-                        };
+                        obj.role_usage_list.get_or_insert(vec![]).extend(
+                            RoleUsageListTypeDeserializer::deserialize("RoleUsageList", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct DeletionTaskIdTypeDeserializer;
@@ -2872,42 +2318,21 @@ impl EntityDetailsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EntityDetails, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = EntityDetails::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, EntityDetails, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EntityInfo" => {
+                    obj.entity_info = EntityInfoDeserializer::deserialize("EntityInfo", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EntityInfo" => {
-                        obj.entity_info = EntityInfoDeserializer::deserialize("EntityInfo", stack)?;
-                    }
-                    "LastAuthenticated" => {
-                        obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
-                            "LastAuthenticated",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "LastAuthenticated" => {
+                    obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
+                        "LastAuthenticated",
+                        stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct EntityDetailsListTypeDeserializer;
@@ -2917,37 +2342,14 @@ impl EntityDetailsListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EntityDetails>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(EntityDetailsDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EntityDetailsDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains details about the specified entity (user or role).</p> <p>This data type is an element of the <a>EntityDetails</a> object.</p>
@@ -2971,48 +2373,27 @@ impl EntityInfoDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EntityInfo, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = EntityInfo::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, EntityInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "Id" => {
-                        obj.id = IdTypeDeserializer::deserialize("Id", stack)?;
-                    }
-                    "Name" => {
-                        obj.name = UserNameTypeDeserializer::deserialize("Name", stack)?;
-                    }
-                    "Path" => {
-                        obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    "Type" => {
-                        obj.type_ = PolicyOwnerEntityTypeDeserializer::deserialize("Type", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Id" => {
+                    obj.id = IdTypeDeserializer::deserialize("Id", stack)?;
                 }
+                "Name" => {
+                    obj.name = UserNameTypeDeserializer::deserialize("Name", stack)?;
+                }
+                "Path" => {
+                    obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                "Type" => {
+                    obj.type_ = PolicyOwnerEntityTypeDeserializer::deserialize("Type", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -3057,39 +2438,18 @@ impl ErrorDetailsDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ErrorDetails, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ErrorDetails::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ErrorDetails, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Code" => {
+                    obj.code = StringTypeDeserializer::deserialize("Code", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Code" => {
-                        obj.code = StringTypeDeserializer::deserialize("Code", stack)?;
-                    }
-                    "Message" => {
-                        obj.message = StringTypeDeserializer::deserialize("Message", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Message" => {
+                    obj.message = StringTypeDeserializer::deserialize("Message", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct EvalDecisionDetailsTypeDeserializer;
@@ -3157,112 +2517,63 @@ impl EvaluationResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EvaluationResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = EvaluationResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, EvaluationResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EvalActionName" => {
+                    obj.eval_action_name =
+                        ActionNameTypeDeserializer::deserialize("EvalActionName", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EvalActionName" => {
-                        obj.eval_action_name =
-                            ActionNameTypeDeserializer::deserialize("EvalActionName", stack)?;
-                    }
-                    "EvalDecision" => {
-                        obj.eval_decision = PolicyEvaluationDecisionTypeDeserializer::deserialize(
-                            "EvalDecision",
-                            stack,
-                        )?;
-                    }
-                    "EvalDecisionDetails" => {
-                        obj.eval_decision_details =
-                            Some(EvalDecisionDetailsTypeDeserializer::deserialize(
-                                "EvalDecisionDetails",
-                                stack,
-                            )?);
-                    }
-                    "EvalResourceName" => {
-                        obj.eval_resource_name = Some(ResourceNameTypeDeserializer::deserialize(
-                            "EvalResourceName",
+                "EvalDecision" => {
+                    obj.eval_decision = PolicyEvaluationDecisionTypeDeserializer::deserialize(
+                        "EvalDecision",
+                        stack,
+                    )?;
+                }
+                "EvalDecisionDetails" => {
+                    obj.eval_decision_details =
+                        Some(EvalDecisionDetailsTypeDeserializer::deserialize(
+                            "EvalDecisionDetails",
                             stack,
                         )?);
-                    }
-                    "MatchedStatements" => {
-                        obj.matched_statements = match obj.matched_statements {
-                            Some(ref mut existing) => {
-                                existing.extend(StatementListTypeDeserializer::deserialize(
-                                    "MatchedStatements",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(StatementListTypeDeserializer::deserialize(
-                                "MatchedStatements",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "MissingContextValues" => {
-                        obj.missing_context_values = match obj.missing_context_values {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                        "MissingContextValues",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                "MissingContextValues",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "OrganizationsDecisionDetail" => {
-                        obj.organizations_decision_detail =
-                            Some(OrganizationsDecisionDetailDeserializer::deserialize(
-                                "OrganizationsDecisionDetail",
-                                stack,
-                            )?);
-                    }
-                    "ResourceSpecificResults" => {
-                        obj.resource_specific_results = match obj.resource_specific_results {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ResourceSpecificResultListTypeDeserializer::deserialize(
-                                        "ResourceSpecificResults",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ResourceSpecificResultListTypeDeserializer::deserialize(
-                                "ResourceSpecificResults",
-                                stack,
-                            )?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
+                "EvalResourceName" => {
+                    obj.eval_resource_name = Some(ResourceNameTypeDeserializer::deserialize(
+                        "EvalResourceName",
+                        stack,
+                    )?);
+                }
+                "MatchedStatements" => {
+                    obj.matched_statements.get_or_insert(vec![]).extend(
+                        StatementListTypeDeserializer::deserialize("MatchedStatements", stack)?,
+                    );
+                }
+                "MissingContextValues" => {
+                    obj.missing_context_values.get_or_insert(vec![]).extend(
+                        ContextKeyNamesResultListTypeDeserializer::deserialize(
+                            "MissingContextValues",
+                            stack,
+                        )?,
+                    );
+                }
+                "OrganizationsDecisionDetail" => {
+                    obj.organizations_decision_detail =
+                        Some(OrganizationsDecisionDetailDeserializer::deserialize(
+                            "OrganizationsDecisionDetail",
+                            stack,
+                        )?);
+                }
+                "ResourceSpecificResults" => {
+                    obj.resource_specific_results.get_or_insert(vec![]).extend(
+                        ResourceSpecificResultListTypeDeserializer::deserialize(
+                            "ResourceSpecificResults",
+                            stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct EvaluationResultsListTypeDeserializer;
@@ -3272,37 +2583,14 @@ impl EvaluationResultsListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EvaluationResult>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(EvaluationResultDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EvaluationResultDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ExistingUserNameTypeDeserializer;
@@ -3335,21 +2623,11 @@ impl GenerateCredentialReportResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GenerateCredentialReportResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GenerateCredentialReportResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GenerateCredentialReportResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Description" => {
                         obj.description =
                             Some(ReportStateDescriptionTypeDeserializer::deserialize(
@@ -3361,17 +2639,10 @@ impl GenerateCredentialReportResponseDeserializer {
                         obj.state = Some(ReportStateTypeDeserializer::deserialize("State", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3406,36 +2677,19 @@ impl GenerateServiceLastAccessedDetailsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GenerateServiceLastAccessedDetailsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GenerateServiceLastAccessedDetailsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GenerateServiceLastAccessedDetailsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "JobId" => {
                         obj.job_id = Some(JobIDTypeDeserializer::deserialize("JobId", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3473,21 +2727,11 @@ impl GetAccessKeyLastUsedResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccessKeyLastUsedResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAccessKeyLastUsedResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetAccessKeyLastUsedResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AccessKeyLastUsed" => {
                         obj.access_key_last_used = Some(
                             AccessKeyLastUsedDeserializer::deserialize("AccessKeyLastUsed", stack)?,
@@ -3499,17 +2743,10 @@ impl GetAccessKeyLastUsedResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3574,35 +2811,15 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountAuthorizationDetailsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAccountAuthorizationDetailsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetAccountAuthorizationDetailsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "GroupDetailList" => {
-                        obj.group_detail_list = match obj.group_detail_list {
-                            Some(ref mut existing) => {
-                                existing.extend(GroupDetailListTypeDeserializer::deserialize(
-                                    "GroupDetailList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(GroupDetailListTypeDeserializer::deserialize(
-                                "GroupDetailList",
-                                stack,
-                            )?),
-                        };
+                        obj.group_detail_list.get_or_insert(vec![]).extend(
+                            GroupDetailListTypeDeserializer::deserialize("GroupDetailList", stack)?,
+                        );
                     }
                     "IsTruncated" => {
                         obj.is_truncated =
@@ -3612,62 +2829,27 @@ impl GetAccountAuthorizationDetailsResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     "Policies" => {
-                        obj.policies = match obj.policies {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ManagedPolicyDetailListTypeDeserializer::deserialize(
-                                        "Policies", stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ManagedPolicyDetailListTypeDeserializer::deserialize(
+                        obj.policies.get_or_insert(vec![]).extend(
+                            ManagedPolicyDetailListTypeDeserializer::deserialize(
                                 "Policies", stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     "RoleDetailList" => {
-                        obj.role_detail_list = match obj.role_detail_list {
-                            Some(ref mut existing) => {
-                                existing.extend(RoleDetailListTypeDeserializer::deserialize(
-                                    "RoleDetailList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(RoleDetailListTypeDeserializer::deserialize(
-                                "RoleDetailList",
-                                stack,
-                            )?),
-                        };
+                        obj.role_detail_list.get_or_insert(vec![]).extend(
+                            RoleDetailListTypeDeserializer::deserialize("RoleDetailList", stack)?,
+                        );
                     }
                     "UserDetailList" => {
-                        obj.user_detail_list = match obj.user_detail_list {
-                            Some(ref mut existing) => {
-                                existing.extend(UserDetailListTypeDeserializer::deserialize(
-                                    "UserDetailList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(UserDetailListTypeDeserializer::deserialize(
-                                "UserDetailList",
-                                stack,
-                            )?),
-                        };
+                        obj.user_detail_list.get_or_insert(vec![]).extend(
+                            UserDetailListTypeDeserializer::deserialize("UserDetailList", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountPasswordPolicy</a> request. </p>
@@ -3684,37 +2866,20 @@ impl GetAccountPasswordPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountPasswordPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAccountPasswordPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetAccountPasswordPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PasswordPolicy" => {
                         obj.password_policy =
                             PasswordPolicyDeserializer::deserialize("PasswordPolicy", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
@@ -3731,21 +2896,11 @@ impl GetAccountSummaryResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSummaryResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetAccountSummaryResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetAccountSummaryResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SummaryMap" => {
                         obj.summary_map = Some(SummaryMapTypeDeserializer::deserialize(
                             "SummaryMap",
@@ -3753,17 +2908,10 @@ impl GetAccountSummaryResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3803,50 +2951,24 @@ impl GetContextKeysForPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetContextKeysForPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetContextKeysForPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetContextKeysForPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ContextKeyNames" => {
-                        obj.context_key_names = match obj.context_key_names {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                        "ContextKeyNames",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ContextKeyNamesResultListTypeDeserializer::deserialize(
+                        obj.context_key_names.get_or_insert(vec![]).extend(
+                            ContextKeyNamesResultListTypeDeserializer::deserialize(
                                 "ContextKeyNames",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3898,21 +3020,11 @@ impl GetCredentialReportResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCredentialReportResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetCredentialReportResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetCredentialReportResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Content" => {
                         obj.content = Some(ReportContentTypeDeserializer::deserialize(
                             "Content", stack,
@@ -3929,17 +3041,10 @@ impl GetCredentialReportResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3982,45 +3087,22 @@ impl GetGroupPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGroupPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetGroupPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetGroupPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "GroupName" => {
+                    obj.group_name = GroupNameTypeDeserializer::deserialize("GroupName", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "GroupName" => {
-                        obj.group_name =
-                            GroupNameTypeDeserializer::deserialize("GroupName", stack)?;
-                    }
-                    "PolicyDocument" => {
-                        obj.policy_document =
-                            PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
-                    }
-                    "PolicyName" => {
-                        obj.policy_name =
-                            PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PolicyDocument" => {
+                    obj.policy_document =
+                        PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
                 }
+                "PolicyName" => {
+                    obj.policy_name = PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4075,47 +3157,26 @@ impl GetGroupResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGroupResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetGroupResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetGroupResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Group" => {
+                    obj.group = GroupDeserializer::deserialize("Group", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Group" => {
-                        obj.group = GroupDeserializer::deserialize("Group", stack)?;
-                    }
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Users" => {
-                        obj.users
-                            .extend(UserListTypeDeserializer::deserialize("Users", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                }
+                "Users" => {
+                    obj.users
+                        .extend(UserListTypeDeserializer::deserialize("Users", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4154,37 +3215,20 @@ impl GetInstanceProfileResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInstanceProfileResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetInstanceProfileResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetInstanceProfileResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "InstanceProfile" => {
                         obj.instance_profile =
                             InstanceProfileDeserializer::deserialize("InstanceProfile", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4220,37 +3264,20 @@ impl GetLoginProfileResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetLoginProfileResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetLoginProfileResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetLoginProfileResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "LoginProfile" => {
                         obj.login_profile =
                             LoginProfileDeserializer::deserialize("LoginProfile", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4295,54 +3322,24 @@ impl GetOpenIDConnectProviderResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetOpenIDConnectProviderResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetOpenIDConnectProviderResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetOpenIDConnectProviderResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ClientIDList" => {
-                        obj.client_id_list = match obj.client_id_list {
-                            Some(ref mut existing) => {
-                                existing.extend(ClientIDListTypeDeserializer::deserialize(
-                                    "ClientIDList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ClientIDListTypeDeserializer::deserialize(
-                                "ClientIDList",
-                                stack,
-                            )?),
-                        };
+                        obj.client_id_list.get_or_insert(vec![]).extend(
+                            ClientIDListTypeDeserializer::deserialize("ClientIDList", stack)?,
+                        );
                     }
                     "CreateDate" => {
                         obj.create_date =
                             Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
                     }
                     "ThumbprintList" => {
-                        obj.thumbprint_list = match obj.thumbprint_list {
-                            Some(ref mut existing) => {
-                                existing.extend(ThumbprintListTypeDeserializer::deserialize(
-                                    "ThumbprintList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ThumbprintListTypeDeserializer::deserialize(
-                                "ThumbprintList",
-                                stack,
-                            )?),
-                        };
+                        obj.thumbprint_list.get_or_insert(vec![]).extend(
+                            ThumbprintListTypeDeserializer::deserialize("ThumbprintList", stack)?,
+                        );
                     }
                     "Url" => {
                         obj.url = Some(OpenIDConnectProviderUrlTypeDeserializer::deserialize(
@@ -4350,17 +3347,10 @@ impl GetOpenIDConnectProviderResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4396,36 +3386,15 @@ impl GetPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Policy" => {
+                    obj.policy = Some(PolicyDeserializer::deserialize("Policy", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Policy" => {
-                        obj.policy = Some(PolicyDeserializer::deserialize("Policy", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4464,21 +3433,11 @@ impl GetPolicyVersionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPolicyVersionResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetPolicyVersionResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetPolicyVersionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "PolicyVersion" => {
                         obj.policy_version = Some(PolicyVersionDeserializer::deserialize(
                             "PolicyVersion",
@@ -4486,17 +3445,10 @@ impl GetPolicyVersionResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4539,44 +3491,22 @@ impl GetRolePolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetRolePolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetRolePolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetRolePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PolicyDocument" => {
+                    obj.policy_document =
+                        PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "PolicyDocument" => {
-                        obj.policy_document =
-                            PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
-                    }
-                    "PolicyName" => {
-                        obj.policy_name =
-                            PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
-                    }
-                    "RoleName" => {
-                        obj.role_name = RoleNameTypeDeserializer::deserialize("RoleName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PolicyName" => {
+                    obj.policy_name = PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
                 }
+                "RoleName" => {
+                    obj.role_name = RoleNameTypeDeserializer::deserialize("RoleName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4612,36 +3542,15 @@ impl GetRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetRoleResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Role" => {
+                    obj.role = RoleDeserializer::deserialize("Role", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Role" => {
-                        obj.role = RoleDeserializer::deserialize("Role", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4684,21 +3593,11 @@ impl GetSAMLProviderResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSAMLProviderResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSAMLProviderResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSAMLProviderResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "CreateDate" => {
                         obj.create_date =
                             Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
@@ -4715,17 +3614,10 @@ impl GetSAMLProviderResponseDeserializer {
                             Some(DateTypeDeserializer::deserialize("ValidUntil", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4770,21 +3662,11 @@ impl GetSSHPublicKeyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSSHPublicKeyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetSSHPublicKeyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetSSHPublicKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SSHPublicKey" => {
                         obj.ssh_public_key = Some(SSHPublicKeyDeserializer::deserialize(
                             "SSHPublicKey",
@@ -4792,17 +3674,10 @@ impl GetSSHPublicKeyResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4841,37 +3716,20 @@ impl GetServerCertificateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServerCertificateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetServerCertificateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetServerCertificateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ServerCertificate" => {
                         obj.server_certificate =
                             ServerCertificateDeserializer::deserialize("ServerCertificate", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -4931,21 +3789,11 @@ impl GetServiceLastAccessedDetailsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLastAccessedDetailsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetServiceLastAccessedDetailsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetServiceLastAccessedDetailsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Error" => {
                         obj.error = Some(ErrorDetailsDeserializer::deserialize("Error", stack)?);
                     }
@@ -4977,17 +3825,10 @@ impl GetServiceLastAccessedDetailsResponseDeserializer {
                         );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5057,21 +3898,11 @@ impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLastAccessedDetailsWithEntitiesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetServiceLastAccessedDetailsWithEntitiesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetServiceLastAccessedDetailsWithEntitiesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "EntityDetailsList" => {
                         obj.entity_details_list.extend(
                             EntityDetailsListTypeDeserializer::deserialize(
@@ -5103,17 +3934,10 @@ impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5153,21 +3977,11 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetServiceLinkedRoleDeletionStatusResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetServiceLinkedRoleDeletionStatusResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, GetServiceLinkedRoleDeletionStatusResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Reason" => {
                         obj.reason = Some(DeletionTaskFailureReasonTypeDeserializer::deserialize(
                             "Reason", stack,
@@ -5178,17 +3992,10 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
                             DeletionTaskStatusTypeDeserializer::deserialize("Status", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5231,45 +4038,23 @@ impl GetUserPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetUserPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetUserPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetUserPolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PolicyDocument" => {
+                    obj.policy_document =
+                        PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "PolicyDocument" => {
-                        obj.policy_document =
-                            PolicyDocumentTypeDeserializer::deserialize("PolicyDocument", stack)?;
-                    }
-                    "PolicyName" => {
-                        obj.policy_name =
-                            PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
-                    }
-                    "UserName" => {
-                        obj.user_name =
-                            ExistingUserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PolicyName" => {
+                    obj.policy_name = PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
                 }
+                "UserName" => {
+                    obj.user_name =
+                        ExistingUserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5307,36 +4092,15 @@ impl GetUserResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetUserResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GetUserResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GetUserResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "User" => {
+                    obj.user = UserDeserializer::deserialize("User", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "User" => {
-                        obj.user = UserDeserializer::deserialize("User", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p><p>Contains information about an IAM group entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateGroup</a> </p> </li> <li> <p> <a>GetGroup</a> </p> </li> <li> <p> <a>ListGroups</a> </p> </li> </ul></p>
@@ -5361,49 +4125,27 @@ impl GroupDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Group, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Group::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Group, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "CreateDate" => {
-                        obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
-                    }
-                    "GroupId" => {
-                        obj.group_id = IdTypeDeserializer::deserialize("GroupId", stack)?;
-                    }
-                    "GroupName" => {
-                        obj.group_name =
-                            GroupNameTypeDeserializer::deserialize("GroupName", stack)?;
-                    }
-                    "Path" => {
-                        obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CreateDate" => {
+                    obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
                 }
+                "GroupId" => {
+                    obj.group_id = IdTypeDeserializer::deserialize("GroupId", stack)?;
+                }
+                "GroupName" => {
+                    obj.group_name = GroupNameTypeDeserializer::deserialize("GroupName", stack)?;
+                }
+                "Path" => {
+                    obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an IAM group, including all of the group's policies.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
@@ -5431,80 +4173,41 @@ impl GroupDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GroupDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = GroupDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, GroupDetail, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
-                                "AttachedManagedPolicies",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "GroupId" => {
-                        obj.group_id = Some(IdTypeDeserializer::deserialize("GroupId", stack)?);
-                    }
-                    "GroupName" => {
-                        obj.group_name =
-                            Some(GroupNameTypeDeserializer::deserialize("GroupName", stack)?);
-                    }
-                    "GroupPolicyList" => {
-                        obj.group_policy_list = match obj.group_policy_list {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyDetailListTypeDeserializer::deserialize(
-                                    "GroupPolicyList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyDetailListTypeDeserializer::deserialize(
-                                "GroupPolicyList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Path" => {
-                        obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AttachedManagedPolicies" => {
+                    obj.attached_managed_policies.get_or_insert(vec![]).extend(
+                        AttachedPoliciesListTypeDeserializer::deserialize(
+                            "AttachedManagedPolicies",
+                            stack,
+                        )?,
+                    );
                 }
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
+                }
+                "GroupId" => {
+                    obj.group_id = Some(IdTypeDeserializer::deserialize("GroupId", stack)?);
+                }
+                "GroupName" => {
+                    obj.group_name =
+                        Some(GroupNameTypeDeserializer::deserialize("GroupName", stack)?);
+                }
+                "GroupPolicyList" => {
+                    obj.group_policy_list.get_or_insert(vec![]).extend(
+                        PolicyDetailListTypeDeserializer::deserialize("GroupPolicyList", stack)?,
+                    );
+                }
+                "Path" => {
+                    obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct GroupDetailListTypeDeserializer;
@@ -5514,37 +4217,14 @@ impl GroupDetailListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GroupDetail>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(GroupDetailDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(GroupDetailDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct GroupListTypeDeserializer;
@@ -5554,37 +4234,14 @@ impl GroupListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Group>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(GroupDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(GroupDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct GroupNameListTypeDeserializer;
@@ -5594,37 +4251,14 @@ impl GroupNameListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(GroupNameTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(GroupNameTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct GroupNameTypeDeserializer;
@@ -5679,57 +4313,35 @@ impl InstanceProfileDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceProfile, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = InstanceProfile::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, InstanceProfile, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "CreateDate" => {
-                        obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
-                    }
-                    "InstanceProfileId" => {
-                        obj.instance_profile_id =
-                            IdTypeDeserializer::deserialize("InstanceProfileId", stack)?;
-                    }
-                    "InstanceProfileName" => {
-                        obj.instance_profile_name =
-                            InstanceProfileNameTypeDeserializer::deserialize(
-                                "InstanceProfileName",
-                                stack,
-                            )?;
-                    }
-                    "Path" => {
-                        obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
-                    }
-                    "Roles" => {
-                        obj.roles
-                            .extend(RoleListTypeDeserializer::deserialize("Roles", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CreateDate" => {
+                    obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
                 }
+                "InstanceProfileId" => {
+                    obj.instance_profile_id =
+                        IdTypeDeserializer::deserialize("InstanceProfileId", stack)?;
+                }
+                "InstanceProfileName" => {
+                    obj.instance_profile_name = InstanceProfileNameTypeDeserializer::deserialize(
+                        "InstanceProfileName",
+                        stack,
+                    )?;
+                }
+                "Path" => {
+                    obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
+                }
+                "Roles" => {
+                    obj.roles
+                        .extend(RoleListTypeDeserializer::deserialize("Roles", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct InstanceProfileListTypeDeserializer;
@@ -5739,37 +4351,14 @@ impl InstanceProfileListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceProfile>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(InstanceProfileDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(InstanceProfileDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct InstanceProfileNameTypeDeserializer;
@@ -5894,48 +4483,27 @@ impl ListAccessKeysResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAccessKeysResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListAccessKeysResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListAccessKeysResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AccessKeyMetadata" => {
+                    obj.access_key_metadata.extend(
+                        AccessKeyMetadataListTypeDeserializer::deserialize(
+                            "AccessKeyMetadata",
+                            stack,
+                        )?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AccessKeyMetadata" => {
-                        obj.access_key_metadata.extend(
-                            AccessKeyMetadataListTypeDeserializer::deserialize(
-                                "AccessKeyMetadata",
-                                stack,
-                            )?,
-                        );
-                    }
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5985,21 +4553,11 @@ impl ListAccountAliasesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAccountAliasesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListAccountAliasesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListAccountAliasesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AccountAliases" => {
                         obj.account_aliases
                             .extend(AccountAliasListTypeDeserializer::deserialize(
@@ -6015,17 +4573,10 @@ impl ListAccountAliasesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6083,35 +4634,18 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedGroupPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListAttachedGroupPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListAttachedGroupPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AttachedPolicies" => {
-                        obj.attached_policies = match obj.attached_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies.get_or_insert(vec![]).extend(
+                            AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     "IsTruncated" => {
                         obj.is_truncated =
@@ -6121,17 +4655,10 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6189,35 +4716,18 @@ impl ListAttachedRolePoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedRolePoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListAttachedRolePoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListAttachedRolePoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AttachedPolicies" => {
-                        obj.attached_policies = match obj.attached_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies.get_or_insert(vec![]).extend(
+                            AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     "IsTruncated" => {
                         obj.is_truncated =
@@ -6227,17 +4737,10 @@ impl ListAttachedRolePoliciesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6295,35 +4798,18 @@ impl ListAttachedUserPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListAttachedUserPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListAttachedUserPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListAttachedUserPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AttachedPolicies" => {
-                        obj.attached_policies = match obj.attached_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
+                        obj.attached_policies.get_or_insert(vec![]).extend(
+                            AttachedPoliciesListTypeDeserializer::deserialize(
                                 "AttachedPolicies",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     "IsTruncated" => {
                         obj.is_truncated =
@@ -6333,17 +4819,10 @@ impl ListAttachedUserPoliciesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6415,21 +4894,11 @@ impl ListEntitiesForPolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListEntitiesForPolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListEntitiesForPolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListEntitiesForPolicyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -6438,62 +4907,25 @@ impl ListEntitiesForPolicyResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     "PolicyGroups" => {
-                        obj.policy_groups = match obj.policy_groups {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyGroupListTypeDeserializer::deserialize(
-                                    "PolicyGroups",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyGroupListTypeDeserializer::deserialize(
-                                "PolicyGroups",
-                                stack,
-                            )?),
-                        };
+                        obj.policy_groups.get_or_insert(vec![]).extend(
+                            PolicyGroupListTypeDeserializer::deserialize("PolicyGroups", stack)?,
+                        );
                     }
                     "PolicyRoles" => {
-                        obj.policy_roles = match obj.policy_roles {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyRoleListTypeDeserializer::deserialize(
-                                    "PolicyRoles",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyRoleListTypeDeserializer::deserialize(
-                                "PolicyRoles",
-                                stack,
-                            )?),
-                        };
+                        obj.policy_roles.get_or_insert(vec![]).extend(
+                            PolicyRoleListTypeDeserializer::deserialize("PolicyRoles", stack)?,
+                        );
                     }
                     "PolicyUsers" => {
-                        obj.policy_users = match obj.policy_users {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyUserListTypeDeserializer::deserialize(
-                                    "PolicyUsers",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyUserListTypeDeserializer::deserialize(
-                                "PolicyUsers",
-                                stack,
-                            )?),
-                        };
+                        obj.policy_users.get_or_insert(vec![]).extend(
+                            PolicyUserListTypeDeserializer::deserialize("PolicyUsers", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6546,21 +4978,11 @@ impl ListGroupPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListGroupPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListGroupPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -6576,17 +4998,10 @@ impl ListGroupPoliciesResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6639,21 +5054,11 @@ impl ListGroupsForUserResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupsForUserResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListGroupsForUserResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListGroupsForUserResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Groups" => {
                         obj.groups
                             .extend(GroupListTypeDeserializer::deserialize("Groups", stack)?);
@@ -6666,17 +5071,10 @@ impl ListGroupsForUserResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6731,44 +5129,23 @@ impl ListGroupsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGroupsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListGroupsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListGroupsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Groups" => {
+                    obj.groups
+                        .extend(GroupListTypeDeserializer::deserialize("Groups", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Groups" => {
-                        obj.groups
-                            .extend(GroupListTypeDeserializer::deserialize("Groups", stack)?);
-                    }
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6821,21 +5198,11 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInstanceProfilesForRoleResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListInstanceProfilesForRoleResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListInstanceProfilesForRoleResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "InstanceProfiles" => {
                         obj.instance_profiles.extend(
                             InstanceProfileListTypeDeserializer::deserialize(
@@ -6852,17 +5219,10 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -6917,21 +5277,11 @@ impl ListInstanceProfilesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInstanceProfilesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListInstanceProfilesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListInstanceProfilesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "InstanceProfiles" => {
                         obj.instance_profiles.extend(
                             InstanceProfileListTypeDeserializer::deserialize(
@@ -6948,17 +5298,10 @@ impl ListInstanceProfilesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7013,47 +5356,26 @@ impl ListMFADevicesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListMFADevicesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListMFADevicesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListMFADevicesResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "MFADevices" => {
-                        obj.mfa_devices
-                            .extend(MfaDeviceListTypeDeserializer::deserialize(
-                                "MFADevices",
-                                stack,
-                            )?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "MFADevices" => {
+                    obj.mfa_devices
+                        .extend(MfaDeviceListTypeDeserializer::deserialize(
+                            "MFADevices",
+                            stack,
+                        )?);
                 }
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7084,51 +5406,24 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListOpenIDConnectProvidersResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListOpenIDConnectProvidersResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListOpenIDConnectProvidersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "OpenIDConnectProviderList" => {
-                        obj.open_id_connect_provider_list = match obj.open_id_connect_provider_list
-                        {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    OpenIDConnectProviderListTypeDeserializer::deserialize(
-                                        "OpenIDConnectProviderList",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(OpenIDConnectProviderListTypeDeserializer::deserialize(
+                        obj.open_id_connect_provider_list
+                            .get_or_insert(vec![])
+                            .extend(OpenIDConnectProviderListTypeDeserializer::deserialize(
                                 "OpenIDConnectProviderList",
                                 stack,
-                            )?),
-                        };
+                            )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is used as a response element in the <a>ListPoliciesGrantingServiceAccess</a> operation.</p>
@@ -7147,55 +5442,30 @@ impl ListPoliciesGrantingServiceAccessEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesGrantingServiceAccessEntry, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPoliciesGrantingServiceAccessEntry::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "Policies" => {
-                            obj.policies = match obj.policies {
-                                Some(ref mut existing) => {
-                                    existing.extend(PolicyGrantingServiceAccessListTypeDeserializer::deserialize("Policies", stack)?);
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(
-                                    PolicyGrantingServiceAccessListTypeDeserializer::deserialize(
-                                        "Policies", stack,
-                                    )?,
-                                ),
-                            };
-                        }
-                        "ServiceNamespace" => {
-                            obj.service_namespace =
-                                Some(ServiceNamespaceTypeDeserializer::deserialize(
-                                    "ServiceNamespace",
-                                    stack,
-                                )?);
-                        }
-                        _ => skip_tree(stack),
+        deserialize_elements::<_, ListPoliciesGrantingServiceAccessEntry, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Policies" => {
+                        obj.policies.get_or_insert(vec![]).extend(
+                            PolicyGrantingServiceAccessListTypeDeserializer::deserialize(
+                                "Policies", stack,
+                            )?,
+                        );
                     }
+                    "ServiceNamespace" => {
+                        obj.service_namespace =
+                            Some(ServiceNamespaceTypeDeserializer::deserialize(
+                                "ServiceNamespace",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
                 }
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7246,21 +5516,11 @@ impl ListPoliciesGrantingServiceAccessResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesGrantingServiceAccessResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPoliciesGrantingServiceAccessResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListPoliciesGrantingServiceAccessResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -7272,17 +5532,10 @@ impl ListPoliciesGrantingServiceAccessResponseDeserializer {
                         obj.policies_granting_service_access.extend(ListPolicyGrantingServiceAccessResponseListTypeDeserializer::deserialize("PoliciesGrantingServiceAccess", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7355,53 +5608,24 @@ impl ListPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListPoliciesResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Policies" => {
-                        obj.policies = match obj.policies {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyListTypeDeserializer::deserialize(
-                                    "Policies", stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => {
-                                Some(PolicyListTypeDeserializer::deserialize("Policies", stack)?)
-                            }
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                 }
+                "Policies" => {
+                    obj.policies
+                        .get_or_insert(vec![])
+                        .extend(PolicyListTypeDeserializer::deserialize("Policies", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ListPolicyGrantingServiceAccessResponseListTypeDeserializer;
@@ -7411,41 +5635,18 @@ impl ListPolicyGrantingServiceAccessResponseListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ListPoliciesGrantingServiceAccessEntry>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(
-                            ListPoliciesGrantingServiceAccessEntryDeserializer::deserialize(
-                                "member", stack,
-                            )?,
-                        );
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(
+                    ListPoliciesGrantingServiceAccessEntryDeserializer::deserialize(
+                        "member", stack,
+                    )?,
+                );
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7498,21 +5699,11 @@ impl ListPolicyVersionsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListPolicyVersionsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListPolicyVersionsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListPolicyVersionsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -7521,32 +5712,17 @@ impl ListPolicyVersionsResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     "Versions" => {
-                        obj.versions = match obj.versions {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                        "Versions", stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyDocumentVersionListTypeDeserializer::deserialize(
+                        obj.versions.get_or_insert(vec![]).extend(
+                            PolicyDocumentVersionListTypeDeserializer::deserialize(
                                 "Versions", stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7599,21 +5775,11 @@ impl ListRolePoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRolePoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListRolePoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListRolePoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -7629,17 +5795,10 @@ impl ListRolePoliciesResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7691,44 +5850,23 @@ impl ListRoleTagsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRoleTagsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListRoleTagsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListRoleTagsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Tags" => {
-                        obj.tags
-                            .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                 }
+                "Tags" => {
+                    obj.tags
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7783,44 +5921,23 @@ impl ListRolesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListRolesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListRolesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListRolesResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Roles" => {
-                        obj.roles
-                            .extend(RoleListTypeDeserializer::deserialize("Roles", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                 }
+                "Roles" => {
+                    obj.roles
+                        .extend(RoleListTypeDeserializer::deserialize("Roles", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7851,48 +5968,24 @@ impl ListSAMLProvidersResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSAMLProvidersResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListSAMLProvidersResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListSAMLProvidersResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SAMLProviderList" => {
-                        obj.saml_provider_list = match obj.saml_provider_list {
-                            Some(ref mut existing) => {
-                                existing.extend(SAMLProviderListTypeDeserializer::deserialize(
-                                    "SAMLProviderList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(SAMLProviderListTypeDeserializer::deserialize(
+                        obj.saml_provider_list.get_or_insert(vec![]).extend(
+                            SAMLProviderListTypeDeserializer::deserialize(
                                 "SAMLProviderList",
                                 stack,
-                            )?),
-                        };
+                            )?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -7947,21 +6040,11 @@ impl ListSSHPublicKeysResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSSHPublicKeysResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListSSHPublicKeysResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListSSHPublicKeysResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -7970,32 +6053,15 @@ impl ListSSHPublicKeysResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     "SSHPublicKeys" => {
-                        obj.ssh_public_keys = match obj.ssh_public_keys {
-                            Some(ref mut existing) => {
-                                existing.extend(SSHPublicKeyListTypeDeserializer::deserialize(
-                                    "SSHPublicKeys",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(SSHPublicKeyListTypeDeserializer::deserialize(
-                                "SSHPublicKeys",
-                                stack,
-                            )?),
-                        };
+                        obj.ssh_public_keys.get_or_insert(vec![]).extend(
+                            SSHPublicKeyListTypeDeserializer::deserialize("SSHPublicKeys", stack)?,
+                        );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8050,21 +6116,11 @@ impl ListServerCertificatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListServerCertificatesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListServerCertificatesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListServerCertificatesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -8081,17 +6137,10 @@ impl ListServerCertificatesResponseDeserializer {
                         );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8133,51 +6182,24 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListServiceSpecificCredentialsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListServiceSpecificCredentialsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "ServiceSpecificCredentials" => {
-                            obj.service_specific_credentials = match obj
-                                .service_specific_credentials
-                            {
-                                Some(ref mut existing) => {
-                                    existing.extend(ServiceSpecificCredentialsListTypeDeserializer::deserialize("ServiceSpecificCredentials", stack)?);
-                                    Some(existing.to_vec())
-                                }
-                                None => Some(
-                                    ServiceSpecificCredentialsListTypeDeserializer::deserialize(
-                                        "ServiceSpecificCredentials",
-                                        stack,
-                                    )?,
-                                ),
-                            };
-                        }
-                        _ => skip_tree(stack),
+        deserialize_elements::<_, ListServiceSpecificCredentialsResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ServiceSpecificCredentials" => {
+                        obj.service_specific_credentials
+                            .get_or_insert(vec![])
+                            .extend(ServiceSpecificCredentialsListTypeDeserializer::deserialize(
+                                "ServiceSpecificCredentials",
+                                stack,
+                            )?);
                     }
+                    _ => skip_tree(stack),
                 }
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8232,21 +6254,11 @@ impl ListSigningCertificatesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListSigningCertificatesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListSigningCertificatesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListSigningCertificatesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Certificates" => {
                         obj.certificates
                             .extend(CertificateListTypeDeserializer::deserialize(
@@ -8262,17 +6274,10 @@ impl ListSigningCertificatesResponseDeserializer {
                         obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8325,21 +6330,11 @@ impl ListUserPoliciesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUserPoliciesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListUserPoliciesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListUserPoliciesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -8355,17 +6350,10 @@ impl ListUserPoliciesResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8417,44 +6405,23 @@ impl ListUserTagsResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUserTagsResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListUserTagsResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListUserTagsResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Tags" => {
-                        obj.tags
-                            .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                 }
+                "Tags" => {
+                    obj.tags
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8509,44 +6476,23 @@ impl ListUsersResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListUsersResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListUsersResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ListUsersResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    "Users" => {
-                        obj.users
-                            .extend(UserListTypeDeserializer::deserialize("Users", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                 }
+                "Users" => {
+                    obj.users
+                        .extend(UserListTypeDeserializer::deserialize("Users", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -8601,21 +6547,11 @@ impl ListVirtualMFADevicesResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVirtualMFADevicesResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ListVirtualMFADevicesResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ListVirtualMFADevicesResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "IsTruncated" => {
                         obj.is_truncated =
                             Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
@@ -8632,17 +6568,10 @@ impl ListVirtualMFADevicesResponseDeserializer {
                         );
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Contains the user name and password create date for a user.</p> <p> This data type is used as a response element in the <a>CreateLoginProfile</a> and <a>GetLoginProfile</a> operations. </p>
@@ -8663,45 +6592,24 @@ impl LoginProfileDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoginProfile, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = LoginProfile::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, LoginProfile, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreateDate" => {
+                    obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CreateDate" => {
-                        obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
-                    }
-                    "PasswordResetRequired" => {
-                        obj.password_reset_required = Some(BooleanTypeDeserializer::deserialize(
-                            "PasswordResetRequired",
-                            stack,
-                        )?);
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PasswordResetRequired" => {
+                    obj.password_reset_required = Some(BooleanTypeDeserializer::deserialize(
+                        "PasswordResetRequired",
+                        stack,
+                    )?);
                 }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an MFA device.</p> <p>This data type is used as a response element in the <a>ListMFADevices</a> operation.</p>
@@ -8722,43 +6630,22 @@ impl MFADeviceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MFADevice, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = MFADevice::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, MFADevice, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EnableDate" => {
+                    obj.enable_date = DateTypeDeserializer::deserialize("EnableDate", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EnableDate" => {
-                        obj.enable_date = DateTypeDeserializer::deserialize("EnableDate", stack)?;
-                    }
-                    "SerialNumber" => {
-                        obj.serial_number =
-                            SerialNumberTypeDeserializer::deserialize("SerialNumber", stack)?;
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "SerialNumber" => {
+                    obj.serial_number =
+                        SerialNumberTypeDeserializer::deserialize("SerialNumber", stack)?;
                 }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about a managed policy, including the policy's ARN, versions, and the number of principal entities (users, groups, and roles) that the policy is attached to.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
@@ -8796,103 +6683,70 @@ impl ManagedPolicyDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ManagedPolicyDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ManagedPolicyDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ManagedPolicyDetail, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "AttachmentCount" => {
-                        obj.attachment_count = Some(AttachmentCountTypeDeserializer::deserialize(
-                            "AttachmentCount",
-                            stack,
-                        )?);
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "DefaultVersionId" => {
-                        obj.default_version_id =
-                            Some(PolicyVersionIdTypeDeserializer::deserialize(
-                                "DefaultVersionId",
-                                stack,
-                            )?);
-                    }
-                    "Description" => {
-                        obj.description = Some(PolicyDescriptionTypeDeserializer::deserialize(
-                            "Description",
-                            stack,
-                        )?);
-                    }
-                    "IsAttachable" => {
-                        obj.is_attachable =
-                            Some(BooleanTypeDeserializer::deserialize("IsAttachable", stack)?);
-                    }
-                    "Path" => {
-                        obj.path = Some(PolicyPathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    "PermissionsBoundaryUsageCount" => {
-                        obj.permissions_boundary_usage_count =
-                            Some(AttachmentCountTypeDeserializer::deserialize(
-                                "PermissionsBoundaryUsageCount",
-                                stack,
-                            )?);
-                    }
-                    "PolicyId" => {
-                        obj.policy_id = Some(IdTypeDeserializer::deserialize("PolicyId", stack)?);
-                    }
-                    "PolicyName" => {
-                        obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
-                            "PolicyName",
-                            stack,
-                        )?);
-                    }
-                    "PolicyVersionList" => {
-                        obj.policy_version_list = match obj.policy_version_list {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                        "PolicyVersionList",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyDocumentVersionListTypeDeserializer::deserialize(
-                                "PolicyVersionList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "UpdateDate" => {
-                        obj.update_date =
-                            Some(DateTypeDeserializer::deserialize("UpdateDate", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AttachmentCount" => {
+                    obj.attachment_count = Some(AttachmentCountTypeDeserializer::deserialize(
+                        "AttachmentCount",
+                        stack,
+                    )?);
                 }
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
+                }
+                "DefaultVersionId" => {
+                    obj.default_version_id = Some(PolicyVersionIdTypeDeserializer::deserialize(
+                        "DefaultVersionId",
+                        stack,
+                    )?);
+                }
+                "Description" => {
+                    obj.description = Some(PolicyDescriptionTypeDeserializer::deserialize(
+                        "Description",
+                        stack,
+                    )?);
+                }
+                "IsAttachable" => {
+                    obj.is_attachable =
+                        Some(BooleanTypeDeserializer::deserialize("IsAttachable", stack)?);
+                }
+                "Path" => {
+                    obj.path = Some(PolicyPathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                "PermissionsBoundaryUsageCount" => {
+                    obj.permissions_boundary_usage_count =
+                        Some(AttachmentCountTypeDeserializer::deserialize(
+                            "PermissionsBoundaryUsageCount",
+                            stack,
+                        )?);
+                }
+                "PolicyId" => {
+                    obj.policy_id = Some(IdTypeDeserializer::deserialize("PolicyId", stack)?);
+                }
+                "PolicyName" => {
+                    obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
+                        "PolicyName",
+                        stack,
+                    )?);
+                }
+                "PolicyVersionList" => {
+                    obj.policy_version_list.get_or_insert(vec![]).extend(
+                        PolicyDocumentVersionListTypeDeserializer::deserialize(
+                            "PolicyVersionList",
+                            stack,
+                        )?,
+                    );
+                }
+                "UpdateDate" => {
+                    obj.update_date = Some(DateTypeDeserializer::deserialize("UpdateDate", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ManagedPolicyDetailListTypeDeserializer;
@@ -8902,39 +6756,16 @@ impl ManagedPolicyDetailListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ManagedPolicyDetail>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ManagedPolicyDetailDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ManagedPolicyDetailDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MarkerTypeDeserializer;
@@ -8972,37 +6803,14 @@ impl MfaDeviceListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MFADevice>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(MFADeviceDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MFADeviceDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct MinimumPasswordLengthTypeDeserializer;
@@ -9032,36 +6840,19 @@ impl OpenIDConnectProviderListEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OpenIDConnectProviderListEntry, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = OpenIDConnectProviderListEntry::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, OpenIDConnectProviderListEntry, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Arn" => {
                         obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct OpenIDConnectProviderListTypeDeserializer;
@@ -9071,39 +6862,16 @@ impl OpenIDConnectProviderListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OpenIDConnectProviderListEntry>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(OpenIDConnectProviderListEntryDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(OpenIDConnectProviderListEntryDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct OpenIDConnectProviderUrlTypeDeserializer;
@@ -9134,21 +6902,11 @@ impl OrganizationsDecisionDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrganizationsDecisionDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = OrganizationsDecisionDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, OrganizationsDecisionDetail, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "AllowedByOrganizations" => {
                         obj.allowed_by_organizations = Some(BooleanTypeDeserializer::deserialize(
                             "AllowedByOrganizations",
@@ -9156,17 +6914,10 @@ impl OrganizationsDecisionDetailDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Contains information about the account password policy.</p> <p> This data type is used as a response element in the <a>GetAccountPasswordPolicy</a> operation. </p>
@@ -9201,98 +6952,73 @@ impl PasswordPolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PasswordPolicy, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PasswordPolicy::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PasswordPolicy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AllowUsersToChangePassword" => {
+                    obj.allow_users_to_change_password = Some(
+                        BooleanTypeDeserializer::deserialize("AllowUsersToChangePassword", stack)?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "AllowUsersToChangePassword" => {
-                        obj.allow_users_to_change_password =
-                            Some(BooleanTypeDeserializer::deserialize(
-                                "AllowUsersToChangePassword",
-                                stack,
-                            )?);
-                    }
-                    "ExpirePasswords" => {
-                        obj.expire_passwords = Some(BooleanTypeDeserializer::deserialize(
-                            "ExpirePasswords",
-                            stack,
-                        )?);
-                    }
-                    "HardExpiry" => {
-                        obj.hard_expiry = Some(BooleanObjectTypeDeserializer::deserialize(
-                            "HardExpiry",
-                            stack,
-                        )?);
-                    }
-                    "MaxPasswordAge" => {
-                        obj.max_password_age = Some(MaxPasswordAgeTypeDeserializer::deserialize(
-                            "MaxPasswordAge",
-                            stack,
-                        )?);
-                    }
-                    "MinimumPasswordLength" => {
-                        obj.minimum_password_length =
-                            Some(MinimumPasswordLengthTypeDeserializer::deserialize(
-                                "MinimumPasswordLength",
-                                stack,
-                            )?);
-                    }
-                    "PasswordReusePrevention" => {
-                        obj.password_reuse_prevention =
-                            Some(PasswordReusePreventionTypeDeserializer::deserialize(
-                                "PasswordReusePrevention",
-                                stack,
-                            )?);
-                    }
-                    "RequireLowercaseCharacters" => {
-                        obj.require_lowercase_characters =
-                            Some(BooleanTypeDeserializer::deserialize(
-                                "RequireLowercaseCharacters",
-                                stack,
-                            )?);
-                    }
-                    "RequireNumbers" => {
-                        obj.require_numbers = Some(BooleanTypeDeserializer::deserialize(
-                            "RequireNumbers",
-                            stack,
-                        )?);
-                    }
-                    "RequireSymbols" => {
-                        obj.require_symbols = Some(BooleanTypeDeserializer::deserialize(
-                            "RequireSymbols",
-                            stack,
-                        )?);
-                    }
-                    "RequireUppercaseCharacters" => {
-                        obj.require_uppercase_characters =
-                            Some(BooleanTypeDeserializer::deserialize(
-                                "RequireUppercaseCharacters",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "ExpirePasswords" => {
+                    obj.expire_passwords = Some(BooleanTypeDeserializer::deserialize(
+                        "ExpirePasswords",
+                        stack,
+                    )?);
                 }
+                "HardExpiry" => {
+                    obj.hard_expiry = Some(BooleanObjectTypeDeserializer::deserialize(
+                        "HardExpiry",
+                        stack,
+                    )?);
+                }
+                "MaxPasswordAge" => {
+                    obj.max_password_age = Some(MaxPasswordAgeTypeDeserializer::deserialize(
+                        "MaxPasswordAge",
+                        stack,
+                    )?);
+                }
+                "MinimumPasswordLength" => {
+                    obj.minimum_password_length =
+                        Some(MinimumPasswordLengthTypeDeserializer::deserialize(
+                            "MinimumPasswordLength",
+                            stack,
+                        )?);
+                }
+                "PasswordReusePrevention" => {
+                    obj.password_reuse_prevention =
+                        Some(PasswordReusePreventionTypeDeserializer::deserialize(
+                            "PasswordReusePrevention",
+                            stack,
+                        )?);
+                }
+                "RequireLowercaseCharacters" => {
+                    obj.require_lowercase_characters = Some(BooleanTypeDeserializer::deserialize(
+                        "RequireLowercaseCharacters",
+                        stack,
+                    )?);
+                }
+                "RequireNumbers" => {
+                    obj.require_numbers = Some(BooleanTypeDeserializer::deserialize(
+                        "RequireNumbers",
+                        stack,
+                    )?);
+                }
+                "RequireSymbols" => {
+                    obj.require_symbols = Some(BooleanTypeDeserializer::deserialize(
+                        "RequireSymbols",
+                        stack,
+                    )?);
+                }
+                "RequireUppercaseCharacters" => {
+                    obj.require_uppercase_characters = Some(BooleanTypeDeserializer::deserialize(
+                        "RequireUppercaseCharacters",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PasswordReusePreventionTypeDeserializer;
@@ -9370,86 +7096,62 @@ impl PolicyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Policy, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Policy::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Policy, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "AttachmentCount" => {
-                        obj.attachment_count = Some(AttachmentCountTypeDeserializer::deserialize(
-                            "AttachmentCount",
-                            stack,
-                        )?);
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "DefaultVersionId" => {
-                        obj.default_version_id =
-                            Some(PolicyVersionIdTypeDeserializer::deserialize(
-                                "DefaultVersionId",
-                                stack,
-                            )?);
-                    }
-                    "Description" => {
-                        obj.description = Some(PolicyDescriptionTypeDeserializer::deserialize(
-                            "Description",
-                            stack,
-                        )?);
-                    }
-                    "IsAttachable" => {
-                        obj.is_attachable =
-                            Some(BooleanTypeDeserializer::deserialize("IsAttachable", stack)?);
-                    }
-                    "Path" => {
-                        obj.path = Some(PolicyPathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    "PermissionsBoundaryUsageCount" => {
-                        obj.permissions_boundary_usage_count =
-                            Some(AttachmentCountTypeDeserializer::deserialize(
-                                "PermissionsBoundaryUsageCount",
-                                stack,
-                            )?);
-                    }
-                    "PolicyId" => {
-                        obj.policy_id = Some(IdTypeDeserializer::deserialize("PolicyId", stack)?);
-                    }
-                    "PolicyName" => {
-                        obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
-                            "PolicyName",
-                            stack,
-                        )?);
-                    }
-                    "UpdateDate" => {
-                        obj.update_date =
-                            Some(DateTypeDeserializer::deserialize("UpdateDate", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AttachmentCount" => {
+                    obj.attachment_count = Some(AttachmentCountTypeDeserializer::deserialize(
+                        "AttachmentCount",
+                        stack,
+                    )?);
                 }
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
+                }
+                "DefaultVersionId" => {
+                    obj.default_version_id = Some(PolicyVersionIdTypeDeserializer::deserialize(
+                        "DefaultVersionId",
+                        stack,
+                    )?);
+                }
+                "Description" => {
+                    obj.description = Some(PolicyDescriptionTypeDeserializer::deserialize(
+                        "Description",
+                        stack,
+                    )?);
+                }
+                "IsAttachable" => {
+                    obj.is_attachable =
+                        Some(BooleanTypeDeserializer::deserialize("IsAttachable", stack)?);
+                }
+                "Path" => {
+                    obj.path = Some(PolicyPathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                "PermissionsBoundaryUsageCount" => {
+                    obj.permissions_boundary_usage_count =
+                        Some(AttachmentCountTypeDeserializer::deserialize(
+                            "PermissionsBoundaryUsageCount",
+                            stack,
+                        )?);
+                }
+                "PolicyId" => {
+                    obj.policy_id = Some(IdTypeDeserializer::deserialize("PolicyId", stack)?);
+                }
+                "PolicyName" => {
+                    obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
+                        "PolicyName",
+                        stack,
+                    )?);
+                }
+                "UpdateDate" => {
+                    obj.update_date = Some(DateTypeDeserializer::deserialize("UpdateDate", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyDescriptionTypeDeserializer;
@@ -9482,45 +7184,24 @@ impl PolicyDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PolicyDetail, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PolicyDocument" => {
+                    obj.policy_document = Some(PolicyDocumentTypeDeserializer::deserialize(
+                        "PolicyDocument",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "PolicyDocument" => {
-                        obj.policy_document = Some(PolicyDocumentTypeDeserializer::deserialize(
-                            "PolicyDocument",
-                            stack,
-                        )?);
-                    }
-                    "PolicyName" => {
-                        obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
-                            "PolicyName",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "PolicyName" => {
+                    obj.policy_name = Some(PolicyNameTypeDeserializer::deserialize(
+                        "PolicyName",
+                        stack,
+                    )?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyDetailListTypeDeserializer;
@@ -9530,37 +7211,14 @@ impl PolicyDetailListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyDetail>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyDetailDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyDetailDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyDocumentTypeDeserializer;
@@ -9584,37 +7242,14 @@ impl PolicyDocumentVersionListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyVersion>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyVersionDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyVersionDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyEvaluationDecisionTypeDeserializer;
@@ -9652,21 +7287,11 @@ impl PolicyGrantingServiceAccessDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyGrantingServiceAccess, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyGrantingServiceAccess::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, PolicyGrantingServiceAccess, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "EntityName" => {
                         obj.entity_name = Some(EntityNameTypeDeserializer::deserialize(
                             "EntityName",
@@ -9691,17 +7316,10 @@ impl PolicyGrantingServiceAccessDeserializer {
                         obj.policy_type = PolicyTypeDeserializer::deserialize("PolicyType", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct PolicyGrantingServiceAccessListTypeDeserializer;
@@ -9711,39 +7329,16 @@ impl PolicyGrantingServiceAccessListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyGrantingServiceAccess>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyGrantingServiceAccessDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyGrantingServiceAccessDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
@@ -9762,40 +7357,19 @@ impl PolicyGroupDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyGroup, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyGroup::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PolicyGroup, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "GroupId" => {
+                    obj.group_id = Some(IdTypeDeserializer::deserialize("GroupId", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "GroupId" => {
-                        obj.group_id = Some(IdTypeDeserializer::deserialize("GroupId", stack)?);
-                    }
-                    "GroupName" => {
-                        obj.group_name =
-                            Some(GroupNameTypeDeserializer::deserialize("GroupName", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "GroupName" => {
+                    obj.group_name =
+                        Some(GroupNameTypeDeserializer::deserialize("GroupName", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyGroupListTypeDeserializer;
@@ -9805,37 +7379,14 @@ impl PolicyGroupListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyGroup>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyGroupDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyGroupDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyIdentifierTypeDeserializer;
@@ -9859,37 +7410,14 @@ impl PolicyListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Policy>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyNameListTypeDeserializer;
@@ -9899,37 +7427,14 @@ impl PolicyNameListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyNameTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyNameTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyNameTypeDeserializer;
@@ -9990,40 +7495,18 @@ impl PolicyRoleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyRole, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyRole::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PolicyRole, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "RoleId" => {
+                    obj.role_id = Some(IdTypeDeserializer::deserialize("RoleId", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "RoleId" => {
-                        obj.role_id = Some(IdTypeDeserializer::deserialize("RoleId", stack)?);
-                    }
-                    "RoleName" => {
-                        obj.role_name =
-                            Some(RoleNameTypeDeserializer::deserialize("RoleName", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "RoleName" => {
+                    obj.role_name = Some(RoleNameTypeDeserializer::deserialize("RoleName", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyRoleListTypeDeserializer;
@@ -10033,37 +7516,14 @@ impl PolicyRoleListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyRole>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyRoleDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyRoleDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicySourceTypeDeserializer;
@@ -10110,40 +7570,18 @@ impl PolicyUserDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyUser, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyUser::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PolicyUser, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "UserId" => {
+                    obj.user_id = Some(IdTypeDeserializer::deserialize("UserId", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "UserId" => {
-                        obj.user_id = Some(IdTypeDeserializer::deserialize("UserId", stack)?);
-                    }
-                    "UserName" => {
-                        obj.user_name =
-                            Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "UserName" => {
+                    obj.user_name = Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyUserListTypeDeserializer;
@@ -10153,37 +7591,14 @@ impl PolicyUserListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PolicyUser>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(PolicyUserDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PolicyUserDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about a version of a managed policy.</p> <p>This data type is used as a response element in the <a>CreatePolicyVersion</a>, <a>GetPolicyVersion</a>, <a>ListPolicyVersions</a>, and <a>GetAccountAuthorizationDetails</a> operations. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
@@ -10206,54 +7621,32 @@ impl PolicyVersionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PolicyVersion, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = PolicyVersion::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, PolicyVersion, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "Document" => {
-                        obj.document = Some(PolicyDocumentTypeDeserializer::deserialize(
-                            "Document", stack,
-                        )?);
-                    }
-                    "IsDefaultVersion" => {
-                        obj.is_default_version = Some(BooleanTypeDeserializer::deserialize(
-                            "IsDefaultVersion",
-                            stack,
-                        )?);
-                    }
-                    "VersionId" => {
-                        obj.version_id = Some(PolicyVersionIdTypeDeserializer::deserialize(
-                            "VersionId",
-                            stack,
-                        )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Document" => {
+                    obj.document = Some(PolicyDocumentTypeDeserializer::deserialize(
+                        "Document", stack,
+                    )?);
                 }
+                "IsDefaultVersion" => {
+                    obj.is_default_version = Some(BooleanTypeDeserializer::deserialize(
+                        "IsDefaultVersion",
+                        stack,
+                    )?);
+                }
+                "VersionId" => {
+                    obj.version_id = Some(PolicyVersionIdTypeDeserializer::deserialize(
+                        "VersionId",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PolicyVersionIdTypeDeserializer;
@@ -10286,39 +7679,18 @@ impl PositionDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Position, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Position::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Position, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Column" => {
+                    obj.column = Some(ColumnNumberDeserializer::deserialize("Column", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Column" => {
-                        obj.column = Some(ColumnNumberDeserializer::deserialize("Column", stack)?);
-                    }
-                    "Line" => {
-                        obj.line = Some(LineNumberDeserializer::deserialize("Line", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Line" => {
+                    obj.line = Some(LineNumberDeserializer::deserialize("Line", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct PublicKeyFingerprintTypeDeserializer;
@@ -10697,21 +8069,11 @@ impl ResetServiceSpecificCredentialResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResetServiceSpecificCredentialResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ResetServiceSpecificCredentialResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ResetServiceSpecificCredentialResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ServiceSpecificCredential" => {
                         obj.service_specific_credential =
                             Some(ServiceSpecificCredentialDeserializer::deserialize(
@@ -10720,17 +8082,10 @@ impl ResetServiceSpecificCredentialResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 
@@ -10781,83 +8136,43 @@ impl ResourceSpecificResultDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceSpecificResult, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ResourceSpecificResult::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ResourceSpecificResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EvalDecisionDetails" => {
+                    obj.eval_decision_details =
+                        Some(EvalDecisionDetailsTypeDeserializer::deserialize(
+                            "EvalDecisionDetails",
+                            stack,
+                        )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EvalDecisionDetails" => {
-                        obj.eval_decision_details =
-                            Some(EvalDecisionDetailsTypeDeserializer::deserialize(
-                                "EvalDecisionDetails",
-                                stack,
-                            )?);
-                    }
-                    "EvalResourceDecision" => {
-                        obj.eval_resource_decision =
-                            PolicyEvaluationDecisionTypeDeserializer::deserialize(
-                                "EvalResourceDecision",
-                                stack,
-                            )?;
-                    }
-                    "EvalResourceName" => {
-                        obj.eval_resource_name =
-                            ResourceNameTypeDeserializer::deserialize("EvalResourceName", stack)?;
-                    }
-                    "MatchedStatements" => {
-                        obj.matched_statements = match obj.matched_statements {
-                            Some(ref mut existing) => {
-                                existing.extend(StatementListTypeDeserializer::deserialize(
-                                    "MatchedStatements",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(StatementListTypeDeserializer::deserialize(
-                                "MatchedStatements",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "MissingContextValues" => {
-                        obj.missing_context_values = match obj.missing_context_values {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                        "MissingContextValues",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ContextKeyNamesResultListTypeDeserializer::deserialize(
-                                "MissingContextValues",
-                                stack,
-                            )?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "EvalResourceDecision" => {
+                    obj.eval_resource_decision =
+                        PolicyEvaluationDecisionTypeDeserializer::deserialize(
+                            "EvalResourceDecision",
+                            stack,
+                        )?;
                 }
+                "EvalResourceName" => {
+                    obj.eval_resource_name =
+                        ResourceNameTypeDeserializer::deserialize("EvalResourceName", stack)?;
+                }
+                "MatchedStatements" => {
+                    obj.matched_statements.get_or_insert(vec![]).extend(
+                        StatementListTypeDeserializer::deserialize("MatchedStatements", stack)?,
+                    );
+                }
+                "MissingContextValues" => {
+                    obj.missing_context_values.get_or_insert(vec![]).extend(
+                        ContextKeyNamesResultListTypeDeserializer::deserialize(
+                            "MissingContextValues",
+                            stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ResourceSpecificResultListTypeDeserializer;
@@ -10867,39 +8182,16 @@ impl ResourceSpecificResultListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceSpecificResult>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ResourceSpecificResultDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ResourceSpecificResultDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -10968,85 +8260,59 @@ impl RoleDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Role, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Role::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Role, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "AssumeRolePolicyDocument" => {
-                        obj.assume_role_policy_document =
-                            Some(PolicyDocumentTypeDeserializer::deserialize(
-                                "AssumeRolePolicyDocument",
-                                stack,
-                            )?);
-                    }
-                    "CreateDate" => {
-                        obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
-                    }
-                    "Description" => {
-                        obj.description = Some(RoleDescriptionTypeDeserializer::deserialize(
-                            "Description",
+                "AssumeRolePolicyDocument" => {
+                    obj.assume_role_policy_document =
+                        Some(PolicyDocumentTypeDeserializer::deserialize(
+                            "AssumeRolePolicyDocument",
                             stack,
                         )?);
-                    }
-                    "MaxSessionDuration" => {
-                        obj.max_session_duration =
-                            Some(RoleMaxSessionDurationTypeDeserializer::deserialize(
-                                "MaxSessionDuration",
-                                stack,
-                            )?);
-                    }
-                    "Path" => {
-                        obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
-                    }
-                    "PermissionsBoundary" => {
-                        obj.permissions_boundary =
-                            Some(AttachedPermissionsBoundaryDeserializer::deserialize(
-                                "PermissionsBoundary",
-                                stack,
-                            )?);
-                    }
-                    "RoleId" => {
-                        obj.role_id = IdTypeDeserializer::deserialize("RoleId", stack)?;
-                    }
-                    "RoleName" => {
-                        obj.role_name = RoleNameTypeDeserializer::deserialize("RoleName", stack)?;
-                    }
-                    "Tags" => {
-                        obj.tags = match obj.tags {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
+                "CreateDate" => {
+                    obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
+                }
+                "Description" => {
+                    obj.description = Some(RoleDescriptionTypeDeserializer::deserialize(
+                        "Description",
+                        stack,
+                    )?);
+                }
+                "MaxSessionDuration" => {
+                    obj.max_session_duration =
+                        Some(RoleMaxSessionDurationTypeDeserializer::deserialize(
+                            "MaxSessionDuration",
+                            stack,
+                        )?);
+                }
+                "Path" => {
+                    obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
+                }
+                "PermissionsBoundary" => {
+                    obj.permissions_boundary =
+                        Some(AttachedPermissionsBoundaryDeserializer::deserialize(
+                            "PermissionsBoundary",
+                            stack,
+                        )?);
+                }
+                "RoleId" => {
+                    obj.role_id = IdTypeDeserializer::deserialize("RoleId", stack)?;
+                }
+                "RoleName" => {
+                    obj.role_name = RoleNameTypeDeserializer::deserialize("RoleName", stack)?;
+                }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct RoleDescriptionTypeDeserializer;
@@ -11096,119 +8362,67 @@ impl RoleDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoleDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = RoleDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, RoleDetail, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "AssumeRolePolicyDocument" => {
-                        obj.assume_role_policy_document =
-                            Some(PolicyDocumentTypeDeserializer::deserialize(
-                                "AssumeRolePolicyDocument",
-                                stack,
-                            )?);
-                    }
-                    "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
-                                "AttachedManagedPolicies",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "InstanceProfileList" => {
-                        obj.instance_profile_list = match obj.instance_profile_list {
-                            Some(ref mut existing) => {
-                                existing.extend(InstanceProfileListTypeDeserializer::deserialize(
-                                    "InstanceProfileList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(InstanceProfileListTypeDeserializer::deserialize(
-                                "InstanceProfileList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Path" => {
-                        obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    "PermissionsBoundary" => {
-                        obj.permissions_boundary =
-                            Some(AttachedPermissionsBoundaryDeserializer::deserialize(
-                                "PermissionsBoundary",
-                                stack,
-                            )?);
-                    }
-                    "RoleId" => {
-                        obj.role_id = Some(IdTypeDeserializer::deserialize("RoleId", stack)?);
-                    }
-                    "RoleName" => {
-                        obj.role_name =
-                            Some(RoleNameTypeDeserializer::deserialize("RoleName", stack)?);
-                    }
-                    "RolePolicyList" => {
-                        obj.role_policy_list = match obj.role_policy_list {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyDetailListTypeDeserializer::deserialize(
-                                    "RolePolicyList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyDetailListTypeDeserializer::deserialize(
-                                "RolePolicyList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Tags" => {
-                        obj.tags = match obj.tags {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AssumeRolePolicyDocument" => {
+                    obj.assume_role_policy_document =
+                        Some(PolicyDocumentTypeDeserializer::deserialize(
+                            "AssumeRolePolicyDocument",
+                            stack,
+                        )?);
                 }
+                "AttachedManagedPolicies" => {
+                    obj.attached_managed_policies.get_or_insert(vec![]).extend(
+                        AttachedPoliciesListTypeDeserializer::deserialize(
+                            "AttachedManagedPolicies",
+                            stack,
+                        )?,
+                    );
+                }
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
+                }
+                "InstanceProfileList" => {
+                    obj.instance_profile_list.get_or_insert(vec![]).extend(
+                        InstanceProfileListTypeDeserializer::deserialize(
+                            "InstanceProfileList",
+                            stack,
+                        )?,
+                    );
+                }
+                "Path" => {
+                    obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                "PermissionsBoundary" => {
+                    obj.permissions_boundary =
+                        Some(AttachedPermissionsBoundaryDeserializer::deserialize(
+                            "PermissionsBoundary",
+                            stack,
+                        )?);
+                }
+                "RoleId" => {
+                    obj.role_id = Some(IdTypeDeserializer::deserialize("RoleId", stack)?);
+                }
+                "RoleName" => {
+                    obj.role_name = Some(RoleNameTypeDeserializer::deserialize("RoleName", stack)?);
+                }
+                "RolePolicyList" => {
+                    obj.role_policy_list.get_or_insert(vec![]).extend(
+                        PolicyDetailListTypeDeserializer::deserialize("RolePolicyList", stack)?,
+                    );
+                }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct RoleDetailListTypeDeserializer;
@@ -11218,37 +8432,14 @@ impl RoleDetailListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RoleDetail>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(RoleDetailDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RoleDetailDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct RoleListTypeDeserializer;
@@ -11258,37 +8449,14 @@ impl RoleListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Role>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(RoleDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RoleDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct RoleMaxSessionDurationTypeDeserializer;
@@ -11326,37 +8494,14 @@ impl RoleUsageListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RoleUsageType>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(RoleUsageTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(RoleUsageTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>An object that contains details about how a service-linked role is used, if that information is returned by the service.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
@@ -11375,49 +8520,20 @@ impl RoleUsageTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RoleUsageType, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = RoleUsageType::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, RoleUsageType, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Region" => {
+                    obj.region = Some(RegionNameTypeDeserializer::deserialize("Region", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Region" => {
-                        obj.region =
-                            Some(RegionNameTypeDeserializer::deserialize("Region", stack)?);
-                    }
-                    "Resources" => {
-                        obj.resources = match obj.resources {
-                            Some(ref mut existing) => {
-                                existing.extend(ArnListTypeDeserializer::deserialize(
-                                    "Resources",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(ArnListTypeDeserializer::deserialize("Resources", stack)?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Resources" => {
+                    obj.resources
+                        .get_or_insert(vec![])
+                        .extend(ArnListTypeDeserializer::deserialize("Resources", stack)?);
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SAMLMetadataDocumentTypeDeserializer;
@@ -11452,44 +8568,21 @@ impl SAMLProviderListEntryDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SAMLProviderListEntry, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SAMLProviderListEntry::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SAMLProviderListEntry, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "ValidUntil" => {
-                        obj.valid_until =
-                            Some(DateTypeDeserializer::deserialize("ValidUntil", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
                 }
+                "ValidUntil" => {
+                    obj.valid_until = Some(DateTypeDeserializer::deserialize("ValidUntil", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SAMLProviderListTypeDeserializer;
@@ -11499,39 +8592,16 @@ impl SAMLProviderListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SAMLProviderListEntry>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(SAMLProviderListEntryDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SAMLProviderListEntryDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an SSH public key.</p> <p>This data type is used as a response element in the <a>GetSSHPublicKey</a> and <a>UploadSSHPublicKey</a> operations. </p>
@@ -11558,59 +8628,33 @@ impl SSHPublicKeyDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSHPublicKey, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SSHPublicKey::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SSHPublicKey, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Fingerprint" => {
+                    obj.fingerprint =
+                        PublicKeyFingerprintTypeDeserializer::deserialize("Fingerprint", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Fingerprint" => {
-                        obj.fingerprint = PublicKeyFingerprintTypeDeserializer::deserialize(
-                            "Fingerprint",
-                            stack,
-                        )?;
-                    }
-                    "SSHPublicKeyBody" => {
-                        obj.ssh_public_key_body = PublicKeyMaterialTypeDeserializer::deserialize(
-                            "SSHPublicKeyBody",
-                            stack,
-                        )?;
-                    }
-                    "SSHPublicKeyId" => {
-                        obj.ssh_public_key_id =
-                            PublicKeyIdTypeDeserializer::deserialize("SSHPublicKeyId", stack)?;
-                    }
-                    "Status" => {
-                        obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
-                    }
-                    "UploadDate" => {
-                        obj.upload_date =
-                            Some(DateTypeDeserializer::deserialize("UploadDate", stack)?);
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "SSHPublicKeyBody" => {
+                    obj.ssh_public_key_body =
+                        PublicKeyMaterialTypeDeserializer::deserialize("SSHPublicKeyBody", stack)?;
                 }
+                "SSHPublicKeyId" => {
+                    obj.ssh_public_key_id =
+                        PublicKeyIdTypeDeserializer::deserialize("SSHPublicKeyId", stack)?;
+                }
+                "Status" => {
+                    obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
+                }
+                "UploadDate" => {
+                    obj.upload_date = Some(DateTypeDeserializer::deserialize("UploadDate", stack)?);
+                }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SSHPublicKeyListTypeDeserializer;
@@ -11620,39 +8664,16 @@ impl SSHPublicKeyListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SSHPublicKeyMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(SSHPublicKeyMetadataDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SSHPublicKeyMetadataDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an SSH public key, without the key's body or fingerprint.</p> <p>This data type is used as a response element in the <a>ListSSHPublicKeys</a> operation.</p>
@@ -11675,46 +8696,25 @@ impl SSHPublicKeyMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SSHPublicKeyMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SSHPublicKeyMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SSHPublicKeyMetadata, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "SSHPublicKeyId" => {
+                    obj.ssh_public_key_id =
+                        PublicKeyIdTypeDeserializer::deserialize("SSHPublicKeyId", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "SSHPublicKeyId" => {
-                        obj.ssh_public_key_id =
-                            PublicKeyIdTypeDeserializer::deserialize("SSHPublicKeyId", stack)?;
-                    }
-                    "Status" => {
-                        obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
-                    }
-                    "UploadDate" => {
-                        obj.upload_date = DateTypeDeserializer::deserialize("UploadDate", stack)?;
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Status" => {
+                    obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
                 }
+                "UploadDate" => {
+                    obj.upload_date = DateTypeDeserializer::deserialize("UploadDate", stack)?;
+                }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct SerialNumberTypeDeserializer;
@@ -11749,51 +8749,29 @@ impl ServerCertificateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerCertificate, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ServerCertificate::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ServerCertificate, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CertificateBody" => {
+                    obj.certificate_body =
+                        CertificateBodyTypeDeserializer::deserialize("CertificateBody", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CertificateBody" => {
-                        obj.certificate_body =
-                            CertificateBodyTypeDeserializer::deserialize("CertificateBody", stack)?;
-                    }
-                    "CertificateChain" => {
-                        obj.certificate_chain =
-                            Some(CertificateChainTypeDeserializer::deserialize(
-                                "CertificateChain",
-                                stack,
-                            )?);
-                    }
-                    "ServerCertificateMetadata" => {
-                        obj.server_certificate_metadata =
-                            ServerCertificateMetadataDeserializer::deserialize(
-                                "ServerCertificateMetadata",
-                                stack,
-                            )?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CertificateChain" => {
+                    obj.certificate_chain = Some(CertificateChainTypeDeserializer::deserialize(
+                        "CertificateChain",
+                        stack,
+                    )?);
                 }
+                "ServerCertificateMetadata" => {
+                    obj.server_certificate_metadata =
+                        ServerCertificateMetadataDeserializer::deserialize(
+                            "ServerCertificateMetadata",
+                            stack,
+                        )?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about a server certificate without its certificate body, certificate chain, and private key.</p> <p> This data type is used as a response element in the <a>UploadServerCertificate</a> and <a>ListServerCertificates</a> operations. </p>
@@ -11820,21 +8798,11 @@ impl ServerCertificateMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServerCertificateMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ServerCertificateMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ServerCertificateMetadata, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Arn" => {
                         obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                     }
@@ -11861,17 +8829,10 @@ impl ServerCertificateMetadataDeserializer {
                             Some(DateTypeDeserializer::deserialize("UploadDate", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct ServerCertificateMetadataListTypeDeserializer;
@@ -11881,39 +8842,16 @@ impl ServerCertificateMetadataListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServerCertificateMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ServerCertificateMetadataDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ServerCertificateMetadataDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ServerCertificateNameTypeDeserializer;
@@ -11952,62 +8890,38 @@ impl ServiceLastAccessedDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceLastAccessed, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ServiceLastAccessed::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, ServiceLastAccessed, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "LastAuthenticated" => {
+                    obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
+                        "LastAuthenticated",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "LastAuthenticated" => {
-                        obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
-                            "LastAuthenticated",
-                            stack,
-                        )?);
-                    }
-                    "LastAuthenticatedEntity" => {
-                        obj.last_authenticated_entity = Some(ArnTypeDeserializer::deserialize(
-                            "LastAuthenticatedEntity",
-                            stack,
-                        )?);
-                    }
-                    "ServiceName" => {
-                        obj.service_name =
-                            ServiceNameTypeDeserializer::deserialize("ServiceName", stack)?;
-                    }
-                    "ServiceNamespace" => {
-                        obj.service_namespace = ServiceNamespaceTypeDeserializer::deserialize(
-                            "ServiceNamespace",
-                            stack,
-                        )?;
-                    }
-                    "TotalAuthenticatedEntities" => {
-                        obj.total_authenticated_entities =
-                            Some(IntegerTypeDeserializer::deserialize(
-                                "TotalAuthenticatedEntities",
-                                stack,
-                            )?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "LastAuthenticatedEntity" => {
+                    obj.last_authenticated_entity = Some(ArnTypeDeserializer::deserialize(
+                        "LastAuthenticatedEntity",
+                        stack,
+                    )?);
                 }
+                "ServiceName" => {
+                    obj.service_name =
+                        ServiceNameTypeDeserializer::deserialize("ServiceName", stack)?;
+                }
+                "ServiceNamespace" => {
+                    obj.service_namespace =
+                        ServiceNamespaceTypeDeserializer::deserialize("ServiceNamespace", stack)?;
+                }
+                "TotalAuthenticatedEntities" => {
+                    obj.total_authenticated_entities = Some(IntegerTypeDeserializer::deserialize(
+                        "TotalAuthenticatedEntities",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ServiceNameDeserializer;
@@ -12104,21 +9018,11 @@ impl ServiceSpecificCredentialDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceSpecificCredential, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ServiceSpecificCredential::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ServiceSpecificCredential, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "CreateDate" => {
                         obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
                     }
@@ -12148,17 +9052,10 @@ impl ServiceSpecificCredentialDeserializer {
                         obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct ServiceSpecificCredentialIdDeserializer;
@@ -12199,21 +9096,11 @@ impl ServiceSpecificCredentialMetadataDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceSpecificCredentialMetadata, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = ServiceSpecificCredentialMetadata::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, ServiceSpecificCredentialMetadata, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "CreateDate" => {
                         obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
                     }
@@ -12239,17 +9126,10 @@ impl ServiceSpecificCredentialMetadataDeserializer {
                         obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 struct ServiceSpecificCredentialsListTypeDeserializer;
@@ -12259,39 +9139,16 @@ impl ServiceSpecificCredentialsListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceSpecificCredentialMetadata>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ServiceSpecificCredentialMetadataDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ServiceSpecificCredentialMetadataDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct ServiceUserNameDeserializer;
@@ -12315,39 +9172,16 @@ impl ServicesLastAccessedDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceLastAccessed>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ServiceLastAccessedDeserializer::deserialize(
-                            "member", stack,
-                        )?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ServiceLastAccessedDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -12394,51 +9228,29 @@ impl SigningCertificateDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SigningCertificate, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SigningCertificate::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SigningCertificate, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CertificateBody" => {
+                    obj.certificate_body =
+                        CertificateBodyTypeDeserializer::deserialize("CertificateBody", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "CertificateBody" => {
-                        obj.certificate_body =
-                            CertificateBodyTypeDeserializer::deserialize("CertificateBody", stack)?;
-                    }
-                    "CertificateId" => {
-                        obj.certificate_id =
-                            CertificateIdTypeDeserializer::deserialize("CertificateId", stack)?;
-                    }
-                    "Status" => {
-                        obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
-                    }
-                    "UploadDate" => {
-                        obj.upload_date =
-                            Some(DateTypeDeserializer::deserialize("UploadDate", stack)?);
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "CertificateId" => {
+                    obj.certificate_id =
+                        CertificateIdTypeDeserializer::deserialize("CertificateId", stack)?;
                 }
+                "Status" => {
+                    obj.status = StatusTypeDeserializer::deserialize("Status", stack)?;
+                }
+                "UploadDate" => {
+                    obj.upload_date = Some(DateTypeDeserializer::deserialize("UploadDate", stack)?);
+                }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -12543,57 +9355,27 @@ impl SimulatePolicyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SimulatePolicyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = SimulatePolicyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, SimulatePolicyResponse, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EvaluationResults" => {
+                    obj.evaluation_results.get_or_insert(vec![]).extend(
+                        EvaluationResultsListTypeDeserializer::deserialize(
+                            "EvaluationResults",
+                            stack,
+                        )?,
+                    );
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EvaluationResults" => {
-                        obj.evaluation_results = match obj.evaluation_results {
-                            Some(ref mut existing) => {
-                                existing.extend(
-                                    EvaluationResultsListTypeDeserializer::deserialize(
-                                        "EvaluationResults",
-                                        stack,
-                                    )?,
-                                );
-                                Some(existing.to_vec())
-                            }
-                            None => Some(EvaluationResultsListTypeDeserializer::deserialize(
-                                "EvaluationResults",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "IsTruncated" => {
-                        obj.is_truncated =
-                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
-                    }
-                    "Marker" => {
-                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "IsTruncated" => {
+                    obj.is_truncated =
+                        Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
                 }
+                "Marker" => {
+                    obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -12719,53 +9501,32 @@ impl StatementDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Statement, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Statement::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Statement, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndPosition" => {
+                    obj.end_position =
+                        Some(PositionDeserializer::deserialize("EndPosition", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "EndPosition" => {
-                        obj.end_position =
-                            Some(PositionDeserializer::deserialize("EndPosition", stack)?);
-                    }
-                    "SourcePolicyId" => {
-                        obj.source_policy_id = Some(PolicyIdentifierTypeDeserializer::deserialize(
-                            "SourcePolicyId",
-                            stack,
-                        )?);
-                    }
-                    "SourcePolicyType" => {
-                        obj.source_policy_type = Some(PolicySourceTypeDeserializer::deserialize(
-                            "SourcePolicyType",
-                            stack,
-                        )?);
-                    }
-                    "StartPosition" => {
-                        obj.start_position =
-                            Some(PositionDeserializer::deserialize("StartPosition", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "SourcePolicyId" => {
+                    obj.source_policy_id = Some(PolicyIdentifierTypeDeserializer::deserialize(
+                        "SourcePolicyId",
+                        stack,
+                    )?);
                 }
+                "SourcePolicyType" => {
+                    obj.source_policy_type = Some(PolicySourceTypeDeserializer::deserialize(
+                        "SourcePolicyType",
+                        stack,
+                    )?);
+                }
+                "StartPosition" => {
+                    obj.start_position =
+                        Some(PositionDeserializer::deserialize("StartPosition", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct StatementListTypeDeserializer;
@@ -12775,37 +9536,14 @@ impl StatementListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Statement>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(StatementDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(StatementDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct StatusTypeDeserializer;
@@ -12903,39 +9641,18 @@ impl TagDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Tag, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = Tag::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Key" => {
+                    obj.key = TagKeyTypeDeserializer::deserialize("Key", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Key" => {
-                        obj.key = TagKeyTypeDeserializer::deserialize("Key", stack)?;
-                    }
-                    "Value" => {
-                        obj.value = TagValueTypeDeserializer::deserialize("Value", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "Value" => {
+                    obj.value = TagValueTypeDeserializer::deserialize("Value", stack)?;
                 }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -12985,37 +9702,14 @@ impl TagListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(TagDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TagDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -13095,37 +9789,14 @@ impl ThumbprintListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(ThumbprintTypeDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(ThumbprintTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 
@@ -13475,36 +10146,19 @@ impl UpdateRoleDescriptionResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateRoleDescriptionResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UpdateRoleDescriptionResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, UpdateRoleDescriptionResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Role" => {
                         obj.role = Some(RoleDeserializer::deserialize("Role", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -13600,37 +10254,20 @@ impl UpdateSAMLProviderResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateSAMLProviderResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UpdateSAMLProviderResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, UpdateSAMLProviderResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SAMLProviderArn" => {
                         obj.saml_provider_arn =
                             Some(ArnTypeDeserializer::deserialize("SAMLProviderArn", stack)?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -13824,21 +10461,11 @@ impl UploadSSHPublicKeyResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadSSHPublicKeyResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UploadSSHPublicKeyResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, UploadSSHPublicKeyResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "SSHPublicKey" => {
                         obj.ssh_public_key = Some(SSHPublicKeyDeserializer::deserialize(
                             "SSHPublicKey",
@@ -13846,17 +10473,10 @@ impl UploadSSHPublicKeyResponseDeserializer {
                         )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -13914,21 +10534,11 @@ impl UploadServerCertificateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadServerCertificateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UploadServerCertificateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, UploadServerCertificateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "ServerCertificateMetadata" => {
                         obj.server_certificate_metadata =
                             Some(ServerCertificateMetadataDeserializer::deserialize(
@@ -13937,17 +10547,10 @@ impl UploadServerCertificateResponseDeserializer {
                             )?);
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -13991,37 +10594,20 @@ impl UploadSigningCertificateResponseDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UploadSigningCertificateResponse, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UploadSigningCertificateResponse::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
+        deserialize_elements::<_, UploadSigningCertificateResponse, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
                     "Certificate" => {
                         obj.certificate =
                             SigningCertificateDeserializer::deserialize("Certificate", stack)?;
                     }
                     _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
-            }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+                Ok(())
+            },
+        )
     }
 }
 /// <p><p>Contains information about an IAM user entity.</p> <p>This data type is used as a response element in the following operations:</p> <ul> <li> <p> <a>CreateUser</a> </p> </li> <li> <p> <a>GetUser</a> </p> </li> <li> <p> <a>ListUsers</a> </p> </li> </ul></p>
@@ -14052,71 +10638,45 @@ impl UserDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<User, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = User::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, User, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
-                    }
-                    "CreateDate" => {
-                        obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
-                    }
-                    "PasswordLastUsed" => {
-                        obj.password_last_used = Some(DateTypeDeserializer::deserialize(
-                            "PasswordLastUsed",
+                "CreateDate" => {
+                    obj.create_date = DateTypeDeserializer::deserialize("CreateDate", stack)?;
+                }
+                "PasswordLastUsed" => {
+                    obj.password_last_used = Some(DateTypeDeserializer::deserialize(
+                        "PasswordLastUsed",
+                        stack,
+                    )?);
+                }
+                "Path" => {
+                    obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
+                }
+                "PermissionsBoundary" => {
+                    obj.permissions_boundary =
+                        Some(AttachedPermissionsBoundaryDeserializer::deserialize(
+                            "PermissionsBoundary",
                             stack,
                         )?);
-                    }
-                    "Path" => {
-                        obj.path = PathTypeDeserializer::deserialize("Path", stack)?;
-                    }
-                    "PermissionsBoundary" => {
-                        obj.permissions_boundary =
-                            Some(AttachedPermissionsBoundaryDeserializer::deserialize(
-                                "PermissionsBoundary",
-                                stack,
-                            )?);
-                    }
-                    "Tags" => {
-                        obj.tags = match obj.tags {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
-                        };
-                    }
-                    "UserId" => {
-                        obj.user_id = IdTypeDeserializer::deserialize("UserId", stack)?;
-                    }
-                    "UserName" => {
-                        obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
                 }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                "UserId" => {
+                    obj.user_id = IdTypeDeserializer::deserialize("UserId", stack)?;
+                }
+                "UserName" => {
+                    obj.user_name = UserNameTypeDeserializer::deserialize("UserName", stack)?;
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// <p>Contains information about an IAM user, including all the user's policies and all the IAM groups the user is in.</p> <p>This data type is used as a response element in the <a>GetAccountAuthorizationDetails</a> operation.</p>
@@ -14150,112 +10710,57 @@ impl UserDetailDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserDetail, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = UserDetail::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, UserDetail, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Arn" => {
-                        obj.arn = Some(ArnTypeDeserializer::deserialize("Arn", stack)?);
-                    }
-                    "AttachedManagedPolicies" => {
-                        obj.attached_managed_policies = match obj.attached_managed_policies {
-                            Some(ref mut existing) => {
-                                existing.extend(AttachedPoliciesListTypeDeserializer::deserialize(
-                                    "AttachedManagedPolicies",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(AttachedPoliciesListTypeDeserializer::deserialize(
-                                "AttachedManagedPolicies",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "CreateDate" => {
-                        obj.create_date =
-                            Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
-                    }
-                    "GroupList" => {
-                        obj.group_list = match obj.group_list {
-                            Some(ref mut existing) => {
-                                existing.extend(GroupNameListTypeDeserializer::deserialize(
-                                    "GroupList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(GroupNameListTypeDeserializer::deserialize(
-                                "GroupList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    "Path" => {
-                        obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
-                    }
-                    "PermissionsBoundary" => {
-                        obj.permissions_boundary =
-                            Some(AttachedPermissionsBoundaryDeserializer::deserialize(
-                                "PermissionsBoundary",
-                                stack,
-                            )?);
-                    }
-                    "Tags" => {
-                        obj.tags = match obj.tags {
-                            Some(ref mut existing) => {
-                                existing
-                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
-                        };
-                    }
-                    "UserId" => {
-                        obj.user_id = Some(IdTypeDeserializer::deserialize("UserId", stack)?);
-                    }
-                    "UserName" => {
-                        obj.user_name =
-                            Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
-                    }
-                    "UserPolicyList" => {
-                        obj.user_policy_list = match obj.user_policy_list {
-                            Some(ref mut existing) => {
-                                existing.extend(PolicyDetailListTypeDeserializer::deserialize(
-                                    "UserPolicyList",
-                                    stack,
-                                )?);
-                                Some(existing.to_vec())
-                            }
-                            None => Some(PolicyDetailListTypeDeserializer::deserialize(
-                                "UserPolicyList",
-                                stack,
-                            )?),
-                        };
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "AttachedManagedPolicies" => {
+                    obj.attached_managed_policies.get_or_insert(vec![]).extend(
+                        AttachedPoliciesListTypeDeserializer::deserialize(
+                            "AttachedManagedPolicies",
+                            stack,
+                        )?,
+                    );
                 }
+                "CreateDate" => {
+                    obj.create_date = Some(DateTypeDeserializer::deserialize("CreateDate", stack)?);
+                }
+                "GroupList" => {
+                    obj.group_list.get_or_insert(vec![]).extend(
+                        GroupNameListTypeDeserializer::deserialize("GroupList", stack)?,
+                    );
+                }
+                "Path" => {
+                    obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
+                }
+                "PermissionsBoundary" => {
+                    obj.permissions_boundary =
+                        Some(AttachedPermissionsBoundaryDeserializer::deserialize(
+                            "PermissionsBoundary",
+                            stack,
+                        )?);
+                }
+                "Tags" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                }
+                "UserId" => {
+                    obj.user_id = Some(IdTypeDeserializer::deserialize("UserId", stack)?);
+                }
+                "UserName" => {
+                    obj.user_name = Some(UserNameTypeDeserializer::deserialize("UserName", stack)?);
+                }
+                "UserPolicyList" => {
+                    obj.user_policy_list.get_or_insert(vec![]).extend(
+                        PolicyDetailListTypeDeserializer::deserialize("UserPolicyList", stack)?,
+                    );
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct UserDetailListTypeDeserializer;
@@ -14265,37 +10770,14 @@ impl UserDetailListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserDetail>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(UserDetailDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(UserDetailDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct UserListTypeDeserializer;
@@ -14305,37 +10787,14 @@ impl UserListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<User>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(UserDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(UserDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct UserNameTypeDeserializer;
@@ -14374,54 +10833,32 @@ impl VirtualMFADeviceDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VirtualMFADevice, XmlParseError> {
-        start_element(tag_name, stack)?;
-
-        let mut obj = VirtualMFADevice::default();
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
+        deserialize_elements::<_, VirtualMFADevice, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Base32StringSeed" => {
+                    obj.base_32_string_seed = Some(BootstrapDatumDeserializer::deserialize(
+                        "Base32StringSeed",
+                        stack,
+                    )?);
                 }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => match &name[..] {
-                    "Base32StringSeed" => {
-                        obj.base_32_string_seed = Some(BootstrapDatumDeserializer::deserialize(
-                            "Base32StringSeed",
-                            stack,
-                        )?);
-                    }
-                    "EnableDate" => {
-                        obj.enable_date =
-                            Some(DateTypeDeserializer::deserialize("EnableDate", stack)?);
-                    }
-                    "QRCodePNG" => {
-                        obj.qr_code_png =
-                            Some(BootstrapDatumDeserializer::deserialize("QRCodePNG", stack)?);
-                    }
-                    "SerialNumber" => {
-                        obj.serial_number =
-                            SerialNumberTypeDeserializer::deserialize("SerialNumber", stack)?;
-                    }
-                    "User" => {
-                        obj.user = Some(UserDeserializer::deserialize("User", stack)?);
-                    }
-                    _ => skip_tree(stack),
-                },
-                DeserializerNext::Close => break,
-                DeserializerNext::Skip => {
-                    stack.next();
+                "EnableDate" => {
+                    obj.enable_date = Some(DateTypeDeserializer::deserialize("EnableDate", stack)?);
                 }
+                "QRCodePNG" => {
+                    obj.qr_code_png =
+                        Some(BootstrapDatumDeserializer::deserialize("QRCodePNG", stack)?);
+                }
+                "SerialNumber" => {
+                    obj.serial_number =
+                        SerialNumberTypeDeserializer::deserialize("SerialNumber", stack)?;
+                }
+                "User" => {
+                    obj.user = Some(UserDeserializer::deserialize("User", stack)?);
+                }
+                _ => skip_tree(stack),
             }
-        }
-
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 struct VirtualMFADeviceListTypeDeserializer;
@@ -14431,37 +10868,14 @@ impl VirtualMFADeviceListTypeDeserializer {
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VirtualMFADevice>, XmlParseError> {
-        let mut obj = vec![];
-        start_element(tag_name, stack)?;
-
-        loop {
-            let next_event = match stack.peek() {
-                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
-                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
-                    DeserializerNext::Element(name.local_name.to_owned())
-                }
-                _ => DeserializerNext::Skip,
-            };
-
-            match next_event {
-                DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(VirtualMFADeviceDeserializer::deserialize("member", stack)?);
-                    } else {
-                        skip_tree(stack);
-                    }
-                }
-                DeserializerNext::Close => {
-                    end_element(tag_name, stack)?;
-                    break;
-                }
-                DeserializerNext::Skip => {
-                    stack.next();
-                }
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(VirtualMFADeviceDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
             }
-        }
-
-        Ok(obj)
+            Ok(())
+        })
     }
 }
 /// Errors returned by AddClientIDToOpenIDConnectProvider
