@@ -91,15 +91,10 @@ impl GenerateProtocol for RestXmlGenerator {
             use xml;
             use xml::EventReader;
             use xml::EventWriter;
-            use xml::reader::XmlEvent;
             use rusoto_core::xmlerror::*;
             use rusoto_core::xmlutil::{Next, Peek, XmlParseError, XmlResponse};
-            use rusoto_core::xmlutil::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree};
-            enum DeserializerNext {
-                Close,
-                Skip,
-                Element(String),
-            }"
+            use rusoto_core::xmlutil::{peek_at_name, characters, end_element, find_start_element, start_element, skip_tree, deserialize_elements};
+            "
             .to_owned();
 
         writeln!(writer, "{}", imports)
