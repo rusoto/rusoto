@@ -23,7 +23,7 @@ To use `rusoto_lex_models` in your application, add it as a dependency in your `
 
 ```toml
 [dependencies]
-rusoto_lex_models = "0.36.0"
+rusoto_lex_models = "0.37.0"
 ```
 
 ## Contributing

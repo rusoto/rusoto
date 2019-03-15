@@ -23,7 +23,7 @@ To use `rusoto_marketplacecommerceanalytics` in your application, add it as a de
 
 ```toml
 [dependencies]
-rusoto_marketplacecommerceanalytics = "0.36.0"
+rusoto_marketplacecommerceanalytics = "0.37.0"
 ```
 
 ## Contributing

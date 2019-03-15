@@ -23,7 +23,7 @@ To use `rusoto_macie` in your application, add it as a dependency in your `Cargo
 
 ```toml
 [dependencies]
-rusoto_macie = "0.36.0"
+rusoto_macie = "0.37.0"
 ```
 
 ## Contributing

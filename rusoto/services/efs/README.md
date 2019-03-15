@@ -23,7 +23,7 @@ To use `rusoto_efs` in your application, add it as a dependency in your `Cargo.t
 
 ```toml
 [dependencies]
-rusoto_efs = "0.36.0"
+rusoto_efs = "0.37.0"
 ```
 
 ## Contributing

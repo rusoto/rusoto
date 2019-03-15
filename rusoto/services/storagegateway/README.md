@@ -23,7 +23,7 @@ To use `rusoto_storagegateway` in your application, add it as a dependency in yo
 
 ```toml
 [dependencies]
-rusoto_storagegateway = "0.36.0"
+rusoto_storagegateway = "0.37.0"
 ```
 
 ## Contributing

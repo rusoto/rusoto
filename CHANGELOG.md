@@ -1,6 +1,10 @@
 # Rusoto changes
 
 ## [Unreleased]
+(Please put notes here)
+
+## [0.37.0] - 2019-03-12
+
 - Implement Clone on the various Client types.
 - Upgrade hyper-rustls library
 - Fix duplicated Content-Type header in SageMaker Runtime
@@ -15,6 +19,8 @@
 - add [apigatewayv2](https://docs.aws.amazon.com/cli/latest/reference/apigatewayv2/index.html) service
 - add [ram](https://docs.aws.amazon.com/cli/latest/reference/ram/index.html) service
 - Add [`credential_process`](https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes) support in `~/.aws/config`
+- Add Route53 TXT record quoting helper
+- Fix a malformed SNS Publish API request when it has message attributes
 
 ## [0.36.0] - 2018-12-04
 
