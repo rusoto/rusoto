@@ -700,14 +700,15 @@ fn to_hexdigest<T: AsRef<[u8]>>(t: T) -> String {
     hex::encode(h.as_ref())
 }
 
-fn remove_scheme_from_custom_hostname(hostname: &str) -> String {
-    if hostname.starts_with("https://") {
-        hostname[8..].to_owned()
-    } else if hostname.starts_with("http://") {
-        hostname[7..].to_owned()
-    } else {
-        hostname.to_owned()
-    }
+fn extract_hostname(endpoint: &str) -> &str {
+    let unschemed = endpoint
+        .find("://")
+        .map(|p| &endpoint[p + 3..])
+        .unwrap_or(endpoint);
+    unschemed
+        .find('/')
+        .map(|p| &unschemed[..p])
+        .unwrap_or(unschemed)
 }
 
 /// Takes a `Region` enum and a service and formas a vaild DNS name.
@@ -716,26 +717,22 @@ fn build_hostname(service: &str, region: &Region) -> String {
     //iam & cloudfront have only 1 endpoint, other services have region-based endpoints
     match service {
         "iam" => match *region {
-            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             Region::CnNorth1 | Region::CnNorthwest1 => {
                 format!("{}.{}.amazonaws.com.cn", service, region.name())
             }
             _ => format!("{}.amazonaws.com", service),
         },
         "cloudfront" => match *region {
-            Region::Custom { ref endpoint, .. } => {
-                remove_scheme_from_custom_hostname(endpoint).to_owned()
-            }
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             _ => format!("{}.amazonaws.com", service),
         },
         "importexport" => match *region {
-            Region::Custom { ref endpoint, .. } => {
-                remove_scheme_from_custom_hostname(endpoint).to_owned()
-            }
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             _ => "importexport.amazonaws.com".to_owned(),
         },
         "s3" => match *region {
-            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             Region::UsEast1 => "s3.amazonaws.com".to_string(),
             Region::CnNorth1 | Region::CnNorthwest1 => {
                 format!("s3.{}.amazonaws.com.cn", region.name())
@@ -743,18 +740,16 @@ fn build_hostname(service: &str, region: &Region) -> String {
             _ => format!("s3-{}.amazonaws.com", region.name()),
         },
         "route53" => match *region {
-            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             _ => "route53.amazonaws.com".to_owned(),
         },
         "sdb" => match *region {
-            Region::Custom { ref endpoint, .. } => {
-                remove_scheme_from_custom_hostname(endpoint).to_owned()
-            }
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             Region::UsEast1 => "sdb.amazonaws.com".to_string(),
             _ => format!("sdb.{}.amazonaws.com", region.name()),
         },
         _ => match *region {
-            Region::Custom { ref endpoint, .. } => remove_scheme_from_custom_hostname(endpoint),
+            Region::Custom { ref endpoint, .. } => extract_hostname(endpoint).to_owned(),
             Region::CnNorth1 | Region::CnNorthwest1 => {
                 format!("{}.{}.amazonaws.com.cn", service, region.name())
             }
@@ -931,17 +926,30 @@ mod tests {
     }
 
     #[test]
-    fn remove_scheme_from_custom_hostname() {
+    fn extract_hostname() {
         assert_eq!(
-            super::remove_scheme_from_custom_hostname("hostname.with.no.scheme"),
+            super::extract_hostname("hostname.with.no.scheme"),
             "hostname.with.no.scheme"
         );
         assert_eq!(
-            super::remove_scheme_from_custom_hostname("http://hostname.with.scheme"),
+            super::extract_hostname("http://hostname.with.scheme"),
             "hostname.with.scheme"
         );
         assert_eq!(
-            super::remove_scheme_from_custom_hostname("https://hostname.with.scheme"),
+            super::extract_hostname("https://hostname.with.scheme"),
+            "hostname.with.scheme"
+        );
+
+        assert_eq!(
+            super::extract_hostname("hostname.with.no.scheme/test"),
+            "hostname.with.no.scheme"
+        );
+        assert_eq!(
+            super::extract_hostname("http://hostname.with.scheme/test"),
+            "hostname.with.scheme"
+        );
+        assert_eq!(
+            super::extract_hostname("https://hostname.with.scheme/test"),
             "hostname.with.scheme"
         );
     }
